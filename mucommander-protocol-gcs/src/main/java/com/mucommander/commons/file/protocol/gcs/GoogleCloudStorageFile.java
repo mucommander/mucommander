@@ -17,61 +17,62 @@
 
 package com.mucommander.commons.file.protocol.gcs;
 
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.connection.ConnectionHandler;
-import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
-import com.mucommander.commons.file.connection.ConnectionPool;
-import com.mucommander.commons.file.protocol.ProtocolFile;
+import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import com.mucommander.commons.io.RandomAccessOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.stream.Stream;
+import java.nio.channels.Channels;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GoogleCloudStorageFile extends ProtocolFile implements ConnectionHandlerFactory {
+public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStorageFile.class);
+    private static final String BUCKET_DIRECTORY_DELIMITER = "/";
 
-    private File file;
+    private final Bucket bucket;
+    private final Blob blob;
+
     private GoogleCloudStorageFile parent;
 
-//    public static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-
-    protected GoogleCloudStorageFile(FileURL url, File file) {
+    protected GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob) {
         super(url);
-        this.file = file;
+        this.bucket = bucket;
+        this.blob = blob;
     }
 
-    protected GoogleCloudStorageFile(FileURL url) {
-        super(url);
+    @Override
+    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
+        var files = bucket.list(Storage.BlobListOption.prefix(blob.getName()), Storage.BlobListOption.delimiter(BUCKET_DIRECTORY_DELIMITER));
+
+        var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
+                .map(this::toFile)
+                .collect(Collectors.toList());
+
+        var childrenArray = new AbstractFile[children.size()];
+        children.toArray(childrenArray);
+        return childrenArray;
     }
 
-    /**
-     * TODO CLIENT or connection?
-     *
-     * @return
-     * @throws IOException
-     */
-    protected GoogleCloudStorageClient getCloudStorageClient() throws IOException {
-        GoogleCloudStorageConnectionHandler connectionHandler =
-                (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(this, fileURL, true);
-
-        // Return client only when connection was checked
-        return connectionHandler.getClient();
+    @Override
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
+        throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
     }
 
-//    protected GoogleCloudStorageConnectionHandler getConnHandler() throws IOException {
-//        GoogleCloudStorageConnectionHandler connection = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(this, fileURL, true);
-//        connection.checkConnection();
-//        return connection;
-//    }
+    private GoogleCloudStorageFile toFile(Blob blob) {
+        // FIXME
+        var url = (FileURL) getURL().clone();
+        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
+        url.setPath(parentPath + blob.getName());
+        var result = new GoogleCloudStorageFile(url, bucket, blob);
+        result.setParent(this);
+        return result;
+    }
 
     @Override
     public MonitoredFile toMonitoredFile() {
@@ -79,309 +80,37 @@ public class GoogleCloudStorageFile extends ProtocolFile implements ConnectionHa
     }
 
     @Override
-    public ConnectionHandler createConnectionHandler(FileURL location) {
-        return new GoogleCloudStorageConnectionHandler(location);
-    }
-
-    @Override
     public long getDate() {
-        return 0; //fixme
-//        return file != null ? file.getModifiedTime().getValue() : 0;
-    }
+        var updateOffsetTime = blob.getUpdateTimeOffsetDateTime() != null ?
+                // Read blob creation date, or use at least bucket last update date
+                blob.getUpdateTimeOffsetDateTime() : bucket.getUpdateTimeOffsetDateTime();
 
-    @Override
-    public void postCopyHook() {
-        try {
-            Thread.sleep(2000); //FIXME
-        } catch (InterruptedException e) {
-        }
-    }
-
-    @Override
-    public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.CHANGE_DATE);
+        return updateOffsetTime != null ? updateOffsetTime.toInstant().toEpochMilli() : 0;
     }
 
     @Override
     public long getSize() {
-//        if (file == null)
-//            return 0;
-//        Long size = file.getSize();
-//        return size != null ? size.longValue() : 0;
-        return 0; // FIXME: 02.04.2023 
-    }
-
-    @Override
-    public GoogleCloudStorageFile getParent() {
-        if (parent == null) {
-            FileURL parentFileURL = this.fileURL.getParent();
-            if (parentFileURL != null)
-                setParent(FileFactory.getFile(parentFileURL));
-            // Note: parent may be null if it can't be resolved
-        }
-        return parent;
-    }
-
-    @Override
-    public void setParent(AbstractFile parent) {
-        if (parent instanceof GoogleCloudStorageMonitoredFile)
-            parent = ((GoogleCloudStorageMonitoredFile) parent).getUnderlyingFile();
-        this.parent = (GoogleCloudStorageFile) parent;
+        // TODO NPE check, unknown size?
+        return blob.getSize();
     }
 
     @Override
     public boolean exists() {
-        if (file != null)
-            return true;
-
-        GoogleCloudStorageFile parent = getParent();
-        if (parent == null || !parent.exists())
-            return false;
-
-        try {
-            Stream.of(parent.ls()).filter(this::equals).findFirst().ifPresent(other -> this.file = other.file);
-        } catch (IOException e) {
-            LOGGER.warn("failed to list {}", parent);
-            return false;
-        }
-
-        return file != null;
-    }
-
-    @Override
-    public FilePermissions getPermissions() {
-        return isDirectory() ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS : new SimpleFilePermissions(FilePermissions.FULL_PERMISSION_INT);
-    }
-
-    @Override
-    public PermissionBits getChangeablePermissions() {
-        return PermissionBits.EMPTY_PERMISSION_BITS;
-    }
-
-    @Override
-    public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled)
-            throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.CHANGE_PERMISSION);
-    }
-
-    @Override
-    public String getOwner() {
-        return null;
-    }
-
-    @Override
-    public boolean canGetOwner() {
-        return false;
-    }
-
-    @Override
-    public String getGroup() {
-        return null;
-    }
-
-    @Override
-    public boolean canGetGroup() {
-        return false;
+        // TODO Check NPE?
+        // TODO Folder always exists
+//        return blob.exists();
+        return true;
     }
 
     @Override
     public boolean isDirectory() {
-        return false;
-//        return file != null ? isFolder(file) : false;
-    }
-
-//    protected static boolean isFolder(File file) {
-//        return FOLDER_MIME_TYPE.equals(file.getMimeType());
-//    }
-
-    @Override
-    public boolean isSymlink() {
-        return false;
-    }
-
-    @Override
-    public boolean isSystem() {
-        return false;
-    }
-
-    @Override
-    public GoogleCloudStorageFile[] ls() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            FileList result = connHandler.getConnection().files().list()
-//                    .setFields("files(id,name,parents,size,modifiedTime,mimeType,trashed)")
-//                    .setQ(String.format("'%s' in parents", getId()))
-//                    .execute();
-//            List<File> files = result.getFiles();
-//            if (files == null || files.isEmpty()) {
-//                LOGGER.info("No files found.");
-//                return new GoogleCloudStorageFile[0];
-//            }
-//
-//            return files.stream()
-//                    .filter(file -> file.getSize() != null || isFolder(file))
-//                    .filter(file -> !file.getTrashed())
-//                    .map(this::toFile)
-//                    .toArray(GoogleCloudStorageFile[]::new);
-//        }
-
-        var buckets = getCloudStorageClient().getConnection().list();
-
-        return StreamSupport.stream(buckets.iterateAll().spliterator(), false)
-                .map(this::toFile)
-                .toArray(GoogleCloudStorageFile[]::new);
-    }
-
-    private GoogleCloudStorageFile toFile(Bucket bucket) {
-        FileURL url = (FileURL) getURL().clone();
-        String parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
-        url.setPath(parentPath + file.getName());
-        GoogleCloudStorageFile result = new GoogleCloudStorageFile(url, file);
-        result.setParent(this);
-        return result;
-    }
-
-//    private GoogleCloudStorageFile toFile(File file) {
-//        FileURL url = (FileURL) getURL().clone();
-//        String parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
-//        url.setPath(parentPath + file.getName());
-//        GoogleCloudStorageFile result = new GoogleCloudStorageFile(url, file);
-//        result.setParent(this);
-//        return result;
-//    }
-
-    @Override
-    public void mkdir() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            File fileMetadata = new File();
-//            String filename = getURL().getFilename();
-//            fileMetadata.setParents(Collections.singletonList(getParent().getId()));
-//            fileMetadata.setName(filename);
-//            fileMetadata.setMimeType(FOLDER_MIME_TYPE);
-//            file = connHandler.getConnection().files().create(fileMetadata)
-//                    .setFields("id,name,parents,size,modifiedTime,mimeType")
-//                    .execute();
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);
+        return blob.isDirectory();
     }
 
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            return connHandler.getConnection().files()
-//                    .get(file.getId())
-//                    .executeMediaAsInputStream();
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.READ_FILE);
+        // FIXME try?
+        // TODO missing file or folder?
+        return Channels.newInputStream(blob.reader());
     }
-
-    @Override
-    public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            File fileMetadata = new File();
-//            String filename = getURL().getFilename();
-//            fileMetadata.setParents(Collections.singletonList(getParent().getId()));
-//            fileMetadata.setName(filename);
-//            PipedOutputStream output = new PipedOutputStream();
-//            PipedInputStream input = new PipedInputStream(output);
-//            new Thread(() -> {
-//                InputStreamContent in = new InputStreamContent("application/octet-stream", input);
-//                try {
-//                    file = connHandler.getConnection().files()
-//                            .create(fileMetadata, in)
-//                            .setFields("id,name,parents,size,modifiedTime,mimeType")
-//                            .execute();
-//                } catch (IOException e) {
-//                    LOGGER.error("failed to copy to Google Drive", e);
-//                }
-//            }).start();
-//            return output;
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
-    }
-
-    @Override
-    public AbstractFile getChild(String filename, AbstractFile template) throws IOException {
-//        if (template == null)
-//            return super.getChild(filename, template);
-//        FileURL url = (FileURL) getURL().clone();
-//        String parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
-//        url.setPath(parentPath + filename);
-//        return new GoogleCloudStorageFile(url);
-        throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
-    }
-
-    @Override
-    public OutputStream getAppendOutputStream() throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.APPEND_FILE);
-    }
-
-    @Override
-    @UnsupportedFileOperation
-    public RandomAccessInputStream getRandomAccessInputStream() throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.RANDOM_READ_FILE);
-    }
-
-    @Override
-    @UnsupportedFileOperation
-    public RandomAccessOutputStream getRandomAccessOutputStream()
-            throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.RANDOM_WRITE_FILE);
-    }
-
-    @Override
-    public void delete() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            connHandler.getConnection().files().delete(file.getId()).execute();
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.DELETE);
-    }
-
-    @Override
-    public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            connHandler.getConnection().files().update(file.getId(), new File().setName(destFile.getName())).execute();
-//            file.setName(destFile.getName());
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.RENAME);
-    }
-
-    @Override
-    @UnsupportedFileOperation
-    public void copyRemotelyTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.COPY_REMOTELY);
-    }
-
-    @Override
-    public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            About about = connHandler.getConnection().about().get().setFields("storageQuota").execute();
-//            Map<String, Long> storageQuota = (Map<String, Long>) about.get("storageQuota");
-//            Long limit = storageQuota.get("limit");
-//            if (limit == null)
-//                return -1;
-//            Long usage = storageQuota.get("usage");
-//            return limit - usage;
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.GET_FREE_SPACE);
-    }
-
-    @Override
-    public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
-//        try (GoogleCloudStorageConnectionHandler connHandler = getConnHandler()) {
-//            About about = connHandler.getConnection().about().get().setFields("storageQuota").execute();
-//            Map<String, Long> storageQuota = (Map<String, Long>) about.get("storageQuota");
-//            Long limit = storageQuota.get("limit");
-//            return limit != null ? limit : -1;
-//        }
-        throw new UnsupportedFileOperationException(FileOperation.GET_TOTAL_SPACE);
-    }
-
-    @Override
-    public Object getUnderlyingFileObject() {
-        return null;
-    }
-
-//    protected String getId() {
-//        return file.getId();
-//    }
 }

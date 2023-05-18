@@ -17,9 +17,12 @@
 
 package com.mucommander.commons.file.protocol.gcs;
 
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.PathUtils;
 
@@ -27,14 +30,21 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
+/**
+ * TODO
+ */
+public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
-    protected GoogleCloudStorageRoot(FileURL url) {
+    private final Bucket bucket;
+
+    protected GoogleCloudStorageBucket(FileURL url, Bucket bucket) {
         super(url);
+        this.bucket = bucket;
     }
 
     @Override
     public boolean isDirectory() {
+        // Bucket is always represented as directory
         return true;
     }
 
@@ -44,15 +54,10 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
     }
 
     @Override
-    public boolean isRoot() {
-        return true;
-    }
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
+        var files = bucket.list(Storage.BlobListOption.currentDirectory());
 
-    @Override
-    public AbstractFile[] ls() throws IOException {
-        var buckets = getCloudStorageClient().getConnection().list();
-
-        var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
+        var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile)
                 .collect(Collectors.toList());
 
@@ -62,11 +67,11 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
     }
 
     @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException {
+    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         //FIXME
-        var buckets = getCloudStorageClient().getConnection().list();
+        var files = bucket.list(Storage.BlobListOption.currentDirectory());
 
-        var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
+        var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile)
                 .collect(Collectors.toList());
 
@@ -75,13 +80,18 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
         return childrenArray;
     }
 
-    private GoogleCloudStorageBucket toFile(Bucket bucket) {
+    private GoogleCloudStorageFile toFile(Blob blob) {
         var url = (FileURL) getURL().clone();
         var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
-        url.setPath(parentPath + bucket.getName());
-        var result = new GoogleCloudStorageBucket(url, bucket);
+        url.setPath(parentPath + blob.getName());
+        var result = new GoogleCloudStorageFile(url, bucket, blob);
         result.setParent(this);
-
         return result;
+    }
+
+    @Override
+    public long getDate() {
+        // TODO check NPE
+        return bucket.getUpdateTimeOffsetDateTime().toInstant().toEpochMilli();
     }
 }

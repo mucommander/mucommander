@@ -34,6 +34,9 @@ public class GoogleCloudStorageProtocolProvider implements ProtocolProvider {
         if (path.equals("/")) {
             return new GoogleCloudStorageRoot(url);
         }
-        return new GoogleCloudStorageFile(url);
+
+        // TODO buckets
+
+        return new GoogleCloudStorageFile(url, null, null); //FIXME
     }
 }

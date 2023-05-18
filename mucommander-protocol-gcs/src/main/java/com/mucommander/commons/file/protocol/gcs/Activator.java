@@ -37,7 +37,7 @@ import org.osgi.framework.ServiceRegistration;
  */
 public class Activator implements BundleActivator {
 
-    private static final String GCS_SCHEMA = "gcs";
+    private static final String GCS_SCHEMA = "gs";
     private ServiceRegistration<FileProtocolService> serviceRegistration;
     private ServiceRegistration<ProtocolPanelProvider> uiServiceRegistration;
 
