@@ -38,7 +38,7 @@ import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.TerminalWidget;
 import com.jediterm.terminal.ui.TerminalWidgetListener;
-import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
+import com.jediterm.terminal.ui.settings.SettingsProvider;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -61,7 +61,7 @@ public final class TerminalWindow {
     }
 
     public static JediTermWidget createTerminal(String currentFolder, Runnable listener, KeyListener keyListener) {
-        DefaultSettingsProvider settings = getDefaultSettings(
+        SettingsProvider settings = getDefaultSettings(
                 new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_COLOR)),
                 new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.SHELL_FOREGROUND_COLOR)));
         JediTermWidget jediTermWidget = createTerminalWidget(currentFolder, settings);
@@ -78,37 +78,18 @@ public final class TerminalWindow {
         return createTerminalWidget(currentFolder, getDefaultSettings(TerminalColor.BLACK, TerminalColor.WHITE));
     }
 
-    private static JediTermWidget createTerminalWidget(String currentFolder, DefaultSettingsProvider settings) {
+    private static JediTermWidget createTerminalWidget(String currentFolder, SettingsProvider settings) {
         JediTermWidget widget = new JediTermWidget(80, 24, settings);
         widget.setTtyConnector(createTtyConnector(currentFolder));
         widget.start();
         return widget;
     }
 
-    private static DefaultSettingsProvider getDefaultSettings(TerminalColor background, TerminalColor foreground) {
-        return new DefaultSettingsProvider() {
-
-            // see: https://github.com/mucommander/mucommander/issues/933
-            private final boolean altSendsEscape = shouldSendEscape();
-
+    private static SettingsProvider getDefaultSettings(TerminalColor background, TerminalColor foreground) {
+        return new TerminalSettingsProvider() {
             @Override
             public TextStyle getDefaultStyle() {
                 return new TextStyle(foreground, background);
-            }
-
-            @Override
-            public boolean altSendsEscape() {
-                return altSendsEscape;
-            }
-
-            private boolean shouldSendEscape() {
-                if (OsFamily.MAC_OS.isCurrent()) {
-                    return MuConfigurations.getPreferences().getVariable(
-                                MuPreference.USE_OPTION_AS_META_KEY,
-                                MuPreferences.DEFAULT_USE_OPTION_AS_META_KEY);
-                } else {
-                    return super.altSendsEscape();
-                }
             }
         };
     }

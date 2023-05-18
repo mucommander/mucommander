@@ -37,7 +37,6 @@ import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 
 /**
