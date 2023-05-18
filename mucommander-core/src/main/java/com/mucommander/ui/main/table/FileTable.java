@@ -31,7 +31,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.WeakHashMap;
 
 import javax.swing.BorderFactory;

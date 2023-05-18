@@ -25,7 +25,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Locale;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
