@@ -21,6 +21,7 @@ jar {
         include 'org/threeten/bp/**'
         include 'io/opencensus/**'
         include 'io/grpc/**'
+        include 'com/fasterxml/jackson/**'
         exclude 'META-INF/**'
     }}
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
