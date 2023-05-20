@@ -108,12 +108,12 @@ public class ThemeData {
     public static final int FILE_TABLE_FONT = 0;
 
     /**
-     * Font used to display shell output.
+     * Font used to display terminal output.
      * <p>
      * This defaults to the current <code>JTextArea</code> font.
      * </p>
      */
-    public static final int SHELL_FONT = 1;
+    public static final int TERMINAL_FONT = 1;
 
     /**
      * Font used in the file editor and viewer.
@@ -130,14 +130,6 @@ public class ThemeData {
      * </p>
      */
     public static final int LOCATION_BAR_FONT = 3;
-
-    /**
-     * Font used in the shell history widget.
-     * <p>
-     * This defaults to the current <code>JTextField</code> font.
-     * </p>
-     */
-    public static final int SHELL_HISTORY_FONT = 4;
 
     /**
      * Font used in the status bar.
@@ -450,68 +442,36 @@ public class ThemeData {
     public static final int FILE_INACTIVE_SELECTED_FOREGROUND_COLOR = 32;
 
     /**
-     * Color used to paint shell commands output.
+     * Color used to paint terminal commands output.
      * <p>
      * This defaults to the current <code>JTextArea</code> foreground color.
      * </p>
      */
-    public static final int SHELL_FOREGROUND_COLOR = 33;
+    public static final int TERMINAL_FOREGROUND_COLOR = 33;
 
     /**
-     * Color used to paint the background of shell commands output.
+     * Color used to paint the background of terminal commands output.
      * <p>
      * This defaults to the current <code>JTextArea</code> background color.
      * </p>
      */
-    public static final int SHELL_BACKGROUND_COLOR = 34;
+    public static final int TERMINAL_BACKGROUND_COLOR = 34;
 
     /**
-     * Color used to paint shell commands output when selected.
+     * Color used to paint terminal commands output when selected.
      * <p>
      * This defaults to the current <code>JTextArea</code> selection foreground color.
      * </p>
      */
-    public static final int SHELL_SELECTED_FOREGROUND_COLOR = 35;
+    public static final int TERMINAL_SELECTED_FOREGROUND_COLOR = 35;
 
     /**
-     * Color used to paint the background of shell commands output when selected.
+     * Color used to paint the background of terminal commands output when selected.
      * <p>
      * This defaults to the current <code>JTextArea</code> selection background color.
      * </p>
      */
-    public static final int SHELL_SELECTED_BACKGROUND_COLOR = 36;
-
-    /**
-     * Color used to paint the shell history's text.
-     * <p>
-     * This defaults to the current <code>JTextField</code> foreground color.
-     * </p>
-     */
-    public static final int SHELL_HISTORY_FOREGROUND_COLOR = 37;
-
-    /**
-     * Color used to paint the shell history's background.
-     * <p>
-     * This defaults to the current <code>JTextField</code> background color.
-     * </p>
-     */
-    public static final int SHELL_HISTORY_BACKGROUND_COLOR = 38;
-
-    /**
-     * Color used to paint the shell history's text when selected.
-     * <p>
-     * This defaults to the current <code>JTextField</code> selection foreground color.
-     * </p>
-     */
-    public static final int SHELL_HISTORY_SELECTED_FOREGROUND_COLOR = 39;
-
-    /**
-     * Color used to paint the shell history's background when selected.
-     * <p>
-     * This defaults to the current <code>JTextField</code> selection background color.
-     * </p>
-     */
-    public static final int SHELL_HISTORY_SELECTED_BACKGROUND_COLOR = 40;
+    public static final int TERMINAL_SELECTED_BACKGROUND_COLOR = 36;
 
     /**
      * Color used to paint the file editor / viewer's text.
@@ -1002,16 +962,11 @@ public class ThemeData {
         registerColor(FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR,              FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR);
 
         // Shell default values.
-        registerFont(SHELL_FONT,                              DEFAULT_TEXT_AREA_FONT);
-        registerFont(SHELL_HISTORY_FONT,                       DEFAULT_TEXT_FIELD_FONT);
-        registerColor(SHELL_FOREGROUND_COLOR,                  DEFAULT_TEXT_AREA_FOREGROUND);
-        registerColor(SHELL_BACKGROUND_COLOR,                  DEFAULT_TEXT_AREA_BACKGROUND);
-        registerColor(SHELL_SELECTED_FOREGROUND_COLOR,         DEFAULT_TEXT_AREA_SELECTION_FOREGROUND);
-        registerColor(SHELL_SELECTED_BACKGROUND_COLOR,         DEFAULT_TEXT_AREA_SELECTION_BACKGROUND);
-        registerColor(SHELL_HISTORY_FOREGROUND_COLOR,          DEFAULT_TEXT_FIELD_FOREGROUND);
-        registerColor(SHELL_HISTORY_BACKGROUND_COLOR,          DEFAULT_TEXT_FIELD_BACKGROUND);
-        registerColor(SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, DEFAULT_TEXT_FIELD_SELECTION_FOREGROUND);
-        registerColor(SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, DEFAULT_TEXT_FIELD_SELECTION_BACKGROUND);
+        registerFont(TERMINAL_FONT,                               DEFAULT_TEXT_AREA_FONT);
+        registerColor(TERMINAL_FOREGROUND_COLOR,                  DEFAULT_TEXT_AREA_FOREGROUND);
+        registerColor(TERMINAL_BACKGROUND_COLOR,                  DEFAULT_TEXT_AREA_BACKGROUND);
+        registerColor(TERMINAL_SELECTED_FOREGROUND_COLOR,         DEFAULT_TEXT_AREA_SELECTION_FOREGROUND);
+        registerColor(TERMINAL_SELECTED_BACKGROUND_COLOR,         DEFAULT_TEXT_AREA_SELECTION_BACKGROUND);
 
         // Editor default values.
         registerFont(EDITOR_FONT,                       DEFAULT_TEXT_AREA_FONT);

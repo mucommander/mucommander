@@ -252,25 +252,25 @@ class ThemeWriter implements ThemeXmlConstants {
         // -------------------------------------------------------------------------------
         out.startElement(ELEMENT_SHELL);
         out.println();
-        if(theme.isFontSet(Theme.SHELL_FONT))
-            out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.SHELL_FONT)));
+        if(theme.isFontSet(Theme.TERMINAL_FONT))
+            out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.TERMINAL_FONT)));
 
         // Normal colors.
         out.startElement(ELEMENT_NORMAL);
         out.println();
-        if(theme.isColorSet(Theme.SHELL_BACKGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.SHELL_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.SHELL_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.SHELL_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.TERMINAL_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.TERMINAL_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.TERMINAL_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.TERMINAL_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_NORMAL);
 
         // Selected colors.
         out.startElement(ELEMENT_SELECTED);
         out.println();
-        if(theme.isColorSet(Theme.SHELL_SELECTED_BACKGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.SHELL_SELECTED_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.SHELL_SELECTED_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.SHELL_SELECTED_FOREGROUND_COLOR)));
+        if(theme.isColorSet(Theme.TERMINAL_SELECTED_BACKGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.TERMINAL_SELECTED_BACKGROUND_COLOR)));
+        if(theme.isColorSet(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR))
+            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_SELECTED);
         out.endElement(ELEMENT_SHELL);
 

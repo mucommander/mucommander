@@ -18,7 +18,6 @@
 package com.mucommander.ui.dialog.pref.theme;
 
 import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.text.Translator;
@@ -36,10 +35,7 @@ import java.beans.PropertyChangeListener;
  * @author Nicolas Rinaudo, Maxence Bernard
  */
 class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
-    private JTextArea        shellPreview;
-    private EditableComboBox historyPreview;
-
-
+    private JTextArea terminalPreview;
 
     // - Initialisation ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -49,7 +45,7 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
      * @param themeData themeData being edited.
      */
     public ShellPanel(PreferencesDialog parent, ThemeData themeData) {
-        super(parent, Translator.get("theme_editor.shell_tab"), themeData);
+        super(parent, Translator.get("theme_editor.terminal_tab"), themeData);
         initUI();
     }
 
@@ -83,30 +79,17 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
 
     private JPanel createPreviewPanel() {
         JPanel      panel;
-        YBoxPanel   headerPanel;
         JScrollPane scroll;
 
         panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
 
-        headerPanel = new YBoxPanel();
-        headerPanel.add(new JLabel(Translator.get("run_dialog.run_command_description") + ":"));
-        headerPanel.add(historyPreview = new EditableComboBox(new JTextField("mucommander -v")));
-        historyPreview.addItem("mucommander -v");
-        historyPreview.addItem("java -version");
-
-        headerPanel.addSpace(10);
-        headerPanel.add(new JLabel(Translator.get("run_dialog.command_output")+":"));
-
-        panel.add(headerPanel, BorderLayout.NORTH);
-
-        shellPreview = new JTextArea(15, 15);
-        panel.add(scroll = new JScrollPane(shellPreview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
-        scroll.getViewport().setPreferredSize(shellPreview.getPreferredSize());
-        shellPreview.append(RuntimeConstants.APP_STRING);
-        shellPreview.append("\nThis is free software, distributed under the terms of the GNU General Public License.");
-        //        shellPreview.setLineWrap(true);
-        shellPreview.setCaretPosition(0);
+        terminalPreview = new JTextArea(15, 15);
+        panel.add(scroll = new JScrollPane(terminalPreview, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+        scroll.getViewport().setPreferredSize(terminalPreview.getPreferredSize());
+        terminalPreview.append(RuntimeConstants.APP_STRING);
+        terminalPreview.append("\nThis is free software, distributed under the terms of the GNU General Public License.");
+        terminalPreview.setCaretPosition(0);
 
         setForegroundColors();
         setBackgroundColors();
@@ -119,23 +102,17 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
      */
     private void initUI() {
         JPanel      mainPanel;
-        JTabbedPane tabbedPane;
         JPanel      previewPanel;
 
         setLayout(new BorderLayout());
 
-        tabbedPane   = new JTabbedPane();
         previewPanel = createPreviewPanel();
 
-        tabbedPane.add(Translator.get("theme_editor.shell_tab"),
-                       createConfigurationPanel(ThemeData.SHELL_FONT, ThemeData.SHELL_FOREGROUND_COLOR, ThemeData.SHELL_BACKGROUND_COLOR,
-                                                ThemeData.SHELL_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_SELECTED_BACKGROUND_COLOR, shellPreview));
-        tabbedPane.add(Translator.get("theme_editor.shell_history_tab"),
-                       createConfigurationPanel(ThemeData.SHELL_HISTORY_FONT, ThemeData.SHELL_HISTORY_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_BACKGROUND_COLOR,
-                                                ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR, ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR, historyPreview));
-
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        mainPanel.add(Translator.get("theme_editor.terminal_tab"),
+                createConfigurationPanel(ThemeData.TERMINAL_FONT, ThemeData.TERMINAL_FOREGROUND_COLOR, ThemeData.TERMINAL_BACKGROUND_COLOR,
+                        ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR, ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR, terminalPreview));
+
         mainPanel.add(previewPanel, BorderLayout.EAST);
 
         add(mainPanel, BorderLayout.NORTH);
@@ -152,18 +129,14 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     }
 
     private void setBackgroundColors() {
-        shellPreview.setBackground(themeData.getColor(ThemeData.SHELL_BACKGROUND_COLOR));
-        shellPreview.setSelectionColor(themeData.getColor(ThemeData.SHELL_SELECTED_BACKGROUND_COLOR));
-        historyPreview.setBackground(themeData.getColor(ThemeData.SHELL_HISTORY_BACKGROUND_COLOR));
-        historyPreview.setSelectionBackground(themeData.getColor(ThemeData.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR));
+        terminalPreview.setBackground(themeData.getColor(ThemeData.TERMINAL_BACKGROUND_COLOR));
+        terminalPreview.setSelectionColor(themeData.getColor(ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR));
     }
 
     private void setForegroundColors() {
-        shellPreview.setForeground(themeData.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
-        shellPreview.setSelectedTextColor(themeData.getColor(ThemeData.SHELL_SELECTED_FOREGROUND_COLOR));
-        shellPreview.setCaretColor(themeData.getColor(ThemeData.SHELL_FOREGROUND_COLOR));
-        historyPreview.setForeground(themeData.getColor(ThemeData.SHELL_HISTORY_FOREGROUND_COLOR));
-        historyPreview.setSelectionForeground(themeData.getColor(ThemeData.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR));
+        terminalPreview.setForeground(themeData.getColor(ThemeData.TERMINAL_FOREGROUND_COLOR));
+        terminalPreview.setSelectedTextColor(themeData.getColor(ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR));
+        terminalPreview.setCaretColor(themeData.getColor(ThemeData.TERMINAL_FOREGROUND_COLOR));
     }
 
 
