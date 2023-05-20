@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an enhancement for muCommander 
+description: Suggest an enhancement for muCommander
 title: "[Enhancement] "
 labels: ["enhancement"]
 body:
@@ -11,7 +11,7 @@ body:
     id: expectations
     attributes:
       label: Description
-      description: A clear and concise description of the features you woul like to see
+      description: A clear and concise description of the feature you would like to see
       placeholder: I wish that...
     validations:
       required: true
