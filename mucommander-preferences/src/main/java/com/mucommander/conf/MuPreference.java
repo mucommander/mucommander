@@ -17,6 +17,11 @@
 
 package com.mucommander.conf;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * 
  * @author Arik Hadas
@@ -79,6 +84,11 @@ public enum MuPreference {
     ;
 
     private String label;
+    private static Map<String, MuPreference> labelToPreference;
+
+    static {
+        labelToPreference = Stream.of(MuPreference.values()).collect(Collectors.toMap(MuPreference::toString, p -> p));
+    }
 
     private MuPreference(String label) {
         this.label = label;
@@ -89,19 +99,13 @@ public enum MuPreference {
      * @param label the label aka configuration key
      * @return MuPreference or null of label/key is unknown.
      */
-    public static MuPreference getMuPreferenceFromString(String label) {
-        MuPreference result = null;
-        for (MuPreference pref : MuPreference.values()) {
-            if (pref.label.equals(label)) {
-                result = pref;
-                break;
-            }
-        }
-        return result;
+    public static MuPreference getByLabel(String label) {
+        return labelToPreference.get(label);
     }
 
     @Override
     public String toString() {
         return label;
     }
+
 }
