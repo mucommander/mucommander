@@ -20,8 +20,10 @@ package com.mucommander.commons.file.protocol.adb;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import se.vidstige.jadb.JadbConnection;
 import se.vidstige.jadb.JadbDevice;
@@ -265,19 +267,28 @@ public class AdbFile extends ProtocolFile {
         if (childs == null) {
             return null;
         }
-        AbstractFile[] result = new AbstractFile[childs.size() - 1];  // skip ".."
-        int index = 0;
-        for (RemoteFile rf : childs) {
-            if ("..".equals(rf.getPath())) {
-                continue;
-            }
-
-            FileURL url = FileURL.getFileURL(getURL() + rootFolder + rf.getPath());
-            AdbFile adbFile = new AdbFile(url, rf);
-            adbFile.parent = this;
-            result[index++] = adbFile;
-        }
-        return result;
+        return childs.stream()
+                .filter(rf -> !"..".equals(rf.getPath()))
+                .map(rf -> {
+                    FileURL url;
+                    try {
+                        url = FileURL.getFileURL(getURL() + rootFolder + rf.getPath());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                    AdbFile adbFile;
+                    try {
+                        adbFile = new AdbFile(url, rf);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                    adbFile.parent = AdbFile.this;
+                    return adbFile;
+                })
+                .filter(Objects::nonNull)
+                .toArray(AbstractFile[]::new);
     }
 
     @Override
