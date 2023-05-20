@@ -52,35 +52,33 @@ public class ReportBugAction extends OpenURLInBrowserAction {
 
     @Override
     public void performAction() {
-        Object url = com.mucommander.RuntimeConstants.REPORT_BUG_URL;
+        var url = com.mucommander.RuntimeConstants.REPORT_BUG_URL;
         try {
-            // TODO remove - temporarily left for testing: uncomment to check on that test-repo
-            //url = "https://github.com/pskowronek/parametrized_issue_template/issues/new";
-            String ver = String.format(Activator.portable ? "%s (%s)" : "%s", RuntimeConstants.VERSION, Translator.get("portable"));
-            String java_ver = String.join(System.lineSeparator(),
+            var muCVersion = String.format(Activator.portable ? "%s (%s)" : "%s", RuntimeConstants.VERSION, Translator.get("portable"));
+            var javaVersion = String.join(System.lineSeparator(),
                     System.getProperty("java.version"),
                     System.getProperty("java.vm.name"),
                     System.getProperty("java.vm.version"),
                     System.getProperty("java.vm.vendor"));
-            String os_ver = String.join(System.lineSeparator(),
+            var osVersion = String.join(System.lineSeparator(),
                     System.getProperty("os.name"),
                     System.getProperty("os.version"),
                     System.getProperty("os.arch"));
 
-            final LoggingEvent[] records = MuLogging.getDebugConsoleAppender().getLogRecords();
-            StringBuilder logRecords = new StringBuilder();
+            var records = MuLogging.getDebugConsoleAppender().getLogRecords();
+            var logRecords = new StringBuilder();
             for (LoggingEvent record : records) {
                 logRecords.append(record.toString());
                 logRecords.append(System.lineSeparator());
             }
-            String newBugUrl = String.format(NEW_BUG_FORMAT, url,
-                    URLEncoder.encode(ver, "UTF-8"),
-                    URLEncoder.encode(java_ver, "UTF-8"),
-                    URLEncoder.encode(os_ver, "UTF-8"),
+            var newBugUrl = String.format(NEW_BUG_FORMAT, url,
+                    URLEncoder.encode(muCVersion, "UTF-8"),
+                    URLEncoder.encode(javaVersion, "UTF-8"),
+                    URLEncoder.encode(osVersion, "UTF-8"),
                     URLEncoder.encode(logRecords.toString(),"UTF-8"));
             putValue(URL_PROPERTY_KEY, newBugUrl);
         } catch (Exception e) {
-            LOGGER.error("Error while preparing a bug report, falling back to generic", e);
+            LOGGER.error("Error while preparing a bug report, falling back to generic one", e);
             putValue(URL_PROPERTY_KEY, url);
         }
         super.performAction();
