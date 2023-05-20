@@ -51,8 +51,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
 
     @Override
     public void configurationChanged(ConfigurationEvent event) {
-        if (MuPreference.USE_OPTION_AS_META_KEY.equals(
-                MuPreference.getMuPreferenceFromString(event.getVariable()))) {
+        if (MuPreference.USE_OPTION_AS_META_KEY == MuPreference.getByLabel(event.getVariable())) {
             altSendsEscape = event.getBooleanValue();
         }
     }
