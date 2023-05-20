@@ -51,6 +51,7 @@ Localization:
 Bug fixes:
 - Fixed connection to SFTP servers using a private key.
 - The terminal accepts input that wasn't accepted before from German keyboard when disabling the setting 'Use Option as Meta key in Terminal'.
+- The terminal now properly displays diacritics when in a form of decomposed characters.
 
 Known issues:
 - Some translations may not be up-to-date.
