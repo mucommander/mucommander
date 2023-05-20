@@ -69,15 +69,15 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      * to force the initialization if it needs to happen at a predictable time.
      */
     static {
-    	currentValue = parseSystemProperty(getRawSystemProperty());
-    	currentArchitecture = System.getProperty("os.arch");
-    	LOGGER.info("Current Java version: {}", currentValue);
-    	LOGGER.info("Current JVM architecture: {}", currentArchitecture);
+        currentValue = parseSystemProperty(getRawSystemProperty());
+        currentArchitecture = System.getProperty("os.arch");
+        LOGGER.info("Current Java version: {}", currentValue);
+        LOGGER.info("Current JVM architecture: {}", currentArchitecture);
     }
 
 
     JavaVersion(String stringRepresentation) {
-    	this.stringRepresentation = stringRepresentation;
+        this.stringRepresentation = stringRepresentation;
     }
 
     ////////////////////
@@ -90,7 +90,7 @@ public enum JavaVersion implements ComparableRuntimeProperty {
      * @return <code>true</code> if the JVM architecture is amd64, and <code>false</code> otherwise.
      */
     public static boolean isAmd64Architecture() {
-    	return "amd64".equals(currentArchitecture);
+        return "amd64".equals(currentArchitecture);
     }
 
     /**
@@ -111,56 +111,56 @@ public enum JavaVersion implements ComparableRuntimeProperty {
         return System.getProperty("java.version");
     }
 
-	/**
-	 * Returns a <code>JavaVersion</code> instance corresponding to the
-	 * specified system property's value.
-	 *
-	 * @param javaVersionProp
-	 *            the value of the "java.version" system property
-	 * @return a JavaVersion instance corresponding to the specified system
-	 *         property's value
-	 */
-	static JavaVersion parseSystemProperty(String javaVersionProp) {
-		// Java version property should never be null or empty, but better be
-		// safe than sorry ...
-		if (javaVersionProp == null
-				|| (javaVersionProp = javaVersionProp.trim()).equals(""))
-			// Assume java 1.8 (first supported Java version)
-			return JavaVersion.JAVA_8;
-		// Java 17
-		if (javaVersionProp.startsWith("17"))
-			return JavaVersion.JAVA_17;
-		// Java 16
-		if (javaVersionProp.startsWith("16"))
-			return JavaVersion.JAVA_16;
-		// Java 15
-		if (javaVersionProp.startsWith("15"))
-			return JavaVersion.JAVA_15;
-		// Java 14
-		if (javaVersionProp.startsWith("14"))
-			return JavaVersion.JAVA_14;
-		// Java 13
-		if (javaVersionProp.startsWith("13"))
-			return JavaVersion.JAVA_13;
-		// Java 12
-		if (javaVersionProp.startsWith("12"))
-			return JavaVersion.JAVA_12;
-		// Java 11
-		if (javaVersionProp.startsWith("11"))
-			return JavaVersion.JAVA_11;
-		// Java 10
-		if (javaVersionProp.startsWith("10"))
-			return JavaVersion.JAVA_10;
-		// Java 9
-		if (javaVersionProp.startsWith("9"))
-			return JavaVersion.JAVA_9;
-		// Java 1.8
-		if (javaVersionProp.startsWith("1.8"))
-			return JavaVersion.JAVA_8;
+    /**
+     * Returns a <code>JavaVersion</code> instance corresponding to the
+     * specified system property's value.
+     *
+     * @param javaVersionProp
+     *            the value of the "java.version" system property
+     * @return a JavaVersion instance corresponding to the specified system
+     *         property's value
+     */
+    static JavaVersion parseSystemProperty(String javaVersionProp) {
+        // Java version property should never be null or empty, but better be
+        // safe than sorry ...
+        if (javaVersionProp == null
+                || (javaVersionProp = javaVersionProp.trim()).equals(""))
+            // Assume java 1.8 (first supported Java version)
+            return JavaVersion.JAVA_8;
+        // Java 17
+        if (javaVersionProp.startsWith("17"))
+            return JavaVersion.JAVA_17;
+        // Java 16
+        if (javaVersionProp.startsWith("16"))
+            return JavaVersion.JAVA_16;
+        // Java 15
+        if (javaVersionProp.startsWith("15"))
+            return JavaVersion.JAVA_15;
+        // Java 14
+        if (javaVersionProp.startsWith("14"))
+            return JavaVersion.JAVA_14;
+        // Java 13
+        if (javaVersionProp.startsWith("13"))
+            return JavaVersion.JAVA_13;
+        // Java 12
+        if (javaVersionProp.startsWith("12"))
+            return JavaVersion.JAVA_12;
+        // Java 11
+        if (javaVersionProp.startsWith("11"))
+            return JavaVersion.JAVA_11;
+        // Java 10
+        if (javaVersionProp.startsWith("10"))
+            return JavaVersion.JAVA_10;
+        // Java 9
+        if (javaVersionProp.startsWith("9"))
+            return JavaVersion.JAVA_9;
+        // Java 1.8
+        if (javaVersionProp.startsWith("1.8"))
+            return JavaVersion.JAVA_8;
 
-		// Newer version we don't know of yet, assume latest supported Java version
-		return JavaVersion.JAVA_16;
-	}
+        // Newer version we don't know of yet, assume latest supported Java version
+        return JavaVersion.JAVA_16;
+    }
 
     /**
      * Returns <code>true</code> if this instance is the same instance as the one returned by {@link #getCurrent()}.
@@ -175,21 +175,21 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     // ComparableRuntimeProperty implementation //
     //////////////////////////////////////////////
 
-	public boolean isCurrentOrLower() {
-		return currentValue.compareTo(this)<=0;
-	}
+    public boolean isCurrentOrLower() {
+        return currentValue.compareTo(this)<=0;
+    }
 
-	public boolean isCurrentLower() {
-		return currentValue.compareTo(this)<0;
-	}
+    public boolean isCurrentLower() {
+        return currentValue.compareTo(this)<0;
+    }
 
-	public boolean isCurrentOrHigher() {
-		return currentValue.compareTo(this)>=0;
-	}
+    public boolean isCurrentOrHigher() {
+        return currentValue.compareTo(this)>=0;
+    }
 
-	public boolean isCurrentHigher() {
-		return currentValue.compareTo(this)>0;
-	}
+    public boolean isCurrentHigher() {
+        return currentValue.compareTo(this)>0;
+    }
 
     ////////////////////////
     // Overridden methods //
