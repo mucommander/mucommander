@@ -37,6 +37,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
@@ -395,8 +396,8 @@ public class AdbFile extends ProtocolFile {
     }
 
     @Override
+    @UnsupportedFileOperation
     public void copyRemotelyTo(AbstractFile destFile) {
-
     }
 
     @Override
