@@ -337,7 +337,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         // Font creation.
         else if(qName.equals(ELEMENT_FONT)) {
             if(state == STATE_SHELL)
-                template.setFont(ThemeData.SHELL_FONT, createFont(attributes));
+                template.setFont(ThemeData.TERMINAL_FONT, createFont(attributes));
             else if(state == STATE_EDITOR)
                 template.setFont(ThemeData.EDITOR_FONT, createFont(attributes));
             else if(state == STATE_LOCATION_BAR)
@@ -476,9 +476,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_NORMAL)
-                template.setColor(ThemeData.SHELL_BACKGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.TERMINAL_BACKGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SHELL_SELECTED)
-                template.setColor(ThemeData.SHELL_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_EDITOR_NORMAL)
                 template.setColor(ThemeData.EDITOR_BACKGROUND_COLOR, createColor(attributes));
@@ -582,9 +582,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 template.setColor(ThemeData.FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_NORMAL)
-                template.setColor(ThemeData.SHELL_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.TERMINAL_FOREGROUND_COLOR, createColor(attributes));
             else if(state == STATE_SHELL_SELECTED)
-                template.setColor(ThemeData.SHELL_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                template.setColor(ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR, createColor(attributes));
 
             else if(state == STATE_SHELL_HISTORY_NORMAL)
                 template.setColor(ThemeData.SHELL_HISTORY_FOREGROUND_COLOR, createColor(attributes));

@@ -62,8 +62,8 @@ public final class TerminalWindow {
 
     public static JediTermWidget createTerminal(String currentFolder, Runnable listener, KeyListener keyListener) {
         SettingsProvider settings = getDefaultSettings(
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.SHELL_BACKGROUND_COLOR)),
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.SHELL_FOREGROUND_COLOR)));
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_BACKGROUND_COLOR)),
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_FOREGROUND_COLOR)));
         JediTermWidget jediTermWidget = createTerminalWidget(currentFolder, settings);
         jediTermWidget.addListener(new TerminalWidgetListener() {
             public void allSessionsClosed(TerminalWidget widget) {
