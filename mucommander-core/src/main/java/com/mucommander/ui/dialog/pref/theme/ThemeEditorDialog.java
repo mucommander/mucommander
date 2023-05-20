@@ -92,7 +92,7 @@ public class ThemeEditorDialog extends PreferencesDialog {
         addPreferencesPanel(new FolderPanePanel(this, data), false);
         addPreferencesPanel(new LocationBarPanel(this, data));
         addPreferencesPanel(new StatusBarPanel(this, data));
-        addPreferencesPanel(new ShellPanel(this, data));
+        addPreferencesPanel(new TerminalPanel(this, data));
         addPreferencesPanel(new FileEditorPanel(this, data));
         addPreferencesPanel(new QuickListPanel(this, data));
 

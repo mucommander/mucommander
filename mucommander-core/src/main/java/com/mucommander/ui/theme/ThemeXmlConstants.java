@@ -28,14 +28,12 @@ interface ThemeXmlConstants {
     public static final String ELEMENT_ROOT                 = "theme";
     /** File table description element. */
     public static final String ELEMENT_TABLE                = "file_table";
-    /** Shell description element. */
-    public static final String ELEMENT_SHELL                = "shell";
+    /** Terminal/Shell description element. */
+    public static final String ELEMENT_TERMINAL             = "shell";
     /** File editor description element. */
     public static final String ELEMENT_EDITOR               = "editor";
     /** Location bar description element. */
     public static final String ELEMENT_LOCATION_BAR         = "location_bar";
-    /** Shell history description element. */
-    public static final String ELEMENT_SHELL_HISTORY        = "shell_history";
     /** Volume label description element. */
     public static final String ELEMENT_STATUS_BAR           = "status_bar";
     /** Quick list label description element. */
