@@ -117,11 +117,11 @@ dependencies {
 }
 
 createBundlesDir.doLast {
-   ant.move file: "${buildDir}/osgi/bundle/${project('mucommander-core').jar.archiveName}",
+   ant.move file: "${buildDir}/osgi/bundle/${project('mucommander-core').jar.archiveFileName.get()}",
             todir: "${buildDir}/osgi/app"
    copy {
        from "build/libs"
-       include project(':').jar.archiveName
+       include project(':').jar.archiveFileName.get()
        into "${buildDir}/osgi"
    }
    copy {
