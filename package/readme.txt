@@ -45,6 +45,7 @@ Improvements:
 - When opening a result of a file search with text search using the internal viewer/editor, the caret is set on the first occurrence of the searched text.
 - The action categoties that are displayed in the shortcuts preferences tab are sorted by their name.
 - The row-filtering in the shortucts preferences tab now matches the specified input also against the tooltip of the row (the action's description).
+- Theme Preferences for Shell renamed to Terminal and now both Terminal and Run Command use right colors and font
 
 Localization:
 -

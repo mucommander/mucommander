@@ -16,6 +16,8 @@
  */
 package com.mucommander.ui.terminal;
 
+import com.jediterm.terminal.TerminalColor;
+import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -23,6 +25,10 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
+
+import java.awt.*;
 
 /**
  * A class providing configuration for Terminal - it is based on DefaultSettingsProvider
@@ -47,6 +53,39 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
     @Override
     public boolean altSendsEscape() {
         return altSendsEscape;
+    }
+
+    @Override
+    public TextStyle getDefaultStyle() {
+        return new TextStyle(
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_FOREGROUND_COLOR)),
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_BACKGROUND_COLOR))
+        );
+    }
+
+    @Override
+    public TextStyle getSelectionColor() {
+        // since we set #useInverseSelectionColor to return false, this method is called.
+        return new TextStyle(
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR)),
+                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_SELECTED_BACKGROUND_COLOR))
+        );
+    }
+
+    @Override
+    public boolean useInverseSelectionColor() {
+        return false;
+    }
+
+    @Override
+    public Font getTerminalFont() {
+        return ThemeManager.getCurrentFont(Theme.TERMINAL_FONT);
+    }
+
+    // it's never called (good, as #getTerminalFont should already return Font in the right size)
+    @Override
+    public float getTerminalFontSize() {
+        return super.getTerminalFontSize();
     }
 
     @Override

@@ -61,9 +61,7 @@ public final class TerminalWindow {
     }
 
     public static JediTermWidget createTerminal(String currentFolder, Runnable listener, KeyListener keyListener) {
-        SettingsProvider settings = getDefaultSettings(
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_BACKGROUND_COLOR)),
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_FOREGROUND_COLOR)));
+        SettingsProvider settings = new TerminalSettingsProvider();
         JediTermWidget jediTermWidget = createTerminalWidget(currentFolder, settings);
         jediTermWidget.addListener(new TerminalWidgetListener() {
             public void allSessionsClosed(TerminalWidget widget) {
@@ -75,7 +73,7 @@ public final class TerminalWindow {
     }
 
     public static JediTermWidget createTerminal(String currentFolder) {
-        return createTerminalWidget(currentFolder, getDefaultSettings(TerminalColor.BLACK, TerminalColor.WHITE));
+        return createTerminalWidget(currentFolder, new TerminalSettingsProvider());
     }
 
     private static JediTermWidget createTerminalWidget(String currentFolder, SettingsProvider settings) {
@@ -83,15 +81,6 @@ public final class TerminalWindow {
         widget.setTtyConnector(createTtyConnector(currentFolder));
         widget.start();
         return widget;
-    }
-
-    private static SettingsProvider getDefaultSettings(TerminalColor background, TerminalColor foreground) {
-        return new TerminalSettingsProvider() {
-            @Override
-            public TextStyle getDefaultStyle() {
-                return new TextStyle(foreground, background);
-            }
-        };
     }
 
     private static @NotNull TtyConnector createTtyConnector(String currentFolder) {

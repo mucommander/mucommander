@@ -34,7 +34,7 @@ import java.beans.PropertyChangeListener;
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
  */
-class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
+class TerminalPanel extends ThemeEditorPanel implements PropertyChangeListener {
     private JTextArea terminalPreview;
 
     // - Initialisation ------------------------------------------------------------------
@@ -44,7 +44,7 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
      * @param parent   dialog containing the panel.
      * @param themeData themeData being edited.
      */
-    public ShellPanel(PreferencesDialog parent, ThemeData themeData) {
+    public TerminalPanel(PreferencesDialog parent, ThemeData themeData) {
         super(parent, Translator.get("theme_editor.terminal_tab"), themeData);
         initUI();
     }
@@ -103,17 +103,18 @@ class ShellPanel extends ThemeEditorPanel implements PropertyChangeListener {
     private void initUI() {
         JPanel      mainPanel;
         JPanel      previewPanel;
-
         setLayout(new BorderLayout());
-
         previewPanel = createPreviewPanel();
 
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(Translator.get("theme_editor.terminal_tab"),
-                createConfigurationPanel(ThemeData.TERMINAL_FONT, ThemeData.TERMINAL_FOREGROUND_COLOR, ThemeData.TERMINAL_BACKGROUND_COLOR,
-                        ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR, ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR, terminalPreview));
-
         mainPanel.add(previewPanel, BorderLayout.EAST);
+        YBoxPanel configurationPanel = new YBoxPanel();
+        configurationPanel.add(
+                createConfigurationPanel(ThemeData.TERMINAL_FONT,
+                        ThemeData.TERMINAL_FOREGROUND_COLOR, ThemeData.TERMINAL_BACKGROUND_COLOR,
+                        ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR, ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR, terminalPreview)
+                );
+        mainPanel.add(configurationPanel, BorderLayout.CENTER);
 
         add(mainPanel, BorderLayout.NORTH);
     }

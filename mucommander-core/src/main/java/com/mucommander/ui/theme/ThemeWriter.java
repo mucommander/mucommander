@@ -248,9 +248,9 @@ class ThemeWriter implements ThemeXmlConstants {
 
 
 
-        // - Shell description ----------------------------------------------------------
+        // - Terminal/Shell description ----------------------------------------------------------
         // -------------------------------------------------------------------------------
-        out.startElement(ELEMENT_SHELL);
+        out.startElement(ELEMENT_TERMINAL);
         out.println();
         if(theme.isFontSet(Theme.TERMINAL_FONT))
             out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.TERMINAL_FONT)));
@@ -272,37 +272,7 @@ class ThemeWriter implements ThemeXmlConstants {
         if(theme.isColorSet(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR))
             out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR)));
         out.endElement(ELEMENT_SELECTED);
-        out.endElement(ELEMENT_SHELL);
-
-
-
-        // - Shell history description ---------------------------------------------------
-        // -------------------------------------------------------------------------------
-        out.startElement(ELEMENT_SHELL_HISTORY);
-        out.println();
-        if(theme.isFontSet(Theme.SHELL_HISTORY_FONT))
-            out.writeStandAloneElement(ELEMENT_FONT, getFontAttributes(theme.getFont(Theme.SHELL_HISTORY_FONT)));
-
-        // Normal colors.
-        out.startElement(ELEMENT_NORMAL);
-        out.println();
-        if(theme.isColorSet(Theme.SHELL_HISTORY_BACKGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.SHELL_HISTORY_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.SHELL_HISTORY_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.SHELL_HISTORY_FOREGROUND_COLOR)));
-        out.endElement(ELEMENT_NORMAL);
-
-        // Selected colors.
-        out.startElement(ELEMENT_SELECTED);
-        out.println();
-        if(theme.isColorSet(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_BACKGROUND, getColorAttributes(theme.getColor(Theme.SHELL_HISTORY_SELECTED_BACKGROUND_COLOR)));
-        if(theme.isColorSet(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR))
-            out.writeStandAloneElement(ELEMENT_FOREGROUND, getColorAttributes(theme.getColor(Theme.SHELL_HISTORY_SELECTED_FOREGROUND_COLOR)));
-        out.endElement(ELEMENT_SELECTED);
-        out.endElement(ELEMENT_SHELL_HISTORY);
-
-
+        out.endElement(ELEMENT_TERMINAL);
 
         // - Editor description ----------------------------------------------------------
         // -------------------------------------------------------------------------------
