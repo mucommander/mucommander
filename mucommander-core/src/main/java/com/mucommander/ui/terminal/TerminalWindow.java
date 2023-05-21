@@ -31,9 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jediterm.pty.PtyProcessTtyConnector;
-import com.jediterm.terminal.TerminalColor;
-import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.TerminalWidget;
@@ -44,8 +41,6 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeManager;
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
 
@@ -77,7 +72,7 @@ public final class TerminalWindow {
     }
 
     private static JediTermWidget createTerminalWidget(String currentFolder, SettingsProvider settings) {
-        JediTermWidget widget = new JediTermWidget(80, 24, settings);
+        JediTermWidget widget = new JediTermWidget(settings);
         widget.setTtyConnector(createTtyConnector(currentFolder));
         widget.start();
         return widget;

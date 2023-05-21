@@ -24,7 +24,7 @@ dependencies {
 
     compileOnly 'com.formdev:flatlaf:2.2'
     compileOnly 'org.violetlib:vaqua:10'
-    compileOnly 'org.jetbrains.jediterm:jediterm-core-pty:3.0'
+    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.17'
     compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.17'
     compileOnly 'org.jetbrains.pty4j:pty4j:0.12.3'
     compileOnly 'org.jetbrains:annotations:23.0.0'
