@@ -18,6 +18,7 @@ package com.mucommander.ui.terminal;
 
 import com.jediterm.terminal.TerminalColor;
 import com.jediterm.terminal.TextStyle;
+import com.jediterm.terminal.ui.AwtTransformers;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -32,8 +33,9 @@ import java.awt.*;
 
 /**
  * A class providing configuration for Terminal - it is based on DefaultSettingsProvider
- * and overrides certain settings based on Preferences.
- * Currently, only 'altSendsEscape' driven by USE_OPTION_AS_META_KEY setting (https://github.com/mucommander/mucommander/issues/933)
+ * and overrides certain settings based on Preferences, for example:
+ * - 'altSendsEscape' driven by USE_OPTION_AS_META_KEY setting (<a href="https://github.com/mucommander/mucommander/issues/933">...</a>)
+ * - font and colors
  */
 public class TerminalSettingsProvider extends DefaultSettingsProvider implements ConfigurationListener {
 
@@ -58,8 +60,10 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
     @Override
     public TextStyle getDefaultStyle() {
         return new TextStyle(
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_FOREGROUND_COLOR)),
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_BACKGROUND_COLOR))
+                new TerminalColor(() ->
+                        AwtTransformers.fromAwtColor(ThemeManager.getCurrentColor(Theme.TERMINAL_FOREGROUND_COLOR))),
+                new TerminalColor(() ->
+                        AwtTransformers.fromAwtColor(ThemeManager.getCurrentColor(Theme.TERMINAL_BACKGROUND_COLOR)))
         );
     }
 
@@ -67,8 +71,10 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
     public TextStyle getSelectionColor() {
         // since we set #useInverseSelectionColor to return false, this method is called.
         return new TextStyle(
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR)),
-                new TerminalColor(() -> ThemeManager.getCurrentColor(Theme.TERMINAL_SELECTED_BACKGROUND_COLOR))
+                new TerminalColor(() ->
+                        AwtTransformers.fromAwtColor(ThemeManager.getCurrentColor(Theme.TERMINAL_SELECTED_FOREGROUND_COLOR))),
+                new TerminalColor(() ->
+                        AwtTransformers.fromAwtColor(ThemeManager.getCurrentColor(Theme.TERMINAL_SELECTED_BACKGROUND_COLOR)))
         );
     }
 

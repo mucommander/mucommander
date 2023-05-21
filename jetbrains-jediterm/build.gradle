@@ -10,9 +10,9 @@ dependencies {
     implementation 'org.checkerframework:checker-qual:3.24.0'
 
     comprise 'org.jetbrains.jediterm:jediterm-core:3.17'
-    comprise 'org.jetbrains.jediterm:jediterm-core-pty:3.0'
+    comprise 'org.jetbrains.jediterm:jediterm-core-pty:3.0'     // if you change version here, remember to change it also in mucommander-core
     comprise 'org.jetbrains.jediterm:jediterm-typeahead:2.69'
-    comprise 'org.jetbrains.jediterm:jediterm-ui:3.17'
+    comprise 'org.jetbrains.jediterm:jediterm-ui:3.17'          // if you change version here, remember to change it also in mucommander-core
     comprise 'org.jetbrains.pty4j:pty4j:0.12.3'
     comprise 'org.jetbrains.pty4j:purejavacomm:0.0.11.1'
 
@@ -59,6 +59,7 @@ jar {
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
         'Import-Package': '!javax.annotation.*,!com.google.appengine*,!com.google.apphosting.*,!kotlin.internal.*,!com.ibm.uvm.tools,!kotlin.reflect.jvm.internal,*',
         'Export-Package':
+            'com.jediterm.core,' +
             'com.jediterm.terminal,' +
             'com.jediterm.terminal.ui,' +
             'com.jediterm.terminal.ui.settings,' +
