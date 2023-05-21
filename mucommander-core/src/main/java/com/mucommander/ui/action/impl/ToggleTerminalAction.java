@@ -170,14 +170,12 @@ public class ToggleTerminalAction extends ActiveTabAction {
         //mainFrame.getToolBarPanel().setVisible(true);
         //mainFrame.getCommandBar().setVisible(true);
         mainFrame.getSplitPane().setVisible(true);
-        // This is a fix for main window resizing issue where after closing (removing)
-        // terminal, SplitPane (folder panels) didn't resize accordingly.
-        // Not sure if it is the proper fix, maybe instead of hiding SplitPane we should
-        // remove it before showing Terminal, and then re-adding it after closing?
-        // Or after SplitPanel#setVisible something else in addition should be called?
+
+        // make sure that MainPanel and SplitPane look good if window was resized when Terminal was present
         mainFrame.getMainPanel().remove(mainFrame.getSplitPane());
         mainFrame.getMainPanel().add(mainFrame.getSplitPane(), BorderLayout.CENTER);
-        mainFrame.getSplitPane().revalidate();
+        mainFrame.getMainPanel().revalidate();
+        SwingUtilities.invokeLater(mainFrame.getSplitPane()::updateDividerLocation);
 
         SwingUtilities.invokeLater(mainFrame.getActiveTable()::requestFocusInWindow);
     }
