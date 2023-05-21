@@ -19,7 +19,9 @@ package com.mucommander.commons.file.protocol.gcs;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
+import com.mucommander.commons.util.StringUtils;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -29,14 +31,20 @@ import java.util.Map;
  */
 public class GoogleCloudStorageProtocolProvider implements ProtocolProvider {
 
-    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) {
-        String path = url.getPath();
-        if (path.equals("/")) {
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+        var parent = url.getParent();
+
+        if(parent == null){
+            // Only root has no parent
             return new GoogleCloudStorageRoot(url);
         }
 
-        // TODO buckets
+        // FIXME no filename when host !!
+        if(StringUtils.isNullOrEmpty(parent.getFilename())){
+            // Parent of the bucket is only the schema i.e. has no filename
+            return GoogleCloudStorageBucket.from(url);
+        }
 
-        return new GoogleCloudStorageFile(url, null, null); //FIXME
+        return GoogleCloudStorageFile.from(url);
     }
 }

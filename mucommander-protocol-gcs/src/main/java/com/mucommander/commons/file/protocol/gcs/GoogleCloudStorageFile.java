@@ -33,22 +33,35 @@ import java.util.stream.StreamSupport;
 
 public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStorageFile.class);
-    private static final String BUCKET_DIRECTORY_DELIMITER = "/";
 
-    private final Bucket bucket;
+    private final Bucket bucket; //TODO final and eager init?
     private final Blob blob;
 
     private GoogleCloudStorageFile parent;
 
-    protected GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob) {
+    GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob) {
         super(url);
         this.bucket = bucket;
         this.blob = blob;
     }
 
+    /**
+     * TODO
+     *
+     * @param url
+     * @return
+     */
+    static GoogleCloudStorageFile from(FileURL url) throws IOException {
+        // TODO ??
+        var bucket = GoogleCloudStorageAbstractFile.getBucket(url);
+        var blob = GoogleCloudStorageAbstractFile.getBlob(url);
+
+        return new GoogleCloudStorageFile(url, bucket, blob);
+    }
+
     @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
-        var files = bucket.list(Storage.BlobListOption.prefix(blob.getName()), Storage.BlobListOption.delimiter(BUCKET_DIRECTORY_DELIMITER));
+        var files = bucket.list(Storage.BlobListOption.prefix(blob.getName()), Storage.BlobListOption.delimiter(CLOUD_STORAGE_DIRECTORY_DELIMITER));
 
         var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile)
@@ -67,7 +80,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     private GoogleCloudStorageFile toFile(Blob blob) {
         // FIXME
         var url = (FileURL) getURL().clone();
-        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
+        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR; // FIXME
         url.setPath(parentPath + blob.getName());
         var result = new GoogleCloudStorageFile(url, bucket, blob);
         result.setParent(this);
@@ -81,6 +94,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
 
     @Override
     public long getDate() {
+        // fixme NPE
         var updateOffsetTime = blob.getUpdateTimeOffsetDateTime() != null ?
                 // Read blob creation date, or use at least bucket last update date
                 blob.getUpdateTimeOffsetDateTime() : bucket.getUpdateTimeOffsetDateTime();
@@ -104,6 +118,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
 
     @Override
     public boolean isDirectory() {
+        // FIXME NPE
         return blob.isDirectory();
     }
 

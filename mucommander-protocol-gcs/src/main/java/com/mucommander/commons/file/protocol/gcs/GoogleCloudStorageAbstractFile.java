@@ -17,13 +17,14 @@
 
 package com.mucommander.commons.file.protocol.gcs;
 
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
 import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.connection.ConnectionHandler;
-import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
 import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +36,9 @@ import java.io.OutputStream;
  *
  * @author miroslav.spak
  */
-public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile implements ConnectionHandlerFactory {
+public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
+
+    public static final String CLOUD_STORAGE_DIRECTORY_DELIMITER = "/";
 
     protected GoogleCloudStorageAbstractFile parent;
 
@@ -45,16 +48,52 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile implem
 
     /**
      * TODO CLIENT or connection? todo connection checking?
+     * TODO some utils?
      *
      * @return
      * @throws IOException
      */
-    protected GoogleCloudStorageClient getCloudStorageClient() throws IOException {
-        GoogleCloudStorageConnectionHandler connectionHandler =
-                (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(this, fileURL, true);
+    protected static GoogleCloudStorageClient getCloudStorageClient(FileURL fileURL) throws IOException {
+        var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
+                GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, true);
+
+        // TODO check connection?
 
         // Return client only when connection was checked
         return connectionHandler.getClient();
+    }
+
+    /**
+     * TODO fetches bucket according to the file URL
+     * TODO some utils maybe?
+     *
+     * @return
+     */
+    protected static Bucket getBucket(FileURL fileURL) throws IOException {
+        var bucketName = fileURL.getHost();
+        if (!StringUtils.isNullOrEmpty(bucketName)) {
+            // TODO what if it doesn't exists?
+            return getCloudStorageClient(fileURL).getConnection().get(bucketName);
+        }
+
+        // No bucket was found for the URL
+        return null;
+    }
+
+    /**
+     * TODO get file according to the file URL
+     * TODO some utils maybe?
+     *
+     * @return
+     */
+    protected static Blob getBlob(FileURL fileURL) throws IOException {
+        var bucketName = fileURL.getHost();
+        var path = fileURL.getPath();
+
+        return getCloudStorageClient(fileURL).getConnection().get(bucketName, path);
+
+        // No blob was found for the URL
+        // TODO
     }
 
     @Override
@@ -224,10 +263,5 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile implem
     @Override
     public Object getUnderlyingFileObject() {
         return null;
-    }
-
-    @Override
-    public ConnectionHandler createConnectionHandler(FileURL location) {
-        return new GoogleCloudStorageConnectionHandler(location);
     }
 }

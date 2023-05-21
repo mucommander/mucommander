@@ -50,7 +50,7 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
 
     @Override
     public AbstractFile[] ls() throws IOException {
-        var buckets = getCloudStorageClient().getConnection().list();
+        var buckets = getCloudStorageClient(fileURL).getConnection().list();
 
         var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
                 .map(this::toFile)
@@ -64,7 +64,7 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
     @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException {
         //FIXME
-        var buckets = getCloudStorageClient().getConnection().list();
+        var buckets = getCloudStorageClient(fileURL).getConnection().list();
 
         var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
                 .map(this::toFile)
@@ -77,8 +77,9 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
 
     private GoogleCloudStorageBucket toFile(Bucket bucket) {
         var url = (FileURL) getURL().clone();
-        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
-        url.setPath(parentPath + bucket.getName());
+        url.setHost(bucket.getName());
+//        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
+//        url.setPath(parentPath + bucket.getName());
         var result = new GoogleCloudStorageBucket(url, bucket);
         result.setParent(this);
 

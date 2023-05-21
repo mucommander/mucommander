@@ -35,9 +35,21 @@ import java.util.stream.StreamSupport;
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
-    private final Bucket bucket;
+    private final Bucket bucket; // TODO final and eager init?
 
-    protected GoogleCloudStorageBucket(FileURL url, Bucket bucket) {
+    /**
+     * TODO
+     *
+     * @param url
+     * @return
+     */
+    static GoogleCloudStorageBucket from(FileURL url) throws IOException {
+        // TODO ??
+        var bucket = GoogleCloudStorageAbstractFile.getBucket(url);
+        return new GoogleCloudStorageBucket(url, bucket);
+    }
+
+    GoogleCloudStorageBucket(FileURL url, Bucket bucket) {
         super(url);
         this.bucket = bucket;
     }
@@ -82,7 +94,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     private GoogleCloudStorageFile toFile(Blob blob) {
         var url = (FileURL) getURL().clone();
-        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
+        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR; // FIXME
         url.setPath(parentPath + blob.getName());
         var result = new GoogleCloudStorageFile(url, bucket, blob);
         result.setParent(this);
