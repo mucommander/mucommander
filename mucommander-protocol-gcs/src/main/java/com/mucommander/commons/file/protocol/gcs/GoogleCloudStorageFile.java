@@ -23,7 +23,6 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.util.PathUtils;
 
 import java.io.IOException;
@@ -89,7 +88,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     }
 
     @Override
-    public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
+    public InputStream getInputStream() throws IOException {
         // FIXME try?
         // TODO missing file or folder?
         return Channels.newInputStream(getBlob().reader());
@@ -98,7 +97,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     @Override
     public void mkdir() throws IOException {
         // TODO unify
-        var bucketName = fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+        var bucketName = getBucketName();
         var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
         var blobPath = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
         var blobName = blobPath + "/."; // TODO dummy file?
@@ -109,6 +108,22 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
             getStorageService().create(blobInfo);
         } catch (Exception ex) {
             throw new IOException("Unable to create folder " + blobPath + " in bucket " + bucketName, ex);
+        }
+    }
+
+    @Override
+    public void mkfile() throws IOException {
+        // TODO unify
+        var bucketName = getBucketName();
+        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
+        var blobName = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
+        try {
+            var blobId = BlobId.of(bucketName, blobName);
+            var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+            // The new blob represents created file
+            blob = getStorageService().create(blobInfo);
+        } catch (Exception ex) {
+            throw new IOException("Unable to create file " + blobName + " in bucket " + bucketName, ex);
         }
     }
 
