@@ -18,9 +18,14 @@
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.util.PathUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
@@ -39,7 +44,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
         this.blob = blob;
     }
 
-    private Blob getBlob(){
+    private Blob getBlob() {
         if (blob == null) {
             var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
             var bucketName = shortPath.substring(0, shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
@@ -70,8 +75,9 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     private GoogleCloudStorageFile toFile(Blob blob) {
         // FIXME
         var url = (FileURL) getURL().clone();
-        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR; // FIXME
-        url.setPath(parentPath + blob.getName());
+        var blobPath = AbstractFile.DEFAULT_SEPARATOR + fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1")
+                + AbstractFile.DEFAULT_SEPARATOR + blob.getName();
+        url.setPath(blobPath);
         var result = new GoogleCloudStorageFile(url, blob, getStorageService());
         result.setParent(this);
         return result;
@@ -80,7 +86,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     @Override
     public long getDate() {
         // fixme NPE
-        var updateOffsetTime = blob.getUpdateTimeOffsetDateTime();
+        var updateOffsetTime = getBlob().getUpdateTimeOffsetDateTime();
 //                != null ?
 //                // Read blob creation date, or use at least bucket last update date
 //                blob.getUpdateTimeOffsetDateTime() : bucket.getUpdateTimeOffsetDateTime();
@@ -91,27 +97,58 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     @Override
     public long getSize() {
         // TODO NPE check, unknown size?
-        return blob.getSize();
+        return getBlob().getSize();
     }
 
     @Override
     public boolean exists() {
         // TODO Check NPE?
         // TODO Folder always exists
-//        return blob.exists();
-        return true;
+        return getBlob() != null && (getBlob().isDirectory() || getBlob().exists());
     }
 
     @Override
     public boolean isDirectory() {
         // FIXME NPE
-        return blob.isDirectory();
+        return getBlob().isDirectory();
     }
 
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
         // FIXME try?
         // TODO missing file or folder?
-        return Channels.newInputStream(blob.reader());
+        return Channels.newInputStream(getBlob().reader());
+    }
+
+    @Override
+    public void mkdir() throws IOException {
+        // TODO unify
+        var bucketName = fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
+        var blobPath = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
+        var blobName = blobPath + "/."; // TODO dummy file?
+        try {
+            var blobId = BlobId.of(bucketName, blobName);
+            var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+            // Cannot set blob because this blob is dummy file not the folder itself
+            getStorageService().create(blobInfo);
+        } catch (Exception ex) {
+            throw new IOException("Unable to create folder " + blobPath + " in bucket " + bucketName, ex);
+        }
+    }
+
+    @Override
+    public void delete() throws IOException {
+        var blobName = getBlob().getName();
+        try {
+            if (getBlob().delete()) {
+                // The blob was deleted
+                blob = null;
+            } else {
+                throw new IllegalStateException("File " + blobName + " wasn't deleted, it's probably missing");
+            }
+        } catch (Exception ex) {
+            throw new IOException("Unable to delete file " + blobName, ex);
+        }
     }
 }
