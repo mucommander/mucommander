@@ -29,10 +29,8 @@ import com.mucommander.commons.file.util.PathUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
+public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     private Blob blob;
 
     GoogleCloudStorageFile(FileURL url) {
@@ -47,49 +45,26 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
     private Blob getBlob() {
         if (blob == null) {
             var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-            var bucketName = shortPath.substring(0, shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
             var blobPath = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
             // TODO check
-            blob = getStorageService().get(bucketName, blobPath);
+            blob = getBucket().get(blobPath);
         }
 
         return blob;
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var bucketName = shortPath.substring(0, shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
-
-        var files = getStorageService().list(bucketName, Storage.BlobListOption.prefix(getBlob().getName()), Storage.BlobListOption.delimiter(CLOUD_STORAGE_DIRECTORY_DELIMITER));
-
-        var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
-                .map(this::toFile)
-                .collect(Collectors.toList());
-
-        var childrenArray = new AbstractFile[children.size()];
-        children.toArray(childrenArray);
-        return childrenArray;
-    }
-
-    private GoogleCloudStorageFile toFile(Blob blob) {
-        // FIXME
-        var url = (FileURL) getURL().clone();
-        var blobPath = AbstractFile.DEFAULT_SEPARATOR + fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1")
-                + AbstractFile.DEFAULT_SEPARATOR + blob.getName();
-        url.setPath(blobPath);
-        var result = new GoogleCloudStorageFile(url, blob, getStorageService());
-        result.setParent(this);
-        return result;
+    public AbstractFile[] ls() throws IOException {
+        var files = getBucket().list(Storage.BlobListOption.prefix(getBlob().getName()), Storage.BlobListOption.delimiter(CLOUD_STORAGE_DIRECTORY_DELIMITER));
+        return toFilesArray(files.iterateAll());
     }
 
     @Override
     public long getDate() {
         // fixme NPE
-        var updateOffsetTime = getBlob().getUpdateTimeOffsetDateTime();
-//                != null ?
-//                // Read blob creation date, or use at least bucket last update date
-//                blob.getUpdateTimeOffsetDateTime() : bucket.getUpdateTimeOffsetDateTime();
+        var updateOffsetTime = getBlob().getUpdateTimeOffsetDateTime() != null ?
+                // Read blob creation date, or use at least bucket last update date
+                getBlob().getUpdateTimeOffsetDateTime() : getBucket().getUpdateTimeOffsetDateTime();
 
         return updateOffsetTime != null ? updateOffsetTime.toInstant().toEpochMilli() : 0;
     }
