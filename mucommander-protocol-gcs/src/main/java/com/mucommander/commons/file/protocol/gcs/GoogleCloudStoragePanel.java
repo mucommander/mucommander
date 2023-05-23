@@ -42,7 +42,7 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStoragePanel.class);
     private static final long serialVersionUID = 6345472628898453189L;
-    private static final String GCS_SCHEMA = "gs"; //FIXME
+    private static final String GCS_SCHEMA = "gcs"; //FIXME
     // TODO: find a better way to load icons from plugins
     private static final String GOOGLE_ACCOUNT_ICON_PATH = "/images/file/google.png";
 

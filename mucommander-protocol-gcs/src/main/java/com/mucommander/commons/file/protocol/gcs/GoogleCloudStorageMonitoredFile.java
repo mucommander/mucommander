@@ -31,9 +31,9 @@ import com.mucommander.commons.file.MonitoredFile;
  */
 public class GoogleCloudStorageMonitoredFile extends ModificationDateBasedMonitoredFile {
 
-    private final GoogleCloudStorageFile file;
+    private final GoogleCloudStorageAbstractFile file;
 
-    public GoogleCloudStorageMonitoredFile(GoogleCloudStorageFile file) {
+    public GoogleCloudStorageMonitoredFile(GoogleCloudStorageAbstractFile file) {
         super(file);
         this.file = file;
     }
@@ -64,7 +64,7 @@ public class GoogleCloudStorageMonitoredFile extends ModificationDateBasedMonito
 //        return !GoogleCloudStorageFile.isFolder(file);
 //    }
 
-    public GoogleCloudStorageFile getUnderlyingFile() {
+    public GoogleCloudStorageAbstractFile getUnderlyingFile() {
         return file;
     }
 }

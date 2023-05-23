@@ -19,11 +19,11 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
-import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.PathUtils;
 
 import java.io.IOException;
@@ -35,23 +35,27 @@ import java.util.stream.StreamSupport;
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
-    private final Bucket bucket; // TODO final and eager init?
+    private Bucket bucket;
 
-    /**
-     * TODO
-     *
-     * @param url
-     * @return
-     */
-    static GoogleCloudStorageBucket from(FileURL url) throws IOException {
-        // TODO ??
-        var bucket = GoogleCloudStorageAbstractFile.getBucket(url);
-        return new GoogleCloudStorageBucket(url, bucket);
+    GoogleCloudStorageBucket(FileURL url, Bucket bucket, Storage storageService) {
+        super(url, storageService);
+        this.bucket = bucket;
     }
 
-    GoogleCloudStorageBucket(FileURL url, Bucket bucket) {
+    private Bucket getBucket() {
+        if (bucket == null) {
+            // TODO jde to jinak?
+            // Find the first part of the path that represents bucket name
+            var bucketName = fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+            // TODO check
+            bucket = getStorageService().get(bucketName);
+        }
+
+        return bucket;
+    }
+
+    GoogleCloudStorageBucket(FileURL url) {
         super(url);
-        this.bucket = bucket;
     }
 
     @Override
@@ -62,26 +66,13 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     @Override
     public boolean exists() {
-        return true;
+        // FIXME
+        return getBucket() != null;
     }
 
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        var files = bucket.list(Storage.BlobListOption.currentDirectory());
-
-        var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
-                .map(this::toFile)
-                .collect(Collectors.toList());
-
-        var childrenArray = new AbstractFile[children.size()];
-        children.toArray(childrenArray);
-        return childrenArray;
-    }
-
-    @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
-        //FIXME
-        var files = bucket.list(Storage.BlobListOption.currentDirectory());
+        var files = getBucket().list(Storage.BlobListOption.currentDirectory());
 
         var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile)
@@ -96,7 +87,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
         var url = (FileURL) getURL().clone();
         var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR; // FIXME
         url.setPath(parentPath + blob.getName());
-        var result = new GoogleCloudStorageFile(url, bucket, blob);
+        var result = new GoogleCloudStorageFile(url, blob, getStorageService());
         result.setParent(this);
         return result;
     }
@@ -104,6 +95,35 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     @Override
     public long getDate() {
         // TODO check NPE
-        return bucket.getUpdateTimeOffsetDateTime().toInstant().toEpochMilli();
+        return getBucket().getUpdateTimeOffsetDateTime().toInstant().toEpochMilli();
+    }
+
+    @Override
+    public void mkdir() throws IOException {
+        // FIXME unify
+        var location = "europe-west1"; // todo from connection
+        var bucketName = fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+        try {
+            // TODO set location only if provided
+            getStorageService().create(BucketInfo.newBuilder(bucketName).setLocation(location).build());
+        } catch (Exception ex){
+            throw new IOException("Unable to create bucket " + bucketName, ex);
+        }
+    }
+
+    @Override
+    public void delete() throws IOException {
+        // FIXME unify
+        var bucketName = fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+        try {
+            if (getBucket().delete()) {
+                // The bucket was deleted
+                bucket = null;
+            } else {
+                throw new IllegalStateException("Bucket " + bucketName + " wasn't deleted, it's probably missing");
+            }
+        } catch (Exception ex){
+            throw new IOException("Unable to delete bucket " + bucketName, ex);
+        }
     }
 }

@@ -17,15 +17,12 @@
 
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.util.StringUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -38,12 +35,33 @@ import java.io.OutputStream;
  */
 public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
-    public static final String CLOUD_STORAGE_DIRECTORY_DELIMITER = "/";
+    public static final String CLOUD_STORAGE_DIRECTORY_DELIMITER = "/"; //TODO jde udelat jinak?
+
+    private Storage storageService;
 
     protected GoogleCloudStorageAbstractFile parent;
 
     protected GoogleCloudStorageAbstractFile(FileURL url) {
+        this(url, null);
+    }
+
+    protected GoogleCloudStorageAbstractFile(FileURL url, Storage storageService) {
         super(url);
+        this.storageService = storageService;
+    }
+
+    protected Storage getStorageService() {
+        if (storageService == null) {
+            try {
+                // TODO check
+                storageService = getCloudStorageClient().getConnection();
+            } catch (IOException e) {
+                // FIXME
+                throw new RuntimeException(e);
+            }
+        }
+
+        return storageService;
     }
 
     /**
@@ -53,7 +71,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
      * @return
      * @throws IOException
      */
-    protected static GoogleCloudStorageClient getCloudStorageClient(FileURL fileURL) throws IOException {
+    private GoogleCloudStorageClient getCloudStorageClient() throws IOException {
         var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
                 GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, true);
 
@@ -61,39 +79,6 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
         // Return client only when connection was checked
         return connectionHandler.getClient();
-    }
-
-    /**
-     * TODO fetches bucket according to the file URL
-     * TODO some utils maybe?
-     *
-     * @return
-     */
-    protected static Bucket getBucket(FileURL fileURL) throws IOException {
-        var bucketName = fileURL.getHost();
-        if (!StringUtils.isNullOrEmpty(bucketName)) {
-            // TODO what if it doesn't exists?
-            return getCloudStorageClient(fileURL).getConnection().get(bucketName);
-        }
-
-        // No bucket was found for the URL
-        return null;
-    }
-
-    /**
-     * TODO get file according to the file URL
-     * TODO some utils maybe?
-     *
-     * @return
-     */
-    protected static Blob getBlob(FileURL fileURL) throws IOException {
-        var bucketName = fileURL.getHost();
-        var path = fileURL.getPath();
-
-        return getCloudStorageClient(fileURL).getConnection().get(bucketName, path);
-
-        // No blob was found for the URL
-        // TODO
     }
 
     @Override
@@ -258,6 +243,11 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     public long getTotalSpace() {
         // No space info for the GoogleCloudStorageAbstractFile
         return 0;
+    }
+
+    @Override
+    public MonitoredFile toMonitoredFile() {
+        return new GoogleCloudStorageMonitoredFile(this);
     }
 
     @Override

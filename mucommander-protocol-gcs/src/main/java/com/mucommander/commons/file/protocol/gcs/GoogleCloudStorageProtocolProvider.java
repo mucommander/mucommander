@@ -20,8 +20,6 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.commons.util.StringUtils;
-
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -31,7 +29,7 @@ import java.util.Map;
  */
 public class GoogleCloudStorageProtocolProvider implements ProtocolProvider {
 
-    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
+    public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) {
         var parent = url.getParent();
 
         if(parent == null){
@@ -39,12 +37,11 @@ public class GoogleCloudStorageProtocolProvider implements ProtocolProvider {
             return new GoogleCloudStorageRoot(url);
         }
 
-        // FIXME no filename when host !!
         if(StringUtils.isNullOrEmpty(parent.getFilename())){
-            // Parent of the bucket is only the schema i.e. has no filename
-            return GoogleCloudStorageBucket.from(url);
+            // Parent of the bucket is only the schema and host i.e. has no filename
+            return new GoogleCloudStorageBucket(url);
         }
 
-        return GoogleCloudStorageFile.from(url);
+        return new GoogleCloudStorageFile(url);
     }
 }
