@@ -18,13 +18,9 @@
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.PathUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.Channels;
@@ -32,36 +28,35 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStorageFile.class);
+    private Blob blob;
 
-    private final Bucket bucket; //TODO final and eager init?
-    private final Blob blob;
-
-    private GoogleCloudStorageFile parent;
-
-    GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob) {
+    GoogleCloudStorageFile(FileURL url) {
         super(url);
-        this.bucket = bucket;
+    }
+
+    GoogleCloudStorageFile(FileURL url, Blob blob, Storage storageService) {
+        super(url, storageService);
         this.blob = blob;
     }
 
-    /**
-     * TODO
-     *
-     * @param url
-     * @return
-     */
-    static GoogleCloudStorageFile from(FileURL url) throws IOException {
-        // TODO ??
-        var bucket = GoogleCloudStorageAbstractFile.getBucket(url);
-        var blob = GoogleCloudStorageAbstractFile.getBlob(url);
+    private Blob getBlob(){
+        if (blob == null) {
+            var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
+            var bucketName = shortPath.substring(0, shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
+            var blobPath = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
+            // TODO check
+            blob = getStorageService().get(bucketName, blobPath);
+        }
 
-        return new GoogleCloudStorageFile(url, bucket, blob);
+        return blob;
     }
 
     @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
-        var files = bucket.list(Storage.BlobListOption.prefix(blob.getName()), Storage.BlobListOption.delimiter(CLOUD_STORAGE_DIRECTORY_DELIMITER));
+    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
+        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
+        var bucketName = shortPath.substring(0, shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
+
+        var files = getStorageService().list(bucketName, Storage.BlobListOption.prefix(getBlob().getName()), Storage.BlobListOption.delimiter(CLOUD_STORAGE_DIRECTORY_DELIMITER));
 
         var children = StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile)
@@ -72,32 +67,23 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageAbstractFile {
         return childrenArray;
     }
 
-    @Override
-    public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
-    }
-
     private GoogleCloudStorageFile toFile(Blob blob) {
         // FIXME
         var url = (FileURL) getURL().clone();
         var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR; // FIXME
         url.setPath(parentPath + blob.getName());
-        var result = new GoogleCloudStorageFile(url, bucket, blob);
+        var result = new GoogleCloudStorageFile(url, blob, getStorageService());
         result.setParent(this);
         return result;
     }
 
     @Override
-    public MonitoredFile toMonitoredFile() {
-        return new GoogleCloudStorageMonitoredFile(this);
-    }
-
-    @Override
     public long getDate() {
         // fixme NPE
-        var updateOffsetTime = blob.getUpdateTimeOffsetDateTime() != null ?
-                // Read blob creation date, or use at least bucket last update date
-                blob.getUpdateTimeOffsetDateTime() : bucket.getUpdateTimeOffsetDateTime();
+        var updateOffsetTime = blob.getUpdateTimeOffsetDateTime();
+//                != null ?
+//                // Read blob creation date, or use at least bucket last update date
+//                blob.getUpdateTimeOffsetDateTime() : bucket.getUpdateTimeOffsetDateTime();
 
         return updateOffsetTime != null ? updateOffsetTime.toInstant().toEpochMilli() : 0;
     }

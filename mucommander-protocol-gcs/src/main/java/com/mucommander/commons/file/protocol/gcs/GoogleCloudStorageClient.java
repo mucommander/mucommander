@@ -65,7 +65,7 @@ public class GoogleCloudStorageClient implements Closeable {
 //                    this.credential != null ? this.credential : getCredentials(HTTP_TRANSPORT, fileUrl.getHost(), null);
 
             storageService = StorageOptions.newBuilder()
-                    .setCredentials(getCredentials())
+//                    .setCredentials(getCredentials())
                     // With projectId
                     .setProjectId("").build() //FIXME
                     .getService();
@@ -73,7 +73,7 @@ public class GoogleCloudStorageClient implements Closeable {
 //            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
 //        } catch (GeneralSecurityException e) {
 //            throw new AuthException(fileUrl);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new IOError(e);
         }
     }

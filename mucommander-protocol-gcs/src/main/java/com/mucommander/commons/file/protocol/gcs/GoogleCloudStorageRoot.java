@@ -20,7 +20,6 @@ package com.mucommander.commons.file.protocol.gcs;
 import com.google.cloud.storage.Bucket;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.util.PathUtils;
 
 import java.io.IOException;
@@ -50,21 +49,7 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
 
     @Override
     public AbstractFile[] ls() throws IOException {
-        var buckets = getCloudStorageClient(fileURL).getConnection().list();
-
-        var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
-                .map(this::toFile)
-                .collect(Collectors.toList());
-
-        var childrenArray = new AbstractFile[children.size()];
-        children.toArray(childrenArray);
-        return childrenArray;
-    }
-
-    @Override
-    public AbstractFile[] ls(FileFilter filter) throws IOException {
-        //FIXME
-        var buckets = getCloudStorageClient(fileURL).getConnection().list();
+        var buckets = getStorageService().list();
 
         var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
                 .map(this::toFile)
@@ -77,10 +62,10 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
 
     private GoogleCloudStorageBucket toFile(Bucket bucket) {
         var url = (FileURL) getURL().clone();
-        url.setHost(bucket.getName());
-//        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
-//        url.setPath(parentPath + bucket.getName());
-        var result = new GoogleCloudStorageBucket(url, bucket);
+//        url.setHost(bucket.getName());
+        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
+        url.setPath(parentPath + bucket.getName());
+        var result = new GoogleCloudStorageBucket(url, bucket, getStorageService());
         result.setParent(this);
 
         return result;
