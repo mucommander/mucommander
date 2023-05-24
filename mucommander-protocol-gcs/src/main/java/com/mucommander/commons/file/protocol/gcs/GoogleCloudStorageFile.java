@@ -27,6 +27,7 @@ import com.mucommander.commons.file.util.PathUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.Channels;
 
 public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
@@ -71,7 +72,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     @Override
     public long getSize() {
         // TODO NPE check, unknown size?
-        return getBlob().getSize();
+        return getBlob() != null ? getBlob().getSize() : 0;
     }
 
     @Override
@@ -92,6 +93,13 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         // FIXME try?
         // TODO missing file or folder?
         return Channels.newInputStream(getBlob().reader());
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        // FIXME try?
+        // TODO missing?
+        return Channels.newOutputStream(getBlob().writer());
     }
 
     @Override
