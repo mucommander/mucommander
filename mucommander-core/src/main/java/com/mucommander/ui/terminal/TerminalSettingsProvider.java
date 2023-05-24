@@ -83,15 +83,10 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
         return false;
     }
 
+    // The returned font is already in a good size (no need to override or call #getTerminalFontSize).
     @Override
     public Font getTerminalFont() {
         return ThemeManager.getCurrentFont(Theme.TERMINAL_FONT);
-    }
-
-    // it's never called (good, as #getTerminalFont should already return Font in the right size)
-    @Override
-    public float getTerminalFontSize() {
-        return super.getTerminalFontSize();
     }
 
     @Override
