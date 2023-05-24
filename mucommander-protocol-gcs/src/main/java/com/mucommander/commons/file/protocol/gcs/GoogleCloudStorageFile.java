@@ -99,7 +99,13 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     public OutputStream getOutputStream() throws IOException {
         // FIXME try?
         // TODO missing?
-        return Channels.newOutputStream(getBlob().writer());
+        var bucketName = getBucketName();
+        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
+        var blobName = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
+        var blobId = BlobId.of(bucketName, blobName);
+        var blobInfo = BlobInfo.newBuilder(blobId).build();
+
+        return Channels.newOutputStream(getStorageService().writer(blobInfo, Storage.BlobWriteOption.detectContentType()));
     }
 
     @Override
