@@ -19,7 +19,6 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
-import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
@@ -50,6 +49,12 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         this.storageService = storageService;
     }
 
+    // TODO do we want that?
+//    @Override
+//    public String getSeparator() {
+//        return super.getSeparator();
+//    }
+
     protected Storage getStorageService() {
         if (storageService == null) {
             try {
@@ -72,13 +77,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
      * @throws IOException
      */
     private GoogleCloudStorageClient getCloudStorageClient() throws IOException {
-        var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
-                GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, true);
-
-        // TODO check connection?
-
-        // Return client only when connection was checked
-        return connectionHandler.getClient();
+        return GoogleCloudStorageConnectionHandlerFactory.getInstance().getCloudStorageClient(fileURL);
     }
 
     @Override

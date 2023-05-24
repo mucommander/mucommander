@@ -28,12 +28,10 @@ import java.io.IOException;
  */
 public class GoogleCloudStorageConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
-    private final FileURL location;
     private GoogleCloudStorageClient client;
 
     public GoogleCloudStorageConnectionHandler(FileURL serverURL) {
         super(serverURL);
-        this.location = serverURL;
     }
 
     public GoogleCloudStorageClient getClient() throws IOException {
