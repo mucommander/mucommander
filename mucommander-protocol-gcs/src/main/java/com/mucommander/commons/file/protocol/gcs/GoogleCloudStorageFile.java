@@ -62,6 +62,10 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     @Override
     public long getDate() {
         // fixme NPE
+        if (getBlob() == null) {
+            return 0;
+        }
+
         var updateOffsetTime = getBlob().getUpdateTimeOffsetDateTime() != null ?
                 // Read blob creation date, or use at least bucket last update date
                 getBlob().getUpdateTimeOffsetDateTime() : getBucket().getUpdateTimeOffsetDateTime();
@@ -84,8 +88,8 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public boolean isDirectory() {
-        // FIXME NPE
-        return getBlob().isDirectory();
+        // TODO check NPE?
+        return getBlob() != null && getBlob().isDirectory();
     }
 
     @Override
@@ -145,7 +149,8 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     public void delete() throws IOException {
         var blobName = getBlob().getName();
         try {
-            if (getBlob().delete()) {
+            // Directories exists only when there are files present
+            if (isDirectory() || getBlob().delete()) {
                 // The blob was deleted
                 blob = null;
             } else {
