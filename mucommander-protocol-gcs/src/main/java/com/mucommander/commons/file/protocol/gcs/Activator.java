@@ -17,7 +17,6 @@
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.mucommander.commons.file.AuthenticationType;
-import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.DefaultSchemeHandler;
 import com.mucommander.commons.file.DefaultSchemeParser;
 import com.mucommander.commons.file.SchemeHandler;
@@ -43,7 +42,7 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) {
-        FileProtocolService service = new FileProtocolService() {
+        var service = new FileProtocolService() {
             @Override
             public String getSchema() {
                 return GCS_SCHEMA;
@@ -56,10 +55,10 @@ public class Activator implements BundleActivator {
 
             @Override
             public SchemeHandler getSchemeHandler() {
-                return new DefaultSchemeHandler(new DefaultSchemeParser(), 443, "/", AuthenticationType.NO_AUTHENTICATION, new Credentials("anonymous", "anonymous_coward@mucommander.com"));
+                return new DefaultSchemeHandler(new DefaultSchemeParser(), 443, "/", AuthenticationType.NO_AUTHENTICATION, null);
             }
         };
-        ProtocolPanelProvider panelProvider = new ProtocolPanelProvider() {
+        var panelProvider = new ProtocolPanelProvider() {
             @Override
             public String getSchema() {
                 return GCS_SCHEMA;

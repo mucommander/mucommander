@@ -28,10 +28,13 @@ import java.io.IOException;
  */
 public class GoogleCloudStorageConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
+    private final String projectId;
     private GoogleCloudStorageClient client;
 
     public GoogleCloudStorageConnectionHandler(FileURL serverURL) {
         super(serverURL);
+        // The host part of url holds project id
+        this.projectId = serverURL.getHost();
     }
 
     public GoogleCloudStorageClient getClient() throws IOException {
@@ -42,7 +45,7 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
     @Override
     public void startConnection() throws IOException {
         if (client == null) {
-            client = new GoogleCloudStorageClient();
+            client = new GoogleCloudStorageClient(projectId);
             client.connect();
         }
     }
