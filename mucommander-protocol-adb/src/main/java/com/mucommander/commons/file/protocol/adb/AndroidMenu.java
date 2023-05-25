@@ -23,8 +23,12 @@ import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
@@ -45,6 +49,7 @@ import com.mucommander.ui.main.MainFrame;
  * @author Oleg Trifonov, Arik Hadas
  */
 public class AndroidMenu extends JMenu implements MenuListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AndroidMenu.class);
 
     private MainFrame mainFrame;
     private FolderPanel folderPanel;
@@ -57,6 +62,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
         this.mainFrame = mainFrame;
         this.folderPanel = folderPanel;
         setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
+        SwingUtilities.invokeLater(() -> menuSelected(null));
 
         // Menu items will be added when menu gets selected
         addMenuListener(this);
@@ -81,7 +87,8 @@ public class AndroidMenu extends JMenu implements MenuListener {
         try {
             return FileURL.getFileURL("adb://" + deviceSerial);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            LOGGER.error("failed to get adb device file");
+            LOGGER.debug("failed to get adb device file", e);
             return null;
         }
     }
@@ -93,8 +100,11 @@ public class AndroidMenu extends JMenu implements MenuListener {
 
         List<String> androidDevices = AdbUtils.getDevices();
         if (androidDevices == null) {
+            setEnabled(false);
+            setToolTipText(Translator.get("adb.android_disabled"));
             return;
         }
+        setEnabled(true);
         if (androidDevices.isEmpty()) {
             add(new JMenuItem(Translator.get("adb.no_devices"))).setEnabled(false);
             return;
