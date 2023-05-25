@@ -46,6 +46,8 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
     // TODO: find a better way to load icons from plugins
     private static final String GOOGLE_ACCOUNT_ICON_PATH = "/images/file/google.png";
 
+    private final JTextField projectIdField;
+
     private JTextField accountAlias;
     private JButton signingIn;
     private JLabel displayName;
@@ -63,6 +65,12 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
 
     GoogleCloudStoragePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
+
+        projectIdField = new JTextField("lastServer");
+        projectIdField.selectAll();
+        addTextFieldListeners(projectIdField, true);
+        // FIXME description
+        addRow(Translator.get("server_connect_dialog.server"), projectIdField, 15);
 
         URL resourceURL = ResourceLoader.getResourceAsURL(GOOGLE_ACCOUNT_ICON_PATH);
         googleIcon = new ImageIcon(resourceURL);
@@ -103,7 +111,7 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
 
     @Override
     public FileURL getServerURL() throws MalformedURLException {
-        return FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, accountAlias.getText()));
+        return FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, projectIdField.getText()));
     }
 
     @Override
@@ -133,16 +141,16 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
                     new Thread(() -> {
 //                        receiver = new LocalServerReceiver();
 //                    About about;
-                        try {
+//                        try {
 //                            credential = GoogleCloudStorageClient.getCredentials();
-                            try (GoogleCloudStorageClient client = new GoogleCloudStorageClient()) {
-                                client.connect();
+//                            try (GoogleCloudStorageClient client = new GoogleCloudStorageClient()) {
+//                                client.connect();
 //                            about = client.getConnection().about().get().setFields("user").execute();
-                            }
-                        } catch (IOException e) {
-                            LOGGER.warn("failed to sign in to Google account", e);
-                            return;
-                        }
+//                            }
+//                        } catch (IOException e) {
+//                            LOGGER.warn("failed to sign in to Google account", e);
+//                            return;
+//                        }
                         // FIXME
 //                    Map<String, String> user = (Map<String, String>) about.get("user");
 //                    displayName.setText(user.get("displayName"));

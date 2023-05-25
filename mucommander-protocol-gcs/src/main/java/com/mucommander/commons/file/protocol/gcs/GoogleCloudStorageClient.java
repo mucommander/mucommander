@@ -38,12 +38,12 @@ public class GoogleCloudStorageClient implements Closeable {
 
     private static final List<String> SCOPES = List.of(StorageScopes.DEVSTORAGE_FULL_CONTROL);
 
+    private final String projectId;
     private Storage storageService;
-//    private FileURL fileUrl;
 
-//    public GoogleCloudStorageClient(FileURL fileUrl) {
-//        this.fileUrl = fileUrl;
-//    }
+    public GoogleCloudStorageClient(String projectId) {
+        this.projectId = projectId;
+    }
 
 
     public Storage getConnection() {
@@ -67,7 +67,7 @@ public class GoogleCloudStorageClient implements Closeable {
             storageService = StorageOptions.newBuilder()
 //                    .setCredentials(getCredentials())
                     // With projectId
-                    .setProjectId("").build() //FIXME
+                    .setProjectId(projectId).build()
                     .getService();
 
 //            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
