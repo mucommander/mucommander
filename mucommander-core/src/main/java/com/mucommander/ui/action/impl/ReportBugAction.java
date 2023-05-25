@@ -23,7 +23,6 @@ import java.util.Map;
 import com.mucommander.Activator;
 import com.mucommander.RuntimeConstants;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.dialog.debug.LoggingEvent;
@@ -54,7 +53,7 @@ public class ReportBugAction extends OpenURLInBrowserAction {
     public void performAction() {
         var url = com.mucommander.RuntimeConstants.REPORT_BUG_URL;
         try {
-            var muCVersion = String.format(Activator.portable ? "%s (%s)" : "%s", RuntimeConstants.VERSION, Translator.get("portable"));
+            var muCVersion = String.format(Activator.portable ? "%s (%s)" : "%s", RuntimeConstants.VERSION, "portable");
             var javaVersion = String.join(System.lineSeparator(),
                     System.getProperty("java.version"),
                     System.getProperty("java.vm.name"),
