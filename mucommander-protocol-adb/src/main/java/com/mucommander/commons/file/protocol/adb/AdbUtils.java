@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.runtime.OsFamily;
@@ -38,7 +41,7 @@ import se.vidstige.jadb.JadbException;
  * Created on 25/12/15.
  */
 public class AdbUtils {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdbUtils.class);
 
     private static Map<String, String> lastDeviceNames;
 
@@ -56,7 +59,8 @@ public class AdbUtils {
             }
             return names;
         } catch (JadbException | IOException e) {
-            e.printStackTrace();
+            LOGGER.error("failed to list android devices");
+            LOGGER.debug("failed to list android devices", e);
         }
         return null;
     }
