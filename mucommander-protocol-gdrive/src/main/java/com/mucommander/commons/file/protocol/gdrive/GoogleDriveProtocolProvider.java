@@ -37,7 +37,9 @@ public class GoogleDriveProtocolProvider implements ProtocolProvider {
 	    String path = url.getPath();
 	    switch(path) {
 	    case "/":
-	        return new GoogleDriveRoot(url);
+	        return new GoogleDriveDrives(url);
+	    case GoogleDriveMyDrive.PATH:
+	        return new GoogleDriveMyDrive(url);
 	    default:
 	        return new GoogleDriveFile(url);
 	    }

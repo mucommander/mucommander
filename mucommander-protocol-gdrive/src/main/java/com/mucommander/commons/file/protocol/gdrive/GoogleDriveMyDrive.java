@@ -19,9 +19,11 @@ package com.mucommander.commons.file.protocol.gdrive;
 
 import com.mucommander.commons.file.FileURL;
 
-public class GoogleDriveRoot extends GoogleDriveFile {
+public class GoogleDriveMyDrive extends GoogleDriveFile {
 
-    protected GoogleDriveRoot(FileURL url) {
+    static final String PATH = "/My Drive/";
+
+    protected GoogleDriveMyDrive(FileURL url) {
         super(url, null);
     }
 
@@ -42,6 +44,6 @@ public class GoogleDriveRoot extends GoogleDriveFile {
 
     @Override
     public boolean isRoot() {
-        return true;
+        return false;
     }
 }
