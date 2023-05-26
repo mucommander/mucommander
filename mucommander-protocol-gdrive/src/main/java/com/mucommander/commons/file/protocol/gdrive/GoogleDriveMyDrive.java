@@ -17,7 +17,11 @@
 
 package com.mucommander.commons.file.protocol.gdrive;
 
+import java.io.IOException;
+
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 
 public class GoogleDriveMyDrive extends GoogleDriveFile {
 
@@ -45,5 +49,10 @@ public class GoogleDriveMyDrive extends GoogleDriveFile {
     @Override
     public boolean isRoot() {
         return false;
+    }
+
+    @Override
+    @UnsupportedFileOperation
+    public void delete() throws IOException, UnsupportedFileOperationException {
     }
 }
