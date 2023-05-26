@@ -68,7 +68,7 @@ public class QuestionDialog extends FocusDialog implements DialogResult {
     /**
      * Minimum dialog size
      */
-    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 0);
+    private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360, 180);
 
     /**
      * Maximum dialog size
