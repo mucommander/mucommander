@@ -41,6 +41,12 @@ public class MkdirAction extends ParentFolderAction {
 
     @Override
     protected void toggleEnabledState() {
+        var currentFolder = mainFrame.getActivePanel().getCurrentFolder();
+        if (currentFolder.isRoot()) {
+            setEnabled(currentFolder.isFileOperationSupported(FileOperation.CREATE_DIRECTORY));
+            return;
+        }
+
         AbstractFile firstFile = mainFrame.getActiveTable().getFileTableModel().getFileAt(0);
 
         // If there is no file at all, do not rely on the action being supported by the current folder as this
