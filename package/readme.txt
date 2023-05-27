@@ -47,7 +47,8 @@ Improvements:
 - When opening a result of a file search with text search using the internal viewer/editor, the caret is set on the first occurrence of the searched text.
 - The action categoties that are displayed in the shortcuts preferences tab are sorted by their name.
 - The row-filtering in the shortucts preferences tab now matches the specified input also against the tooltip of the row (the action's description).
-- Theme preferences for Shell renamed to Terminal and now both the Terminal and Run Command dialog use configured colors and font
+- Theme preferences for Shell renamed to Terminal and now both the Terminal and Run Command dialog use configured colors and font.
+- Google Drive: file queries can return up to 1000 files (was 100).
 
 Localization:
 -
