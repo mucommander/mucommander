@@ -34,12 +34,13 @@ import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
 /**
- * Lists "My Drive"
+ * Root path of Google Drive, presenting: "My Drive", "Shared with me" and "Trash" folders.
+ *
  * @author Arik Hadas
  */
-public class GoogleDriveDrives extends GoogleDriveFile {
+public class GoogleDriveRoot extends GoogleDriveFile {
 
-    protected GoogleDriveDrives(FileURL url) {
+    protected GoogleDriveRoot(FileURL url) {
         super(url);
     }
 
