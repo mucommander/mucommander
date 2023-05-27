@@ -225,7 +225,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
         }
     }
 
-    private GoogleDriveFile toFile(File file) {
+    protected GoogleDriveFile toFile(File file) {
         FileURL url = (FileURL) getURL().clone();
         String parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
         url.setPath(parentPath + file.getName());

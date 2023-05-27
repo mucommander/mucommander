@@ -39,6 +39,7 @@ New features:
 - Dock/TaskBar icon shows the number of active jobs and their progress.
 - Open With contextual menu shows compatible apps on macOS.
 - Support for Android Debug Bridge (adb).
+- Google Drive: present files shared with the authorized user in the 'Shared with me' folder.
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
