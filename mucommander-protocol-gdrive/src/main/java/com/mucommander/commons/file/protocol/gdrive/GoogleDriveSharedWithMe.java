@@ -58,8 +58,7 @@ public class GoogleDriveSharedWithMe extends GoogleDriveFile {
             }
 
             return files.stream()
-                    .filter(file -> file.getSize() != null || isFolder(file))
-                    .filter(file -> !file.getTrashed())
+                    .filter(Files::isNotTrashed)
                     .map(this::toFile)
                     .toArray(GoogleDriveFile[]::new);
         }

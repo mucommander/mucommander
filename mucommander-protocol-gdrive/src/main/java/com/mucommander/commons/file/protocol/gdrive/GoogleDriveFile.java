@@ -60,8 +60,6 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     private File file;
     private GoogleDriveFile parent;
 
-    public static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
-
     protected GoogleDriveFile(FileURL url, File file) {
         super(url);
         this.file = file;
@@ -187,11 +185,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
 
     @Override
     public boolean isDirectory() {
-        return file != null ? isFolder(file) : false;
-    }
-
-    protected static boolean isFolder(File file) {
-        return FOLDER_MIME_TYPE.equals(file.getMimeType());
+        return file != null ? Files.isFolder(file) : false;
     }
 
     @Override
@@ -219,8 +213,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             }
 
             return files.stream()
-                    .filter(file -> file.getSize() != null || isFolder(file))
-                    .filter(file -> !file.getTrashed())
+                    .filter(Files::isNotTrashed)
                     .map(this::toFile)
                     .toArray(GoogleDriveFile[]::new);
         }
@@ -242,7 +235,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             String filename = getURL().getFilename();
             fileMetadata.setParents(Collections.singletonList(getParent().getId()));
             fileMetadata.setName(filename);
-            fileMetadata.setMimeType(FOLDER_MIME_TYPE);
+            fileMetadata.setMimeType(Files.FOLDER_MIME_TYPE);
             file = connHandler.getConnection().files().create(fileMetadata)
                     .setFields("id,name,parents,size,modifiedTime,mimeType")
                     .execute();
@@ -252,9 +245,28 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
         try (GoogleDriveConnHandler connHandler = getConnHandler()) {
-            return connHandler.getConnection().files()
-                    .get(file.getId())
-                    .executeMediaAsInputStream();
+            switch(file.getMimeType()) {
+            case Files.DOCUMENT_MIME_TYPE:
+                return connHandler.getConnection().files()
+                        .export(file.getId(), "application/vnd.oasis.opendocument.text")
+                        .executeMediaAsInputStream();
+            case Files.SPREADSHEET_MIME_TYPE:
+                return connHandler.getConnection().files()
+                        .export(file.getId(), "application/vnd.oasis.opendocument.spreadsheet")
+                        .executeMediaAsInputStream();
+            case Files.PRESENTATION_MIME_TYPE:
+                return connHandler.getConnection().files()
+                        .export(file.getId(), "application/vnd.oasis.opendocument.presentation")
+                        .executeMediaAsInputStream();
+            case Files.DRAWING_MIME_TYPE:
+                return connHandler.getConnection().files()
+                        .export(file.getId(), "image/jpeg")
+                        .executeMediaAsInputStream();
+            default:
+                return connHandler.getConnection().files()
+                        .get(file.getId())
+                        .executeMediaAsInputStream();
+            }
         }
     }
 

@@ -58,7 +58,6 @@ public class GoogleDriveTrash extends GoogleDriveFile {
             }
 
             return files.stream()
-                    .filter(file -> file.getSize() != null || isFolder(file))
                     .map(this::toFile)
                     .toArray(GoogleDriveFile[]::new);
         }

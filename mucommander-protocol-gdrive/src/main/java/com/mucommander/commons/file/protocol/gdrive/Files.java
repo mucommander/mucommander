@@ -17,37 +17,25 @@
 
 package com.mucommander.commons.file.protocol.gdrive;
 
-import java.io.IOException;
+import com.google.api.services.drive.model.File;
 
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.UnsupportedFileOperation;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
+public class Files {
 
-public class GoogleDriveMyDrive extends GoogleDriveFile {
+    public final static String FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
+    public final static String DOCUMENT_MIME_TYPE = "application/vnd.google-apps.document";
+    public final static String SPREADSHEET_MIME_TYPE = "application/vnd.google-apps.spreadsheet";
+    public final static String PRESENTATION_MIME_TYPE = "application/vnd.google-apps.presentation";
+    public final static String DRAWING_MIME_TYPE = "application/vnd.google-apps.drawing";
 
-    static final String PATH = "/My Drive/";
-
-    protected GoogleDriveMyDrive(FileURL url) {
-        super(url);
+    public static boolean isNotFolder(File file) {
+        return !isFolder(file);
     }
 
-    @Override
-    protected String getId() {
-        return "root";
+    public static boolean isFolder(File file) {
+        return FOLDER_MIME_TYPE.equals(file.getMimeType());
     }
 
-    @Override
-    public boolean isDirectory() {
-        return true;
-    }
-
-    @Override
-    public boolean exists() {
-        return true;
-    }
-
-    @Override
-    @UnsupportedFileOperation
-    public void delete() throws IOException, UnsupportedFileOperationException {
+    public static boolean isNotTrashed(File file) {
+        return !file.getTrashed();
     }
 }

@@ -54,7 +54,7 @@ public class GoogleDriveMonitoredFile extends ModificationDateBasedMonitoredFile
                     .setQ(String.format("'%s' in parents", file.getId()))
                     .execute();
             return result.getFiles().stream()
-                    .filter(this::isNotFolder)
+                    .filter(Files::isNotFolder)
                     .map(File::getModifiedTime)
                     .map(DateTime::getValue)
                     .max(Long::compareTo)
@@ -66,10 +66,6 @@ public class GoogleDriveMonitoredFile extends ModificationDateBasedMonitoredFile
             LOGGER.error("runtime exception while retrieving folder modification date", e);
             return 0;
         }
-    }
-
-    protected boolean isNotFolder(File file) {
-        return !GoogleDriveFile.isFolder(file);
     }
 
     public GoogleDriveFile getUnderlyingFile() {
