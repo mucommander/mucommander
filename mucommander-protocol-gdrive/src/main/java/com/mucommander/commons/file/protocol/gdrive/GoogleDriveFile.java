@@ -210,6 +210,7 @@ public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFa
             FileList result = connHandler.getConnection().files().list()
                     .setFields("files(id,name,parents,size,modifiedTime,mimeType,trashed)")
                     .setQ(String.format("'%s' in parents", getId()))
+                    .setPageSize(1000)
                     .execute();
             List<File> files = result.getFiles();
             if (files == null || files.isEmpty()) {
