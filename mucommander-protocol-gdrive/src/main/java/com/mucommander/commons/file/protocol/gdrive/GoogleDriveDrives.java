@@ -133,7 +133,11 @@ public class GoogleDriveDrives extends GoogleDriveFile {
         url.setPath(GoogleDriveSharedWithMe.PATH);
         var sharedWithMe = new GoogleDriveSharedWithMe(url);
 
-        return new GoogleDriveFile[] { myDrive, sharedWithMe };
+        url = (FileURL) getURL().clone();
+        url.setPath(GoogleDriveTrash.PATH);
+        var trash = new GoogleDriveTrash(url);
+
+        return new GoogleDriveFile[] { myDrive, sharedWithMe, trash };
     }
 
     @Override
