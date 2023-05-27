@@ -42,6 +42,8 @@ public class GoogleDriveProtocolProvider implements ProtocolProvider {
 	        return new GoogleDriveMyDrive(url);
 	    case GoogleDriveSharedWithMe.PATH:
 	        return new GoogleDriveSharedWithMe(url);
+	    case GoogleDriveTrash.PATH:
+	        return new GoogleDriveTrash(url);
 	    default:
 	        return new GoogleDriveFile(url);
 	    }

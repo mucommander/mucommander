@@ -30,16 +30,16 @@ import com.mucommander.commons.file.UnsupportedFileOperation;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
 
 /**
- * Folder of files shared with the authorized user
+ * Folder of trashed files
  *
  * @author Arik Hadas
  */
-public class GoogleDriveSharedWithMe extends GoogleDriveFile {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveSharedWithMe.class);
+public class GoogleDriveTrash extends GoogleDriveFile {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveTrash.class);
 
-    static final String PATH = "/Shared with me/";
+    static final String PATH = "/Trash/";
 
-    protected GoogleDriveSharedWithMe(FileURL url) {
+    protected GoogleDriveTrash(FileURL url) {
         super(url);
     }
 
@@ -48,7 +48,7 @@ public class GoogleDriveSharedWithMe extends GoogleDriveFile {
         try (GoogleDriveConnHandler connHandler = getConnHandler()) {
             FileList result = connHandler.getConnection().files().list()
                     .setFields("files(id,name,parents,size,modifiedTime,mimeType,trashed)")
-                    .setQ("sharedWithMe")
+                    .setQ("trashed")
                     .setPageSize(1000)
                     .execute();
             List<File> files = result.getFiles();
@@ -59,7 +59,6 @@ public class GoogleDriveSharedWithMe extends GoogleDriveFile {
 
             return files.stream()
                     .filter(file -> file.getSize() != null || isFolder(file))
-                    .filter(file -> !file.getTrashed())
                     .map(this::toFile)
                     .toArray(GoogleDriveFile[]::new);
         }
