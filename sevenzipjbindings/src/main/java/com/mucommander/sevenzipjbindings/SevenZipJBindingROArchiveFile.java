@@ -150,11 +150,6 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
                     } catch (IOException e) {
                         LOGGER.info("Error in closing outputstream: " + e.getMessage());
                     }
-                    try {
-                        inArchive.close();
-                    } catch (SevenZipException e) {
-                        LOGGER.warn("Error closing inArchive: {}", inArchive, e);
-                    }
                     inArchive = null;
                 }
             }
