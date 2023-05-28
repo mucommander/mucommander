@@ -92,6 +92,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
     /* TODO branch private JCheckBoxMenuItem toggleBranchView; */
 
+    // File menu
+    private JMenu fileMenu;
 
     // Go menu
     private JMenu goMenu;
@@ -110,6 +112,8 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     /** Maps window menu items onto weakly-referenced frames */
     private WeakHashMap<JMenuItem, Frame> windowMenuFrames;
 
+    /** A handler for Open With menu */
+    private OpenWithMenu openWithMenu;
 
     private final static String RECALL_WINDOW_ACTION_IDS[] = {
             ActionType.RecallWindow1.toString(),
@@ -140,13 +144,13 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MnemonicHelper menuItemMnemonicHelper2 = new MnemonicHelper();
 
         // File menu
-        JMenu fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
+        fileMenu = MenuToolkit.addMenu(Translator.get("file_menu"), menuMnemonicHelper, this);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.NewWindow, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.NewTab, mainFrame), menuItemMnemonicHelper);
         fileMenu.add(new JSeparator());
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.Open, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenNatively, mainFrame), menuItemMnemonicHelper);
-        fileMenu.add(new OpenWithMenu(mainFrame));
+        fileMenu.add(openWithMenu = new OpenWithMenu(mainFrame));
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenInNewTab, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenInOtherPanel, mainFrame), menuItemMnemonicHelper);
         MenuToolkit.addMenuItem(fileMenu, ActionManager.getActionInstance(ActionType.OpenInBothPanels, mainFrame), menuItemMnemonicHelper);
@@ -401,7 +405,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     public void menuSelected(MenuEvent e) {
         Object source = e.getSource();
 
-        if (source == viewMenu) {
+        if (source == fileMenu) {
+            if (openWithMenu != null) {
+                openWithMenu.refresh(mainFrame.getActiveTable().getSelectedFile());
+            }
+        } else if (source == viewMenu) {
             FileTable activeTable = mainFrame.getActiveTable();
 
             // Select the 'sort by' criterion currently in use in the active table
