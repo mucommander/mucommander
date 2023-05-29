@@ -33,6 +33,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -777,19 +778,22 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         /**
          * Custom JLabel that render specific column cells
          */
-        private final DotBorderedCellLabel[] cellLabels = new DotBorderedCellLabel[NUM_OF_COLUMNS];
+        private final Map<TableDataColumnEnum, DotBorderedCellLabel> cellLabels =
+                Set.of(TableDataColumnEnum.DESCRIPTION,
+                       TableDataColumnEnum.ACCELERATOR,
+                       TableDataColumnEnum.ALT_ACCELERATOR).stream()
+                        .collect(Collectors.toMap(
+                            e -> e,
+                            e -> new DotBorderedCellLabel()
+                ));
 
         public ShortcutsTableCellRenderer() {
-            for (int i = 0; i < NUM_OF_COLUMNS; ++i) {
-                cellLabels[i] = new DotBorderedCellLabel();
-            }
-
             // Set labels' font.
             setCellLabelsFont(ThemeCache.tableFont);
 
-            cellLabels[TableDataColumnEnum.DESCRIPTION.columnIndex].setHorizontalAlignment(CellLabel.LEFT);
-            cellLabels[TableDataColumnEnum.ACCELERATOR.columnIndex].setHorizontalAlignment(CellLabel.CENTER);
-            cellLabels[TableDataColumnEnum.ALT_ACCELERATOR.columnIndex].setHorizontalAlignment(CellLabel.CENTER);
+            cellLabels.get(TableDataColumnEnum.DESCRIPTION).setHorizontalAlignment(CellLabel.LEFT);
+            cellLabels.get(TableDataColumnEnum.ACCELERATOR).setHorizontalAlignment(CellLabel.CENTER);
+            cellLabels.get(TableDataColumnEnum.ALT_ACCELERATOR).setHorizontalAlignment(CellLabel.CENTER);
 
             // Listens to certain configuration variables
             ThemeCache.addThemeListener(this);
@@ -800,21 +804,18 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
          */
         private void setCellLabelsFont(Font newFont) {
             // Set custom font
-            for (int i = 0; i < NUM_OF_COLUMNS; ++i) {
-                cellLabels[i].setFont(newFont);
+            for (DotBorderedCellLabel label : cellLabels.values()) {
+                label.setFont(newFont);
             }
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
-            DotBorderedCellLabel label;
-            int columnId;
 
-            columnId = convertColumnIndexToModel(vColIndex);
-            label = cellLabels[columnId];
+            TableDataColumnEnum colEnum = TableDataColumnEnum.fromInt(convertColumnIndexToModel(vColIndex));
+            DotBorderedCellLabel label = cellLabels.get(colEnum);
 
-            TableDataColumnEnum colEnum = TableDataColumnEnum.fromInt(columnId);
             // action's icon column: return ImageIcon instance
             if (colEnum == TableDataColumnEnum.DESCRIPTION) {
                 Pair<ImageIcon, String> description = (Pair<ImageIcon, String>) value;
