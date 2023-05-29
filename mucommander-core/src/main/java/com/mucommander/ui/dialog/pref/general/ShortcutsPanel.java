@@ -136,7 +136,6 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         final JButton restoreDefaultButton = new JButton();
         restoreDefaultButton.setAction(new AbstractAction(Translator.get("shortcuts_panel" + ".restore_defaults")) {
-
             public void actionPerformed(ActionEvent e) {
                 shortcutsTable.restoreDefaults();
             }
@@ -282,8 +281,9 @@ public class ShortcutsPanel extends PreferencesPanel {
         }
 
         private void createMessageRemoverThread() {
-            if (currentRemoverThread != null)
+            if (currentRemoverThread != null) {
                 currentRemoverThread.neutralize();
+            }
             (currentRemoverThread = new MessageRemoverThread()).start();
         }
 
@@ -300,8 +300,9 @@ public class ShortcutsPanel extends PreferencesPanel {
                     Thread.sleep(MESSAGE_SHOWING_TIME);
                 } catch (InterruptedException e) {}
 
-                if (!stopped)
+                if (!stopped) {
                     showActionTooltip(lastActionTooltipShown);
+                }
             }
         }
     }
@@ -335,8 +336,10 @@ public class ShortcutsPanel extends PreferencesPanel {
         private void updateButtonState() {
             int column = shortcutsTable.getSelectedColumn();
             int row = shortcutsTable.getSelectedRow();
-            boolean canRemove = (column == ShortcutsTable.ACCELERATOR_COLUMN_INDEX || column == ShortcutsTable.ALTERNATE_ACCELERATOR_COLUMN_INDEX)
-                    && row != -1 && shortcutsTable.getValueAt(shortcutsTable.getSelectedRow(), column) != null;
+            ShortcutsTable.TableDataColumnEnum colEnum = ShortcutsTable.TableDataColumnEnum.fromInt(column);
+            boolean canRemove = (colEnum == ShortcutsTable.TableDataColumnEnum.ACCELERATOR ||
+                        colEnum == ShortcutsTable.TableDataColumnEnum.ALT_ACCELERATOR)
+                        && row != -1 && shortcutsTable.getValueAt(shortcutsTable.getSelectedRow(), column) != null;
             setEnabled(canRemove);
         }
     }

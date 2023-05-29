@@ -133,14 +133,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     private static final int NUM_OF_CLICKS_TO_ENTER_EDITING_STATE = 2;
 
     /**
-     * Column indexes
-     */
-    public static final int ACTION_DESCRIPTION_COLUMN_INDEX = 0;
-    public static final int ACCELERATOR_COLUMN_INDEX = 1;
-    public static final int ALTERNATE_ACCELERATOR_COLUMN_INDEX = 2;
-    public static final int ACTION_TOOLTIP_COLUMN_INDEX = 3;
-
-    /**
      * Number of columns in the table
      */
     private static final int NUM_OF_COLUMNS = 3;
@@ -177,9 +169,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
         if (!usesTableHeaderRenderingProperties()) {
             CenteredTableHeaderRenderer renderer = new CenteredTableHeaderRenderer();
-            getColumnModel().getColumn(ACTION_DESCRIPTION_COLUMN_INDEX).setHeaderRenderer(renderer);
-            getColumnModel().getColumn(ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(renderer);
-            getColumnModel().getColumn(ALTERNATE_ACCELERATOR_COLUMN_INDEX).setHeaderRenderer(renderer);
+            getColumnModel().getColumn(TableDataColumnEnum.DESCRIPTION.columnIndex).setHeaderRenderer(renderer);
+            getColumnModel().getColumn(TableDataColumnEnum.ACCELERATOR.columnIndex).setHeaderRenderer(renderer);
+            getColumnModel().getColumn(TableDataColumnEnum.ALT_ACCELERATOR.columnIndex).setHeaderRenderer(renderer);
         }
 
         putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -283,6 +275,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         super.setModel(model);
     }
 
+    @Override
     public boolean hasChanged() {
         return shortcutsTableData.hasChanged();
     }
@@ -335,7 +328,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             e.consume();
         } else if (!Set.of(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_UP,
                         KeyEvent.VK_DOWN, KeyEvent.VK_HOME, KeyEvent.VK_END,
-                        KeyEvent.VK_F2, KeyEvent.VK_ESCAPE).add(keyCode)) {
+                        KeyEvent.VK_F2, KeyEvent.VK_ESCAPE).contains(keyCode)) {
             e.consume();
         }
     }
@@ -420,20 +413,21 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     private class KeymapTableModel extends DefaultTableModel {
         private ShortcutsTableData tableData = null;
 
-        private KeymapTableModel(ShortcutsTableData data) {
-            super(data.getTableData(), new String[]{Translator.get("shortcuts_table.action_description"),
-                    Translator.get("shortcuts_table.shortcut"),
-                    Translator.get("shortcuts_table.alternate_shortcut")});
-            this.tableData = data;
+        private KeymapTableModel(ShortcutsTableData tableData) {
+            super(new String[] { Translator.get("shortcuts_table.action_description"),
+                                 Translator.get("shortcuts_table.shortcut"),
+                                 Translator.get("shortcuts_table.alternate_shortcut")},
+                    tableData.getTableSize());
+            this.tableData = tableData;
         }
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            switch (column) {
-                case ACCELERATOR_COLUMN_INDEX:
-                case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
+            TableDataColumnEnum colEnum = TableDataColumnEnum.fromInt(column);
+            switch (colEnum) {
+                case ACCELERATOR:
+                case ALT_ACCELERATOR:
                     return true;
-                case ACTION_DESCRIPTION_COLUMN_INDEX:
                 default:
                     return false;
             }
@@ -441,7 +435,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
         @Override
         public Object getValueAt(int row, int column) {
-            return tableData.getTableData(row, column);
+            TableDataColumnEnum colEnum = TableDataColumnEnum.fromInt(column);
+            return tableData.getTableData(row, colEnum);
         }
 
         @Override
@@ -453,21 +448,22 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 value = null;
             }
 
+            TableDataColumnEnum colEnum = TableDataColumnEnum.fromInt(column);
             KeyStroke typedKeyStroke = (KeyStroke) value;
-            switch (column) {
-                case ACCELERATOR_COLUMN_INDEX:
+            switch (colEnum) {
+                case ACCELERATOR:
                     tableData.setAccelerator(typedKeyStroke, row);
                     break;
-                case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
+                case ALT_ACCELERATOR:
                     tableData.setAlternativeAccelerator(typedKeyStroke, row);
                     break;
                 default:
-                    LOGGER.debug("Unexpected column index: {}", column);
+                    LOGGER.debug("Unexpected column: {} -> {}", column, colEnum);
             }
 
             fireTableCellUpdated(row, column);
 
-            LOGGER.trace("Value: {}, row: {}, col: {}", value, row, column);
+            LOGGER.trace("Value: {}, row: {}, col: {}", value, row, colEnum);
         }
     }
 
@@ -531,11 +527,12 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             } else {
                 String actionId;
                 if ((actionId = shortcutsTableData.contains(pressedKeyStroke)) != null) {
-                    String errorMessage =
-                            Translator.get("shortcuts_panel.already_assigned",
+                    tooltipBar.showErrorMessage(Translator.get("shortcuts_panel.already_assigned",
                             KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke),
-                                        ActionProperties.getActionDescription(actionId));
-                    tooltipBar.showErrorMessage(errorMessage);
+                            ActionProperties.getActionLabel(actionId)));
+                    tooltipBar.setToolTipText(Translator.get("shortcuts_panel.already_assigned",
+                            KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke),
+                            ActionProperties.getActionDescription(actionId)));
                     createCancelEditingStateThread(getCellEditor());
                 } else {
                     lastKeyStroke = pressedKeyStroke;
@@ -555,33 +552,64 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
     }
 
+    public enum TableDataColumnEnum {
+        DESCRIPTION(0),
+        ACCELERATOR(1),
+        ALT_ACCELERATOR(2),
+        TOOLTIPS(3),
+        UNKNOWN(-1),
+        ;
+
+        private int columnIndex;
+
+        TableDataColumnEnum(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        static TableDataColumnEnum fromInt(int idx) {
+            TableDataColumnEnum result = UNKNOWN;
+            for (TableDataColumnEnum e : TableDataColumnEnum.values()) {
+                if (e.columnIndex == idx) {
+                    result = e;
+                    break;
+                }
+            }
+            return result;
+        }
+    }
+
     private class ShortcutsTableData {
-        private Object[][] data;
-        private String[] actionIds;
-        private String[] descriptions;
 
-        private final Integer description = 0;
-        private final Integer accelerator = 1;
-        private final Integer alt_accelerator = 2;
-        private final Integer tooltips = 3;
+        /**
+         * Original actions (so we can revert to defaults or compare what has changed)
+         */
+        private final Map<String, Map<TableDataColumnEnum, Object>> originalActionMap;
 
-        private final List<String> allActionIds;
-        private final HashMap<String, HashMap<Integer, Object>> db;
+        /**
+         * Edited actions (decoupled from originalActionMap).
+         */
+        private final Map<String, Map<TableDataColumnEnum, Object>> editedActionMap;
+
+        /**
+         * Filtered aka visible and edited actions (mapped thru references to editedActionMap).
+         */
+        private List<String> filteredEditedActionIds;
+        private final LinkedHashMap<String, Map<TableDataColumnEnum, Object>> filteredEditedActionMap;
 
         public ShortcutsTableData() {
-            allActionIds = ActionManager.getActionIds();
+            List<String> allActionIds = ActionManager.getActionIds();
             Collections.sort(allActionIds, ACTIONS_COMPARATOR);
 
             final int nbActions = allActionIds.size();
-            db = new HashMap<>(nbActions);
-
-            int nbRows = allActionIds.size();
-            data = new Object[nbRows][NUM_OF_COLUMNS];
+            originalActionMap = new LinkedHashMap<>(nbActions);
+            editedActionMap = new LinkedHashMap<>(nbActions);
+            filteredEditedActionIds = new LinkedList<>();
+            filteredEditedActionMap = new LinkedHashMap<>(nbActions);
 
             for (String actionId : allActionIds) {
                 ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
-                HashMap<Integer, Object> actionProperties = new HashMap<Integer, Object>();
+                HashMap<TableDataColumnEnum, Object> actionProperties = new HashMap<>();
 
                 ImageIcon actionIcon = actionDescriptor.getIcon();
                 if (actionIcon == null) {
@@ -589,72 +617,60 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 }
                 String actionLabel = actionDescriptor.getLabel();
 
-                /* 0 -> action's icon & name pair */
-                actionProperties.put(description, new Pair<ImageIcon, String>(IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)), actionLabel));
-                /* 1 -> action's accelerator */
-                actionProperties.put(accelerator, ActionKeymap.getAccelerator(actionId));
-                /* 2 -> action's alternate accelerator */
-                actionProperties.put(alt_accelerator, ActionKeymap.getAlternateAccelerator(actionId));
-                /* 3 -> action's description */
-                actionProperties.put(tooltips, actionDescriptor.getDescription());
+                /* icon & name pair */
+                actionProperties.put(TableDataColumnEnum.DESCRIPTION, new Pair<ImageIcon, String>(IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4)), actionLabel));
+                /* action's accelerator */
+                actionProperties.put(TableDataColumnEnum.ACCELERATOR, ActionKeymap.getAccelerator(actionId));
+                /* action's alternate accelerator */
+                actionProperties.put(TableDataColumnEnum.ALT_ACCELERATOR, ActionKeymap.getAlternateAccelerator(actionId));
+                /* action's description */
+                actionProperties.put(TableDataColumnEnum.TOOLTIPS, actionDescriptor.getDescription());
 
-                db.put(actionId, actionProperties);
+                filteredEditedActionIds.add(actionId);
+                originalActionMap.put(actionId, actionProperties);
+                // and deep copy so original mapping stays untouched
+                editedActionMap.put(actionId, (Map<TableDataColumnEnum, Object>)actionProperties.clone());
             }
+            filteredEditedActionMap.putAll(editedActionMap);
         }
 
         public void filter(ActionFilter filter) {
-            List<String> filteredActionIds = filter(allActionIds, filter);
+            filteredEditedActionIds = filter(originalActionMap.keySet(), filter);
+            filteredEditedActionMap.clear();
 
-            // Build the table data
-            int nbRows = filteredActionIds.size();
-
-            actionIds = new String[nbRows];
-            descriptions = new String[nbRows];
-            data = new Object[nbRows][NUM_OF_COLUMNS];
-
-            for (int i = 0; i < nbRows; ++i) {
-                String actionId = filteredActionIds.get(i);
-                actionIds[i] = actionId;
-                ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
-
-                data[i][ACTION_DESCRIPTION_COLUMN_INDEX] = db.get(actionId).get(this.description);
-
-                KeyStroke accelerator = (KeyStroke) db.get(actionId).get(this.accelerator);
-                setAccelerator(accelerator, i);
-
-                KeyStroke alternativeAccelerator = (KeyStroke) db.get(actionId).get(this.alt_accelerator);
-                setAlternativeAccelerator(alternativeAccelerator, i);
-
-                descriptions[i] = actionDescriptor.getDescription();
+            for (String actionId : filteredEditedActionIds) {
+                filteredEditedActionMap.put(actionId, originalActionMap.get(actionId));
             }
 
             ShortcutsTable.this.clearSelection();
-            ((DefaultTableModel) getModel()).setRowCount(data.length);
+            ((DefaultTableModel) getModel()).setRowCount(filteredEditedActionMap.size());
             ShortcutsTable.this.repaint();
             ShortcutsTable.this.scrollToVisible(0, 0);
         }
 
-        public Object[][] getTableData() {
-            return data;
+        public int getTableSize() {
+            return filteredEditedActionMap.size();
         }
 
-        public Object getTableData(int row, int col) {
-            return data[row][col];
+        public Object getTableData(int row, TableDataColumnEnum col) {
+            return filteredEditedActionMap.get(filteredEditedActionIds.get(row)).get(col);
         }
 
         public String getCurrentTooltip() {
-            return descriptions[getSelectedRow()];
+            return (String)getTableData(getSelectedRow(), TableDataColumnEnum.TOOLTIPS);
         }
 
         public String getActionId(int row) {
-            return actionIds[row];
+            return filteredEditedActionIds.get(row);
         }
 
         public boolean hasChanged() {
-            for (String actionId : db.keySet()) {
-                HashMap<Integer, Object> actionProperties = db.get(actionId);
-                if (!equals(actionProperties.get(this.accelerator), ActionKeymap.getAccelerator(actionId)) ||
-                        !equals(actionProperties.get(this.alt_accelerator), ActionKeymap.getAlternateAccelerator(actionId))) {
+            for (String actionId : editedActionMap.keySet()) {
+                Map<TableDataColumnEnum, Object> actionProperties = editedActionMap.get(actionId);
+                if (!equals(actionProperties.get(TableDataColumnEnum.ACCELERATOR),
+                        originalActionMap.get(actionId).get(TableDataColumnEnum.ACCELERATOR)) ||
+                        !equals(actionProperties.get(TableDataColumnEnum.ALT_ACCELERATOR),
+                        originalActionMap.get(actionId).get(TableDataColumnEnum.ALT_ACCELERATOR))) {
                     return true;
                 }
             }
@@ -662,40 +678,37 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
 
         public void restoreDefaultAccelerators() {
-            for (String actionId : allActionIds) {
-                (db.get(actionId)).put(this.accelerator, ActionProperties.getDefaultAccelerator(actionId));
-                (db.get(actionId)).put(this.alt_accelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId));
+            for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
+                entry.getValue().put(TableDataColumnEnum.ACCELERATOR, ActionProperties.getDefaultAccelerator(entry.getKey()));
+                entry.getValue().put(TableDataColumnEnum.ALT_ACCELERATOR, ActionProperties.getDefaultAlternativeAccelerator(entry.getKey()));
             }
-
-            int nbRows = actionIds.length;
-            for (int i = 0; i < nbRows; ++i) {
-                data[i][ACCELERATOR_COLUMN_INDEX] = db.get(actionIds[i]).get(this.accelerator);
-                data[i][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = db.get(actionIds[i]).get(this.alt_accelerator);
+            for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : filteredEditedActionMap.entrySet()) {
+                entry.setValue(editedActionMap.get(entry.getKey()));
             }
-
             ((DefaultTableModel) getModel()).fireTableDataChanged();
         }
 
         public void submitChanges() {
-            for (String actionId : db.keySet()) {
-                HashMap<Integer, Object> actionProperties = db.get(actionId);
-                KeyStroke accelerator = (KeyStroke) actionProperties.get(this.accelerator);
-                KeyStroke alternateAccelerator = (KeyStroke) actionProperties.get(this.alt_accelerator);
+            for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : originalActionMap.entrySet()) {
+                String actionId = entry.getKey();
+                Map<TableDataColumnEnum, Object> actionProperties = editedActionMap.get(actionId);
+                KeyStroke accelerator = (KeyStroke) actionProperties.get(TableDataColumnEnum.ACCELERATOR);
+                KeyStroke altAccelerator = (KeyStroke) actionProperties.get(TableDataColumnEnum.ALT_ACCELERATOR);
 
                 // If action's accelerators differ from its saved accelerators, register them.
-                if (!equals(accelerator, ActionKeymap.getAccelerator(actionId)) ||
-                        !equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId))) {
-                    ActionKeymap.changeActionAccelerators(actionId, accelerator, alternateAccelerator);
+                if (!equals(accelerator, entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
+                        !equals(altAccelerator, entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR))) {
+                    ActionKeymap.changeActionAccelerators(actionId, accelerator, altAccelerator);
                 }
             }
         }
 
         public String contains(KeyStroke accelerator) {
             if (accelerator != null) {
-                for (String actionId : db.keySet()) {
-                    if (accelerator.equals(db.get(actionId).get(this.accelerator)) ||
-                            accelerator.equals(db.get(actionId).get(this.alt_accelerator))) {
-                        return actionId;
+                for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
+                    if (accelerator.equals(entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
+                            accelerator.equals(entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR))) {
+                        return entry.getKey();
                     }
                 }
             }
@@ -703,16 +716,14 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
 
         private void setAccelerator(KeyStroke accelerator, int row) {
-            data[row][ACCELERATOR_COLUMN_INDEX] = accelerator;
-            db.get(getActionId(row)).put(this.accelerator, accelerator);
+            filteredEditedActionMap.get(getActionId(row)).put(TableDataColumnEnum.ACCELERATOR, accelerator);
         }
 
         private void setAlternativeAccelerator(KeyStroke altAccelerator, int row) {
-            data[row][ALTERNATE_ACCELERATOR_COLUMN_INDEX] = altAccelerator;
-            db.get(getActionId(row)).put(this.alt_accelerator, altAccelerator);
+            filteredEditedActionMap.get(getActionId(row)).put(TableDataColumnEnum.ALT_ACCELERATOR, altAccelerator);
         }
 
-        private List<String> filter(List<String> actionIds, ActionFilter filter) {
+        private List<String> filter(Set<String> actionIds, ActionFilter filter) {
             List<String> filteredActionsList = new LinkedList<String>();
             for (String actionId : actionIds) {
                 // Discard actions that are parameterized, and those that are rejected by the filter
@@ -725,28 +736,27 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
 
         private String getRowAsTextForFilter(String actionId) {
-            if (actionIds == null) {
-                return "";
-            }
             StringBuilder rowText = new StringBuilder();
-            Object[] rowValues = db.get(actionId).values().toArray();
+            Map<TableDataColumnEnum, Object> rowData = originalActionMap.get(actionId);
 
-            for (int i = 0; i < rowValues.length; i++) {
-                Object colValue = rowValues[i];
-                String rowTextValue = "";
-                switch (i) {
-                    case ACTION_DESCRIPTION_COLUMN_INDEX:
+            for (Map.Entry<TableDataColumnEnum, Object> entry : rowData.entrySet()) {
+                String rowTextValue;
+                Object colValue = entry.getValue();
+                switch (entry.getKey()) {
+                    case DESCRIPTION:
                         Pair<ImageIcon, String> description = (Pair<ImageIcon, String>) colValue;
                         rowTextValue = description.second;
                         break;
-                    case ACCELERATOR_COLUMN_INDEX:
-                    case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
+                    case ACCELERATOR:
+                    case ALT_ACCELERATOR:
                         final KeyStroke key = (KeyStroke) colValue;
                         rowTextValue = key == null ? "" : KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(key);
                         break;
-                    case ACTION_TOOLTIP_COLUMN_INDEX:
+                    case TOOLTIPS:
                         rowTextValue = (String) colValue;
                         break;
+                    default:
+                        rowTextValue = "";
                 }
                 rowText.append(" ");
                 rowText.append(rowTextValue.trim().toLowerCase());
@@ -777,9 +787,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             // Set labels' font.
             setCellLabelsFont(ThemeCache.tableFont);
 
-            cellLabels[ACTION_DESCRIPTION_COLUMN_INDEX].setHorizontalAlignment(CellLabel.LEFT);
-            cellLabels[ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
-            cellLabels[ALTERNATE_ACCELERATOR_COLUMN_INDEX].setHorizontalAlignment(CellLabel.CENTER);
+            cellLabels[TableDataColumnEnum.DESCRIPTION.columnIndex].setHorizontalAlignment(CellLabel.LEFT);
+            cellLabels[TableDataColumnEnum.ACCELERATOR.columnIndex].setHorizontalAlignment(CellLabel.CENTER);
+            cellLabels[TableDataColumnEnum.ALT_ACCELERATOR.columnIndex].setHorizontalAlignment(CellLabel.CENTER);
 
             // Listens to certain configuration variables
             ThemeCache.addThemeListener(this);
@@ -795,6 +805,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             }
         }
 
+        @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                                                        boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
             DotBorderedCellLabel label;
@@ -803,8 +814,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             columnId = convertColumnIndexToModel(vColIndex);
             label = cellLabels[columnId];
 
+            TableDataColumnEnum colEnum = TableDataColumnEnum.fromInt(columnId);
             // action's icon column: return ImageIcon instance
-            if (columnId == ACTION_DESCRIPTION_COLUMN_INDEX) {
+            if (colEnum == TableDataColumnEnum.DESCRIPTION) {
                 Pair<ImageIcon, String> description = (Pair<ImageIcon, String>) value;
                 label.setIcon(description.first);
                 label.setText(description.second);
@@ -818,7 +830,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 String text = key == null ? "" : KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(key);
 
                 // If component's preferred width is bigger than column width then the component is not entirely
-                // visible so we set a tooltip text that will display the whole text when mouse is over the component
+                // visible, so we set a tooltip text that will display the whole text when mouse is over the component
                 if (table.getColumnModel().getColumn(vColIndex).getWidth() < label.getPreferredSize().getWidth()) {
                     label.setToolTipText(text);
                 } else {
@@ -831,11 +843,11 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 // set cell's foreground color
                 if (key != null) {
                     boolean customized;
-                    switch (columnId) {
-                        case ACCELERATOR_COLUMN_INDEX:
+                    switch (colEnum) {
+                        case ACCELERATOR:
                             customized = !key.equals(ActionProperties.getDefaultAccelerator(shortcutsTableData.getActionId(rowIndex)));
                             break;
-                        case ALTERNATE_ACCELERATOR_COLUMN_INDEX:
+                        case ALT_ACCELERATOR:
                             customized = !key.equals(ActionProperties.getDefaultAlternativeAccelerator(shortcutsTableData.getActionId(rowIndex)));
                             break;
                         default:
@@ -860,12 +872,14 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         /**
          * Receives theme color changes notifications.
          */
+        @Override
         public void colorChanged(ColorChangedEvent event) {
         }
 
         /**
          * Receives theme font changes notifications.
          */
+        @Override
         public void fontChanged(FontChangedEvent event) {
             if (event.getFontId() == Theme.FILE_TABLE_FONT) {
                 setCellLabelsFont(ThemeCache.tableFont);
