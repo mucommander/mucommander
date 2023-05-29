@@ -20,7 +20,6 @@ package com.mucommander.ui.action;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -277,9 +276,7 @@ public class ActionManager {
         }
 
         Matcher matcher = pattern.matcher(actionClassPath);
-        return matcher.matches() ?
-                matcher.group(1)
-                : actionClassPath;
+        return matcher.matches() ? matcher.group(1) : actionClassPath;
     }
 
     /**
@@ -353,8 +350,7 @@ public class ActionManager {
         // Looks for an existing MuAction instance used by the specified MainFrame
         if (mainFrameActions.containsKey(actionParameters)) {
             return mainFrameActions.get(actionParameters).getAction();
-        }
-        else {
+        } else {
             String actionId = actionParameters.getActionId();
 
             // Looks for the action's factory
@@ -486,13 +482,10 @@ public class ActionManager {
      */
     public static boolean performAction(ActionParameters actionParameters, MainFrame mainFrame) {
         MuAction action = getActionInstance(actionParameters, mainFrame);
-
-        if (action==null) {
+        if (action == null) {
             return false;
         }
-
         action.performAction();
-
         return true;
     }
 
