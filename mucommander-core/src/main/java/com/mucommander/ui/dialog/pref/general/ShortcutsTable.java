@@ -39,6 +39,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -701,9 +702,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         public boolean hasChanged() {
             for (String actionId : editedActionMap.keySet()) {
                 Map<TableDataColumnEnum, Object> actionProperties = editedActionMap.get(actionId);
-                if (!equals(actionProperties.get(TableDataColumnEnum.ACCELERATOR),
+                if (!Objects.equals(actionProperties.get(TableDataColumnEnum.ACCELERATOR),
                         originalActionMap.get(actionId).get(TableDataColumnEnum.ACCELERATOR)) ||
-                        !equals(actionProperties.get(TableDataColumnEnum.ALT_ACCELERATOR),
+                        !Objects.equals(actionProperties.get(TableDataColumnEnum.ALT_ACCELERATOR),
                                 originalActionMap.get(actionId).get(TableDataColumnEnum.ALT_ACCELERATOR))) {
                     return true;
                 }
@@ -733,8 +734,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 KeyStroke altAccelerator = (KeyStroke) actionProperties.get(TableDataColumnEnum.ALT_ACCELERATOR);
 
                 // If action's accelerators differ from its saved accelerators, register them.
-                if (!equals(accelerator, entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
-                        !equals(altAccelerator, entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR))) {
+                if (!Objects.equals(accelerator, entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
+                        !Objects.equals(altAccelerator, entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR))) {
                     ActionKeymap.changeActionAccelerators(actionId, accelerator, altAccelerator);
                 }
             }
@@ -800,13 +801,6 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             }
 
             return rowText.toString().trim();
-        }
-
-        private boolean equals(Object obj1, Object obj2) {
-            if (obj1 == null) {
-                return obj2 == null;
-            }
-            return obj1.equals(obj2);
         }
     }
 
