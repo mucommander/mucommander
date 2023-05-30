@@ -235,13 +235,12 @@ public class ActionManager {
         registerAction(new ViewAction.Descriptor(),                         ViewAction::new);
 
         // register "open with" commands as actions, to allow for keyboard shortcuts for them
-        for (Command command : CommandManager.commands()) {
-            if (command.getType() == CommandType.NORMAL_COMMAND) {
-                ActionManager.registerAction(
+        CommandManager.commands()
+                .stream()
+                .filter(command -> command.getType() == CommandType.NORMAL_COMMAND)
+                .forEach(command -> ActionManager.registerAction(
                         new CommandAction.Descriptor(command),
-                        (mainFrame, properties) -> new CommandAction(mainFrame, properties, command));
-            }
-        }
+                        (mainFrame, properties) -> new CommandAction(mainFrame, properties, command)));
     }
 
     /**
