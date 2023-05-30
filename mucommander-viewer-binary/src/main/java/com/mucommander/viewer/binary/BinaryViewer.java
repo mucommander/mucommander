@@ -16,20 +16,6 @@
  */
 package com.mucommander.viewer.binary;
 
-import java.awt.event.KeyEvent;
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.JComponent;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
-
-import org.exbin.bined.EditMode;
-import org.exbin.bined.swing.basic.CodeArea;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
@@ -38,6 +24,18 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.encoding.EncodingMenu;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
+import org.exbin.bined.EditMode;
+import org.exbin.bined.swing.basic.CodeArea;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.swing.JComponent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.util.Objects;
 
 /**
  * General viewer for binary files.

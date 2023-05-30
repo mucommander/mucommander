@@ -86,6 +86,48 @@ public interface BinaryStatusApi {
      */
     void setMemoryMode(MemoryMode memoryMode);
 
+    /**
+     * Sets text for status bar.
+     *
+     * @param text
+     *            text
+     */
+    void setStatusText(String text);
+
+    @ParametersAreNonnullByDefault
+    public enum MemoryMode {
+
+        READ_ONLY("R", "read_only"),
+        RAM_MEMORY("M", "ram"),
+        DIRECT_ACCESS("D", "direct"),
+        DELTA_MODE("\u0394", "delta");
+
+        private final String displayChar;
+        private final String value;
+
+        private MemoryMode(String displayChar, String preferencesValue) {
+            this.displayChar = displayChar;
+            this.value = preferencesValue;
+        }
+
+        @Nonnull
+        public static Optional<MemoryMode> findByPreferencesValue(String matchValue) {
+            return Arrays.stream(values())
+                    .filter(memoryMode -> memoryMode.getPreferencesValue().equals(matchValue))
+                    .findFirst();
+        }
+
+        @Nonnull
+        public String getDisplayChar() {
+            return displayChar;
+        }
+
+        @Nonnull
+        public String getPreferencesValue() {
+            return value;
+        }
+    }
+
     @ParametersAreNonnullByDefault
     interface StatusControlHandler {
 
@@ -122,39 +164,5 @@ public interface BinaryStatusApi {
          *            memory mode
          */
         void changeMemoryMode(MemoryMode memoryMode);
-    }
-
-    @ParametersAreNonnullByDefault
-    public enum MemoryMode {
-
-        READ_ONLY("R", "read_only"),
-        RAM_MEMORY("M", "ram"),
-        DIRECT_ACCESS("D", "direct"),
-        DELTA_MODE("\u0394", "delta");
-
-        private final String displayChar;
-        private final String value;
-
-        private MemoryMode(String displayChar, String preferencesValue) {
-            this.displayChar = displayChar;
-            this.value = preferencesValue;
-        }
-
-        @Nonnull
-        public String getDisplayChar() {
-            return displayChar;
-        }
-
-        @Nonnull
-        public String getPreferencesValue() {
-            return value;
-        }
-
-        @Nonnull
-        public static Optional<MemoryMode> findByPreferencesValue(String matchValue) {
-            return Arrays.stream(values())
-                    .filter(memoryMode -> memoryMode.getPreferencesValue().equals(matchValue))
-                    .findFirst();
-        }
     }
 }

@@ -21,6 +21,9 @@ dependencies {
     implementation('org.exbin.bined:bined-operation-swing:0.2.0') {
         exclude group: 'org.exbin.auxiliary', module: 'paged_data'
     }
+    implementation('org.exbin.bined:bined-highlight-swing:0.2.0') {
+        exclude group: 'org.exbin.auxiliary', module: 'paged_data'
+    }
     // TODO: replace with 'org.exbin.auxiliary:paged_data' once fixed version is released
     implementation files('lib/paged_data-0.2.1-SNAPSHOT.jar')
 
