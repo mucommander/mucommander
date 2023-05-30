@@ -17,11 +17,16 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.*;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 
 import com.mucommander.desktop.ActionType;
-
-import java.util.*;
 
 /**
  * Class that maintains properties of the registered MuAction-s:

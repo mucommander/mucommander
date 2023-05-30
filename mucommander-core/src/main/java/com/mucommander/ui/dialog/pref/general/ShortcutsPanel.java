@@ -70,7 +70,7 @@ public class ShortcutsPanel extends PreferencesPanel {
     public ShortcutsPanel(PreferencesDialog parent) {
         super(parent, Translator.get("shortcuts_panel" + ".title"));
         initUI();
-        setPreferredSize(new Dimension(0,0));
+        setPreferredSize(new Dimension(0, 0));
 
         shortcutsTable.addDialogListener(parent);
     }
@@ -89,8 +89,8 @@ public class ShortcutsPanel extends PreferencesPanel {
     }
 
     /**
-     * Returns a panel that contains combo-box of action categories which is used for filtering
-     * the actions shown at the shortcuts editor table.
+     * Returns a panel that contains combo-box of action categories which is used for filtering the actions shown at the
+     * shortcuts editor table.
      */
     private JPanel createNorthPanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -105,8 +105,8 @@ public class ShortcutsPanel extends PreferencesPanel {
      * Returns a panel that contains the shortcuts editor table.
      */
     private JPanel createCenterPanel() {
-        JPanel panel = new JPanel(new GridLayout(1,0));
-        shortcutsTable.setPreferredColumnWidths(new double[] {0.6, 0.2, 0.2});
+        JPanel panel = new JPanel(new GridLayout(1, 0));
+        shortcutsTable.setPreferredColumnWidths(new double[] { 0.6, 0.2, 0.2 });
         panel.add(new JScrollPane(shortcutsTable));
         return panel;
     }
@@ -130,7 +130,7 @@ public class ShortcutsPanel extends PreferencesPanel {
 
     private JPanel createButtonsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.setBorder(BorderFactory.createEmptyBorder(0,0,0,5));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
 
         RemoveButton removeButton = new RemoveButton();
 
@@ -190,7 +190,10 @@ public class ShortcutsPanel extends PreferencesPanel {
 
         final JComboBox<ActionCategory> combo = new JComboBox<>();
         combo.addItem(ActionCategory.ALL);
-        ActionProperties.getNonEmptyActionCategories().stream().sorted(Comparator.comparing(ActionCategory::toString)).forEach(combo::addItem);
+        ActionProperties.getNonEmptyActionCategories()
+                .stream()
+                .sorted(Comparator.comparing(ActionCategory::toString))
+                .forEach(combo::addItem);
 
         final ActionListener filterActionListener = new ActionListener() {
             @Override
@@ -214,7 +217,6 @@ public class ShortcutsPanel extends PreferencesPanel {
                 }
             }
         };
-
 
         combo.addActionListener(filterActionListener);
         combo.setSelectedIndex(0);
@@ -298,7 +300,8 @@ public class ShortcutsPanel extends PreferencesPanel {
             public void run() {
                 try {
                     Thread.sleep(MESSAGE_SHOWING_TIME);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
 
                 if (!stopped) {
                     showActionTooltip(lastActionTooltipShown);
@@ -314,7 +317,9 @@ public class ShortcutsPanel extends PreferencesPanel {
             setAction(new AbstractAction(Translator.get("remove")) {
 
                 public void actionPerformed(ActionEvent e) {
-                    shortcutsTable.setValueAt(ShortcutsTable.DELETE, shortcutsTable.getSelectedRow(), shortcutsTable.getSelectedColumn());
+                    shortcutsTable.setValueAt(ShortcutsTable.DELETE,
+                            shortcutsTable.getSelectedRow(),
+                            shortcutsTable.getSelectedColumn());
                     shortcutsTable.repaint();
                     shortcutsTable.requestFocus();
                 }
@@ -338,8 +343,8 @@ public class ShortcutsPanel extends PreferencesPanel {
             int row = shortcutsTable.getSelectedRow();
             ShortcutsTable.TableDataColumnEnum colEnum = ShortcutsTable.TableDataColumnEnum.fromInt(column);
             boolean canRemove = (colEnum == ShortcutsTable.TableDataColumnEnum.ACCELERATOR ||
-                        colEnum == ShortcutsTable.TableDataColumnEnum.ALT_ACCELERATOR)
-                        && row != -1 && shortcutsTable.getValueAt(shortcutsTable.getSelectedRow(), column) != null;
+                    colEnum == ShortcutsTable.TableDataColumnEnum.ALT_ACCELERATOR)
+                    && row != -1 && shortcutsTable.getValueAt(shortcutsTable.getSelectedRow(), column) != null;
             setEnabled(canRemove);
         }
     }
