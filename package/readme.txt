@@ -33,7 +33,7 @@ What's new since v1.2.0 ?
 
 New features:
 - Replace-all functionality for the internal text editor.
-- Undo and redo actions for the internal binary editor.
+- Added undo/redo and find/search support to internal binary editor.
 - Additional search options for the internal text viewer/editor: case-sensitivity, whole-words, regular expressions, forward/backward.
 - Browsing and extracting multi-volume RAR 5+ files.
 - Dock/TaskBar icon shows the number of active jobs and their progress.

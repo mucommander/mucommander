@@ -22,6 +22,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
@@ -35,13 +37,25 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
+import com.mucommander.commons.util.StringUtils;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
+import com.mucommander.search.SearchProperty;
+import com.mucommander.viewer.binary.search.BinarySearchService;
+import com.mucommander.viewer.binary.search.BinarySearchServiceImpl;
+import com.mucommander.viewer.binary.search.ReplaceParameters;
+import com.mucommander.viewer.binary.search.SearchCondition;
+import com.mucommander.viewer.binary.search.SearchParameters;
+import com.mucommander.viewer.binary.search.ui.FindBinaryPanel;
 import org.exbin.bined.CodeAreaCaretPosition;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.CodeType;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.capability.EditModeCapable;
+import org.exbin.bined.highlight.swing.HighlightCodeAreaPainter;
 import org.exbin.bined.swing.basic.CodeArea;
 
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
@@ -65,6 +79,10 @@ import com.mucommander.viewer.binary.ui.GoToBinaryPanel;
 @ParametersAreNonnullByDefault
 class BinaryBase {
 
+    protected final BinarySearchService binarySearchService;
+    protected final BinarySearchService.SearchStatusListener searchStatusListener;
+    protected SearchParameters lastSearchParameters = null;
+
     protected JMenu editMenu;
     protected JMenu viewMenu;
     protected JMenuItem copyMenuItem;
@@ -72,6 +90,10 @@ class BinaryBase {
     protected JMenuItem selectAllMenuItem;
     protected JMenuItem goToMenuItem;
     protected JFrame windowFrame;
+    protected JMenuItem findMenuItem;
+    protected JMenuItem findNextMenuItem;
+    protected JMenuItem findPreviousMenuItem;
+    protected BinaryComponent binaryComponent = new BinaryComponent();
 
     private JMenu codeTypeMenu;
     private JMenu codeCharacterCaseMenu;
@@ -84,10 +106,48 @@ class BinaryBase {
     private JRadioButtonMenuItem lowerCaseRadioButtonMenuItem;
     private JRadioButtonMenuItem upperCaseRadioButtonMenuItem;
 
-    protected BinaryComponent binaryComponent = new BinaryComponent();
-
     public BinaryBase() {
+        binarySearchService = new BinarySearchServiceImpl(binaryComponent.getCodeArea());
+        searchStatusListener = new BinarySearchService.SearchStatusListener() {
+            @Override
+            public void setStatus(BinarySearchService.FoundMatches foundMatches) {
+                updateFindStatus();
+
+                if (foundMatches.getMatchesCount() == 0) {
+                    binaryComponent.setStatusText("No matches found");
+                }
+            }
+
+            @Override
+            public void clearStatus() {
+                updateFindStatus();
+            }
+        };
         initMenuBars();
+    }
+
+    /**
+     * Returns platform specific down mask filter.
+     *
+     * @return down mask for meta keys
+     */
+    @SuppressWarnings("deprecation")
+    public static int getMetaMask() {
+        try {
+            switch (java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
+            case java.awt.Event.META_MASK:
+                return KeyEvent.META_DOWN_MASK;
+            case java.awt.Event.SHIFT_MASK:
+                return KeyEvent.SHIFT_DOWN_MASK;
+            case java.awt.Event.ALT_MASK:
+                return KeyEvent.ALT_DOWN_MASK;
+            case java.awt.Event.CTRL_MASK:
+            default:
+                return KeyEvent.CTRL_DOWN_MASK;
+            }
+        } catch (java.awt.HeadlessException ex) {
+            return KeyEvent.CTRL_DOWN_MASK;
+        }
     }
 
     private void initMenuBars() {
@@ -108,6 +168,25 @@ class BinaryBase {
                 KeyStroke.getKeyStroke(KeyEvent.VK_A, metaMask),
                 e -> binaryComponent.getCodeArea().selectAll());
 
+        editMenu.addSeparator();
+        findMenuItem = MenuToolkit.createMenuItem(
+                Translator.get("binary_viewer.find"),
+                menuItemMnemonicHelper,
+                DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Find),
+                e -> performFind());
+        findNextMenuItem = MenuToolkit.addMenuItem(editMenu,
+                Translator.get("binary_viewer.find_next"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
+                e -> performFindNext());
+        findPreviousMenuItem = MenuToolkit.addMenuItem(editMenu,
+                Translator.get("binary_viewer.find_previous"),
+                menuItemMnemonicHelper,
+                KeyStroke.getKeyStroke(KeyEvent.VK_F3, KeyEvent.SHIFT_DOWN_MASK),
+                e -> performFindPrevious());
+        editMenu.add(findMenuItem);
+        editMenu.add(findNextMenuItem);
+        editMenu.add(findPreviousMenuItem);
         editMenu.addSeparator();
 
         goToMenuItem = MenuToolkit.addMenuItem(editMenu,
@@ -169,30 +248,7 @@ class BinaryBase {
                 .addActionListener(e -> binaryComponent.getCodeArea().setCodeCharactersCase(CodeCharactersCase.LOWER));
         codeCharacterCaseMenu.add(lowerCaseRadioButtonMenuItem);
         viewMenu.add(codeCharacterCaseMenu);
-    }
-
-    /**
-     * Returns platform specific down mask filter.
-     *
-     * @return down mask for meta keys
-     */
-    @SuppressWarnings("deprecation")
-    public static int getMetaMask() {
-        try {
-            switch (java.awt.Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) {
-            case java.awt.Event.META_MASK:
-                return KeyEvent.META_DOWN_MASK;
-            case java.awt.Event.SHIFT_MASK:
-                return KeyEvent.SHIFT_DOWN_MASK;
-            case java.awt.Event.ALT_MASK:
-                return KeyEvent.ALT_DOWN_MASK;
-            case java.awt.Event.CTRL_MASK:
-            default:
-                return KeyEvent.CTRL_DOWN_MASK;
-            }
-        } catch (java.awt.HeadlessException ex) {
-            return KeyEvent.CTRL_DOWN_MASK;
-        }
+        updateFindStatus();
     }
 
     public void setWindowFrame(JFrame windowFrame) {
@@ -237,6 +293,102 @@ class BinaryBase {
         dialog.showDialog();
     }
 
+    public void performFind() {
+        FocusDialog dialog = new FocusDialog(windowFrame,
+                Translator.get("binary_viewer.find.dialog_title"),
+                windowFrame);
+        Container contentPane = dialog.getContentPane();
+        FindBinaryPanel findPanel = new FindBinaryPanel();
+        if (lastSearchParameters != null) {
+            findPanel.setSearchParameters(lastSearchParameters);
+        }
+        contentPane.add(findPanel, BorderLayout.CENTER);
+        if (!binaryComponent.getCodeArea().isEditable()) {
+            findPanel.hideReplaceOptions();
+            contentPane.setPreferredSize(new Dimension(700, 400));
+        } else {
+            contentPane.setPreferredSize(new Dimension(700, 800));
+        }
+
+        final JButton okButton = new JButton(Translator.get("binary_viewer.find.ok"));
+        JButton cancelButton = new JButton(Translator.get("cancel"));
+        contentPane.add(DialogToolkit.createOKCancelPanel(okButton, cancelButton, dialog.getRootPane(), e -> {
+            Object source = e.getSource();
+            if (source == okButton) {
+                SearchParameters searchParameters = findPanel.getSearchParameters();
+                lastSearchParameters = searchParameters;
+                ReplaceParameters replaceParameters = findPanel.getReplaceParameters();
+                if (replaceParameters != null) {
+                    binarySearchService.performReplace(searchParameters, replaceParameters);
+                } else {
+                    binarySearchService.performFind(searchParameters, searchStatusListener);
+                }
+            } else {
+                binarySearchService.clearMatches();
+                updateFindStatus();
+            }
+            findPanel.setClosedByAction(true);
+            dialog.dispose();
+
+        }), BorderLayout.SOUTH);
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (!findPanel.isClosedByAction()) {
+                    binarySearchService.clearMatches();
+                    updateFindStatus();
+                }
+            }
+        });
+
+        SwingUtilities.invokeLater(findPanel::initFocus);
+
+        dialog.showDialog();
+    }
+
+    private void updateFindStatus() {
+        int matchPosition = binarySearchService.getMatchPosition();
+        int matchesCount = binarySearchService.getMatchesCount();
+        findNextMenuItem.setEnabled(matchPosition < matchesCount - 1);
+        findPreviousMenuItem.setEnabled(matchPosition > 0);
+        if (matchesCount > 0) {
+            binaryComponent.setStatusText("Match " + (matchPosition + 1) + " of " + matchesCount);
+        } else {
+            binaryComponent.setStatusText("");
+        }
+    }
+
+    public void performFindNext() {
+        int matchPosition = binarySearchService.getMatchPosition();
+        int matchCount = binarySearchService.getMatchesCount();
+        if (matchPosition < matchCount - 1) {
+            binarySearchService.setMatchPosition(matchPosition + 1);
+            updateFindStatus();
+        }
+    }
+
+    public void performFindPrevious() {
+        int matchPosition = binarySearchService.getMatchPosition();
+        if (matchPosition > 0) {
+            binarySearchService.setMatchPosition(matchPosition - 1);
+            updateFindStatus();
+        }
+    }
+
+    public void performFindFromContent() {
+        String textToFind = SearchProperty.SEARCH_TEXT.getValue();
+        if (StringUtils.isNullOrEmpty(textToFind)) {
+            performFind();
+        } else {
+            SearchCondition searchCondition = new SearchCondition();
+            searchCondition.setSearchText(textToFind);
+            SearchParameters searchParameters = new SearchParameters();
+            searchParameters.setCondition(searchCondition);
+            binarySearchService.performFind(searchParameters, searchStatusListener);
+        }
+    }
+
     public void changeEncoding(String encoding) {
         binaryComponent.changeEncoding(encoding);
     }
@@ -260,6 +412,7 @@ class BinaryBase {
             super.setBackground(backgroundColor);
             ThemeManager.addCurrentThemeListener(this);
 
+            codeArea.setPainter(new HighlightCodeAreaPainter(codeArea));
             registerBinaryStatus(statusPanel);
             add(codeArea, BorderLayout.CENTER);
             add(statusPanel, BorderLayout.SOUTH);
@@ -357,6 +510,10 @@ class BinaryBase {
             if (binaryStatus != null) {
                 binaryStatus.setMemoryMode(memoryMode);
             }
+        }
+
+        public void setStatusText(String text) {
+            binaryStatus.setStatusText(text);
         }
     }
 }
