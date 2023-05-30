@@ -469,8 +469,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             // if no keystroke was pressed
             if (value == null) {
                 return;
-            } else if (value == DELETE) { // if the user pressed a keystroke that is used to indicate a delete operation
-                                          // should be made
+            }
+            // if the user pressed a keystroke that is used to indicate a delete operation should be made
+            if (value == DELETE) {
                 value = null;
             }
 
