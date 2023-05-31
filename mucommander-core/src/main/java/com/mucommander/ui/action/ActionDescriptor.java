@@ -28,24 +28,24 @@ import javax.swing.KeyStroke;
  * @author Arik Hadas
  */
 public interface ActionDescriptor {
-	
-	String getId();
-	
-	String getDescription();
-	
-	ActionCategory getCategory();
-	
-	String getLabel();
-	
-	String getLabelKey();
-	
-	KeyStroke getDefaultKeyStroke();
-	
-	KeyStroke getDefaultAltKeyStroke();
-	
-	ImageIcon getIcon();
-	
-	String getTooltip();
+
+    String getId();
+
+    String getDescription();
+
+    ActionCategory getCategory();
+
+    String getLabel();
+
+    String getLabelKey();
+
+    KeyStroke getDefaultKeyStroke();
+
+    KeyStroke getDefaultAltKeyStroke();
+
+    ImageIcon getIcon();
+
+    String getTooltip();
 
     /**
      * Returns <code>true</code> if the action requires parameters at creation time.
