@@ -56,7 +56,7 @@ public class CalculateChecksumAction extends SelectedFilesAction  {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CalculateChecksum.toString(); }
+		public String getId() { return ActionType.CalculateChecksum.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

@@ -51,7 +51,7 @@ public class ViewAction extends InternalViewAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.View.toString(); }
+		public String getId() { return ActionType.View.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

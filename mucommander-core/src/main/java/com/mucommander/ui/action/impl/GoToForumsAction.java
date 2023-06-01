@@ -38,7 +38,7 @@ public class GoToForumsAction extends OpenURLInBrowserAction {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToForums.toString(); }
+		public String getId() { return ActionType.GoToForums.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

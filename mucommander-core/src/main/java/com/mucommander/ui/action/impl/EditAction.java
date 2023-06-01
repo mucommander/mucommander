@@ -52,7 +52,7 @@ public class EditAction extends InternalEditAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Edit.toString(); }
+		public String getId() { return ActionType.Edit.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

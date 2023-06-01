@@ -49,7 +49,7 @@ public class ShowParentFoldersQLAction extends ShowQuickListAction {
 	}
 
 	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowParentFoldersQL.toString(); }
+		public String getId() { return ActionType.ShowParentFoldersQL.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

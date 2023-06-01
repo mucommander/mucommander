@@ -60,7 +60,7 @@ public class MoveTabToOtherPanelAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MoveTabToOtherPanel.toString(); }
+		public String getId() { return ActionType.MoveTabToOtherPanel.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

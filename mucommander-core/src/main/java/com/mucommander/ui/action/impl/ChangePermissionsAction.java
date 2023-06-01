@@ -55,7 +55,7 @@ public class ChangePermissionsAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ChangePermissions.toString(); }
+		public String getId() { return ActionType.ChangePermissions.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

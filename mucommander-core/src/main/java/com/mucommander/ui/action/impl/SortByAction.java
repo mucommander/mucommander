@@ -128,7 +128,7 @@ public abstract class SortByAction extends MuAction implements ActivePanelListen
             this.column = column;
         }
 
-        public String getId() { return column.getSortByColumnActionId(); }
+        public String getId() { return column.getSortByColumnActionId().getActionId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

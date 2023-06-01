@@ -68,7 +68,7 @@ public class LocalCopyAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.LocalCopy.toString(); }
+		public String getId() { return ActionType.LocalCopy.getId(); }
 
 		public ActionCategory getCategory() { return null; }
     }

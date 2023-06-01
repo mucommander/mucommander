@@ -84,7 +84,7 @@ public class OpenInNewTabAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenInNewTab.toString(); }
+		public String getId() { return ActionType.OpenInNewTab.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

@@ -98,7 +98,7 @@ public class GoToParentAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToParent.toString(); }
+		public String getId() { return ActionType.GoToParent.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

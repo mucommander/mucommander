@@ -52,7 +52,7 @@ public class ToggleTreeAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleTree.toString(); }
+		public String getId() { return ActionType.ToggleTree.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

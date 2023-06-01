@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import javax.xml.parsers.SAXParserFactory;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -43,7 +44,7 @@ public class ToolBarReader extends ToolBarIO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ToolBarReader.class);
 
     /** Temporarily used for XML parsing */
-    private List<String> actionIdsV;
+    private List<ActionId> actionIdsV;
 
     /**
      * Starts parsing the XML description file.
@@ -61,9 +62,9 @@ public class ToolBarReader extends ToolBarIO {
         }
     }
     
-    public String[] getActionsRead() {
+    public ActionId[] getActionsRead() {
     	int nbActions = actionIdsV.size();
-    	String[] actionIds = new String[nbActions];
+        ActionId[] actionIds = new ActionId[nbActions];
         actionIdsV.toArray(actionIds);
         return actionIds;
     }
@@ -74,7 +75,7 @@ public class ToolBarReader extends ToolBarIO {
 
     @Override
     public void startDocument() {
-        actionIdsV = new Vector<String>();
+        actionIdsV = new Vector<ActionId>();
     }
 
     @Override
@@ -86,15 +87,16 @@ public class ToolBarReader extends ToolBarIO {
         	// Resolve action id
         	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
         	if (actionIdAttribute != null) {
-        		if (ActionManager.isActionExist(actionIdAttribute))
-        			actionIdsV.add(actionIdAttribute);
+                ActionId actionId = ActionId.asToolBarAction(actionIdAttribute);
+        		if (ActionManager.isActionExist(actionId))
+        			actionIdsV.add(actionId);
         		else
         			LOGGER.warn("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id \"" + actionIdAttribute + "\" not found");
         	}
         	else {
         		// Resolve action class
         		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
-        		String actionId = ActionManager.extrapolateId(actionClassAttribute);
+        		ActionId actionId = ActionId.asToolBarAction(ActionManager.extrapolateId(actionClassAttribute));
         		if (ActionManager.isActionExist(actionId))
         			actionIdsV.add(actionId);
         		else

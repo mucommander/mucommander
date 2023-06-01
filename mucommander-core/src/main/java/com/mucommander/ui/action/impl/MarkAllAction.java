@@ -65,7 +65,7 @@ public class MarkAllAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkAll.toString(); }
+		public String getId() { return ActionType.MarkAll.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

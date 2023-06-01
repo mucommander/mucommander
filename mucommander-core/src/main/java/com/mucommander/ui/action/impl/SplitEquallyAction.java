@@ -48,7 +48,7 @@ public class SplitEquallyAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SplitEqually.toString(); }
+		public String getId() { return ActionType.SplitEqually.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

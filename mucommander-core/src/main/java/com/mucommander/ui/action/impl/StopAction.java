@@ -81,7 +81,7 @@ public class StopAction extends MuAction implements LocationListener {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Stop.toString(); }
+		public String getId() { return ActionType.Stop.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

@@ -55,7 +55,7 @@ public class ToggleShowFoldersFirstAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleShowFoldersFirst.toString(); }
+		public String getId() { return ActionType.ToggleShowFoldersFirst.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

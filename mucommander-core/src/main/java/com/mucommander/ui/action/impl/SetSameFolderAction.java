@@ -67,7 +67,7 @@ public class SetSameFolderAction extends MuAction implements ActivePanelListener
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SetSameFolder.toString(); }
+		public String getId() { return ActionType.SetSameFolder.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

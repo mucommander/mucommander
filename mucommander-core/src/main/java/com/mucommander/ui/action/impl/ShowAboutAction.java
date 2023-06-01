@@ -49,7 +49,7 @@ public class ShowAboutAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowAbout.toString(); }
+		public String getId() { return ActionType.ShowAbout.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

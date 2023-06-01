@@ -67,7 +67,7 @@ public class OpenURLInBrowserAction extends MuAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.OpenURLInBrowser.toString(); }
+        public String getId() { return ActionType.OpenURLInBrowser.getId(); }
 
         public ActionCategory getCategory() { return null; }
 

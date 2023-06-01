@@ -47,6 +47,7 @@ import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.action.MuAction;
@@ -115,17 +116,17 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     /** A handler for Open With menu */
     private OpenWithMenu openWithMenu;
 
-    private final static String RECALL_WINDOW_ACTION_IDS[] = {
-            ActionType.RecallWindow1.toString(),
-            ActionType.RecallWindow2.toString(),
-            ActionType.RecallWindow3.toString(),
-            ActionType.RecallWindow4.toString(),
-            ActionType.RecallWindow5.toString(),
-            ActionType.RecallWindow6.toString(),
-            ActionType.RecallWindow7.toString(),
-            ActionType.RecallWindow8.toString(),
-            ActionType.RecallWindow9.toString(),
-            ActionType.RecallWindow10.toString()
+    private final static ActionId RECALL_WINDOW_ACTION_IDS[] = {
+            ActionId.asGenericAction(ActionType.RecallWindow1.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow2.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow3.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow4.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow5.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow6.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow7.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow8.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow9.getId()),
+            ActionId.asGenericAction(ActionType.RecallWindow10.getId())
     };
 
 
@@ -505,7 +506,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     Hashtable<String, Object> actionProps = new Hashtable<>();
                     // Specify the window number using the dedicated property
                     actionProps.put(RecallWindowAction.WINDOW_NUMBER_PROPERTY_KEY, ""+(i+1));
-                    recallWindowAction = ActionManager.getActionInstance(new ActionParameters(RecallWindowAction.Descriptor.ACTION_ID, actionProps), this.mainFrame);
+                    recallWindowAction = ActionManager.getActionInstance(new ActionParameters(ActionId.asGenericAction(RecallWindowAction.Descriptor.ACTION_ID), actionProps), this.mainFrame);
                 }
 
                 checkBoxMenuItem.setAction(recallWindowAction);

@@ -59,6 +59,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,8 +111,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     /**
      * Comparator of actions according to their labels
      */
-    private static final Comparator<String> ACTIONS_COMPARATOR = new Comparator<String>() {
-        public int compare(String id1, String id2) {
+    private static final Comparator<ActionId> ACTIONS_COMPARATOR = new Comparator<>() {
+        public int compare(ActionId id1, ActionId id2) {
             String label1 = ActionProperties.getActionLabel(id1);
             if (label1 == null) {
                 return 1;
@@ -362,7 +363,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     }
 
     public interface ActionFilter {
-        boolean accept(String actionId, String rowAsText);
+        boolean accept(ActionId actionId, String rowAsText);
     }
 
     /**
@@ -558,7 +559,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                     activeCellEditor.stopCellEditing();
                 }
             } else {
-                String actionId;
+                ActionId actionId;
                 if ((actionId = shortcutsTableData.contains(pressedKeyStroke)) != null) {
                     tooltipBar.showErrorMessage(Translator.get("shortcuts_panel.already_assigned",
                             KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(pressedKeyStroke),
@@ -616,21 +617,21 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         /**
          * Original actions (so we can revert to defaults or compare what has changed)
          */
-        private final Map<String, Map<TableDataColumnEnum, Object>> originalActionMap;
+        private final Map<ActionId, Map<TableDataColumnEnum, Object>> originalActionMap;
 
         /**
          * Edited actions (decoupled from originalActionMap).
          */
-        private final Map<String, Map<TableDataColumnEnum, Object>> editedActionMap;
+        private final Map<ActionId, Map<TableDataColumnEnum, Object>> editedActionMap;
 
         /**
          * Filtered aka visible and edited actions (mapped thru references to editedActionMap).
          */
-        private List<String> filteredEditedActionIds;
-        private final LinkedHashMap<String, Map<TableDataColumnEnum, Object>> filteredEditedActionMap;
+        private List<ActionId> filteredEditedActionIds;
+        private final LinkedHashMap<ActionId, Map<TableDataColumnEnum, Object>> filteredEditedActionMap;
 
         public ShortcutsTableData() {
-            List<String> allActionIds = ActionManager.getActionIds();
+            List<ActionId> allActionIds = ActionManager.getActionIds();
             Collections.sort(allActionIds, ACTIONS_COMPARATOR);
 
             final int nbActions = allActionIds.size();
@@ -639,7 +640,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             filteredEditedActionIds = new LinkedList<>();
             filteredEditedActionMap = new LinkedHashMap<>(nbActions);
 
-            for (String actionId : allActionIds) {
+            for (ActionId actionId : allActionIds) {
                 ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
                 HashMap<TableDataColumnEnum, Object> actionProperties = new HashMap<>();
@@ -674,7 +675,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             filteredEditedActionIds = filter(originalActionMap.keySet(), filter);
             filteredEditedActionMap.clear();
 
-            for (String actionId : filteredEditedActionIds) {
+            for (ActionId actionId : filteredEditedActionIds) {
                 filteredEditedActionMap.put(actionId, originalActionMap.get(actionId));
             }
 
@@ -696,12 +697,12 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             return (String) getTableData(getSelectedRow(), TableDataColumnEnum.TOOLTIPS);
         }
 
-        public String getActionId(int row) {
+        public ActionId getActionId(int row) {
             return filteredEditedActionIds.get(row);
         }
 
         public boolean hasChanged() {
-            for (String actionId : editedActionMap.keySet()) {
+            for (ActionId actionId : editedActionMap.keySet()) {
                 Map<TableDataColumnEnum, Object> actionProperties = editedActionMap.get(actionId);
                 if (!Objects.equals(actionProperties.get(TableDataColumnEnum.ACCELERATOR),
                         originalActionMap.get(actionId).get(TableDataColumnEnum.ACCELERATOR)) ||
@@ -714,22 +715,22 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
 
         public void restoreDefaultAccelerators() {
-            for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
+            for (Map.Entry<ActionId, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
                 entry.getValue()
                         .put(TableDataColumnEnum.ACCELERATOR, ActionProperties.getDefaultAccelerator(entry.getKey()));
                 entry.getValue()
                         .put(TableDataColumnEnum.ALT_ACCELERATOR,
                                 ActionProperties.getDefaultAlternativeAccelerator(entry.getKey()));
             }
-            for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : filteredEditedActionMap.entrySet()) {
+            for (Map.Entry<ActionId, Map<TableDataColumnEnum, Object>> entry : filteredEditedActionMap.entrySet()) {
                 entry.setValue(editedActionMap.get(entry.getKey()));
             }
             ((DefaultTableModel) getModel()).fireTableDataChanged();
         }
 
         public void submitChanges() {
-            for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : originalActionMap.entrySet()) {
-                String actionId = entry.getKey();
+            for (Map.Entry<ActionId, Map<TableDataColumnEnum, Object>> entry : originalActionMap.entrySet()) {
+                ActionId actionId = entry.getKey();
                 Map<TableDataColumnEnum, Object> actionProperties = editedActionMap.get(actionId);
                 KeyStroke accelerator = (KeyStroke) actionProperties.get(TableDataColumnEnum.ACCELERATOR);
                 KeyStroke altAccelerator = (KeyStroke) actionProperties.get(TableDataColumnEnum.ALT_ACCELERATOR);
@@ -742,9 +743,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             }
         }
 
-        public String contains(KeyStroke accelerator) {
+        public ActionId contains(KeyStroke accelerator) {
             if (accelerator != null) {
-                for (Map.Entry<String, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
+                for (Map.Entry<ActionId, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
                     if (accelerator.equals(entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
                             accelerator.equals(entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR))) {
                         return entry.getKey();
@@ -762,9 +763,9 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             filteredEditedActionMap.get(getActionId(row)).put(TableDataColumnEnum.ALT_ACCELERATOR, altAccelerator);
         }
 
-        private List<String> filter(Set<String> actionIds, ActionFilter filter) {
-            List<String> filteredActionsList = new LinkedList<String>();
-            for (String actionId : actionIds) {
+        private List<ActionId> filter(Set<ActionId> actionIds, ActionFilter filter) {
+            List<ActionId> filteredActionsList = new LinkedList<>();
+            for (ActionId actionId : actionIds) {
                 // Discard actions that are parameterized, and those that are rejected by the filter
                 if (!ActionProperties.getActionDescriptor(actionId).isParameterized()
                         && filter.accept(actionId, getRowAsTextForFilter(actionId))) {
@@ -774,7 +775,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             return filteredActionsList;
         }
 
-        private String getRowAsTextForFilter(String actionId) {
+        private String getRowAsTextForFilter(ActionId actionId) {
             StringBuilder rowText = new StringBuilder();
             Map<TableDataColumnEnum, Object> rowData = originalActionMap.get(actionId);
 

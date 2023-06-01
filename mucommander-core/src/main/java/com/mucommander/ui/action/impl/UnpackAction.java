@@ -60,7 +60,7 @@ public class UnpackAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Unpack.toString(); }
+		public String getId() { return ActionType.Unpack.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

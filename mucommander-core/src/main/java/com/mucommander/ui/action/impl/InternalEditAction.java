@@ -85,7 +85,7 @@ public class InternalEditAction extends AbstractViewerAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.InternalEdit.toString(); }
+		public String getId() { return ActionType.InternalEdit.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

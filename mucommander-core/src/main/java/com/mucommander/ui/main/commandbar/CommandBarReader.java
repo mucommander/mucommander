@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
@@ -45,9 +46,9 @@ class CommandBarReader extends CommandBarIO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandBarReader.class);
 	
     /** Temporarily used for XML parsing */
-    private List<String> actionsIdsV;
+    private List<ActionId> actionsIdsV;
     /** Temporarily used for XML parsing */
-    private List<String> alternateActionsIdsV;
+    private List<ActionId> alternateActionsIdsV;
     /** Temporarily used for XML parsing */
     private KeyStroke modifier;
 
@@ -77,20 +78,24 @@ class CommandBarReader extends CommandBarIO {
     ///// getters //////
     ////////////////////
     
-    public String[] getActionsRead() {
+    public ActionId[] getActionsRead() {
     	int nbActions = actionsIdsV.size();
-    	String[] actionIds = new String[nbActions];
+        ActionId[] actionIds = new ActionId[nbActions];
         actionsIdsV.toArray(actionIds);
         return actionIds;
     }
     
-    public String[] getAlternateActionsRead() {
+    public ActionId[] getAlternateActionsRead() {
     	int nbActions = alternateActionsIdsV.size();
-    	String[] alternateActionIds = new String[nbActions];
+        ActionId[] alternateActionIds = new ActionId[nbActions];
         alternateActionsIdsV.toArray(alternateActionIds);
         return alternateActionIds;
     }
-    
+
+    public boolean actionsPresent() {
+        return actionsIdsV.size() > 0 && alternateActionsIdsV.size() > 0;
+    }
+
     public KeyStroke getModifierRead() {
     	return modifier;
     }
@@ -103,8 +108,8 @@ class CommandBarReader extends CommandBarIO {
     public void startDocument() {
     	LOGGER.trace(file.getAbsolutePath()+" parsing started");
 
-        actionsIdsV = new Vector<String>();
-        alternateActionsIdsV = new Vector<String>();
+        actionsIdsV = new Vector<ActionId>();
+        alternateActionsIdsV = new Vector<ActionId>();
         modifier = null;
     }
 
@@ -119,19 +124,21 @@ class CommandBarReader extends CommandBarIO {
         	// Resolve action id
         	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
         	if (actionIdAttribute != null) {
-        		if (ActionManager.isActionExist(actionIdAttribute)) {
-        			actionsIdsV.add(actionIdAttribute);
+                ActionId actionId = ActionId.asCommandBarAction(actionIdAttribute);
+        		if (ActionManager.isActionExist(actionId)) {
+        			actionsIdsV.add(actionId);
 
         			// Resolve alternate action id (if any)
         			actionIdAttribute = attributes.getValue(ALT_ACTION_ID_ATTRIBUTE);
-        			alternateActionsIdsV.add(ActionManager.isActionExist(actionIdAttribute) ? actionIdAttribute : null);
+                    actionId = actionIdAttribute != null ? ActionId.asCommandBarAction(actionIdAttribute) : null;
+                    alternateActionsIdsV.add(ActionManager.isActionExist(actionId) ? actionId : null);
         		}
         	}
         	else {
         		// Resolve action class
         		String actionClassAttribute = attributes.getValue(ACTION_ATTRIBUTE);
         		if (actionClassAttribute != null) {
-        			String actionId = ActionManager.extrapolateId(actionClassAttribute);
+                    ActionId actionId = ActionId.asCommandBarAction(ActionManager.extrapolateId(actionClassAttribute));
         			if (ActionManager.isActionExist(actionId)) {
         				actionsIdsV.add(actionId);
 
@@ -140,7 +147,7 @@ class CommandBarReader extends CommandBarIO {
         				if(actionClassAttribute == null)
         					alternateActionsIdsV.add(null);
         				else {
-        					actionId = ActionManager.extrapolateId(actionClassAttribute);
+        					actionId = ActionId.asCommandBarAction(ActionManager.extrapolateId(actionClassAttribute));
         					if (ActionManager.isActionExist(actionId))
         						alternateActionsIdsV.add(actionId);
         					else {

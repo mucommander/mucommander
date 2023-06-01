@@ -26,6 +26,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.button.NonFocusableButton;
@@ -42,18 +43,18 @@ import com.mucommander.ui.main.MainFrame;
 public class CommandBarButton extends NonFocusableButton implements ConfigurationListener {
 
 	/** ID of the button's action */
-	private String actionId;
+	private ActionId actionId;
 	
 	/** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
     protected static float scaleFactor = Math.max(1.0f, MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_ICON_SCALE,
                                                                         MuPreferences.DEFAULT_COMMAND_BAR_ICON_SCALE));
 	
-    public static CommandBarButton create(String actionId, MainFrame mainFrame) {
+    public static CommandBarButton create(ActionId actionId, MainFrame mainFrame) {
 		return actionId == null ? null : new CommandBarButton(actionId, mainFrame);
 	}
 	
-	protected CommandBarButton(String actionId, MainFrame mainFrame) {
+	protected CommandBarButton(ActionId actionId, MainFrame mainFrame) {
         if(OsFamily.MAC_OS.isCurrent()) {
             putClientProperty("JComponent.sizeVariant", "small");
             putClientProperty("JButton.buttonType", "textured");
@@ -76,7 +77,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
 	/**
      * Sets the given button's action, custom label showing the accelerator and icon taking into account the scale factor.
      */
-	public void setButtonAction(String actionId, MainFrame mainFrame) {
+	public void setButtonAction(ActionId actionId, MainFrame mainFrame) {
     	MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
     	
     	setAction(action);
@@ -100,7 +101,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
      * 
      * @return id of the button's action
      */
-    public String getActionId() {
+    public ActionId getActionId() {
     	return actionId;
     }
     

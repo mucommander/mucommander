@@ -53,7 +53,7 @@ public class NewWindowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.NewWindow.toString(); }
+		public String getId() { return ActionType.NewWindow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
     }

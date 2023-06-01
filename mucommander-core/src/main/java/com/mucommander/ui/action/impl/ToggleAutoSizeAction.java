@@ -54,7 +54,7 @@ public class ToggleAutoSizeAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleAutoSize.toString(); }
+		public String getId() { return ActionType.ToggleAutoSize.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

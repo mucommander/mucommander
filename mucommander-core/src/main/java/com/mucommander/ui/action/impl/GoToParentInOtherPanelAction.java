@@ -89,7 +89,7 @@ public class GoToParentInOtherPanelAction extends ParentFolderAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToParentInOtherPanel.toString(); }
+		public String getId() { return ActionType.GoToParentInOtherPanel.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

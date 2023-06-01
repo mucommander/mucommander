@@ -41,15 +41,15 @@ import java.awt.event.ActionListener;
 public class AWTActionProxy implements ActionListener {
 
     /** Proxied Action */
-    private String proxiedActionId;
+    private ActionId proxiedActionId;
 
     /**
      * Creates a new AWTActionProxy instance that will transfer ActionEvents caught by {@link #actionPerformed(java.awt.event.ActionEvent)}
      * to the specified <code>Action</code>.
      *
-     * @param action the Action instance to transfer the ActionEvents to.
+     * @param actionId the Action instance to transfer the ActionEvents to.
      */
-    public AWTActionProxy(String actionId) {
+    public AWTActionProxy(ActionId actionId) {
         this.proxiedActionId = actionId;
     }
 

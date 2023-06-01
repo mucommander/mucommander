@@ -23,6 +23,7 @@ import javax.swing.JPopupMenu;
 
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 
@@ -44,15 +45,15 @@ public abstract class MuActionsPopupMenu extends JPopupMenu {
      * Adds the MuAction denoted by the given ID to this popup menu, as a <code>JMenuItem</code>.
      * @param actionId action ID
      */
-    protected JMenuItem addAction(String actionId) {
+    protected JMenuItem addAction(ActionId actionId) {
         return add(ActionManager.getActionInstance(actionId, mainFrame));
     }
 
     /**
-     * @see #addAction(String)
+     * @see #addAction(ActionId)
      */
     protected JMenuItem addAction(ActionType actionType) {
-        return addAction(actionType.toString());
+        return addAction(ActionId.asGenericAction(actionType.getId()));
     }
     
     @Override

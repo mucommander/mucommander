@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.MainFrame;
 
@@ -56,10 +57,10 @@ public class CommandBar extends JPanel {
     private CommandBarButton buttons[];
     
     /** Command bar actions */
-    private static String actionIds[];
+    private static ActionId actionIds[];
     
     /** Command bar alternate actions */
-    private static String alternateActionIds[];
+    private static ActionId alternateActionIds[];
     
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;

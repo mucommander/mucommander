@@ -50,7 +50,7 @@ public class SelectLastRowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SelectLastRow.toString(); }
+		public String getId() { return ActionType.SelectLastRow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

@@ -61,11 +61,11 @@ class ActionKeymapWriter extends ActionKeymapIO {
     }
 
     void write() throws IOException {
-        Map<String, KeyStroke[]> combinedMapping = new Hashtable<String, KeyStroke[]>();
-        Iterator<String> modifiedActionsIterator = ActionKeymap.getCustomizedActions();
+        Map<ActionId, KeyStroke[]> combinedMapping = new Hashtable<>();
+        Iterator<ActionId> modifiedActionsIterator = ActionKeymap.getCustomizedActions();
 
         while (modifiedActionsIterator.hasNext()) {
-            String actionId = modifiedActionsIterator.next();
+            ActionId actionId = modifiedActionsIterator.next();
             KeyStroke[] keyStrokes = new KeyStroke[2];
             keyStrokes[0] = ActionKeymap.getAccelerator(actionId);
             keyStrokes[1] = ActionKeymap.getAlternateAccelerator(actionId);
@@ -92,7 +92,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
             this.writer = new XmlWriter(stream);
         }
 
-        private void writeKeyMap(Map<String, KeyStroke[]> actionMap) throws IOException {
+        private void writeKeyMap(Map<ActionId, KeyStroke[]> actionMap) throws IOException {
             try {
                 writer.writeCommentLine(ACTION_COMMENT_HEADER);
 
@@ -102,7 +102,7 @@ class ActionKeymapWriter extends ActionKeymapIO {
                 writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
 
                 if (actionMap != null) {
-                    for (String actionId : actionMap.keySet())
+                    for (ActionId actionId : actionMap.keySet())
                         addMapping(actionId, actionMap.get(actionId));
                 }
 
@@ -111,9 +111,9 @@ class ActionKeymapWriter extends ActionKeymapIO {
             }
         }
 
-        private void addMapping(String actionId, KeyStroke[] keyStrokes) throws IOException {
+        private void addMapping(ActionId actionId, KeyStroke[] keyStrokes) throws IOException {
             XmlAttributes attributes = new XmlAttributes();
-            attributes.add(ID_ATTRIBUTE, actionId);
+            attributes.add(ID_ATTRIBUTE, actionId.getActionId());
 
             LOGGER.trace("     Writing mapping of " + actionId + " to " + keyStrokes[0] + " and " + keyStrokes[1]);
 

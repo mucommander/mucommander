@@ -85,7 +85,7 @@ public class RevealInDesktopAction extends ActiveTabAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.RevealInDesktop.toString();
+            return ActionType.RevealInDesktop.getId();
         }
 
         public ActionCategory getCategory() {

@@ -64,7 +64,7 @@ public class BatchRenameAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.BatchRename.toString(); }
+		public String getId() { return ActionType.BatchRename.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

@@ -51,7 +51,7 @@ public class MarkToFirstRowAction extends MarkBackwardAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkToFirstRow.toString(); }
+		public String getId() { return ActionType.MarkToFirstRow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

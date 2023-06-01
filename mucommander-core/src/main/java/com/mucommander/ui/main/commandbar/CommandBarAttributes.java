@@ -20,6 +20,7 @@ package com.mucommander.ui.main.commandbar;
 import javax.swing.*;
 
 import com.mucommander.desktop.ActionType;
+import com.mucommander.ui.action.ActionId;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -34,33 +35,33 @@ import java.util.List;
 public class CommandBarAttributes {
 
 	/** Command bar actions */
-    private static String actionIds[];
+    private static ActionId actionIds[];
     /** Command bar alternate actions */
-    private static String alternateActionIds[];
+    private static ActionId alternateActionIds[];
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
     
     /** Command bar default actions */
-    private static final String DEFAULT_ACTION_IDS[] = 
+    private static final ActionId DEFAULT_ACTION_IDS[] = 
     {
-    	ActionType.View.toString(),
-    	ActionType.Edit.toString(),
-    	ActionType.Copy.toString(),
-    	ActionType.Move.toString(),
-    	ActionType.Mkdir.toString(),
-    	ActionType.Delete.toString(),
-    	ActionType.Refresh.toString(),
-    	ActionType.CloseWindow.toString()
+		ActionId.asCommandBarAction(ActionType.View.getId()),
+		ActionId.asCommandBarAction(ActionType.Edit.getId()),
+		ActionId.asCommandBarAction(ActionType.Copy.getId()),
+		ActionId.asCommandBarAction(ActionType.Move.getId()),
+		ActionId.asCommandBarAction(ActionType.Mkdir.getId()),
+		ActionId.asCommandBarAction(ActionType.Delete.getId()),
+		ActionId.asCommandBarAction(ActionType.Refresh.getId()),
+		ActionId.asCommandBarAction(ActionType.CloseWindow.getId())
     };
     /** Command bar default alternate actions */
-    private static final String DEFAULT_ALTERNATE_ACTION_IDS[] =
+    private static final ActionId DEFAULT_ALTERNATE_ACTION_IDS[] =
     {
     	null,
     	null,
-    	ActionType.LocalCopy.toString(),
-    	ActionType.Rename.toString(),
-    	ActionType.Mkfile.toString(),
-    	ActionType.PermanentDelete.toString(),
+    	ActionId.asCommandBarAction(ActionType.LocalCopy.getId()),
+		ActionId.asCommandBarAction(ActionType.Rename.getId()),
+		ActionId.asCommandBarAction(ActionType.Mkfile.getId()),
+		ActionId.asCommandBarAction(ActionType.PermanentDelete.getId()),
     	null,
     	null
     };
@@ -124,7 +125,7 @@ public class CommandBarAttributes {
      * @param alternateActionIds alternate command-bar actions.
      * @param modifier           command-bar modifier.
      */
-    public static void setAttributes(String[] actionIds, String[] alternateActionIds, KeyStroke modifier) {
+    public static void setAttributes(ActionId[] actionIds, ActionId[] alternateActionIds, KeyStroke modifier) {
     	CommandBarAttributes.actionIds = actionIds;
     	CommandBarAttributes.alternateActionIds = alternateActionIds;
     	CommandBarAttributes.modifier = modifier;
@@ -135,9 +136,9 @@ public class CommandBarAttributes {
     /// getters ///
     ///////////////
     
-    public static String[] getActions() {return actionIds;}
+    public static ActionId[] getActions() {return actionIds;}
     
-    public static String[] getAlternateActions() {return alternateActionIds;}
+    public static ActionId[] getAlternateActions() {return alternateActionIds;}
     
     public static KeyStroke getModifier() {return modifier;}
     

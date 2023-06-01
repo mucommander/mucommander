@@ -62,7 +62,7 @@ public class PopupRightDriveButtonAction extends MuAction implements ActiveTabLi
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.PopupRightDriveButton.toString(); }
+		public String getId() { return ActionType.PopupRightDriveButton.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

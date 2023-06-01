@@ -48,7 +48,7 @@ public class CloseOtherTabsAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CloseOtherTabs.toString(); }
+		public String getId() { return ActionType.CloseOtherTabs.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

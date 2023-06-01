@@ -65,7 +65,7 @@ public class GoToRootAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToRoot.toString(); }
+		public String getId() { return ActionType.GoToRoot.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

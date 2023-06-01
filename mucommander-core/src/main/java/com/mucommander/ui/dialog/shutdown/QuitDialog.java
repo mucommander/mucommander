@@ -47,7 +47,7 @@ public class QuitDialog extends QuestionDialog {
 
     private enum QuitDialogAction implements DialogAction {
 
-        QUIT(ActionType.Quit.toString()),
+        QUIT(ActionType.Quit.getId()),
         CANCEL("cancel");
 
         private final String actionName;

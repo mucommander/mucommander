@@ -58,7 +58,7 @@ public class ChangeLocationAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ChangeLocation.toString(); }
+		public String getId() { return ActionType.ChangeLocation.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

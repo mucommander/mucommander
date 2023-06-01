@@ -53,7 +53,7 @@ public class MarkNextBlockAction extends MarkForwardAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkNextBlock.toString(); }
+		public String getId() { return ActionType.MarkNextBlock.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

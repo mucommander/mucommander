@@ -52,7 +52,7 @@ public class ShowInEnclosingFolderAction extends SelectedFileAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.ShowInEnclosingFolder.toString(); }
+        public String getId() { return ActionType.ShowInEnclosingFolder.getId(); }
 
         public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

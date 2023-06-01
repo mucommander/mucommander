@@ -54,7 +54,7 @@ public class MinimizeWindowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MinimizeWindow.toString(); }
+		public String getId() { return ActionType.MinimizeWindow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
 

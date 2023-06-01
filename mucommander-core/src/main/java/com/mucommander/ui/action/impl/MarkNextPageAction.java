@@ -50,7 +50,7 @@ public class MarkNextPageAction extends MarkForwardAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkNextPage.toString(); }
+		public String getId() { return ActionType.MarkNextPage.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

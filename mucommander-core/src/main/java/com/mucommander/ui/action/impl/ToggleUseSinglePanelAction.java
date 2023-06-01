@@ -69,7 +69,7 @@ public class ToggleUseSinglePanelAction extends MuAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.ToggleUseSinglePanel.toString();
+            return ActionType.ToggleUseSinglePanel.getId();
         }
 
         public ActionCategory getCategory() {

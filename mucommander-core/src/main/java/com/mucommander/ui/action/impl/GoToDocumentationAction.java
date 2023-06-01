@@ -84,7 +84,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToDocumentation.toString(); }
+		public String getId() { return ActionType.GoToDocumentation.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

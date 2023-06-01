@@ -48,7 +48,7 @@ public class SplitHorizontallyAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SplitHorizontally.toString(); }
+		public String getId() { return ActionType.SplitHorizontally.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

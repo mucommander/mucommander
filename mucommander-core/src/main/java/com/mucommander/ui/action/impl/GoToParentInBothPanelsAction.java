@@ -103,7 +103,7 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToParentInBothPanels.toString(); }
+		public String getId() { return ActionType.GoToParentInBothPanels.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

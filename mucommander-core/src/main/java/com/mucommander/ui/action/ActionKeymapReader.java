@@ -20,6 +20,7 @@ package com.mucommander.ui.action;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.KeyStroke;
 import javax.xml.parsers.ParserConfigurationException;
@@ -45,9 +46,9 @@ class ActionKeymapReader extends ActionKeymapIO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ActionKeymapReader.class);
 	
 	/** Maps action Class onto Keystroke instances*/
-    private HashMap<String, KeyStroke> primaryActionsReadKeymap;
+    private Map<ActionId, KeyStroke> primaryActionsReadKeymap;
     /** Maps action Class instances onto Keystroke instances*/
-    private HashMap<String, KeyStroke> alternateActionsReadKeymap;
+    private Map<ActionId, KeyStroke> alternateActionsReadKeymap;
 
     /** Parsed file */
     private AbstractFile file;
@@ -91,7 +92,7 @@ class ActionKeymapReader extends ActionKeymapIO {
      * @param actionId the action id to associate the keystroke with
      * @param attributes the attributes map that holds the value
      */
-    private void processKeystrokeAttribute(String actionId, Attributes attributes) {    	
+    private void processKeystrokeAttribute(ActionId actionId, Attributes attributes) {    	
     	String keyStrokeString;
     	KeyStroke alternateKeyStroke = null;
     	KeyStroke primaryKeyStroke = null;
@@ -104,7 +105,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     		if (primaryKeyStroke == null)
     			LOGGER.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
     		else {
-    			String prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(primaryKeyStroke);
+    			ActionId prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(primaryKeyStroke);
     			if (prevAssignedActionId != null && !prevAssignedActionId.equals(actionId))
     				LOGGER.debug("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
     		}
@@ -118,7 +119,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     		if (alternateKeyStroke == null)
     			LOGGER.info("Action keymap file contains a keystroke which could not be resolved: " + keyStrokeString);
     		else {
-    			String prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(alternateKeyStroke);
+    			ActionId prevAssignedActionId = ActionKeymap.getRegisteredActionIdForKeystroke(alternateKeyStroke);
     			if (prevAssignedActionId != null && !prevAssignedActionId.equals(actionId))
     				LOGGER.debug("Canceling previous association of keystroke " + keyStrokeString + ", reassign it to action: " + actionId);
     		}
@@ -143,9 +144,9 @@ class ActionKeymapReader extends ActionKeymapIO {
     ///// getters /////
     ///////////////////
     
-    public HashMap<String, KeyStroke> getPrimaryActionsKeymap() {return primaryActionsReadKeymap;}
+    public Map<ActionId, KeyStroke> getPrimaryActionsKeymap() {return primaryActionsReadKeymap;}
     
-    public HashMap<String, KeyStroke> getAlternateActionsKeymap() {return alternateActionsReadKeymap;}
+    public Map<ActionId, KeyStroke> getAlternateActionsKeymap() {return alternateActionsReadKeymap;}
     
     ///////////////////////////////////
     // ContentHandler implementation //
@@ -155,8 +156,8 @@ class ActionKeymapReader extends ActionKeymapIO {
     public void startDocument() {
     	LOGGER.trace(file.getAbsolutePath()+" parsing started");
     	
-    	primaryActionsReadKeymap = new HashMap<String, KeyStroke>();
-    	alternateActionsReadKeymap = new HashMap<String, KeyStroke>();
+    	primaryActionsReadKeymap = new HashMap<ActionId, KeyStroke>();
+    	alternateActionsReadKeymap = new HashMap<ActionId, KeyStroke>();
     }
     
     @Override
@@ -168,7 +169,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
     	if(qName.equals(ACTION_ELEMENT)) {
     		// Retrieve the action id
-    		String actionId = attributes.getValue(ID_ATTRIBUTE);
+    		ActionId actionId = ActionId.asGenericAction(attributes.getValue(ID_ATTRIBUTE));
     		// if id attribute not exits, read class attribute
     		if (actionId == null) {
     			String actionClassPath = attributes.getValue(CLASS_ATTRIBUTE);
@@ -178,7 +179,7 @@ class ActionKeymapReader extends ActionKeymapIO {
         			return;
         		}
     			// extrapolate the action id from its class path
-    			actionId = ActionManager.extrapolateId(actionClassPath);
+    			actionId = ActionId.asGenericAction(ActionManager.extrapolateId(actionClassPath));
     		}
     		
     		if (!ActionManager.isActionExist(actionId)) {

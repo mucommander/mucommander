@@ -72,7 +72,7 @@ public class BringAllToFrontAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.BringAllToFront.toString(); }
+		public String getId() { return ActionType.BringAllToFront.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
     }
