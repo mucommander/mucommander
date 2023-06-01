@@ -48,7 +48,7 @@ public class SelectFirstRowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SelectFirstRow.toString(); }
+		public String getId() { return ActionType.SelectFirstRow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

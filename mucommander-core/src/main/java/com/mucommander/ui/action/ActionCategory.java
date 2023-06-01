@@ -27,7 +27,7 @@ import com.mucommander.text.Translator;
 public enum ActionCategory {
 	ALL("action_categories.all") {
 		@Override
-        public boolean contains(String actionId) {
+        public boolean contains(ActionId actionId) {
             return true;
 		}
 	},
@@ -51,7 +51,7 @@ public enum ActionCategory {
 
 	public String getDescription() { return Translator.get(descriptionKey); }
 	
-	public boolean contains(String actionId) {
+	public boolean contains(ActionId actionId) {
 		ActionCategory actionCategory = ActionProperties.getActionCategory(actionId);
 		return actionCategory != null && descriptionKey.equals(actionCategory.getDescriptionKey());
 	}

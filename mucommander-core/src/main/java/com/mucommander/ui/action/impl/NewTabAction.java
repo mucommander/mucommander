@@ -50,7 +50,7 @@ public class NewTabAction extends MuAction {
 	}
 
 	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.NewTab.toString(); }
+		public String getId() { return ActionType.NewTab.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

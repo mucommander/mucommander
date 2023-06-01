@@ -58,7 +58,7 @@ public class CloseWindowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CloseWindow.toString(); }
+		public String getId() { return ActionType.CloseWindow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
     }

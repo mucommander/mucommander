@@ -20,6 +20,7 @@ package com.mucommander.ui.main.toolbar;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ public class ToolBarWriter extends ToolBarIO {
 	private ToolBarWriter() {}
 	
 	void write() throws IOException {
-		String[] actionIds = ToolBarAttributes.getActions();
+		ActionId[] actionIds = ToolBarAttributes.getActions();
 		
 		BackupOutputStream bos = new BackupOutputStream(getDescriptionFile());
 		try {
@@ -69,7 +70,7 @@ public class ToolBarWriter extends ToolBarIO {
     		this.writer = new XmlWriter(stream);
     	}
 		
-		private void write(String[] actionIds) throws IOException {
+		private void write(ActionId[] actionIds) throws IOException {
 			try {
 				writer.writeCommentLine("See http://trac.mucommander.com/wiki/ToolBar for information on how to customize this file");
 				
@@ -87,12 +88,12 @@ public class ToolBarWriter extends ToolBarIO {
     		}
 		}
 		
-		private void write(String actionId) throws IOException {
+		private void write(ActionId actionId) throws IOException {
 			if (actionId == null)
 				writer.writeStandAloneElement(SEPARATOR_ELEMENT);
 			else {
 				XmlAttributes attributes = new XmlAttributes();
-				attributes.add(ACTION_ID_ATTRIBUTE, actionId);
+				attributes.add(ACTION_ID_ATTRIBUTE, actionId.getActionId());
 
 				// AppLogger.finest("Writing button: action_id = "  + attributes.getValue(ACTION_ATTRIBUTE_ID) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ATTRIBUTE_ID));
 

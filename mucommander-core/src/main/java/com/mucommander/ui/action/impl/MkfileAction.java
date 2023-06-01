@@ -60,7 +60,7 @@ public class MkfileAction extends ParentFolderAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Mkfile.toString(); }
+		public String getId() { return ActionType.Mkfile.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

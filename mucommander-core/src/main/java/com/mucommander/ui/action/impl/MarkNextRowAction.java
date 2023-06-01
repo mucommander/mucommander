@@ -47,7 +47,7 @@ public class MarkNextRowAction extends MarkForwardAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkNextRow.toString(); }
+		public String getId() { return ActionType.MarkNextRow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

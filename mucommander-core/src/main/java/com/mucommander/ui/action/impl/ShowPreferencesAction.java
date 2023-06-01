@@ -49,7 +49,7 @@ public class ShowPreferencesAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowPreferences.toString(); }
+		public String getId() { return ActionType.ShowPreferences.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

@@ -49,7 +49,7 @@ public class SelectNextRowAction extends SelectForwardAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.SelectNextRow.toString();
+            return ActionType.SelectNextRow.getId();
         }
 
         public ActionCategory getCategory() {

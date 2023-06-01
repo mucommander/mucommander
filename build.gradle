@@ -136,7 +136,7 @@ runOsgi {
     javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
     def port = System.getenv('DEBUG')
     if (port) {
-        javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=' + port
+        javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=' + port
     }
     javaArgs += ' --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED --add-exports java.desktop/com.apple.laf=ALL-UNNAMED  --add-exports java.desktop/com.apple.eio=ALL-UNNAMED'
     configSettings = 'felix'

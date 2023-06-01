@@ -58,7 +58,7 @@ public class GoBackAction extends ActiveTabAction {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoBack.toString(); }
+		public String getId() { return ActionType.GoBack.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

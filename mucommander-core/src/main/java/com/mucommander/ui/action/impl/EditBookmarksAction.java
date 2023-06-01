@@ -52,7 +52,7 @@ public class EditBookmarksAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.EditBookmarks.toString(); }
+		public String getId() { return ActionType.EditBookmarks.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

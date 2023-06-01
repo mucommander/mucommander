@@ -20,30 +20,7 @@ package com.mucommander.ui.main.toolbar;
 import java.util.WeakHashMap;
 
 import com.mucommander.desktop.ActionType;
-import com.mucommander.ui.action.impl.AddBookmarkAction;
-import com.mucommander.ui.action.impl.NewTabAction;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
-import com.mucommander.ui.action.impl.EditBookmarksAction;
-import com.mucommander.ui.action.impl.EditCredentialsAction;
-import com.mucommander.ui.action.impl.EmailAction;
-import com.mucommander.ui.action.impl.FindAction;
-import com.mucommander.ui.action.impl.GoBackAction;
-import com.mucommander.ui.action.impl.GoForwardAction;
-import com.mucommander.ui.action.impl.GoToHomeAction;
-import com.mucommander.ui.action.impl.GoToParentAction;
-import com.mucommander.ui.action.impl.MarkGroupAction;
-import com.mucommander.ui.action.impl.NewWindowAction;
-import com.mucommander.ui.action.impl.PackAction;
-import com.mucommander.ui.action.impl.RevealInDesktopAction;
-import com.mucommander.ui.action.impl.RunCommandAction;
-import com.mucommander.ui.action.impl.SetSameFolderAction;
-import com.mucommander.ui.action.impl.ShowFilePropertiesAction;
-import com.mucommander.ui.action.impl.ShowPreferencesAction;
-import com.mucommander.ui.action.impl.ShowServerConnectionsAction;
-import com.mucommander.ui.action.impl.StopAction;
-import com.mucommander.ui.action.impl.SwapFoldersAction;
-import com.mucommander.ui.action.impl.UnmarkGroupAction;
-import com.mucommander.ui.action.impl.UnpackAction;
+import com.mucommander.ui.action.ActionId;
 
 /**
  * This class is responsible to handle the attributes of ToolBars - their actions and separators.
@@ -54,50 +31,50 @@ import com.mucommander.ui.action.impl.UnpackAction;
 public class ToolBarAttributes {
 	
 	/** Command bar actions: Class instances or null to signify a separator */
-    private static String actionIds[];
+    private static ActionId actionIds[];
     
     private static boolean useDefaultActions = true;
     
     /** Contains all registered toolbar-attributes listeners, stored as weak references */
-    private final static WeakHashMap<ToolBarAttributesListener, ?> listeners = new WeakHashMap<ToolBarAttributesListener, Object>();
+    private final static WeakHashMap<ToolBarAttributesListener, ?> listeners = new WeakHashMap<>();
     
     /** Default command bar actions: Class instances or null to signify a separator */
-    private final static String[] DEFAULT_TOOLBAR_ACTIONS = new String[] {
-            ActionType.NewWindow.toString(),
-            ActionType.NewTab.toString(),
+    private final static ActionId[] DEFAULT_TOOLBAR_ACTIONS = new ActionId[] {
+            ActionId.asToolBarAction(ActionType.NewWindow.getId()),
+            ActionId.asToolBarAction(ActionType.NewTab.getId()),
             null,
-            ActionType.GoBack.toString(),
-            ActionType.GoForward.toString(),
+            ActionId.asToolBarAction(ActionType.GoBack.getId()),
+            ActionId.asToolBarAction(ActionType.GoForward.getId()),
             null,
-            ActionType.GoToParent.toString(),
-            ActionType.GoToHome.toString(),
+            ActionId.asToolBarAction(ActionType.GoToParent.getId()),
+            ActionId.asToolBarAction(ActionType.GoToHome.getId()),
             null,
-            ActionType.Stop.toString(),
+            ActionId.asToolBarAction(ActionType.Stop.getId()),
             null,
-            ActionType.MarkGroup.toString(),
-            ActionType.UnmarkGroup.toString(),
+            ActionId.asToolBarAction(ActionType.MarkGroup.getId()),
+            ActionId.asToolBarAction(ActionType.UnmarkGroup.getId()),
             null,
-            ActionType.SwapFolders.toString(),
-            ActionType.SetSameFolder.toString(),
+            ActionId.asToolBarAction(ActionType.SwapFolders.getId()),
+            ActionId.asToolBarAction(ActionType.SetSameFolder.getId()),
             null,
-            ActionType.Pack.toString(),
-            ActionType.Unpack.toString(),
+            ActionId.asToolBarAction(ActionType.Pack.getId()),
+            ActionId.asToolBarAction(ActionType.Unpack.getId()),
             null,
-            ActionType.Find.toString(),
+            ActionId.asToolBarAction(ActionType.Find.getId()),
             null,
-            ActionType.AddBookmark.toString(),
-            ActionType.EditBookmarks.toString(),
-            ActionType.EditCredentials.toString(),
+            ActionId.asToolBarAction(ActionType.AddBookmark.getId()),
+            ActionId.asToolBarAction(ActionType.EditBookmarks.getId()),
+            ActionId.asToolBarAction(ActionType.EditCredentials.getId()),
             null,
-            ActionType.ConnectToServer.toString(),
-            ActionType.ShowServerConnections.toString(),
-            ActionType.RunCommand.toString(),
-            ActionType.Email.toString(),
+            ActionId.asToolBarAction(ActionType.ConnectToServer.getId()),
+            ActionId.asToolBarAction(ActionType.ShowServerConnections.getId()),
+            ActionId.asToolBarAction(ActionType.RunCommand.getId()),
+            ActionId.asToolBarAction(ActionType.Email.getId()),
             null,
-            ActionType.RevealInDesktop.toString(),
-            ActionType.ShowFileProperties.toString(),
+            ActionId.asToolBarAction(ActionType.RevealInDesktop.getId()),
+            ActionId.asToolBarAction(ActionType.ShowFileProperties.getId()),
             null,
-            ActionType.ShowPreferences.toString()
+            ActionId.asToolBarAction(ActionType.ShowPreferences.getId())
     };
 
     /**
@@ -107,7 +84,7 @@ public class ToolBarAttributes {
      * @param actions the action Class array to trim.
      * @return the trimmed action Class array, free of leading and trailing separators.
      */
-    private static String[] trimActionsArray(String[] actions) {
+    private static ActionId[] trimActionsArray(ActionId[] actions) {
         int start = 0;
         int end = actions.length;
 
@@ -115,13 +92,13 @@ public class ToolBarAttributes {
             start++;
 
         if(start==end)
-            return new String[]{};
+            return new ActionId[]{};
 
         while(end>start && actions[end-1]==null)
             end--;
 
         int newLen = end-start;
-        String newActions[] = new String[newLen];
+        ActionId newActions[] = new ActionId[newLen];
         System.arraycopy(actions, start, newActions, 0, newLen);
 
         return newActions;
@@ -133,7 +110,7 @@ public class ToolBarAttributes {
      *
      * @param actions the new toolbar actions classes
      */
-    public static void setActions(String[] actions) {
+    public static void setActions(ActionId[] actions) {
         ToolBarAttributes.actionIds = trimActionsArray(actions);
     	useDefaultActions = false;
     	fireActionsChanged();
@@ -170,9 +147,9 @@ public class ToolBarAttributes {
      * Returns the actions classes that constitute the toolbar. <code>null</code> elements are used to insert a separator
      * between buttons.
      *
-     * @return the actions classes that constitute the toolbar.
+     * @return the action classes that constitute the toolbar.
      */
-    public static String[] getActions() {
+    public static ActionId[] getActions() {
     	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;
     }
     

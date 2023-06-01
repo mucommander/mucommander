@@ -86,7 +86,7 @@ public class OpenAsAction extends OpenAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.OpenAs.toString(); }
+        public String getId() { return ActionType.OpenAs.getId(); }
 
         public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

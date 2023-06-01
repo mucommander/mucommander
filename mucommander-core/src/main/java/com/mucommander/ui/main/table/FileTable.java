@@ -50,6 +50,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1778,7 +1779,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 	        else {
 	            // Test if the typed key combination corresponds to a registered action.
 	            // If that's the case, the quick search is canceled and the action is performed.
-	            String muActionId = ActionKeymap.getRegisteredActionIdForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
+	            ActionId muActionId = ActionKeymap.getRegisteredActionIdForKeystroke(KeyStroke.getKeyStrokeForEvent(e));
 	            if(muActionId!=null) {
 	                // Consume the key event otherwise it would be fired again on the FileTable
 	                // (or any other KeyListener on this FileTable)

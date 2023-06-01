@@ -79,13 +79,15 @@ public abstract class CommandBarIO extends DefaultHandler {
 
     	// Load user's file if exist
     	AbstractFile commandBarFile = getDescriptionFile();
+		var actionsLoaded = false;
     	if(commandBarFile != null && commandBarFile.exists()) {
     		CommandBarReader reader = new CommandBarReader(commandBarFile);
     		CommandBarAttributes.setAttributes(reader.getActionsRead(), reader.getAlternateActionsRead(), reader.getModifierRead());
+			actionsLoaded = reader.actionsPresent();
     	}
-    	else {
+    	if (!actionsLoaded) {
     		CommandBarAttributes.restoreDefault();
-    		LOGGER.debug(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found, using defaults");
+    		LOGGER.info(DEFAULT_COMMAND_BAR_FILE_NAME + " was not found or empty, using defaults");
     	}
     	
     	// initialize the writer after setting the command-bar initial attributes:
@@ -99,7 +101,6 @@ public abstract class CommandBarIO extends DefaultHandler {
     
     /**
      * Writes the current command bar to the user's command bar file.
-     * @throws IOException 
      * @throws IOException
      */
     public static void saveCommandBar() throws IOException {

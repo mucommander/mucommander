@@ -47,7 +47,7 @@ public class ShowDebugConsoleAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowDebugConsole.toString(); }
+		public String getId() { return ActionType.ShowDebugConsole.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

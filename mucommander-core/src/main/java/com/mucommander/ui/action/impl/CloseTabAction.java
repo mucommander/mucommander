@@ -59,7 +59,7 @@ public class CloseTabAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CloseTab.toString(); }
+		public String getId() { return ActionType.CloseTab.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

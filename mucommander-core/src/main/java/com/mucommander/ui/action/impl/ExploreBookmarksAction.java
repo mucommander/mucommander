@@ -58,7 +58,7 @@ public class ExploreBookmarksAction extends ActiveTabAction {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ExploreBookmarks.toString(); }
+		public String getId() { return ActionType.ExploreBookmarks.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

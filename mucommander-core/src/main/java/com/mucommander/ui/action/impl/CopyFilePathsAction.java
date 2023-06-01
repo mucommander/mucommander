@@ -59,7 +59,7 @@ public class CopyFilePathsAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CopyFilePaths.toString(); }
+		public String getId() { return ActionType.CopyFilePaths.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

@@ -49,7 +49,7 @@ public class CustomizeCommandBarAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CustomizeCommandBar.toString(); }
+		public String getId() { return ActionType.CustomizeCommandBar.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

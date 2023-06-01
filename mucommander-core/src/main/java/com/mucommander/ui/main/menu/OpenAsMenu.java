@@ -28,6 +28,7 @@ import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
 import com.mucommander.ui.main.MainFrame;
@@ -57,7 +58,7 @@ public class OpenAsMenu extends JMenu {
         .flatMap(List::stream)
         .sorted()
         .forEach(extension -> {
-            Action action = ActionManager.getActionInstance(new ActionParameters(ActionType.OpenAs, Collections.singletonMap("extension", extension)), mainFrame);
+            Action action = ActionManager.getActionInstance(new ActionParameters(ActionId.asGenericAction(ActionType.OpenAs.getId()), Collections.singletonMap("extension", extension)), mainFrame);
             action.putValue(Action.NAME, extension.substring(1));
             add(action);
         });

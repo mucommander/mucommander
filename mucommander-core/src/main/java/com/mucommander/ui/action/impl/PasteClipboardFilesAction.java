@@ -71,7 +71,7 @@ public class PasteClipboardFilesAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.PasteClipboardFiles.toString(); }
+		public String getId() { return ActionType.PasteClipboardFiles.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

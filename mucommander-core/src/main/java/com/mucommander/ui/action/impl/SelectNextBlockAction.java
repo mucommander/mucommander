@@ -53,7 +53,7 @@ public class SelectNextBlockAction extends SelectForwardAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.SelectNextBlock.toString();
+            return ActionType.SelectNextBlock.getId();
         }
 
         public ActionCategory getCategory() {

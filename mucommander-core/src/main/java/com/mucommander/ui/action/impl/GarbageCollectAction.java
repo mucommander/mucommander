@@ -48,7 +48,7 @@ public class GarbageCollectAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GarbageCollect.toString(); }
+		public String getId() { return ActionType.GarbageCollect.getId(); }
 
 		public ActionCategory getCategory() { return null; }
     }

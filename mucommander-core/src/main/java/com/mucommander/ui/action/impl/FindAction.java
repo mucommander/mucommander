@@ -50,7 +50,7 @@ public class FindAction extends MuAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.Find.toString(); }
+        public String getId() { return ActionType.Find.getId(); }
 
         public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

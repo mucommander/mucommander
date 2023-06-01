@@ -50,7 +50,7 @@ public class CopyFilesToClipboardAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CopyFilesToClipboard.toString(); }
+		public String getId() { return ActionType.CopyFilesToClipboard.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

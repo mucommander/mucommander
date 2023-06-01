@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
@@ -33,18 +34,18 @@ public class CommandBarButtonForDisplay extends CommandBarButton {
 	/** The preferred size of display button */
 	public static final Dimension PREFERRED_SIZE = new Dimension(130, 30);
 	
-	public static CommandBarButtonForDisplay create(String actionId) {
+	public static CommandBarButtonForDisplay create(ActionId actionId) {
 		return actionId == null ? null : new CommandBarButtonForDisplay(actionId);
 	}
 	
-	private CommandBarButtonForDisplay(String actionId) {
+	private CommandBarButtonForDisplay(ActionId actionId) {
 		super(actionId, null);
 		setEnabled(true);
 		setPreferredSize(PREFERRED_SIZE);
 	}
 	
 	@Override
-    public void setButtonAction(String actionId, MainFrame mainFrame) {
+    public void setButtonAction(ActionId actionId, MainFrame mainFrame) {
         // Use the action's label as the button's label
         String label = ActionProperties.getActionLabel(actionId);
         setText(label);

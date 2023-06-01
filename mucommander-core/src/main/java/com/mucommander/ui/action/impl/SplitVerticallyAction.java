@@ -49,7 +49,7 @@ public class SplitVerticallyAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SplitVertically.toString(); }
+		public String getId() { return ActionType.SplitVertically.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

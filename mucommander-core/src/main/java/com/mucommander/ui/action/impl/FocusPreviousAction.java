@@ -82,7 +82,7 @@ public class FocusPreviousAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.FocusPrevious.toString(); }
+		public String getId() { return ActionType.FocusPrevious.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

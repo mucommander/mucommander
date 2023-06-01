@@ -56,7 +56,7 @@ public class MarkSelectedFileAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkSelectedFile.toString(); }
+		public String getId() { return ActionType.MarkSelectedFile.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

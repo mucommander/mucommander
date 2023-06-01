@@ -48,7 +48,7 @@ public class ShowTabsQLAction extends ShowQuickListAction {
 	}
 
 	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowTabsQL.toString(); }
+		public String getId() { return ActionType.ShowTabsQL.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

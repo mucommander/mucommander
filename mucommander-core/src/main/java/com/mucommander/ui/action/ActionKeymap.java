@@ -20,6 +20,7 @@ package com.mucommander.ui.action;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -35,10 +36,10 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ActionKeymap {
 
-    /** Maps action id onto Keystroke instances */
-    private static HashMap<String, KeyStroke> customPrimaryActionKeymap = new HashMap<String, KeyStroke>();
     /** Maps action id instances onto Keystroke instances */
-    private static HashMap<String, KeyStroke> customAlternateActionKeymap = new HashMap<String, KeyStroke>();
+    private static Map<ActionId, KeyStroke> customPrimaryActionKeymap = new HashMap<>();
+    /** Maps action id instances onto alt Keystroke instances */
+    private static Map<ActionId, KeyStroke> customAlternateActionKeymap = new HashMap<>();
     /** Maps Keystroke instances onto action id */
     private static AcceleratorMap acceleratorMap = new AcceleratorMap();
 
@@ -53,7 +54,7 @@ public class ActionKeymap {
      *            - MainFrame instance to which all action shortcuts would be registered.
      */
     public static void registerActions(MainFrame mainFrame) {
-        for (String actionId : ActionManager.getActionIds()) {
+        for (ActionId actionId : ActionManager.getActionIds()) {
             ActionDescriptor actionDescriptor = ActionProperties.getActionDescriptor(actionId);
 
             // Instantiate the action only if it is not parameterized: parameterized actions should only be instantiated
@@ -91,7 +92,7 @@ public class ActionKeymap {
      * @param alternateAccelerator
      *            - KeyStroke that would be alternative accelerator of the given action.
      */
-    public static void changeActionAccelerators(String actionId,
+    public static void changeActionAccelerators(ActionId actionId,
             KeyStroke accelerator,
             KeyStroke alternateAccelerator) {
         // Check whether the given actions are already assigned to the given action
@@ -100,12 +101,12 @@ public class ActionKeymap {
             return;
 
         // If primary accelerator is already registered to other MuAction, unregister it.
-        String previousActionForAccelerator = getRegisteredActionIdForKeystroke(accelerator);
+        ActionId previousActionForAccelerator = getRegisteredActionIdForKeystroke(accelerator);
         if (previousActionForAccelerator != null && !previousActionForAccelerator.equals(actionId))
             unregisterAcceleratorFromAction(previousActionForAccelerator, accelerator);
 
         // If alternative accelerator is already registered to other MuAction, unregister it.
-        String previousActionForAlternativeAccelerator = getRegisteredActionIdForKeystroke(alternateAccelerator);
+        ActionId previousActionForAlternativeAccelerator = getRegisteredActionIdForKeystroke(alternateAccelerator);
         if (previousActionForAlternativeAccelerator != null
                 && !previousActionForAlternativeAccelerator.equals(actionId))
             unregisterAcceleratorFromAction(previousActionForAlternativeAccelerator, alternateAccelerator);
@@ -118,7 +119,7 @@ public class ActionKeymap {
         registerActionAccelerators(actionId, accelerator, alternateAccelerator);
     }
 
-    private static void unregisterAcceleratorFromAction(String actionId, KeyStroke accelerator) {
+    private static void unregisterAcceleratorFromAction(ActionId actionId, KeyStroke accelerator) {
         switch (getAcceleratorType(accelerator)) {
         case PRIMARY:
             registerActionAccelerators(actionId, null, getAlternateAccelerator(actionId));
@@ -137,8 +138,8 @@ public class ActionKeymap {
      * @param alternate
      *            - HashMap that maps action id to alternative accelerator.
      */
-    public static void registerActions(HashMap<String, KeyStroke> primary, HashMap<String, KeyStroke> alternate) {
-        for (String actionId : primary.keySet()) {
+    public static void registerActions(Map<ActionId, KeyStroke> primary, Map<ActionId, KeyStroke> alternate) {
+        for (ActionId actionId : primary.keySet()) {
             // Add the action/keystroke mapping
             ActionKeymap.registerActionAccelerators(
                     actionId,
@@ -165,7 +166,7 @@ public class ActionKeymap {
      *            - id of MuAction.
      * @return true if there is a shortcut which is assigned to the action, false otherwise.
      */
-    public static boolean doesActionHaveShortcut(String actionId) {
+    public static boolean doesActionHaveShortcut(ActionId actionId) {
         return getAccelerator(actionId) != null;
     }
 
@@ -180,7 +181,7 @@ public class ActionKeymap {
      *            - id of MuAction.
      * @return primary accelerator of the given MuAction.
      */
-    public static KeyStroke getAccelerator(String actionId) {
+    public static KeyStroke getAccelerator(ActionId actionId) {
         if (customPrimaryActionKeymap.containsKey(actionId))
             return customPrimaryActionKeymap.get(actionId);
         return ActionProperties.getDefaultAccelerator(actionId);
@@ -193,7 +194,7 @@ public class ActionKeymap {
      *            - id of MuAction.
      * @return alternative accelerator of the given MuAction.
      */
-    public static KeyStroke getAlternateAccelerator(String actionId) {
+    public static KeyStroke getAlternateAccelerator(ActionId actionId) {
         if (customAlternateActionKeymap.containsKey(actionId))
             return customAlternateActionKeymap.get(actionId);
         return ActionProperties.getDefaultAlternativeAccelerator(actionId);
@@ -206,8 +207,8 @@ public class ActionKeymap {
      *            - accelerator.
      * @return id of MuAction to which the given accelerator is registered, null if the accelerator is not registered.
      */
-    public static String getRegisteredActionIdForKeystroke(KeyStroke ks) {
-        String actionId = acceleratorMap.getActionId(ks);
+    public static ActionId getRegisteredActionIdForKeystroke(KeyStroke ks) {
+        ActionId actionId = acceleratorMap.getActionId(ks);
         return actionId != null ? actionId : ActionProperties.getDefaultActionForKeyStroke(ks);
     }
 
@@ -228,8 +229,8 @@ public class ActionKeymap {
      * 
      * @return Iterator of actions that their accelerators were customized.
      */
-    public static Iterator<String> getCustomizedActions() {
-        HashSet<String> modifiedActions = new HashSet<String>();
+    public static Iterator<ActionId> getCustomizedActions() {
+        HashSet<ActionId> modifiedActions = new HashSet<>();
         modifiedActions.addAll(customPrimaryActionKeymap.keySet());
         modifiedActions.addAll(customAlternateActionKeymap.keySet());
         return modifiedActions.iterator();
@@ -257,7 +258,7 @@ public class ActionKeymap {
         if (accelerator != null) {
             InputMap inputMap = comp.getInputMap(condition);
             ActionMap actionMap = comp.getActionMap();
-            String actionId = action.getDescriptor().getId();
+            ActionId actionId = ActionId.asGenericAction(action.getDescriptor().getId());
             inputMap.put(accelerator, actionId);
             actionMap.put(actionId, action);
         }
@@ -297,7 +298,7 @@ public class ActionKeymap {
     /**
      * Register primary and alternative accelerators to MuAction.
      */
-    private static void registerActionAccelerators(String actionId,
+    private static void registerActionAccelerators(ActionId actionId,
             KeyStroke accelerator,
             KeyStroke alternateAccelerator) {
         // If accelerator is null, replace it with alternateAccelerator

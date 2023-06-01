@@ -38,7 +38,7 @@ public class GoToWebsiteAction extends OpenURLInBrowserAction {
     }
     
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToWebsite.toString(); }
+		public String getId() { return ActionType.GoToWebsite.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

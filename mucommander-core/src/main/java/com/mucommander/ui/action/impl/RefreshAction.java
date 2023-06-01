@@ -49,7 +49,7 @@ public class RefreshAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Refresh.toString(); }
+		public String getId() { return ActionType.Refresh.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

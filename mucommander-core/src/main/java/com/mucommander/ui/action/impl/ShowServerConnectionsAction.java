@@ -51,7 +51,7 @@ public class ShowServerConnectionsAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowServerConnections.toString(); }
+		public String getId() { return ActionType.ShowServerConnections.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }
