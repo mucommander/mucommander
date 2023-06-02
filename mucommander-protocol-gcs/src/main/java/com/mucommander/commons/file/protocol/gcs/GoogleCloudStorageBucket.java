@@ -38,10 +38,6 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
         super(url);
     }
 
-    GoogleCloudStorageBucket(FileURL url, Storage storageService) {
-        super(url, storageService);
-    }
-
     GoogleCloudStorageBucket(FileURL url, Bucket bucket, Storage storageService) {
         super(url, storageService);
         this.bucket = bucket;
@@ -95,7 +91,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
         var blobPath = AbstractFile.DEFAULT_SEPARATOR + fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1")
                 + AbstractFile.DEFAULT_SEPARATOR + blob.getName();
         url.setPath(blobPath);
-        var result = new GoogleCloudStorageFile(url, blob, getStorageService());
+        var result = new GoogleCloudStorageFile(url, getBucket(), blob, getStorageService());
         result.setParent(this);
         return result;
     }
