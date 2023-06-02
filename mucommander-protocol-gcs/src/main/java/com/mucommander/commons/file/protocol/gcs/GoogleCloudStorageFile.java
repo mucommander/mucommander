@@ -17,10 +17,7 @@
 
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.PathUtils;
@@ -37,8 +34,8 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         super(url);
     }
 
-    GoogleCloudStorageFile(FileURL url, Blob blob, Storage storageService) {
-        super(url, storageService);
+    GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob, Storage storageService) {
+        super(url, bucket, storageService);
         this.blob = blob;
     }
 
