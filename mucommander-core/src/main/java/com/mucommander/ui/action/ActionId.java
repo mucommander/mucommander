@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public final class ActionId {
 
-    enum ActionType {
+    public enum ActionType {
         GENERIC,
         COMMAND,
         COMMANDBAR,
