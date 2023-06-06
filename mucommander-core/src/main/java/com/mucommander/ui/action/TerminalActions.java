@@ -17,12 +17,8 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.ui.action.impl.CommandAction;
 import com.mucommander.ui.main.MainFrame;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +29,7 @@ import java.util.stream.Collectors;
  */
 public class TerminalActions {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TerminalActions.class);
-
-    enum Action {
+    public enum Action {
         PAGE_UP,
         PAGE_DOWN,
         LINE_UP,
@@ -49,7 +43,7 @@ public class TerminalActions {
             descriptor = new Descriptor(this);
         }
 
-        String getId() {
+        public String getId() {
             return "terminal." + this.name().toLowerCase();
         }
 
