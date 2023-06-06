@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public final class ActionId {
 
-    enum ACTION_TYPE {
+    enum ActionType {
         GENERIC,
         COMMAND,
         COMMANDBAR,
@@ -33,35 +33,39 @@ public final class ActionId {
     }
 
     private final String actionId;
-    private final ACTION_TYPE type;
+    private final ActionType type;
 
-    private ActionId(String actionId, ACTION_TYPE type) {
+    private ActionId(String actionId, ActionType type) {
         this.actionId = actionId;
         this.type = type;
     }
 
     public static ActionId asGenericAction(String actionId) {
-        return new ActionId(actionId, ACTION_TYPE.GENERIC);
+        return new ActionId(actionId, ActionType.GENERIC);
     }
 
     public static ActionId asCommandAction(String actionId) {
-        return new ActionId(actionId, ACTION_TYPE.COMMAND);
+        return new ActionId(actionId, ActionType.COMMAND);
     }
 
     public static ActionId asCommandBarAction(String actionId) {
-        return new ActionId(actionId, ACTION_TYPE.COMMANDBAR);
+        return new ActionId(actionId, ActionType.COMMANDBAR);
     }
 
     public static ActionId asToolBarAction(String actionId) {
-        return new ActionId(actionId, ACTION_TYPE.TOOLBAR);
+        return new ActionId(actionId, ActionType.TOOLBAR);
     }
 
     public static ActionId asTerminalAction(String actionId) {
-        return new ActionId(actionId, ACTION_TYPE.TERMINAL);
+        return new ActionId(actionId, ActionType.TERMINAL);
     }
 
     public String getActionId() {
         return actionId;
+    }
+
+    public ActionType getType() {
+        return type;
     }
 
     @Override

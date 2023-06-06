@@ -241,6 +241,10 @@ public class ActionManager {
                 .forEach(command -> ActionManager.registerAction(
                         new CommandAction.Descriptor(command),
                         (mainFrame, properties) -> new CommandAction(mainFrame, properties, command)));
+
+        TerminalActions.actionDescriptors().stream().forEach(
+                descriptor -> ActionManager.registerAction(descriptor,
+                        (mainFrame, properties) -> new TerminalActions.NullAction(mainFrame, properties, descriptor)));
     }
 
     /**
@@ -251,6 +255,28 @@ public class ActionManager {
      */
     public static void registerAction(ActionDescriptor actionDescriptor, ActionFactory actionFactory) {
         actionFactories.put(ActionId.asGenericAction(actionDescriptor.getId()), actionFactory);
+        ActionProperties.addActionDescriptor(actionDescriptor);
+    }
+
+    /**
+     * Registration method for MuActions.
+     *
+     * @param actionDescriptor - ActionDescriptor instance of the action.
+     * @param actionFactory - ActionFactory instance of the action.
+     */
+    public static void registerAction(CommandAction.Descriptor actionDescriptor, ActionFactory actionFactory) {
+        actionFactories.put(ActionId.asCommandAction(actionDescriptor.getId()), actionFactory);
+        ActionProperties.addActionDescriptor(actionDescriptor);
+    }
+
+    /**
+     * Registration method for MuActions.
+     *
+     * @param actionDescriptor - ActionDescriptor instance of the action.
+     * @param actionFactory - ActionFactory instance of the action.
+     */
+    public static void registerAction(TerminalActions.Descriptor actionDescriptor, ActionFactory actionFactory) {
+        actionFactories.put(ActionId.asTerminalAction(actionDescriptor.getId()), actionFactory);
         ActionProperties.addActionDescriptor(actionDescriptor);
     }
 

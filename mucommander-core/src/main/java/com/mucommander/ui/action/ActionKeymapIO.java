@@ -52,8 +52,6 @@ public abstract class ActionKeymapIO extends DefaultHandler {
 
     /** Default actions filename */
     private final static String DEFAULT_ACTIONS_FILE_NAME = "action_keymap.xml";
-    /** Path to the actions resource file within the application JAR file */
-    public final static String ACTION_KEYMAP_RESOURCE_PATH = "/" + DEFAULT_ACTIONS_FILE_NAME;
 
     /** Whether the actions have been modified since the last time they were saved */
     protected static boolean wereActionsModified;
