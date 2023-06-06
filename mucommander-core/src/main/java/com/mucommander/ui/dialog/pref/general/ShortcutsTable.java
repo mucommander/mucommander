@@ -672,11 +672,11 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
 
         public void filter(ActionFilter filter) {
-            filteredEditedActionIds = filter(originalActionMap.keySet(), filter);
+            filteredEditedActionIds = filter(editedActionMap.keySet(), filter);
             filteredEditedActionMap.clear();
 
             for (ActionId actionId : filteredEditedActionIds) {
-                filteredEditedActionMap.put(actionId, originalActionMap.get(actionId));
+                filteredEditedActionMap.put(actionId, editedActionMap.get(actionId));
             }
 
             ShortcutsTable.this.clearSelection();
@@ -777,7 +777,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
         private String getRowAsTextForFilter(ActionId actionId) {
             StringBuilder rowText = new StringBuilder();
-            Map<TableDataColumnEnum, Object> rowData = originalActionMap.get(actionId);
+            Map<TableDataColumnEnum, Object> rowData = editedActionMap.get(actionId);
 
             for (Map.Entry<TableDataColumnEnum, Object> entry : rowData.entrySet()) {
                 String rowTextValue;

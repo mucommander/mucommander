@@ -38,7 +38,9 @@ public enum ActionCategory {
 	WINDOW("action_categories.windows"),
 	TAB("action_categories.tabs"),
 	MISC("action_categories.misc"),
-	COMMANDS("action_categories.commands");
+	COMMANDS("action_categories.commands"),
+	TERMINAL("action_terminal.keymapping"),
+	;
 
 	/** The category's label key in the dictionary file */
 	private String descriptionKey;
