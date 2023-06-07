@@ -42,6 +42,7 @@ New features:
 - Google Drive: present files shared with the authorized user in the 'Shared with me' folder.
 - Google Drive: present trashed files in the 'Trash' folder.
 - Google Drive: documents, spreadsheets and presentations are shown and can be downloaded in their corresponding OpenDocument format (odt, ods, and odp).
+- The terminal's key bindings can be reconfigured in Shortcut Preferences
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
