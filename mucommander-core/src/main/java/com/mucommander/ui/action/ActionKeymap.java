@@ -84,40 +84,49 @@ public class ActionKeymap {
     /**
      * Register new accelerators to the given action.
      * 
-     * Note: if accelerator is null, it would be replaced by alternateAccelerator.
+     * Note: if accelerator is null, it would be replaced by altAccelerator.
      * 
      * @param actionId
      *            - id of the MuAction.
      * @param accelerator
      *            - KeyStroke that would be primary accelerator of the given action.
-     * @param alternateAccelerator
+     * @param altAccelerator
      *            - KeyStroke that would be alternative accelerator of the given action.
      */
     public static void changeActionAccelerators(ActionId actionId,
             KeyStroke accelerator,
-            KeyStroke alternateAccelerator) {
+            KeyStroke altAccelerator) {
         // Check whether the given actions are already assigned to the given action
         if (Objects.equals(accelerator, ActionKeymap.getAccelerator(actionId)) &&
-                Objects.equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
+                Objects.equals(altAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
             return;
 
         // If primary accelerator is already registered to other MuAction, unregister it.
         ActionId previousActionForAccelerator = getRegisteredActionIdForKeystroke(accelerator);
-        if (previousActionForAccelerator != null && !previousActionForAccelerator.equals(actionId))
+        if (previousActionForAccelerator != null &&
+                !(previousActionForAccelerator.getType() == ActionId.ActionType.TERMINAL ^
+                        actionId.getType() == ActionId.ActionType.TERMINAL)
+                &&
+                !previousActionForAccelerator.equals(actionId)) {
             unregisterAcceleratorFromAction(previousActionForAccelerator, accelerator);
+        }
 
         // If alternative accelerator is already registered to other MuAction, unregister it.
-        ActionId previousActionForAlternativeAccelerator = getRegisteredActionIdForKeystroke(alternateAccelerator);
-        if (previousActionForAlternativeAccelerator != null
-                && !previousActionForAlternativeAccelerator.equals(actionId))
-            unregisterAcceleratorFromAction(previousActionForAlternativeAccelerator, alternateAccelerator);
+        ActionId previousActionForAltAccelerator = getRegisteredActionIdForKeystroke(altAccelerator);
+        if (previousActionForAltAccelerator != null &&
+                !(previousActionForAltAccelerator.getType() == ActionId.ActionType.TERMINAL ^
+                        actionId.getType() == ActionId.ActionType.TERMINAL)
+                &&
+                !previousActionForAltAccelerator.equals(actionId)) {
+            unregisterAcceleratorFromAction(previousActionForAltAccelerator, altAccelerator);
+        }
 
         // Remove action's previous accelerators (primary and alternate)
         acceleratorMap.remove(customPrimaryActionKeymap.remove(actionId));
         acceleratorMap.remove(customAlternateActionKeymap.remove(actionId));
 
         // Register new accelerators
-        registerActionAccelerators(actionId, accelerator, alternateAccelerator);
+        registerActionAccelerators(actionId, accelerator, altAccelerator);
     }
 
     private static void unregisterAcceleratorFromAction(ActionId actionId, KeyStroke accelerator) {
