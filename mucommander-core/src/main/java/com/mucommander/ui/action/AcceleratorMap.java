@@ -22,6 +22,9 @@ import javax.swing.*;
 import com.mucommander.commons.util.Pair;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Data structure that maps KeyStroke (accelerator) to MuAction id.
@@ -36,7 +39,7 @@ public class AcceleratorMap {
 	}
     
     // Maps KeyStrokes to MuAction id and accelerator type (PRIMARY_ACCELERATOR/ALTERNATIVE_ACCELERATOR) pair.
-	private static HashMap<KeyStroke, Pair<ActionId, AcceleratorType>> map = new HashMap<>();
+	private static Map<KeyStroke, List<Pair<ActionId, AcceleratorType>>> map = new HashMap<>();
 
 	/**
 	 * Register KeyStroke to MuAction as primary accelerator.
@@ -97,11 +100,17 @@ public class AcceleratorMap {
     }
     
     private void put(KeyStroke ks, ActionId actionId, AcceleratorType acceleratorType) {
-        if (ks != null)
-            map.put(ks, new Pair<>(actionId, acceleratorType));
+        if (ks != null) {
+            var actions = map.getOrDefault(ks, new LinkedList<>());
+            actions.add(new Pair<>(actionId, acceleratorType));
+            map.putIfAbsent(ks, actions);
+        }
     }
     
     private Pair<ActionId, AcceleratorType> getActionIdAndAcceleratorTypeOfKeyStroke(KeyStroke ks) {
-    	return map.get(ks);
+        var actions = map.get(ks);
+        return actions != null
+                ? actions.stream().filter(a -> a.first.getType() != ActionId.ActionType.TERMINAL).findFirst().get()
+                : null;
     }
 }

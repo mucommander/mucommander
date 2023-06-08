@@ -421,7 +421,7 @@ public class ActionManager {
             }
 
             // If the action's accelerators have not been set yet, use the ones from ActionKeymap
-            if (action.getAccelerator() == null) {
+            if (actionId.getType() != ActionId.ActionType.TERMINAL && action.getAccelerator() == null) {
                 // Retrieve the standard accelerator (if any) and use it as this action's accelerator
                 KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
                 if (accelerator!=null) {

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -96,8 +97,8 @@ public class ActionKeymap {
             KeyStroke accelerator,
             KeyStroke alternateAccelerator) {
         // Check whether the given actions are already assigned to the given action
-        if (equals(accelerator, ActionKeymap.getAccelerator(actionId)) &&
-                equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
+        if (Objects.equals(accelerator, ActionKeymap.getAccelerator(actionId)) &&
+                Objects.equals(alternateAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
             return;
 
         // If primary accelerator is already registered to other MuAction, unregister it.
@@ -301,6 +302,7 @@ public class ActionKeymap {
     private static void registerActionAccelerators(ActionId actionId,
             KeyStroke accelerator,
             KeyStroke alternateAccelerator) {
+
         // If accelerator is null, replace it with alternateAccelerator
         if (accelerator == null) {
             accelerator = alternateAccelerator;
@@ -308,8 +310,8 @@ public class ActionKeymap {
         }
 
         // New accelerators are identical to the default action's accelerators
-        if (equals(accelerator, ActionProperties.getDefaultAccelerator(actionId)) &&
-                equals(alternateAccelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {
+        if (Objects.equals(accelerator, ActionProperties.getDefaultAccelerator(actionId)) &&
+                Objects.equals(alternateAccelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {
             // Remove all action's accelerators customization
             customPrimaryActionKeymap.remove(actionId);
             customAlternateActionKeymap.remove(actionId);
@@ -325,28 +327,22 @@ public class ActionKeymap {
             acceleratorMap.putAlternativeAccelerator(alternateAccelerator, actionId);
         }
 
-        // Update each MainFrame's action instance and input map
-        for (MuAction action : ActionManager.getActionInstances(actionId)) {
-            MainFrame mainFrame = action.getMainFrame();
+        if (actionId.getType() != ActionId.ActionType.TERMINAL) {
+            // Update each MainFrame's action instance and input map
+            for (MuAction action : ActionManager.getActionInstances(actionId)) {
+                MainFrame mainFrame = action.getMainFrame();
 
-            // Remove action from MainFrame's action and input maps
-            unregisterAction(mainFrame, action);
+                // Remove action from MainFrame's action and input maps
+                unregisterAction(mainFrame, action);
 
-            // Change action's accelerators
-            action.setAccelerator(accelerator);
-            action.setAlternateAccelerator(alternateAccelerator);
+                // Change action's accelerators
+                action.setAccelerator(accelerator);
+                action.setAlternateAccelerator(alternateAccelerator);
 
-            // Add updated action to MainFrame's action and input maps
-            registerAction(mainFrame, action);
+                // Add updated action to MainFrame's action and input maps
+                registerAction(mainFrame, action);
+            }
         }
     }
 
-    /**
-     * Return true if the two KeyStrokes are equal, false otherwise.
-     */
-    private static boolean equals(Object first, Object second) {
-        if (first == null)
-            return second == null;
-        return first.equals(second);
-    }
 }
