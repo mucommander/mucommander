@@ -92,7 +92,7 @@ public class TerminalActions {
     }
 
     public static List<Descriptor> actionDescriptors() {
-        return Arrays.stream(Action.values()).map(action -> action.getDescriptor()).collect(Collectors.toUnmodifiableList());
+        return Arrays.stream(Action.values()).map(Action::getDescriptor).collect(Collectors.toUnmodifiableList());
     }
 
 }
