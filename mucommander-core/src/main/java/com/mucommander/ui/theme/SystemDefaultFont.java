@@ -77,7 +77,7 @@ public class SystemDefaultFont extends DefaultFont implements PropertyChangeList
         if(font == null)
             // ... try to retrieve it from the UIManager.
             if((font = UIManager.getFont(property)) == null)
-                // If the current l&f didn't set the right propery, attempt to retrieve it from a component of the
+                // If the current l&f didn't set the right properly, attempt to retrieve it from a component of the
                 // desired type.
                 if((font = mapper.getComponent().getFont()) == null)
                     // If that failed, defaults to SansSerif (guaranteed to be supported by the VM).
