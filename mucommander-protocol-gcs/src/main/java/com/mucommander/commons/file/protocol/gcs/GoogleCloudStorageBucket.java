@@ -20,11 +20,10 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -70,26 +69,16 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException {
+    protected Stream<GoogleCloudStorageAbstractFile> listDir() {
         var files = getBucket().list(Storage.BlobListOption.currentDirectory());
-        return toFilesArray(files.iterateAll());
+        return StreamSupport.stream(files.iterateAll().spliterator(), false)
+                .map(this::toFile);
     }
 
-    protected AbstractFile[] toFilesArray(Iterable<Blob> blobs) {
-        var children = StreamSupport.stream(blobs.spliterator(), false)
-                .map(this::toFile)
-                .collect(Collectors.toList());
-
-        var childrenArray = new AbstractFile[children.size()];
-        children.toArray(childrenArray);
-        return childrenArray;
-    }
-
-    private GoogleCloudStorageFile toFile(Blob blob) {
+    protected GoogleCloudStorageFile toFile(Blob blob) {
         // FIXME
         var url = (FileURL) getURL().clone();
-        var blobPath = AbstractFile.DEFAULT_SEPARATOR + fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1")
-                + AbstractFile.DEFAULT_SEPARATOR + blob.getName();
+        var blobPath = getSeparator() + getBucketName() + getSeparator() + blob.getName();
         url.setPath(blobPath);
         var result = new GoogleCloudStorageFile(url, getBucket(), blob, getStorageService());
         result.setParent(this);
@@ -116,6 +105,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     @Override
     public void delete() throws IOException {
         try {
+            // FIXME NPE?
             if (getBucket().delete()) {
                 // The bucket was deleted
                 bucket = null;
