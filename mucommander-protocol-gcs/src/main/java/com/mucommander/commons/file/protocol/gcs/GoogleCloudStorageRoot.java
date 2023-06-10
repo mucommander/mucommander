@@ -14,18 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Bucket;
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.PathUtils;
 
-import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * Representation of the Root for the CloudStorage. This root folder lists CloudStorage buckets, so it is an additional
+ * layer over the bucket content.
+ *
+ * @author miroslav.spak
+ */
 public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
 
     protected GoogleCloudStorageRoot(FileURL url) {
@@ -48,22 +51,19 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException {
+    protected Stream<GoogleCloudStorageAbstractFile> listDir() {
         var buckets = getStorageService().list();
 
-        var children = StreamSupport.stream(buckets.iterateAll().spliterator(), false)
-                .map(this::toFile)
-                .collect(Collectors.toList());
-
-        var childrenArray = new AbstractFile[children.size()];
-        children.toArray(childrenArray);
-        return childrenArray;
+        return StreamSupport.stream(buckets.iterateAll().spliterator(), false)
+                .map(this::toFile);
     }
 
+    /**
+     * Transforms single {@link Bucket} to the internal representation of {@link GoogleCloudStorageBucket} directory.
+     */
     private GoogleCloudStorageBucket toFile(Bucket bucket) {
         var url = (FileURL) getURL().clone();
-//        url.setHost(bucket.getName());
-        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + AbstractFile.DEFAULT_SEPARATOR;
+        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + getSeparator();
         url.setPath(parentPath + bucket.getName());
         var result = new GoogleCloudStorageBucket(url, bucket, getStorageService());
         result.setParent(this);

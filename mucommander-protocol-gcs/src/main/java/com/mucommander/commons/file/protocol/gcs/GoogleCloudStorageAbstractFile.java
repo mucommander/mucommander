@@ -24,6 +24,8 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Dummy abstract implementation of CloudStorage file. Refuses almost all standard operations later overridden
@@ -33,7 +35,7 @@ import java.io.OutputStream;
  */
 public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
-    public static final String CLOUD_STORAGE_DIRECTORY_DELIMITER = "/"; //TODO jde udelat jinak?
+    private static final String CLOUD_STORAGE_DIRECTORY_SEPARATOR = "/";
 
     private Storage storageService;
 
@@ -47,12 +49,6 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         super(url);
         this.storageService = storageService;
     }
-
-    // TODO do we want that?
-//    @Override
-//    public String getSeparator() {
-//        return super.getSeparator();
-//    }
 
     protected Storage getStorageService() {
         if (storageService == null) {
@@ -77,6 +73,11 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
      */
     private GoogleCloudStorageClient getCloudStorageClient() throws IOException {
         return GoogleCloudStorageConnectionHandlerFactory.getInstance().getCloudStorageClient(fileURL);
+    }
+
+    @Override
+    public String getSeparator() {
+        return CLOUD_STORAGE_DIRECTORY_SEPARATOR;
     }
 
     @Override
@@ -183,8 +184,22 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
     @Override
     public AbstractFile[] ls() throws IOException {
-        throw new UnsupportedFileOperationException(FileOperation.LIST_CHILDREN);
+        try {
+            // Try to list this as directory
+            var childrenList = listDir().collect(Collectors.toList());
+            // Remap childrenList to array
+            var childrenArray = new AbstractFile[childrenList.size()];
+            childrenList.toArray(childrenArray);
+            return childrenArray;
+        } catch (Exception ex) {
+            throw new IOException("Unable to list directory: " + fileURL);
+        }
     }
+
+    /**
+     * @return lists the children of the current {@link GoogleCloudStorageAbstractFile}.
+     */
+    protected abstract Stream<GoogleCloudStorageAbstractFile> listDir();
 
     @Override
     public void mkdir() throws IOException {

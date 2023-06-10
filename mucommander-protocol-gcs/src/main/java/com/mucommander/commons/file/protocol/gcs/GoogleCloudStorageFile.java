@@ -18,7 +18,6 @@
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.*;
-import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.PathUtils;
 
@@ -26,6 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     private Blob blob;
@@ -42,7 +43,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     private Blob getBlob() {
         if (blob == null) {
             var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-            var blobPath = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER));
+            var blobPath = shortPath.substring(shortPath.indexOf(getSeparator()));
             // TODO check
             blob = getBucket().get(blobPath);
         }
@@ -51,9 +52,12 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     }
 
     @Override
-    public AbstractFile[] ls() throws IOException {
-        var files = getBucket().list(Storage.BlobListOption.prefix(getBlob().getName()), Storage.BlobListOption.delimiter(CLOUD_STORAGE_DIRECTORY_DELIMITER));
-        return toFilesArray(files.iterateAll());
+    protected Stream<GoogleCloudStorageAbstractFile> listDir() {
+        var files = getBucket().list(
+                Storage.BlobListOption.prefix(getBlob().getName()),
+                Storage.BlobListOption.delimiter(getSeparator()));
+        return StreamSupport.stream(files.iterateAll().spliterator(), false)
+                .map(this::toFile);
     }
 
     @Override
@@ -102,7 +106,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         // TODO missing?
         var bucketName = getBucketName();
         var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var blobName = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
+        var blobName = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);
         var blobId = BlobId.of(bucketName, blobName);
         var blobInfo = BlobInfo.newBuilder(blobId).build();
 
@@ -114,7 +118,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         // TODO unify
         var bucketName = getBucketName();
         var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var blobPath = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
+        var blobPath = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);
         var blobName = blobPath + "/."; // TODO dummy file?
         try {
             var blobId = BlobId.of(bucketName, blobName);
@@ -131,7 +135,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         // TODO unify
         var bucketName = getBucketName();
         var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var blobName = shortPath.substring(shortPath.indexOf(CLOUD_STORAGE_DIRECTORY_DELIMITER) + 1);
+        var blobName = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);
         try {
             var blobId = BlobId.of(bucketName, blobName);
             var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
