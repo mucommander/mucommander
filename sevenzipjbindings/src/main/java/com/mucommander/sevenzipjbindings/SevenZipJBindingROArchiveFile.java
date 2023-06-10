@@ -17,18 +17,6 @@
 
 package com.mucommander.sevenzipjbindings;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
@@ -37,15 +25,20 @@ import com.mucommander.commons.file.archive.WrapperArchiveEntryIterator;
 import com.mucommander.commons.util.CircularByteBuffer;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.sevenzipjbindings.multivolume.InArchiveWrapper;
+import com.mucommander.sevenzipjbindings.multivolume.SevenZipMultiVolumeCallbackHandler;
 import com.mucommander.sevenzipjbindings.multivolume.SevenZipRarMultiVolumeCallbackHandler;
+import net.sf.sevenzipjbinding.*;
+import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import net.sf.sevenzipjbinding.ArchiveFormat;
-import net.sf.sevenzipjbinding.IInArchive;
-import net.sf.sevenzipjbinding.IInStream;
-import net.sf.sevenzipjbinding.ISequentialOutStream;
-import net.sf.sevenzipjbinding.PropID;
-import net.sf.sevenzipjbinding.SevenZip;
-import net.sf.sevenzipjbinding.SevenZipException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author Oleg Trifonov, Arik Hadas
@@ -54,6 +47,8 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(SevenZipJBindingROArchiveFile.class);
 
     private static final Pattern MULTI_PART_RAR_PATTERN = Pattern.compile("[.]part\\d+[.]rar");
+
+    private static final String MULTI_PART_7Z_EXT = ".7z.001";
 
     protected IInArchive inArchive;
     private ArchiveFormat sevenZipJBindingFormat;
@@ -86,19 +81,23 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
 
     private IInArchive openInArchive() throws IOException {
         if (inArchive == null) {
-            Matcher matcher = MULTI_PART_RAR_PATTERN.matcher(file.getName());
+            boolean multiPartRar = MULTI_PART_RAR_PATTERN.matcher(file.getName()).find();
+            boolean multiPartSevenZip = file.getName().toLowerCase().endsWith(MULTI_PART_7Z_EXT);
 
-            if (matcher.find()) {
+            if (multiPartRar) {
                 SevenZipRarMultiVolumeCallbackHandler handler = new SevenZipRarMultiVolumeCallbackHandler(formatSignature, password);
                 IInStream firstStream = handler.getStream(file.getAbsolutePath());
                 IInArchive tmpInArchive = SevenZip.openInArchive(sevenZipJBindingFormat, firstStream, handler);
+                inArchive = new InArchiveWrapper(tmpInArchive, handler);
+            } else if (multiPartSevenZip) {
+                SevenZipMultiVolumeCallbackHandler handler = new SevenZipMultiVolumeCallbackHandler(formatSignature, file, password);
+                IInArchive tmpInArchive = SevenZip.openInArchive(sevenZipJBindingFormat, new VolumedArchiveInStream(handler));
                 inArchive = new InArchiveWrapper(tmpInArchive, handler);
             } else {
                 SignatureCheckedRandomAccessFile in = new SignatureCheckedRandomAccessFile(file, formatSignature);
                 IInArchive tmpInArchive = SevenZip.openInArchive(sevenZipJBindingFormat, in, password);
                 inArchive = new InArchiveWrapper(tmpInArchive, in);
             }
-
         }
         return inArchive;
     }

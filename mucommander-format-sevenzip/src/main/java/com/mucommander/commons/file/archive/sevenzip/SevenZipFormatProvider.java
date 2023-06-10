@@ -38,7 +38,7 @@ import java.util.List;
 public class SevenZipFormatProvider implements ArchiveFormatProvider {
 
     /** extensions of archive filenames */
-    public static final String[] EXTENSIONS = new String[] {".7z", ".cb7"};
+    public static final String[] EXTENSIONS = new String[] {".7z", ".cb7", ".7z.001"};
 
     /** signature of 7z files */
     private static final byte[] SIGNATURE = { 0x37, 0x7A, (byte) 0xBC, (byte) 0xAF, 0x27, 0x1C };
