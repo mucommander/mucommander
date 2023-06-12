@@ -18,8 +18,8 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Bucket;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.util.PathUtils;
 
+import java.io.IOException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -51,7 +51,7 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
     }
 
     @Override
-    protected Stream<GoogleCloudStorageAbstractFile> listDir() {
+    protected Stream<GoogleCloudStorageAbstractFile> listDir() throws IOException {
         var buckets = getStorageService().list();
 
         return StreamSupport.stream(buckets.iterateAll().spliterator(), false)
@@ -62,12 +62,8 @@ public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
      * Transforms single {@link Bucket} to the internal representation of {@link GoogleCloudStorageBucket} directory.
      */
     private GoogleCloudStorageBucket toFile(Bucket bucket) {
-        var url = (FileURL) getURL().clone();
-        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + getSeparator();
-        url.setPath(parentPath + bucket.getName());
-        var result = new GoogleCloudStorageBucket(url, bucket, getStorageService());
-        result.setParent(this);
-
-        return result;
+        return toFile(
+                parentPath -> parentPath + bucket.getName(),
+                url -> new GoogleCloudStorageBucket(url, bucket));
     }
 }

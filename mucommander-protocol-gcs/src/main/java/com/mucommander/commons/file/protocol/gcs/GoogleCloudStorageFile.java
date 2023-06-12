@@ -35,8 +35,8 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         super(url);
     }
 
-    GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob, Storage storageService) {
-        super(url, bucket, storageService);
+    GoogleCloudStorageFile(FileURL url, Bucket bucket, Blob blob) {
+        super(url, bucket);
         this.blob = blob;
     }
 
@@ -53,6 +53,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     protected Stream<GoogleCloudStorageAbstractFile> listDir() {
+        // TODO check NPE
         var files = getBucket().list(
                 Storage.BlobListOption.prefix(getBlob().getName()),
                 Storage.BlobListOption.delimiter(getSeparator()));
@@ -150,7 +151,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     public void delete() throws IOException {
         var blobName = getBlob().getName();
         try {
-            // Directories exists only when there are files present
+            // Directories exists only when there are files present, we cannot delete them
             if (isDirectory() || getBlob().delete()) {
                 // The blob was deleted
                 blob = null;

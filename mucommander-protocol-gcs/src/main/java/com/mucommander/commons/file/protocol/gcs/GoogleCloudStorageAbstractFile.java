@@ -19,11 +19,14 @@ package com.mucommander.commons.file.protocol.gcs;
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.protocol.ProtocolFile;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,15 +53,9 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         this.storageService = storageService;
     }
 
-    protected Storage getStorageService() {
+    protected Storage getStorageService() throws IOException {
         if (storageService == null) {
-            try {
-                // TODO check
-                storageService = getCloudStorageClient().getConnection();
-            } catch (IOException e) {
-                // FIXME
-                throw new RuntimeException(e);
-            }
+            storageService = getCloudStorageClient().getConnection();
         }
 
         return storageService;
@@ -192,14 +189,44 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
             childrenList.toArray(childrenArray);
             return childrenArray;
         } catch (Exception ex) {
-            throw new IOException("Unable to list directory: " + fileURL);
+            throw new IOException("Unable to list directory: " + fileURL, ex);
         }
     }
 
     /**
      * @return lists the children of the current {@link GoogleCloudStorageAbstractFile}.
      */
-    protected abstract Stream<GoogleCloudStorageAbstractFile> listDir();
+    protected abstract Stream<GoogleCloudStorageAbstractFile> listDir() throws IOException;
+
+    /**
+     * Unifies the creation of a {@link GoogleCloudStorageAbstractFile} in the module.
+     *
+     * @param filePathFun function that gets parent path as parameter and returns a new target file path
+     * @param createFun   function to create a new concrete instance of the abstract file
+     *                    (e.g., {@link GoogleCloudStorageFile})
+     */
+    protected <FileT extends GoogleCloudStorageAbstractFile> FileT toFile(
+            Function<String, String> filePathFun,
+            Function<FileURL, FileT> createFun
+    ) {
+        Storage storageService;
+        try {
+            storageService = getStorageService();
+        } catch (IOException e) {
+            // Storage service is not mandatory here
+            storageService = null;
+        }
+
+        var url = (FileURL) getURL().clone();
+        var parentPath = PathUtils.removeTrailingSeparator(url.getPath()) + getSeparator();
+        url.setPath(filePathFun.apply(parentPath));
+        var result = createFun.apply(url);
+        // Initialize known properties
+        ((GoogleCloudStorageAbstractFile) result).storageService = storageService;
+        result.setParent(this);
+
+        return result;
+    }
 
     @Override
     public void mkdir() throws IOException {
