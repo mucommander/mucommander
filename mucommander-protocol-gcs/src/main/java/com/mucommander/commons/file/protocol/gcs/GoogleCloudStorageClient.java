@@ -39,7 +39,7 @@ public class GoogleCloudStorageClient implements Closeable {
     private static final List<String> SCOPES = List.of(StorageScopes.DEVSTORAGE_FULL_CONTROL);
 
     private final String projectId;
-    private Storage storageService;
+    private Storage storageService; //TODO force storageService not null!
 
     public GoogleCloudStorageClient(String projectId) {
         this.projectId = projectId;

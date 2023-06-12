@@ -27,7 +27,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * TODO
+ * Representation of the Bucket as a Folder for the CloudStorage. The bucket lists its content as its children.
+ *
+ * @author miroslav.spak
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
@@ -37,22 +39,36 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
         super(url);
     }
 
-    GoogleCloudStorageBucket(FileURL url, Bucket bucket, Storage storageService) {
-        super(url, storageService);
+    GoogleCloudStorageBucket(FileURL url, Bucket bucket) {
+        super(url);
         this.bucket = bucket;
     }
 
+    /**
+     * Reads bucket name from the standard {@link FileURL} representation. I.e., first level after the root separator.
+     */
     protected String getBucketName() {
         // Find the first part of the path that represents bucket name
         return fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
     }
 
+    /**
+     * Tries to receive bucket from the Google Cloud Storage service.
+     *
+     * @return bucket for this object path (i.e., {@link GoogleCloudStorageBucket#fileURL}), can be <b>null</b>
+     * if bucket doesn't exist
+     */
     protected Bucket getBucket() {
         if (bucket == null) {
-            // TODO check
-            bucket = getStorageService().get(getBucketName());
+            try {
+                bucket = getStorageService().get(getBucketName());
+            } catch (IOException ex) {
+                // We were unable to receive bucket, try to continue work without it
+                return null;
+            }
         }
 
+        // Bucket can be null if it doesn't exist
         return bucket;
     }
 
@@ -64,30 +80,35 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     @Override
     public boolean exists() {
-        // FIXME
         return getBucket() != null && getBucket().exists();
     }
 
     @Override
     protected Stream<GoogleCloudStorageAbstractFile> listDir() {
+        if (getBucket() == null) {
+            throw new IllegalStateException("Cannot list bucket that doesn't exist, bucket path " + getURL());
+        }
         var files = getBucket().list(Storage.BlobListOption.currentDirectory());
         return StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile);
     }
 
+    /**
+     * Transforms given Cloud Storage Blob to the {@link GoogleCloudStorageFile}.
+     */
     protected GoogleCloudStorageFile toFile(Blob blob) {
-        // FIXME
-        var url = (FileURL) getURL().clone();
-        var blobPath = getSeparator() + getBucketName() + getSeparator() + blob.getName();
-        url.setPath(blobPath);
-        var result = new GoogleCloudStorageFile(url, getBucket(), blob, getStorageService());
-        result.setParent(this);
-        return result;
+        return toFile(
+                parentPath -> parentPath + blob.getName(),
+                url -> new GoogleCloudStorageFile(url, getBucket(), blob));
     }
 
     @Override
     public long getDate() {
-        // TODO check NPE
+        if (getBucket() == null) {
+            // Unknown date for the missing Bucket
+            return 0;
+        }
+
         return getBucket().getUpdateTimeOffsetDateTime().toInstant().toEpochMilli();
     }
 
@@ -95,8 +116,12 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     public void mkdir() throws IOException {
         var location = "europe-west1"; // todo from connection
         try {
-            // TODO set location only if provided
-            getStorageService().create(BucketInfo.newBuilder(getBucketName()).setLocation(location).build());
+            var bucketBuilder = BucketInfo.newBuilder(getBucketName());
+            if (location != null) {
+                // Set location only if provided
+                bucketBuilder.setLocation(location);
+            }
+            bucket = getStorageService().create(bucketBuilder.build());
         } catch (Exception ex) {
             throw new IOException("Unable to create bucket " + getBucketName(), ex);
         }
@@ -105,8 +130,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     @Override
     public void delete() throws IOException {
         try {
-            // FIXME NPE?
-            if (getBucket().delete()) {
+            if (getBucket() != null && getBucket().delete()) {
                 // The bucket was deleted
                 bucket = null;
             } else {
