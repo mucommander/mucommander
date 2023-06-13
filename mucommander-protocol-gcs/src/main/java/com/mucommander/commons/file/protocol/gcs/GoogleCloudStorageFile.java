@@ -103,7 +103,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        // FIXME try?
+        // FIXME try? Wrong parent folder!
         // TODO missing?
         var bucketName = getBucketName();
         var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
@@ -134,6 +134,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     @Override
     public void mkfile() throws IOException {
         // TODO unify
+        // FIXME wrong parent folder
         var bucketName = getBucketName();
         var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
         var blobName = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);

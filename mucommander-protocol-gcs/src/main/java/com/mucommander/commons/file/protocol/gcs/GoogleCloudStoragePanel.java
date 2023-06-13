@@ -16,7 +16,6 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.auth.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.protocol.ui.ServerPanel;
@@ -29,7 +28,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -47,6 +45,10 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
     private static final String GOOGLE_ACCOUNT_ICON_PATH = "/images/file/google.png";
 
     private final JTextField projectIdField;
+    private final JTextField locationField;
+
+    private static String projectId = "";
+    private static String location = "";
 
     private JTextField accountAlias;
     private JButton signingIn;
@@ -55,7 +57,7 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
     private JLabel signingInInstructions;
     //    private LocalServerReceiver receiver;
     private LoginPhase loginPhase;
-//    private GoogleCredentials credential;
+    //    private GoogleCredentials credential;
     private ImageIcon googleIcon;
     private JLabel accountLabel, accountAliasLabel;
 
@@ -66,11 +68,18 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
     GoogleCloudStoragePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
 
-        projectIdField = new JTextField("lastServer");
+        projectIdField = new JTextField(projectId);
         projectIdField.selectAll();
         addTextFieldListeners(projectIdField, true);
         // FIXME description
         addRow(Translator.get("server_connect_dialog.server"), projectIdField, 15);
+
+        locationField = new JTextField(location);
+        locationField.selectAll();
+        // FIXME is necessary?
+        addTextFieldListeners(locationField, true);
+        // FIXME description
+        addRow(Translator.get("server_connect_dialog.server"), locationField, 15);
 
         URL resourceURL = ResourceLoader.getResourceAsURL(GOOGLE_ACCOUNT_ICON_PATH);
         googleIcon = new ImageIcon(resourceURL);
@@ -109,9 +118,19 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
     // ServerPanel implementation //
     ////////////////////////////////
 
+    private void updateValues() {
+        projectId = projectIdField.getText();
+        location = locationField.getText();
+    }
+
     @Override
     public FileURL getServerURL() throws MalformedURLException {
-        return FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, projectIdField.getText()));
+        updateValues();
+
+        var url = FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, projectId));
+
+        url.setProperty(GoogleCloudStorageBucket.GCS_BUCKET_LOCATION, location);
+        return url;
     }
 
     @Override
