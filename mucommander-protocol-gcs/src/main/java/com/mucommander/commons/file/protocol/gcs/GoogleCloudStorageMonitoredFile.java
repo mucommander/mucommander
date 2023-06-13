@@ -18,6 +18,10 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
 import com.mucommander.commons.file.MonitoredFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * //TODO do we need?
@@ -27,9 +31,12 @@ import com.mucommander.commons.file.MonitoredFile;
  * mechanism checks the last modification date of the files in this folder and this way
  * can detect when a file is added to the folder or a file in this folder is changed.
  * This mechanism is unable to detect if a file is removed from the folder though.
+ *
  * @author Arik Hadas
  */
 public class GoogleCloudStorageMonitoredFile extends ModificationDateBasedMonitoredFile {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStorageMonitoredFile.class);
 
     private final GoogleCloudStorageAbstractFile file;
 
@@ -38,31 +45,23 @@ public class GoogleCloudStorageMonitoredFile extends ModificationDateBasedMonito
         this.file = file;
     }
 
-//    @Override
-//    public long getDate() {
-//        try (GoogleCloudStorageConnectionHandler connHandler = file.getConnHandler()) {
-//            FileList result = connHandler.getConnection().files().list()
-//                    .setFields("files(id,name,parents,size,modifiedTime,mimeType)")
-//                    .setQ(String.format("'%s' in parents", file.getId()))
-//                    .execute();
-//            return result.getFiles().stream()
-//                    .filter(this::isNotFolder)
-//                    .map(File::getModifiedTime)
-//                    .map(DateTime::getValue)
-//                    .max(Long::compareTo)
-//                    .orElse(0l);
-//        } catch (IOException e) {
-//            LOGGER.error("failed to retrieve folder modification date", e);
-//            return 0;
-//        } catch (RuntimeException e) {
-//            LOGGER.error("runtime exception while retrieving folder modification date", e);
-//            return 0;
-//        }
-//    }
-
-//    protected boolean isNotFolder(File file) {
-//        return !GoogleCloudStorageFile.isFolder(file);
-//    }
+    @Override
+    public long getDate() {
+        try {
+            if (file.isDirectory()) {
+                return file.listDir()
+                        .filter(file -> !file.isDirectory())
+                        .map(GoogleCloudStorageAbstractFile::getDate)
+                        .max(Long::compareTo)
+                        .orElse(0L);
+            } else {
+                return file.getDate();
+            }
+        } catch (IOException ex) {
+            LOGGER.error("Failed to retrieve modification date for file " + file.getURL(), ex);
+            return 0;
+        }
+    }
 
     public GoogleCloudStorageAbstractFile getUnderlyingFile() {
         return file;
