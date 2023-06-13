@@ -45,8 +45,10 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     private Blob getBlob() {
         if (blob == null) {
-            // FIXME NPE
-            blob = getBucket().get(getBlobPath());
+            // Try to find blob if bucket itself exist
+            if (getBucket() != null) {
+                blob = getBucket().get(getBlobPath());
+            }
         }
 
         return blob;
@@ -61,8 +63,11 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     protected Stream<GoogleCloudStorageAbstractFile> listDir() {
-        // TODO check NPE
+        if (getBucket() == null || getBlob() == null) {
+            throw new IllegalStateException("Cannot list directory that doesn't exist, path " + getURL());
+        }
         var files = getBucket().list(
+                // List all blobs in the given folder, i.e. all with given blob name prefix
                 Storage.BlobListOption.prefix(getBlob().getName()),
                 Storage.BlobListOption.delimiter(getSeparator()));
         return StreamSupport.stream(files.iterateAll().spliterator(), false)
@@ -71,13 +76,12 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public long getDate() {
-        // fixme NPE
-        if (getBlob() == null) {
+        if (getBlob() == null || getBucket() == null) {
             return 0;
         }
 
         var updateOffsetTime = getBlob().getUpdateTimeOffsetDateTime() != null ?
-                // Read blob creation date, or use at least bucket last update date
+                // Read blob creation date, or use at least bucket last update date (typically for directories)
                 getBlob().getUpdateTimeOffsetDateTime() : getBucket().getUpdateTimeOffsetDateTime();
 
         return updateOffsetTime != null ? updateOffsetTime.toInstant().toEpochMilli() : 0;
@@ -100,20 +104,30 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        // FIXME try?
-        // TODO missing file or folder?
-        // FIXME read of empty - changed file
-        return Channels.newInputStream(getBlob().reader());
+        if (getBlob() == null) {
+            throw new IOException("Underlying blob doesn't exist " + getURL());
+        }
+        try {
+            return Channels.newInputStream(getBlob().reader());
+        } catch (Exception ex) {
+            throw new IOException("Unable to read file " + getURL(), ex);
+        }
     }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        // TODO missing?
-        // TODO error when creating?
-        var blobId = BlobId.of(getBucketName(), getBlobPath());
-        var blobInfo = BlobInfo.newBuilder(blobId).build();
+        try {
+            var blobId = BlobId.of(getBucketName(), getBlobPath());
+            var blobInfo = BlobInfo.newBuilder(blobId).build();
+            // Any change to the blob creates a new blob in Cloud Storage, the fresh blob will be fetched later
+            blob = null;
 
-        return Channels.newOutputStream(getStorageService().writer(blobInfo, Storage.BlobWriteOption.detectContentType()));
+            return Channels.newOutputStream(
+                    // Let the library detect the content
+                    getStorageService().writer(blobInfo, Storage.BlobWriteOption.detectContentType()));
+        } catch (Exception ex) {
+            throw new IOException("Unable to write file " + getURL(), ex);
+        }
     }
 
     @Override
@@ -147,7 +161,10 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public void delete() throws IOException {
-        // FIXME npe?
+        if (getBlob() == null) {
+            // Expecting the missing blob here is an error
+            throw new IOException("Unable to find the file to delete, file " + getURL());
+        }
         var blobName = getBlob().getName();
         try {
             // Directories exists only when there are files present, we cannot delete them

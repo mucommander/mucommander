@@ -75,7 +75,6 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
                 bucket = getStorageService().get(getBucketName());
             } catch (IOException ex) {
                 // We were unable to receive bucket, try to continue work without it
-                return null;
             }
         }
 
@@ -99,7 +98,9 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
         if (getBucket() == null) {
             throw new IllegalStateException("Cannot list bucket that doesn't exist, bucket path " + getURL());
         }
-        var files = getBucket().list(Storage.BlobListOption.currentDirectory());
+        var files = getBucket().list(
+                // By default, lists bucket root as directory
+                Storage.BlobListOption.currentDirectory());
         return StreamSupport.stream(files.iterateAll().spliterator(), false)
                 .map(this::toFile);
     }
