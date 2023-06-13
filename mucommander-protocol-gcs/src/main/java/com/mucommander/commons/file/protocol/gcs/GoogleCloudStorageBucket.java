@@ -21,6 +21,7 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.util.StringUtils;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -32,6 +33,8 @@ import java.util.stream.StreamSupport;
  * @author miroslav.spak
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
+
+    static final String GCS_BUCKET_LOCATION = "gcs_bucket_location";
 
     private Bucket bucket;
 
@@ -114,10 +117,11 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     @Override
     public void mkdir() throws IOException {
-        var location = "europe-west1"; // todo from connection
+        var location = getURL().getProperty(GCS_BUCKET_LOCATION);
+
         try {
             var bucketBuilder = BucketInfo.newBuilder(getBucketName());
-            if (location != null) {
+            if (!StringUtils.isNullOrEmpty(location)) {
                 // Set location only if provided
                 bucketBuilder.setLocation(location);
             }
