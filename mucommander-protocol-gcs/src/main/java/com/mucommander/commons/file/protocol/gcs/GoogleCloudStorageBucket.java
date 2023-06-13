@@ -23,6 +23,7 @@ import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.util.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -53,6 +54,13 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     protected String getBucketName() {
         // Find the first part of the path that represents bucket name
         return fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+    }
+
+    protected String getBlobName(Blob blob) {
+        // Get path without trailing separator
+        var blobPath = blob != null ? blob.getName() : "";
+        // Find the last part of the path that represents blob file name
+        return new File(blobPath).getName();
     }
 
     /**
@@ -101,7 +109,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
      */
     protected GoogleCloudStorageFile toFile(Blob blob) {
         return toFile(
-                parentPath -> parentPath + blob.getName(),
+                parentPath -> parentPath + getBlobName(blob),
                 url -> new GoogleCloudStorageFile(url, getBucket(), blob));
     }
 
