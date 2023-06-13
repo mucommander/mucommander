@@ -29,6 +29,9 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
+
+    private static final String DUMMY_FILE_NAME = ".";
+
     private Blob blob;
 
     GoogleCloudStorageFile(FileURL url) {
@@ -42,13 +45,18 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     private Blob getBlob() {
         if (blob == null) {
-            var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-            var blobPath = shortPath.substring(shortPath.indexOf(getSeparator()));
-            // TODO check
-            blob = getBucket().get(blobPath);
+            // FIXME NPE
+            blob = getBucket().get(getBlobPath());
         }
 
         return blob;
+    }
+
+    private String getBlobPath() {
+        // Remove first separator if any
+        var pathWithBucket = PathUtils.removeLeadingSeparator(fileURL.getPath());
+        // Remove bucket name from path
+        return pathWithBucket.substring(pathWithBucket.indexOf(getSeparator()) + 1);
     }
 
     @Override
@@ -77,20 +85,16 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public long getSize() {
-        // TODO NPE check, unknown size?
         return getBlob() != null ? getBlob().getSize() : 0;
     }
 
     @Override
     public boolean exists() {
-        // TODO Check NPE?
-        // TODO Folder always exists
         return getBlob() != null && (getBlob().isDirectory() || getBlob().exists());
     }
 
     @Override
     public boolean isDirectory() {
-        // TODO check NPE?
         return getBlob() != null && getBlob().isDirectory();
     }
 
@@ -98,17 +102,15 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     public InputStream getInputStream() throws IOException {
         // FIXME try?
         // TODO missing file or folder?
+        // FIXME read of empty - changed file
         return Channels.newInputStream(getBlob().reader());
     }
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        // FIXME try? Wrong parent folder!
         // TODO missing?
-        var bucketName = getBucketName();
-        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var blobName = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);
-        var blobId = BlobId.of(bucketName, blobName);
+        // TODO error when creating?
+        var blobId = BlobId.of(getBucketName(), getBlobPath());
         var blobInfo = BlobInfo.newBuilder(blobId).build();
 
         return Channels.newOutputStream(getStorageService().writer(blobInfo, Storage.BlobWriteOption.detectContentType()));
@@ -116,13 +118,11 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public void mkdir() throws IOException {
-        // TODO unify
         var bucketName = getBucketName();
-        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var blobPath = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);
-        var blobName = blobPath + "/."; // TODO dummy file?
+        // Create dummy file in the folder, because folder cannot exist without file in GCS
+        var blobPath = PathUtils.removeTrailingSeparator(getBlobPath()) + getSeparator() + DUMMY_FILE_NAME;
         try {
-            var blobId = BlobId.of(bucketName, blobName);
+            var blobId = BlobId.of(bucketName, blobPath);
             var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
             // Cannot set blob because this blob is dummy file not the folder itself
             getStorageService().create(blobInfo);
@@ -133,23 +133,21 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     @Override
     public void mkfile() throws IOException {
-        // TODO unify
-        // FIXME wrong parent folder
         var bucketName = getBucketName();
-        var shortPath = PathUtils.removeLeadingSeparator(fileURL.getPath());
-        var blobName = shortPath.substring(shortPath.indexOf(getSeparator()) + 1);
+        var blobPath = getBlobPath();
         try {
-            var blobId = BlobId.of(bucketName, blobName);
+            var blobId = BlobId.of(bucketName, blobPath);
             var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
             // The new blob represents created file
             blob = getStorageService().create(blobInfo);
         } catch (Exception ex) {
-            throw new IOException("Unable to create file " + blobName + " in bucket " + bucketName, ex);
+            throw new IOException("Unable to create file " + blobPath + " in bucket " + bucketName, ex);
         }
     }
 
     @Override
     public void delete() throws IOException {
+        // FIXME npe?
         var blobName = getBlob().getName();
         try {
             // Directories exists only when there are files present, we cannot delete them
