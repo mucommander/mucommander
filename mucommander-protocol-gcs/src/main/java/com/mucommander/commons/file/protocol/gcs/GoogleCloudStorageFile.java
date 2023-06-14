@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.*;
@@ -25,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
+import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -48,17 +48,29 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
             // Try to find blob if bucket itself exist
             if (getBucket() != null) {
                 blob = getBucket().get(getBlobPath());
+                // Directories are not returned using bucket#get()
+                if (blob == null) {
+                    // Try to find this blob in the parent directory
+                    blob = listGcsDir(getBlobPath(getURL().getParent()))
+                            .filter(blob -> Objects.equals(getBlobName(blob), getURL().getFilename()))
+                            .findFirst()
+                            .orElse(null);
+                }
             }
         }
 
         return blob;
     }
 
-    private String getBlobPath() {
+    private String getBlobPath(FileURL url) {
         // Remove first separator if any
-        var pathWithBucket = PathUtils.removeLeadingSeparator(fileURL.getPath());
+        var pathWithBucket = PathUtils.removeLeadingSeparator(url.getPath());
         // Remove bucket name from path
         return pathWithBucket.substring(pathWithBucket.indexOf(getSeparator()) + 1);
+    }
+
+    private String getBlobPath() {
+        return getBlobPath(fileURL);
     }
 
     @Override
@@ -66,12 +78,20 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         if (getBucket() == null || getBlob() == null) {
             throw new IllegalStateException("Cannot list directory that doesn't exist, path " + getURL());
         }
-        var files = getBucket().list(
-                // List all blobs in the given folder, i.e. all with given blob name prefix
-                Storage.BlobListOption.prefix(getBlob().getName()),
-                Storage.BlobListOption.delimiter(getSeparator()));
-        return StreamSupport.stream(files.iterateAll().spliterator(), false)
+        // List all blobs in the given folder, i.e. all with given blob name prefix
+        return listGcsDir(getBlob().getName())
                 .map(this::toFile);
+    }
+
+    /**
+     * Returns stream of the blobs in the directory on given path
+     */
+    private Stream<Blob> listGcsDir(String path) {
+        var files = getBucket().list(
+                // List all blobs in the given folder by string path
+                Storage.BlobListOption.prefix(path),
+                Storage.BlobListOption.currentDirectory());
+        return StreamSupport.stream(files.iterateAll().spliterator(), false);
     }
 
     @Override
