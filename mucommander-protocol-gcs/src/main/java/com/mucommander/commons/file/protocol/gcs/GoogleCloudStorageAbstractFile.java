@@ -18,6 +18,7 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
@@ -61,15 +62,14 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         return storageService;
     }
 
-    /**
-     * TODO CLIENT or connection? todo connection checking?
-     * TODO some utils?
-     *
-     * @return
-     * @throws IOException
-     */
     private GoogleCloudStorageClient getCloudStorageClient() throws IOException {
-        return GoogleCloudStorageConnectionHandlerFactory.getInstance().getCloudStorageClient(fileURL);
+        GoogleCloudStorageConnectionHandler connectionHandler =
+                // Get connection handler for the given GCS url
+                (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
+                        GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, false);
+
+        connectionHandler.checkConnection();
+        return connectionHandler.getClient();
     }
 
     @Override
