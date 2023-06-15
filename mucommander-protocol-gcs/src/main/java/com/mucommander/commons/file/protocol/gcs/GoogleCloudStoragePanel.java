@@ -17,101 +17,105 @@
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.util.ResourceLoader;
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * This ServerPanel helps initiate Google Drive connections.
  *
  * @author Arik Hadas TODO
  */
-public class GoogleCloudStoragePanel extends ServerPanel implements ActionListener {
+public class GoogleCloudStoragePanel extends ServerPanel {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStoragePanel.class);
-    private static final long serialVersionUID = 6345472628898453189L;
-    private static final String GCS_SCHEMA = "gcs"; //FIXME
-    // TODO: find a better way to load icons from plugins
-    private static final String GOOGLE_ACCOUNT_ICON_PATH = "/images/file/google.png";
+    static final String GCS_SCHEMA = "gcs";
+    static final String GCS_DEFAULT_PROJECT_ID = "gcs_default_project_id";
+    static final String GCS_CREDENTIALS_JSON = "gcs_credentials_json";
+    static final String GCS_DEFAULT_CREDENTIALS = "gcs_default_credentials";
+    static final String GCS_BUCKET_LOCATION = "gcs_bucket_location";
+    static final String GCS_IMPERSONATED_PRINCIPAL = "gcs_impersonated_principal";
+    static final String GCS_IMPERSONATION = "gcs_impersonation";
 
     private final JTextField projectIdField;
+    private final JTextField credentialsJsonPathField;
     private final JTextField locationField;
+    private final JTextField impersonatedPrincipalField;
 
-    private static String projectId = "";
-    private static String location = "";
+    private final JCheckBox defaultProjectIdCheckBox;
+    private final JCheckBox defaultCredentialsCheckBox;
+    private final JCheckBox impersonationCheckBox;
 
-    private JTextField accountAlias;
-    private JButton signingIn;
-    private JLabel displayName;
-    private JLabel emailAddress;
-    private JLabel signingInInstructions;
-    //    private LocalServerReceiver receiver;
-    private LoginPhase loginPhase;
-    //    private GoogleCredentials credential;
-    private ImageIcon googleIcon;
-    private JLabel accountLabel, accountAliasLabel;
+    private static String lastProjectId = "";
+    private static String lastCredentialsJsonPath = "";
+    private static String lastLocation = "";
+    private static String lastImpersonatedPrincipal = "";
 
-    enum LoginPhase {
-        SIGN_IN, CANCEL_SIGN_IN,
-    }
+    private static boolean lastDefaultProjectId = false;
+    private static boolean lastDefaultCredentials = false;
+    private static boolean lastImpersonation = false;
 
     GoogleCloudStoragePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
+//        - gsUtilswarning;
 
-        projectIdField = new JTextField(projectId);
+        // TODO use translator for descriptions
+
+        // Project id field
+        projectIdField = new JTextField(lastProjectId);
         projectIdField.selectAll();
         addTextFieldListeners(projectIdField, true);
-        // FIXME description
-        addRow(Translator.get("server_connect_dialog.server"), projectIdField, 15);
+        addRow("Project id", projectIdField, 15);
 
-        locationField = new JTextField(location);
+        // Credentials Json path field
+        var credentialsJsonChooser = new JPanel(new BorderLayout());
+
+        credentialsJsonPathField = new JTextField(lastCredentialsJsonPath);
+        credentialsJsonPathField.selectAll();
+        addTextFieldListeners(credentialsJsonPathField, false);
+        credentialsJsonChooser.add(credentialsJsonPathField, BorderLayout.CENTER);
+
+        var chooseFileButton = new JButton("...");
+        // Mac OS X: small component size
+        if (OsFamily.MAC_OS.isCurrent())
+            chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
+
+        var fileChooser = new JFileChooser(System.getProperty("user.home"));
+        chooseFileButton.addActionListener(event -> {
+            int returnVal = fileChooser.showOpenDialog(mainFrame);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                credentialsJsonPathField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            }
+        });
+        credentialsJsonChooser.add(chooseFileButton, BorderLayout.EAST);
+
+        addRow("Credentials json", credentialsJsonChooser, 15);
+
+        // Impersonation field
+        impersonatedPrincipalField = new JTextField(lastImpersonatedPrincipal);
+        impersonatedPrincipalField.selectAll();
+        addTextFieldListeners(impersonatedPrincipalField, false);
+        addRow("Impersonated principal", impersonatedPrincipalField, 15);
+
+        // Location field
+        locationField = new JTextField(lastLocation);
         locationField.selectAll();
         // FIXME is necessary?
-        addTextFieldListeners(locationField, true);
+        addTextFieldListeners(locationField, false);
         // FIXME description
-        addRow(Translator.get("server_connect_dialog.server"), locationField, 15);
+        addRow("Location", locationField, 15);
 
-        URL resourceURL = ResourceLoader.getResourceAsURL(GOOGLE_ACCOUNT_ICON_PATH);
-        googleIcon = new ImageIcon(resourceURL);
-        signingIn = new JButton();
-        signingIn.addActionListener(this);
-        addRow(wrapWithJPanel(signingIn), 5);
+        defaultProjectIdCheckBox = new JCheckBox("Default project id", lastDefaultProjectId);
+        addRow("", defaultProjectIdCheckBox, 5);
 
-        signingInInstructions = new JLabel();
-        addRow(wrapWithJPanel(signingInInstructions), 15);
+        defaultCredentialsCheckBox = new JCheckBox("Default credentials", lastDefaultCredentials);
+        addRow("", defaultCredentialsCheckBox, 5);
 
-        emailAddress = new JLabel(" ");
-        displayName = new JLabel(" ");
-        accountLabel = new JLabel(Translator.get(("server_connect_dialog.account")));
-        addRow(accountLabel, displayName, 5);
-        addRow("", emailAddress, 15);
-
-        accountAlias = new JTextField();
-        addTextFieldListeners(accountAlias, true);
-        accountAliasLabel = new JLabel(Translator.get("server_connect_dialog.account_alias"));
-        addRow(accountAliasLabel, accountAlias, 5);
-
-        // hide the following widgets until the user signs in
-        setAccountFieldsVisible(false);
-
-        setLoginPhase(LoginPhase.SIGN_IN, false);
-    }
-
-    private static JPanel wrapWithJPanel(JComponent component) {
-        JPanel panel = new JPanel();
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        panel.add(component);
-        return panel;
+        impersonationCheckBox = new JCheckBox("Impersonation", lastImpersonation);
+        addRow("", impersonationCheckBox, 5);
     }
 
     ////////////////////////////////
@@ -119,17 +123,27 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
     ////////////////////////////////
 
     private void updateValues() {
-        projectId = projectIdField.getText();
-        location = locationField.getText();
+        lastProjectId = projectIdField.getText();
+        lastCredentialsJsonPath = credentialsJsonPathField.getText();
+        lastImpersonatedPrincipal = impersonatedPrincipalField.getText();
+        lastLocation = locationField.getText();
+        lastDefaultProjectId = defaultProjectIdCheckBox.isSelected();
+        lastDefaultCredentials = defaultCredentialsCheckBox.isSelected();
+        lastImpersonation = impersonationCheckBox.isSelected();
     }
 
     @Override
     public FileURL getServerURL() throws MalformedURLException {
         updateValues();
 
-        var url = FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, projectId));
+        var url = FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, lastProjectId));
 
-        url.setProperty(GoogleCloudStorageBucket.GCS_BUCKET_LOCATION, location);
+        url.setProperty(GCS_CREDENTIALS_JSON, lastCredentialsJsonPath);
+        url.setProperty(GCS_BUCKET_LOCATION, lastLocation);
+        url.setProperty(GCS_IMPERSONATED_PRINCIPAL, lastImpersonatedPrincipal);
+        url.setProperty(GCS_DEFAULT_PROJECT_ID, Boolean.toString(lastDefaultProjectId));
+        url.setProperty(GCS_DEFAULT_CREDENTIALS, Boolean.toString(lastDefaultCredentials));
+        url.setProperty(GCS_IMPERSONATION, Boolean.toString(lastImpersonation));
         return url;
     }
 
@@ -149,84 +163,5 @@ public class GoogleCloudStoragePanel extends ServerPanel implements ActionListen
 //        } catch (IOException e) {
 //            LOGGER.warn("failed to store credentials to Google account", e);
 //        }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent event) {
-        switch (loginPhase) {
-            case SIGN_IN:
-                setLoginPhase(LoginPhase.CANCEL_SIGN_IN, false);
-                SwingUtilities.invokeLater(() -> {
-                    new Thread(() -> {
-//                        receiver = new LocalServerReceiver();
-//                    About about;
-//                        try {
-//                            credential = GoogleCloudStorageClient.getCredentials();
-//                            try (GoogleCloudStorageClient client = new GoogleCloudStorageClient()) {
-//                                client.connect();
-//                            about = client.getConnection().about().get().setFields("user").execute();
-//                            }
-//                        } catch (IOException e) {
-//                            LOGGER.warn("failed to sign in to Google account", e);
-//                            return;
-//                        }
-                        // FIXME
-//                    Map<String, String> user = (Map<String, String>) about.get("user");
-//                    displayName.setText(user.get("displayName"));
-//                    String email = user.get("emailAddress");
-                        displayName.setText("");
-                        String email = "";
-
-                        emailAddress.setText(email);
-                        int indexOfAt = email.indexOf('@');
-                        String alias = indexOfAt > 0 ? email.substring(0, indexOfAt) : email;
-                        accountAlias.setText(alias);
-                        setLoginPhase(LoginPhase.SIGN_IN, true);
-                        accountAlias.requestFocus();
-                        accountAlias.selectAll();
-                    }).start();
-                });
-                break;
-            case CANCEL_SIGN_IN:
-                setLoginPhase(LoginPhase.SIGN_IN, false);
-//                SwingUtilities.invokeLater(() -> {
-//                    if (receiver != null) {
-//                        try {
-//                            receiver.stop();
-//                        } catch (IOException e) {
-//                            LOGGER.warn("failed to cancel signing in to Google account", e);
-//                        }
-//                    }
-//                });
-        }
-    }
-
-    private void setAccountFieldsVisible(boolean enabled) {
-        accountLabel.setVisible(enabled);
-        accountAliasLabel.setVisible(enabled);
-        emailAddress.setVisible(enabled);
-        displayName.setVisible(enabled);
-        accountAlias.setVisible(enabled);
-    }
-
-    private void setLoginPhase(LoginPhase loginPhase, boolean setAccountFieldsVisible) {
-        switch (loginPhase) {
-            case CANCEL_SIGN_IN:
-                signingIn.setText(Translator.get("cancel"));
-                signingIn.setIcon(null);
-                signingInInstructions.setText(Translator.get("server_connect_dialog.google.wait_for_sign_in"));
-                break;
-            case SIGN_IN:
-                if (setAccountFieldsVisible) setAccountFieldsVisible(true);
-                signingIn.setText(Translator.get("server_connect_dialog.google.sign_in"));
-                signingIn.setIcon(googleIcon);
-                signingInInstructions.setText("");
-        }
-        this.loginPhase = loginPhase;
-    }
-
-    @Override
-    public boolean privacyPolicyApplicable() {
-        return true;
     }
 }
