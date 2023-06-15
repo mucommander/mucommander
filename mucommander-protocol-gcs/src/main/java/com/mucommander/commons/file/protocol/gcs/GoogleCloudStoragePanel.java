@@ -16,6 +16,8 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.StorageOptions;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.protocol.ui.ServerPanel;
@@ -23,6 +25,7 @@ import com.mucommander.protocol.ui.ServerPanelListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -37,6 +40,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     static final String GCS_CREDENTIALS_JSON = "gcs_credentials_json";
     static final String GCS_DEFAULT_CREDENTIALS = "gcs_default_credentials";
     static final String GCS_BUCKET_LOCATION = "gcs_bucket_location";
+    static final String GCS_DEFAULT_BUCKET_LOCATION = "gcs_default_bucket_location";
     static final String GCS_IMPERSONATED_PRINCIPAL = "gcs_impersonated_principal";
     static final String GCS_IMPERSONATION = "gcs_impersonation";
 
@@ -47,6 +51,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
     private final JCheckBox defaultProjectIdCheckBox;
     private final JCheckBox defaultCredentialsCheckBox;
+    private final JCheckBox defaultLocationCheckBox;
     private final JCheckBox impersonationCheckBox;
 
     private static String lastProjectId = "";
@@ -56,16 +61,32 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
     private static boolean lastDefaultProjectId = false;
     private static boolean lastDefaultCredentials = false;
+    private static boolean lastDefaultLocation = false;
     private static boolean lastImpersonation = false;
 
     GoogleCloudStoragePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
-//        - gsUtilswarning;
+
+        // Prepare default values
+        var gsutilsDefaults = true;
+        try {
+            // Test we can use default credentials and project id
+            GoogleCredentials.getApplicationDefault();
+            lastProjectId = StorageOptions.getDefaultProjectId();
+            // By default, use defaults
+            lastDefaultProjectId = true;
+            lastDefaultCredentials = true;
+            lastDefaultLocation = true;
+        } catch (IOException ex) {
+            // Defaults does not exist
+            gsutilsDefaults = false;
+        }
 
         // TODO use translator for descriptions
 
         // Project id field
         projectIdField = new JTextField(lastProjectId);
+        projectIdField.setEnabled(!lastDefaultProjectId);
         projectIdField.selectAll();
         addTextFieldListeners(projectIdField, true);
         addRow("Project id", projectIdField, 15);
@@ -74,6 +95,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         var credentialsJsonChooser = new JPanel(new BorderLayout());
 
         credentialsJsonPathField = new JTextField(lastCredentialsJsonPath);
+        credentialsJsonPathField.setEnabled(!lastDefaultCredentials);
         credentialsJsonPathField.selectAll();
         addTextFieldListeners(credentialsJsonPathField, false);
         credentialsJsonChooser.add(credentialsJsonPathField, BorderLayout.CENTER);
@@ -96,26 +118,41 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
         // Impersonation field
         impersonatedPrincipalField = new JTextField(lastImpersonatedPrincipal);
+        impersonatedPrincipalField.setEnabled(lastImpersonation);
         impersonatedPrincipalField.selectAll();
         addTextFieldListeners(impersonatedPrincipalField, false);
         addRow("Impersonated principal", impersonatedPrincipalField, 15);
 
         // Location field
         locationField = new JTextField(lastLocation);
+        locationField.setEnabled(!lastDefaultLocation);
         locationField.selectAll();
         // FIXME is necessary?
         addTextFieldListeners(locationField, false);
         // FIXME description
-        addRow("Location", locationField, 15);
+        addRow("Bucket location", locationField, 15);
 
         defaultProjectIdCheckBox = new JCheckBox("Default project id", lastDefaultProjectId);
+        defaultProjectIdCheckBox.setEnabled(gsutilsDefaults);
         addRow("", defaultProjectIdCheckBox, 5);
 
+        defaultLocationCheckBox = new JCheckBox("Default bucket location", lastDefaultLocation);
+        defaultLocationCheckBox.setEnabled(gsutilsDefaults);
+        addRow("", defaultLocationCheckBox, 5);
+
         defaultCredentialsCheckBox = new JCheckBox("Default credentials", lastDefaultCredentials);
+        defaultCredentialsCheckBox.setEnabled(gsutilsDefaults);
         addRow("", defaultCredentialsCheckBox, 5);
 
         impersonationCheckBox = new JCheckBox("Impersonation", lastImpersonation);
         addRow("", impersonationCheckBox, 5);
+
+        if (!gsutilsDefaults) {
+            // Missing GS utils warning
+            JLabel warnLabel = new JLabel("To use defaults install gsutils!");
+            warnLabel.setForeground(Color.red);
+            addRow(warnLabel, 10);
+        }
     }
 
     ////////////////////////////////
@@ -129,6 +166,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         lastLocation = locationField.getText();
         lastDefaultProjectId = defaultProjectIdCheckBox.isSelected();
         lastDefaultCredentials = defaultCredentialsCheckBox.isSelected();
+        lastDefaultLocation = defaultLocationCheckBox.isSelected();
         lastImpersonation = impersonationCheckBox.isSelected();
     }
 
@@ -143,6 +181,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         url.setProperty(GCS_IMPERSONATED_PRINCIPAL, lastImpersonatedPrincipal);
         url.setProperty(GCS_DEFAULT_PROJECT_ID, Boolean.toString(lastDefaultProjectId));
         url.setProperty(GCS_DEFAULT_CREDENTIALS, Boolean.toString(lastDefaultCredentials));
+        url.setProperty(GCS_DEFAULT_BUCKET_LOCATION, Boolean.toString(lastDefaultLocation));
         url.setProperty(GCS_IMPERSONATION, Boolean.toString(lastImpersonation));
         return url;
     }
