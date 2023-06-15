@@ -35,8 +35,6 @@ import java.util.stream.StreamSupport;
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
-    static final String GCS_BUCKET_LOCATION = "gcs_bucket_location";
-
     private Bucket bucket;
 
     GoogleCloudStorageBucket(FileURL url) {
@@ -126,7 +124,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     @Override
     public void mkdir() throws IOException {
-        var location = getURL().getProperty(GCS_BUCKET_LOCATION);
+        var location = getURL().getProperty(GoogleCloudStoragePanel.GCS_BUCKET_LOCATION);
 
         try {
             var bucketBuilder = BucketInfo.newBuilder(getBucketName());

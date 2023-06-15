@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class GoogleCloudStorageClient implements Closeable {
 
-    private static final List<String> SCOPES = List.of(StorageScopes.DEVSTORAGE_FULL_CONTROL);
+    private static final List<String> SCOPES = List.of(StorageScopes.DEVSTORAGE_READ_WRITE);
 
     private final String projectId;
     private Storage storageService; //TODO force storageService not null!
@@ -123,6 +123,11 @@ public class GoogleCloudStorageClient implements Closeable {
 
     @Override
     public void close() throws IOException {
-        // no-op
+        try {
+            storageService.close();
+        } catch (Exception ex) {
+            // Let enclosing code to handle the close exception
+            throw new IOException("Unable to close connection to project " + projectId, ex);
+        }
     }
 }
