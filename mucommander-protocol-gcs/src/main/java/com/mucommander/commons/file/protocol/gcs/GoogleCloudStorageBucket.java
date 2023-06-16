@@ -21,7 +21,6 @@ import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,11 +123,13 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     @Override
     public void mkdir() throws IOException {
+        var defaultLocation = Boolean.parseBoolean(
+                getURL().getProperty(GoogleCloudStoragePanel.GCS_DEFAULT_BUCKET_LOCATION));
         var location = getURL().getProperty(GoogleCloudStoragePanel.GCS_BUCKET_LOCATION);
 
         try {
             var bucketBuilder = BucketInfo.newBuilder(getBucketName());
-            if (!StringUtils.isNullOrEmpty(location)) {
+            if (!defaultLocation) {
                 // Set location only if provided
                 bucketBuilder.setLocation(location);
             }

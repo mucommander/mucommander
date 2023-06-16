@@ -21,6 +21,8 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
 
 import java.io.IOException;
 
+import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStorageClient.ConnectionProperties;
+
 /**
  * TODO
  *
@@ -28,13 +30,13 @@ import java.io.IOException;
  */
 public class GoogleCloudStorageConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
-    private final String projectId;
+    private final ConnectionProperties connectionProperties;
     private GoogleCloudStorageClient client;
 
     public GoogleCloudStorageConnectionHandler(FileURL serverURL) {
         super(serverURL);
-        // The host part of url holds project id
-        this.projectId = serverURL.getHost();
+        // Read all  properties from url
+        this.connectionProperties = new ConnectionProperties(serverURL);
     }
 
     public GoogleCloudStorageClient getClient() throws IOException {
@@ -45,7 +47,7 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
     @Override
     public void startConnection() throws IOException {
         if (client == null) {
-            client = new GoogleCloudStorageClient(projectId);
+            client = new GoogleCloudStorageClient(connectionProperties);
             client.connect();
         }
     }
