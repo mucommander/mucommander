@@ -22,12 +22,14 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ImpersonatedCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.mucommander.commons.file.AuthException;
+import com.mucommander.commons.file.FileURL;
 
 import java.io.Closeable;
-import java.io.IOError;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+
+import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStoragePanel.*;
 
 /**
  * TODO
@@ -38,96 +40,91 @@ public class GoogleCloudStorageClient implements Closeable {
 
     private static final List<String> SCOPES = List.of(StorageScopes.DEVSTORAGE_READ_WRITE);
 
-    private final String projectId;
-    private Storage storageService; //TODO force storageService not null!
+    private final ConnectionProperties connectionProperties;
+    private Storage storageService;
 
-    public GoogleCloudStorageClient(String projectId) {
-        this.projectId = projectId;
+    public GoogleCloudStorageClient(ConnectionProperties connectionProperties) {
+        this.connectionProperties = connectionProperties;
     }
 
-
-    public Storage getConnection() {
+    public Storage getConnection() throws IOException {
+        if (storageService == null) {
+            // Try to connect at first
+            connect();
+        }
         return storageService;
     }
 
-//    public static AbstractFile getCredentialsFolder() throws IOException {
-//        AbstractFile credentialsFolder = PlatformManager.getCredentialsFolder().getChild("/google");
-//        if (!credentialsFolder.exists())
-//            credentialsFolder.mkdir();
-//
-//        return credentialsFolder;
-//    }
-
-    public void connect() throws AuthException {
+    public void connect() throws IOException {
         try {
-//            NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//            Credential credential = FIXME
-//                    this.credential != null ? this.credential : getCredentials(HTTP_TRANSPORT, fileUrl.getHost(), null);
+            var storageServiceBuilder = StorageOptions.newBuilder();
 
-            storageService = StorageOptions.newBuilder()
-//                    .setCredentials(getCredentials())
-                    // With projectId
-                    .setProjectId(projectId).build()
-                    .getService();
+            // Prepare project id
+            if (!connectionProperties.defaultProjectId) {
+                // Set given project id
+                storageServiceBuilder.setProjectId(connectionProperties.projectId);
+            }
 
-//            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
-//        } catch (GeneralSecurityException e) {
-//            throw new AuthException(fileUrl);
+            // Prepare credentials
+            GoogleCredentials credentials;
+            if (connectionProperties.defaultCredentials) {
+                credentials = GoogleCredentials.getApplicationDefault();
+            } else {
+                try (var credentialsStream = new FileInputStream(connectionProperties.credentialsJsonPath)) {
+                    credentials = GoogleCredentials.fromStream(credentialsStream);
+                }
+            }
+
+            // Prepare impersonation
+            if (connectionProperties.impersonation) {
+                var impersonatedCredentials = ImpersonatedCredentials.newBuilder()
+                        .setSourceCredentials(credentials)
+                        .setTargetPrincipal(connectionProperties.impersonatedPrincipal)
+                        // With R/W permissions
+                        .setScopes(SCOPES)
+                        .build();
+
+                // Verify impersonation
+                impersonatedCredentials.refresh();
+
+                // Use impersonated credentials
+                credentials = impersonatedCredentials;
+            }
+
+            // Build service
+            storageService = storageServiceBuilder.setCredentials(credentials).build().getService();
+
         } catch (Exception e) {
-            throw new IOError(e);
+            throw new IOException("Unable to connect to the storage service with config " + connectionProperties, e);
         }
-    }
-
-//    public static GoogleCredentials getCredentials(LocalServerReceiver receiver) throws IOException, GeneralSecurityException {
-//        NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-//        return getCredentials(HTTP_TRANSPORT, null, receiver);
-//    }
-
-    /**
-     * Creates an authorized Credential object.
-     */
-    public static GoogleCredentials getCredentials() throws IOException {
-        // Load client secrets. FIXME
-//        Details details = new Details();
-//        details.setClientId(CLIENT_ID);
-//        details.setClientSecret(CLIENT_SECRET);
-//        details.setAuthUri("https://accounts.google.com/o/oauth2/auth");
-//        details.setTokenUri("https://oauth2.googleapis.com/token");
-//        details.setRedirectUris(Arrays.asList("urn:ietf:wg:oauth:2.0:oob", "http://localhost"));
-//        GoogleClientSecrets clientSecrets = new GoogleClientSecrets().setInstalled(details);
-
-//        GoogleAuthorizationCodeFlow.Builder builder = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES);
-//        if (host != null) {
-//            String tokensDir = getCredentialsFolder().getAbsolutePath();
-//            builder.setDataStoreFactory(
-//                    tokensDir != null ? new FileDataStoreFactory(new java.io.File(tokensDir)) : null);
-//        }
-//        builder.setAccessType("offline");
-//        GoogleAuthorizationCodeFlow flow = builder.build();
-//        if (receiver == null)
-//            receiver = new LocalServerReceiver();
-//        return new AuthorizationCodeInstalledApp(flow, receiver, DesktopManager::browse).authorize(host);
-
-        var impersonatedCredentials = ImpersonatedCredentials.newBuilder()
-                .setSourceCredentials(GoogleCredentials.getApplicationDefault())
-                .setTargetPrincipal("") //FIXME
-                // With full access to permission management
-                .setScopes(SCOPES)
-                .build();
-
-        // Verify impersonation
-        impersonatedCredentials.refresh();
-
-        return impersonatedCredentials;
     }
 
     @Override
     public void close() throws IOException {
         try {
             storageService.close();
-        } catch (Exception ex) {
+        } catch (Exception e) {
             // Let enclosing code to handle the close exception
-            throw new IOException("Unable to close connection to project " + projectId, ex);
+            throw new IOException("Unable to close connection to project with config " + connectionProperties, e);
+        }
+    }
+
+    static final class ConnectionProperties {
+
+        private final String projectId;
+        private final String credentialsJsonPath;
+        private final String impersonatedPrincipal;
+        private final boolean defaultProjectId;
+        private final boolean defaultCredentials;
+        private final boolean impersonation;
+
+        ConnectionProperties(FileURL url) {
+            this.projectId = url.getHost();
+            this.credentialsJsonPath = url.getProperty(GCS_CREDENTIALS_JSON);
+            this.impersonatedPrincipal = url.getProperty(GCS_IMPERSONATED_PRINCIPAL);
+            this.defaultProjectId = Boolean.parseBoolean(url.getProperty(GCS_DEFAULT_PROJECT_ID));
+            this.defaultCredentials = Boolean.parseBoolean(url.getProperty(GCS_DEFAULT_CREDENTIALS));
+            this.impersonation = Boolean.parseBoolean(url.getProperty(GCS_IMPERSONATION));
         }
     }
 }
