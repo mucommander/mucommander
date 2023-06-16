@@ -101,6 +101,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         credentialsJsonChooser.add(credentialsJsonPathField, BorderLayout.CENTER);
 
         var chooseFileButton = new JButton("...");
+        chooseFileButton.setEnabled(!lastDefaultCredentials);
         // Mac OS X: small component size
         if (OsFamily.MAC_OS.isCurrent())
             chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
@@ -116,13 +117,6 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
         addRow("Credentials json", credentialsJsonChooser, 15);
 
-        // Impersonation field
-        impersonatedPrincipalField = new JTextField(lastImpersonatedPrincipal);
-        impersonatedPrincipalField.setEnabled(lastImpersonation);
-        impersonatedPrincipalField.selectAll();
-        addTextFieldListeners(impersonatedPrincipalField, false);
-        addRow("Impersonated principal", impersonatedPrincipalField, 15);
-
         // Location field
         locationField = new JTextField(lastLocation);
         locationField.setEnabled(!lastDefaultLocation);
@@ -132,19 +126,59 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         // FIXME description
         addRow("Bucket location", locationField, 15);
 
+        // Impersonation field
+        impersonatedPrincipalField = new JTextField(lastImpersonatedPrincipal);
+        impersonatedPrincipalField.setEnabled(lastImpersonation);
+        impersonatedPrincipalField.selectAll();
+        addTextFieldListeners(impersonatedPrincipalField, false);
+        addRow("Impersonated principal", impersonatedPrincipalField, 15);
+
         defaultProjectIdCheckBox = new JCheckBox("Default project id", lastDefaultProjectId);
         defaultProjectIdCheckBox.setEnabled(gsutilsDefaults);
+        defaultProjectIdCheckBox.addActionListener(event -> {
+            var toBeEnabled = !projectIdField.isEnabled();
+            if (!toBeEnabled) {
+                // TODO Effective default value?
+                projectIdField.setText(StorageOptions.getDefaultProjectId());// FIXME unify?
+            }
+            projectIdField.setEnabled(toBeEnabled);
+        });
         addRow("", defaultProjectIdCheckBox, 5);
-
-        defaultLocationCheckBox = new JCheckBox("Default bucket location", lastDefaultLocation);
-        defaultLocationCheckBox.setEnabled(gsutilsDefaults);
-        addRow("", defaultLocationCheckBox, 5);
 
         defaultCredentialsCheckBox = new JCheckBox("Default credentials", lastDefaultCredentials);
         defaultCredentialsCheckBox.setEnabled(gsutilsDefaults);
+        defaultCredentialsCheckBox.addActionListener(event -> {
+            var toBeEnabled = !credentialsJsonPathField.isEnabled();
+            if (!toBeEnabled) {
+                // TODO Effective default value?
+                credentialsJsonPathField.setText("");// FIXME unify?
+            }
+            credentialsJsonPathField.setEnabled(toBeEnabled);
+            chooseFileButton.setEnabled(toBeEnabled);
+        });
         addRow("", defaultCredentialsCheckBox, 5);
 
+        defaultLocationCheckBox = new JCheckBox("Default bucket location", lastDefaultLocation);
+        defaultLocationCheckBox.setEnabled(gsutilsDefaults);
+        defaultLocationCheckBox.addActionListener(event -> {
+            var toBeEnabled = !locationField.isEnabled();
+            if (!toBeEnabled) {
+                // TODO Effective default value?
+                locationField.setText("");// FIXME unify?
+            }
+            locationField.setEnabled(toBeEnabled);
+        });
+        addRow("", defaultLocationCheckBox, 5);
+
         impersonationCheckBox = new JCheckBox("Impersonation", lastImpersonation);
+        impersonationCheckBox.addActionListener(event -> {
+            var toBeEnabled = !impersonatedPrincipalField.isEnabled();
+            if (!toBeEnabled) {
+                // TODO Effective default value?
+                impersonatedPrincipalField.setText("");// FIXME unify?
+            }
+            impersonatedPrincipalField.setEnabled(toBeEnabled);
+        });
         addRow("", impersonationCheckBox, 5);
 
         if (!gsutilsDefaults) {
