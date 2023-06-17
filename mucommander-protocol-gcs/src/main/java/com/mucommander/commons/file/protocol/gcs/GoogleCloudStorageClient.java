@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.mucommander.commons.file.protocol.gcs;
 
 import com.google.api.services.storage.StorageScopes;
@@ -32,9 +31,7 @@ import java.util.List;
 import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStoragePanel.*;
 
 /**
- * TODO
- *
- * @author Arik Hadas
+ * @author miroslav.spak
  */
 public class GoogleCloudStorageClient implements Closeable {
 
@@ -109,8 +106,10 @@ public class GoogleCloudStorageClient implements Closeable {
         }
     }
 
+    /**
+     * Properties for the GSC connection. All the properties are read from the {@link FileURL}.
+     */
     static final class ConnectionProperties {
-
         private final String projectId;
         private final String credentialsJsonPath;
         private final String impersonatedPrincipal;

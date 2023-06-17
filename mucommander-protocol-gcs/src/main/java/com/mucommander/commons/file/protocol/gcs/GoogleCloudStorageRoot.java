@@ -31,7 +31,7 @@ import java.util.stream.StreamSupport;
  */
 public class GoogleCloudStorageRoot extends GoogleCloudStorageAbstractFile {
 
-    protected GoogleCloudStorageRoot(FileURL url) {
+    GoogleCloudStorageRoot(FileURL url) {
         super(url);
     }
 

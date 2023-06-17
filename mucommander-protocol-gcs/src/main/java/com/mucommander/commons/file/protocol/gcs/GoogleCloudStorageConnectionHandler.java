@@ -24,9 +24,7 @@ import java.io.IOException;
 import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStorageClient.ConnectionProperties;
 
 /**
- * TODO
- *
- * @author Arik Hadas
+ * @author miroslav.spak
  */
 public class GoogleCloudStorageConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
@@ -35,7 +33,7 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
 
     public GoogleCloudStorageConnectionHandler(FileURL serverURL) {
         super(serverURL);
-        // Read all  properties from url
+        // Read all properties from url
         this.connectionProperties = new ConnectionProperties(serverURL);
     }
 
