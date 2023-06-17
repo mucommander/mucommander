@@ -20,7 +20,6 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.StorageOptions;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.util.StringUtils;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
 
@@ -57,40 +56,21 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     private final JCheckBox impersonationCheckBox;
 
     // Store to static, so it is saved for the next instance
-    private static String lastProjectId = null;
+    private static final boolean gsUtilsDefaults = hasGsUtilsDefaults();
+    private static String lastProjectId = gsUtilsDefaults ? StorageOptions.getDefaultProjectId() : "";
     private static String lastCredentialsJsonPath = "";
     private static String lastLocation = "";
     private static String lastImpersonatedPrincipal = "";
-    private static boolean lastDefaultProjectId = false;
-    private static boolean lastDefaultCredentials = false;
-    private static boolean lastDefaultLocation = false;
+    private static boolean lastDefaultProjectId = gsUtilsDefaults;
+    private static boolean lastDefaultCredentials = gsUtilsDefaults;
+    private static boolean lastDefaultLocation = gsUtilsDefaults;
     private static boolean lastImpersonation = false;
 
     GoogleCloudStoragePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
 
-        // Prepare default values
-        var gsutilsDefaults = true;
-        try {
-            // If there is no previous project id config, try defaults
-            // FIXME problem with second initialization - gs utils
-            if (StringUtils.isNullOrEmpty(lastProjectId)) {
-                // Test we can use default credentials and project id
-                GoogleCredentials.getApplicationDefault();
-
-                // By default, use all defaults
-                lastProjectId = StorageOptions.getDefaultProjectId(); // To show the default project id here
-                lastDefaultProjectId = true;
-                lastDefaultCredentials = true;
-                lastDefaultLocation = true;
-            }
-        } catch (IOException ex) {
-            // Defaults does not exist
-            lastProjectId = "";
-            gsutilsDefaults = false;
-        }
-
         // TODO use translator for descriptions
+        var gsUtilsDefaults = hasGsUtilsDefaults();
 
         // Add all text fields
         projectIdField = addTextField("Project id", lastProjectId, !lastDefaultProjectId, true);
@@ -99,13 +79,12 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         impersonatedPrincipalField = addTextField("Impersonated principal", lastImpersonatedPrincipal, lastImpersonation, false);
 
         // Add all check boxes
-        // FIXME default is wrong
-        defaultProjectIdCheckBox = addCheckBoxToTextField("Default project id", lastDefaultProjectId, gsutilsDefaults, projectIdField, StorageOptions.getDefaultProjectId());
-        defaultCredentialsCheckBox = addCheckBoxToTextField("Default credentials", lastDefaultCredentials, gsutilsDefaults, credentialsJsonPathField, "");
-        defaultLocationCheckBox = addCheckBoxToTextField("Default bucket location", lastDefaultLocation, gsutilsDefaults, locationField, "");
+        defaultProjectIdCheckBox = addCheckBoxToTextField("Default project id", lastDefaultProjectId, gsUtilsDefaults, projectIdField, StorageOptions.getDefaultProjectId());
+        defaultCredentialsCheckBox = addCheckBoxToTextField("Default credentials", lastDefaultCredentials, gsUtilsDefaults, credentialsJsonPathField, "");
+        defaultLocationCheckBox = addCheckBoxToTextField("Default bucket location", lastDefaultLocation, gsUtilsDefaults, locationField, "");
         impersonationCheckBox = addCheckBoxToTextField("Impersonation", lastImpersonation, true, impersonatedPrincipalField, "");
 
-        if (!gsutilsDefaults) {
+        if (!gsUtilsDefaults) {
             // Missing GS utils warning
             JLabel warnLabel = new JLabel("To use defaults install gsutils!");
             warnLabel.setForeground(Color.red);
@@ -247,6 +226,18 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     @Override
     public void dialogValidated() {
         updateValues();
+    }
+
+    private static boolean hasGsUtilsDefaults(){
+        try {
+            // Test we can use default credentials and project id
+            GoogleCredentials.getApplicationDefault();
+            StorageOptions.getDefaultProjectId();
+            return true;
+        } catch (IOException ex) {
+            // Defaults does not exist
+            return false;
+        }
     }
 
     private static abstract class TextField {
