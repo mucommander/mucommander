@@ -183,7 +183,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         checkBox.addActionListener(event -> {
             var textFieldEnabled = textField.switchEnabled();
             if (!textFieldEnabled) {
-                // Revert to the default filed value if disabled
+                // Revert the field to the default value if disabled
                 textField.setText(textFieldDefaultValue);
             }
         });
