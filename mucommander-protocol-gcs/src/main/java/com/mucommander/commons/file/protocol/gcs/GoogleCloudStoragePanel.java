@@ -25,13 +25,13 @@ import com.mucommander.protocol.ui.ServerPanelListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Objects;
 
 /**
- * This ServerPanel helps initiate Google Drive connections.
+ * This ServerPanel helps initiate Google Cloud Storage connections.
  *
- * @author Arik Hadas TODO
+ * @author miroslav.spak
  */
 public class GoogleCloudStoragePanel extends ServerPanel {
 
@@ -93,49 +93,43 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     }
 
     /**
-     * todo
+     * Adds simple standard TextField to the Server connection panel.
      *
-     * @param label
-     * @param initValue
-     * @param enabled
-     * @param updateUrl
-     * @return
+     * @param label     the label od the new textField
+     * @param initValue initial value of this textField
+     * @param enabled   if the textField should be enabled or not
+     * @param updateUrl if the connection panel url should be updated for this textField
+     * @return a new simple textField already added to the Server connection panel
      */
     private TextField addTextField(String label, String initValue, boolean enabled, boolean updateUrl) {
-        var textField = new JTextField(initValue);
-        textField.setEnabled(enabled);
-        textField.selectAll();
+        var jTextField = new JTextField(initValue);
+        jTextField.setEnabled(enabled);
+        jTextField.selectAll();
         if (updateUrl) {
             // Add listener for the file url if needed
-            addTextFieldListeners(textField, true);
+            addTextFieldListeners(jTextField, true);
         }
-        addRow(label, textField, Y_SPACE_AFTER_TEXT_FIELD);
+        addRow(label, jTextField, Y_SPACE_AFTER_TEXT_FIELD);
 
-        return new TextField(textField) {
-            @Override
-            public boolean switchEnabled() {
-                textField.setEnabled(!textField.isEnabled());
-                return textField.isEnabled();
-            }
-        };
+        return new TextField(jTextField);
     }
 
     /**
-     * TODO
+     * Adds TextField with the file chooser to the Server connection panel.
      *
-     * @param label
-     * @param initValue
-     * @param enabled
-     * @return
+     * @param label     the label of the new textField
+     * @param initValue initial value of this textField
+     * @param enabled   if the textField and the file chooser button should be enabled or not
+     * @return a composite textField with path chooser added to the Server connection panel
      */
     private TextField addFilePathChooser(String label, String initValue, boolean enabled) {
         var fileChooserPanel = new JPanel(new BorderLayout());
 
         // Prepare text field
-        var textField = new JTextField(initValue);
-        textField.setEnabled(enabled);
-        textField.selectAll();
-        fileChooserPanel.add(textField, BorderLayout.CENTER);
+        var jTextField = new JTextField(initValue);
+        jTextField.setEnabled(enabled);
+        jTextField.selectAll();
+        fileChooserPanel.add(jTextField, BorderLayout.CENTER);
 
         // Prepare button
         var chooseFileButton = new JButton("...");
@@ -149,32 +143,34 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         chooseFileButton.addActionListener(event -> {
             int returnVal = fileChooser.showOpenDialog(mainFrame);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+                jTextField.setText(fileChooser.getSelectedFile().getAbsolutePath());
             }
         });
         fileChooserPanel.add(chooseFileButton, BorderLayout.EAST);
 
         addRow(label, fileChooserPanel, Y_SPACE_AFTER_TEXT_FIELD);
 
-        return new TextField(textField) {
+        return new TextField(jTextField) {
             @Override
             public boolean switchEnabled() {
-                textField.setEnabled(!textField.isEnabled());
-                chooseFileButton.setEnabled(textField.isEnabled());
-                return textField.isEnabled();
+                var isEnabled = super.switchEnabled();
+                // Update also the button state to match the text field
+                chooseFileButton.setEnabled(isEnabled);
+                return isEnabled;
             }
         };
     }
 
     /**
-     * TODO
+     * Adds checkBox to the Server connection panel with the ability to switch text field "enabled" state and reset it
+     * to the default value.
      *
-     * @param label
-     * @param initValue
-     * @param enabled
-     * @param textField
-     * @param textFieldDefaultValue
-     * @return
+     * @param label                 the label of the new checkBox
+     * @param initValue             initial state of this checkBox
+     * @param enabled               if the checkBox should be enabled or not
+     * @param textField             controlled textField using this checkBox
+     * @param textFieldDefaultValue the default value of the textField when it is disabled
+     * @return a new checkBox (controlling textField) already added to the Server connection panel
      */
     private JCheckBox addCheckBoxToTextField(
             String label, boolean initValue, boolean enabled, TextField textField, String textFieldDefaultValue) {
@@ -228,26 +224,42 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         updateValues();
     }
 
-    private static boolean hasGsUtilsDefaults(){
+    /**
+     * Checks if the google-cloud library can find default credentials and default project id.
+     * Typically signifying that the "gsUtils" are installed. It doesn't matter if the defaults were provided in
+     * a different way, we are using only those two.
+     */
+    private static boolean hasGsUtilsDefaults() {
         try {
             // Test we can use default credentials and project id
             GoogleCredentials.getApplicationDefault();
-            StorageOptions.getDefaultProjectId();
+            Objects.requireNonNull(StorageOptions.getDefaultProjectId());
             return true;
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             // Defaults does not exist
             return false;
         }
     }
 
-    private static abstract class TextField {
+    /**
+     * Wrapper class for any composite UI elements containing text field.
+     */
+    private static class TextField {
         private final JTextField textField;
 
         public TextField(JTextField textField) {
             this.textField = textField;
         }
 
-        abstract boolean switchEnabled();
+        /**
+         * Switch enabled state of the composite text field.
+         *
+         * @return the final isEnabled state of the field
+         */
+        boolean switchEnabled() {
+            textField.setEnabled(!textField.isEnabled());
+            return textField.isEnabled();
+        }
 
         void setText(String text) {
             textField.setText(text);
