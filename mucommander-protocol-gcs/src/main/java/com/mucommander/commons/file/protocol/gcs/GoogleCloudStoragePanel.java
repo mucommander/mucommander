@@ -20,6 +20,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.StorageOptions;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
 
@@ -35,6 +36,7 @@ import java.net.MalformedURLException;
  */
 public class GoogleCloudStoragePanel extends ServerPanel {
 
+    private static final int Y_SPACE_AFTER_TEXT_FIELD = 15;
     static final String GCS_SCHEMA = "gcs";
     static final String GCS_DEFAULT_PROJECT_ID = "gcs_default_project_id";
     static final String GCS_CREDENTIALS_JSON = "gcs_credentials_json";
@@ -44,21 +46,21 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     static final String GCS_IMPERSONATED_PRINCIPAL = "gcs_impersonated_principal";
     static final String GCS_IMPERSONATION = "gcs_impersonation";
 
-    private final JTextField projectIdField;
-    private final JTextField credentialsJsonPathField;
-    private final JTextField locationField;
-    private final JTextField impersonatedPrincipalField;
+    private final TextField projectIdField;
+    private final TextField credentialsJsonPathField;
+    private final TextField locationField;
+    private final TextField impersonatedPrincipalField;
 
     private final JCheckBox defaultProjectIdCheckBox;
     private final JCheckBox defaultCredentialsCheckBox;
     private final JCheckBox defaultLocationCheckBox;
     private final JCheckBox impersonationCheckBox;
 
-    private static String lastProjectId = "";
+    // Store to static, so it is saved for the next instance
+    private static String lastProjectId = null;
     private static String lastCredentialsJsonPath = "";
     private static String lastLocation = "";
     private static String lastImpersonatedPrincipal = "";
-
     private static boolean lastDefaultProjectId = false;
     private static boolean lastDefaultCredentials = false;
     private static boolean lastDefaultLocation = false;
@@ -70,116 +72,38 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         // Prepare default values
         var gsutilsDefaults = true;
         try {
-            // Test we can use default credentials and project id
-            GoogleCredentials.getApplicationDefault();
-            lastProjectId = StorageOptions.getDefaultProjectId();
-            // By default, use defaults
-            lastDefaultProjectId = true;
-            lastDefaultCredentials = true;
-            lastDefaultLocation = true;
+            // If there is no previous project id config, try defaults
+            // FIXME problem with second initialization - gs utils
+            if (StringUtils.isNullOrEmpty(lastProjectId)) {
+                // Test we can use default credentials and project id
+                GoogleCredentials.getApplicationDefault();
+
+                // By default, use all defaults
+                lastProjectId = StorageOptions.getDefaultProjectId(); // To show the default project id here
+                lastDefaultProjectId = true;
+                lastDefaultCredentials = true;
+                lastDefaultLocation = true;
+            }
         } catch (IOException ex) {
             // Defaults does not exist
+            lastProjectId = "";
             gsutilsDefaults = false;
         }
 
         // TODO use translator for descriptions
 
-        // Project id field
-        projectIdField = new JTextField(lastProjectId);
-        projectIdField.setEnabled(!lastDefaultProjectId);
-        projectIdField.selectAll();
-        addTextFieldListeners(projectIdField, true);
-        addRow("Project id", projectIdField, 15);
+        // Add all text fields
+        projectIdField = addTextField("Project id", lastProjectId, !lastDefaultProjectId, true);
+        credentialsJsonPathField = addFilePathChooser("Credentials json", lastCredentialsJsonPath, !lastDefaultCredentials);
+        locationField = addTextField("Bucket location", lastLocation, !lastDefaultLocation, false);
+        impersonatedPrincipalField = addTextField("Impersonated principal", lastImpersonatedPrincipal, lastImpersonation, false);
 
-        // Credentials Json path field
-        var credentialsJsonChooser = new JPanel(new BorderLayout());
-
-        credentialsJsonPathField = new JTextField(lastCredentialsJsonPath);
-        credentialsJsonPathField.setEnabled(!lastDefaultCredentials);
-        credentialsJsonPathField.selectAll();
-        addTextFieldListeners(credentialsJsonPathField, false);
-        credentialsJsonChooser.add(credentialsJsonPathField, BorderLayout.CENTER);
-
-        var chooseFileButton = new JButton("...");
-        chooseFileButton.setEnabled(!lastDefaultCredentials);
-        // Mac OS X: small component size
-        if (OsFamily.MAC_OS.isCurrent())
-            chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
-
-        var fileChooser = new JFileChooser(System.getProperty("user.home"));
-        chooseFileButton.addActionListener(event -> {
-            int returnVal = fileChooser.showOpenDialog(mainFrame);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                credentialsJsonPathField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-            }
-        });
-        credentialsJsonChooser.add(chooseFileButton, BorderLayout.EAST);
-
-        addRow("Credentials json", credentialsJsonChooser, 15);
-
-        // Location field
-        locationField = new JTextField(lastLocation);
-        locationField.setEnabled(!lastDefaultLocation);
-        locationField.selectAll();
-        // FIXME is necessary?
-        addTextFieldListeners(locationField, false);
-        // FIXME description
-        addRow("Bucket location", locationField, 15);
-
-        // Impersonation field
-        impersonatedPrincipalField = new JTextField(lastImpersonatedPrincipal);
-        impersonatedPrincipalField.setEnabled(lastImpersonation);
-        impersonatedPrincipalField.selectAll();
-        addTextFieldListeners(impersonatedPrincipalField, false);
-        addRow("Impersonated principal", impersonatedPrincipalField, 15);
-
-        defaultProjectIdCheckBox = new JCheckBox("Default project id", lastDefaultProjectId);
-        defaultProjectIdCheckBox.setEnabled(gsutilsDefaults);
-        defaultProjectIdCheckBox.addActionListener(event -> {
-            var toBeEnabled = !projectIdField.isEnabled();
-            if (!toBeEnabled) {
-                // TODO Effective default value?
-                projectIdField.setText(StorageOptions.getDefaultProjectId());// FIXME unify?
-            }
-            projectIdField.setEnabled(toBeEnabled);
-        });
-        addRow("", defaultProjectIdCheckBox, 5);
-
-        defaultCredentialsCheckBox = new JCheckBox("Default credentials", lastDefaultCredentials);
-        defaultCredentialsCheckBox.setEnabled(gsutilsDefaults);
-        defaultCredentialsCheckBox.addActionListener(event -> {
-            var toBeEnabled = !credentialsJsonPathField.isEnabled();
-            if (!toBeEnabled) {
-                // TODO Effective default value?
-                credentialsJsonPathField.setText("");// FIXME unify?
-            }
-            credentialsJsonPathField.setEnabled(toBeEnabled);
-            chooseFileButton.setEnabled(toBeEnabled);
-        });
-        addRow("", defaultCredentialsCheckBox, 5);
-
-        defaultLocationCheckBox = new JCheckBox("Default bucket location", lastDefaultLocation);
-        defaultLocationCheckBox.setEnabled(gsutilsDefaults);
-        defaultLocationCheckBox.addActionListener(event -> {
-            var toBeEnabled = !locationField.isEnabled();
-            if (!toBeEnabled) {
-                // TODO Effective default value?
-                locationField.setText("");// FIXME unify?
-            }
-            locationField.setEnabled(toBeEnabled);
-        });
-        addRow("", defaultLocationCheckBox, 5);
-
-        impersonationCheckBox = new JCheckBox("Impersonation", lastImpersonation);
-        impersonationCheckBox.addActionListener(event -> {
-            var toBeEnabled = !impersonatedPrincipalField.isEnabled();
-            if (!toBeEnabled) {
-                // TODO Effective default value?
-                impersonatedPrincipalField.setText("");// FIXME unify?
-            }
-            impersonatedPrincipalField.setEnabled(toBeEnabled);
-        });
-        addRow("", impersonationCheckBox, 5);
+        // Add all check boxes
+        // FIXME default is wrong
+        defaultProjectIdCheckBox = addCheckBoxToTextField("Default project id", lastDefaultProjectId, gsutilsDefaults, projectIdField, StorageOptions.getDefaultProjectId());
+        defaultCredentialsCheckBox = addCheckBoxToTextField("Default credentials", lastDefaultCredentials, gsutilsDefaults, credentialsJsonPathField, "");
+        defaultLocationCheckBox = addCheckBoxToTextField("Default bucket location", lastDefaultLocation, gsutilsDefaults, locationField, "");
+        impersonationCheckBox = addCheckBoxToTextField("Impersonation", lastImpersonation, true, impersonatedPrincipalField, "");
 
         if (!gsutilsDefaults) {
             // Missing GS utils warning
@@ -189,9 +113,104 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         }
     }
 
-    ////////////////////////////////
-    // ServerPanel implementation //
-    ////////////////////////////////
+    /**
+     * todo
+     *
+     * @param label
+     * @param initValue
+     * @param enabled
+     * @param updateUrl
+     * @return
+     */
+    private TextField addTextField(String label, String initValue, boolean enabled, boolean updateUrl) {
+        var textField = new JTextField(initValue);
+        textField.setEnabled(enabled);
+        textField.selectAll();
+        if (updateUrl) {
+            // Add listener for the file url if needed
+            addTextFieldListeners(textField, true);
+        }
+        addRow(label, textField, Y_SPACE_AFTER_TEXT_FIELD);
+
+        return new TextField(textField) {
+            @Override
+            public boolean switchEnabled() {
+                textField.setEnabled(!textField.isEnabled());
+                return textField.isEnabled();
+            }
+        };
+    }
+
+    /**
+     * TODO
+     *
+     * @param label
+     * @param initValue
+     * @param enabled
+     * @return
+     */
+    private TextField addFilePathChooser(String label, String initValue, boolean enabled) {
+        var fileChooserPanel = new JPanel(new BorderLayout());
+
+        // Prepare text field
+        var textField = new JTextField(initValue);
+        textField.setEnabled(enabled);
+        textField.selectAll();
+        fileChooserPanel.add(textField, BorderLayout.CENTER);
+
+        // Prepare button
+        var chooseFileButton = new JButton("...");
+        chooseFileButton.setEnabled(enabled);
+        // Mac OS X: small component size
+        if (OsFamily.MAC_OS.isCurrent())
+            chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
+
+        // Prepare file chooser
+        var fileChooser = new JFileChooser(System.getProperty("user.home"));
+        chooseFileButton.addActionListener(event -> {
+            int returnVal = fileChooser.showOpenDialog(mainFrame);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            }
+        });
+        fileChooserPanel.add(chooseFileButton, BorderLayout.EAST);
+
+        addRow(label, fileChooserPanel, Y_SPACE_AFTER_TEXT_FIELD);
+
+        return new TextField(textField) {
+            @Override
+            public boolean switchEnabled() {
+                textField.setEnabled(!textField.isEnabled());
+                chooseFileButton.setEnabled(textField.isEnabled());
+                return textField.isEnabled();
+            }
+        };
+    }
+
+    /**
+     * TODO
+     *
+     * @param label
+     * @param initValue
+     * @param enabled
+     * @param textField
+     * @param textFieldDefaultValue
+     * @return
+     */
+    private JCheckBox addCheckBoxToTextField(
+            String label, boolean initValue, boolean enabled, TextField textField, String textFieldDefaultValue) {
+        var checkBox = new JCheckBox(label, initValue);
+        checkBox.setEnabled(enabled);
+        checkBox.addActionListener(event -> {
+            var textFieldEnabled = textField.switchEnabled();
+            if (!textFieldEnabled) {
+                // Revert to the default filed value if disabled
+                textField.setText(textFieldDefaultValue);
+            }
+        });
+        addRow("", checkBox, 5);
+        return checkBox;
+    }
 
     private void updateValues() {
         lastProjectId = projectIdField.getText();
@@ -227,14 +246,24 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
     @Override
     public void dialogValidated() {
-//        String accountName = this.accountAlias.getText();
-//        try {
-//            String tokensDir = GoogleCloudStorageClient.getCredentialsFolder().getAbsolutePath();
-//            DataStore<StoredCredential> dataStore = StoredCredential.getDefaultDataStore(new FileDataStoreFactory(new File(tokensDir)));
-//            dataStore.set(accountName, new StoredCredential(credential));
-        // TODO why?
-//        } catch (IOException e) {
-//            LOGGER.warn("failed to store credentials to Google account", e);
-//        }
+        updateValues();
+    }
+
+    private static abstract class TextField {
+        private final JTextField textField;
+
+        public TextField(JTextField textField) {
+            this.textField = textField;
+        }
+
+        abstract boolean switchEnabled();
+
+        void setText(String text) {
+            textField.setText(text);
+        }
+
+        String getText() {
+            return textField.getText();
+        }
     }
 }
