@@ -46,12 +46,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     protected GoogleCloudStorageAbstractFile parent;
 
     protected GoogleCloudStorageAbstractFile(FileURL url) {
-        this(url, null);
-    }
-
-    protected GoogleCloudStorageAbstractFile(FileURL url, Storage storageService) {
         super(url);
-        this.storageService = storageService;
     }
 
     protected Storage getStorageService() throws IOException {

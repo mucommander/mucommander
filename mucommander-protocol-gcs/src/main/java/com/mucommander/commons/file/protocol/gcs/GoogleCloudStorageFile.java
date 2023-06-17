@@ -28,9 +28,15 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * Representation of the Cloud Storage Blob as a File/Folder.
+ *
+ * @author miroslav.spak
+ */
 public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
     private static final String DUMMY_FILE_NAME = ".";
+    private static final String EMPTY_FILE_CONTENT_TYPE = "text/plain";
 
     private Blob blob;
 
@@ -43,25 +49,33 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         this.blob = blob;
     }
 
+    /**
+     * Tries to receive blob from the Google Cloud Storage service.
+     *
+     * @return blob for this object path (i.e., {@link GoogleCloudStorageFile#fileURL}), can be <b>null</b>
+     * if blob doesn't exist
+     */
     private Blob getBlob() {
+        // Get Blob file from the bucket
+        if (blob == null && getBucket() != null) {
+            blob = getBucket().get(getBlobPath());
+        }
+
+        // Directories are not returned using bucket#get()
         if (blob == null) {
-            // Try to find blob if bucket itself exist
-            if (getBucket() != null) {
-                blob = getBucket().get(getBlobPath());
-                // Directories are not returned using bucket#get()
-                if (blob == null) {
-                    // Try to find this blob in the parent directory
-                    blob = listGcsDir(getBlobPath(getURL().getParent()))
-                            .filter(blob -> Objects.equals(getBlobName(blob), getURL().getFilename()))
-                            .findFirst()
-                            .orElse(null);
-                }
-            }
+            // Try to find this blob in the parent directory
+            blob = listGcsDir(getBlobPath(getURL().getParent()))
+                    .filter(blob -> Objects.equals(getBlobName(blob), getURL().getFilename()))
+                    .findFirst()
+                    .orElse(null);
         }
 
         return blob;
     }
 
+    /**
+     * Finds the path of the Blob in the GCS Bucket from the given fileURL. I.e., full path without Bucket name.
+     */
     private String getBlobPath(FileURL url) {
         // Remove first separator if any
         var pathWithBucket = PathUtils.removeLeadingSeparator(url.getPath());
@@ -69,8 +83,11 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         return pathWithBucket.substring(pathWithBucket.indexOf(getSeparator()) + 1);
     }
 
+    /**
+     * Finds the path of the current Blob in the GCS Bucket.
+     */
     private String getBlobPath() {
-        return getBlobPath(fileURL);
+        return getBlobPath(getURL());
     }
 
     @Override
@@ -84,7 +101,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     }
 
     /**
-     * Returns stream of the blobs in the directory on given path
+     * Returns stream of the blobs in the directory on the given path
      */
     private Stream<Blob> listGcsDir(String path) {
         var files = getBucket().list(
@@ -157,8 +174,8 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         var blobPath = PathUtils.removeTrailingSeparator(getBlobPath()) + getSeparator() + DUMMY_FILE_NAME;
         try {
             var blobId = BlobId.of(bucketName, blobPath);
-            var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
-            // Cannot set blob because this blob is dummy file not the folder itself
+            var blobInfo = BlobInfo.newBuilder(blobId).setContentType(EMPTY_FILE_CONTENT_TYPE).build();
+            // Cannot set blob because this blob is a dummy file not the folder itself
             getStorageService().create(blobInfo);
         } catch (Exception ex) {
             throw new IOException("Unable to create folder " + blobPath + " in bucket " + bucketName, ex);
@@ -171,7 +188,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         var blobPath = getBlobPath();
         try {
             var blobId = BlobId.of(bucketName, blobPath);
-            var blobInfo = BlobInfo.newBuilder(blobId).setContentType("text/plain").build();
+            var blobInfo = BlobInfo.newBuilder(blobId).setContentType(EMPTY_FILE_CONTENT_TYPE).build();
             // The new blob represents created file
             blob = getStorageService().create(blobInfo);
         } catch (Exception ex) {
@@ -182,7 +199,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     @Override
     public void delete() throws IOException {
         if (getBlob() == null) {
-            // Expecting the missing blob here is an error
+            // Expecting the missing blob here - it is an error
             throw new IOException("Unable to find the file to delete, file " + getURL());
         }
         var blobName = getBlob().getName();

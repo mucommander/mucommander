@@ -41,7 +41,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
     }
 
     GoogleCloudStorageBucket(FileURL url, Bucket bucket) {
-        super(url);
+        this(url);
         this.bucket = bucket;
     }
 
@@ -133,6 +133,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
                 // Set location only if provided
                 bucketBuilder.setLocation(location);
             }
+            // We can set created bucket here
             bucket = getStorageService().create(bucketBuilder.build());
         } catch (Exception ex) {
             throw new IOException("Unable to create bucket " + getBucketName(), ex);

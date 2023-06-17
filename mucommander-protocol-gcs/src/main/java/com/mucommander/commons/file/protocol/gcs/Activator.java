@@ -30,13 +30,13 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStoragePanel.GCS_SCHEMA;
+
 /**
- * TODO
- * @author Miroslav Spak
+ * @author miroslav.spak
  */
 public class Activator implements BundleActivator {
 
-    private static final String GCS_SCHEMA = "gcs";
     private ServiceRegistration<FileProtocolService> serviceRegistration;
     private ServiceRegistration<ProtocolPanelProvider> uiServiceRegistration;
 

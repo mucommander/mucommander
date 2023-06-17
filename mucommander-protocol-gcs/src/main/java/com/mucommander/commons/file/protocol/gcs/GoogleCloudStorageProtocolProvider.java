@@ -23,9 +23,10 @@ import com.mucommander.commons.util.StringUtils;
 import java.util.Map;
 
 /**
- * TODO
+ * An implementation of protocol provider that differentiates among all three GCS file/folder types.
+ * The provider instantiates the right type according to their path.
  *
- * @author Miroslav Spak
+ * @author miroslav.spak
  */
 public class GoogleCloudStorageProtocolProvider implements ProtocolProvider {
 
