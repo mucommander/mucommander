@@ -18,23 +18,25 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;
+import com.mucommander.conf.PlatformManager;
 
 import java.io.IOException;
-
-import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStorageClient.ConnectionProperties;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * @author miroslav.spak
  */
 public class GoogleCloudStorageConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
-    private final ConnectionProperties connectionProperties;
+    private static final String GCS_CREDENTIALS_FOLDER = "/google_cloud_storage";
+    private final FileURL fileURL;
     private GoogleCloudStorageClient client;
 
     public GoogleCloudStorageConnectionHandler(FileURL serverURL) {
         super(serverURL);
-        // Read all properties from url
-        this.connectionProperties = new ConnectionProperties(serverURL);
+        this.fileURL = serverURL;
     }
 
     public GoogleCloudStorageClient getClient() throws IOException {
@@ -45,9 +47,32 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
     @Override
     public void startConnection() throws IOException {
         if (client == null) {
+            GoogleCloudStorageConnectionProperties connectionProperties;
+            try {
+                // Read connection properties
+                var inputPath = getCredentialFileUrl(fileURL.getHost());
+                connectionProperties = GoogleCloudStorageConnectionProperties.from(Files.readString(inputPath));
+            } catch (Exception ex) {
+                throw new IOException("Cannot read connection properties", ex);
+            }
+
             client = new GoogleCloudStorageClient(connectionProperties);
             client.connect();
         }
+    }
+
+    /**
+     * Finds url path of the credentials file for the given project id.
+     */
+    public static Path getCredentialFileUrl(String projectId) throws IOException {
+        var credentialsFolder = PlatformManager.getCredentialsFolder().getChild(GCS_CREDENTIALS_FOLDER);
+        if (!credentialsFolder.exists()) {
+            credentialsFolder.mkdir();
+        }
+
+        var credentialFileUrl = (FileURL) credentialsFolder.getURL().clone();
+        credentialFileUrl.setPath(credentialsFolder.addTrailingSeparator(credentialFileUrl.getPath()) + projectId);
+        return Paths.get(credentialFileUrl.getPath());
     }
 
     @Override
