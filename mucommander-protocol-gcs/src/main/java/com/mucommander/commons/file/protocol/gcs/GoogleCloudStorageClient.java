@@ -21,14 +21,11 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ImpersonatedCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.mucommander.commons.file.FileURL;
 
 import java.io.Closeable;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
-
-import static com.mucommander.commons.file.protocol.gcs.GoogleCloudStoragePanel.*;
 
 /**
  * @author miroslav.spak
@@ -37,10 +34,10 @@ public class GoogleCloudStorageClient implements Closeable {
 
     private static final List<String> SCOPES = List.of(StorageScopes.DEVSTORAGE_READ_WRITE);
 
-    private final ConnectionProperties connectionProperties;
+    private final GoogleCloudStorageConnectionProperties connectionProperties;
     private Storage storageService;
 
-    public GoogleCloudStorageClient(ConnectionProperties connectionProperties) {
+    public GoogleCloudStorageClient(GoogleCloudStorageConnectionProperties connectionProperties) {
         this.connectionProperties = connectionProperties;
     }
 
@@ -52,31 +49,35 @@ public class GoogleCloudStorageClient implements Closeable {
         return storageService;
     }
 
+    public GoogleCloudStorageConnectionProperties getConnectionProperties() {
+        return connectionProperties;
+    }
+
     public void connect() throws IOException {
         try {
             var storageServiceBuilder = StorageOptions.newBuilder();
 
             // Prepare project id
-            if (!connectionProperties.defaultProjectId) {
+            if (!connectionProperties.isDefaultProjectId()) {
                 // Set given project id
-                storageServiceBuilder.setProjectId(connectionProperties.projectId);
+                storageServiceBuilder.setProjectId(connectionProperties.getProjectId());
             }
 
             // Prepare credentials
             GoogleCredentials credentials;
-            if (connectionProperties.defaultCredentials) {
+            if (connectionProperties.isDefaultCredentials()) {
                 credentials = GoogleCredentials.getApplicationDefault();
             } else {
-                try (var credentialsStream = new FileInputStream(connectionProperties.credentialsJsonPath)) {
+                try (var credentialsStream = new FileInputStream(connectionProperties.getCredentialsJsonPath())) {
                     credentials = GoogleCredentials.fromStream(credentialsStream);
                 }
             }
 
             // Prepare impersonation
-            if (connectionProperties.impersonation) {
+            if (connectionProperties.isImpersonation()) {
                 var impersonatedCredentials = ImpersonatedCredentials.newBuilder()
                         .setSourceCredentials(credentials)
-                        .setTargetPrincipal(connectionProperties.impersonatedPrincipal)
+                        .setTargetPrincipal(connectionProperties.getImpersonatedPrincipal())
                         // With R/W permissions
                         .setScopes(SCOPES)
                         .build();
@@ -103,27 +104,6 @@ public class GoogleCloudStorageClient implements Closeable {
         } catch (Exception e) {
             // Let enclosing code to handle the close exception
             throw new IOException("Unable to close connection to project with config " + connectionProperties, e);
-        }
-    }
-
-    /**
-     * Properties for the GSC connection. All the properties are read from the {@link FileURL}.
-     */
-    static final class ConnectionProperties {
-        private final String projectId;
-        private final String credentialsJsonPath;
-        private final String impersonatedPrincipal;
-        private final boolean defaultProjectId;
-        private final boolean defaultCredentials;
-        private final boolean impersonation;
-
-        ConnectionProperties(FileURL url) {
-            this.projectId = url.getHost();
-            this.credentialsJsonPath = url.getProperty(GCS_CREDENTIALS_JSON);
-            this.impersonatedPrincipal = url.getProperty(GCS_IMPERSONATED_PRINCIPAL);
-            this.defaultProjectId = Boolean.parseBoolean(url.getProperty(GCS_DEFAULT_PROJECT_ID));
-            this.defaultCredentials = Boolean.parseBoolean(url.getProperty(GCS_DEFAULT_CREDENTIALS));
-            this.impersonation = Boolean.parseBoolean(url.getProperty(GCS_IMPERSONATION));
         }
     }
 }

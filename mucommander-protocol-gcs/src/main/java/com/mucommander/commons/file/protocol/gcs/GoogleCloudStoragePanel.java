@@ -22,10 +22,14 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 /**
@@ -35,15 +39,9 @@ import java.util.Objects;
  */
 public class GoogleCloudStoragePanel extends ServerPanel {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStoragePanel.class);
     private static final int Y_SPACE_AFTER_TEXT_FIELD = 15;
     static final String GCS_SCHEMA = "gcs";
-    static final String GCS_DEFAULT_PROJECT_ID = "gcs_default_project_id";
-    static final String GCS_CREDENTIALS_JSON = "gcs_credentials_json";
-    static final String GCS_DEFAULT_CREDENTIALS = "gcs_default_credentials";
-    static final String GCS_BUCKET_LOCATION = "gcs_bucket_location";
-    static final String GCS_DEFAULT_BUCKET_LOCATION = "gcs_default_bucket_location";
-    static final String GCS_IMPERSONATED_PRINCIPAL = "gcs_impersonated_principal";
-    static final String GCS_IMPERSONATION = "gcs_impersonation";
 
     private final TextField projectIdField;
     private final TextField credentialsJsonPathField;
@@ -201,17 +199,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     @Override
     public FileURL getServerURL() throws MalformedURLException {
         updateValues();
-
-        var url = FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, lastProjectId));
-
-        url.setProperty(GCS_CREDENTIALS_JSON, lastCredentialsJsonPath);
-        url.setProperty(GCS_BUCKET_LOCATION, lastLocation);
-        url.setProperty(GCS_IMPERSONATED_PRINCIPAL, lastImpersonatedPrincipal);
-        url.setProperty(GCS_DEFAULT_PROJECT_ID, Boolean.toString(lastDefaultProjectId));
-        url.setProperty(GCS_DEFAULT_CREDENTIALS, Boolean.toString(lastDefaultCredentials));
-        url.setProperty(GCS_DEFAULT_BUCKET_LOCATION, Boolean.toString(lastDefaultLocation));
-        url.setProperty(GCS_IMPERSONATION, Boolean.toString(lastImpersonation));
-        return url;
+        return FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, lastProjectId));
     }
 
     @Override
@@ -222,6 +210,27 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     @Override
     public void dialogValidated() {
         updateValues();
+        // Prepare connection properties
+        var connectionProperties = new GoogleCloudStorageConnectionProperties(
+                lastProjectId,
+                lastCredentialsJsonPath,
+                lastImpersonatedPrincipal,
+                lastLocation,
+                lastDefaultProjectId,
+                lastDefaultCredentials,
+                lastImpersonation,
+                lastDefaultLocation
+        );
+
+        try {
+            // Find path for this properties
+            var outputPath = GoogleCloudStorageConnectionHandler.getCredentialFileUrl(lastProjectId);
+            // There are no secrets, just write it as plain json
+            Files.writeString(outputPath, connectionProperties.toJson(),
+                    StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+        } catch (Exception e) {
+            LOGGER.error("Failed to persist credentials for google cloud storage project " + lastProjectId, e);
+        }
     }
 
     /**

@@ -43,6 +43,8 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
     private Storage storageService;
 
+    private GoogleCloudStorageClient gcsClient;
+
     protected GoogleCloudStorageAbstractFile parent;
 
     protected GoogleCloudStorageAbstractFile(FileURL url) {
@@ -57,14 +59,17 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         return storageService;
     }
 
-    private GoogleCloudStorageClient getCloudStorageClient() throws IOException {
-        GoogleCloudStorageConnectionHandler connectionHandler =
-                // Get connection handler for the given GCS url
-                (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
-                        GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, false);
+    protected GoogleCloudStorageClient getCloudStorageClient() throws IOException {
+        if (gcsClient == null) {
+            // Get connection handler for the given GCS url
+            var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
+                    GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, false);
 
-        connectionHandler.checkConnection();
-        return connectionHandler.getClient();
+            connectionHandler.checkConnection();
+            gcsClient = connectionHandler.getClient();
+        }
+
+        return gcsClient;
     }
 
     @Override
@@ -92,7 +97,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     @Override
     public AbstractFile getParent() {
         if (parent == null) {
-            FileURL parentFileURL = this.fileURL.getParent();
+            var parentFileURL = this.fileURL.getParent();
             if (parentFileURL != null) {
                 setParent(FileFactory.getFile(parentFileURL));
             }

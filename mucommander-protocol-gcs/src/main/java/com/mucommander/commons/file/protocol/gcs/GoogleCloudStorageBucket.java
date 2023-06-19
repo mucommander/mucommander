@@ -123,15 +123,13 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
 
     @Override
     public void mkdir() throws IOException {
-        var defaultLocation = Boolean.parseBoolean(
-                getURL().getProperty(GoogleCloudStoragePanel.GCS_DEFAULT_BUCKET_LOCATION));
-        var location = getURL().getProperty(GoogleCloudStoragePanel.GCS_BUCKET_LOCATION);
+        var properties = getCloudStorageClient().getConnectionProperties();
 
         try {
             var bucketBuilder = BucketInfo.newBuilder(getBucketName());
-            if (!defaultLocation) {
+            if (!properties.isDefaultLocation()) {
                 // Set location only if provided
-                bucketBuilder.setLocation(location);
+                bucketBuilder.setLocation(properties.getLocation());
             }
             // We can set created bucket here
             bucket = getStorageService().create(bucketBuilder.build());
