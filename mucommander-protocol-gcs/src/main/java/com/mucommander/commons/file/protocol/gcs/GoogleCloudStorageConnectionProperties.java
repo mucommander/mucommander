@@ -21,6 +21,8 @@ import com.google.gson.Gson;
 /**
  * Properties for the GSC connection. The properties are read from {@link GoogleCloudStoragePanel} or from credentials
  * json file.
+ *
+ * @author miroslav.spak
  */
 final class GoogleCloudStorageConnectionProperties {
     private static final Gson jsonMapper = new Gson();
