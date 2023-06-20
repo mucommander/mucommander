@@ -5,29 +5,36 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-//    implementation 'com.google.auth:google-auth-library-oauth2-http:1.15.0'
-//    comprise 'com.google.auth:google-auth-library-credentials:1.15.0'
     comprise 'com.google.cloud:google-cloud-storage:2.16.0'
 
     testImplementation 'junit:junit:6.11'
     testImplementation 'org.testng:testng:7.7.0'
 }
 
-// fixme java.lang.NoClassDefFoundError: com/fasterxml/jackson/core/JsonFactory
 jar {
     from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-        // fixme size
-        include 'com/google/**'
+        include 'com/google/auth/**'
+        include 'com/google/common/**'
+        include 'com/google/cloud/**'
+        include 'com/google/gson/**'
+        include 'com/google/api/client/**'
+        include 'com/google/api/client/**'
+        include 'com/google/api/core/**'
+        include 'com/google/api/gax/**'
+        include 'com/google/api/services/storage/**'
         include 'org/threeten/bp/**'
-        include 'io/opencensus/**'
-        include 'io/grpc/**'
+        include 'io/opencensus/trace/**'
+        include 'io/opencensus/common/**'
+        include 'io/opencensus/internal/**'
+        include 'io/opencensus/contrib/**'
+        include 'io/grpc/*'
         include 'com/fasterxml/jackson/**'
         exclude 'META-INF/**'
     }}
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     bnd('Bundle-Name': 'muCommander-gcs',
             'Bundle-Vendor': 'muCommander',
-            'Bundle-Description': 'Plugin for Google-Clud Storage',
+            'Bundle-Description': 'Plugin for Google-Cloud Storage',
             'Bundle-DocURL': 'https://www.mucommander.com',
             'Export-Package': 'com.mucommander.commons.file.protocol.gcs',
             'Import-Package': 'org.osgi.framework.*,com.mucommander.*,javax.swing.*,org.slf4j.*,javax.net.ssl.*',
@@ -36,7 +43,7 @@ jar {
             'Specification-Vendor': "Arik Hadas",
             'Specification-Version': project.version,
             'Implementation-Title': "muCommander",
-            'Implementation-Vendor': "Arik Hadas",
+            'Implementation-Vendor': "Miroslav Spak",
             'Implementation-Version': revision.substring(0, 7),
             'Build-Date': new Date().format('yyyyMMdd'),
             'Build-Url': "https://www.mucommander.com/version/nightly.xml")
