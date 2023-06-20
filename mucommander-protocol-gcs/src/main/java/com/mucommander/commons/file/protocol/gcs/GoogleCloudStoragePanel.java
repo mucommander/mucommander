@@ -22,6 +22,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
+import com.mucommander.text.Translator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,24 +68,39 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     GoogleCloudStoragePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
 
-        // TODO use translator for descriptions
         var gsUtilsDefaults = hasGsUtilsDefaults();
 
         // Add all text fields
-        projectIdField = addTextField("Project id", lastProjectId, !lastDefaultProjectId, true);
-        credentialsJsonPathField = addFilePathChooser("Credentials json", lastCredentialsJsonPath, !lastDefaultCredentials);
-        locationField = addTextField("Bucket location", lastLocation, !lastDefaultLocation, false);
-        impersonatedPrincipalField = addTextField("Impersonated principal", lastImpersonatedPrincipal, lastImpersonation, false);
+        projectIdField = addTextField(
+                Translator.get("server_connect_dialog.gcs.project_id"),
+                lastProjectId, !lastDefaultProjectId, true);
+        credentialsJsonPathField = addFilePathChooser(
+                Translator.get("server_connect_dialog.gcs.credentials_json"),
+                lastCredentialsJsonPath, !lastDefaultCredentials);
+        locationField = addTextField(
+                Translator.get("server_connect_dialog.gcs.bucket_location"),
+                lastLocation, !lastDefaultLocation, false);
+        impersonatedPrincipalField = addTextField(
+                Translator.get("server_connect_dialog.gcs.impersonated_principal"),
+                lastImpersonatedPrincipal, lastImpersonation, false);
 
         // Add all check boxes
-        defaultProjectIdCheckBox = addCheckBoxToTextField("Default project id", lastDefaultProjectId, gsUtilsDefaults, projectIdField, StorageOptions.getDefaultProjectId());
-        defaultCredentialsCheckBox = addCheckBoxToTextField("Default credentials", lastDefaultCredentials, gsUtilsDefaults, credentialsJsonPathField, "");
-        defaultLocationCheckBox = addCheckBoxToTextField("Default bucket location", lastDefaultLocation, gsUtilsDefaults, locationField, "");
-        impersonationCheckBox = addCheckBoxToTextField("Impersonation", lastImpersonation, true, impersonatedPrincipalField, "");
+        defaultProjectIdCheckBox = addCheckBoxToTextField(
+                Translator.get("server_connect_dialog.gcs.default.project_id"),
+                lastDefaultProjectId, gsUtilsDefaults, projectIdField, StorageOptions.getDefaultProjectId());
+        defaultCredentialsCheckBox = addCheckBoxToTextField(
+                Translator.get("server_connect_dialog.gcs.default.credentials"),
+                lastDefaultCredentials, gsUtilsDefaults, credentialsJsonPathField, "");
+        defaultLocationCheckBox = addCheckBoxToTextField(
+                Translator.get("server_connect_dialog.gcs.default.bucket_location"),
+                lastDefaultLocation, gsUtilsDefaults, locationField, "");
+        impersonationCheckBox = addCheckBoxToTextField(
+                Translator.get("server_connect_dialog.gcs.impersonation"),
+                lastImpersonation, true, impersonatedPrincipalField, "");
 
         if (!gsUtilsDefaults) {
             // Missing GS utils warning
-            JLabel warnLabel = new JLabel("To use defaults install gsutils!");
+            JLabel warnLabel = new JLabel(Translator.get("server_connect_dialog.gcs.missing_defaults"));
             warnLabel.setForeground(Color.red);
             addRow(warnLabel, 10);
         }
