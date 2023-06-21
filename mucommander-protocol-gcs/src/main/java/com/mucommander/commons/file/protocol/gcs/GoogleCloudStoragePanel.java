@@ -28,11 +28,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * This ServerPanel helps initiate Google Cloud Storage connections.
@@ -99,12 +105,16 @@ public class GoogleCloudStoragePanel extends ServerPanel {
                 Translator.get("server_connect_dialog.gcs.impersonation"),
                 lastImpersonation, true, impersonatedPrincipalField, "");
 
-        if (!gsUtilsDefaults) {
-            // Missing GS utils warning
-            JLabel warnLabel = new JLabel(Translator.get("server_connect_dialog.gcs.missing_defaults"));
-            warnLabel.setForeground(Color.red);
-            addRow(warnLabel, 10);
-        }
+        addWarnLabel(
+                Translator.get("server_connect_dialog.gcs.missing_default_project_id"),
+                !lastDefaultProjectId && lastProjectId.isBlank(), defaultProjectIdCheckBox, projectIdField);
+        addWarnLabel(
+                Translator.get("server_connect_dialog.gcs.missing_default_credentials"),
+                !lastDefaultCredentials && lastCredentialsJsonPath.isBlank(),
+                defaultCredentialsCheckBox, credentialsJsonPathField);
+        addWarnLabel(
+                Translator.get("server_connect_dialog.gcs.missing_defaults"),
+                !gsUtilsDefaults, null, null);
     }
 
     /**
@@ -202,6 +212,32 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         return checkBox;
     }
 
+    /**
+     * Adds warning label to the Server connection panel. The label can be associated with the defaults checkbox
+     * and textField to be shown only when there is no valid configuration for the two. Associated checkBox and
+     * textField can be both null or not.
+     *
+     * @param label               the text of this warning label
+     * @param visible             initial visibility of the warning
+     * @param associatedCheckBox  default value checkBox that when selected hides this warning label
+     * @param associatedTextField textField that shows label when empty or hides it otherwise
+     */
+    private void addWarnLabel(
+            String label, boolean visible, JCheckBox associatedCheckBox, TextField associatedTextField) {
+        JLabel warnLabel = new JLabel(label);
+        warnLabel.setVisible(visible);
+        warnLabel.setForeground(Color.red);
+        addRow(warnLabel, 10);
+
+        if (associatedTextField != null && associatedCheckBox != null) {
+            // Add action listeners - show warning on empty associated text field without defaults on
+            SimpleDocumentActionListener action = () ->
+                    warnLabel.setVisible(!associatedCheckBox.isSelected() && associatedTextField.getText().isBlank());
+            associatedTextField.addActionListener(action);
+            associatedCheckBox.addActionListener(action);
+        }
+    }
+
     private void updateValues() {
         lastProjectId = projectIdField.getText();
         lastCredentialsJsonPath = credentialsJsonPathField.getText();
@@ -288,6 +324,15 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         }
 
         /**
+         * Adds event action to apply on any text field change.
+         *
+         * @param documentListener listener with action to be executed
+         */
+        public void addActionListener(DocumentListener documentListener) {
+            textField.getDocument().addDocumentListener(documentListener);
+        }
+
+        /**
          * Switch enabled state of the composite text field.
          *
          * @return the final isEnabled state of the field
@@ -302,7 +347,31 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         }
 
         String getText() {
-            return textField.getText();
+            return Optional.ofNullable(textField).map(JTextComponent::getText).orElse("");
+        }
+    }
+
+    /**
+     * Simple no-args action listener interface usable for the {@link DocumentListener} and {@link ActionListener}
+     */
+    private interface SimpleDocumentActionListener extends DocumentListener, ActionListener {
+
+        void executeAction();
+
+        default void actionPerformed(ActionEvent e) {
+            executeAction();
+        }
+
+        default void insertUpdate(DocumentEvent e) {
+            executeAction();
+        }
+
+        default void removeUpdate(DocumentEvent e) {
+            executeAction();
+        }
+
+        default void changedUpdate(DocumentEvent e) {
+            executeAction();
         }
     }
 }
