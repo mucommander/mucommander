@@ -21,6 +21,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ImpersonatedCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import com.mucommander.commons.util.StringUtils;
 
 import java.io.Closeable;
 import java.io.FileInputStream;
@@ -59,6 +60,10 @@ public class GoogleCloudStorageClient implements Closeable {
 
             // Prepare project id
             if (!connectionProperties.isDefaultProjectId()) {
+                if (StringUtils.isNullOrEmpty(connectionProperties.getProjectId())) {
+                    throw new IllegalStateException("Missing project id");
+                }
+
                 // Set given project id
                 storageServiceBuilder.setProjectId(connectionProperties.getProjectId());
             }
@@ -68,6 +73,10 @@ public class GoogleCloudStorageClient implements Closeable {
             if (connectionProperties.isDefaultCredentials()) {
                 credentials = GoogleCredentials.getApplicationDefault();
             } else {
+                if (StringUtils.isNullOrEmpty(connectionProperties.getCredentialsJsonPath())) {
+                    throw new IllegalStateException("Missing credentials JSON for the project");
+                }
+
                 try (var credentialsStream = new FileInputStream(connectionProperties.getCredentialsJsonPath())) {
                     credentials = GoogleCredentials.fromStream(credentialsStream);
                 }
