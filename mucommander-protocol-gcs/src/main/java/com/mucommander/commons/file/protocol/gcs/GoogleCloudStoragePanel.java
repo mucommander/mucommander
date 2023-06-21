@@ -20,6 +20,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.StorageOptions;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
@@ -215,6 +216,11 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     @Override
     public FileURL getServerURL() throws MalformedURLException {
         updateValues();
+
+        if (StringUtils.isNullOrEmpty(lastProjectId)) {
+            throw new MalformedURLException("Project id cannot be empty");
+        }
+
         return FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, lastProjectId));
     }
 
@@ -226,26 +232,31 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     @Override
     public void dialogValidated() {
         updateValues();
-        // Prepare connection properties
-        var connectionProperties = new GoogleCloudStorageConnectionProperties(
-                lastProjectId,
-                lastCredentialsJsonPath,
-                lastImpersonatedPrincipal,
-                lastLocation,
-                lastDefaultProjectId,
-                lastDefaultCredentials,
-                lastImpersonation,
-                lastDefaultLocation
-        );
 
-        try {
-            // Find path for this properties
-            var outputPath = GoogleCloudStorageConnectionHandler.getCredentialFileUrl(lastProjectId);
-            // There are no secrets, just write it as plain json
-            Files.writeString(outputPath, connectionProperties.toJson(),
-                    StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
-        } catch (Exception e) {
-            LOGGER.error("Failed to persist credentials for google cloud storage project " + lastProjectId, e);
+        // We will store credentials only if there is a project id, without it, it will fail anyway
+        if (!StringUtils.isNullOrEmpty(lastProjectId)) {
+
+            // Prepare connection properties
+            var connectionProperties = new GoogleCloudStorageConnectionProperties(
+                    lastProjectId,
+                    lastCredentialsJsonPath,
+                    lastImpersonatedPrincipal,
+                    lastLocation,
+                    lastDefaultProjectId,
+                    lastDefaultCredentials,
+                    lastImpersonation,
+                    lastDefaultLocation
+            );
+
+            try {
+                // Find path for this properties
+                var outputPath = GoogleCloudStorageConnectionHandler.getCredentialFileUrl(lastProjectId);
+                // There are no secrets, just write it as plain json
+                Files.writeString(outputPath, connectionProperties.toJson(),
+                        StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+            } catch (Exception e) {
+                LOGGER.error("Failed to persist credentials for google cloud storage project " + lastProjectId, e);
+            }
         }
     }
 
