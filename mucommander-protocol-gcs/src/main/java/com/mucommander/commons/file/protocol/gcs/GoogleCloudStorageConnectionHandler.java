@@ -70,9 +70,8 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
             credentialsFolder.mkdir();
         }
 
-        var credentialFileUrl = (FileURL) credentialsFolder.getURL().clone();
-        credentialFileUrl.setPath(credentialsFolder.addTrailingSeparator(credentialFileUrl.getPath()) + projectId);
-        return Paths.get(credentialFileUrl.getPath());
+        // Return path to the child with project id name
+        return Paths.get(credentialsFolder.getChild(projectId).getPath());
     }
 
     @Override
