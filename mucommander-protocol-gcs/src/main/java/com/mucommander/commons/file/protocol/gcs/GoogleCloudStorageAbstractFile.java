@@ -223,6 +223,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         var result = createFun.apply(url);
         // Initialize known properties
         ((GoogleCloudStorageAbstractFile) result).storageService = storageService;
+        ((GoogleCloudStorageAbstractFile) result).gcsClient = gcsClient;
         result.setParent(this);
 
         return result;

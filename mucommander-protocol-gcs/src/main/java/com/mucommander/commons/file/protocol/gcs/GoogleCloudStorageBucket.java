@@ -16,14 +16,14 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.Bucket;
-import com.google.cloud.storage.BucketInfo;
-import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.*;
 import com.mucommander.commons.file.FileURL;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -33,6 +33,8 @@ import java.util.stream.StreamSupport;
  * @author miroslav.spak
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
+
+    protected static final Pattern BUCKER_NAME_BLOB_PATH_PATTERN = Pattern.compile("^/([^/]+)/?(.*)/?$");
 
     private Bucket bucket;
 
@@ -50,11 +52,11 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
      */
     protected String getBucketName() {
         // Find the first part of the path that represents bucket name
-        return fileURL.getPath().replaceAll("/([^/]+)/?.*", "$1");
+        var matcher = BUCKER_NAME_BLOB_PATH_PATTERN.matcher(fileURL.getPath());
+        return Optional.of(matcher).filter(Matcher::find).map(match -> match.group(1)).orElse("");
     }
 
-    protected String getBlobName(Blob blob) {
-        // Get path without trailing separator
+    protected static String getBlobName(BlobInfo blob) {
         var blobPath = blob != null ? blob.getName() : "";
         // Find the last part of the path that represents blob file name
         return new File(blobPath).getName();
