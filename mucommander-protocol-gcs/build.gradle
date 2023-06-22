@@ -11,6 +11,10 @@ dependencies {
     testImplementation 'org.testng:testng:7.7.0'
 }
 
+configurations {
+    testImplementation.extendsFrom comprise
+}
+
 jar {
     from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         include 'com/google/auth/**'
@@ -47,4 +51,8 @@ jar {
             'Implementation-Version': revision.substring(0, 7),
             'Build-Date': new Date().format('yyyyMMdd'),
             'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+}
+
+test {
+    useJUnit()
 }

@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -62,7 +64,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         }
 
         // Directories are not returned using bucket#get()
-        if (blob == null) {
+        if (blob == null && getBucket() != null) {
             // Try to find this blob in the parent directory
             blob = listGcsDir(getBlobPath(getURL().getParent()))
                     .filter(blob -> Objects.equals(getBlobName(blob), getURL().getFilename()))
@@ -76,17 +78,20 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     /**
      * Finds the path of the Blob in the GCS Bucket from the given fileURL. I.e., full path without Bucket name.
      */
-    private String getBlobPath(FileURL url) {
-        // Remove first separator if any
-        var pathWithBucket = PathUtils.removeLeadingSeparator(url.getPath());
-        // Remove bucket name from path
-        return pathWithBucket.substring(pathWithBucket.indexOf(getSeparator()) + 1);
+    protected static String getBlobPath(FileURL url) {
+        // Find second part of the path that represents blob path (without bucket name)
+        var matcher = BUCKER_NAME_BLOB_PATH_PATTERN.matcher(url.getPath());
+        return Optional.of(matcher)
+                .filter(Matcher::find)
+                .map(match -> match.group(2))
+                .map(PathUtils::removeTrailingSeparator)
+                .orElse("");
     }
 
     /**
      * Finds the path of the current Blob in the GCS Bucket.
      */
-    private String getBlobPath() {
+    protected String getBlobPath() {
         return getBlobPath(getURL());
     }
 
