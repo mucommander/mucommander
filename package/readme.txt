@@ -37,7 +37,7 @@ New features:
 - Additional search options for the internal text viewer/editor: case-sensitivity, whole-words, regular expressions, forward/backward.
 - Browsing and extracting multi-volume RAR 5+ files.
 - Dock/TaskBar icon shows the number of active jobs and their progress.
-- Open With contextual menu shows compatible apps on macOS.
+- Open With menu includes compatible apps on macOS.
 - Support for Android Debug Bridge (adb).
 - Google Drive: present files shared with the authorized user in the 'Shared with me' folder.
 - Google Drive: present trashed files in the 'Trash' folder.
