@@ -84,7 +84,7 @@ public class OpenWithMenu extends JMenu {
      */
     private void populate() {
         populateRegisteredCommands();
-        populateOpenWith();
+        populateNativeApplications();
         setEnabled(getItemCount() > 0);
     }
 
@@ -130,7 +130,7 @@ public class OpenWithMenu extends JMenu {
         };
     }
 
-    private void populateOpenWith() {
+    private void populateNativeApplications() {
         if (selectedFile != null && !selectedFile.isDirectory()) {
             if (DesktopManager.isOpenWithAppsAvailable()) {
                 var loadingItem = super.add(Translator.get("file_menu.loading") + "...");
