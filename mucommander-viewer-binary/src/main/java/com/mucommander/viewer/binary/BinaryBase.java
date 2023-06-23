@@ -81,7 +81,7 @@ class BinaryBase {
 
     protected final BinarySearchService binarySearchService;
     protected final BinarySearchService.SearchStatusListener searchStatusListener;
-    protected SearchParameters lastSearchParameters = null;
+    protected SearchParameters lastSearchParameters;
 
     protected JMenu editMenu;
     protected JMenu viewMenu;
@@ -170,7 +170,7 @@ class BinaryBase {
 
         editMenu.addSeparator();
         findMenuItem = MenuToolkit.createMenuItem(
-                Translator.get("binary_viewer.find"),
+                Translator.get("binary_viewer.find") + "...",
                 menuItemMnemonicHelper,
                 DesktopManager.getActionShortcuts().getDefaultKeystroke(ActionType.Find),
                 e -> performFind());
