@@ -436,7 +436,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 // Override the action's label to a shorter one
                 item.setText(c.getLabel());
             }
-        }  else if (source == goMenu) {
+        } else if (source == goMenu) {
             // Remove any previous volumes from the Go menu
             // as they might have changed since menu was last selected
             for (int i = goMenu.getItemCount(); i> volumeOffset; i--) {
@@ -449,7 +449,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             for (int i = 0; i < nbFolders; i++) {
                 goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), volumes[i]));
             }
-        }  else if (source == bookmarksMenu) {
+        } else if (source == bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
             // as bookmarks might have changed since menu was last selected
             for (int i = bookmarksMenu.getItemCount(); i > bookmarksOffset; i--) {
@@ -545,7 +545,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                     windowMenuFrames.put(menuItem, frame);
                 }
             }
-        }  else if (source == themesMenu) {
+        } else if (source == themesMenu) {
             // Remove all previous theme items, create new ones for each available theme and select the current theme
             themesMenu.removeAll();
             ButtonGroup buttonGroup = new ButtonGroup();
