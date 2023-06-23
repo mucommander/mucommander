@@ -83,13 +83,16 @@ public class OpenWithMenu extends JMenu {
      * Refreshes the content of the menu.
      */
     private void populate() {
-        for (Command command : CommandManager.commands()) {
-            if (command.getType() == CommandType.NORMAL_COMMAND) {
-                add(ActionManager.getActionInstance(command, mainFrame));
-            }
-        }
+        populateRegisteredCommands();
         populateOpenWith();
         setEnabled(getItemCount() > 0);
+    }
+
+    private void populateRegisteredCommands() {
+        CommandManager.commands().stream()
+        .filter(command -> command.getType() == CommandType.NORMAL_COMMAND)
+        .map(command -> ActionManager.getActionInstance(command, mainFrame))
+        .forEach(this::add);
     }
 
     /**
