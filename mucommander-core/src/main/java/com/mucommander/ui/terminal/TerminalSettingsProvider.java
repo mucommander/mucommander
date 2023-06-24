@@ -18,6 +18,7 @@ package com.mucommander.ui.terminal;
 
 import java.awt.Font;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -148,7 +149,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
         KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(
                 ActionId.asTerminalAction(action.getId()));
 
-        List<KeyStroke> keys = Stream.of(accelerator, alternateAccelerator).filter(k -> k != null).collect(Collectors.toList());
+        List<KeyStroke> keys = Stream.of(accelerator, alternateAccelerator).filter(Objects::nonNull).collect(Collectors.toList());
 
         return !keys.isEmpty() ? new TerminalActionPresentation(name, keys) : null;
     }
