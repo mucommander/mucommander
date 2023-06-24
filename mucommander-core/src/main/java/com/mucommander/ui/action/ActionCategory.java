@@ -39,7 +39,7 @@ public enum ActionCategory {
 	TAB("action_categories.tabs"),
 	MISC("action_categories.misc"),
 	COMMANDS("action_categories.commands"),
-	TERMINAL("action_terminal.keymapping"),
+	TERMINAL("action_categories.terminal"),
 	;
 
 	/** The category's label key in the dictionary file */

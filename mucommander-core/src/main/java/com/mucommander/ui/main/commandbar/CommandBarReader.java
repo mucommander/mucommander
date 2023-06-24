@@ -93,7 +93,7 @@ class CommandBarReader extends CommandBarIO {
     }
 
     public boolean actionsPresent() {
-        return actionsIdsV.size() > 0 && alternateActionsIdsV.size() > 0;
+        return !actionsIdsV.isEmpty() && !alternateActionsIdsV.isEmpty();
     }
 
     public KeyStroke getModifierRead() {

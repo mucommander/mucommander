@@ -110,7 +110,7 @@ public class AcceleratorMap {
     private Pair<ActionId, AcceleratorType> getActionIdAndAcceleratorTypeOfKeyStroke(KeyStroke ks) {
         var actions = map.get(ks);
         return actions != null
-                ? actions.stream().filter(a -> a.first.getType() != ActionId.ActionType.TERMINAL).findFirst().get()
+                ? actions.stream().filter(a -> a.first.getType() != ActionId.ActionType.TERMINAL).findFirst().orElse(null)
                 : null;
     }
 }
