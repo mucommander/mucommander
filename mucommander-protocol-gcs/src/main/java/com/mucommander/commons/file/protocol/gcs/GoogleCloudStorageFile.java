@@ -84,7 +84,6 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         return Optional.of(matcher)
                 .filter(Matcher::find)
                 .map(match -> match.group(2))
-                .map(PathUtils::removeTrailingSeparator)
                 .orElse("");
     }
 
@@ -113,7 +112,9 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
                 // List all blobs in the given folder by string path
                 Storage.BlobListOption.prefix(path),
                 Storage.BlobListOption.currentDirectory());
-        return StreamSupport.stream(files.iterateAll().spliterator(), false);
+        return StreamSupport.stream(files.iterateAll().spliterator(), false)
+                // Blob name in bucket equals to its path, and sometimes Google API returns parent folder in the result
+                .filter(blob -> !path.equals(blob.getName()));
     }
 
     @Override
