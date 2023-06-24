@@ -107,8 +107,9 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
                 // Get a MuAction instance
                 MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
                 // Do not add buttons for actions that do not have an icon
-                if(action.getIcon()!=null)
+                if (action != null && action.getIcon() != null) {
                     addButton(action);
+                }
             }
         }
 

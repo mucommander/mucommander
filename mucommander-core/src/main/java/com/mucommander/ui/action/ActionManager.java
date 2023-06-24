@@ -381,7 +381,7 @@ public class ActionManager {
             // Looks for the action's factory
             ActionFactory actionFactory = actionFactories.get(actionId);
             if (actionFactory == null) {
-                LOGGER.debug("couldn't initiate action: " + actionId + ", its factory wasn't found");
+                LOGGER.error("couldn't initiate action: " + actionId + ", its factory wasn't found");
                 return null;
             }
 
