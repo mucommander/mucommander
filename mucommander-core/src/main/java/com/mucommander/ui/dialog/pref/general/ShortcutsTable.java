@@ -796,8 +796,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
             if (accelerator != null) {
                 for (Map.Entry<ActionId, Map<TableDataColumnEnum, Object>> entry : editedActionMap.entrySet()) {
                     if (scope.contains(entry.getKey().getType()) &&
-                            accelerator.equals(entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
-                            accelerator.equals(entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR))) {
+                            (accelerator.equals(entry.getValue().get(TableDataColumnEnum.ACCELERATOR)) ||
+                                    accelerator.equals(entry.getValue().get(TableDataColumnEnum.ALT_ACCELERATOR)))) {
                         return entry.getKey();
                     }
                 }
