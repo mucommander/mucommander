@@ -137,7 +137,6 @@ public abstract class ActionKeymapIO extends DefaultHandler {
      * Writes the current action keymaps to the user's actions file.
      * 
      * @throws IOException
-     * @throws IOException
      */
     public static void saveActionKeymap() throws IOException {
         if (wereActionsModified)

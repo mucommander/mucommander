@@ -301,7 +301,8 @@ public class ActionKeymap {
             InputMap inputMap = comp.getInputMap(condition);
             ActionMap actionMap = comp.getActionMap();
             inputMap.remove(accelerator);
-            actionMap.remove(action.getDescriptor().getId());
+            ActionId actionId = ActionId.asGenericAction(action.getDescriptor().getId());
+            actionMap.remove(actionId);
         }
     }
 
