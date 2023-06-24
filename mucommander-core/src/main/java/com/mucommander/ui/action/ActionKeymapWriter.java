@@ -42,8 +42,6 @@ import com.mucommander.ui.text.KeyStrokeUtils;
  */
 class ActionKeymapWriter extends ActionKeymapIO {
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionKeymapWriter.class);
-    private static final String ACTION_COMMENT_HEADER =
-            "See http://trac.mucommander.com/wiki/ActionKeyMap for information on how to customize this file";
 
     ActionKeymapWriter() {
     }
@@ -94,8 +92,6 @@ class ActionKeymapWriter extends ActionKeymapIO {
 
         private void writeKeyMap(Map<ActionId, KeyStroke[]> actionMap) throws IOException {
             try {
-                writer.writeCommentLine(ACTION_COMMENT_HEADER);
-
                 XmlAttributes rootElementAttributes = new XmlAttributes();
                 rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
 

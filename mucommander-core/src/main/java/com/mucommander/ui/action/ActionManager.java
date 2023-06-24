@@ -242,7 +242,7 @@ public class ActionManager {
                         new CommandAction.Descriptor(command),
                         (mainFrame, properties) -> new CommandAction(mainFrame, properties, command)));
 
-        TerminalActions.actionDescriptors().stream().forEach(
+        TerminalActions.actionDescriptors().forEach(
                 descriptor -> ActionManager.registerAction(descriptor,
                         (mainFrame, properties) -> new TerminalActions.NullAction(mainFrame, properties, descriptor)));
     }

@@ -17,6 +17,7 @@
 
 package com.mucommander.ui.action;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Arrays;
@@ -68,6 +69,11 @@ public class TerminalActions {
         @Override
         public ActionCategory getCategory() {
             return ActionCategory.TERMINAL;
+        }
+
+        @Override
+        public String getLabel() {
+            return Translator.get("terminal.prefix", Translator.get(getLabelKey()));
         }
     }
 
