@@ -125,7 +125,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		commandBarAlternateButtons   = new AlteredVector<JButton>();
 		
 		// a Set that contains all actions that are used by the command-bar (as regular or alternate buttons).
-		Set<ActionId> usedActions = new HashSet<ActionId>();
+		Set<ActionId> usedActions = new HashSet<>();
 		usedActions.addAll(initCommandBarActionsList());
 		usedActions.addAll(initCommandBarAlternateActionsList());
 		initActionsPoolList(usedActions);
@@ -158,7 +158,7 @@ public class CommandBarDialog extends CustomizeDialog {
     
     private boolean areAlternativeActionsChanged() {
     	// Fetch command-bar alternative actions
-		ActionId[] commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
+    	var commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
     	int nbActions = commandBarAlternativeActionIds.length;
     	
     	if (nbActions != commandBarAlternateButtons.size())
