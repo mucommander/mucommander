@@ -20,6 +20,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.viewer.binary.search.ReplaceParameters;
 import com.mucommander.viewer.binary.search.SearchCondition;
 import com.mucommander.viewer.binary.search.SearchParameters;
+import org.exbin.auxiliary.paged_data.BinaryData;
 import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
 import org.exbin.auxiliary.paged_data.EditableBinaryData;
 import org.exbin.bined.RowWrappingMode;
@@ -105,11 +106,11 @@ public class FindBinaryPanel extends javax.swing.JPanel {
         findButtonGroup.add(findTextRadioButton);
         findTextRadioButton.setSelected(true);
         findTextRadioButton.setText(Translator.get("binary_viewer.find.textVariant"));
-        findTextRadioButton.addActionListener(this::findTextRadioButtonActionPerformed);
+        findTextRadioButton.addChangeListener(l -> updateFindCondition());
 
         findButtonGroup.add(findBinaryRadioButton);
         findBinaryRadioButton.setText(Translator.get("binary_viewer.find.binaryVariant"));
-        findBinaryRadioButton.addActionListener(this::findBinaryRadioButtonActionPerformed);
+        findBinaryRadioButton.addChangeListener(l -> updateFindCondition());
 
         findCodeArea.setEnabled(false);
 
@@ -184,7 +185,7 @@ public class FindBinaryPanel extends javax.swing.JPanel {
         replacePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(Translator.get("binary_viewer.find.replacePanel.title")));
 
         performReplaceCheckBox.setText(Translator.get("binary_viewer.find.replaceOnMatch"));
-        performReplaceCheckBox.addActionListener(this::performReplaceCheckBoxActionPerformed);
+        performReplaceCheckBox.addChangeListener(l -> updateReplaceEnablement());
 
         replaceLabel.setText(Translator.get("binary_viewer.find.replaceText"));
         replaceLabel.setEnabled(false);
@@ -193,14 +194,14 @@ public class FindBinaryPanel extends javax.swing.JPanel {
         replaceTextRadioButton.setSelected(true);
         replaceTextRadioButton.setText(Translator.get("binary_viewer.find.textVariant"));
         replaceTextRadioButton.setEnabled(false);
-        replaceTextRadioButton.addActionListener(this::replaceTextRadioButtonActionPerformed);
+        replaceTextRadioButton.addChangeListener(l -> updateReplaceEnablement());
 
         replaceTextField.setEnabled(false);
 
         replaceButtonGroup.add(replaceBinaryRadioButton);
         replaceBinaryRadioButton.setText(Translator.get("binary_viewer.find.binaryVariant"));
         replaceBinaryRadioButton.setEnabled(false);
-        replaceBinaryRadioButton.addActionListener(this::replaceBinaryRadioButtonActionPerformed);
+        replaceBinaryRadioButton.addChangeListener(l -> updateReplaceEnablement());
 
         replaceCodeArea.setEnabled(false);
 
@@ -268,6 +269,8 @@ public class FindBinaryPanel extends javax.swing.JPanel {
         splitPane.setRightComponent(replacePanel);
 
         add(splitPane, java.awt.BorderLayout.CENTER);
+        revalidate();
+        repaint();
     }
 
     public void initFocus() {
@@ -278,26 +281,8 @@ public class FindBinaryPanel extends javax.swing.JPanel {
     public void hideReplaceOptions() {
         remove(splitPane);
         add(findPanel, BorderLayout.CENTER);
-    }
-
-    private void performReplaceCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {
-        updateReplaceEnablement();
-    }
-
-    private void findTextRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        updateFindCondition();
-    }
-
-    private void findBinaryRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        updateFindCondition();
-    }
-
-    private void replaceTextRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        updateReplaceCondition();
-    }
-
-    private void replaceBinaryRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        updateReplaceCondition();
+        revalidate();
+        repaint();
     }
 
     @Nonnull
@@ -321,7 +306,12 @@ public class FindBinaryPanel extends javax.swing.JPanel {
             findBinaryRadioButton.setSelected(true);
         }
         findTextField.setText(condition.getSearchText());
-        findCodeArea.setContentData(condition.getBinaryData());
+        ByteArrayEditableData contentData = (ByteArrayEditableData) findCodeArea.getContentData();
+        contentData.clear();
+        BinaryData conditionData = condition.getBinaryData();
+        if (conditionData != null) {
+            contentData.insert(0, conditionData);
+        }
     }
 
     @Nullable
@@ -346,7 +336,12 @@ public class FindBinaryPanel extends javax.swing.JPanel {
             replaceBinaryRadioButton.setSelected(true);
         }
         replaceTextField.setText(condition.getSearchText());
-        replaceCodeArea.setContentData(condition.getBinaryData());
+        ByteArrayEditableData contentData = (ByteArrayEditableData) replaceCodeArea.getContentData();
+        contentData.clear();
+        BinaryData conditionData = condition.getBinaryData();
+        if (conditionData != null) {
+            contentData.insert(0, conditionData);
+        }
     }
 
     @Nonnull
