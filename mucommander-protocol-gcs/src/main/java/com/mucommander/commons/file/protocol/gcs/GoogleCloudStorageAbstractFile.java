@@ -65,7 +65,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
             var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
                     GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, true);
 
-            connectionHandler.checkConnection();
+            // Connection is checked before returning the client
             gcsClient = connectionHandler.getClient();
         }
 
