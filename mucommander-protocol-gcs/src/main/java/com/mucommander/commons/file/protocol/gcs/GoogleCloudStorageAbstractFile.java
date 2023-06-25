@@ -63,7 +63,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         if (gcsClient == null) {
             // Get connection handler for the given GCS url
             var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
-                    GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, false);
+                    GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, true);
 
             connectionHandler.checkConnection();
             gcsClient = connectionHandler.getClient();

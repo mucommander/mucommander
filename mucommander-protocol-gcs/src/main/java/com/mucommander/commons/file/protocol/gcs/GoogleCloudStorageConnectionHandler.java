@@ -40,7 +40,10 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
     }
 
     public GoogleCloudStorageClient getClient() throws IOException {
+        // The connection is checked and started if needed
         checkConnection();
+        // No need for a lock anymore
+        releaseLock();
         return client;
     }
 
