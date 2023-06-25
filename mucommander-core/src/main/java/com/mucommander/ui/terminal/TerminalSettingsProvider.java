@@ -125,7 +125,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
 
     @Override
     public @NotNull TerminalActionPresentation getLineUpActionPresentation() {
-        TerminalActionPresentation custom = getTerminalActionPresentation("Line Up",
+        TerminalActionPresentation custom = getTerminalActionPresentation("terminal.line_up.label",
                 TerminalActions.Action.LINE_UP);
         return custom != null ? custom : overrideName(super.getPageUpActionPresentation(), "terminal.line_up.label");
     }
