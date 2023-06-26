@@ -1233,7 +1233,7 @@ public class ThemeData {
         DefaultColor defaultColor = COLORS.get(Integer.valueOf(id));
         if (defaultColor == null) {
             // see the first comment for this class
-            LOGGER.debug("Default color for id {} not found, using generic default");
+            LOGGER.debug("Default color for id {} not found, using a generic default", id);
             return Color.LIGHT_GRAY;
         }
 
@@ -1256,7 +1256,7 @@ public class ThemeData {
         DefaultFont defaultFont = FONTS.get(Integer.valueOf(id));
         if (defaultFont == null) {
             // see the first comment for this class
-            LOGGER.debug("Default font for id {} not found, using generic default");
+            LOGGER.debug("Default font for id {} not found, using a generic default", id);
             return Font.decode("SansSerif");
         }
         return defaultFont.getFont(data);
