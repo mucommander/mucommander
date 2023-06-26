@@ -133,7 +133,7 @@
     <!-- = Shell appearance ============================== -->
     <!-- ================================================= -->
     <shell>
-        <font family="Monospaced,Lucida Sans Typewriter" size ="12"/>
+        <font family="Menlo,Monospaced,Lucida Sans Typewriter" size ="12"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
