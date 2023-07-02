@@ -16,6 +16,12 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
+import javax.swing.JFrame;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
 import com.mucommander.commons.file.AuthenticationType;
 import com.mucommander.commons.file.DefaultSchemeHandler;
 import com.mucommander.commons.file.DefaultSchemeParser;
@@ -25,10 +31,6 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import javax.swing.JFrame;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author miroslav.spak
@@ -54,7 +56,11 @@ public class Activator implements BundleActivator {
 
             @Override
             public SchemeHandler getSchemeHandler() {
-                return new DefaultSchemeHandler(new DefaultSchemeParser(), 443, "/", AuthenticationType.NO_AUTHENTICATION, null);
+                return new DefaultSchemeHandler(new DefaultSchemeParser(),
+                        443,
+                        "/",
+                        AuthenticationType.NO_AUTHENTICATION,
+                        null);
             }
         };
         var panelProvider = new ProtocolPanelProvider() {

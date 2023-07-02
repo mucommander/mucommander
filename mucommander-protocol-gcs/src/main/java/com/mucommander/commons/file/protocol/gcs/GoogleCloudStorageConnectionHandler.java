@@ -16,14 +16,14 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.connection.ConnectionHandler;
-import com.mucommander.conf.PlatformManager;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.connection.ConnectionHandler;
+import com.mucommander.conf.PlatformManager;
 
 /**
  * @author miroslav.spak

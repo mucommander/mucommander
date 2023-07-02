@@ -16,6 +16,13 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionPool;
@@ -24,16 +31,9 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
- * Dummy abstract implementation of CloudStorage file. Refuses almost all standard operations later overridden
- * by children who can support them.
+ * Dummy abstract implementation of CloudStorage file. Refuses almost all standard operations later overridden by
+ * children who can support them.
  *
  * @author miroslav.spak
  */
@@ -61,7 +61,9 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         if (gcsClient == null) {
             // Get connection handler for the given GCS url
             var connectionHandler = (GoogleCloudStorageConnectionHandler) ConnectionPool.getConnectionHandler(
-                    GoogleCloudStorageConnectionHandlerFactory.getInstance(), fileURL, true);
+                    GoogleCloudStorageConnectionHandlerFactory.getInstance(),
+                    fileURL,
+                    true);
 
             // Connection is checked before returning the client
             gcsClient = connectionHandler.getClient();
@@ -194,14 +196,14 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     /**
      * Unifies the creation of a {@link GoogleCloudStorageAbstractFile} in the module.
      *
-     * @param filePathFun function that gets parent path as parameter and returns a new target file path
-     * @param createFun   function to create a new concrete instance of the abstract file
-     *                    (e.g., {@link GoogleCloudStorageFile})
+     * @param filePathFun
+     *            function that gets parent path as parameter and returns a new target file path
+     * @param createFun
+     *            function to create a new concrete instance of the abstract file (e.g., {@link GoogleCloudStorageFile})
      */
     protected <FileT extends GoogleCloudStorageAbstractFile> FileT toFile(
             Function<String, String> filePathFun,
-            Function<FileURL, FileT> createFun
-    ) {
+            Function<FileURL, FileT> createFun) {
         Storage storageService;
         try {
             storageService = getStorageService();

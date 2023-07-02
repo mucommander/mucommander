@@ -16,15 +16,16 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
+import java.util.Map;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.commons.util.StringUtils;
-import java.util.Map;
 
 /**
- * An implementation of protocol provider that differentiates among all three GCS file/folder types.
- * The provider instantiates the right type according to their path.
+ * An implementation of protocol provider that differentiates among all three GCS file/folder types. The provider
+ * instantiates the right type according to their path.
  *
  * @author miroslav.spak
  */
@@ -33,12 +34,12 @@ public class GoogleCloudStorageProtocolProvider implements ProtocolProvider {
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) {
         var parent = url.getParent();
 
-        if(parent == null){
+        if (parent == null) {
             // Only root has no parent
             return new GoogleCloudStorageRoot(url);
         }
 
-        if(StringUtils.isNullOrEmpty(parent.getFilename())){
+        if (StringUtils.isNullOrEmpty(parent.getFilename())) {
             // Parent of the bucket is only the schema and host i.e. has no filename
             return new GoogleCloudStorageBucket(url);
         }
