@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.cloud.storage.Storage;
@@ -167,11 +166,7 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     public AbstractFile[] ls() throws IOException {
         try {
             // Try to list this as directory
-            var childrenList = listDir().collect(Collectors.toList());
-            // Remap childrenList to array
-            var childrenArray = new AbstractFile[childrenList.size()];
-            childrenList.toArray(childrenArray);
-            return childrenArray;
+            return listDir().toArray(AbstractFile[]::new);
         } catch (Exception ex) {
             throw new IOException("Unable to list directory: " + fileURL, ex);
         }
