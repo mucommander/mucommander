@@ -40,6 +40,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.mucommander.commons.file.protocol.gcs.Activator.GCS_SCHEMA;
+
 /**
  * This ServerPanel helps initiate Google Cloud Storage connections.
  *
@@ -49,7 +51,6 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStoragePanel.class);
     private static final int Y_SPACE_AFTER_TEXT_FIELD = 15;
-    static final String GCS_SCHEMA = "gcs";
 
     private final TextField projectIdField;
     private final TextField credentialsJsonPathField;

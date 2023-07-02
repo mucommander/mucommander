@@ -39,8 +39,6 @@ import java.util.stream.Stream;
  */
 public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
-    private static final String CLOUD_STORAGE_DIRECTORY_SEPARATOR = "/";
-
     private Storage storageService;
 
     private GoogleCloudStorageClient gcsClient;
@@ -70,11 +68,6 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
         }
 
         return gcsClient;
-    }
-
-    @Override
-    public String getSeparator() {
-        return CLOUD_STORAGE_DIRECTORY_SEPARATOR;
     }
 
     @Override
