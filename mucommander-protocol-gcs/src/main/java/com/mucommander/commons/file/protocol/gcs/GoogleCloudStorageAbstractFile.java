@@ -110,12 +110,6 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     }
 
     @Override
-    public boolean exists() {
-        // GoogleCloudStorageAbstractFile has no representation
-        return false;
-    }
-
-    @Override
     public FilePermissions getPermissions() {
         return isDirectory() ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                 : new SimpleFilePermissions(FilePermissions.FULL_PERMISSION_INT);
@@ -151,11 +145,6 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
 
     @Override
     public boolean canGetGroup() {
-        return false;
-    }
-
-    @Override
-    public boolean isDirectory() {
         return false;
     }
 
