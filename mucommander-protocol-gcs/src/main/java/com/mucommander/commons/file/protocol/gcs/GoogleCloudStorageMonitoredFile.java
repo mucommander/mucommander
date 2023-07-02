@@ -16,20 +16,20 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
-import com.mucommander.commons.file.MonitoredFile;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
+import com.mucommander.commons.file.MonitoredFile;
 
 /**
- * This class is an implementation of {@link MonitoredFile} that enables
- * to detect changes to a folder in Google Cloud Storage. In GCS, the modification date
- * of a folder does not change when files are added to or removed from the folder. This
- * mechanism checks the last modification date of the files in this folder and this way
- * can detect when a file is added to the folder or a file in this folder is changed.
- * This mechanism is unable to detect if a file is removed from the folder though.
+ * This class is an implementation of {@link MonitoredFile} that enables to detect changes to a folder in Google Cloud
+ * Storage. In GCS, the modification date of a folder does not change when files are added to or removed from the
+ * folder. This mechanism checks the last modification date of the files in this folder and this way can detect when a
+ * file is added to the folder or a file in this folder is changed. This mechanism is unable to detect if a file is
+ * removed from the folder though.
  * <p>
  * Inspired from the GoogleDriveMonitoredFile class.
  *

@@ -16,21 +16,8 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.StorageOptions;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.util.StringUtils;
-import com.mucommander.protocol.ui.ServerPanel;
-import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.mucommander.commons.file.protocol.gcs.Activator.GCS_SCHEMA;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +27,22 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.mucommander.commons.file.protocol.gcs.Activator.GCS_SCHEMA;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.StorageOptions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.StringUtils;
+import com.mucommander.protocol.ui.ServerPanel;
+import com.mucommander.protocol.ui.ServerPanelListener;
+import com.mucommander.text.Translator;
 
 /**
  * This ServerPanel helps initiate Google Cloud Storage connections.
@@ -81,50 +83,78 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         // Add all text fields
         projectIdField = addTextField(
                 Translator.get("server_connect_dialog.gcs.project_id"),
-                lastProjectId, !lastDefaultProjectId, true);
+                lastProjectId,
+                !lastDefaultProjectId,
+                true);
         credentialsJsonPathField = addFilePathChooser(
                 Translator.get("server_connect_dialog.gcs.credentials_json"),
-                lastCredentialsJsonPath, !lastDefaultCredentials);
+                lastCredentialsJsonPath,
+                !lastDefaultCredentials);
         locationField = addTextField(
                 Translator.get("server_connect_dialog.gcs.bucket_location"),
-                lastLocation, !lastDefaultLocation, false);
+                lastLocation,
+                !lastDefaultLocation,
+                false);
         impersonatedPrincipalField = addTextField(
                 Translator.get("server_connect_dialog.gcs.impersonated_principal"),
-                lastImpersonatedPrincipal, lastImpersonation, false);
+                lastImpersonatedPrincipal,
+                lastImpersonation,
+                false);
 
         // Add all check boxes
         defaultProjectIdCheckBox = addCheckBoxToTextField(
                 Translator.get("server_connect_dialog.gcs.default.project_id"),
-                lastDefaultProjectId, gsUtilsDefaults, projectIdField, StorageOptions.getDefaultProjectId());
+                lastDefaultProjectId,
+                gsUtilsDefaults,
+                projectIdField,
+                StorageOptions.getDefaultProjectId());
         defaultCredentialsCheckBox = addCheckBoxToTextField(
                 Translator.get("server_connect_dialog.gcs.default.credentials"),
-                lastDefaultCredentials, gsUtilsDefaults, credentialsJsonPathField, "");
+                lastDefaultCredentials,
+                gsUtilsDefaults,
+                credentialsJsonPathField,
+                "");
         defaultLocationCheckBox = addCheckBoxToTextField(
                 Translator.get("server_connect_dialog.gcs.default.bucket_location"),
-                lastDefaultLocation, gsUtilsDefaults, locationField, "");
+                lastDefaultLocation,
+                gsUtilsDefaults,
+                locationField,
+                "");
         impersonationCheckBox = addCheckBoxToTextField(
                 Translator.get("server_connect_dialog.gcs.impersonation"),
-                lastImpersonation, true, impersonatedPrincipalField, "");
+                lastImpersonation,
+                true,
+                impersonatedPrincipalField,
+                "");
 
         addWarnLabel(
                 Translator.get("server_connect_dialog.gcs.missing_default_project_id"),
-                !lastDefaultProjectId && lastProjectId.isBlank(), defaultProjectIdCheckBox, projectIdField);
+                !lastDefaultProjectId && lastProjectId.isBlank(),
+                defaultProjectIdCheckBox,
+                projectIdField);
         addWarnLabel(
                 Translator.get("server_connect_dialog.gcs.missing_default_credentials"),
                 !lastDefaultCredentials && lastCredentialsJsonPath.isBlank(),
-                defaultCredentialsCheckBox, credentialsJsonPathField);
+                defaultCredentialsCheckBox,
+                credentialsJsonPathField);
         addWarnLabel(
                 Translator.get("server_connect_dialog.gcs.missing_defaults"),
-                !gsUtilsDefaults, null, null);
+                !gsUtilsDefaults,
+                null,
+                null);
     }
 
     /**
      * Adds simple standard TextField to the Server connection panel.
      *
-     * @param label     the label od the new textField
-     * @param initValue initial value of this textField
-     * @param enabled   if the textField should be enabled or not
-     * @param updateUrl if the connection panel url should be updated for this textField
+     * @param label
+     *            the label od the new textField
+     * @param initValue
+     *            initial value of this textField
+     * @param enabled
+     *            if the textField should be enabled or not
+     * @param updateUrl
+     *            if the connection panel url should be updated for this textField
      * @return a new simple textField already added to the Server connection panel
      */
     private TextField addTextField(String label, String initValue, boolean enabled, boolean updateUrl) {
@@ -143,9 +173,12 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     /**
      * Adds TextField with the file chooser to the Server connection panel.
      *
-     * @param label     the label of the new textField
-     * @param initValue initial value of this textField
-     * @param enabled   if the textField and the file chooser button should be enabled or not
+     * @param label
+     *            the label of the new textField
+     * @param initValue
+     *            initial value of this textField
+     * @param enabled
+     *            if the textField and the file chooser button should be enabled or not
      * @return a composite textField with path chooser added to the Server connection panel
      */
     private TextField addFilePathChooser(String label, String initValue, boolean enabled) {
@@ -191,15 +224,24 @@ public class GoogleCloudStoragePanel extends ServerPanel {
      * Adds checkBox to the Server connection panel with the ability to switch text field "enabled" state and reset it
      * to the default value.
      *
-     * @param label                 the label of the new checkBox
-     * @param initValue             initial state of this checkBox
-     * @param enabled               if the checkBox should be enabled or not
-     * @param textField             controlled textField using this checkBox
-     * @param textFieldDefaultValue the default value of the textField when it is disabled
+     * @param label
+     *            the label of the new checkBox
+     * @param initValue
+     *            initial state of this checkBox
+     * @param enabled
+     *            if the checkBox should be enabled or not
+     * @param textField
+     *            controlled textField using this checkBox
+     * @param textFieldDefaultValue
+     *            the default value of the textField when it is disabled
      * @return a new checkBox (controlling textField) already added to the Server connection panel
      */
     private JCheckBox addCheckBoxToTextField(
-            String label, boolean initValue, boolean enabled, TextField textField, String textFieldDefaultValue) {
+            String label,
+            boolean initValue,
+            boolean enabled,
+            TextField textField,
+            String textFieldDefaultValue) {
         var checkBox = new JCheckBox(label, initValue);
         checkBox.setEnabled(enabled);
         checkBox.addActionListener(event -> {
@@ -214,17 +256,24 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     }
 
     /**
-     * Adds warning label to the Server connection panel. The label can be associated with the defaults checkbox
-     * and textField to be shown only when there is no valid configuration for the two. Associated checkBox and
-     * textField can be both null or not.
+     * Adds warning label to the Server connection panel. The label can be associated with the defaults checkbox and
+     * textField to be shown only when there is no valid configuration for the two. Associated checkBox and textField
+     * can be both null or not.
      *
-     * @param label               the text of this warning label
-     * @param visible             initial visibility of the warning
-     * @param associatedCheckBox  default value checkBox that when selected hides this warning label
-     * @param associatedTextField textField that shows label when empty or hides it otherwise
+     * @param label
+     *            the text of this warning label
+     * @param visible
+     *            initial visibility of the warning
+     * @param associatedCheckBox
+     *            default value checkBox that when selected hides this warning label
+     * @param associatedTextField
+     *            textField that shows label when empty or hides it otherwise
      */
     private void addWarnLabel(
-            String label, boolean visible, JCheckBox associatedCheckBox, TextField associatedTextField) {
+            String label,
+            boolean visible,
+            JCheckBox associatedCheckBox,
+            TextField associatedTextField) {
         JLabel warnLabel = new JLabel(label);
         warnLabel.setVisible(visible);
         warnLabel.setForeground(Color.red);
@@ -232,8 +281,8 @@ public class GoogleCloudStoragePanel extends ServerPanel {
 
         if (associatedTextField != null && associatedCheckBox != null) {
             // Add action listeners - show warning on empty associated text field without defaults on
-            SimpleDocumentActionListener action = () ->
-                    warnLabel.setVisible(!associatedCheckBox.isSelected() && associatedTextField.getText().isBlank());
+            SimpleDocumentActionListener action = () -> warnLabel
+                    .setVisible(!associatedCheckBox.isSelected() && associatedTextField.getText().isBlank());
             associatedTextField.addActionListener(action);
             associatedCheckBox.addActionListener(action);
         }
@@ -282,15 +331,16 @@ public class GoogleCloudStoragePanel extends ServerPanel {
                     lastDefaultProjectId,
                     lastDefaultCredentials,
                     lastImpersonation,
-                    lastDefaultLocation
-            );
+                    lastDefaultLocation);
 
             try {
                 // Find path for this properties
                 var outputPath = GoogleCloudStorageConnectionHandler.getCredentialFileUrl(lastProjectId);
                 // There are no secrets, just write it as plain json
-                Files.writeString(outputPath, connectionProperties.toJson(),
-                        StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
+                Files.writeString(outputPath,
+                        connectionProperties.toJson(),
+                        StandardOpenOption.TRUNCATE_EXISTING,
+                        StandardOpenOption.CREATE);
             } catch (Exception e) {
                 LOGGER.error("Failed to persist credentials for google cloud storage project " + lastProjectId, e);
             }
@@ -298,9 +348,9 @@ public class GoogleCloudStoragePanel extends ServerPanel {
     }
 
     /**
-     * Checks if the google-cloud library can find default credentials and default project id.
-     * Typically signifying that the "gsUtils" are installed. It doesn't matter if the defaults were provided in
-     * a different way, we are using only those two.
+     * Checks if the google-cloud library can find default credentials and default project id. Typically signifying that
+     * the "gsUtils" are installed. It doesn't matter if the defaults were provided in a different way, we are using
+     * only those two.
      */
     private static boolean hasGsUtilsDefaults() {
         try {
@@ -327,7 +377,8 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         /**
          * Adds event action to apply on any text field change.
          *
-         * @param documentListener listener with action to be executed
+         * @param documentListener
+         *            listener with action to be executed
          */
         public void addActionListener(DocumentListener documentListener) {
             textField.getDocument().addDocumentListener(documentListener);

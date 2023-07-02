@@ -1,12 +1,13 @@
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.cloud.storage.BlobInfo;
-import com.mucommander.commons.file.FileURL;
-import org.junit.Test;
+import static org.testng.Assert.assertEquals;
 
 import java.net.MalformedURLException;
 
-import static org.testng.Assert.assertEquals;
+import org.junit.Test;
+
+import com.google.cloud.storage.BlobInfo;
+import com.mucommander.commons.file.FileURL;
 
 public class GoogleCloudStorageBucketTest {
 

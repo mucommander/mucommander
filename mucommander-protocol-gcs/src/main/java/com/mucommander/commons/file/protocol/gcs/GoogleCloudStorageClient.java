@@ -16,17 +16,17 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
+import java.io.Closeable;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+
 import com.google.api.services.storage.StorageScopes;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ImpersonatedCredentials;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.mucommander.commons.util.StringUtils;
-
-import java.io.Closeable;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * @author miroslav.spak

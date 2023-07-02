@@ -16,10 +16,6 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.cloud.storage.*;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.util.PathUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,6 +25,10 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import com.google.cloud.storage.*;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.util.PathUtils;
 
 /**
  * Representation of the Cloud Storage Blob as a File/Folder.
@@ -54,8 +54,8 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     /**
      * Tries to receive blob from the Google Cloud Storage service.
      *
-     * @return blob for this object path (i.e., {@link GoogleCloudStorageFile#fileURL}), can be <b>null</b>
-     * if blob doesn't exist
+     * @return blob for this object path (i.e., {@link GoogleCloudStorageFile#fileURL}), can be <b>null</b> if blob
+     *         doesn't exist
      */
     private Blob getBlob() {
         // Get Blob file from the bucket

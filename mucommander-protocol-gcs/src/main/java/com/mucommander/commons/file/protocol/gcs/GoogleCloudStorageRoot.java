@@ -16,12 +16,12 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import com.google.cloud.storage.Bucket;
-import com.mucommander.commons.file.FileURL;
-
 import java.io.IOException;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import com.google.cloud.storage.Bucket;
+import com.mucommander.commons.file.FileURL;
 
 /**
  * Representation of the Root for the CloudStorage. This root folder lists CloudStorage buckets, so it is an additional

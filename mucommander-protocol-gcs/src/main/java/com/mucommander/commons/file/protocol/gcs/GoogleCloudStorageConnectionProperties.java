@@ -48,8 +48,7 @@ final class GoogleCloudStorageConnectionProperties {
             boolean defaultProjectId,
             boolean defaultCredentials,
             boolean impersonation,
-            boolean defaultLocation
-    ) {
+            boolean defaultLocation) {
         this.projectId = projectId;
         this.credentialsJsonPath = credentialsJsonPath;
         this.impersonatedPrincipal = impersonatedPrincipal;
