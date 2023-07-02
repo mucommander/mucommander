@@ -54,6 +54,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
@@ -236,7 +237,12 @@ class BinaryEditor extends BinaryBase implements FileEditor {
 
         // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
         if (OsFamily.MAC_OS.isCurrent()) {
-            windowFrame.getRootPane().putClientProperty("windowModified", isSaveNeeded());
+            if (windowFrame != null) {
+                JRootPane rootPane = windowFrame.getRootPane();
+                if (rootPane != null) {
+                    rootPane.putClientProperty("windowModified", isSaveNeeded());
+                }
+            }
         }
     }
 
