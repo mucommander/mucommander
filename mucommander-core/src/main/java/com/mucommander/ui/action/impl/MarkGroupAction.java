@@ -51,7 +51,7 @@ public class MarkGroupAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkGroup.toString(); }
+		public String getId() { return ActionType.MarkGroup.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

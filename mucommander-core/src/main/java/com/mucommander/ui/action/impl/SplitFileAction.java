@@ -63,7 +63,7 @@ public class SplitFileAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SplitFile.toString(); }
+		public String getId() { return ActionType.SplitFile.getId(); }
 
 		public ActionCategory getCategory() { return null; }
     }

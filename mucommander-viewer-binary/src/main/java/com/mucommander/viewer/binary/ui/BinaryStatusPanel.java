@@ -43,12 +43,11 @@ import com.mucommander.viewer.binary.StatusDocumentSizeFormat;
 @ParametersAreNonnullByDefault
 public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatusApi {
 
+    private static final String BR_TAG = "<br>";
+
     public static int DEFAULT_OCTAL_SPACE_GROUP_SIZE = 4;
     public static int DEFAULT_DECIMAL_SPACE_GROUP_SIZE = 3;
     public static int DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE = 4;
-
-    private static final String BR_TAG = "<br>";
-
     private StatusControlHandler statusControlHandler;
 
     private StatusCursorPositionFormat cursorPositionFormat = new StatusCursorPositionFormat();
@@ -63,6 +62,7 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
     private long documentSize;
     private long initialDocumentSize;
 
+    private javax.swing.JLabel statusLabel;
     private javax.swing.JMenu cursorPositionCodeTypeMenu;
     private javax.swing.JLabel cursorPositionLabel;
     private javax.swing.ButtonGroup cursorPositionModeButtonGroup;
@@ -138,6 +138,7 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
                 return super.createToolTip();
             }
         };
+        statusLabel = new javax.swing.JLabel();
 
         editModeLabel = new javax.swing.JLabel();
         encodingLabel = new javax.swing.JLabel();
@@ -301,7 +302,12 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                 layout.createSequentialGroup()
-                                        .addContainerGap(195, Short.MAX_VALUE)
+                                        .addContainerGap()
+                                        .addComponent(statusLabel,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                177,
+                                                Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(encodingLabel,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 148,
@@ -347,7 +353,8 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
                         .addComponent(encodingLabel,
                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE));
+                                Short.MAX_VALUE)
+                        .addComponent(statusLabel));
     }
 
     private void editModeLabelMouseClicked(java.awt.event.MouseEvent evt) {
@@ -497,6 +504,11 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
     }
 
     @Override
+    public void setStatusText(String text) {
+        statusLabel.setText(text);
+    }
+
+    @Override
     public void setEditMode(EditMode editMode, EditOperation editOperation) {
         this.editOperation = editOperation;
         switch (editMode) {
@@ -537,7 +549,7 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
     @Override
     public void setMemoryMode(BinaryStatusApi.MemoryMode memoryMode) {
         memoryModeLabel.setText(memoryMode.getDisplayChar());
-        boolean enabled = false; // TODO memoryMode != MemoryMode.READ_ONLY;
+        boolean enabled = memoryMode != MemoryMode.READ_ONLY && memoryMode != MemoryMode.DIRECT_ACCESS;
         deltaMemoryModeRadioButtonMenuItem.setEnabled(false); // Not available
         directMemoryModeRadioButtonMenuItem.setEnabled(enabled);
         ramMemoryModeRadioButtonMenuItem.setEnabled(enabled);

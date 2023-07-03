@@ -30,6 +30,7 @@ import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 import java.util.Map;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,9 +40,6 @@ import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.ui.action.AWTActionProxy;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
-import com.mucommander.ui.action.impl.BringAllToFrontAction;
-import com.mucommander.ui.action.impl.NewWindowAction;
-import com.mucommander.ui.action.impl.QuitAction;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.WindowManager;
 
@@ -86,17 +84,17 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     }
 
     /**
-     * @see #addMenuItem(Menu, String)
+     * @see #addMenuItem(Menu, ActionId)
      */
     private void addMenuItem(Menu menu, ActionType muActionType) {
-        addMenuItem(menu, muActionType.toString());
+        addMenuItem(menu, ActionId.asGenericAction(muActionType.getId()));
     }
 
     /**
      * Creates and adds a menu item that triggers the MuAction denoted by the given Class. The menu item's label
      * is set to the value returned by {@link MuAction#getLabel()}.
      */
-    private void addMenuItem(Menu menu, String muActionId) {
+    private void addMenuItem(Menu menu, ActionId muActionId) {
         MenuItem menuItem = new MenuItem(ActionProperties.getActionLabel(muActionId));
         menuItem.addActionListener(new AWTActionProxy(muActionId));
         menu.add(menuItem);

@@ -22,6 +22,7 @@ import java.io.OutputStream;
 
 import javax.swing.KeyStroke;
 
+import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +53,8 @@ class CommandBarWriter extends CommandBarIO {
 	private CommandBarWriter() {}
 	
 	void write() throws IOException {
-		String[] commandBarActionIds = CommandBarAttributes.getActions();
-		String[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
+		ActionId[] commandBarActionIds = CommandBarAttributes.getActions();
+		ActionId[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
 		KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
 
 		BackupOutputStream bos = new BackupOutputStream(getDescriptionFile());
@@ -75,7 +76,7 @@ class CommandBarWriter extends CommandBarIO {
     		this.writer = new XmlWriter(stream);
     	}
 		
-		private void write(String[] actionIds, String[] alternativeActionIds, KeyStroke modifier) throws IOException {
+		private void write(ActionId[] actionIds, ActionId[] alternativeActionIds, KeyStroke modifier) throws IOException {
 			try {
 				writer.writeCommentLine("See http://trac.mucommander.com/wiki/CommandBar for information on how to customize this file");
 				
@@ -94,11 +95,11 @@ class CommandBarWriter extends CommandBarIO {
     		}
 		}
 		
-		private void write(String actionId, String alternativeActionId) throws IOException {
+		private void write(ActionId actionId, ActionId alternativeActionId) throws IOException {
 			XmlAttributes attributes = new XmlAttributes();
-			attributes.add(ACTION_ID_ATTRIBUTE, actionId);
+			attributes.add(ACTION_ID_ATTRIBUTE, actionId.getActionId());
 			if (alternativeActionId != null)
-				attributes.add(ALT_ACTION_ID_ATTRIBUTE, alternativeActionId);
+				attributes.add(ALT_ACTION_ID_ATTRIBUTE, alternativeActionId.getActionId());
 			
             LOGGER.trace("Writing button: action_id = "  + attributes.getValue(ACTION_ID_ATTRIBUTE) + ", alt_action_id = " + attributes.getValue(ALT_ACTION_ID_ATTRIBUTE));
 			

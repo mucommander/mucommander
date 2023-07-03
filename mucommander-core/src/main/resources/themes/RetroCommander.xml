@@ -126,7 +126,7 @@
     <!-- = Shell appearance ============================== -->
     <!-- ================================================= -->
     <shell>
-        <font family="Monospaced,Lucida Sans Typewriter" size ="12" bold="true"/>
+        <font family="Menlo,Monospaced,Lucida Sans Typewriter" size ="12"/>
 
         <!-- = Default appearance ========================== -->
         <!-- =============================================== -->
@@ -142,28 +142,6 @@
             <foreground color="ffffff"/>
         </selected>
     </shell>
-
-
-
-    <!-- = Shell history appearance ====================== -->
-    <!-- ================================================= -->
-    <shell_history>
-        <font size="13" family="Lucida Grande,Arial,Lucida Sans"/>
-
-        <!-- = Default appearance ========================== -->
-        <!-- =============================================== -->
-        <normal>
-            <background color="ffffff"/>
-            <foreground color="000000"/>
-        </normal>
-
-        <!-- = Selected appearance ========================= -->
-        <!-- =============================================== -->
-        <selected>
-            <background color="b4d5ff"/>
-            <foreground color="000000"/>
-        </selected>
-    </shell_history>
 
 
 

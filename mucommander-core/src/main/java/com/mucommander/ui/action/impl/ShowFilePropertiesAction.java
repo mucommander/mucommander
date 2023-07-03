@@ -49,7 +49,7 @@ public class ShowFilePropertiesAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowFileProperties.toString(); }
+		public String getId() { return ActionType.ShowFileProperties.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

@@ -19,8 +19,6 @@ package com.mucommander.ui.action.impl;
 
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -51,7 +49,7 @@ public class ShowKeyboardShortcutsAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowKeyboardShortcuts.toString(); }
+		public String getId() { return ActionType.ShowKeyboardShortcuts.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

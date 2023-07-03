@@ -16,9 +16,19 @@
  */
 package com.mucommander.ui.terminal;
 
+import java.awt.Font;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.mucommander.text.Translator;
+import org.jetbrains.annotations.NotNull;
+
 import com.jediterm.terminal.TerminalColor;
 import com.jediterm.terminal.TextStyle;
 import com.jediterm.terminal.ui.AwtTransformers;
+import com.jediterm.terminal.ui.TerminalActionPresentation;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -26,10 +36,13 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
+import com.mucommander.ui.action.ActionId;
+import com.mucommander.ui.action.ActionKeymap;
+import com.mucommander.ui.action.TerminalActions;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
-import java.awt.*;
+import javax.swing.KeyStroke;
 
 /**
  * A class providing configuration for Terminal - it is based on DefaultSettingsProvider
@@ -94,5 +107,55 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
         if (MuPreference.USE_OPTION_AS_META_KEY == MuPreference.getByLabel(event.getVariable())) {
             altSendsEscape = event.getBooleanValue();
         }
+    }
+
+    @Override
+    public @NotNull TerminalActionPresentation getPageUpActionPresentation() {
+        TerminalActionPresentation custom = getTerminalActionPresentation("terminal.page_up.label",
+                TerminalActions.Action.PAGE_UP);
+        return custom != null ? custom : overrideName(super.getPageUpActionPresentation(), "terminal.page_up.label");
+    }
+
+    @Override
+    public @NotNull TerminalActionPresentation getPageDownActionPresentation() {
+        TerminalActionPresentation custom = getTerminalActionPresentation("terminal.page_down.label",
+                TerminalActions.Action.PAGE_DOWN);
+        return custom != null ? custom : overrideName(super.getPageUpActionPresentation(), "terminal.page_down.label");
+    }
+
+    @Override
+    public @NotNull TerminalActionPresentation getLineUpActionPresentation() {
+        TerminalActionPresentation custom = getTerminalActionPresentation("terminal.line_up.label",
+                TerminalActions.Action.LINE_UP);
+        return custom != null ? custom : overrideName(super.getPageUpActionPresentation(), "terminal.line_up.label");
+    }
+
+    @Override
+    public @NotNull TerminalActionPresentation getLineDownActionPresentation() {
+        TerminalActionPresentation custom = getTerminalActionPresentation("terminal.line_down.label",
+                TerminalActions.Action.LINE_DOWN);
+        return custom != null ? custom : overrideName(super.getPageUpActionPresentation(), "terminal.line_down.label");
+    }
+
+    @Override
+    public @NotNull TerminalActionPresentation getFindActionPresentation() {
+        TerminalActionPresentation custom = getTerminalActionPresentation("terminal.find.label",
+                TerminalActions.Action.FIND);
+        return custom != null ? custom : overrideName(super.getPageUpActionPresentation(), "terminal.find.label");
+    }
+
+    private TerminalActionPresentation getTerminalActionPresentation(String name, TerminalActions.Action action) {
+        KeyStroke accelerator = ActionKeymap.getAccelerator(
+                ActionId.asTerminalAction(action.getId()));
+        KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(
+                ActionId.asTerminalAction(action.getId()));
+
+        List<KeyStroke> keys = Stream.of(accelerator, alternateAccelerator).filter(Objects::nonNull).collect(Collectors.toList());
+
+        return !keys.isEmpty() ? new TerminalActionPresentation(Translator.get(name), keys) : null;
+    }
+
+    private TerminalActionPresentation overrideName(TerminalActionPresentation action, String key) {
+        return new TerminalActionPresentation(Translator.get(key), action.getKeyStrokes());
     }
 }

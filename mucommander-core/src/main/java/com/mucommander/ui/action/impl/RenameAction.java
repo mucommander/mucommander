@@ -69,7 +69,7 @@ public class RenameAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Rename.toString(); }
+		public String getId() { return ActionType.Rename.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

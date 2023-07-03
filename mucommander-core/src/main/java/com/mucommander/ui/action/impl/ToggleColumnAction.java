@@ -64,7 +64,7 @@ public abstract class ToggleColumnAction extends MuAction {
 
         protected Descriptor(Column column) { this.column = column; }
 
-        public String getId() { return column.getToggleColumnActionId(); }
+        public String getId() { return column.getToggleColumnActionId().getActionId(); }
 
         public ActionCategory getCategory() { return ActionCategory.VIEW; }
 

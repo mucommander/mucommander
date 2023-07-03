@@ -39,7 +39,7 @@ import com.mucommander.desktop.ActionType;
 public class ActionProperties {
 
     /* Maps action id -> action descriptor */
-    private static Map<String, ActionDescriptor> actionDescriptors = new Hashtable<>();
+    private static Map<ActionId, ActionDescriptor> actionDescriptors = new Hashtable<>();
 
     private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 
@@ -47,9 +47,9 @@ public class ActionProperties {
     private static TreeSet<ActionCategory> nonEmptyActionCategories = new TreeSet<>();
 
     /* Maps action id -> primary shortcut */
-    private static HashMap<String, KeyStroke> defaultPrimaryActionKeymap = new HashMap<>();
+    private static Map<ActionId, KeyStroke> defaultPrimaryActionKeymap = new HashMap<>();
     /* Maps action id -> alternative shortcut */
-    private static HashMap<String, KeyStroke> defaultAlternateActionKeymap = new HashMap<>();
+    private static Map<ActionId, KeyStroke> defaultAlternateActionKeymap = new HashMap<>();
     /* Maps shortcut -> action id */
     private static AcceleratorMap defaultAcceleratorMap = new AcceleratorMap();
 
@@ -59,7 +59,7 @@ public class ActionProperties {
      * @param actionDescriptor - an ActionDescriptor instance to be registered.
      */
     public static void addActionDescriptor(ActionDescriptor actionDescriptor) {
-        String actionId = actionDescriptor.getId();
+        ActionId actionId = ActionId.asGenericAction(actionDescriptor.getId());
 
         // Add the descriptor to the descriptors map.
         actionDescriptors.put(actionId, actionDescriptor);
@@ -89,7 +89,7 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return ActionDescriptor of the given MuAction. null is returned if ActionDescriptor doesn't exist.
      */
-    public static ActionDescriptor getActionDescriptor(String actionId) {
+    public static ActionDescriptor getActionDescriptor(ActionId actionId) {
         return actionDescriptors.get(actionId);
     }
 
@@ -103,7 +103,7 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return Description of MuAction as described above.
      */
-    public static String getActionDescription(String actionId) {
+    public static String getActionDescription(ActionId actionId) {
         return getNullSafeActionDescriptor(actionId).getDescription();
     }
 
@@ -113,7 +113,7 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return ActionCategory of the given MuAction. null is returned if ActionCategory doesn't exist.
      */
-    public static ActionCategory getActionCategory(String actionId) {
+    public static ActionCategory getActionCategory(ActionId actionId) {
         return getNullSafeActionDescriptor(actionId).getCategory();
     }
 
@@ -123,7 +123,7 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return default shortcut of the given MuAction. null is returned if default shortcut doesn't exist.
      */
-    public static KeyStroke getDefaultAccelerator(String actionId) {
+    public static KeyStroke getDefaultAccelerator(ActionId actionId) {
         return defaultPrimaryActionKeymap.get(actionId);
     }
 
@@ -133,7 +133,7 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return alternative shortcut for the given MuAction. null is returned if alternative shortcut doesn't exist.
      */
-    public static KeyStroke getDefaultAlternativeAccelerator(String actionId) {
+    public static KeyStroke getDefaultAlternativeAccelerator(ActionId actionId) {
         return defaultAlternateActionKeymap.get(actionId);
     }
 
@@ -144,7 +144,7 @@ public class ActionProperties {
      * @return default MuAction which the given shortcut is assigned for. null is returned if the shortcut doesn't
      * assign to any MuAction by default.
      */
-    static String getDefaultActionForKeyStroke(KeyStroke keyStroke) {
+    static ActionId getDefaultActionForKeyStroke(KeyStroke keyStroke) {
         return defaultAcceleratorMap.getActionId(keyStroke);
     }
 
@@ -166,17 +166,17 @@ public class ActionProperties {
      * @return Label of MuAction. if the label doesn't exist in the dictionary, its key is returned.
      * null is returned if label's key doesn't exist.
      */
-    public static String getActionLabel(String actionId) {
+    public static String getActionLabel(ActionId actionId) {
         return getNullSafeActionDescriptor(actionId).getLabel();
     }
 
     /**
-     * @see #getActionLabel(String)
+     * @see #getActionLabel(ActionId)
      * @param actionId
      * @return
      */
     public static String getActionLabel(ActionType actionId) {
-        return getActionLabel(actionId.toString());
+        return getActionLabel(ActionId.asGenericAction(actionId.getId()));
     }
 
     /**
@@ -184,15 +184,15 @@ public class ActionProperties {
      *
      * @param actionId - id of MuAction.
      */
-    public static String getActionLabelKey(String actionId) {
+    public static String getActionLabelKey(ActionId actionId) {
         return getNullSafeActionDescriptor(actionId).getLabelKey();
     }
 
     /**
-     * @see #getActionLabelKey(String)
+     * @see #getActionLabelKey(ActionId)
      */
     public static String getActionLabelKey(ActionType actionId) {
-        return getActionLabelKey(actionId.toString());
+        return getActionLabelKey(ActionId.asGenericAction(actionId.getId()));
     }
 
     /**
@@ -201,7 +201,7 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return Icon of MuAction. null is returned if there is no icon for the action.
      */
-    public static ImageIcon getActionIcon(String actionId) {
+    public static ImageIcon getActionIcon(ActionId actionId) {
         return getNullSafeActionDescriptor(actionId).getIcon();
     }
 
@@ -211,15 +211,15 @@ public class ActionProperties {
      * @param actionId - id of MuAction.
      * @return Tooltip of MuAction. null is returned if there is no tooltip for the action.
      */
-    public static String getActionTooltip(String actionId) {
+    public static String getActionTooltip(ActionId actionId) {
         return getNullSafeActionDescriptor(actionId).getTooltip();
     }
 
     /**
-     * @see #getActionTooltip(String)
+     * @see #getActionTooltip(ActionId)
      */
     public static String getActionTooltip(ActionType actionType) {
-        return getActionTooltip(actionType.toString());
+        return getActionTooltip(ActionId.asGenericAction(actionType.getId()));
     }
 
     /**
@@ -234,7 +234,7 @@ public class ActionProperties {
         return nonEmptyActionCategories;
     }
 
-    private static ActionDescriptor getNullSafeActionDescriptor(String actionId) {
+    private static ActionDescriptor getNullSafeActionDescriptor(ActionId actionId) {
         ActionDescriptor actionDescriptor = actionDescriptors.get(actionId);
         return actionDescriptor != null ? actionDescriptor : nullActionDescriptor;
     }

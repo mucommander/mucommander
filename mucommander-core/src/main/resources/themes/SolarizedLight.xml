@@ -103,17 +103,12 @@
         </group10>
     </file_groups>
     <shell>
+        <font family="Menlo,Monospaced,Lucida Sans Typewriter" size ="12"/>
         <normal>
         </normal>
         <selected>
         </selected>
     </shell>
-    <shell_history>
-        <normal>
-        </normal>
-        <selected>
-        </selected>
-    </shell_history>
     <terminal>
         <normal>
         </normal>

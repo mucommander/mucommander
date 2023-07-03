@@ -210,7 +210,7 @@ public class OpenAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Open.toString(); }
+		public String getId() { return ActionType.Open.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

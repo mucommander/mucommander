@@ -57,7 +57,7 @@ public class DeleteAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Delete.toString(); }
+		public String getId() { return ActionType.Delete.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

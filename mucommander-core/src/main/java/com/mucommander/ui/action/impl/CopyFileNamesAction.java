@@ -63,7 +63,7 @@ public class CopyFileNamesAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CopyFileNames.toString(); }
+		public String getId() { return ActionType.CopyFileNames.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

@@ -56,7 +56,7 @@ public class ChangeDateAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ChangeDate.toString(); }
+		public String getId() { return ActionType.ChangeDate.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

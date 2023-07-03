@@ -21,6 +21,7 @@ import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.impl.CustomizeCommandBarAction;
@@ -98,13 +99,13 @@ public class CommandBarDialog extends CustomizeDialog {
     @Override
     protected void commit() {
 		int nbNewActions = getNumberOfButtons();
-		String[] newActionIds = new String[nbNewActions];
+		ActionId[] newActionIds = new ActionId[nbNewActions];
 		for (int i=0; i<nbNewActions; ++i) {
 			newActionIds[i] = ((CommandBarButtonForDisplay) commandBarButtons.get(i)).getActionId();
 		}
 		
 		int nbNewAlternativeActions = commandBarAlternateButtons.size();
-		String[] newAlternativeActionIds = new String[nbNewAlternativeActions];
+		ActionId[] newAlternativeActionIds = new ActionId[nbNewAlternativeActions];
 		for (int i=0; i<nbNewAlternativeActions; ++i) {
 			Object button = commandBarAlternateButtons.get(i);
 			newAlternativeActionIds[i] = (button != null) ? 
@@ -124,7 +125,7 @@ public class CommandBarDialog extends CustomizeDialog {
 		commandBarAlternateButtons   = new AlteredVector<JButton>();
 		
 		// a Set that contains all actions that are used by the command-bar (as regular or alternate buttons).
-		Set<String> usedActions = new HashSet<String>();
+		Set<ActionId> usedActions = new HashSet<>();
 		usedActions.addAll(initCommandBarActionsList());
 		usedActions.addAll(initCommandBarAlternateActionsList());
 		initActionsPoolList(usedActions);
@@ -137,7 +138,7 @@ public class CommandBarDialog extends CustomizeDialog {
     
     private boolean areActionsChanged() {
     	// Fetch command-bar action ids
-    	String[] commandBarActionIds = CommandBarAttributes.getActions();
+		ActionId[] commandBarActionIds = CommandBarAttributes.getActions();
     	int nbActions = commandBarActionIds.length;
     	
     	if (nbActions != getNumberOfButtons())
@@ -157,7 +158,7 @@ public class CommandBarDialog extends CustomizeDialog {
     
     private boolean areAlternativeActionsChanged() {
     	// Fetch command-bar alternative actions
-    	String[] commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
+    	var commandBarAlternativeActionIds = CommandBarAttributes.getAlternateActions();
     	int nbActions = commandBarAlternativeActionIds.length;
     	
     	if (nbActions != commandBarAlternateButtons.size())
@@ -179,8 +180,8 @@ public class CommandBarDialog extends CustomizeDialog {
     	return !modifierField.getKeyStroke().equals(CommandBarAttributes.getModifier());
     }
     
-	private Collection<String> initCommandBarActionsList() {
-		String[] commandBarActionIds = CommandBarAttributes.getActions();
+	private Collection<ActionId> initCommandBarActionsList() {
+		ActionId[] commandBarActionIds = CommandBarAttributes.getActions();
 		int nbCommandBarActionIds = commandBarActionIds.length;
 		for (int i=0; i<nbCommandBarActionIds; ++i)
 			commandBarButtons.add(CommandBarButtonForDisplay.create(commandBarActionIds[i]));
@@ -287,8 +288,8 @@ public class CommandBarDialog extends CustomizeDialog {
 		return index;
 	}
 	
-	private Collection<String> initCommandBarAlternateActionsList() {
-		String[] commandBarActionIds = CommandBarAttributes.getAlternateActions();
+	private Collection<ActionId> initCommandBarAlternateActionsList() {
+		ActionId[] commandBarActionIds = CommandBarAttributes.getAlternateActions();
 		int nbCommandBarActionIds = commandBarActionIds.length;
 		for (int i=0; i<nbCommandBarActionIds; ++i)
 			commandBarAlternateButtons.add(CommandBarButtonForDisplay.create(commandBarActionIds[i]));
@@ -366,8 +367,8 @@ public class CommandBarDialog extends CustomizeDialog {
 		return Arrays.asList(commandBarActionIds);
 	}
 	
-	private void initActionsPoolList(Set<String> usedActions) {
-	    for (String actionId : ActionManager.getActionIds()) {
+	private void initActionsPoolList(Set<ActionId> usedActions) {
+	    for (ActionId actionId : ActionManager.getActionIds()) {
 	        // Filter out actions that are currently used in the command bar, and those that are parameterized
 	        if (!usedActions.contains(actionId) && !ActionProperties.getActionDescriptor(actionId).isParameterized())
 	            insertInOrder(commandBarAvailableButtons, CommandBarButtonForDisplay.create(actionId));

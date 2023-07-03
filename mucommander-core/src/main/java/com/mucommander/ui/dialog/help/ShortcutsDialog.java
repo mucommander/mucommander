@@ -24,6 +24,7 @@ import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
@@ -61,8 +62,8 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     };
 
     /** Comparator of actions according to their labels */
-    private static final Comparator<String> ACTIONS_COMPARATOR = new Comparator<String>() {
-        public int compare(String id1, String id2) {
+    private static final Comparator<ActionId> ACTIONS_COMPARATOR = new Comparator<>() {
+        public int compare(ActionId id1, ActionId id2) {
             String label1 = ActionProperties.getActionLabel(id1);
             if (label1 == null)
                 return 1;
@@ -82,12 +83,12 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 
         // Separate the actions according to their categories. 
-        Map<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = createCategoryToItsActionsWithShortcutsMap();
+        Map<ActionCategory, LinkedList<ActionId>> categoryToItsActionsWithShortcutsIdsMap = createCategoryToItsActionsWithShortcutsMap();
 
         //Create tab and panel for each category
         for(ActionCategory category: categoryToItsActionsWithShortcutsIdsMap.keySet()) {
             // Get the list of actions from the above category which have shortcuts assigned to them
-            LinkedList<String> categoryActionsWithShortcuts = categoryToItsActionsWithShortcutsIdsMap.get(category);
+            List<ActionId> categoryActionsWithShortcuts = categoryToItsActionsWithShortcutsIdsMap.get(category);
             Collections.sort(categoryActionsWithShortcuts, ACTIONS_COMPARATOR);
 
             // If there is at least one action in the category with shortcuts assigned to it, add tab for the category
@@ -112,16 +113,16 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         setMaximumSize(new Dimension(600, 360));
     }
 
-    private Map<ActionCategory, LinkedList<String>> createCategoryToItsActionsWithShortcutsMap() {
+    private Map<ActionCategory, LinkedList<ActionId>> createCategoryToItsActionsWithShortcutsMap() {
         // Hashtable that maps actions-category to LinkedList of actions (Ids) from the category that have shortcuts assigned to them
-        Hashtable<ActionCategory, LinkedList<String>> categoryToItsActionsWithShortcutsIdsMap = new Hashtable<>();
+        Hashtable<ActionCategory, LinkedList<ActionId>> categoryToItsActionsWithShortcutsIdsMap = new Hashtable<>();
 
         // Initialize empty LinkedList for each category
         for (ActionCategory category : ActionProperties.getNonEmptyActionCategories())
-            categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<String>());
+            categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<ActionId>());
 
         // Go over all action ids
-        for (String actionId : ActionManager.getActionIds()) {
+        for (ActionId actionId : ActionManager.getActionIds()) {
             ActionCategory category = ActionProperties.getActionCategory(actionId);
             // If the action has category and there is a primary shortcut assigned to it, add its id to the list of the category
             if (category != null && ActionKeymap.doesActionHaveShortcut(actionId))
@@ -131,7 +132,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         return categoryToItsActionsWithShortcutsIdsMap;
     }
 
-    private void addTopic(JTabbedPane tabbedPane, String titleKey, Iterator<String> descriptionsIterator) {
+    private void addTopic(JTabbedPane tabbedPane, String titleKey, Iterator<ActionId> descriptionsIterator) {
         XAlignedComponentPanel compPanel;
         JPanel northPanel;
         JScrollPane scrollPane;
@@ -173,9 +174,9 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         tabbedPane.addTab(titleKey, scrollPane);
     }
 
-    private void addShortcutList(XAlignedComponentPanel compPanel, Iterator<String> muActionIdsIterator) {
+    private void addShortcutList(XAlignedComponentPanel compPanel, Iterator<ActionId> muActionIdsIterator) {
         // Add all actions shortcut and label (or tooltip if available)
-        String actionId;
+        ActionId actionId;
         KeyStroke shortcut;
         String shortcutsRep;
         while (muActionIdsIterator.hasNext()) {

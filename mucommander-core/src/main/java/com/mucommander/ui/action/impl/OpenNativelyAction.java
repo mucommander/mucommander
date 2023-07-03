@@ -78,7 +78,7 @@ public class OpenNativelyAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenNatively.toString(); }
+		public String getId() { return ActionType.OpenNatively.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

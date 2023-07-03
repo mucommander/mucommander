@@ -49,11 +49,11 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
     }
 
     public ImageIcon getIcon() {
-        return getStandardIcon(getId());
+        return getStandardIcon(ActionId.asGenericAction(getId()));
     }
     
     public String getTooltip() {
-        return getStandardTooltip(getId());
+        return getStandardTooltip(ActionId.asGenericAction(getId()));
     }
     
     public String getDescription() {
@@ -112,7 +112,7 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      * @param actionId a String identification of MuAction
      * @return the standard icon image corresponding to the specified MuAction, <code>null</code> if none was found
      */
-    private static ImageIcon getStandardIcon(String actionId) {
+    private static ImageIcon getStandardIcon(ActionId actionId) {
         String iconPath;
 
         // Look for an icon image file with the /action/<action id>.png path and use it if it exists
@@ -129,8 +129,8 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      * @param actionId a String identification of MuAction
      * @return the standard path to the icon image corresponding to the specified MuAction
      */
-    private static String getStandardIconPath(String actionId) {
-        return IconManager.getIconSetFolder(IconManager.ACTION_ICON_SET) + actionId + ".png";
+    private static String getStandardIconPath(ActionId actionId) {
+        return IconManager.getIconSetFolder(IconManager.ACTION_ICON_SET) + actionId.getActionId() + ".png";
     }
     
     /**
@@ -140,7 +140,7 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      * @param actionId a String identification of MuAction
      * @return the standard tooltip corresponding to the specified MuAction, <code>null</code> if none was found
      */
-    private static String getStandardTooltip(String actionId) {
+    private static String getStandardTooltip(ActionId actionId) {
         String tooltipKey = getStandardTooltipKey(actionId);
         if(!Translator.hasValue(tooltipKey, true))
             return null;
@@ -158,8 +158,8 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
      * @param actionId a String identification of MuAction
      * @return the standard dictionary key for the specified action's tooltip
      */
-    private static String getStandardTooltipKey(String actionId) {
-        return actionId+".tooltip";
+    private static String getStandardTooltipKey(ActionId actionId) {
+        return actionId.getActionId() + ".tooltip";
     }
 
     @Override

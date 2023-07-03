@@ -53,7 +53,7 @@ public class SelectPreviousBlockAction extends SelectBackwardAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.SelectPreviousBlock.toString();
+            return ActionType.SelectPreviousBlock.getId();
         }
 
         public ActionCategory getCategory() {

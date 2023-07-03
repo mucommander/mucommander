@@ -100,7 +100,7 @@ public class CompareFoldersAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CompareFolders.toString(); }
+		public String getId() { return ActionType.CompareFolders.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

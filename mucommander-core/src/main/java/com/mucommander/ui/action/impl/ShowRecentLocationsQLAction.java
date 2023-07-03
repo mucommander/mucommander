@@ -49,7 +49,7 @@ public class ShowRecentLocationsQLAction extends ShowQuickListAction {
 	}
 
 	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowRecentLocationsQL.toString(); }
+		public String getId() { return ActionType.ShowRecentLocationsQL.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

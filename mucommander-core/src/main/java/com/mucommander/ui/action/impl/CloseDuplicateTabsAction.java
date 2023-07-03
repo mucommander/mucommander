@@ -48,7 +48,7 @@ public class CloseDuplicateTabsAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CloseDuplicateTabs.toString(); }
+		public String getId() { return ActionType.CloseDuplicateTabs.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

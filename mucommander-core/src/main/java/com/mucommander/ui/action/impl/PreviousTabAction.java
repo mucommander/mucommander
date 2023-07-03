@@ -66,7 +66,7 @@ public class PreviousTabAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.PreviousTab.toString(); }
+		public String getId() { return ActionType.PreviousTab.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

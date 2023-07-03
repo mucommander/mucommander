@@ -55,23 +55,23 @@ import java.util.Collections;
 public class OpenWithMenu extends JMenu {
     private final MainFrame mainFrame;
 
-    private final AbstractFile clickedFile;
+    private AbstractFile selectedFile;
 
     /**
-     * Creates a new Open With menu.
+     * Creates a new Open With menu (for contextual i.e. right click when selected file is known).
      *
      * @param frame the Main frame
-     * @param clickedFile a clicked file, can be null then no OS-specific apps will be added to the menu
+     * @param selectedFile a selected/clicked file, can be null then no OS-specific apps will be added to the menu
      */
-    public OpenWithMenu(MainFrame frame, AbstractFile clickedFile) {
+    public OpenWithMenu(MainFrame frame, AbstractFile selectedFile) {
         super(Translator.get("file_menu.open_with") + "...");
         this.mainFrame = frame;
-        this.clickedFile = clickedFile;
+        this.selectedFile = selectedFile;
         populate();
     }
 
     /**
-     * Creates a new Open With menu.
+     * Creates a new Open With menu (for Main Menu when selected file is not known yet).
      *
      * @param frame the Main frame
      */
@@ -83,13 +83,55 @@ public class OpenWithMenu extends JMenu {
      * Refreshes the content of the menu.
      */
     private void populate() {
-        for (Command command : CommandManager.commands()) {
-            if (command.getType() == CommandType.NORMAL_COMMAND) {
-                add(ActionManager.getActionInstance(command, mainFrame));
-            }
-        }
+        populateRegisteredCommands();
+        populateNativeApplications();
+        setEnabled(getItemCount() > 0);
+    }
 
-        if (clickedFile != null && !clickedFile.isDirectory()) {
+    private void populateRegisteredCommands() {
+        CommandManager.commands().stream()
+        .filter(command -> command.getType() == CommandType.NORMAL_COMMAND)
+        .map(command -> ActionManager.getActionInstance(command, mainFrame))
+        .forEach(this::add);
+    }
+
+    /**
+     * Refreshes the menu contents with a new selected file information.
+     * @param selectedFile the selected file, can be null;
+     */
+    public void refresh(AbstractFile selectedFile) {
+        this.removeAll();
+        this.selectedFile = selectedFile;
+        populate();
+    }
+
+    @Override
+    public final JMenuItem add(Action a) {
+        JMenuItem item = super.add(a);
+        MenuToolkit.configureActionMenuItem(item);
+        return item;
+    }
+
+    private MuAction createMuAction(Command cmd) {
+        return new MuAction(mainFrame, Collections.emptyMap()) {
+            @Override
+            public void performAction() {
+                try {
+                    ProcessRunner.executeAsync(cmd.getTokens(selectedFile), selectedFile);
+                } catch (IOException e) {
+                    LOGGER.error("Error running command: {} for file: {}", cmd, selectedFile, e);
+                }
+            }
+
+            @Override
+            public ActionDescriptor getDescriptor() {
+                return new CommandAction.Descriptor(cmd);
+            }
+        };
+    }
+
+    private void populateNativeApplications() {
+        if (selectedFile != null && !selectedFile.isDirectory()) {
             if (DesktopManager.isOpenWithAppsAvailable()) {
                 var loadingItem = super.add(Translator.get("file_menu.loading") + "...");
                 var spinningIcon = new SpinningDial();
@@ -101,7 +143,7 @@ public class OpenWithMenu extends JMenu {
                 // especially if a given file has a lot of apps that can be opened with...
                 new Thread(() -> {
 
-                    var commands = DesktopManager.getAppsForOpenWith(clickedFile);
+                    var commands = DesktopManager.getAppsForOpenWith(selectedFile);
                     if (!commands.isEmpty() && getItemCount() > 1) {
                         add(new JSeparator());
                     }
@@ -134,33 +176,6 @@ public class OpenWithMenu extends JMenu {
                 }
             }
         }
-        if (getItemCount() == 0) {
-            setEnabled(false);
-        }
     }
 
-    @Override
-    public final JMenuItem add(Action a) {
-        JMenuItem item = super.add(a);
-        MenuToolkit.configureActionMenuItem(item);
-        return item;
-    }
-
-    private MuAction createMuAction(Command cmd) {
-        return new MuAction(mainFrame, Collections.emptyMap()) {
-            @Override
-            public void performAction() {
-                try {
-                    ProcessRunner.executeAsync(cmd.getTokens(clickedFile), clickedFile);
-                } catch (IOException e) {
-                    LOGGER.error("Error running command: {} for file: {}", cmd, clickedFile, e);
-                }
-            }
-
-            @Override
-            public ActionDescriptor getDescriptor() {
-                return new CommandAction.Descriptor(cmd);
-            }
-        };
-    }
 }

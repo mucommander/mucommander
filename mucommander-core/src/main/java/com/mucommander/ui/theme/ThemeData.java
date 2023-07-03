@@ -17,6 +17,9 @@
 
  package com.mucommander.ui.theme;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Hashtable;
@@ -76,6 +79,11 @@ public class ThemeData {
     // For this reason, we've declared the number of font and colors as constants.
     // People are still going to forget to update these constants, but at least it'll be
     // a lot easier to fix.
+    //
+    // And if some font or color is not needed anymore then one must decrease all the indexes?
+    // TODO refactor this, get rid of indexes, arrays....
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThemeData.class);
 
     /**
      * Number of known fonts.
@@ -1222,7 +1230,14 @@ public class ThemeData {
         // Makes sure id is a legal color identifier.
         checkColorIdentifier(id);
 
-        return COLORS.get(Integer.valueOf(id)).getColor(data);
+        DefaultColor defaultColor = COLORS.get(Integer.valueOf(id));
+        if (defaultColor == null) {
+            // see the first comment for this class
+            LOGGER.debug("Default color for id {} not found, using a generic default", id);
+            return Color.LIGHT_GRAY;
+        }
+
+        return defaultColor.getColor(data);
     }
 
     /**
@@ -1238,8 +1253,13 @@ public class ThemeData {
      */
     private static Font getDefaultFont(int id, ThemeData data) {
         checkFontIdentifier(id);
-
-        return FONTS.get(Integer.valueOf(id)).getFont(data);
+        DefaultFont defaultFont = FONTS.get(Integer.valueOf(id));
+        if (defaultFont == null) {
+            // see the first comment for this class
+            LOGGER.debug("Default font for id {} not found, using a generic default", id);
+            return Font.decode("SansSerif");
+        }
+        return defaultFont.getFont(data);
     }
 
 

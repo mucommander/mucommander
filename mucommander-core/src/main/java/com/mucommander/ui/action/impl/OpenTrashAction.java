@@ -59,7 +59,7 @@ public class OpenTrashAction extends MuAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.OpenTrash.toString();
+            return ActionType.OpenTrash.getId();
         }
 
         public ActionCategory getCategory() {

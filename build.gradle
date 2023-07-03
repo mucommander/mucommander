@@ -196,6 +196,13 @@ launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
     mainClassName = "com.mucommander.main.muCommander"
     jar = "${project.tasks.jar.archiveFileName.get()}"
+    productName = "muCommander"
+    companyName = "Arik Hadas"
+    version = project.version
+    textVersion = project.version
+    copyright = "Arik Hadas"
+    fileDescription = "a lightweight, cross-platform file manager"
+
     dontWrapJar = true
     classpath = ['.']
     headerType = "gui"

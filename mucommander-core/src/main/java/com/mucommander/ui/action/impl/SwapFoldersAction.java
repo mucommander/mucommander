@@ -49,7 +49,7 @@ public class SwapFoldersAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SwapFolders.toString(); }
+		public String getId() { return ActionType.SwapFolders.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
     }

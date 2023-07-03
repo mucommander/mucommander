@@ -50,7 +50,7 @@ public class SelectNextPageAction extends SelectForwardAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.SelectNextPage.toString();
+            return ActionType.SelectNextPage.getId();
         }
 
         public ActionCategory getCategory() {

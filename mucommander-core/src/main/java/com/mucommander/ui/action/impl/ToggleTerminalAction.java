@@ -26,6 +26,7 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
@@ -128,7 +129,8 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
         @Override
         public String getLabel() {
-            return Translator.get(ActionProperties.getActionLabelKey(ToggleTerminalAction.Descriptor.ACTION_ID),
+            return Translator.get(ActionProperties.getActionLabelKey(
+                    ActionId.asTerminalAction(ToggleTerminalAction.Descriptor.ACTION_ID)),
                     DesktopManager.canOpenInFileManager() ? DesktopManager.getFileManagerName()
                             : Translator.get("file_manager"));
         }
@@ -138,14 +140,12 @@ public class ToggleTerminalAction extends ActiveTabAction {
         return new KeyAdapter() {
             public void keyPressed(KeyEvent keyEvent) {
                 KeyStroke pressedKeyStroke = KeyStroke.getKeyStrokeForEvent(keyEvent);
-                KeyStroke accelerator = ActionKeymap.getAccelerator(ActionType.ToggleTerminal.toString());
+                KeyStroke accelerator = ActionKeymap.getAccelerator(
+                        ActionId.asTerminalAction(ActionType.ToggleTerminal.getId()));
                 KeyStroke alternateAccelerator = ActionKeymap.getAlternateAccelerator(
-                        ActionType.ToggleTerminal.toString());
+                        ActionId.asTerminalAction(ActionType.ToggleTerminal.getId()));
                 if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                     keyEvent.consume();
-                    // FIXME workaround, since JediTerm doesn't check #isConsumed status
-                    // https://github.com/JetBrains/jediterm/issues/251
-                    keyEvent.setKeyCode(-1);
                     revertToTableView();
                     setVisible(false);
                 } else if (!terminal.getTtyConnector().isConnected()) {

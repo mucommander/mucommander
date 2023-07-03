@@ -59,7 +59,7 @@ public class ConnectToServerAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ConnectToServer.toString(); }
+		public String getId() { return ActionType.ConnectToServer.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

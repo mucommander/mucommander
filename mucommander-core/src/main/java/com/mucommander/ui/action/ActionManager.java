@@ -61,10 +61,10 @@ public class ActionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionManager.class);
 
     /** MuAction id -> factory map */
-    private static Map<String, ActionFactory> actionFactories = new Hashtable<String, ActionFactory>();
+    private static Map<ActionId, ActionFactory> actionFactories = new Hashtable<>();
 
     /** MainFrame -> MuAction map */
-    private static WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>>();
+    private static WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<>();
 
     /** Pattern to resolve the action ID from action class path */
     private final static Pattern pattern = Pattern.compile(".*\\.(.*)?Action");
@@ -241,6 +241,10 @@ public class ActionManager {
                 .forEach(command -> ActionManager.registerAction(
                         new CommandAction.Descriptor(command),
                         (mainFrame, properties) -> new CommandAction(mainFrame, properties, command)));
+
+        TerminalActions.actionDescriptors().forEach(
+                descriptor -> ActionManager.registerAction(descriptor,
+                        (mainFrame, properties) -> new TerminalActions.NullAction(mainFrame, properties, descriptor)));
     }
 
     /**
@@ -250,7 +254,29 @@ public class ActionManager {
      * @param actionFactory - ActionFactory instance of the action.
      */
     public static void registerAction(ActionDescriptor actionDescriptor, ActionFactory actionFactory) {
-        actionFactories.put(actionDescriptor.getId(), actionFactory);
+        actionFactories.put(ActionId.asGenericAction(actionDescriptor.getId()), actionFactory);
+        ActionProperties.addActionDescriptor(actionDescriptor);
+    }
+
+    /**
+     * Registration method for MuActions.
+     *
+     * @param actionDescriptor - ActionDescriptor instance of the action.
+     * @param actionFactory - ActionFactory instance of the action.
+     */
+    public static void registerAction(CommandAction.Descriptor actionDescriptor, ActionFactory actionFactory) {
+        actionFactories.put(ActionId.asCommandAction(actionDescriptor.getId()), actionFactory);
+        ActionProperties.addActionDescriptor(actionDescriptor);
+    }
+
+    /**
+     * Registration method for MuActions.
+     *
+     * @param actionDescriptor - ActionDescriptor instance of the action.
+     * @param actionFactory - ActionFactory instance of the action.
+     */
+    public static void registerAction(TerminalActions.Descriptor actionDescriptor, ActionFactory actionFactory) {
+        actionFactories.put(ActionId.asTerminalAction(actionDescriptor.getId()), actionFactory);
         ActionProperties.addActionDescriptor(actionDescriptor);
     }
 
@@ -259,7 +285,7 @@ public class ActionManager {
      *
      * @return List of all registered actions' ids.
      */
-    public static List<String> getActionIds() {
+    public static List<ActionId> getActionIds() {
         return new ArrayList<>(actionFactories.keySet());
     }
 
@@ -284,23 +310,23 @@ public class ActionManager {
      * @param actionId - id of MuAction.
      * @return true if an MuAction which is represented by the given id is registered, otherwise return false.
      */
-    public static boolean isActionExist(String actionId) {
+    public static boolean isActionExist(ActionId actionId) {
         return actionId != null && actionFactories.containsKey(actionId);
     }
 
     /**
      * Convenience method that returns an instance of the action corresponding to the given <code>Command</code>,
      * and associated with the specified <code>MainFrame</code>. This method gets the ID of the relevant action,
-     * passes it to {@link #getActionInstance(String, MainFrame)} and returns the {@link MuAction} instance.
+     * passes it to {@link #getActionInstance(ActionId, MainFrame)} and returns the {@link MuAction} instance.
      *
      * @param command the command that is invoked by the returned action
      * @param mainFrame the MainFrame instance the action belongs to
      * @return a MuAction instance matching the given action ID and MainFrame, <code>null</code> if the
-     * @see {@link #getActionInstance(String, MainFrame)}
+     * @see {@link #getActionInstance(ActionId, MainFrame)}
      * action could not be found or could not be instantiated.
      */
     public static MuAction getActionInstance(Command command, MainFrame mainFrame) {
-        return getActionInstance(new CommandAction.Descriptor(command).getId(), mainFrame);
+        return getActionInstance(ActionId.asCommandAction(new CommandAction.Descriptor(command).getId()), mainFrame);
     }
 
     /**
@@ -314,15 +340,15 @@ public class ActionManager {
      * @see {@link #getActionInstance(ActionParameters, MainFrame)}
      * action could not be found or could not be instantiated.
      */
-    public static MuAction getActionInstance(String actionId, MainFrame mainFrame) {
+    public static MuAction getActionInstance(ActionId actionId, MainFrame mainFrame) {
         return getActionInstance(new ActionParameters(actionId), mainFrame);
     }
 
     /**
-     * @see {@link #getActionInstance(String, MainFrame)}
+     * @see {@link #getActionInstance(ActionId, MainFrame)}
      */
     public static MuAction getActionInstance(ActionType actionId, MainFrame mainFrame) {
-        return getActionInstance(actionId.toString(), mainFrame);
+        return getActionInstance(ActionId.asGenericAction(actionId.getId()), mainFrame);
     }
 
     /**
@@ -350,12 +376,12 @@ public class ActionManager {
         if (mainFrameActions.containsKey(actionParameters)) {
             return mainFrameActions.get(actionParameters).getAction();
         } else {
-            String actionId = actionParameters.getActionId();
+            ActionId actionId = actionParameters.getActionId();
 
             // Looks for the action's factory
             ActionFactory actionFactory = actionFactories.get(actionId);
             if (actionFactory == null) {
-                LOGGER.debug("couldn't initiate action: " + actionId + ", its factory wasn't found");
+                LOGGER.error("couldn't initiate action: " + actionId + ", its factory wasn't found");
                 return null;
             }
 
@@ -395,7 +421,7 @@ public class ActionManager {
             }
 
             // If the action's accelerators have not been set yet, use the ones from ActionKeymap
-            if (action.getAccelerator() == null) {
+            if (actionId.getType() != ActionId.ActionType.TERMINAL && action.getAccelerator() == null) {
                 // Retrieve the standard accelerator (if any) and use it as this action's accelerator
                 KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
                 if (accelerator!=null) {
@@ -426,17 +452,17 @@ public class ActionManager {
     /**
      * Returns a Vector of all MuAction instances matching the specified action id.
      *
-     * @param muActionId the MuAction id to compare instances against
+     * @param actionId the action id to compare instances against
      * @return  a Vector of all MuAction instances matching the specified action id
      */
-    public static List<MuAction> getActionInstances(String muActionId) {
+    public static List<MuAction> getActionInstances(ActionId actionId) {
         List<MuAction> actionInstances = new Vector<MuAction>();
 
         // Iterate on all MainFrame instances
         for (Map<ActionParameters, ActionAndIdPair> actionParametersActionAndIdPairHashtable : mainFrameActionsMap.values()) {
             // Iterate on all the MainFrame's actions and their ids pairs
             for (ActionAndIdPair actionAndIdPair : actionParametersActionAndIdPairHashtable.values()) {
-                if (actionAndIdPair.getId().equals(muActionId)) {
+                if (actionAndIdPair.getId().equals(actionId)) {
                     // Found an action matching the specified class
                     actionInstances.add(actionAndIdPair.getAction());
                     // Jump to the next MainFrame
@@ -458,15 +484,15 @@ public class ActionManager {
      * @param mainFrame the MainFrame the action belongs to
      * @return true if the action instance could be retrieved and the action performed, false otherwise
      */
-    public static boolean performAction(String actionId, MainFrame mainFrame) {
+    public static boolean performAction(ActionId actionId, MainFrame mainFrame) {
         return performAction(new ActionParameters(actionId), mainFrame);
     }
 
     /**
-     * @see #performAction(String, MainFrame)
+     * @see #performAction(ActionId, MainFrame)
      */
     public static boolean performAction(ActionType actionType, MainFrame mainFrame) {
-        return performAction(actionType.toString(), mainFrame);
+        return performAction(ActionId.asGenericAction(actionType.getId()), mainFrame);
     }
 
     /**
@@ -493,15 +519,15 @@ public class ActionManager {
      */
     private static class ActionAndIdPair {
         private MuAction action;
-        private String id;
+        private ActionId id;
 
-        public ActionAndIdPair(MuAction action, String id) {
+        public ActionAndIdPair(MuAction action, ActionId id) {
             this.action = action;
             this.id = id;
         }
 
         public MuAction getAction() { return action; }
 
-        public String getId() { return id; }
+        public ActionId getId() { return id; }
     }
 }

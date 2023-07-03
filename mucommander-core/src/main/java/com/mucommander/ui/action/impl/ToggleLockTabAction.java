@@ -68,7 +68,7 @@ public class ToggleLockTabAction extends ActiveTabAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleLockTab.toString(); }
+		public String getId() { return ActionType.ToggleLockTab.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

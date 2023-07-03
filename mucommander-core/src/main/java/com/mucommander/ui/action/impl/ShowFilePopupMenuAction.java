@@ -77,7 +77,7 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
 
     public static final class Descriptor extends AbstractActionDescriptor {
         public String getId() {
-            return ActionType.ShowFilePopupMenu.toString();
+            return ActionType.ShowFilePopupMenu.getId();
         }
 
         public ActionCategory getCategory() {

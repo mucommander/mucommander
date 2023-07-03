@@ -72,7 +72,7 @@ public class ToggleStatusBarAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleStatusBar.toString(); }
+		public String getId() { return ActionType.ToggleStatusBar.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.VIEW; }
 

@@ -50,7 +50,7 @@ public class CloneTabToOtherPanelAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CloneTabToOtherPanel.toString(); }
+		public String getId() { return ActionType.CloneTabToOtherPanel.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

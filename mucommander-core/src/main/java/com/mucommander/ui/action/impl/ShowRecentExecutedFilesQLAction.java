@@ -49,7 +49,7 @@ public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
 	}
 
 	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowRecentExecutedFilesQL.toString(); }
+		public String getId() { return ActionType.ShowRecentExecutedFilesQL.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

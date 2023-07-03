@@ -7,4 +7,15 @@
 <!-- look&feel.                                          -->
 <!-- =================================================== -->
 <theme>
+
+  <!-- = Shell appearance ============================== -->
+  <!-- ================================================= -->
+  <shell>
+    <font family="Menlo,Monospaced,Lucida Sans Typewriter" size ="12"/>
+    <normal>
+    </normal>
+    <selected>
+    </selected>
+  </shell>
+
 </theme>

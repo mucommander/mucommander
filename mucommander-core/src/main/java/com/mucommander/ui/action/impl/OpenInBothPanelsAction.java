@@ -150,7 +150,7 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenInBothPanels.toString(); }
+		public String getId() { return ActionType.OpenInBothPanels.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

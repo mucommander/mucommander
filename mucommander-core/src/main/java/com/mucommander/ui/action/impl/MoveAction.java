@@ -62,7 +62,7 @@ public class MoveAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Move.toString(); }
+		public String getId() { return ActionType.Move.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

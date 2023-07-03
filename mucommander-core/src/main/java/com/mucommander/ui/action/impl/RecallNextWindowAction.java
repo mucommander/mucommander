@@ -49,7 +49,7 @@ public class RecallNextWindowAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.RecallNextWindow.toString(); }
+		public String getId() { return ActionType.RecallNextWindow.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
     }

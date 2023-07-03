@@ -42,7 +42,7 @@ public class UnmarkAllAction extends MarkAllAction {
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.UnmarkAll.toString(); }
+		public String getId() { return ActionType.UnmarkAll.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
     }

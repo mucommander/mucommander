@@ -56,7 +56,7 @@ public class SwitchActiveTableAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SwitchActiveTable.toString(); }
+		public String getId() { return ActionType.SwitchActiveTable.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

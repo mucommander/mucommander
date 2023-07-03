@@ -27,7 +27,7 @@ import com.mucommander.text.Translator;
 public enum ActionCategory {
 	ALL("action_categories.all") {
 		@Override
-        public boolean contains(String actionId) {
+        public boolean contains(ActionId actionId) {
             return true;
 		}
 	},
@@ -38,7 +38,9 @@ public enum ActionCategory {
 	WINDOW("action_categories.windows"),
 	TAB("action_categories.tabs"),
 	MISC("action_categories.misc"),
-	COMMANDS("action_categories.commands");
+	COMMANDS("action_categories.commands"),
+	TERMINAL("action_categories.terminal"),
+	;
 
 	/** The category's label key in the dictionary file */
 	private String descriptionKey;
@@ -51,7 +53,7 @@ public enum ActionCategory {
 
 	public String getDescription() { return Translator.get(descriptionKey); }
 	
-	public boolean contains(String actionId) {
+	public boolean contains(ActionId actionId) {
 		ActionCategory actionCategory = ActionProperties.getActionCategory(actionId);
 		return actionCategory != null && descriptionKey.equals(actionCategory.getDescriptionKey());
 	}

@@ -46,19 +46,19 @@ import com.mucommander.desktop.ActionType;
 public class ActionParameters {
 
     /** Action ID */
-    private String actionId;
+    private ActionId actionId;
 
     /** Initialization properties, null if there are no initialization properties */
     private Map<String,Object> properties;
 
 
     /**
-     * Convenience constructor which has the same effect as calling {@link #ActionParameters(String, Map)}
+     * Convenience constructor which has the same effect as calling {@link #ActionParameters(ActionId, Map)}
      * with a null value for the <code>properties</code> parameter.
      *
      * @param actionId a MuAction id
      */
-    public ActionParameters(String actionId) {
+    public ActionParameters(ActionId actionId) {
         this(actionId, null);
     }
 
@@ -70,13 +70,9 @@ public class ActionParameters {
      * @param actionId a MuAction id
      * @param initProperties a Hashtable containing the properties that will be used to instantiate the specified MuAction class
      */
-    public ActionParameters(String actionId, Map<String,Object> initProperties) {
+    public ActionParameters(ActionId actionId, Map<String,Object> initProperties) {
         this.actionId = actionId;
         this.properties = initProperties;
-    }
-
-    public ActionParameters(ActionType actionId, Map<String,Object> initProperties) {
-        this(actionId.toString(), initProperties);
     }
 
     /**
@@ -84,7 +80,7 @@ public class ActionParameters {
      *
      * @return the action ID that was used to create this object.
      */
-    public String getActionId() {
+    public ActionId getActionId() {
         return actionId;
     }
 

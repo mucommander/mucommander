@@ -52,7 +52,7 @@ public class EditCredentialsAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.EditCredentials.toString(); }
+		public String getId() { return ActionType.EditCredentials.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }

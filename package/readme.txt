@@ -1,5 +1,5 @@
 
-	   _____                           _
+           _____                           _
  _____ _ _|     |___ _____ _____ ___ ___ _| |___ ___
 |     | | |   --| . |     |     | .'|   | . | -_|  _|
 |_|_|_|___|_____|___|_|_|_|_|_|_|__,|_|_|___|___|_| 
@@ -33,23 +33,26 @@ What's new since v1.2.0 ?
 
 New features:
 - Replace-all functionality for the internal text editor.
-- Undo and redo actions for the internal binary editor.
+- Additional operations for the internal binary editor: undo/redo, search/replace.
 - Additional search options for the internal text viewer/editor: case-sensitivity, whole-words, regular expressions, forward/backward.
 - Browsing and extracting multi-volume RAR 5+ files.
 - Dock/TaskBar icon shows the number of active jobs and their progress.
-- Open With contextual menu shows compatible apps on macOS.
+- Open With menu includes compatible apps on macOS.
 - Support for Android Debug Bridge (adb).
 - Google Drive: present files shared with the authorized user in the 'Shared with me' folder.
 - Google Drive: present trashed files in the 'Trash' folder.
 - Google Drive: documents, spreadsheets and presentations are shown and can be downloaded in their corresponding OpenDocument format (odt, ods, and odp).
+- The terminal's keyboard shortcuts can be configured using the Shortcut Preferences dialog
 
 Improvements:
 - When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
 - When opening a result of a file search with text search using the internal viewer/editor, the caret is set on the first occurrence of the searched text.
-- The action categoties that are displayed in the shortcuts preferences tab are sorted by their name.
-- The row-filtering in the shortucts preferences tab now matches the specified input also against the tooltip of the row (the action's description).
+- The action categories that are displayed in the shortcuts preferences tab are sorted by their name.
+- The row-filtering in the shortcuts preferences tab now matches the specified input also against the tooltip of the row (the action's description).
 - Theme preferences for Shell renamed to Terminal and now both the Terminal and Run Command dialog use configured colors and font.
 - Google Drive: file queries can return up to 1000 files (was 100).
+- Set the 'File version' property of the 'mucommander.exe' file to the application version.
+- Menlo font added as one of defaults for Terminal for all themes (even native ones).
 
 Localization:
 -
@@ -58,10 +61,11 @@ Bug fixes:
 - Fixed connection to SFTP servers using a private key.
 - The terminal accepts input that wasn't accepted before from German keyboard when disabling the setting 'Use Option as Meta key in Terminal'.
 - The terminal now properly displays diacritics when in a form of decomposed characters.
+- When source files cannot be opened with code-folding using the internal text viewer/editor, we fall back to open them without code-folding.
 
 Known issues:
 - Some translations may not be up-to-date.
-- SMB support may not work properly on non multi-language JRE.
+- SMB support may not work properly on non-multi-language JRE.
 - 'Copy files to clipboard' not working with some applications (files are not pasted).
 - Authentication issues when using several sets of credentials (login/password) for the same server.
 - Untrusted HTTPS connections are allowed without a warning.

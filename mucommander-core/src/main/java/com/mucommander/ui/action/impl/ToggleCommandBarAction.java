@@ -72,7 +72,7 @@ public class ToggleCommandBarAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleCommandBar.toString(); }
+		public String getId() { return ActionType.ToggleCommandBar.getId(); }
 
         public ActionCategory getCategory() { return ActionCategory.VIEW; }
 

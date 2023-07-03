@@ -51,7 +51,7 @@ public class CheckForUpdatesAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CheckForUpdates.toString(); }
+		public String getId() { return ActionType.CheckForUpdates.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.MISC; }
     }

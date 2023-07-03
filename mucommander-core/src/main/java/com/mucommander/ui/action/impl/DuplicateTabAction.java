@@ -65,7 +65,7 @@ public class DuplicateTabAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.DuplicateTab.toString(); }
+		public String getId() { return ActionType.DuplicateTab.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.TAB; }
     }

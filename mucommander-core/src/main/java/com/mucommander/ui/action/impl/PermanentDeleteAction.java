@@ -56,7 +56,7 @@ public class PermanentDeleteAction extends SelectedFilesAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.PermanentDelete.toString(); }
+		public String getId() { return ActionType.PermanentDelete.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

@@ -40,6 +40,7 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.GoBackAction;
@@ -98,16 +99,17 @@ public class ToolBar extends JToolBar implements ConfigurationListener, MouseLis
         ToolBarAttributes.addToolBarAttributesListener(this);
     }
     
-    private void addButtons(String[] actionIds) {
-        for (String actionId : actionIds) {
+    private void addButtons(ActionId[] actionIds) {
+        for (ActionId actionId : actionIds) {
             if(actionId==null)
                 addSeparator(SEPARATOR_DIMENSION);
             else {
                 // Get a MuAction instance
                 MuAction action = ActionManager.getActionInstance(actionId, mainFrame);
                 // Do not add buttons for actions that do not have an icon
-                if(action.getIcon()!=null)
+                if (action != null && action.getIcon() != null) {
                     addButton(action);
+                }
             }
         }
 

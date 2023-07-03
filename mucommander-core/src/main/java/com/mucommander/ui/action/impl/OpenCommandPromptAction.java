@@ -49,7 +49,7 @@ public class OpenCommandPromptAction extends ParentFolderAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         @Override
-        public String getId() { return ActionType.OpenCommandPrompt.toString(); }
+        public String getId() { return ActionType.OpenCommandPrompt.getId(); }
 
         @Override
         public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }

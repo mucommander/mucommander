@@ -51,7 +51,7 @@ public class RunCommandAction extends MuAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.RunCommand.toString(); }
+		public String getId() { return ActionType.RunCommand.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.FILES; }
     }

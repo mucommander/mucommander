@@ -85,7 +85,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
 	}
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenInOtherPanel.toString(); }
+		public String getId() { return ActionType.OpenInOtherPanel.getId(); }
 
 		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
     }
