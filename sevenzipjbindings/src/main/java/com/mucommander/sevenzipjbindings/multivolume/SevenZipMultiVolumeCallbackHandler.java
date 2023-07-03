@@ -88,6 +88,7 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
         } catch (FileNotFoundException e) {
             // There is no way to know ahead of time if we reached the last file,
             // So it is safe to ignore this Exception
+            LOGGER.debug("Multi volume 7z file not found - This is expected after reading the final volume [filename = {}]", filename, e);
             return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
