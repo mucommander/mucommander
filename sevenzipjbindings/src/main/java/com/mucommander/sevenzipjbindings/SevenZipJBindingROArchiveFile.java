@@ -17,6 +17,17 @@
 
 package com.mucommander.sevenzipjbindings;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.archive.AbstractROArchiveFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
@@ -27,18 +38,15 @@ import com.mucommander.commons.util.StringUtils;
 import com.mucommander.sevenzipjbindings.multivolume.InArchiveWrapper;
 import com.mucommander.sevenzipjbindings.multivolume.SevenZipMultiVolumeCallbackHandler;
 import com.mucommander.sevenzipjbindings.multivolume.SevenZipRarMultiVolumeCallbackHandler;
-import net.sf.sevenzipjbinding.*;
-import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
+import net.sf.sevenzipjbinding.ArchiveFormat;
+import net.sf.sevenzipjbinding.IInArchive;
+import net.sf.sevenzipjbinding.IInStream;
+import net.sf.sevenzipjbinding.ISequentialOutStream;
+import net.sf.sevenzipjbinding.PropID;
+import net.sf.sevenzipjbinding.SevenZip;
+import net.sf.sevenzipjbinding.SevenZipException;
+import net.sf.sevenzipjbinding.impl.VolumedArchiveInStream;
 
 /**
  * @author Oleg Trifonov, Arik Hadas
