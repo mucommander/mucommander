@@ -74,9 +74,9 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
             if (stream != null) {
                 stream.seek(0, ISeekableStream.SEEK_SET);
             } else {
-                AbstractFile abstractFile = FileFactory.getFile(filename);
                 if (firstVolume) {
                     // Only first file starts with magic number
+                    AbstractFile abstractFile = FileFactory.getFile(filename);
                     stream = new SignatureCheckedRandomAccessFile(abstractFile, signature);
                     firstVolume = false;
                 } else {
