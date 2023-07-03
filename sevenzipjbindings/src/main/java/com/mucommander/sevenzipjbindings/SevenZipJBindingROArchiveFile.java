@@ -100,6 +100,10 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
             } else if (multiPartSevenZip) {
                 SevenZipMultiVolumeCallbackHandler handler = new SevenZipMultiVolumeCallbackHandler(formatSignature, file, password);
                 IInArchive tmpInArchive = SevenZip.openInArchive(sevenZipJBindingFormat, new VolumedArchiveInStream(handler));
+                if (isEnc(tmpInArchive) && password == null) {
+                    // Throwing this exception to trigger password dialog
+                    throw new IOException(String.format("Password protected file but password is null [file = %s]", file.getName()));
+                }
                 inArchive = new InArchiveWrapper(tmpInArchive, handler);
             } else {
                 SignatureCheckedRandomAccessFile in = new SignatureCheckedRandomAccessFile(file, formatSignature);
@@ -108,6 +112,23 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
             }
         }
         return inArchive;
+    }
+
+    private boolean isEnc(IInArchive archive) {
+        try {
+            if (Boolean.TRUE.equals(archive.getArchiveProperty(PropID.ENCRYPTED))) {
+                return true;
+            }
+
+            for (int i = 0; i < archive.getNumberOfItems(); i++) {
+                if (Boolean.TRUE.equals(archive.getProperty(i, PropID.ENCRYPTED))) {
+                    return true;
+                }
+            }
+        } catch (SevenZipException e) {
+            LOGGER.error("Error checking if file is encrypted", e);
+        }
+        return false;
     }
 
     @Override
@@ -126,7 +147,9 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
             LOGGER.debug("failed to list archive", e);
             throw new IOException(e);
         } finally {
-            inArchive.close();
+            if (inArchive != null) {
+                inArchive.close();
+            }
             inArchive = null;
         }
     }
@@ -151,6 +174,13 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
                 } catch (IOException e) {
                     LOGGER.warn("failed to extract entry from archive: " + e.getMessage());
                     LOGGER.debug("failed to extract entry from archive", e);
+
+                    try {
+                        // Close input stream to make sure reader thread will be notified
+                        cbb.getInputStream().close();
+                    } catch (IOException e2) {
+                        LOGGER.debug("failed to close input stream", e2);
+                    }
                 } finally {
                     try {
                         cbb.getOutputStream().close();
