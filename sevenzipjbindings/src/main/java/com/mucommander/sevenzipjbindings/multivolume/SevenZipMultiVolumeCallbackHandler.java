@@ -1,25 +1,31 @@
 package com.mucommander.sevenzipjbindings.multivolume;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.sevenzipjbindings.SignatureCheckedRandomAccessFile;
-import net.sf.sevenzipjbinding.*;
-import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.Closeable;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.sevenzipjbindings.SignatureCheckedRandomAccessFile;
+
+import net.sf.sevenzipjbinding.IArchiveOpenVolumeCallback;
+import net.sf.sevenzipjbinding.ICryptoGetTextPassword;
+import net.sf.sevenzipjbinding.IInStream;
+import net.sf.sevenzipjbinding.ISeekableStream;
+import net.sf.sevenzipjbinding.PropID;
+import net.sf.sevenzipjbinding.SevenZipException;
+import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 
 public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCallback, ICryptoGetTextPassword, Closeable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SevenZipMultiVolumeCallbackHandler.class);
 
-    private Map<String, IInStream> fileCache = new HashMap<>();
+    private final Map<String, IInStream> fileCache = new HashMap<>();
 
     private final AbstractFile firstFile;
 
@@ -36,7 +42,7 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
     }
 
     @Override
-    public Object getProperty(PropID propID) throws SevenZipException {
+    public Object getProperty(PropID propID) {
         switch (propID) {
             case NAME:
                 return firstFile.getAbsolutePath();
@@ -45,7 +51,7 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
     }
 
     @Override
-    public IInStream getStream(String filename) throws SevenZipException {
+    public IInStream getStream(String filename) {
         try {
             IInStream stream = fileCache.get(filename);
             if (stream != null) {
@@ -72,7 +78,7 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         for (IInStream f : fileCache.values()) {
             try {
                 f.close();
