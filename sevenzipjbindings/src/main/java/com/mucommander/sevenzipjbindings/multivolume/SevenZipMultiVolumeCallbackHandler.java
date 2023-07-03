@@ -50,7 +50,7 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
 
     private final String password;
 
-    private boolean isFirstFile = true;
+    private boolean firstVolume = true;
 
     public SevenZipMultiVolumeCallbackHandler(byte[] signature, AbstractFile firstFile, String password) {
         this.signature = signature;
@@ -75,10 +75,10 @@ public class SevenZipMultiVolumeCallbackHandler implements IArchiveOpenVolumeCal
                 stream.seek(0, ISeekableStream.SEEK_SET);
             } else {
                 AbstractFile abstractFile = FileFactory.getFile(filename);
-                if (isFirstFile) {
+                if (firstVolume) {
                     // Only first file starts with magic number
                     stream = new SignatureCheckedRandomAccessFile(abstractFile, signature);
-                    isFirstFile = false;
+                    firstVolume = false;
                 } else {
                     stream = new RandomAccessFileInStream(new RandomAccessFile(filename, "r"));
                 }
