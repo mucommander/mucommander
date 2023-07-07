@@ -17,84 +17,66 @@
 
 package com.mucommander.commons.file.protocol.adb;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Random;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.util.CircularByteBuffer;
 
 import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.JadbException;
 import se.vidstige.jadb.RemoteFile;
 
 /**
- * @author Oleg Trifonov
+ * @author Oleg Trifonov, Arik Hadas
  * Created on 29/12/15.
  */
 public class AdbInputStream extends InputStream {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdbInputStream.class);
 
-    private static final long MAX_CACHED_SIZE = 10*1024*1024;
-
-    private final ByteArrayOutputStream bos;
-    private InputStream is;
-    private final File tempFile;
+    private InputStream inputStream;
 
     AdbInputStream(AdbFile file) throws IOException {
-        this.bos = file.getSize() <= MAX_CACHED_SIZE ? new ByteArrayOutputStream() : null;
-        this.tempFile = bos == null ? File.createTempFile(file.getName(), ""+System.currentTimeMillis() + "-" + new Random().nextInt(0xffff)) : null;
-
         JadbDevice device = file.getDevice(file.getURL());
         if (device == null) {
             throw new IOException("file not found: " + file.getURL());
         }
-        if (bos != null) {
+
+        CircularByteBuffer cbb = new CircularByteBuffer(BufferPool.getDefaultBufferSize());
+        new Thread(() -> {
+            var out = cbb.getOutputStream();
             try {
-                device.pull(new RemoteFile(file.getURL().getPath()), bos);
-            } catch (JadbException e) {
-                close();
-                throw new IOException(e);
+                device.pull(new RemoteFile(file.getURL().getPath()), out);
+            } catch (IOException | JadbException e) {
+                LOGGER.error("failed to read from adb path %s", file.getURL());
+                LOGGER.debug("failed to read from adb path", e);
             }
-        } else {
             try {
-                device.pull(new RemoteFile(file.getURL().getPath()), new FileOutputStream(tempFile));
-            } catch (JadbException e) {
-                close();
-                throw new IOException(e);
+                out.close();
+            } catch (IOException e) {
+                LOGGER.error("failed to close output stream when writing to adb path %s", file.getURL());
+                LOGGER.debug("failed to close output stream when writing to adb path", e);
             }
-        }
+        }).start();
+        this.inputStream = cbb.getInputStream();
     }
 
     @Override
     public int read() throws IOException {
-        if (is == null) {
-            is = bos != null ? new ByteArrayInputStream(bos.toByteArray()) : new FileInputStream(tempFile);
-        }
-        return is.read();
+        return inputStream.read();
     }
 
     @Override
     public synchronized void reset() throws IOException {
-        super.reset();
-        if (is != null) {
-            is.reset();
-        }
+        inputStream.reset();
     }
 
     @Override
     public void close() throws IOException {
-        super.close();
-        if (is != null) {
-            is.close();
-        }
-        if (bos != null) {
-            bos.close();
-        }
-        if (tempFile != null) {
-            tempFile.delete();
-        }
+        inputStream.close();
     }
 
 }
