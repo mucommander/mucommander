@@ -177,7 +177,7 @@ public class AdbFile extends ProtocolFile {
         if (remoteFile == null) {
             return 0;
         }
-        return remoteFile.getLastModified();
+        return remoteFile.getLastModified() * 1000l;
     }
 
     @Override
