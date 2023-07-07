@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.3.0
+muCommander v1.4.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,41 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.2.0 ?
+What's new since v1.3.0 ?
 -----------------------
 
 New features:
-- Replace-all functionality for the internal text editor.
-- Additional operations for the internal binary editor: undo/redo, search/replace.
-- Additional search options for the internal text viewer/editor: case-sensitivity, whole-words, regular expressions, forward/backward.
-- Browsing and extracting multi-volume RAR 5+ files.
-- Dock/TaskBar icon shows the number of active jobs and their progress.
-- Open With menu includes compatible apps on macOS.
-- Support for Android Debug Bridge (adb).
-- Google Drive: present files shared with the authorized user in the 'Shared with me' folder.
-- Google Drive: present trashed files in the 'Trash' folder.
-- Google Drive: documents, spreadsheets and presentations are shown and can be downloaded in their corresponding OpenDocument format (odt, ods, and odp).
-- The terminal's keyboard shortcuts can be configured using the Shortcut Preferences dialog
-- Browsing and extracting multi-volume 7z files.
+- 
 
 Improvements:
-- When sorting a file table by filenames, the sort operation performs a locale-sensitive String comparison.
-- When opening a result of a file search with text search using the internal viewer/editor, the caret is set on the first occurrence of the searched text.
-- The action categories that are displayed in the shortcuts preferences tab are sorted by their name.
-- The row-filtering in the shortcuts preferences tab now matches the specified input also against the tooltip of the row (the action's description).
-- Theme preferences for Shell renamed to Terminal and now both the Terminal and Run Command dialog use configured colors and font.
-- Google Drive: file queries can return up to 1000 files instead of up to 100 files.
-- Set the 'File version' property of the 'mucommander.exe' file to the application version.
-- Menlo font is added as one of the default fonts of the Terminal for all themes (also native ones).
+- 
 
 Localization:
 -
 
 Bug fixes:
-- Fixed connection to SFTP servers using a private key.
-- The terminal accepts input that wasn't accepted before from German keyboard when disabling the setting 'Use Option as Meta key in Terminal'.
-- The terminal displays diacritics in a form of decomposed characters properly.
-- When source files cannot be opened with code-folding using the internal text viewer/editor, it falls back to opening them without code-folding.
+- 
 
 Known issues:
 - Some translations may not be up-to-date.
