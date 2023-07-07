@@ -24,16 +24,17 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
-import se.vidstige.jadb.JadbConnection;
-import se.vidstige.jadb.JadbDevice;
-import se.vidstige.jadb.JadbException;
-import se.vidstige.jadb.RemoteFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileOperation;
 import com.mucommander.commons.file.FilePermissions;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.PermissionAccess;
 import com.mucommander.commons.file.PermissionBits;
 import com.mucommander.commons.file.PermissionType;
@@ -43,11 +44,17 @@ import com.mucommander.commons.file.protocol.ProtocolFile;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
+import se.vidstige.jadb.JadbConnection;
+import se.vidstige.jadb.JadbDevice;
+import se.vidstige.jadb.JadbException;
+import se.vidstige.jadb.RemoteFile;
+
 /**
  * @author Oleg Trifonov, Arik Hadas
  * Created on 09/09/15.
  */
 public class AdbFile extends ProtocolFile {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdbFile.class);
 
     private final RemoteFile remoteFile;
     private List<RemoteFile> childs;
@@ -221,7 +228,8 @@ public class AdbFile extends ProtocolFile {
 
     @Override
     public PermissionBits getChangeablePermissions() {
-        return null;
+        // no permission can be changed
+        return PermissionBits.EMPTY_PERMISSION_BITS;
     }
 
     @Override
@@ -325,7 +333,13 @@ public class AdbFile extends ProtocolFile {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return null;
+        return new AdbOutputStream(this) {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                finishFileOperation();
+            }
+        };
     }
 
     @Override
@@ -452,16 +466,16 @@ public class AdbFile extends ProtocolFile {
         }
         closeConnection();
         finishFileOperation();
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        if (getParent() instanceof AdbFile) {
-//            AdbFile parent = (AdbFile)getParent();
-//            lastModifiedPath = parent.getURL();
-//            parent.rebuildChildrenList(parent.getURL());
-//        }
+        //        try {
+        //            Thread.sleep(100);
+        //        } catch (InterruptedException e) {
+        //            e.printStackTrace();
+        //        }
+        //        if (getParent() instanceof AdbFile) {
+        //            AdbFile parent = (AdbFile)getParent();
+        //            lastModifiedPath = parent.getURL();
+        //            parent.rebuildChildrenList(parent.getURL());
+        //        }
     }
 
     @Override
@@ -471,5 +485,26 @@ public class AdbFile extends ProtocolFile {
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled)
             throws IOException, UnsupportedFileOperationException {
+    }
+
+    @Override
+    public MonitoredFile toMonitoredFile() {
+        return new ModificationDateBasedMonitoredFile(this) {
+            @Override
+            public long getDate() {
+                try {
+                    return Stream.of(AdbFile.this.ls())
+                            .map(AbstractFile::getDate)
+                            .max(Long::compareTo)
+                            .orElse(0l);
+                } catch (IOException e) {
+                    LOGGER.error("failed to retrieve folder modification date", e);
+                    return 0;
+                } catch (RuntimeException e) {
+                    LOGGER.error("runtime exception while retrieving folder modification date", e);
+                    return 0;
+                }
+            }
+        };
     }
 }
