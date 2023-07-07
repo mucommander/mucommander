@@ -55,9 +55,6 @@ Improvements:
 - Set the 'File version' property of the 'mucommander.exe' file to the application version.
 - Menlo font is added as one of the default fonts of the Terminal for all themes (also native ones).
 
-Localization:
--
-
 Bug fixes:
 - Fixed connection to SFTP servers using a private key.
 - The terminal accepts input that wasn't accepted before from German keyboard when disabling the setting 'Use Option as Meta key in Terminal'.
