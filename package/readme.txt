@@ -51,9 +51,9 @@ Improvements:
 - The action categories that are displayed in the shortcuts preferences tab are sorted by their name.
 - The row-filtering in the shortcuts preferences tab now matches the specified input also against the tooltip of the row (the action's description).
 - Theme preferences for Shell renamed to Terminal and now both the Terminal and Run Command dialog use configured colors and font.
-- Google Drive: file queries can return up to 1000 files (was 100).
+- Google Drive: file queries can return up to 1000 files instead of up to 100 files.
 - Set the 'File version' property of the 'mucommander.exe' file to the application version.
-- Menlo font added as one of defaults for Terminal for all themes (even native ones).
+- Menlo font is added as one of the default fonts of the Terminal for all themes (also native ones).
 
 Localization:
 -
@@ -61,8 +61,8 @@ Localization:
 Bug fixes:
 - Fixed connection to SFTP servers using a private key.
 - The terminal accepts input that wasn't accepted before from German keyboard when disabling the setting 'Use Option as Meta key in Terminal'.
-- The terminal now properly displays diacritics when in a form of decomposed characters.
-- When source files cannot be opened with code-folding using the internal text viewer/editor, we fall back to open them without code-folding.
+- The terminal displays diacritics in a form of decomposed characters properly.
+- When source files cannot be opened with code-folding using the internal text viewer/editor, it falls back to opening them without code-folding.
 
 Known issues:
 - Some translations may not be up-to-date.
