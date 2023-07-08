@@ -212,10 +212,10 @@ public class GoogleCloudStoragePanel extends ServerPanel {
         return new TextField(jTextField) {
             @Override
             public boolean switchEnabled() {
-                var isEnabled = super.switchEnabled();
+                var enabled = super.switchEnabled();
                 // Update also the button state to match the text field
-                chooseFileButton.setEnabled(isEnabled);
-                return isEnabled;
+                chooseFileButton.setEnabled(enabled);
+                return enabled;
             }
         };
     }
