@@ -210,7 +210,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         }
         var blobName = getBlob().getName();
         try {
-            // Directories exists only when there are files present, we cannot delete them
+            // Directories exist only when there are files present, we cannot delete them
             if (isDirectory() || getBlob().delete()) {
                 // The blob was deleted
                 blob = null;
