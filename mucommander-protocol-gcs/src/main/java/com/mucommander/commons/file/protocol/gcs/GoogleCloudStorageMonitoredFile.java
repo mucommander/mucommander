@@ -50,15 +50,11 @@ public class GoogleCloudStorageMonitoredFile extends ModificationDateBasedMonito
     @Override
     public long getDate() {
         try {
-            if (file.isDirectory()) {
-                return file.listDir()
-                        .filter(file -> !file.isDirectory())
-                        .map(GoogleCloudStorageAbstractFile::getDate)
-                        .max(Long::compareTo)
-                        .orElse(0L);
-            } else {
-                return file.getDate();
-            }
+            return file.listDir()
+                    .filter(file -> !file.isDirectory())
+                    .map(GoogleCloudStorageAbstractFile::getDate)
+                    .max(Long::compareTo)
+                    .orElse(0L);
         } catch (IOException ex) {
             LOGGER.error("Failed to retrieve modification date for file " + file.getURL(), ex);
             return 0;
