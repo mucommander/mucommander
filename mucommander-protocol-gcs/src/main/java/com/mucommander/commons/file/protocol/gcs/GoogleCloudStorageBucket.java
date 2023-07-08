@@ -24,6 +24,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.cloud.storage.*;
 import com.mucommander.commons.file.FileURL;
 
@@ -33,6 +36,8 @@ import com.mucommander.commons.file.FileURL;
  * @author miroslav.spak
  */
 public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStorageBucket.class);
 
     protected static final Pattern BUCKER_NAME_BLOB_PATH_PATTERN = Pattern.compile("^/([^/]+)/?(.*)/?$");
 
@@ -74,6 +79,7 @@ public class GoogleCloudStorageBucket extends GoogleCloudStorageAbstractFile {
                 bucket = getStorageService().get(getBucketName());
             } catch (IOException ex) {
                 // We were unable to receive bucket, try to continue work without it
+                LOGGER.warn("Unable to receive bucket with name: " + getBucketName(), ex);
             }
         }
 
