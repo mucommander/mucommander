@@ -37,7 +37,6 @@ import com.mucommander.commons.file.util.PathUtils;
  */
 public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
 
-    private static final String DUMMY_FILE_NAME = ".";
     private static final String EMPTY_FILE_CONTENT_TYPE = "text/plain";
 
     private Blob blob;
@@ -176,13 +175,13 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
     @Override
     public void mkdir() throws IOException {
         var bucketName = getBucketName();
-        // Create dummy file in the folder, because folder cannot exist without file in GCS
-        var blobPath = PathUtils.removeTrailingSeparator(getBlobPath()) + getSeparator() + DUMMY_FILE_NAME;
+        // Folder names have to end with separator
+        var blobPath = PathUtils.removeTrailingSeparator(getBlobPath()) + getSeparator();
         try {
             var blobId = BlobId.of(bucketName, blobPath);
-            var blobInfo = BlobInfo.newBuilder(blobId).setContentType(EMPTY_FILE_CONTENT_TYPE).build();
-            // Cannot set blob because this blob is a dummy file not the folder itself
-            getStorageService().create(blobInfo);
+            var blobInfo = BlobInfo.newBuilder(blobId).build();
+            // The new blob represents created folder
+            blob = getStorageService().create(blobInfo);
         } catch (Exception ex) {
             throw new IOException("Unable to create folder " + blobPath + " in bucket " + bucketName, ex);
         }
@@ -210,8 +209,7 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         }
         var blobName = getBlob().getName();
         try {
-            // Directories exist only when there are files present, we cannot delete them
-            if (isDirectory() || getBlob().delete()) {
+            if (getBlob().delete()) {
                 // The blob was deleted
                 blob = null;
             } else {
