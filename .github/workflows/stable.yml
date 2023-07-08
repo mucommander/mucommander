@@ -70,7 +70,6 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.dmg"
-          asset_name: mucommander-snapshot.dmg
           asset_content_type: application/octet-stream
 
   upload-linux-artifacts:
@@ -112,7 +111,6 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-portable.zip"
-          asset_name: mucommander-snapshot-portable.zip
           asset_content_type: application/zip
 
       - name: Upload tgz
@@ -120,23 +118,20 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.tgz"
-          asset_name: mucommander-snapshot.tgz
           asset_content_type: application/gzip
 
       - name: Upload deb
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander_${{ needs.create-release.outputs.version }}-1_amd64.deb"
-          asset_name: mucommander-snapshot_amd64.deb
+          asset_path: "./build/distributions/mucommander_${{ needs.create-release.outputs.full_version }}_amd64.deb"
           asset_content_type: application/octet-stream
 
       - name: Upload rpm
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}-1.x86_64.rpm"
-          asset_name: mucommander-snapshot.x86_64.rpm
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.x86_64.rpm"
           asset_content_type: application/octet-stream
 
 
@@ -179,6 +174,5 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}.msi"
-          asset_name: mucommander-snapshot.msi
           asset_content_type: application/octet-stream
 
