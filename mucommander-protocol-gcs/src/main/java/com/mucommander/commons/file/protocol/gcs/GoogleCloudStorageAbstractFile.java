@@ -209,16 +209,12 @@ public abstract class GoogleCloudStorageAbstractFile extends ProtocolFile {
     }
 
     @Override
-    public void mkdir() throws IOException {
-        throw new UnsupportedFileOperationException(FileOperation.CREATE_DIRECTORY);
-    }
-
-    @Override
     public InputStream getInputStream() throws IOException {
         throw new UnsupportedFileOperationException(FileOperation.READ_FILE);
     }
 
     @Override
+    @UnsupportedFileOperation
     public OutputStream getOutputStream() throws IOException {
         throw new UnsupportedFileOperationException(FileOperation.WRITE_FILE);
     }
