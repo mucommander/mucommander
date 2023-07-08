@@ -32,7 +32,7 @@ public class GoogleCloudStorageFileTest {
 
         assertEquals(bucket1.getBlobPath(), "folder/folder2/file.txt");
         assertEquals(bucket2.getBlobPath(), "folder/folder2");
-        assertEquals(bucket3.getBlobPath(), "folder");
+        assertEquals(bucket3.getBlobPath(), "folder/");
         // Paths without any blob names
         assertEquals(bucket4.getBlobPath(), "");
         assertEquals(bucket5.getBlobPath(), "");
