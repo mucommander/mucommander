@@ -58,8 +58,9 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
      */
     private Blob getBlob() {
         // Get Blob file from the bucket
-        if (blob == null && getBucket() != null) {
-            blob = getBucket().get(getBlobPath());
+        var blobPath = getBlobPath();
+        if (blob == null && getBucket() != null && !blobPath.endsWith(getSeparator())) {
+            blob = getBucket().get(blobPath);
         }
 
         // Directories are not returned using bucket#get()
@@ -209,8 +210,11 @@ public class GoogleCloudStorageFile extends GoogleCloudStorageBucket {
         }
         var blobName = getBlob().getName();
         try {
-            if (getBlob().delete()) {
-                // The blob was deleted
+            // Folders can both exist in the Bucket (file representing a folder), then they need to be deleted,
+            // or not exist in the Bucket (the folder is a part of another file's path), and deletion has to be skipped
+            // GCS flat namespace explanation here https://cloud.google.com/storage/docs/folders
+            if (getBlob().exists() && getBlob().delete() || !getBlob().exists()) {
+                // The blob was deleted or doesn't exist anymore
                 blob = null;
             } else {
                 throw new IllegalStateException("File " + blobName + " wasn't deleted, it's probably missing");
