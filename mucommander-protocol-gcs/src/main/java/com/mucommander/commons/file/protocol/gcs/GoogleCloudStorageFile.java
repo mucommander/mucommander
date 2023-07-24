@@ -26,7 +26,11 @@ import java.util.regex.Matcher;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import com.google.cloud.storage.*;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Bucket;
+import com.google.cloud.storage.Storage;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.PathUtils;
 

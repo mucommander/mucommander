@@ -32,7 +32,7 @@ What's new since v1.3.0 ?
 -----------------------
 
 New features:
-- Added a new Google Cloud Storage protocol to browse and manage files in the GCS buckets.
+- Add Google Cloud Storage as a file protocol that enables browsing and managing files in GCS buckets.
 
 Improvements:
 - 

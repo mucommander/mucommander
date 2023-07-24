@@ -18,7 +18,8 @@ package com.mucommander.commons.file.protocol.gcs;
 
 import static com.mucommander.commons.file.protocol.gcs.Activator.GCS_SCHEMA;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
@@ -27,7 +28,13 @@ import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
