@@ -19,6 +19,14 @@
 
 package com.mucommander.commons.file;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import com.mucommander.commons.file.compat.CompatURLStreamHandler;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
@@ -27,14 +35,6 @@ import com.mucommander.commons.file.protocol.search.SearchSchemeParser;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
 
 /**
  * This class represents a Uniform Resource Locator (URL). The general format of a URL is as follows:
@@ -722,20 +722,7 @@ public class FileURL implements Cloneable {
      * @return an <code>Enumeration</code> of all property names this FileURL contains
      */
     public Enumeration<String> getPropertyNames() {
-        // Return an empty enumeration if the property hashtable is null
-        if(properties==null) {
-            return new Enumeration<String>() {
-                public boolean hasMoreElements() {
-                    return false;
-                }
-
-                public String nextElement() {
-                    throw new NoSuchElementException();
-                }
-            };
-        }
-
-        return properties.keys();
+        return properties != null ? properties.keys() : Collections.emptyEnumeration();
     }
 
     /**
