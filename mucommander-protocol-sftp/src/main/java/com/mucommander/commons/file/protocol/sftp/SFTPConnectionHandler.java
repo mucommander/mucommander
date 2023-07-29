@@ -123,12 +123,12 @@ class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
     @Override
     public synchronized void closeConnection() {
-        if(channelSftp!=null) {
+        if (channelSftp!=null) {
             channelSftp.quit();
         }
 
-        if(session!=null)
-        	session.disconnect();
+        if (session!=null)
+            session.disconnect();
     }
 
 
