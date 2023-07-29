@@ -189,7 +189,7 @@ public class SFTPFile extends ProtocolFile {
                 }
             };
         } catch (Exception e) {
-            LOGGER.error("failed to get output stream for %s", getURL());
+            LOGGER.error("failed to get output stream for {}", getURL());
             try {
                 connHandler.close();
             } catch (Exception e1) {}
@@ -373,7 +373,7 @@ public class SFTPFile extends ProtocolFile {
             fileAttributes.setSymlink(false);
             fileAttributes.setSize(0);
         } catch (Exception e) {
-            LOGGER.error("failed to delete %s", getURL());
+            LOGGER.error("failed to delete {}", getURL());
         }
     }
 
@@ -388,7 +388,7 @@ public class SFTPFile extends ProtocolFile {
 
             files = connHandler.channelSftp.ls(absPath);
         } catch (Exception e) {
-            LOGGER.error("failed to ls %s", getURL());
+            LOGGER.error("failed to ls {}", getURL());
         }
 
         int nbFiles = files.size();
@@ -443,7 +443,7 @@ public class SFTPFile extends ProtocolFile {
             fileAttributes.setDate(System.currentTimeMillis());
             fileAttributes.setSize(0);
         } catch (Exception e) {
-            LOGGER.error("failed to mkdir %s", getURL());
+            LOGGER.error("failed to mkdir {}", getURL());
             throw new IOException(e);
         }
     }
@@ -477,7 +477,7 @@ public class SFTPFile extends ProtocolFile {
             fileAttributes.setDirectory(false);
             fileAttributes.setSize(0);
         } catch (Exception e) {
-            LOGGER.error("failed to rename %s", getURL());
+            LOGGER.error("failed to rename {}", getURL());
         }
     }
 
@@ -550,7 +550,7 @@ public class SFTPFile extends ProtocolFile {
             // Update local attribute copy
             fileAttributes.setPermissions(new SimpleFilePermissions(permissions));
         } catch (Exception e) {
-            LOGGER.error("failed to change permissions %s", getURL());
+            LOGGER.error("failed to change permissions {}", getURL());
             throw new IOException(e);
         }
     }
@@ -576,7 +576,7 @@ public class SFTPFile extends ProtocolFile {
                 }
             };
         } catch(Exception e) {
-            LOGGER.error("failed to get input stream %s", getURL());
+            LOGGER.error("failed to get input stream {}", getURL());
             try {
                 connHandler.close();
             } catch (Exception e1) {}
@@ -613,7 +613,7 @@ public class SFTPFile extends ProtocolFile {
                 canonicalPathFetchedTime = System.currentTimeMillis();
                 return canonicalPath;
             } catch(Exception e) {
-                LOGGER.warn("failed to get canonical path of symlink %s", getURL());
+                LOGGER.warn("failed to get canonical path of symlink {}", getURL());
             }
         }
 
