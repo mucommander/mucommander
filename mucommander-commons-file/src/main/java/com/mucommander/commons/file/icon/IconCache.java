@@ -18,9 +18,10 @@
 
 package com.mucommander.commons.file.icon;
 
-import org.apache.commons.collections.map.ReferenceMap;
+import javax.swing.Icon;
 
-import javax.swing.*;
+import org.apache.commons.collections4.map.AbstractReferenceMap.ReferenceStrength;
+import org.apache.commons.collections4.map.ReferenceMap;
 
 /**
  * This class provides a icon cache, mapping <code>Object</code> keys onto {@link Icon} instances.
@@ -38,7 +39,7 @@ import javax.swing.*;
 public class IconCache {
 
    /** The actual hash map */
-    protected final ReferenceMap hashMap = new ReferenceMap(ReferenceMap.HARD, ReferenceMap.SOFT);
+    protected final ReferenceMap<Object, Icon> hashMap = new ReferenceMap<>(ReferenceStrength.HARD, ReferenceStrength.SOFT);
 
     /**
      * Creates a new icon cache.
@@ -56,7 +57,7 @@ public class IconCache {
      * such mapping existed
      */
     public synchronized Icon put(Object key, Icon value) {
-        return (Icon)hashMap.put(key, value);
+        return hashMap.put(key, value);
     }
 
     /**
@@ -68,7 +69,7 @@ public class IconCache {
      * <code>null</code> otherwise
      */
     public synchronized Icon get(Object key) {
-        return (Icon)hashMap.get(key);
+        return hashMap.get(key);
     }
 
     /**
