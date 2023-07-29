@@ -244,7 +244,7 @@ public class ConnectionPool implements Runnable {
         @Override
         public void run() {
             // Try to close connection, only if it is connected
-            if(connHandler.isConnected()) {
+            if (connHandler.isConnected()) {
                 LOGGER.info("Closing connection held by {}", connHandler);
                 connHandler.closeConnection();
             }

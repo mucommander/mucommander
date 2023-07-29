@@ -19,6 +19,7 @@
 
 package com.mucommander.commons.file.protocol.sftp;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,9 +51,8 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionPool;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolFile;
-import com.mucommander.commons.io.ByteCounter;
 import com.mucommander.commons.io.ByteUtils;
-import com.mucommander.commons.io.CounterOutputStream;
+import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
@@ -160,12 +160,12 @@ public class SFTPFile extends ProtocolFile {
             connHandler.checkConnection();
 
             OutputStream outputStream;
-            if(exists()) {
-                outputStream = connHandler.channelSftp.put(absPath,
-                        append ? ChannelSftp.APPEND : ChannelSftp.OVERWRITE);
+            if (exists()) {
+                int mode = append ? ChannelSftp.APPEND : ChannelSftp.OVERWRITE;
+                outputStream = connHandler.channelSftp.put(absPath, mode);
 
                 // Update local attributes
-                if(!append)
+                if (!append)
                     fileAttributes.setSize(0);
             }
             else {
@@ -177,22 +177,10 @@ public class SFTPFile extends ProtocolFile {
                 fileAttributes.setSize(0);
             }
 
-            return new OutputStream() {
-                @Override
-                public void write(int b) throws IOException {
-                    outputStream.write(b);
-                }
-                @Override
-                public void write(byte[] b) throws IOException {
-                    outputStream.write(b);
-                }
-                @Override
-                public void write(byte[] b, int off, int len) throws IOException {
-                    outputStream.write(b, off, len);
-                }
+            return new FilteredOutputStream(outputStream) {
                 @Override
                 public void close() throws IOException {
-                    outputStream.close();
+                    super.close();
                     try {
                         connHandler.close();
                     } catch (Exception e) {
@@ -576,22 +564,10 @@ public class SFTPFile extends ProtocolFile {
 
             InputStream in = connHandler.channelSftp.get(absPath);
             in.skip(offset);
-            return new InputStream() {
-                @Override
-                public int read() throws IOException {
-                    return in.read();
-                }
-                @Override
-                public int read(byte[] b) throws IOException {
-                    return in.read(b);
-                }
-                @Override
-                public int read(byte[] b, int off, int len) throws IOException {
-                    return in.read(b, off, len);
-                }
+            return new FilterInputStream(in) {
                 @Override
                 public void close() throws IOException {
-                    in.close();
+                    super.close();
                     try {
                         connHandler.close();
                     } catch (Exception e) {
