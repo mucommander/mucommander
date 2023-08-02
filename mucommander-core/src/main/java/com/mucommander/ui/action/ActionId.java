@@ -16,13 +16,16 @@
  */
 package com.mucommander.ui.action;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A class representing ActionId for shortcuts and actions, including custom commands,
  * commandbar, toolbar and terminal.
  */
-public final class ActionId {
+public final class ActionId implements Serializable {
+
+    private static final long serialVersionUID = -5303000770743807314L;
 
     public enum ActionType {
         GENERIC,
