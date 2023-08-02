@@ -147,10 +147,11 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
      */
     protected boolean isValidQuickSearchInput(KeyEvent e) {
         int modifier = e.getModifiersEx();
-        char keyChar = e.getKeyChar();
         if ((modifier&(KeyEvent.CTRL_DOWN_MASK|KeyEvent.META_DOWN_MASK)) != 0) {
             return false;
-        } else if ((modifier & (KeyEvent.ALT_DOWN_MASK)) != 0) {
+        }
+        char keyChar = e.getKeyChar();
+        if ((modifier & (KeyEvent.ALT_DOWN_MASK)) != 0) {
             // special case for certain keyboard layouts where diacritics
             // typed using letter+ALT/OPTION (like Polish Programmer keyboard, the most popular variant in PL).
             if (!Character.isLetter(keyChar)) {
