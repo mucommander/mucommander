@@ -451,14 +451,7 @@ class TextEditorImpl implements ThemeListener {
         String mimeType = FileTypeUtil.get().guessContentType(
                 new File(file.getCanonicalPath()), true);
 
-        // TODO temporary fix with try/catch to address: https://github.com/mucommander/mucommander/issues/983, https://github.com/bobbylight/RSyntaxTextArea/issues/514
-        try {
-            textArea.setSyntaxEditingStyle(mimeType);
-        } catch (Exception e) {
-            LOGGER.error("Exception while trying to set syntax editing style - retrying with code folding disabled", e);
-            textArea.setCodeFoldingEnabled(false);
-            textArea.setSyntaxEditingStyle(mimeType);
-        }
+        textArea.setSyntaxEditingStyle(mimeType);
         if (syntaxChangeListener != null) {
             syntaxChangeListener.accept(mimeType);
         }
