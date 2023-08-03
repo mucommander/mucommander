@@ -1749,6 +1749,14 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 	            boolean down = keyCode==KeyEvent.VK_DOWN;
 	            findMatch(currentRow + (down ? 1 : -1), down, false);
 	        }
+	        // If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
+	        // and a valid Unicode character, add it to the current search string
+	        else if(isValidQuickSearchInput(e)) {
+	            appendCharacterToSearchString(keyChar);
+
+	            // Find the row that best matches the new search string and select it
+	            findMatch(0, true, true);
+	        }
 	        // MarkSelectedFileAction and MarkNextRowAction mark the current row and moves to the next match
 	        else if(ActionManager.getActionInstance(ActionType.MarkSelectedFile, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))
 	             || ActionManager.getActionInstance(ActionType.MarkNextRow, mainFrame).isAccelerator(KeyStroke.getKeyStrokeForEvent(e))) {
@@ -1767,14 +1775,6 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
 	            // Find the first the previous row that matches the search string
 	            findMatch(currentRow-1, false, false);
-	        }
-	        // If no modifier other than Shift is pressed and the typed character is not a control character (space is ok)
-	        // and a valid Unicode character, add it to the current search string
-	        else if(isValidQuickSearchInput(e)) {
-	            appendCharacterToSearchString(keyChar);
-
-	            // Find the row that best matches the new search string and select it
-	            findMatch(0, true, true);
 	        }
 	        else {
 	            // Test if the typed key combination corresponds to a registered action.

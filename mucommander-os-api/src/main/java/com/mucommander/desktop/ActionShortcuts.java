@@ -216,7 +216,7 @@ public class ActionShortcuts {
         case ShowBookmarksQL:
             return KeyStroke.getKeyStroke(KeyEvent.VK_4, KeyEvent.ALT_DOWN_MASK);
         case ShowFilePopupMenu:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.CTRL_DOWN_MASK);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
         case ShowFileProperties:
             return KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, KeyEvent.ALT_DOWN_MASK);
         case ShowParentFoldersQL:
@@ -295,7 +295,7 @@ public class ActionShortcuts {
         case MarkGroup:
             return KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case MarkSelectedFile:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0);
+            return KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, KeyEvent.CTRL_DOWN_MASK);
         case NextTab:
             return KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, KeyEvent.CTRL_DOWN_MASK | KeyEvent.SHIFT_DOWN_MASK);
         case Open:
