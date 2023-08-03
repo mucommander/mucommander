@@ -35,7 +35,8 @@ New features:
 - Add Google Cloud Storage as a file protocol that enables browsing and managing files in GCS buckets.
 
 Improvements:
-- 
+- The 'Space' key can be used to filter filenames with spaces in quick search. Files can be selected during an ongoing
+  quick search using CTRL+Space (that was replaced with CTRL+SHIFT+Space for 'Popup menu' action).
 
 Localization:
 -
