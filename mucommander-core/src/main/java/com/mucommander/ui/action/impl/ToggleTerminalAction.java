@@ -89,6 +89,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 } else {
                     if (cwd == null || !cwd.equals(newCwd)) {
                         // TODO check somehow if term is busy..... or find another way to set CWD
+                        // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
                         // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
                         terminal.getTtyConnector().write(
                                 " cd \"" + newCwd + "\""
