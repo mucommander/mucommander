@@ -7,6 +7,14 @@ body:
     attributes:
       value: |
         Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    id: exisitng-issue
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please [search](https://github.com/mucommander/mucommander/issues?q=) to see if an issue already exists for the bug you encountered, including the closed ones.
+      options:
+      - label: I have searched the existing issues (including the closed ones)
+        required: true
   - type: textarea
     id: what-happend
     attributes:
