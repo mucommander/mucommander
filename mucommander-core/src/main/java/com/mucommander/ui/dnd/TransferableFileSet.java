@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -332,13 +333,10 @@ public class TransferableFileSet implements Transferable {
         }
         // Return files stored in a java.util.Vector instance
         else if(dataFlavor.equals(DataFlavor.javaFileListFlavor) && javaFileListFlavorSupported) {
-            List<File> fileList = new Vector<File>(nbFiles);
-
-            for(int i=0; i<nbFiles; i++) {
-                AbstractFile file = fileSet.elementAt(i);
-                fileList.add(new File(file.getAbsolutePath()));
-            }
-            return fileList;
+            return fileSet.stream()
+                    .map(AbstractFile::getAbsolutePath)
+                    .map(File::new)
+                    .collect(Collectors.toList());
         }
 //        // Return an InputStream formatted in a specified Unicode charset that contains file paths separated by '\n' characters
 //        else if(dataFlavor.equals(DataFlavor.getTextPlainUnicodeFlavor())) {
