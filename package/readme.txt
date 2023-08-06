@@ -42,7 +42,7 @@ Localization:
 -
 
 Bug fixes:
-- 
+- Fix copying files to Finder.
 
 Known issues:
 - Some translations may not be up-to-date.
