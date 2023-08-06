@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
@@ -73,7 +74,9 @@ import com.mucommander.ui.notifier.NotifierProvider;
  */
 public class MainFrame extends JFrame implements LocationListener {
 
-    private ProportionalSplitPane splitPane;
+    private ProportionalSplitPane foldersSplitPane;
+
+    private JSplitPane verticalSplitPane;
 
     private FolderPanel leftFolderPanel;
     private FolderPanel rightFolderPanel;
@@ -190,11 +193,11 @@ public class MainFrame extends JFrame implements LocationListener {
         // both of them. The split orientation is loaded from and saved to the preferences.
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
-        splitPane = new ProportionalSplitPane(this,
+        foldersSplitPane = new ProportionalSplitPane(this,
                 MuSnapshot.getSnapshot().getVariable(
                         MuSnapshot.getSplitOrientation(0),
                         MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
-                        JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT,
+                        JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
                         false,
                         MainFrame.this.leftFolderPanel,
                         MainFrame.this.rightFolderPanel) {
@@ -206,17 +209,34 @@ public class MainFrame extends JFrame implements LocationListener {
         };
 
         // Remove any default border the split pane has
-        splitPane.setBorder(null);
+        foldersSplitPane.setBorder(null);
 
         // Add buttons that allow to collapse and expand the split pane in both directions
-        splitPane.setOneTouchExpandable(true);
+        foldersSplitPane.setOneTouchExpandable(true);
 
         // Disable all the JSplitPane accessibility shortcuts that are registered by default, as some of them
         // conflict with default mucommander action shortcuts (e.g. F6 and F8) 
-        splitPane.disableAccessibilityShortcuts();
+        foldersSplitPane.disableAccessibilityShortcuts();
 
+        verticalSplitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT, true) {
+            @Override
+            public Insets getInsets() {
+                return new Insets(0, 0, 0, 0);
+            }
+        };
+        verticalSplitPane.setBorder(null);
+        verticalSplitPane.setOneTouchExpandable(true);
+        // TODO?
+        //verticalSplitPane.disableAccessibilityShortcuts();
+        verticalSplitPane.setTopComponent(foldersSplitPane);
+        verticalSplitPane.setBottomComponent(null);
+
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setLayout(new BorderLayout() );
+        layeredPane.add(verticalSplitPane, BorderLayout.CENTER);
+        layeredPane.setLayer(verticalSplitPane, JLayeredPane.DEFAULT_LAYER);
         // Split pane will be given any extra space
-        insetsPane.add(splitPane, BorderLayout.CENTER);
+        insetsPane.add(layeredPane, BorderLayout.CENTER);
 
         // Add a 2-pixel gap between the file table and status bar
         YBoxPanel southPanel = new YBoxPanel();
@@ -483,12 +503,21 @@ public class MainFrame extends JFrame implements LocationListener {
 
 
     /**
-     * Returns the ProportionalSplitPane component that splits the two panels.
+     * Returns the ProportionalSplitPane component that splits the two folder panels.
      *
-     * @return the ProportionalSplitPane component that splits the two panels
+     * @return the ProportionalSplitPane component that splits the two folder panels
      */
-    public ProportionalSplitPane getSplitPane() {
-        return splitPane;
+    public ProportionalSplitPane getFoldersSplitPane() {
+        return foldersSplitPane;
+    }
+
+    /**
+     * Returns the JSplitPane component that splits folder panels and optional terminal.
+     *
+     * @return the JSplitPane component that splits folder panels and optional terminal.
+     */
+    public JSplitPane getVerticalSplitPane() {
+        return verticalSplitPane;
     }
 
     /**
@@ -500,7 +529,7 @@ public class MainFrame extends JFrame implements LocationListener {
     public void setSplitPaneOrientation(boolean vertical) {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-        splitPane.setOrientation(vertical?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT);
+        foldersSplitPane.setOrientation(vertical?JSplitPane.HORIZONTAL_SPLIT:JSplitPane.VERTICAL_SPLIT);
     }
 
     /**
@@ -512,7 +541,7 @@ public class MainFrame extends JFrame implements LocationListener {
     public boolean getSplitPaneOrientation() {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-        return splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT;
+        return foldersSplitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT;
     }
 
 
@@ -521,8 +550,8 @@ public class MainFrame extends JFrame implements LocationListener {
      * vice-versa.
      */
     public void swapFolders() {
-        splitPane.remove(leftFolderPanel);
-        splitPane.remove(rightFolderPanel);
+        foldersSplitPane.remove(leftFolderPanel);
+        foldersSplitPane.remove(rightFolderPanel);
 
         // Swaps the folder panels.
         FolderPanel tempPanel = leftFolderPanel;
@@ -557,13 +586,13 @@ public class MainFrame extends JFrame implements LocationListener {
         rightTable.updateColumnsVisibility();
 
         // Do the swap and update the split pane
-        splitPane.setLeftComponent(leftFolderPanel);
-        splitPane.setRightComponent(rightFolderPanel);
+        foldersSplitPane.setLeftComponent(leftFolderPanel);
+        foldersSplitPane.setRightComponent(rightFolderPanel);
 
-        splitPane.doLayout();
+        foldersSplitPane.doLayout();
 
         // Update split pane divider's location
-        splitPane.updateDividerLocation();
+        foldersSplitPane.updateDividerLocation();
 
         activeTable.requestFocus();
     }

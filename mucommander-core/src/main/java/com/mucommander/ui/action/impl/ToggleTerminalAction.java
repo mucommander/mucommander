@@ -32,13 +32,21 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.terminal.TerminalWindow;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.Field;
 import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.plaf.basic.BasicSplitPaneDivider;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 /**
  * This action shows built-in terminal (it mimics the behavior of Midnight Commander Ctrl-O command
@@ -48,13 +56,22 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     private JediTermWidget terminal;
 
+    /**
+     * When divider is close to max by this value we conclude it is maximised.
+     */
+    private static final float TREAT_AS_MAXIMIZED = 0.3f;
+
     private String cwd; // keep it as String or as MonitoredFile maybe?
-    private boolean visible; // is terminal visible?
+    private boolean terminalMaximized; // is terminal maximized?
+
+    private int lastMinDividerLocation; // last vertical split pane divider location when minimized
+    private int lastMaxDividerLocation; // last vertical split pane divider location when maximised
 
     public ToggleTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setEnabled(DesktopManager.canOpenInFileManager());
+        prepareVerticalSplitPaneForTerminal();
     }
 
     @Override
@@ -63,29 +80,28 @@ public class ToggleTerminalAction extends ActiveTabAction {
         setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA));
     }
 
-    private void setVisible(boolean visible) {
-        this.visible = visible;
-        setLabel(Translator.get(visible?ActionType.ToggleTerminal+".hide":ActionType.ToggleTerminal+".label"));
+    private void setTerminalMaximized(boolean terminalMaximized) {
+        this.terminalMaximized = terminalMaximized;
+        setLabel(Translator.get(terminalMaximized ? ActionType.ToggleTerminal + ".hide" : ActionType.ToggleTerminal + ".show"));
     }
 
-    private boolean isVisible() {
-        return visible;
+    private boolean isTerminalMaximized() {
+        return terminalMaximized;
     }
 
     @Override
     public void performAction() {
-        if (!isVisible()) {
+        if (!isTerminalMaximized()) {
             try {
                 LOGGER.info("Going to show Terminal...");
-                // TODO either hide them, or disable all the options (or maybe add 'return' option?)
-                //mainFrame.getToolBarPanel().setVisible(false);
-                //mainFrame.getCommandBar().setVisible(false);
-                mainFrame.getSplitPane().setVisible(false);
                 String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
                 // If !connected means that terminal process has ended (via `exit` command for ex.).
                 if (terminal == null || !terminal.getTtyConnector().isConnected()) {
                     terminal = getTerminal(newCwd);
                     terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
+                    // TODO do this better? For now 2 lines ~height + 20%
+                    terminal.setMinimumSize(new Dimension(-1, (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
+                    mainFrame.getVerticalSplitPane().setBottomComponent(terminal);
                 } else {
                     if (cwd == null || !cwd.equals(newCwd)) {
                         // TODO check somehow if term is busy..... or find another way to set CWD
@@ -97,10 +113,10 @@ public class ToggleTerminalAction extends ActiveTabAction {
                     }
                 }
                 cwd = newCwd;
-                mainFrame.getMainPanel().add(terminal, BorderLayout.CENTER);
-                terminal.revalidate();
+                mainFrame.getVerticalSplitPane().setDividerLocation(lastMaxDividerLocation);
+
                 SwingUtilities.invokeLater(terminal::requestFocusInWindow);
-                setVisible(true);
+                setTerminalMaximized(true);
             } catch (Exception e) {
                 LOGGER.error("Caught exception while trying to show Terminal", e);
                 revertToTableView();
@@ -108,13 +124,24 @@ public class ToggleTerminalAction extends ActiveTabAction {
         } else {
             // Normally this case is being handled by keyadapter above
             revertToTableView();
-            setVisible(false);
+            setTerminalMaximized(false);
         }
     }
 
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
+    }
+
+    /**
+     * Toggles the Terminal, i.e. shows (maximized) or hides it (minimized).
+     */
+    public void toggleTerminal() {
+        if (!isTerminalMaximized() || terminal == null) {
+            performAction();
+        } else {
+            revertToTableView();
+        }
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
@@ -148,11 +175,11 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                     keyEvent.consume();
                     revertToTableView();
-                    setVisible(false);
+                    setTerminalMaximized(false);
                 } else if (!terminal.getTtyConnector().isConnected()) {
                     // just close terminal if it is not active/connected (for example when sb typed 'exit')
                     revertToTableView();
-                    setVisible(false);
+                    setTerminalMaximized(false);
                 }
             }
         };
@@ -164,20 +191,96 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     private void revertToTableView() {
         LOGGER.info("Going to hide Terminal...");
-        if (terminal != null) {
-            mainFrame.getMainPanel().remove(terminal);
+        var verticalSplitPane = mainFrame.getVerticalSplitPane();
+        if (terminal != null && !terminal.getTtyConnector().isConnected()) {
+            verticalSplitPane.remove(terminal);
         }
-        // TODO see #performAction above
-        //mainFrame.getToolBarPanel().setVisible(true);
-        //mainFrame.getCommandBar().setVisible(true);
-        mainFrame.getSplitPane().setVisible(true);
 
-        // make sure that MainPanel and SplitPane look good if window was resized when Terminal was present
-        mainFrame.getMainPanel().remove(mainFrame.getSplitPane());
-        mainFrame.getMainPanel().add(mainFrame.getSplitPane(), BorderLayout.CENTER);
-        mainFrame.getMainPanel().revalidate();
-        SwingUtilities.invokeLater(mainFrame.getSplitPane()::updateDividerLocation);
+        // try to use last location falling back to the minimum of terminal constraints
+        // however, user may move divider below terminal constraints (hide it completely) and we
+        // should accept that
+        verticalSplitPane.setDividerLocation(
+                lastMinDividerLocation <= 0 ||    // ignore unknown or max
+                lastMinDividerLocation > verticalSplitPane.getHeight() || // or outside vertical height
+                lastMinDividerLocation < verticalSplitPane.getHeight() * TREAT_AS_MAXIMIZED // or too close to max
+                ? verticalSplitPane.getMaximumDividerLocation() : lastMinDividerLocation);
 
         SwingUtilities.invokeLater(mainFrame.getActiveTable()::requestFocusInWindow);
+    }
+
+    private void alterSplitPaneButton(String buttonName, JSplitPane splitPane, Runnable action, String tooltip) {
+        // https://stackoverflow.com/a/31709568/1715521
+        try {
+            Field field = BasicSplitPaneDivider.class.getDeclaredField(buttonName);
+            field.setAccessible(true);
+            JButton oneTouchButton = (JButton) field.get(((BasicSplitPaneUI) splitPane.getUI()).getDivider());
+            oneTouchButton.setToolTipText(tooltip);
+            oneTouchButton.setActionCommand(buttonName);
+            oneTouchButton.addActionListener((e) -> {
+                if (terminal == null) {
+                    SwingUtilities.invokeLater(action::run);
+                }
+            });
+        } catch (Exception e) {
+            LOGGER.error("Problem running reflection on vertical split pane: {}", e.getMessage(), e);
+        }
+    }
+
+    private void alterSplitPaneDivider(JSplitPane splitPane, Runnable action, String tooltip) {
+
+        try {
+            // https://stackoverflow.com/a/27432464/1715521
+            BasicSplitPaneUI splitUI = ((BasicSplitPaneUI) splitPane.getUI());
+            splitPane.setToolTipText(tooltip);
+
+            splitUI.getDivider().addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    SwingUtilities.invokeLater(action::run);
+                }
+
+                // force tooltip when mouse enters divider
+                public void mouseEntered(MouseEvent e) {
+                    // https://stackoverflow.com/a/39803911/1715521
+                    final ToolTipManager ttm = ToolTipManager.sharedInstance();
+                    final int oldDelay = ttm.getInitialDelay();
+                    ttm.setInitialDelay(0);
+                    ttm.mouseMoved(new MouseEvent(splitPane, 0, 0, 0,
+                            splitUI.getDivider().getX() + e.getX(),
+                            splitUI.getDivider().getY() + e.getY(), 0, false));
+                    SwingUtilities.invokeLater(() -> ttm.setInitialDelay(oldDelay));
+                }
+            });
+        } catch (Exception e) {
+            LOGGER.error("Problem running reflection on vertical split pane: {}", e.getMessage(), e);
+        }
+    }
+
+    private void prepareVerticalSplitPaneForTerminal() {
+        var verticalSplitPane = mainFrame.getVerticalSplitPane();
+        alterSplitPaneButton("leftButton", verticalSplitPane,
+                () -> toggleTerminal(),
+                Translator.get(ActionType.ToggleTerminal + ".show"));
+        alterSplitPaneButton("rightButton", verticalSplitPane,
+                () -> toggleTerminal(),
+                Translator.get(ActionType.ToggleTerminal + ".hide"));
+        alterSplitPaneDivider(
+                verticalSplitPane,
+                () -> toggleTerminal(),
+                Translator.get(ActionType.ToggleTerminal + ".toggle"));
+
+        mainFrame.getVerticalSplitPane().addPropertyChangeListener(
+                JSplitPane.DIVIDER_LOCATION_PROPERTY,
+                (e) -> {
+                    if (terminal != null) {
+                        int location = ((Integer)e.getNewValue()).intValue();
+                        if (location > verticalSplitPane.getMaximumDividerLocation() * TREAT_AS_MAXIMIZED) {
+                            lastMinDividerLocation = location;
+                            setTerminalMaximized(false);
+                        } else {
+                            lastMaxDividerLocation = location;
+                            setTerminalMaximized(true);
+                        }
+                    }
+                });
     }
 }

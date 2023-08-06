@@ -57,7 +57,7 @@ import com.mucommander.ui.main.MainFrame;
  * @author Maxence Bernard
  */
 public abstract class MuAction extends AbstractAction {
-	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     /** The MainFrame associated with this MuAction */
     protected MainFrame mainFrame;
