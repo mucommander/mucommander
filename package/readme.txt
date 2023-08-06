@@ -32,11 +32,12 @@ What's new since v1.3.0 ?
 -----------------------
 
 New features:
-- Add Google Cloud Storage as a file protocol that enables browsing and managing files in GCS buckets.
+- Added Google Cloud Storage as a file protocol that enables browsing and managing files in GCS buckets.
 
 Improvements:
 - The 'Space' key can be used to filter filenames with spaces in quick search. Files can be selected during an ongoing
   quick search using CTRL+Space (that was replaced with CTRL+SHIFT+Space for 'Popup menu' action).
+- Changed 'Store login and password' to 'Store credentials' to reflect that additional properties, like ssh-key, are also stored.
 
 Localization:
 -
