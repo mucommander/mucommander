@@ -65,16 +65,6 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
         init(window, null, null);
     }
 
-    public ProportionalSplitPane(Window window, int orientation, boolean continuousLayout) {
-        super(orientation, continuousLayout);
-        init(window, null, null);
-    }
-
-    public ProportionalSplitPane(Window window, int orientation, JComponent leftComponent, JComponent rightComponent) {
-        super(orientation, leftComponent, rightComponent);
-        init(window, leftComponent, rightComponent);
-    }
-
     public ProportionalSplitPane(Window window, int orientation, boolean continuousLayout, JComponent leftComponent, JComponent rightComponent) {
         super(orientation, continuousLayout, leftComponent, rightComponent);
         init(window, leftComponent, rightComponent);

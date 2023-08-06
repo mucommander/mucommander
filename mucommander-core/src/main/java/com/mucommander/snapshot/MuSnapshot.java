@@ -718,7 +718,7 @@ public class MuSnapshot {
         // Save split pane orientation
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing
-    	configuration.setVariable(getSplitOrientation(index), currentMainFrame.getSplitPane().getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuSnapshot.VERTICAL_SPLIT_ORIENTATION:MuSnapshot.HORIZONTAL_SPLIT_ORIENTATION);
+    	configuration.setVariable(getSplitOrientation(index), currentMainFrame.getFoldersSplitPane().getOrientation()==JSplitPane.HORIZONTAL_SPLIT?MuSnapshot.VERTICAL_SPLIT_ORIENTATION:MuSnapshot.HORIZONTAL_SPLIT_ORIENTATION);
 
         // Save single panel view toggle state
         configuration.setVariable(getSinglePanelViewToggleState(index), currentMainFrame.isSinglePanel());

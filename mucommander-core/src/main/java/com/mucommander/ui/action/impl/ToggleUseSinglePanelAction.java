@@ -53,11 +53,11 @@ public class ToggleUseSinglePanelAction extends MuAction {
         boolean isSinglePanelViewNow = mainFrame.toggleSinglePanel();
 
         if (isSinglePanelViewNow) {
-            previousRatio = mainFrame.getSplitPane().getSplitRatio();
+            previousRatio = mainFrame.getFoldersSplitPane().getSplitRatio();
             hideInactivePanel();
 
         } else {
-            mainFrame.getSplitPane().setSplitRatio(previousRatio);
+            mainFrame.getFoldersSplitPane().setSplitRatio(previousRatio);
             showInactivePanel();
         }
     }
