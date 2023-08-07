@@ -43,7 +43,7 @@ import com.mucommander.process.AbstractProcess;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.terminal.TerminalWindow;
+import com.mucommander.ui.terminal.TerminalWidget;
 
 /**
  * Dialog used to execute a user-defined command.
@@ -109,7 +109,7 @@ public class RunDialog extends FocusDialog implements ActionListener, KeyListene
 
         // Initializes the dialog's UI.
         Container contentPane = getContentPane();
-        JComponent terminal = TerminalWindow.createTerminal(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath(), this::dispose, this);
+        JComponent terminal = TerminalWidget.createTerminal(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath(), this::dispose, this);
         contentPane.add(terminal, BorderLayout.CENTER);
         contentPane.add(createButtonsArea(), BorderLayout.SOUTH);
 

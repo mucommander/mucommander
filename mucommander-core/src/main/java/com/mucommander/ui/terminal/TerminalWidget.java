@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
-import com.jediterm.terminal.ui.TerminalWidget;
 import com.jediterm.terminal.ui.TerminalWidgetListener;
 import com.jediterm.terminal.ui.settings.SettingsProvider;
 import com.mucommander.commons.runtime.OsFamily;
@@ -48,18 +47,18 @@ import com.pty4j.PtyProcessBuilder;
  * Creates JediTerm widget.
  * Based on JediTerm's BasicTerminalShellExample class.
  */
-public final class TerminalWindow {
+public final class TerminalWidget {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TerminalWindow.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TerminalWidget.class);
 
-    private TerminalWindow() {
+    private TerminalWidget() {
     }
 
     public static JediTermWidget createTerminal(String currentFolder, Runnable listener, KeyListener keyListener) {
         SettingsProvider settings = new TerminalSettingsProvider();
         JediTermWidget jediTermWidget = createTerminalWidget(currentFolder, settings);
         jediTermWidget.addListener(new TerminalWidgetListener() {
-            public void allSessionsClosed(TerminalWidget widget) {
+            public void allSessionsClosed(com.jediterm.terminal.ui.TerminalWidget widget) {
                 listener.run();
             }
         });
