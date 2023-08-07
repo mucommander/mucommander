@@ -40,9 +40,16 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
 
+/**
+ * This class integrates Terminal (via TerminalWidget) into bottom pane of provided vertical split pane.
+ */
 public class TerminalIntegration {
 
     protected final Logger LOGGER = LoggerFactory.getLogger(TerminalIntegration.class);
+
+    private final MainFrame mainFrame;
+
+    private final JSplitPane verticalSplitPane;
 
     private JediTermWidget terminal;
 
@@ -53,14 +60,14 @@ public class TerminalIntegration {
 
     private String cwd; // keep it as String or as MonitoredFile maybe?
     private boolean terminalMaximized; // is terminal maximized?
-
     private int lastMinDividerLocation; // last vertical split pane divider location when minimized
     private int lastMaxDividerLocation; // last vertical split pane divider location when maximised
 
-
-    final MainFrame mainFrame;
-    final JSplitPane verticalSplitPane;
-
+    /**
+     * Integrates Terminal in provided verticalSplitPane belonging to a given mainFrame.
+     * @param mainFrame mainFrame instance
+     * @param verticalSplitPane the JSplitPane instance of mainFrame
+     */
     public TerminalIntegration(MainFrame mainFrame, JSplitPane verticalSplitPane) {
         this.mainFrame = mainFrame;
         this.verticalSplitPane = verticalSplitPane;
