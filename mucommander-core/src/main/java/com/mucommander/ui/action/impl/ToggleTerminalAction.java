@@ -32,6 +32,7 @@ import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.terminal.TerminalWindow;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -91,57 +92,12 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     @Override
     public void performAction() {
-        if (!isTerminalMaximized()) {
-            try {
-                LOGGER.info("Going to show Terminal...");
-                String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
-                // If !connected means that terminal process has ended (via `exit` command for ex.).
-                if (terminal == null || !terminal.getTtyConnector().isConnected()) {
-                    terminal = getTerminal(newCwd);
-                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
-                    // TODO do this better? For now 2 lines ~height + 20%
-                    terminal.setMinimumSize(new Dimension(-1, (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
-                    mainFrame.getVerticalSplitPane().setBottomComponent(terminal);
-                } else {
-                    if (cwd == null || !cwd.equals(newCwd)) {
-                        // TODO check somehow if term is busy..... or find another way to set CWD
-                        // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
-                        // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
-                        terminal.getTtyConnector().write(
-                                " cd \"" + newCwd + "\""
-                                        + System.getProperty("line.separator"));
-                    }
-                }
-                cwd = newCwd;
-                mainFrame.getVerticalSplitPane().setDividerLocation(lastMaxDividerLocation);
-
-                SwingUtilities.invokeLater(terminal::requestFocusInWindow);
-                setTerminalMaximized(true);
-            } catch (Exception e) {
-                LOGGER.error("Caught exception while trying to show Terminal", e);
-                revertToTableView();
-            }
-        } else {
-            // Normally this case is being handled by keyadapter above
-            revertToTableView();
-            setTerminalMaximized(false);
-        }
+        toggleTerminal();
     }
 
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
-    }
-
-    /**
-     * Toggles the Terminal, i.e. shows (maximized) or hides it (minimized).
-     */
-    public void toggleTerminal() {
-        if (!isTerminalMaximized() || terminal == null) {
-            performAction();
-        } else {
-            revertToTableView();
-        }
     }
 
     public static class Descriptor extends AbstractActionDescriptor {
@@ -174,12 +130,10 @@ public class ToggleTerminalAction extends ActiveTabAction {
                         ActionId.asTerminalAction(ActionType.ToggleTerminal.getId()));
                 if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                     keyEvent.consume();
-                    revertToTableView();
-                    setTerminalMaximized(false);
+                    hideTerminal();
                 } else if (!terminal.getTtyConnector().isConnected()) {
                     // just close terminal if it is not active/connected (for example when sb typed 'exit')
-                    revertToTableView();
-                    setTerminalMaximized(false);
+                    hideTerminal();
                 }
             }
         };
@@ -189,11 +143,57 @@ public class ToggleTerminalAction extends ActiveTabAction {
         return TerminalWindow.createTerminal(initialPath);
     }
 
-    private void revertToTableView() {
+    /**
+     * Toggles the Terminal, i.e. shows (maximized) or hides it (minimized).
+     */
+    private void toggleTerminal() {
+        if (!isTerminalMaximized() || terminal == null) {
+            showTerminal();
+        } else {
+            hideTerminal();
+        }
+    }
+
+    private void showTerminal() {
+        try {
+            LOGGER.info("Going to show Terminal...");
+            String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
+            // If !connected means that terminal process has ended (via `exit` command for ex.).
+            if (terminal == null || !terminal.getTtyConnector().isConnected()) {
+                mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                terminal = getTerminal(newCwd);
+                terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
+                // TODO do this better? For now 2 lines ~height + 20%
+                terminal.setMinimumSize(new Dimension(-1,
+                        (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
+                mainFrame.getVerticalSplitPane().setBottomComponent(terminal);
+            } else {
+                if (cwd == null || !cwd.equals(newCwd)) {
+                    // TODO check somehow if term is busy..... or find another way to set CWD
+                    // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
+                    // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
+                    terminal.getTtyConnector().write(
+                            " cd \"" + newCwd + "\""
+                                    + System.getProperty("line.separator"));
+                }
+            }
+            cwd = newCwd;
+            mainFrame.getVerticalSplitPane().setDividerLocation(lastMaxDividerLocation);
+
+            SwingUtilities.invokeLater(terminal::requestFocusInWindow);
+            setTerminalMaximized(true);
+        } catch (Exception e) {
+            LOGGER.error("Caught exception while trying to show Terminal", e);
+            hideTerminal();
+        }
+    }
+
+    private void hideTerminal() {
         LOGGER.info("Going to hide Terminal...");
         var verticalSplitPane = mainFrame.getVerticalSplitPane();
         if (terminal != null && !terminal.getTtyConnector().isConnected()) {
             verticalSplitPane.remove(terminal);
+            terminal = null;
         }
 
         // try to use last location falling back to the minimum of terminal constraints
@@ -206,6 +206,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
                 ? verticalSplitPane.getMaximumDividerLocation() : lastMinDividerLocation);
 
         SwingUtilities.invokeLater(mainFrame.getActiveTable()::requestFocusInWindow);
+        setTerminalMaximized(false);
     }
 
     private void alterSplitPaneButton(String buttonName, JSplitPane splitPane, Runnable action, String tooltip) {
@@ -216,11 +217,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
             JButton oneTouchButton = (JButton) field.get(((BasicSplitPaneUI) splitPane.getUI()).getDivider());
             oneTouchButton.setToolTipText(tooltip);
             oneTouchButton.setActionCommand(buttonName);
-            oneTouchButton.addActionListener((e) -> {
-                if (terminal == null) {
-                    SwingUtilities.invokeLater(action::run);
-                }
-            });
+            oneTouchButton.addActionListener((e) -> SwingUtilities.invokeLater(action::run));
         } catch (Exception e) {
             LOGGER.error("Problem running reflection on vertical split pane: {}", e.getMessage(), e);
         }
@@ -258,22 +255,24 @@ public class ToggleTerminalAction extends ActiveTabAction {
     private void prepareVerticalSplitPaneForTerminal() {
         var verticalSplitPane = mainFrame.getVerticalSplitPane();
         alterSplitPaneButton("leftButton", verticalSplitPane,
-                () -> toggleTerminal(),
+                () -> SwingUtilities.invokeLater(this::showTerminal),
                 Translator.get(ActionType.ToggleTerminal + ".show"));
         alterSplitPaneButton("rightButton", verticalSplitPane,
-                () -> toggleTerminal(),
+                () -> SwingUtilities.invokeLater(this::hideTerminal),
                 Translator.get(ActionType.ToggleTerminal + ".hide"));
         alterSplitPaneDivider(
                 verticalSplitPane,
-                () -> toggleTerminal(),
+                () -> SwingUtilities.invokeLater(this::toggleTerminal),
                 Translator.get(ActionType.ToggleTerminal + ".toggle"));
 
         mainFrame.getVerticalSplitPane().addPropertyChangeListener(
                 JSplitPane.DIVIDER_LOCATION_PROPERTY,
                 (e) -> {
                     if (terminal != null) {
-                        int location = ((Integer)e.getNewValue()).intValue();
-                        if (location > verticalSplitPane.getMaximumDividerLocation() * TREAT_AS_MAXIMIZED) {
+                        var location = ((Integer)e.getNewValue()).intValue();
+                        if (terminal == null) {
+                            setTerminalMaximized(false);
+                        } else if (location > verticalSplitPane.getMaximumDividerLocation() * TREAT_AS_MAXIMIZED) {
                             lastMinDividerLocation = location;
                             setTerminalMaximized(false);
                         } else {
