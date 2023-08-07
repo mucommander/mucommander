@@ -38,6 +38,7 @@ Improvements:
 - The 'Space' key can be used to filter filenames with spaces in quick search. Files can be selected during an ongoing
   quick search using CTRL+Space (that was replaced with CTRL+SHIFT+Space for 'Popup menu' action).
 - Changed 'Store login and password' to 'Store credentials' to reflect that additional properties, like ssh-key, are also stored.
+- Set Shift+F4 as the default alternative keyboard shortcut for "Make file" action.
 
 Localization:
 -
