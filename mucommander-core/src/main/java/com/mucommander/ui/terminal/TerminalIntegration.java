@@ -34,11 +34,16 @@ import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * This class integrates Terminal (via TerminalWidget) into bottom pane of provided vertical split pane.
@@ -126,6 +131,12 @@ public class TerminalIntegration {
                 try {
                     mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
+                    terminal.getTerminalPanel().addFocusListener(new FocusAdapter() {
+                        public void focusGained(FocusEvent e) {
+                            syncCWD(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath());
+                        }
+                    });
+                    cwd = newCwd;
                     terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
                     // TODO do this better? For now 2 lines ~height + 20%
                     terminal.setMinimumSize(new Dimension(-1,
@@ -135,16 +146,9 @@ public class TerminalIntegration {
                     mainFrame.setCursor(orgCursor);
                 }
             } else {
-                if (cwd == null || !cwd.equals(newCwd)) {
-                    // TODO check somehow if term is busy..... or find another way to set CWD
-                    // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
-                    // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
-                    terminal.getTtyConnector().write(
-                            " cd \"" + newCwd + "\""
-                                    + System.getProperty("line.separator"));
-                }
+                syncCWD(newCwd);
             }
-            cwd = newCwd;
+
             verticalSplitPane.setDividerLocation(lastMaxDividerLocation);
 
             SwingUtilities.invokeLater(terminal::requestFocusInWindow);
@@ -152,6 +156,22 @@ public class TerminalIntegration {
         } catch (Exception e) {
             LOGGER.error("Caught exception while trying to show Terminal", e);
             hideTerminal();
+        }
+    }
+
+    private void syncCWD(String newCwd) {
+        if (cwd == null || !cwd.equals(newCwd)) {
+            // TODO check somehow if term is busy..... or find another way to set CWD
+            // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
+            // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
+            try {
+                terminal.getTtyConnector().write(
+                        " cd \"" + newCwd + "\""
+                                + System.getProperty("line.separator"));
+            } catch (IOException e) {
+                LOGGER.error("Cannot sync table's CWD with terminal", e);
+            }
+            cwd = newCwd;
         }
     }
 
@@ -197,25 +217,59 @@ public class TerminalIntegration {
             splitPane.setToolTipText(tooltip);
 
             splitUI.getDivider().addMouseListener(new MouseAdapter() {
+
+                Timer tooltipTimer;
+
                 public void mouseClicked(MouseEvent e) {
                     SwingUtilities.invokeLater(action::run);
                 }
 
                 // force tooltip when mouse enters divider
                 public void mouseEntered(MouseEvent e) {
-                    // https://stackoverflow.com/a/39803911/1715521
-                    final ToolTipManager ttm = ToolTipManager.sharedInstance();
-                    final int oldDelay = ttm.getInitialDelay();
-                    ttm.setInitialDelay(0);
-                    ttm.mouseMoved(new MouseEvent(splitPane, 0, 0, 0,
-                            splitUI.getDivider().getX() + e.getX(),
-                            splitUI.getDivider().getY() + e.getY(), 0, false));
-                    SwingUtilities.invokeLater(() -> ttm.setInitialDelay(oldDelay));
+                    if (tooltipTimer != null) {
+                        return;
+                    }
+                    tooltipTimer = new java.util.Timer();
+                    tooltipTimer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            showTooltip(splitPane, splitUI, e.getX(), e.getY());
+                            cancelTimer();
+                        }
+                    }, 1000L);
+                }
+
+                public void mouseExited(MouseEvent e) {
+                    cancelTimer();
+                }
+
+                private void cancelTimer() {
+                    Timer t = tooltipTimer;
+                    if (t != null) {
+                        t.cancel();
+                        tooltipTimer = null;
+                    }
                 }
             });
         } catch (Exception e) {
             LOGGER.error("Problem running reflection on vertical split pane: {}", e.getMessage(), e);
         }
+    }
+
+    private void showTooltip(JSplitPane splitPane, BasicSplitPaneUI splitUI, int x, int y) {
+        // https://stackoverflow.com/a/39803911/1715521
+        final ToolTipManager ttm = ToolTipManager.sharedInstance();
+        final int orgInitDelay = ttm.getInitialDelay();
+        final int orgDismDelay = ttm.getInitialDelay();
+        ttm.setInitialDelay(0);
+        ttm.setDismissDelay(3000);
+        ttm.mouseMoved(new MouseEvent(splitPane, 0, 0, 0,
+                splitUI.getDivider().getX() + x,
+                splitUI.getDivider().getY() + y, 0, false));
+        SwingUtilities.invokeLater(() -> {
+            ttm.setInitialDelay(orgInitDelay);
+            ttm.setDismissDelay(orgDismDelay);
+        });
     }
 
     private void prepareVerticalSplitPaneForTerminal() {
