@@ -262,7 +262,7 @@ public class TerminalIntegration {
         final int orgInitDelay = ttm.getInitialDelay();
         final int orgDismDelay = ttm.getInitialDelay();
         ttm.setInitialDelay(0);
-        ttm.setDismissDelay(3000);
+        ttm.setDismissDelay(4000);
         ttm.mouseMoved(new MouseEvent(splitPane, 0, 0, 0,
                 splitUI.getDivider().getX() + x,
                 splitUI.getDivider().getY() + y, 0, false));

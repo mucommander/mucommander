@@ -35,4 +35,9 @@ fi
 cd `dirname "$BASE_FOLDER"`
 
 # Starts mucommander.
-$JAVA --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.net=ALL-UNNAMED --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED --add-exports java.desktop/com.apple.laf=ALL-UNNAMED  --add-exports java.desktop/com.apple.eio=ALL-UNNAMED -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
+$JAVA --add-opens java.base/java.io=ALL-UNNAMED \
+      --add-opens java.base/java.net=ALL-UNNAMED \
+      --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
+      --add-exports java.desktop/com.apple.laf=ALL-UNNAMED  \
+      --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
+      -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
