@@ -31,15 +31,17 @@ public class JavaVersionTest {
      */
     @Test
     public void testOrder() {
+        assert JavaVersion.JAVA_22.compareTo(JavaVersion.JAVA_21)>0;
+        assert JavaVersion.JAVA_21.compareTo(JavaVersion.JAVA_20)>0;
+        assert JavaVersion.JAVA_20.compareTo(JavaVersion.JAVA_19)>0;
+        assert JavaVersion.JAVA_19.compareTo(JavaVersion.JAVA_18)>0;
+        assert JavaVersion.JAVA_18.compareTo(JavaVersion.JAVA_17)>0;
         assert JavaVersion.JAVA_17.compareTo(JavaVersion.JAVA_16)>0;
         assert JavaVersion.JAVA_16.compareTo(JavaVersion.JAVA_15)>0;
         assert JavaVersion.JAVA_15.compareTo(JavaVersion.JAVA_14)>0;
         assert JavaVersion.JAVA_14.compareTo(JavaVersion.JAVA_13)>0;
         assert JavaVersion.JAVA_13.compareTo(JavaVersion.JAVA_12)>0;
         assert JavaVersion.JAVA_12.compareTo(JavaVersion.JAVA_11)>0;
-        assert JavaVersion.JAVA_11.compareTo(JavaVersion.JAVA_10)>0;
-        assert JavaVersion.JAVA_10.compareTo(JavaVersion.JAVA_9)>0;
-        assert JavaVersion.JAVA_9.compareTo(JavaVersion.JAVA_8)>0;
     }
 
     /**
@@ -59,9 +61,6 @@ public class JavaVersionTest {
      */
     @Test
     public void testParsing() {
-        assert JavaVersion.parseSystemProperty("1.8")==JavaVersion.JAVA_8;
-        assert JavaVersion.parseSystemProperty("9")==JavaVersion.JAVA_9;
-        assert JavaVersion.parseSystemProperty("10")==JavaVersion.JAVA_10;
         assert JavaVersion.parseSystemProperty("11")==JavaVersion.JAVA_11;
         assert JavaVersion.parseSystemProperty("12")==JavaVersion.JAVA_12;
         assert JavaVersion.parseSystemProperty("13")==JavaVersion.JAVA_13;
@@ -69,6 +68,11 @@ public class JavaVersionTest {
         assert JavaVersion.parseSystemProperty("15")==JavaVersion.JAVA_15;
         assert JavaVersion.parseSystemProperty("16")==JavaVersion.JAVA_16;
         assert JavaVersion.parseSystemProperty("17")==JavaVersion.JAVA_17;
+        assert JavaVersion.parseSystemProperty("18")==JavaVersion.JAVA_18;
+        assert JavaVersion.parseSystemProperty("19")==JavaVersion.JAVA_19;
+        assert JavaVersion.parseSystemProperty("20")==JavaVersion.JAVA_20;
+        assert JavaVersion.parseSystemProperty("21")==JavaVersion.JAVA_21;
+        assert JavaVersion.parseSystemProperty("22")==JavaVersion.JAVA_22;
     }
 
 

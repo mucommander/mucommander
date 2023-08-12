@@ -29,13 +29,6 @@ import org.slf4j.LoggerFactory;
  * @author Maxence Bernard, Arik Hadas
 */
 public enum JavaVersion implements ComparableRuntimeProperty {
-    /** Java 1.8.x */
-    JAVA_8("1.8"),
-    /** Java 9.x */
-    JAVA_9("9"),
-    /** Java 10.x */
-    JAVA_10("10"),
-    /** Java 11.x */
     JAVA_11("11"),
     /** Java 12.x */
     JAVA_12("12"),
@@ -49,6 +42,16 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     JAVA_16("16"),
     /** Java 17.x */
     JAVA_17("17"),
+    /** Java 18.x */
+    JAVA_18("18"),
+    /** Java 19.x */
+    JAVA_19("19"),
+    /** Java 20.x */
+    JAVA_20("20"),
+    /** Java 21.x */
+    JAVA_21("21"),
+    /** Java 22.x */
+    JAVA_22("22"),
     ;
 
     /** Logger used by this class. */
@@ -126,7 +129,22 @@ public enum JavaVersion implements ComparableRuntimeProperty {
         if (javaVersionProp == null
                 || (javaVersionProp = javaVersionProp.trim()).equals(""))
             // Assume java 1.8 (first supported Java version)
-            return JavaVersion.JAVA_8;
+            return JavaVersion.JAVA_11;
+        // Java 20
+        if (javaVersionProp.startsWith("22"))
+            return JavaVersion.JAVA_22;
+        // Java 21
+        if (javaVersionProp.startsWith("21"))
+            return JavaVersion.JAVA_21;
+        // Java 20
+        if (javaVersionProp.startsWith("20"))
+            return JavaVersion.JAVA_20;
+        // Java 19
+        if (javaVersionProp.startsWith("19"))
+            return JavaVersion.JAVA_19;
+        // Java 18
+        if (javaVersionProp.startsWith("18"))
+            return JavaVersion.JAVA_18;
         // Java 17
         if (javaVersionProp.startsWith("17"))
             return JavaVersion.JAVA_17;
@@ -148,18 +166,9 @@ public enum JavaVersion implements ComparableRuntimeProperty {
         // Java 11
         if (javaVersionProp.startsWith("11"))
             return JavaVersion.JAVA_11;
-        // Java 10
-        if (javaVersionProp.startsWith("10"))
-            return JavaVersion.JAVA_10;
-        // Java 9
-        if (javaVersionProp.startsWith("9"))
-            return JavaVersion.JAVA_9;
-        // Java 1.8
-        if (javaVersionProp.startsWith("1.8"))
-            return JavaVersion.JAVA_8;
 
         // Newer version we don't know of yet, assume latest supported Java version
-        return JavaVersion.JAVA_16;
+        return JavaVersion.JAVA_22;
     }
 
     /**
