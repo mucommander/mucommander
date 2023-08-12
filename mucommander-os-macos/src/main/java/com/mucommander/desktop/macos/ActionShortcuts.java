@@ -123,8 +123,6 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
         case RevealInDesktop:
             return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.META_DOWN_MASK);
-        case RunCommand:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.META_DOWN_MASK);
         case Save:
             return KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.META_DOWN_MASK);
         case SelectNextBlock:
@@ -257,8 +255,6 @@ public class ActionShortcuts extends com.mucommander.desktop.ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_9, KeyEvent.CTRL_DOWN_MASK);
         case RevealInDesktop:
             return KeyStroke.getKeyStroke(KeyEvent.VK_L, KeyEvent.CTRL_DOWN_MASK);
-        case RunCommand:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK);
         case SelectNextBlock:
             return KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, KeyEvent.CTRL_DOWN_MASK);
         case SelectPreviousBlock:

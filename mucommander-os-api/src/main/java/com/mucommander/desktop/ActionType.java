@@ -127,7 +127,6 @@ public enum ActionType {
     ReportBug("ReportBug"),
     RevealInDesktop("RevealInDesktop"),
     ReverseSortOrder("ReverseSortOrder"),
-    RunCommand("RunCommand"),
     Save("Save"),
     SelectFirstRow("SelectFirstRow"),
     SelectLastRow("SelectLastRow"),

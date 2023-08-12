@@ -36,17 +36,23 @@ import com.mucommander.ui.terminal.TerminalIntegration;
  */
 public class ToggleTerminalAction extends ActiveTabAction {
 
-    final TerminalIntegration terminalIntegration;
+    private volatile TerminalIntegration terminalIntegration = null;
 
     public ToggleTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-
         setEnabled(DesktopManager.canOpenInFileManager());
-        terminalIntegration = new TerminalIntegration(mainFrame, mainFrame.getVerticalSplitPane());
     }
 
     @Override
     public void performAction() {
+        if (terminalIntegration == null) {
+            // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
+            synchronized (this) {
+                if (terminalIntegration == null) {
+                    terminalIntegration = new TerminalIntegration(mainFrame, mainFrame.getVerticalSplitPane());
+                }
+            }
+        }
         terminalIntegration.toggleTerminal();
     }
 

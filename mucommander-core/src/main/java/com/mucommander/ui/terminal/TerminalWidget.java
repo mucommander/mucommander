@@ -54,18 +54,6 @@ public final class TerminalWidget {
     private TerminalWidget() {
     }
 
-    public static JediTermWidget createTerminal(String currentFolder, Runnable listener, KeyListener keyListener) {
-        SettingsProvider settings = new TerminalSettingsProvider();
-        JediTermWidget jediTermWidget = createTerminalWidget(currentFolder, settings);
-        jediTermWidget.addListener(new TerminalWidgetListener() {
-            public void allSessionsClosed(com.jediterm.terminal.ui.TerminalWidget widget) {
-                listener.run();
-            }
-        });
-        jediTermWidget.getTerminalPanel().addCustomKeyListener(keyListener);
-        return jediTermWidget;
-    }
-
     public static JediTermWidget createTerminal(String currentFolder) {
         return createTerminalWidget(currentFolder, new TerminalSettingsProvider());
     }
