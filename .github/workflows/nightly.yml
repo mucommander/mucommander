@@ -118,6 +118,12 @@ jobs:
         with:
           arguments: tgz portable deb rpm
 
+      - name: Sign rpm
+        run: |
+          gpg --keyring release/rpm/.gpg --export-secret-key -a 'Arik Hadas' > private.key
+          gpg --import private.key
+          rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}-1.x86_64.rpm"
+
       - name: Upload portable
         uses: shogo82148/actions-upload-release-asset@v1
         with:
