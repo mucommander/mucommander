@@ -52,12 +52,12 @@ final class NotificationPopup {
     /**
      * Default opacity of popup.
      */
-    private static final float OPACITY = 0.6f;
+    private static final float OPACITY = 0.4f;
 
     private final Timer closingTimer;
     private TimerTask closingTask;
 
-    private final JPopupMenu popup;
+    private final CustomPopupMenu popup;
     private final JPanel panel;
     private final JLabel labelText;
 
@@ -95,22 +95,39 @@ final class NotificationPopup {
         }
     };
 
+    private class CustomPopupMenu extends JPopupMenu {
+        @Override
+        public Insets getInsets() {
+            return new Insets(0, 0, 0, 0);
+        }
+
+        @Override
+        public void setVisible(boolean b) {
+            // ignore hiding, useful to force popup to stay if dialog is shown
+            if (b) {
+                super.setVisible(b);
+            }
+        }
+
+        /**
+         * Hide popup (setVisible ignores hiding)
+         */
+        public void hidePopup() {
+            super.setVisible(false);
+        }
+    }
+
     private NotificationPopup() {
         closingTimer =  new Timer();
         popupListener = new CustomPopupMenuListener();
 
-        popup = new JPopupMenu() {
-            @Override
-            public Insets getInsets() {
-                return new Insets(0, 0, 0, 0);
-            }
-        };
+        popup = new CustomPopupMenu();
         popup.setLayout(new BorderLayout());
         popup.addPopupMenuListener(popupListener);
         popup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                popup.setVisible(false);
+                popup.hidePopup();
             }
         });
         panel = new JPanel() {
@@ -150,7 +167,7 @@ final class NotificationPopup {
             return; // noop
         }
         popupListener.setMainFame(mainFrame);
-        popup.setVisible(false);    // if there's still notification visible
+        popup.hidePopup();    // if there's still notification visible
         panel.setBackground(bgColor);
         labelText.setForeground(fgColor);
         labelText.setText(notificationText);
@@ -164,7 +181,7 @@ final class NotificationPopup {
         try {
             SwingUtilities.getWindowAncestor(comp).setOpacity(opacity);
         } catch (Exception e) {
-            LOGGER.error("Error setting opacity for notification popup", e);
+            LOGGER.debug("Error setting opacity for notification popup", e);
         }
     }
 
@@ -173,7 +190,7 @@ final class NotificationPopup {
             @Override
             public void run() {
                 closingTask = null;
-                popup.setVisible(false);
+                popup.hidePopup();
             }
         };
         TimerTask oldTask = closingTask;

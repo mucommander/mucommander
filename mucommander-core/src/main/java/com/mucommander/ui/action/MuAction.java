@@ -30,6 +30,7 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
+import com.mucommander.text.Translator;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.NotifierProvider;
 import com.mucommander.ui.text.KeyStrokeUtils;
@@ -382,7 +383,7 @@ public abstract class MuAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         // Discard this event while in 'no events mode'
         if (!(mainFrame.getNoEventsMode() && honourNoEventsMode())) {
-            // it means that mouse click was used and we may want to present keyboard alternatives
+            // it means that mouse click was used, and we may want to present keyboard alternatives
             if (e.getSource() == null || !(e.getSource() instanceof FileTable)) {
                 String keyShortcut = Stream.of(
                         this.getAccelerator() != null
@@ -392,10 +393,12 @@ public abstract class MuAction extends AbstractAction {
                                 ? KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(getAlternateAccelerator())
                                 : null)
                         .filter(s -> s != null && !s.isEmpty())
-                        .collect(Collectors.joining(" or "));
-
-                NotifierProvider.displayMainFrameNotification(mainFrame,
-                        keyShortcut, Color.GREEN, Color.WHITE, 3000L);
+                        .collect(Collectors.joining(" " + Translator.get("or") + " "));
+                if (!keyShortcut.isBlank()) {
+                    NotifierProvider.displayMainFrameNotification(mainFrame,
+                            this.getLabel() + ": " + keyShortcut,
+                            new Color(35, 124, 35), Color.WHITE, 3000L);
+                }
             }
             if (performActionInSeparateThread()) {
                 new Thread(this::performAction).start();

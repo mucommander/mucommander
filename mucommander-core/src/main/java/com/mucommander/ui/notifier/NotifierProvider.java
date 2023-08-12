@@ -18,22 +18,11 @@
 package com.mucommander.ui.notifier;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.SystemTray;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
@@ -148,8 +137,9 @@ public class NotifierProvider {
                                                     String notification,
                                                     Color bgColor, Color fgColor,
                                                     long timeout) {
-        NotificationPopup.getInstance().displayNotification(mainFrame,
-                notification, bgColor, fgColor, timeout);
+        SwingUtilities.invokeLater(() ->
+                NotificationPopup.getInstance().displayNotification(
+                        mainFrame, notification, bgColor, fgColor, timeout));
     }
 
     public static void registerJobsListeners() {
