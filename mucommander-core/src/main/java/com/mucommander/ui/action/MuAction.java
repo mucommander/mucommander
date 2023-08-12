@@ -30,6 +30,11 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.NotifierProvider;
@@ -78,6 +83,26 @@ public abstract class MuAction extends AbstractAction {
 
     /** Name of the alternate accelerator KeyStroke property */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
+
+    private static boolean showKeyboardHints = false;
+
+    public final static ConfigurationListener CONFIGURATION_ADAPTER;
+
+    static {
+        // Listens to configuration changes and updates static fields accordingly.
+        // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
+        CONFIGURATION_ADAPTER = new ConfigurationListener() {
+            public synchronized void configurationChanged(ConfigurationEvent event) {
+                String var = event.getVariable();
+                if (var.equals(MuPreferences.SHOW_KEYBOARD_HINTS)) {
+                    showKeyboardHints = event.getBooleanValue();
+                }
+            }
+        };
+        MuConfigurations.addPreferencesListener(CONFIGURATION_ADAPTER);
+        showKeyboardHints = MuConfigurations.getPreferences().getVariable(
+                MuPreference.SHOW_KEYBOARD_HINTS, MuPreferences.DEFAULT_SHOW_KEYBOARD_HINTS);
+    }
     
     /**
      * Creates a new <code>MuAction</code> associated with the specified {@link MainFrame}. The properties contained by
@@ -122,17 +147,6 @@ public abstract class MuAction extends AbstractAction {
      */
     public void setLabel(String label) {
         putValue(Action.NAME, label);
-    }
-
-
-    /**
-     * Returns the tooltip text of this action, <code>null</code> if this action has no tooltip.
-     * The tooltip value is stored in the {@link #SHORT_DESCRIPTION} property.
-     *
-     * @return the tooltip text of this action, <code>null</code> if this action has no tooltip
-     */
-    public String getToolTipText() {
-        return (String)getValue(Action.SHORT_DESCRIPTION);
     }
 
     /**
@@ -190,7 +204,7 @@ public abstract class MuAction extends AbstractAction {
 
     /**
      * Returns the alternate accelerator KeyStroke of this action, <code>null</code> if it doesn't have any.
-     * The accelerator accelerator value is stored in the {@link #ALTERNATE_ACCELERATOR_PROPERTY_KEY} property.
+     * The accelerator value is stored in the {@link #ALTERNATE_ACCELERATOR_PROPERTY_KEY} property.
      *
      * @return the alternate accelerator KeyStroke of this action, <code>null</code> if it doesn't have any
      */
@@ -200,7 +214,7 @@ public abstract class MuAction extends AbstractAction {
 
     /**
      * Sets the alternate accelerator KeyStroke for this action, <code>null</code> for none.
-     * The accelerator accelerator value is stored in the {@link #ALTERNATE_ACCELERATOR_PROPERTY_KEY} property.
+     * The accelerator value is stored in the {@link #ALTERNATE_ACCELERATOR_PROPERTY_KEY} property.
      *
      * @param keyStroke the new alternate accelerator KeyStroke for this action, replacing the previous one (if any)
      */
@@ -350,7 +364,7 @@ public abstract class MuAction extends AbstractAction {
      */
     public static ImageIcon getStandardIcon(Class<? extends MuAction> action) {
         // Look for an icon image file with the /action/<classname>.png path and use it if it exists
-    	String iconPath = getStandardIconPath(action);
+        String iconPath = getStandardIconPath(action);
         if(ResourceLoader.getResourceAsURL(iconPath) == null)
             return null;
         return IconManager.getIcon(iconPath);
@@ -368,7 +382,7 @@ public abstract class MuAction extends AbstractAction {
     }
 
     private static String getActionName(Class<? extends MuAction> action) {
-    	return action.getSimpleName().replace("Action", "");
+        return action.getSimpleName().replace("Action", "");
     }
 
     ///////////////////////////////////
@@ -383,22 +397,8 @@ public abstract class MuAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         // Discard this event while in 'no events mode'
         if (!(mainFrame.getNoEventsMode() && honourNoEventsMode())) {
-            // it means that mouse click was used, and we may want to present keyboard alternatives
-            if (e.getSource() == null || !(e.getSource() instanceof FileTable)) {
-                String keyShortcut = Stream.of(
-                        this.getAccelerator() != null
-                                ? KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(getAccelerator())
-                                : null,
-                        this.getAlternateAccelerator() != null
-                                ? KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(getAlternateAccelerator())
-                                : null)
-                        .filter(s -> s != null && !s.isEmpty())
-                        .collect(Collectors.joining(" " + Translator.get("or") + " "));
-                if (!keyShortcut.isBlank()) {
-                    NotifierProvider.displayMainFrameNotification(mainFrame,
-                            this.getLabel() + ": " + keyShortcut,
-                            new Color(35, 124, 35), Color.WHITE, 3000L);
-                }
+            if (showKeyboardHints) {
+                displayKeyboardNotification(e);
             }
             if (performActionInSeparateThread()) {
                 new Thread(this::performAction).start();
@@ -411,6 +411,30 @@ public abstract class MuAction extends AbstractAction {
     @Override
     public String toString() {
         return getLabel();
+    }
+
+    /**
+     * Displays notification with keyboard shortcut for a given action (only if action was invoked not from keyboard).
+     * @param e action event
+     */
+    private void displayKeyboardNotification(ActionEvent e) {
+        // it means that mouse click was used, and we may want to show keyboard hints
+        if (e.getSource() == null || !(e.getSource() instanceof FileTable)) {
+            String keyShortcut = Stream.of(
+                            this.getAccelerator() != null
+                                    ? KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(getAccelerator())
+                                    : null,
+                            this.getAlternateAccelerator() != null
+                                    ? KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(getAlternateAccelerator())
+                                    : null)
+                    .filter(s -> s != null && !s.isEmpty())
+                    .collect(Collectors.joining(" " + Translator.get("or") + " "));
+            if (!keyShortcut.isBlank()) {
+                NotifierProvider.displayMainFrameNotification(mainFrame,
+                        this.getLabel() + ": " + keyShortcut,
+                        new Color(35, 124, 35), Color.WHITE, 3000L);
+            }
+        }
     }
 
     //////////////////////
