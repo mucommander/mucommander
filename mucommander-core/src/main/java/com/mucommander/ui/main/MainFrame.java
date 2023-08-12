@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
 
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -218,7 +220,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // conflict with default mucommander action shortcuts (e.g. F6 and F8) 
         foldersSplitPane.disableAccessibilityShortcuts();
 
-        verticalSplitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT, true) {
+        verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true) {
             @Override
             public Insets getInsets() {
                 return new Insets(0, 0, 0, 0);
@@ -226,13 +228,16 @@ public class MainFrame extends JFrame implements LocationListener {
         };
         verticalSplitPane.setBorder(null);
         verticalSplitPane.setOneTouchExpandable(true);
-        // TODO?
-        //verticalSplitPane.disableAccessibilityShortcuts();
+        {   // Do the same as in ProportionalSplitPane#disableAccessibilityShortcuts (foldersSplitPane)
+            InputMap inputMap = verticalSplitPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+            inputMap.clear();
+            inputMap.setParent(null);
+        }
         verticalSplitPane.setTopComponent(foldersSplitPane);
         verticalSplitPane.setBottomComponent(null);
 
         JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setLayout(new BorderLayout() );
+        layeredPane.setLayout(new BorderLayout());
         layeredPane.add(verticalSplitPane, BorderLayout.CENTER);
         layeredPane.setLayer(verticalSplitPane, JLayeredPane.DEFAULT_LAYER);
         // Split pane will be given any extra space
