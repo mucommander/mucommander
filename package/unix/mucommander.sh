@@ -35,9 +35,18 @@ fi
 cd `dirname "$BASE_FOLDER"`
 
 # Starts mucommander.
-$JAVA --add-opens java.base/java.io=ALL-UNNAMED \
-      --add-opens java.base/java.net=ALL-UNNAMED \
-      --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
-      --add-exports java.desktop/com.apple.laf=ALL-UNNAMED  \
+$JAVA --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
       --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
+      --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
+      --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
+      --add-opens java.base/java.io=ALL-UNNAMED \
+      --add-opens java.base/java.net=ALL-UNNAMED \
+      --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
+      --add-opens java.management/javax.management=ALL-UNNAMED \
+      --add-opens java.rmi/java.rmi=ALL-UNNAMED \
+      --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
+      --add-opens java.sql/java.sql=ALL-UNNAMED \
+      --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
+      --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
       -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
+
