@@ -173,7 +173,6 @@ public class ActionManager {
         registerAction(new ReportBugAction.Descriptor(),                    ReportBugAction::new);
         registerAction(new RevealInDesktopAction.Descriptor(),              RevealInDesktopAction::new);
         registerAction(new ReverseSortOrderAction.Descriptor(),             ReverseSortOrderAction::new);
-        registerAction(new RunCommandAction.Descriptor(),                   RunCommandAction::new);
         registerAction(new ShowInEnclosingFolderAction.Descriptor(),        ShowInEnclosingFolderAction::new);
         registerAction(new SelectPreviousBlockAction.Descriptor(),          SelectPreviousBlockAction::new);
         registerAction(new SelectPreviousPageAction.Descriptor(),           SelectPreviousPageAction::new);
