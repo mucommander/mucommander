@@ -118,10 +118,14 @@ jobs:
         with:
           arguments: tgz portable deb rpm
 
+      - name: Import GPG
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+
       - name: Sign rpm
         run: |
-          gpg --keyring release/rpm/.gpg --export-secret-key -a 'Arik Hadas' > private.key
-          gpg --import private.key
           rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}-1.x86_64.rpm"
 
       - name: Upload portable
