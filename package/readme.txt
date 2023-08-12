@@ -44,7 +44,8 @@ Localization:
 -
 
 Bug fixes:
-- Fix copying files to Finder.
+- Fixed copying files to Finder.
+- Fixed drag-and-drop of action buttons in the 'Customize command bar' dialog.
 
 Known issues:
 - Some translations may not be up-to-date.
