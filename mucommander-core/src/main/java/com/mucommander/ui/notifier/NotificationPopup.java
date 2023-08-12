@@ -52,7 +52,7 @@ final class NotificationPopup {
     /**
      * Default opacity of popup.
      */
-    private static final float OPACITY = 0.4f;
+    private static final float OPACITY = 0.8f;
 
     private final Timer closingTimer;
     private TimerTask closingTask;
@@ -78,6 +78,7 @@ final class NotificationPopup {
         public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
             if (mainFrame != null) {
                 SwingUtilities.invokeLater(() -> {
+                    // now panel has a proper width and we can correctly re-center
                     Point position = getPosition(mainFrame, panel.getWidth());
                     popup.setLocation(mainFrame.getLocation().x + position.x,
                             mainFrame.getLocation().y + position.y);

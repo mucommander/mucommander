@@ -64,6 +64,9 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Show splash screen' checkbox */
     private PrefCheckBox showSplashScreenCheckBox;
 
+    /** 'Show keyboard shortcuts hints' checkbox */
+    private PrefCheckBox showKeyboardHintsCheckBox;
+
     /** 'Enable system notifications' checkbox */
     private PrefCheckBox systemNotificationsCheckBox;
 
@@ -141,6 +144,12 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         showSplashScreenCheckBox.addDialogListener(parent);
         northPanel.add(showSplashScreenCheckBox);
 
+        showKeyboardHintsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_keyboard_hints"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.SHOW_KEYBOARD_HINTS,
+                MuPreferences.DEFAULT_SHOW_KEYBOARD_HINTS));
+        showKeyboardHintsCheckBox.addDialogListener(parent);
+        northPanel.add(showKeyboardHintsCheckBox);
+
         // 'Check for updates on startup' option
         checkForUpdatesCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.check_for_updates_on_startup"), () -> MuConfigurations.getPreferences().getVariable(
                 MuPreference.CHECK_FOR_UPDATE,
@@ -217,6 +226,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         MuConfigurations.getPreferences().setVariable(MuPreference.CONFIRM_ON_QUIT, quitConfirmationCheckBox.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_SPLASH_SCREEN, showSplashScreenCheckBox.isSelected());
+        MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_KEYBOARD_HINTS, showKeyboardHintsCheckBox.isSelected());
 
         boolean enabled;
         if (systemNotificationsCheckBox != null) {
