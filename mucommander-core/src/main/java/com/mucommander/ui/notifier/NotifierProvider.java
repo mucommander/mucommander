@@ -17,10 +17,23 @@
 
 package com.mucommander.ui.notifier;
 
+import java.awt.Color;
+import java.awt.Point;
 import java.awt.SystemTray;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
@@ -36,6 +49,11 @@ import com.mucommander.ui.main.WindowManager;
 
 public class NotifierProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(NotifierProvider.class);
+
+    /**
+     * How often the dock icon should be updated (in ms).
+     */
+    private static final long UPDATE_ICON_INTERVAL = 1000L;
 
     private static AbstractNotifier defaultNotifier;
 
@@ -116,6 +134,24 @@ public class NotifierProvider {
         });
     }
 
+    /**
+     * Displays a notification above the main frame that hide after provided time.
+     * If given notification is null or blank it does nothing.
+     *
+     * @param mainFrame the main frame
+     * @param bgColor background color (no alpha supported)
+     * @param fgColor foreground color
+     * @param notification the notification text
+     * @param timeout the time-out in ms after which the notification disappears
+     */
+    public static void displayMainFrameNotification(JFrame mainFrame,
+                                                    String notification,
+                                                    Color bgColor, Color fgColor,
+                                                    long timeout) {
+        NotificationPopup.getInstance().displayNotification(mainFrame,
+                notification, bgColor, fgColor, timeout);
+    }
+
     public static void registerJobsListeners() {
         // register only once
         if (jobsRegistered.compareAndSet(false, true)) {
@@ -137,7 +173,7 @@ public class NotifierProvider {
                     List<FileJob> jobs = JobsManager.getInstance().getAllJobs();
                     if (!jobs.isEmpty()) {
                         // Update icon every 1s
-                        if (lastUpdate + 1000L < System.currentTimeMillis()) {
+                        if (lastUpdate + UPDATE_ICON_INTERVAL < System.currentTimeMillis()) {
                             lastUpdate = System.currentTimeMillis();
                             long sum = 0;
                             int jobsCount = 0;
