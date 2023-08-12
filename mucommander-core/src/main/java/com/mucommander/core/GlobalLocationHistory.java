@@ -95,7 +95,7 @@ public class GlobalLocationHistory implements LocationListener {
 	 * @return all the tracked locations
 	 */
 	public List<FileURL> getHistory() {
-		return new ArrayList<FileURL>(history);
+		return new ArrayList<>(history);
 	}
 	
 	/**

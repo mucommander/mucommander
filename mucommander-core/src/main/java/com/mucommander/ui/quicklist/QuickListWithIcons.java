@@ -115,17 +115,15 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	}
 	
 	protected Icon getImageIconOfItemImp(final T item,  final Dimension preferredSize) {
-		boolean found;
 		synchronized(itemToIconCacheMap) {
-			if (!(found = itemToIconCacheMap.containsKey(item))) {
-				itemToIconCacheMap.put(item, waitingIcon);
-				waitingIconAddedToList();
-			}
+		    if (itemToIconCacheMap.putIfAbsent(item, waitingIcon) == null) {
+		        waitingIconAddedToList();
+		    }
 		}
 
-		Icon result = itemToIconCacheMap.get(item);
+		Icon icon = itemToIconCacheMap.get(item);
 
-		if (!found)
+		if (icon == waitingIcon)
 			new Thread() {
 				@Override
                 public void run() {
@@ -137,7 +135,7 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 				}
 			}.start();
 		
-		return resizeIcon(result, preferredSize);
+		return resizeIcon(icon, preferredSize);
 	}
 
 	protected Icon resizeIcon(Icon icon,  final Dimension preferredSize) {
