@@ -68,7 +68,7 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '20'
           distribution: 'adopt'
 
       - name: Build dmg
@@ -96,7 +96,7 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '20'
           distribution: 'adopt'
 
       - name: Checkout 'release'
@@ -173,7 +173,7 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: '20'
           distribution: 'adopt'
 
       - name: Checkout 'release'
