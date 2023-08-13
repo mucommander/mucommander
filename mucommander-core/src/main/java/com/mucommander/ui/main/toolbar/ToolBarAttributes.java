@@ -162,7 +162,7 @@ public class ToolBarAttributes {
     public static void removeToolBarAttributesListener(ToolBarAttributesListener listener) {
         synchronized(listeners) {listeners.remove(listener);}
     }
-    
+
     public static void fireActionsChanged() {
         synchronized(listeners) {
             for(ToolBarAttributesListener listener : listeners.keySet())

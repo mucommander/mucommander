@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * This class is responsible to handle the attributes of CommandBars - their actions, alternate actions and modifier.
  * Every CommandBar should get its attributes from this class, and register in it for receiving attributes modifications.  
- * 
+ *
  * @author Arik Hadas
  */
 public class CommandBarAttributes {
@@ -40,34 +40,34 @@ public class CommandBarAttributes {
     private static ActionId alternateActionIds[];
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
-    
+
     /** Command bar default actions */
-    private static final ActionId DEFAULT_ACTION_IDS[] = 
-    {
-        ActionId.asCommandBarAction(ActionType.View.getId()),
-        ActionId.asCommandBarAction(ActionType.Edit.getId()),
-        ActionId.asCommandBarAction(ActionType.Copy.getId()),
-        ActionId.asCommandBarAction(ActionType.Move.getId()),
-        ActionId.asCommandBarAction(ActionType.Mkdir.getId()),
-        ActionId.asCommandBarAction(ActionType.Delete.getId()),
-        ActionId.asCommandBarAction(ActionType.Refresh.getId()),
-        ActionId.asCommandBarAction(ActionType.CloseWindow.getId())
-    };
+    private static final ActionId DEFAULT_ACTION_IDS[] =
+            {
+                    ActionId.asCommandBarAction(ActionType.View.getId()),
+                    ActionId.asCommandBarAction(ActionType.Edit.getId()),
+                    ActionId.asCommandBarAction(ActionType.Copy.getId()),
+                    ActionId.asCommandBarAction(ActionType.Move.getId()),
+                    ActionId.asCommandBarAction(ActionType.Mkdir.getId()),
+                    ActionId.asCommandBarAction(ActionType.Delete.getId()),
+                    ActionId.asCommandBarAction(ActionType.Refresh.getId()),
+                    ActionId.asCommandBarAction(ActionType.CloseWindow.getId())
+            };
     /** Command bar default alternate actions */
     private static final ActionId DEFAULT_ALTERNATE_ACTION_IDS[] =
-    {
-        null,
-        null,
-        ActionId.asCommandBarAction(ActionType.LocalCopy.getId()),
-        ActionId.asCommandBarAction(ActionType.Rename.getId()),
-        ActionId.asCommandBarAction(ActionType.Mkfile.getId()),
-        ActionId.asCommandBarAction(ActionType.PermanentDelete.getId()),
-        null,
-        null
-    };
+            {
+                    null,
+                    null,
+                    ActionId.asCommandBarAction(ActionType.LocalCopy.getId()),
+                    ActionId.asCommandBarAction(ActionType.Rename.getId()),
+                    ActionId.asCommandBarAction(ActionType.Mkfile.getId()),
+                    ActionId.asCommandBarAction(ActionType.PermanentDelete.getId()),
+                    null,
+                    null
+            };
     /** Default modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke DEFAULT_MODIFIER = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
-    
+
     /** Contains all registered command-bar attributes listeners, stored as weak references */
     private static List<CommandBarAttributesListener> listeners = new ArrayList<>();
 
@@ -78,7 +78,7 @@ public class CommandBarAttributes {
     public static void restoreDefault() {
         setAttributes(DEFAULT_ACTION_IDS, DEFAULT_ALTERNATE_ACTION_IDS, DEFAULT_MODIFIER);
     }
-    
+
     /**
      * @return true if command-bar attributes equal to the default attributes.
      */
@@ -107,20 +107,20 @@ public class CommandBarAttributes {
 
         return DEFAULT_MODIFIER == modifier || DEFAULT_MODIFIER.equals(modifier);
     }
-    
+
     private static boolean equals(Object action1, Object action2) {
         if (action1 == null)
             return action2 == null;
         return action1.equals(action2);
     }
-    
+
     ///////////////
     /// setters ///
     ///////////////
-    
+
     /**
      * This method sets command bar actions and modifiers.
-     * 
+     *
      * @param actionIds          standard command-bar actions.
      * @param alternateActionIds alternate command-bar actions.
      * @param modifier           command-bar modifier.
@@ -129,31 +129,31 @@ public class CommandBarAttributes {
         CommandBarAttributes.actionIds = actionIds;
         CommandBarAttributes.alternateActionIds = alternateActionIds;
         CommandBarAttributes.modifier = modifier;
-        fireAttributesChanged();
+        fireActionsChanged();
     }
-    
+
     ///////////////
     /// getters ///
     ///////////////
-    
+
     public static ActionId[] getActions() {return actionIds;}
-    
+
     public static ActionId[] getAlternateActions() {return alternateActionIds;}
-    
+
     public static KeyStroke getModifier() {return modifier;}
-    
-    
+
+
     // - Listeners -------------------------------------------------------------
     // -------------------------------------------------------------------------
     public static void addCommandBarAttributesListener(CommandBarAttributesListener listener) {
         synchronized(listeners) {listeners.add(listener);}
     }
-    
+
     public static void removeCommandBarAttributesListener(CommandBarAttributesListener listener) {
         synchronized(listeners) {listeners.remove(listener);}
     }
-    
-    protected static void fireAttributesChanged() {
+
+    public static void fireActionsChanged() {
         synchronized(listeners) {
             // Iterate on all listeners
             listeners.forEach(CommandBarAttributesListener::commandBarAttributeChanged);

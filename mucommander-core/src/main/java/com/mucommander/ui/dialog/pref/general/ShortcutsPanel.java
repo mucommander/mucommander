@@ -53,6 +53,8 @@ import com.mucommander.ui.action.ActionKeymapIO;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
+import com.mucommander.ui.main.commandbar.CommandBarAttributes;
+import com.mucommander.ui.main.toolbar.ToolBarAttributes;
 
 /**
  * 'Shortcuts' preferences panel.
@@ -252,6 +254,9 @@ public class ShortcutsPanel extends PreferencesPanel {
     protected void commit() {
         shortcutsTable.commitChanges();
         ActionKeymapIO.setModified();
+        // just in case if changed shortcuts were in CommandBar or ToolBar
+        CommandBarAttributes.fireActionsChanged();
+        ToolBarAttributes.fireActionsChanged();
     }
 
     class TooltipBar extends JLabel {
