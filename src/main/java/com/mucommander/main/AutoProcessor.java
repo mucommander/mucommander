@@ -20,6 +20,12 @@ package com.mucommander.main;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import org.osgi.framework.*;
 import org.osgi.service.startlevel.*;
 
@@ -74,9 +80,17 @@ public class AutoProcessor
     **/
     public static void process(Map configMap, BundleContext context)
     {
-        configMap = (configMap == null) ? new HashMap() : configMap;
-        processAutoDeploy(configMap, context);
-        processAutoProperties(configMap, context);
+        ExecutorService executor = null;
+        try {
+            executor = Executors.newFixedThreadPool(20);
+            var configMapLocal = (configMap == null) ? new HashMap() : configMap;
+            processAutoDeploy(executor, configMapLocal, context);
+            processAutoProperties(executor, configMapLocal, context);
+        } finally {
+            if (executor != null) {
+                executor.shutdown();
+            }
+        }
     }
 
     /**
@@ -85,7 +99,7 @@ public class AutoProcessor
      * specified deploy actions.
      * </p>
      */
-    private static void processAutoDeploy(Map configMap, BundleContext context)
+    private static void processAutoDeploy(ExecutorService executor, Map configMap, BundleContext context)
     {
         // Determine if auto deploy actions to perform.
         String action = (String) configMap.get(AUTO_DEPLOY_ACTION_PROPERTY);
@@ -155,7 +169,7 @@ public class AutoProcessor
             }
 
             // Install bundle JAR files and remember the bundle objects.
-            final List startBundleList = new ArrayList();
+            final List<Future<Bundle>> startBundleList = new ArrayList<>();
             for (int i = 0; i < jarList.size(); i++)
             {
                 // Look up the bundle by location, removing it from
@@ -163,15 +177,23 @@ public class AutoProcessor
                 // indicate which bundles may need to be uninstalled.
                 Bundle b = (Bundle) installedBundleMap.remove(
                     ((File) jarList.get(i)).toURI().toString());
-
+                Future<Bundle> futureBundle = CompletableFuture.completedFuture(b);
                 try
                 {
                     // If the bundle is not already installed, then install it
                     // if the 'install' action is present.
                     if ((b == null) && actionList.contains(AUTO_DEPLOY_INSTALL_VALUE))
                     {
-                        b = context.installBundle(
-                            ((File) jarList.get(i)).toURI().toString());
+                        var jarPath = ((File) jarList.get(i)).toURI().toString();
+                        futureBundle = executor.submit(() -> {
+                            try {
+                                return context.installBundle(jarPath);
+                            } catch (BundleException ex) {
+                                System.err.println("Auto-deploy install: "
+                                        + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
+                                return null;
+                            }
+                        });
                     }
                     // If the bundle is already installed, then update it
                     // if the 'update' action is present.
@@ -179,15 +201,7 @@ public class AutoProcessor
                     {
                         b.update();
                     }
-
-                    // If we have found and/or successfully installed a bundle,
-                    // then add it to the list of bundles to potentially start
-                    // and also set its start level accordingly.
-                    if ((b != null) && !isFragment(b))
-                    {
-                        startBundleList.add(b);
-                        sl.setBundleStartLevel(b, startLevel);
-                    }
+                    startBundleList.add(futureBundle);
                 }
                 catch (BundleException ex)
                 {
@@ -208,6 +222,7 @@ public class AutoProcessor
                     {
                         try
                         {
+                            System.err.println("bundle uninstall pre: ");
                             b.uninstall();
                         }
                         catch (BundleException ex)
@@ -219,20 +234,42 @@ public class AutoProcessor
                 }
             }
 
+            for (Future<Bundle> futureBundle : startBundleList) {
+                try {
+                    Bundle b = futureBundle.get();
+                    // If we have found and/or successfully installed a bundle,
+                    // then add it to the list of bundles to potentially start
+                    // and also set its start level accordingly.
+                    if (b != null && !isFragment(b))
+                    {
+                        sl.setBundleStartLevel(b, startLevel);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    System.err.println("Problem getting bundle: " + e.getMessage());
+                }
+            }
+
             // Start all installed and/or updated bundles if the 'start'
             // action is present.
             if (actionList.contains(AUTO_DEPLOY_START_VALUE))
             {
                 for (int i = 0; i < startBundleList.size(); i++)
                 {
-                    try
-                    {
-                        ((Bundle) startBundleList.get(i)).start();
-                    }
-                    catch (BundleException ex)
-                    {
-                        System.err.println("Auto-deploy start: "
-                            + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
+                    try {
+                        var bundle = ((Bundle) startBundleList.get(i).get());
+                        executor.execute(() -> {
+                            try
+                            {
+                                bundle.start();
+                            }
+                            catch (BundleException ex)
+                            {
+                                System.err.println("Auto-deploy start: "
+                                        + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
+                            }
+                        });
+                    } catch (InterruptedException | ExecutionException e) {
+                        System.err.println("Problem getting bundle: " + e.getMessage());
                     }
                 }
             }
@@ -245,7 +282,7 @@ public class AutoProcessor
      * specified configuration properties.
      * </p>
      */
-    private static void processAutoProperties(Map configMap, BundleContext context)
+    private static void processAutoProperties(ExecutorService executor, Map configMap, BundleContext context)
     {
         // Retrieve the Start Level service, since it will be needed
         // to set the start level of the installed bundles.
@@ -315,20 +352,22 @@ if (ex.getCause() != null)
                 StringTokenizer st = new StringTokenizer((String) configMap.get(key), "\" ", true);
                 for (String location = nextLocation(st); location != null; location = nextLocation(st))
                 {
-                    // Installing twice just returns the same bundle.
-                    try
-                    {
-                        Bundle b = context.installBundle(location, null);
-                        if (b != null)
+                    var loc = location;
+                    executor.execute(() -> {
+                        try
                         {
-                            b.start();
+                            Bundle b = context.installBundle(loc, null);
+                            if (b != null)
+                            {
+                                b.start();
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        System.err.println("Auto-properties start: " + location + " ("
-                            + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : "") + ")");
-                    }
+                        catch (Exception ex)
+                        {
+                            System.err.println("Auto-properties start: " + loc + " ("
+                                    + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : "") + ")");
+                        }
+                    });
                 }
             }
         }
