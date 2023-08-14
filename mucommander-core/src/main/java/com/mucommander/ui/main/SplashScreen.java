@@ -55,7 +55,7 @@ public class SplashScreen extends JWindow {
     private final static int FONT_STYLE = Font.BOLD;
     /** Size of the font used to display text on this splash screen */
     private final static int FONT_SIZE = 11;
-	
+
     /** Color of the text displayed on this splash screen */ 
     private final static Color TEXT_COLOR = new Color(192, 238, 241);
     private final static Color SHADOW_TEXT_COLOR = new Color(0, 86, 117);
@@ -96,7 +96,7 @@ public class SplashScreen extends JWindow {
         catch(InterruptedException e) {}
 
         setContentPane(new JLabel(imageIcon));
-		
+
         // Set size manually instead of using pack(), because of a bug under 1.3.1/Win32 which
         // eats a 1-pixel row of the image
         //		pack();
