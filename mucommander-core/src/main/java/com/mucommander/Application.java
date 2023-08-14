@@ -480,8 +480,10 @@ public class Application {
             }
 
             // Dispose splash screen.
-            if(splashScreen!=null)
+            if(splashScreen!=null) {
                 splashScreen.dispose();
+                splashScreen = null;
+            }
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
@@ -493,8 +495,10 @@ public class Application {
                 new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
         } catch (Throwable t) {
             // Startup failed, dispose the splash screen
-            if(splashScreen!=null)
+            if(splashScreen!=null) {
                 splashScreen.dispose();
+                splashScreen = null;
+            }
 
             LOGGER.error("Startup failed", t);
 
