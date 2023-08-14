@@ -463,7 +463,7 @@ public class Application {
             }
             // Done launching, wake up threads waiting for the application being launched.
             // Important: this must be done before disposing the splash screen, as this would otherwise create a
-            // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
+            // deadlock
             synchronized (LAUNCH_LOCK) {
                 isLaunching = false;
                 LAUNCH_LOCK.notifyAll();
@@ -480,7 +480,7 @@ public class Application {
             }
 
             // Dispose splash screen.
-            if(splashScreen!=null) {
+            if (splashScreen != null) {
                 splashScreen.dispose();
                 splashScreen = null;
             }
@@ -495,7 +495,7 @@ public class Application {
                 new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
         } catch (Throwable t) {
             // Startup failed, dispose the splash screen
-            if(splashScreen!=null) {
+            if (splashScreen != null) {
                 splashScreen.dispose();
                 splashScreen = null;
             }
