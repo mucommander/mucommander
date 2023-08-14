@@ -21,8 +21,16 @@ import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.ui.icon.IconManager;
 
-import javax.swing.*;
-import java.awt.*;
+// if we want SplashScreen to load faster,
+// then don't load everything from awt.* or swing.* (i.e. no wildcards)
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JWindow;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.MediaTracker;
 
 /**
  * Splash screen that gets displayed on muCommander startup.
@@ -101,7 +109,8 @@ public class SplashScreen extends JWindow {
         } catch (InterruptedException e) {
         }
 
-        setContentPane(new JLabel(imageIcon));
+        JLabel splash = new JLabel(imageIcon);
+        setContentPane(splash);
 
         // Set size manually instead of using pack(), because of a bug under 1.3.1/Win32 which
         // eats a 1-pixel row of the image
@@ -111,7 +120,8 @@ public class SplashScreen extends JWindow {
         setSize(width, height);
 
         DialogToolkit.centerOnScreen(this);
-
+        // avoid bright background painted just before splash image
+        setBackground(new Color(0, 0, 0, 0));
         // Display the splash screen
         setVisible(true);
     }

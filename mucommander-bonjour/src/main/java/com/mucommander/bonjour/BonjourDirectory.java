@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
@@ -91,7 +92,7 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
     /**
      * Enables/disables Bonjour services discovery. If currently active and false is specified, current services
      * will be lost and {@link #getServices()} will return an empty array. If currently inactive and true is specified,
-     * services discovery will be immediately started but it may take a while (a few seconds at least) to
+     * services discovery will be immediately started, but it may take a while (a few seconds at least) to
      * collect services. The activation (aka initialization) is being done asynchronously.
      * @param enabled whether Bonjour services discovery should be enabled.
      */
@@ -100,7 +101,10 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
             return;
         }
         if (enabled && jmDNS == null) {
-            CompletableFuture.runAsync(BonjourDirectory::initiateBonjour);
+            // let's defer init of Bonjour (that does a lot of network witchery)
+            // so muC can have more resources to start up quicker
+            var executor = CompletableFuture.delayedExecutor(5L, TimeUnit.SECONDS);
+            CompletableFuture.runAsync(BonjourDirectory::initiateBonjour, executor);
         } else if(!enabled && jmDNS!=null) {
             // Shutdown JmDNS
             try {
