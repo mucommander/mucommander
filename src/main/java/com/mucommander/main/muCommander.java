@@ -29,6 +29,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.AbstractMap;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -362,7 +363,6 @@ public class muCommander
             });
         }
         logTimeSinceStart("Hooks configured");
-
         try
         {
             // Create an instance of the framework.
