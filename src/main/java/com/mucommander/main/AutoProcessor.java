@@ -179,6 +179,7 @@ public class AutoProcessor
 
             // Install bundle JAR files and remember the bundle objects.
             final List<Future<Bundle>> startBundleList = new ArrayList<>();
+            final List<Future<Bundle>> deferStartBundleList = new ArrayList<>();
             for (File jarFile : jarList)
             {
                 // Look up the bundle by location, removing it from
@@ -186,6 +187,7 @@ public class AutoProcessor
                 // indicate which bundles may need to be uninstalled.
                 Bundle b = (Bundle) installedBundleMap.remove(jarFile.toURI().toString());
                 Future<Bundle> futureBundle = CompletableFuture.completedFuture(b);
+                var defer = false;
                 try
                 {
                     // If the bundle is not already installed, then install it
@@ -193,6 +195,11 @@ public class AutoProcessor
                     if ((b == null) && actionList.contains(AUTO_DEPLOY_INSTALL_VALUE))
                     {
                         var jarPath = jarFile.toURI().toString();
+                        if (jarPath.contains("dropbox") || jarPath.contains("jediterm")
+                                || jarPath.contains("protocol-gcs") || jarPath.contains("viewer-pdf")
+                                || jarPath.contains("gdrive")) {
+                            defer = true;
+                        }
                         futureBundle = executor.submit(() -> {
                             try {
                                 return context.installBundle(jarPath);
@@ -209,7 +216,11 @@ public class AutoProcessor
                     {
                         b.update();
                     }
-                    startBundleList.add(futureBundle);
+                    if (!defer) {
+                        startBundleList.add(futureBundle);
+                    } else {
+                        deferStartBundleList.add(futureBundle);
+                    }
                 }
                 catch (BundleException ex)
                 {
@@ -217,6 +228,8 @@ public class AutoProcessor
                         + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
                 }
             }
+            // deferred bundles added to the end of start list (so they have more time to load in the meantime)
+            startBundleList.addAll(deferStartBundleList);
 
             // Uninstall all bundles not in the auto-deploy directory if
             // the 'uninstall' action is present.
@@ -242,6 +255,7 @@ public class AutoProcessor
                 }
             }
 
+
             // Start all installed and/or updated bundles if the 'start'
             // action is present.
             if (actionList.contains(AUTO_DEPLOY_START_VALUE))
@@ -249,7 +263,9 @@ public class AutoProcessor
                 for (Future<Bundle> bundleFuture : startBundleList)
                 {
                     try {
+                        long pre = System.currentTimeMillis();
                         var bundle = bundleFuture.get();
+                        System.out.println("------ get bundle " + (System.currentTimeMillis() - pre) + "ms " + bundle);
                         var startLvl = startLevel;
                         executor.execute(() -> {
                             try
@@ -297,9 +313,9 @@ public class AutoProcessor
         // property name, where "n" is the desired start level for the list
         // of bundles. If no start level is specified, the default start
         // level is assumed.
-        for (Iterator i = configMap.keySet().iterator(); i.hasNext(); )
+        for (Object keyObj : configMap.keySet())
         {
-            String key = ((String) i.next()).toLowerCase();
+            String key = ((String) keyObj).toLowerCase();
 
             // Ignore all keys that are not an auto property.
             if (!key.startsWith(AUTO_INSTALL_PROP) && !key.startsWith(AUTO_START_PROP))
@@ -336,16 +352,17 @@ public class AutoProcessor
                 {
                     System.err.println("Auto-properties install: " + location + " ("
                         + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : "") + ")");
-if (ex.getCause() != null)
-    ex.printStackTrace();
+                    if (ex.getCause() != null) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }
 
         // Now loop through the auto-start bundles and start them.
-        for (Iterator i = configMap.keySet().iterator(); i.hasNext(); )
+        for (Object keyObj : configMap.keySet())
         {
-            String key = ((String) i.next()).toLowerCase();
+            String key = ((String)keyObj).toLowerCase();
             if (key.startsWith(AUTO_START_PROP))
             {
                 StringTokenizer st = new StringTokenizer((String) configMap.get(key), "\" ", true);
