@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class CommandBarAttributes {
 
-	/** Command bar actions */
+    /** Command bar actions */
     private static ActionId actionIds[];
     /** Command bar alternate actions */
     private static ActionId alternateActionIds[];
@@ -44,26 +44,26 @@ public class CommandBarAttributes {
     /** Command bar default actions */
     private static final ActionId DEFAULT_ACTION_IDS[] = 
     {
-		ActionId.asCommandBarAction(ActionType.View.getId()),
-		ActionId.asCommandBarAction(ActionType.Edit.getId()),
-		ActionId.asCommandBarAction(ActionType.Copy.getId()),
-		ActionId.asCommandBarAction(ActionType.Move.getId()),
-		ActionId.asCommandBarAction(ActionType.Mkdir.getId()),
-		ActionId.asCommandBarAction(ActionType.Delete.getId()),
-		ActionId.asCommandBarAction(ActionType.Refresh.getId()),
-		ActionId.asCommandBarAction(ActionType.CloseWindow.getId())
+        ActionId.asCommandBarAction(ActionType.View.getId()),
+        ActionId.asCommandBarAction(ActionType.Edit.getId()),
+        ActionId.asCommandBarAction(ActionType.Copy.getId()),
+        ActionId.asCommandBarAction(ActionType.Move.getId()),
+        ActionId.asCommandBarAction(ActionType.Mkdir.getId()),
+        ActionId.asCommandBarAction(ActionType.Delete.getId()),
+        ActionId.asCommandBarAction(ActionType.Refresh.getId()),
+        ActionId.asCommandBarAction(ActionType.CloseWindow.getId())
     };
     /** Command bar default alternate actions */
     private static final ActionId DEFAULT_ALTERNATE_ACTION_IDS[] =
     {
-    	null,
-    	null,
-    	ActionId.asCommandBarAction(ActionType.LocalCopy.getId()),
-		ActionId.asCommandBarAction(ActionType.Rename.getId()),
-		ActionId.asCommandBarAction(ActionType.Mkfile.getId()),
-		ActionId.asCommandBarAction(ActionType.PermanentDelete.getId()),
-    	null,
-    	null
+        null,
+        null,
+        ActionId.asCommandBarAction(ActionType.LocalCopy.getId()),
+        ActionId.asCommandBarAction(ActionType.Rename.getId()),
+        ActionId.asCommandBarAction(ActionType.Mkfile.getId()),
+        ActionId.asCommandBarAction(ActionType.PermanentDelete.getId()),
+        null,
+        null
     };
     /** Default modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke DEFAULT_MODIFIER = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
@@ -76,42 +76,42 @@ public class CommandBarAttributes {
      * The attributes are updated only if they are not already equal to the default attributes.
      */
     public static void restoreDefault() {
-    	setAttributes(DEFAULT_ACTION_IDS, DEFAULT_ALTERNATE_ACTION_IDS, DEFAULT_MODIFIER);
+        setAttributes(DEFAULT_ACTION_IDS, DEFAULT_ALTERNATE_ACTION_IDS, DEFAULT_MODIFIER);
     }
     
     /**
      * @return true if command-bar attributes equal to the default attributes.
      */
     public static boolean areDefaultAttributes() {
-    	if (actionIds != DEFAULT_ACTION_IDS) {
-    		int nbActions = actionIds.length;
-    		
-    		if (nbActions != DEFAULT_ACTION_IDS.length)
-    			return false;
-    		
-    		for (int i=0; i<nbActions; ++i)
-    			if (!equals(actionIds[i], DEFAULT_ACTION_IDS[i]))
-    				return false;
-    	}
-    	
-    	if (alternateActionIds != DEFAULT_ALTERNATE_ACTION_IDS) {
-    		int nbAlternateActions = alternateActionIds.length;
-    		
-    		if (nbAlternateActions != DEFAULT_ALTERNATE_ACTION_IDS.length)
-    			return false;
-    		
-    		for (int i=0; i<nbAlternateActions; ++i)
-    			if (!equals(alternateActionIds[i], DEFAULT_ALTERNATE_ACTION_IDS[i]))
-    				return false;
-    	}
-    	
-    	return DEFAULT_MODIFIER == modifier || DEFAULT_MODIFIER.equals(modifier);
+        if (actionIds != DEFAULT_ACTION_IDS) {
+            int nbActions = actionIds.length;
+
+            if (nbActions != DEFAULT_ACTION_IDS.length)
+                return false;
+
+            for (int i=0; i<nbActions; ++i)
+                if (!equals(actionIds[i], DEFAULT_ACTION_IDS[i]))
+                    return false;
+        }
+
+        if (alternateActionIds != DEFAULT_ALTERNATE_ACTION_IDS) {
+            int nbAlternateActions = alternateActionIds.length;
+
+            if (nbAlternateActions != DEFAULT_ALTERNATE_ACTION_IDS.length)
+                return false;
+
+            for (int i=0; i<nbAlternateActions; ++i)
+                if (!equals(alternateActionIds[i], DEFAULT_ALTERNATE_ACTION_IDS[i]))
+                    return false;
+        }
+
+        return DEFAULT_MODIFIER == modifier || DEFAULT_MODIFIER.equals(modifier);
     }
     
     private static boolean equals(Object action1, Object action2) {
-    	if (action1 == null)
-    		return action2 == null;
-    	return action1.equals(action2);
+        if (action1 == null)
+            return action2 == null;
+        return action1.equals(action2);
     }
     
     ///////////////
@@ -126,10 +126,10 @@ public class CommandBarAttributes {
      * @param modifier           command-bar modifier.
      */
     public static void setAttributes(ActionId[] actionIds, ActionId[] alternateActionIds, KeyStroke modifier) {
-    	CommandBarAttributes.actionIds = actionIds;
-    	CommandBarAttributes.alternateActionIds = alternateActionIds;
-    	CommandBarAttributes.modifier = modifier;
-    	fireAttributesChanged();
+        CommandBarAttributes.actionIds = actionIds;
+        CommandBarAttributes.alternateActionIds = alternateActionIds;
+        CommandBarAttributes.modifier = modifier;
+        fireAttributesChanged();
     }
     
     ///////////////
@@ -150,7 +150,7 @@ public class CommandBarAttributes {
     }
     
     public static void removeCommandBarAttributesListener(CommandBarAttributesListener listener) {
-    	synchronized(listeners) {listeners.remove(listener);}
+        synchronized(listeners) {listeners.remove(listener);}
     }
     
     protected static void fireAttributesChanged() {

@@ -29,8 +29,8 @@ import com.mucommander.ui.action.ActionId;
  * @author Arik Hadas
  */
 public class ToolBarAttributes {
-	
-	/** Command bar actions: Class instances or null to signify a separator */
+
+    /** Command bar actions: Class instances or null to signify a separator */
     private static ActionId actionIds[];
     
     private static boolean useDefaultActions = true;
@@ -112,8 +112,8 @@ public class ToolBarAttributes {
      */
     public static void setActions(ActionId[] actions) {
         ToolBarAttributes.actionIds = trimActionsArray(actions);
-    	useDefaultActions = false;
-    	fireActionsChanged();
+        useDefaultActions = false;
+        fireActionsChanged();
     }
     
     /**
@@ -122,25 +122,25 @@ public class ToolBarAttributes {
      * @return true if the default attributes are used, false otherwise.
      */
     public static boolean areDefaultAttributes() {
-    	if (useDefaultActions)
-    		return true;
-    		
-    	int nbActions = actionIds.length;
-    	
-    	if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
-    		return false;
-    	
-    	for (int i=0; i<nbActions; ++i)
-    		if (!equals(actionIds[i], DEFAULT_TOOLBAR_ACTIONS[i]))
-    			return false;
-    	
-    	return true;
+        if (useDefaultActions)
+            return true;
+
+        int nbActions = actionIds.length;
+
+        if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
+            return false;
+
+        for (int i=0; i<nbActions; ++i)
+            if (!equals(actionIds[i], DEFAULT_TOOLBAR_ACTIONS[i]))
+                return false;
+
+        return true;
     }
     
     private static boolean equals(Object action1, Object action2) {
-    	if (action1 == null)
-    		return action2 == null;
-    	return action1.equals(action2);
+        if (action1 == null)
+            return action2 == null;
+        return action1.equals(action2);
     }
     
     /**
@@ -150,21 +150,21 @@ public class ToolBarAttributes {
      * @return the action classes that constitute the toolbar.
      */
     public static ActionId[] getActions() {
-    	return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;
+        return useDefaultActions ? DEFAULT_TOOLBAR_ACTIONS : actionIds;
     }
     
     // - Listeners -------------------------------------------------------------
     // -------------------------------------------------------------------------
     public static void addToolBarAttributesListener(ToolBarAttributesListener listener) {
-    	synchronized(listeners) {listeners.put(listener, null);}
+        synchronized(listeners) {listeners.put(listener, null);}
     }
     
     public static void removeToolBarAttributesListener(ToolBarAttributesListener listener) {
-    	synchronized(listeners) {listeners.remove(listener);}
+        synchronized(listeners) {listeners.remove(listener);}
     }
     
     public static void fireActionsChanged() {
-    	synchronized(listeners) {
+        synchronized(listeners) {
             for(ToolBarAttributesListener listener : listeners.keySet())
                 listener.toolBarActionsChanged();
         }
