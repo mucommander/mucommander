@@ -181,8 +181,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     /**
      * Creates a new MainFrame and makes it visible on the screen, on top of any other frames.
      *
-     * @param leftFolders initial paths for the left frame.
-     * @param rightFolders initial paths for the right frame.
+     * @param mainFrameBuilder the mainFrame builder
      * @return the newly created MainFrame.
      */
     public static synchronized void createNewMainFrame(MainFrameBuilder mainFrameBuilder) {
