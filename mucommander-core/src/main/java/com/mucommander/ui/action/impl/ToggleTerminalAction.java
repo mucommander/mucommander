@@ -45,14 +45,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     @Override
     public void performAction() {
-        if (terminalIntegration == null) {
-            // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
-            synchronized (this) {
-                if (terminalIntegration == null) {
-                    terminalIntegration = new TerminalIntegration(mainFrame, mainFrame.getVerticalSplitPane());
-                }
-            }
-        }
+        ensureIntegrationIsInitialized();
         terminalIntegration.toggleTerminal();
     }
 
@@ -82,8 +75,19 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     @Override
     protected void toggleEnabledState() {
+        ensureIntegrationIsInitialized();
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA));
     }
 
+    private void ensureIntegrationIsInitialized() {
+        if (terminalIntegration == null && mainFrame != null && mainFrame.getVerticalSplitPane() != null) {
+            // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
+            synchronized (this) {
+                if (terminalIntegration == null) {
+                    terminalIntegration = new TerminalIntegration(mainFrame, mainFrame.getVerticalSplitPane());
+                }
+            }
+        }
+    }
 }
