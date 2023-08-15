@@ -19,15 +19,24 @@
 package com.mucommander.main;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.osgi.framework.*;
-import org.osgi.service.startlevel.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.service.startlevel.StartLevel;
 
 public class AutoProcessor
 {
@@ -82,7 +91,7 @@ public class AutoProcessor
     {
         ExecutorService executor = null;
         try {
-            executor = Executors.newFixedThreadPool(20);
+            executor = Executors.newFixedThreadPool(8);
             var configMapLocal = (configMap == null) ? new HashMap() : configMap;
             processAutoDeploy(executor, configMapLocal, context);
             processAutoProperties(executor, configMapLocal, context);
@@ -155,28 +164,27 @@ public class AutoProcessor
             // Look in the specified bundle directory to create a list
             // of all JAR files to install.
             File[] files = new File(autoDir).listFiles();
-            List jarList = new ArrayList();
+            List<File> jarList = new ArrayList<>();
             if (files != null)
             {
                 Arrays.sort(files);
-                for (int i = 0; i < files.length; i++)
+                for (File f : files)
                 {
-                    if (files[i].getName().endsWith(".jar"))
+                    if (f.getName().endsWith(".jar"))
                     {
-                        jarList.add(files[i]);
+                        jarList.add(f);
                     }
                 }
             }
 
             // Install bundle JAR files and remember the bundle objects.
             final List<Future<Bundle>> startBundleList = new ArrayList<>();
-            for (int i = 0; i < jarList.size(); i++)
+            for (File jarFile : jarList)
             {
                 // Look up the bundle by location, removing it from
                 // the map of installed bundles so the remaining bundles
                 // indicate which bundles may need to be uninstalled.
-                Bundle b = (Bundle) installedBundleMap.remove(
-                    ((File) jarList.get(i)).toURI().toString());
+                Bundle b = (Bundle) installedBundleMap.remove(jarFile.toURI().toString());
                 Future<Bundle> futureBundle = CompletableFuture.completedFuture(b);
                 try
                 {
@@ -184,7 +192,7 @@ public class AutoProcessor
                     // if the 'install' action is present.
                     if ((b == null) && actionList.contains(AUTO_DEPLOY_INSTALL_VALUE))
                     {
-                        var jarPath = ((File) jarList.get(i)).toURI().toString();
+                        var jarPath = jarFile.toURI().toString();
                         futureBundle = executor.submit(() -> {
                             try {
                                 return context.installBundle(jarPath);
@@ -234,33 +242,24 @@ public class AutoProcessor
                 }
             }
 
-            for (Future<Bundle> futureBundle : startBundleList) {
-                try {
-                    Bundle b = futureBundle.get();
-                    // If we have found and/or successfully installed a bundle,
-                    // then add it to the list of bundles to potentially start
-                    // and also set its start level accordingly.
-                    if (b != null && !isFragment(b))
-                    {
-                        sl.setBundleStartLevel(b, startLevel);
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    System.err.println("Problem getting bundle: " + e.getMessage());
-                }
-            }
-
             // Start all installed and/or updated bundles if the 'start'
             // action is present.
             if (actionList.contains(AUTO_DEPLOY_START_VALUE))
             {
-                for (int i = 0; i < startBundleList.size(); i++)
+                for (Future<Bundle> bundleFuture : startBundleList)
                 {
                     try {
-                        var bundle = ((Bundle) startBundleList.get(i).get());
+                        var bundle = bundleFuture.get();
+                        var startLvl = startLevel;
                         executor.execute(() -> {
                             try
                             {
-                                bundle.start();
+                                if (bundle != null) {
+                                    if (!isFragment(bundle)) {
+                                        sl.setBundleStartLevel(bundle, startLvl);
+                                    }
+                                    bundle.start();
+                                }
                             }
                             catch (BundleException ex)
                             {
@@ -404,13 +403,6 @@ if (ex.getCause() != null)
                 else if (tok.equals(" "))
                 {
                     tokBuf.append(tok);
-                    /*if (tokStarted)
-                    {
-                        retVal = tokBuf.toString();
-                        tokStarted=false;
-                        tokBuf = new StringBuffer(10);
-                        exit = true;
-                    }*/
                 }
                 else
                 {
