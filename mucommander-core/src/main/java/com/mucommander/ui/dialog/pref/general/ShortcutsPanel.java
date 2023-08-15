@@ -254,7 +254,7 @@ public class ShortcutsPanel extends PreferencesPanel {
     protected void commit() {
         shortcutsTable.commitChanges();
         ActionKeymapIO.setModified();
-        // just in case if changed shortcuts were in CommandBar or ToolBar
+        // just in case shortcuts of actions in CommandBar or ToolBar have changed
         CommandBarAttributes.fireActionsChanged();
         ToolBarAttributes.fireActionsChanged();
     }

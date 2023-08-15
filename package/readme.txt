@@ -47,7 +47,7 @@ Localization:
 Bug fixes:
 - Fixed copying files to Finder.
 - Fixed drag-and-drop of action buttons in the 'Customize command bar' dialog.
-- Fixed actions not being updated when their shortcuts changed in Preferences. 
+- Fixed Toolbar and Command bar actions not being updated when their shortcuts changed in Preferences. 
 
 Known issues:
 - Some translations may not be up-to-date.
