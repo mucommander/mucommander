@@ -670,7 +670,7 @@ public class muCommander
     }
 
     private static void logTimeSinceStart(String text) {
-        System.out.println("[" + (System.currentTimeMillis() - START_EPOCH) + "ms] " + text);
+        System.out.println("[muEpoch+" + (System.currentTimeMillis() - START_EPOCH) + "ms] muCommander: " + text);
     }
 
 }
