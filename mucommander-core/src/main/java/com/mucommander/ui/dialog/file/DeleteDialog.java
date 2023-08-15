@@ -17,6 +17,16 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -29,17 +39,8 @@ import com.mucommander.job.impl.DeleteJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.DeleteAction;
-import com.mucommander.ui.action.impl.PermanentDeleteAction;
 import com.mucommander.ui.layout.InformationPane;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 
 /**

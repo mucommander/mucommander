@@ -17,9 +17,9 @@
 
 package com.mucommander.ui.icon;
 
-import org.testng.annotations.Test;
+import javax.swing.Icon;
 
-import javax.swing.*;
+import org.testng.annotations.Test;
 
 /**
  * A test case for the custom file icon set.

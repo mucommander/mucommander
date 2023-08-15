@@ -33,16 +33,38 @@ import com.mucommander.ui.main.commandbar.CommandBarButtonForDisplay;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
 import com.mucommander.ui.text.RecordingKeyStrokeTextField;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.Box.Filler;
-import java.awt.*;
+import javax.swing.DropMode;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.TransferHandler;
+import javax.swing.UIManager;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Dialog used to customize the command-bar.

@@ -17,18 +17,18 @@
 
 package com.mucommander.ui.autocomplete;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.JTextComponent;
-
-import com.mucommander.commons.util.ui.combobox.EditableComboBox;
-
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Vector;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
+
+import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 
 /**
  * AutocompleterTextComponent convert any text component to auto-completion supported text component. 

@@ -27,13 +27,15 @@ import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.AddBookmarkAction;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

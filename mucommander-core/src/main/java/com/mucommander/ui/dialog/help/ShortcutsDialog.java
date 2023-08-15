@@ -18,6 +18,27 @@
 
 package com.mucommander.ui.dialog.help;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
@@ -30,13 +51,6 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.KeyStrokeUtils;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
 
 /**
  * Dialog that displays shortcuts used in the application, sorted by topics.

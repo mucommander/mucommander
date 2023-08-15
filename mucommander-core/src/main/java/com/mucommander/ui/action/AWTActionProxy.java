@@ -17,7 +17,6 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.*;
 
 import com.mucommander.ui.main.WindowManager;
 

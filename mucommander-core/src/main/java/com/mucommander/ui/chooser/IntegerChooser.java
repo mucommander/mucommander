@@ -17,10 +17,13 @@
 
 package com.mucommander.ui.chooser;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.util.WeakHashMap;
 
 /**

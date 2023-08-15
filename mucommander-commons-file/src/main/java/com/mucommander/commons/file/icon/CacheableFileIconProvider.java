@@ -20,8 +20,8 @@ package com.mucommander.commons.file.icon;
 
 import com.mucommander.commons.file.AbstractFile;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import java.awt.Dimension;
 
 /**
  * <code>CacheableFileIconProvider</code> is an interface to be implemented by file icon providers that wish to use

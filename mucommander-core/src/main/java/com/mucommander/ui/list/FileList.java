@@ -17,11 +17,17 @@
 
 package com.mucommander.ui.list;
 
+import java.awt.Component;
+import java.awt.Font;
+
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * FileList is a <code>JList</code> that displays information about a list of files: each row displays a file's name

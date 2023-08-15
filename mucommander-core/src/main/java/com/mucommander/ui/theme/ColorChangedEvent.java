@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class ColorChangedEvent {
     private Theme source;

@@ -19,10 +19,13 @@ package com.mucommander.ui.chooser;
 
 import com.mucommander.text.Translator;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 

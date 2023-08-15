@@ -18,6 +18,16 @@
 
 package com.mucommander.ui.dialog.file;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
@@ -26,11 +36,6 @@ import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Dialog invoked when the user wants to change a file name after a collision has been detected

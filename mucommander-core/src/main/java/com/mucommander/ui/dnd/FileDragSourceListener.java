@@ -17,15 +17,22 @@
 
 package com.mucommander.ui.dnd;
 
+import java.awt.Component;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.event.InputEvent;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
-
-import java.awt.*;
-import java.awt.dnd.*;
-import java.awt.event.InputEvent;
 
 
 /**

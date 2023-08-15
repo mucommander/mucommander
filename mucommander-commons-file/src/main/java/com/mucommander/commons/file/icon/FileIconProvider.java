@@ -20,8 +20,8 @@ package com.mucommander.commons.file.icon;
 
 import com.mucommander.commons.file.AbstractFile;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.Icon;
+import java.awt.Dimension;
 
 /**
  * FileIconProvider provides a standard interface for retrieving file icons. Icon providers can fetch icons from any

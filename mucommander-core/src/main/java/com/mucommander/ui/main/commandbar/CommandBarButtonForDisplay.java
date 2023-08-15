@@ -17,12 +17,12 @@
 
 package com.mucommander.ui.main.commandbar;
 
+import java.awt.Dimension;
+
 import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
-
-import java.awt.*;
 
 /**
  * CommandBarButton that used for display purpose only

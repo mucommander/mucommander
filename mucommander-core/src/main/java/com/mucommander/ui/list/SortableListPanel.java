@@ -17,12 +17,17 @@
 
 package com.mucommander.ui.list;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.button.ArrowButton;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * SortableListPanel is a JPanel which contains a scrollable {@link DynamicList} in the center and two buttons

@@ -17,6 +17,18 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.mucommander.commons.util.ui.layout.ProportionalGridPanel;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.FontChooser;
@@ -24,12 +36,6 @@ import com.mucommander.ui.chooser.PreviewLabel;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.PreferencesPanel;
 import com.mucommander.ui.theme.ThemeData;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
-import java.util.Vector;
 
 /**
  * Base class for theme editor panels.

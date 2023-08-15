@@ -17,14 +17,14 @@
 
 package com.mucommander.ui.main.commandbar;
 
-import javax.swing.*;
-
-import com.mucommander.desktop.ActionType;
-import com.mucommander.ui.action.ActionId;
-
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.KeyStroke;
+
+import com.mucommander.desktop.ActionType;
+import com.mucommander.ui.action.ActionId;
 
 /**
  * This class is responsible to handle the attributes of CommandBars - their actions, alternate actions and modifier.

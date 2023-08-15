@@ -17,10 +17,11 @@
 
 package com.mucommander.ui.theme;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import javax.swing.UIManager;
 
 /**
  * {@link DefaultFont} implementation that maps to a system value.

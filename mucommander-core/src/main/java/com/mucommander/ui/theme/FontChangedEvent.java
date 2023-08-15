@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Font;
 
 public class FontChangedEvent {
     private Theme source;

@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.dialog.pref;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 /**
  * Abstract preferences panel.

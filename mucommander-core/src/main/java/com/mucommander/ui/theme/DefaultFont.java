@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Font;
 import java.util.Vector;
 
 /**

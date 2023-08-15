@@ -18,10 +18,18 @@
 
 package com.mucommander.ui.main.table;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 
 /**

@@ -17,9 +17,12 @@
 
 package com.mucommander.ui.table;
 
-import javax.swing.*;
+import java.awt.Component;
+
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 
 /**
  * A TableCellRenderer which can be used to center the text in table's headers.

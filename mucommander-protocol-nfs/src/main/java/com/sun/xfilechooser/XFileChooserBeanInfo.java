@@ -37,11 +37,11 @@
 
 package com.sun.xfilechooser;
 
-import java.beans.*;
-import com.sun.xfilechooser.*;
-import javax.swing.*;
-import javax.swing.filechooser.*;
-import java.util.*;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.beans.SimpleBeanInfo;
+import java.util.ResourceBundle;
 
 /**
  * Describes the XFileChooser properties that is modifiable by

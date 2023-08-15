@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.action;
 
-import javax.swing.*;
+import javax.swing.KeyStroke;
 
 import com.mucommander.commons.util.Pair;
 

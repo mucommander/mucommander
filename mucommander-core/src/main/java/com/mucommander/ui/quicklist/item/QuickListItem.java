@@ -17,13 +17,15 @@
 
 package com.mucommander.ui.quicklist.item;
 
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.JMenuItem;
+
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * This abstract class represent menu item of QuickList.

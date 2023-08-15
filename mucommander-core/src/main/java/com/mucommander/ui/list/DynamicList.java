@@ -17,13 +17,21 @@
 
 package com.mucommander.ui.list;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.AbstractListModel;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JList;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
 import com.mucommander.text.Translator;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 /**
  * DynamicList extends JList to work with an {@link AlteredVector} of items which values can be dynamically modified

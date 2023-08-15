@@ -17,17 +17,21 @@
 
 package com.mucommander.ui.dialog.file;
 
-import com.mucommander.commons.util.ui.dialog.DialogToolkit;
-import com.mucommander.commons.util.ui.dialog.FocusDialog;
-import com.mucommander.text.Translator;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import com.mucommander.commons.util.ui.dialog.DialogToolkit;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
+import com.mucommander.text.Translator;
 
 /**
  * A dialog that allows select a range of characters from file name. 

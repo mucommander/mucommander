@@ -17,8 +17,10 @@
 
 package com.mucommander.ui.main.frame;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.util.Collection;
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 

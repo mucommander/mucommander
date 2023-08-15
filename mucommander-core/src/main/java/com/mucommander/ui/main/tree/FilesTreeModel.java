@@ -17,20 +17,21 @@
 
 package com.mucommander.ui.main.tree;
 
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.filter.FileFilter;
-import com.mucommander.commons.file.util.FileComparator;
-import com.mucommander.ui.icon.FileIcons;
-import com.mucommander.ui.icon.SpinningDial;
+import java.util.Arrays;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.SwingUtilities;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.Arrays;
-import java.util.Locale;
+
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.ui.icon.FileIcons;
+import com.mucommander.ui.icon.SpinningDial;
 
 /**
  * A tree model for files.

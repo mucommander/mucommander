@@ -19,7 +19,13 @@ package com.mucommander.ui.chooser;
 
 import com.mucommander.text.SizeFormat;
 
-import javax.swing.*;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ItemEvent;

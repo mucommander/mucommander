@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.theme;
 
-import javax.swing.*;
+import javax.swing.JComponent;
 
 /**
  * Used to provide instances of {@link JComponent} to {@link SystemDefaultColor} and {@link SystemDefaultFont}.

@@ -17,6 +17,13 @@
 
 package com.mucommander.ui.dialog.file;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.text.Translator;
@@ -25,8 +32,6 @@ import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.layout.AsyncPanel;
 import com.mucommander.ui.list.FileList;
 import com.mucommander.ui.main.MainFrame;
-
-import javax.swing.*;
 
 /**
  * This abstract dialog is to be sub-classed by job confirmation dialogs and provides helper methods for common

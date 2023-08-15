@@ -17,15 +17,17 @@
 
 package com.mucommander.ui.table;
 
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Rectangle;
+import java.util.EventObject;
+
+import javax.swing.JTable;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.util.EventObject;
 
 public class EditableHeader extends JTableHeader implements CellEditorListener {
 

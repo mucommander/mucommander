@@ -17,11 +17,13 @@
 
 package com.mucommander.ui.theme;
 
-import javax.swing.*;
-import javax.swing.text.JTextComponent;
-import java.awt.*;
+import java.awt.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import javax.swing.JComponent;
+import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 
 /**
  * {@link DefaultColor} implementation that maps to a system value.

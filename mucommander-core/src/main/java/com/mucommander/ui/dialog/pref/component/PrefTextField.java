@@ -17,11 +17,11 @@
 
 package com.mucommander.ui.dialog.pref.component;
 
-import com.mucommander.ui.dialog.pref.PreferencesDialog;
-
-import javax.swing.*;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import com.mucommander.ui.dialog.pref.PreferencesDialog;
 
 /**
  * @author Arik Hadas
