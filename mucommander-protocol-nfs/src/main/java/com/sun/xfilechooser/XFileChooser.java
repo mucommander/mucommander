@@ -37,13 +37,16 @@
 
 package com.sun.xfilechooser;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.filechooser.*;
-import java.beans.*;
-
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
-import com.sun.xfile.*;
+
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+
+import com.sun.xfile.XFile;
+import com.sun.xfile.XFileInputStream;
+import com.sun.xfile.XFileOutputStream;
 
 /**
  * XFileChooser is an extension of the JFileChooser.  It

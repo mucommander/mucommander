@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.dialog.file;
 
-import javax.swing.*;
+import javax.swing.JTextField;
 
 /**
  * This class wraps a path, and start and end offsets for the portion of the text to be selected in a text field.

@@ -17,10 +17,12 @@
 
 package com.mucommander.ui.list;
 
-import com.mucommander.commons.collections.AlteredVector;
+import java.awt.Container;
+import java.awt.Rectangle;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JList;
+
+import com.mucommander.commons.collections.AlteredVector;
 
 /**
  * This class represent a DynamicList with a following horizontal-wrap layout:

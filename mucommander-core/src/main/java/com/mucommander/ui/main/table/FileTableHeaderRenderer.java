@@ -18,13 +18,18 @@
 
 package com.mucommander.ui.main.table;
 
-import com.mucommander.ui.icon.IconManager;
+import java.awt.Component;
+import java.awt.Font;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import java.awt.*;
+
+import com.mucommander.ui.icon.IconManager;
 
 
 /**

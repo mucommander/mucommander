@@ -17,12 +17,14 @@
 
 package com.mucommander.ui.quicklist.item;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
-
-import java.awt.*;
 
 /**
  * This class represent an item that will be shown in a QuickList which doesn't

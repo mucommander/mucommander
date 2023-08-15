@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import javax.swing.*;
+import javax.swing.Action;
 import java.awt.event.ActionEvent;
 
 /**

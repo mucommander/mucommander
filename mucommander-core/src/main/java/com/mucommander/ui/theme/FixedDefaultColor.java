@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * {@link DefaultColor} implementation that maps to a fixed value.

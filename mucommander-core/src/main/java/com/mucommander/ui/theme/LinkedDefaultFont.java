@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.theme;
 
-import java.awt.*;
+import java.awt.Font;
 
 /**
  * {@link DefaultFont} implementation that maps to a value in the current theme.

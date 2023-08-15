@@ -17,18 +17,18 @@
 
 package com.mucommander.ui.main;
 
+import java.awt.Insets;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
 import com.mucommander.commons.util.ui.button.RolloverButtonAdapter;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.EmptyTrashAction;
-import com.mucommander.ui.action.impl.OpenTrashAction;
 import com.mucommander.ui.button.PopupButton;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * TrashPopupButton is a button that allows to interact with the current platform's trash, as returned by

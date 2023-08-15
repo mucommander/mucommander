@@ -17,12 +17,14 @@
 
 package com.mucommander.ui.table;
 
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+
+import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
 import javax.swing.table.TableColumnModel;
-import java.awt.*;
-import java.awt.event.MouseEvent;
 
 class EditableHeaderUI extends BasicTableHeaderUI {
 

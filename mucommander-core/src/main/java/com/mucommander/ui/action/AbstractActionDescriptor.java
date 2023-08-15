@@ -23,7 +23,8 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 
 /**
  * AbstractActionDescriptor is an abstract class which implements ActionDescriptor interface.

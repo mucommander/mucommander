@@ -17,13 +17,17 @@
 
 package com.mucommander.ui.quicklist.item;
 
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 /**
  * HeaderMenuItem is a custom MenuItem that shown as the first item in every QuickList.

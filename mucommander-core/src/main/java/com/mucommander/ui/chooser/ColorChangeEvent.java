@@ -17,8 +17,8 @@
 
 package com.mucommander.ui.chooser;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import java.awt.Color;
 
 /**
  * @author Maxence Bernard

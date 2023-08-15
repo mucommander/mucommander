@@ -17,6 +17,22 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
+
 import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.chooser.PreviewLabel;
@@ -26,13 +42,6 @@ import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.table.CellLabel;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeData;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 /**
  * @author Nicolas Rinaudo

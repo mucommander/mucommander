@@ -17,12 +17,14 @@
 
 package com.mucommander.ui.main.tree;
 
+import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeCellRenderer;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.theme.ThemeCache;
-
-import javax.swing.*;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.*;
 
 /**
  * A renderer for the directory tree. It renders model's items (which are

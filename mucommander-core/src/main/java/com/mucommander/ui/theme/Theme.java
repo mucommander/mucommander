@@ -17,10 +17,11 @@
 
 package com.mucommander.ui.theme;
 
-import com.mucommander.text.Translator;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.WeakHashMap;
+
+import com.mucommander.text.Translator;
 
 /**
  * @author Nicolas Rinaudo

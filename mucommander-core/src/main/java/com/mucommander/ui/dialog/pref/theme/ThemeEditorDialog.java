@@ -17,6 +17,11 @@
 
 package com.mucommander.ui.dialog.pref.theme;
 
+import java.awt.Dialog;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.util.Arrays;
+
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
@@ -26,9 +31,6 @@ import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeData;
 import com.mucommander.ui.theme.ThemeManager;
-
-import java.awt.*;
-import java.util.Arrays;
 
 /**
  * Main dialog for the theme editor.
