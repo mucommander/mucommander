@@ -168,7 +168,7 @@ public class Application {
             splashScreen.setLoadingMessage(message);
         }
 
-        LOGGER.trace(message);
+        LOGGER.info(message);
     }
 
     // - Boot code --------------------------------------------------------------
@@ -440,7 +440,12 @@ public class Application {
                     setSystemIconsPolicy();
                 });
 
-                executor.execute(() -> {
+                executor.shutdown();
+                executor.awaitTermination(20L, TimeUnit.SECONDS);
+                executor = null;
+
+                // The code below makes keyboard actions not working (even up/down doesn't work then)
+                //executor.execute(() -> {
                     // Register actions
                     printStartupMessage(splashScreen, "Registering actions...");
                     ActionManager.registerActions();
@@ -468,7 +473,7 @@ public class Application {
                     } catch (Exception e) {
                         printFileError("Could not load commandbar description", e, activator.fatalWarnings());
                     }
-                });
+                //});
             } finally {
                 if (executor != null) {
                     executor.shutdown();
