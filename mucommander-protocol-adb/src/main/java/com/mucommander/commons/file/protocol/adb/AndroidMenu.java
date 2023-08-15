@@ -98,7 +98,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
         // Remove previous menu items (if any)
         removeAll();
 
-        List<String> androidDevices = AdbUtils.getDevices();
+        List<String> androidDevices = null; //AdbUtils.getDevices(); - defer loading like for Bonjour
         if (androidDevices == null) {
             setEnabled(false);
             setToolTipText(Translator.get("adb.android_disabled"));
