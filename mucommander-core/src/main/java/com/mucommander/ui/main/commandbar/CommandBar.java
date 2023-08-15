@@ -110,7 +110,7 @@ public class CommandBar extends JPanel {
         addMouseListener(mouseAdapter);
 
         actionIds = CommandBarAttributes.getActions();
-		alternateActionIds = CommandBarAttributes.getAlternateActions();
+        alternateActionIds = CommandBarAttributes.getAlternateActions();
         modifier = CommandBarAttributes.getModifier();
         
         addButtons(mouseAdapter);
@@ -139,8 +139,8 @@ public class CommandBar extends JPanel {
      * actions array must be initialized before this function is called.
      */
     private void addButtons(MouseListener mouseListener) {
-    	setLayout(new GridLayout(0,actionIds.length));
-    	
+        setLayout(new GridLayout(0,actionIds.length));
+
         // Create buttons
         buttons = Arrays.stream(actionIds)
                 .map(action -> {
