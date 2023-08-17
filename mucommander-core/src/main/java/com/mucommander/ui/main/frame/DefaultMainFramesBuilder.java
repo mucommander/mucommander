@@ -69,7 +69,6 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         }
         else {
             int index = getSelectedFrame();
-
             MainFrame mainFrame = new MainFrame(
                     new ConfFileTableTab(getInitialPath(FolderPanelType.LEFT)),
                     getFileTableConfiguration(FolderPanelType.LEFT, index),
@@ -110,7 +109,6 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
                     snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
                     restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
                     snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
-
         MainFrame mainFrame = new MainFrame(
                 leftTabs,
                 getInitialSelectedTab(FolderPanelType.LEFT, index),
@@ -151,7 +149,6 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         if (MuSnapshot.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {
             ActionManager.performAction(ActionType.ToggleUseSinglePanel, mainFrame);
         }
-
         return mainFrame;
     }
 

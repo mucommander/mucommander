@@ -30,6 +30,13 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -141,7 +148,7 @@ public class MainFrame extends JFrame implements LocationListener {
         }
     }
 
-    private void init(FolderPanel leftFolderPanel, FolderPanel rightFolderPanel) {
+    private void init(Future<FolderPanel> leftFolderPanel, Future<FolderPanel> rightFolderPanel, ExecutorService executor) throws ExecutionException, InterruptedException {
         // Set the window icon
         setWindowIcon();
         // Register jobs listeners for UI notification purposes
@@ -157,20 +164,25 @@ public class MainFrame extends JFrame implements LocationListener {
         setContentPane(contentPane);
 
         // Initializes the folder panels and file tables.
-        this.leftFolderPanel = leftFolderPanel;
-        this.rightFolderPanel = rightFolderPanel;
-        leftTable = leftFolderPanel.getFileTable();
-        rightTable = rightFolderPanel.getFileTable();
+        this.leftFolderPanel = leftFolderPanel.get();
+        this.rightFolderPanel = rightFolderPanel.get();
+        leftTable = this.leftFolderPanel.getFileTable();
+        rightTable = this.rightFolderPanel.getFileTable();
         activeTable  = leftTable;
 
+        // Listen to location change events to display the current folder in the window's title
+        this.leftFolderPanel.getLocationManager().addLocationListener(this);
+        this.rightFolderPanel.getLocationManager().addLocationListener(this);
         // Create the toolbar and corresponding panel wrapping it, and show it only if it hasn't been disabled in the
         // preferences.
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be
         // properly initialized
-        this.toolbar = new ToolBar(this);
-        this.toolbarPanel = ToolbarMoreButton.wrapToolBar(toolbar);
-        this.toolbarPanel.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
-        contentPane.add(toolbarPanel, BorderLayout.NORTH);
+        executor.execute(() -> {
+            this.toolbar = new ToolBar(this);
+            this.toolbarPanel = ToolbarMoreButton.wrapToolBar(toolbar);
+            this.toolbarPanel.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
+            contentPane.add(toolbarPanel, BorderLayout.NORTH);
+        });
 
         insetsPane = new JPanel(new BorderLayout()) {
                 // Add an x=3,y=3 gap around content pane
@@ -183,13 +195,11 @@ public class MainFrame extends JFrame implements LocationListener {
         // Below the toolbar there is the pane with insets
         contentPane.add(insetsPane, BorderLayout.CENTER);
 
-        // Listen to location change events to display the current folder in the window's title
-        leftFolderPanel.getLocationManager().addLocationListener(this);
-        rightFolderPanel.getLocationManager().addLocationListener(this);
-
-        // Create menu bar (has to be created after toolbar)
-        MainMenuBar menuBar = new MainMenuBar(this);
-        setJMenuBar(menuBar);
+        executor.execute(() -> {
+            // Create menu bar (has to be created after toolbar) - ok, but why?
+            MainMenuBar menuBar = new MainMenuBar(this);
+            setJMenuBar(menuBar);
+        });
 
         // Create the split pane that separates folder panels and allows to resize how much space is allocated to the
         // both of them. The split orientation is loaded from and saved to the preferences.
@@ -247,16 +257,18 @@ public class MainFrame extends JFrame implements LocationListener {
         YBoxPanel southPanel = new YBoxPanel();
         southPanel.addSpace(2);
 
-        // Add status bar
-        this.statusBar = new StatusBar(this);
-        southPanel.add(statusBar);
+        executor.execute(() -> {
+            // Add status bar
+            this.statusBar = new StatusBar(this);
+            southPanel.add(statusBar);
 
-        // Show command bar only if it hasn't been disabled in the preferences
-        this.commandBar = new CommandBar(this);
-        // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
-        this.commandBar.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
-        southPanel.add(commandBar);
-        insetsPane.add(southPanel, BorderLayout.SOUTH);
+            // Show command bar only if it hasn't been disabled in the preferences
+            this.commandBar = new CommandBar(this);
+            // Note: CommandBar.setVisible() has to be called no matter if CommandBar is visible or not, in order for it to be properly initialized
+            this.commandBar.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
+            southPanel.add(commandBar);
+            insetsPane.add(southPanel, BorderLayout.SOUTH);
+        });
 
         // Perform CloseAction when the user asked the window to close
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -287,8 +299,16 @@ public class MainFrame extends JFrame implements LocationListener {
     public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
                      ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
 
-        init(new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf), 
-             new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        try {
+            init(executor.submit(() -> new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf)),
+                    executor.submit(() -> new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf)),
+                    executor);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            executor.shutdown();
+        }
 
         for (boolean isLeft = true; ; isLeft=false) {
             FileTable fileTable = isLeft ? leftTable : rightTable;
@@ -314,12 +334,28 @@ public class MainFrame extends JFrame implements LocationListener {
         FileTable leftFileTable = leftFolderPanel.getFileTable();
         FileTable rightFileTable = rightFolderPanel.getFileTable();
 
-        init(new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())}, 0, leftFileTable.getConfiguration()),
-             new FolderPanel(this, new ConfFileTableTab[] {new ConfFileTableTab(rightFolderPanel.getCurrentFolder().getURL())}, 0, rightFileTable.getConfiguration()));
+        ExecutorService executor = null;
+        try {
+            Executors.newFixedThreadPool(4);
 
-        // TODO: Sorting should be part of the FileTable configuration
-        this.leftTable.sortBy(leftFileTable.getSortInfo());
-        this.rightTable.sortBy(rightFileTable.getSortInfo());
+            init(CompletableFuture.completedFuture( // non-async
+                        new FolderPanel(this, new ConfFileTableTab[] {
+                                new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())},
+                                0, leftFileTable.getConfiguration())),
+                    CompletableFuture.completedFuture(
+                            new FolderPanel(this, new ConfFileTableTab[] {
+                                    new ConfFileTableTab(rightFolderPanel.getCurrentFolder().getURL())},
+                                    0, rightFileTable.getConfiguration())),
+                    executor);
+
+            // TODO: Sorting should be part of the FileTable configuration
+            this.leftTable.sortBy(leftFileTable.getSortInfo());
+            this.rightTable.sortBy(rightFileTable.getSortInfo());
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            executor.shutdown();
+        }
     }
 
     /**
