@@ -18,16 +18,13 @@
 package com.mucommander;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.table.FileTableConfiguration;
-import com.mucommander.ui.main.tabs.ConfFileTableTab;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -199,6 +196,7 @@ public class Application {
     }
 
     private void run() {
+        System.out.println(new Date() + " -- Application#run");
         SplashScreen splashScreen = null;
         try {
             // Associations handling.
@@ -344,7 +342,9 @@ public class Application {
             boolean useSplash = MuConfigurations.getPreferences()
                     .getVariable(MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN);
             if (useSplash) {
-                splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
+                new Thread(() -> {
+                    splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
+                }).start();
             }
 
             boolean showSetup;
@@ -364,7 +364,7 @@ public class Application {
             ExecutorService executor = null;
             try {
                 var firstBoot = isFirstBoot;
-                executor = Executors.newFixedThreadPool(4);
+                executor = Executors.newFixedThreadPool(8);
 
                 executor.execute(() -> {
                     // Initializes the desktop.
@@ -440,9 +440,10 @@ public class Application {
                     setSystemIconsPolicy();
                 });
 
+                long pre = System.currentTimeMillis();
                 executor.shutdown();
                 executor.awaitTermination(20L, TimeUnit.SECONDS);
-                executor = null;
+                System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
 
                 // The code below makes keyboard actions not working (even up/down doesn't work then)
                 //executor.execute(() -> {
@@ -481,25 +482,34 @@ public class Application {
                 }
             }
 
-            // Loads the themes.
-            printStartupMessage(splashScreen, "Loading theme...");
-            com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
 
-            // Creates the initial main frame using any initial path specified by the command line.
-            printStartupMessage(splashScreen, "Initializing window...");
-            List<String> folders = activator.getInitialFolders();
-            if (CollectionUtils.isNotEmpty(folders)) {
-                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-            } else {
-                WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-            }
-            // Done launching, wake up threads waiting for the application being launched.
-            // Important: this must be done before disposing the splash screen, as this would otherwise create a
-            // deadlock
-            synchronized (LAUNCH_LOCK) {
-                isLaunching = false;
-                LAUNCH_LOCK.notifyAll();
-            }
+            new Thread(() -> {
+                LOGGER.error("muC UI about to be presented");
+                // Loads the themes.
+                printStartupMessage(splashScreen, "Loading theme...");
+                com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
+                // Creates the initial main frame using any initial path specified by the command line.
+                printStartupMessage(splashScreen, "Initializing window...");
+                List<String> folders = activator.getInitialFolders();
+                if (CollectionUtils.isNotEmpty(folders)) {
+                    WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+                } else {
+                    WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
+                }
+                // Dispose splash screen.
+                if (splashScreen != null) {
+                    splashScreen.dispose();
+                    splashScreen = null;
+                }
+                LOGGER.error("muC UI presented");
+                // Done launching, wake up threads waiting for the application being launched.
+                // Important: this must be done before disposing the splash screen, as this would otherwise create a
+                // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
+                synchronized (LAUNCH_LOCK) {
+                    isLaunching = false;
+                    LAUNCH_LOCK.notifyAll();
+                }
+            }).start();
 
             // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
             // a MainFrame instance
@@ -509,12 +519,6 @@ public class Application {
                 printStartupMessage(splashScreen, "Enabling system notifications...");
                 if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
                     com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
-            }
-
-            // Dispose splash screen.
-            if (splashScreen != null) {
-                splashScreen.dispose();
-                splashScreen = null;
             }
 
             // Check for newer version unless it was disabled
