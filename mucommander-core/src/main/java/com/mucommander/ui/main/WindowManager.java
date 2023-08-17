@@ -185,6 +185,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * @return the newly created MainFrame.
      */
     public static synchronized void createNewMainFrame(MainFrameBuilder mainFrameBuilder) {
+        LOGGER.error("creating new main frame...");
         Collection<MainFrame> newMainFrames = mainFrameBuilder.build();
 
         // To catch user window closing actions
@@ -196,9 +197,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         // Set new window's title. Window titles show window number only if there is more than one window.
         // So if a second window was just created, we update first window's title so that it shows window number (#1).
         instance.mainFrames.forEach(MainFrame::updateWindowTitle);
+        LOGGER.error("creating new main frame - update window...");
 
         // Make frames visible
         newMainFrames.forEach(frame -> frame.setVisible(true));
+        LOGGER.error("creating new main frame - all visible...");
 
         if (!instance.mainFrames.isEmpty()) {
             // get the main frame that was previously selected
@@ -208,6 +211,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 mainFrameToSelect = 0;
             instance.mainFrames.get(mainFrameToSelect).toFront();
         }
+        LOGGER.error("creating new main frame done...");
     }
 
     /**
