@@ -508,6 +508,17 @@ public class Application {
                     splashScreen.dispose();
                     splashScreen = null;
                 }
+
+                // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
+                // a MainFrame instance
+                if (MuConfigurations.getPreferences()
+                        .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
+                                MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+                printStartupMessage(splashScreen, "Enabling system notifications...");
+                    if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
+                        com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
+                }
+                
                 LOGGER.error("muC UI presented");
                 // Done launching, wake up threads waiting for the application being launched.
                 // Important: this must be done before disposing the splash screen, as this would otherwise create a
@@ -517,16 +528,6 @@ public class Application {
                     LAUNCH_LOCK.notifyAll();
                 }
             }).start();
-
-            // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
-            // a MainFrame instance
-            if (MuConfigurations.getPreferences()
-                    .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
-                            MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
-                printStartupMessage(splashScreen, "Enabling system notifications...");
-                if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
-                    com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
-            }
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
