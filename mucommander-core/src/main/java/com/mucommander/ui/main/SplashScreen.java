@@ -131,10 +131,8 @@ public class SplashScreen extends JWindow {
      * @param msg a new loading message to be displayed
      */
     public void setLoadingMessage(String msg) {
-        SwingUtilities.invokeLater(() -> {
-            this.loadingMessage = msg;
-            repaint();
-        });
+        this.loadingMessage = msg;
+        repaint();
     }
 
     /**
