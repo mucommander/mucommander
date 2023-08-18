@@ -18,6 +18,7 @@
 package com.mucommander;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -56,6 +57,8 @@ import com.mucommander.ui.main.frame.CommandLineMainFrameBuilder;
 import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
+
+import javax.swing.SwingUtilities;
 
 /**
  * The graphical application.
@@ -487,7 +490,11 @@ public class Application {
                 LOGGER.error("muC UI about to be presented");
                 // Loads the themes.
                 printStartupMessage(splashScreen, "Loading theme...");
-                com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
+                try {
+                    SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
+                } catch (InterruptedException | InvocationTargetException e) {
+                    LOGGER.error("Error loading current theme, continuing without it", e);
+                }
                 // Creates the initial main frame using any initial path specified by the command line.
                 printStartupMessage(splashScreen, "Initializing window...");
                 List<String> folders = activator.getInitialFolders();
