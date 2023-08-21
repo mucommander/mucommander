@@ -133,10 +133,8 @@ public class NotifierProvider {
      * @param notification the notification text
      * @param timeout the time-out in ms after which the notification disappears
      */
-    public static void displayMainFrameNotification(JFrame mainFrame,
-                                                    String notification,
-                                                    Color bgColor, Color fgColor,
-                                                    long timeout) {
+    public static void displayMainFrameNotification(JFrame mainFrame, String notification,
+                                                    Color bgColor, Color fgColor, long timeout) {
         SwingUtilities.invokeLater(() ->
                 NotificationPopup.getInstance().displayNotification(
                         mainFrame, notification, bgColor, fgColor, timeout));

@@ -74,7 +74,7 @@ public class MuPreferences implements MuPreferencesAPI {
     public static final boolean DEFAULT_SHOW_SPLASH_SCREEN        = true;
     /** Whether to display keyboard shortcut hints. */
     public static final String SHOW_KEYBOARD_HINTS                = "show_keyboard_hints";
-    /** Default settings whether to show keyboard shortcut hints */
+    /** Default setting for whether to show keyboard shortcut hints */
     public static final boolean DEFAULT_SHOW_KEYBOARD_HINTS       = true;
     /** Look and feel used by muCommander. */
     public static final String  LOOK_AND_FEEL                     = "lookAndFeel";
