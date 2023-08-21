@@ -61,14 +61,14 @@ final class NotificationPopup {
     private final JPanel panel;
     private final JLabel labelText;
 
-    private CustomPopupMenuListener popupListener = null;
+    private CustomPopupMenuListener popupListener;
 
     /**
      * Used to re-center notification when we know panel width.
      */
     private class CustomPopupMenuListener implements PopupMenuListener {
 
-        JFrame mainFrame = null;
+        JFrame mainFrame;
 
         public void setMainFame(JFrame mainFrame) {
             this.mainFrame = mainFrame;
@@ -103,17 +103,17 @@ final class NotificationPopup {
         }
 
         @Override
-        public void setVisible(boolean b) {
+        public void setVisible(boolean visible) {
             // ignore hiding, useful to force popup to stay if dialog is shown
-            if (b) {
-                super.setVisible(b);
+            if (visible) {
+                super.setVisible(visible);
             }
         }
 
         /**
          * Hide popup (setVisible ignores hiding)
          */
-        public void hidePopup() {
+        private void hidePopup() {
             super.setVisible(false);
         }
     }

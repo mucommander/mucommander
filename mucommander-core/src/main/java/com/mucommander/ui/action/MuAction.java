@@ -32,6 +32,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.util.StringUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
@@ -83,6 +84,11 @@ public abstract class MuAction extends AbstractAction {
 
     /** Name of the alternate accelerator KeyStroke property */
     public final static String ALTERNATE_ACCELERATOR_PROPERTY_KEY = "alternate_accelerator";
+
+    /** Notification colors and timeout (in ms) settings. */
+    private final static Color NOTIFICATION_BG_COLOR = new Color(35, 124, 35);
+    private final static Color NOTIFICATION_FG_COLOR = Color.WHITE;
+    private final static long NOTIFICATION_TIMEOUT = 3000L;
 
     private static boolean showKeyboardHints = false;
 
@@ -427,12 +433,12 @@ public abstract class MuAction extends AbstractAction {
                             this.getAlternateAccelerator() != null
                                     ? KeyStrokeUtils.getKeyStrokeDisplayableRepresentation(getAlternateAccelerator())
                                     : null)
-                    .filter(s -> s != null && !s.isEmpty())
+                    .filter(s -> !StringUtils.isNullOrEmpty(s))
                     .collect(Collectors.joining(" " + Translator.get("or") + " "));
             if (!keyShortcut.isBlank()) {
                 NotifierProvider.displayMainFrameNotification(mainFrame,
                         this.getLabel() + ": " + keyShortcut,
-                        new Color(35, 124, 35), Color.WHITE, 3000L);
+                        NOTIFICATION_BG_COLOR, NOTIFICATION_FG_COLOR, NOTIFICATION_TIMEOUT);
             }
         }
     }
