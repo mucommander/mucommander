@@ -124,20 +124,32 @@ public class NotifierProvider {
     }
 
     /**
-     * Displays a notification above the main frame that hide after provided time.
-     * If given notification is null or blank it does nothing.
+     * Displays a notification above the main frame that hide after provided time. If given notification is null or
+     * blank it does nothing.
      *
-     * @param mainFrame the main frame
-     * @param bgColor background color (no alpha supported)
-     * @param fgColor foreground color
-     * @param notification the notification text
-     * @param timeout the time-out in ms after which the notification disappears
+     * @param mainFrame
+     *            the main frame
+     * @param bgColor
+     *            background color (no alpha supported)
+     * @param fgColor
+     *            foreground color
+     * @param notification
+     *            the notification text
+     * @param timeout
+     *            the time-out in ms after which the notification disappears
      */
-    public static void displayMainFrameNotification(JFrame mainFrame, String notification,
-                                                    Color bgColor, Color fgColor, long timeout) {
-        SwingUtilities.invokeLater(() ->
-                NotificationPopup.getInstance().displayNotification(
-                        mainFrame, notification, bgColor, fgColor, timeout));
+    public static void displayMainFrameNotification(JFrame mainFrame,
+            String notification,
+            Color bgColor,
+            Color fgColor,
+            long timeout) {
+        SwingUtilities.invokeLater(() -> NotificationPopup.getInstance()
+                .displayNotification(
+                        mainFrame,
+                        notification,
+                        bgColor,
+                        fgColor,
+                        timeout));
     }
 
     public static void registerJobsListeners() {
