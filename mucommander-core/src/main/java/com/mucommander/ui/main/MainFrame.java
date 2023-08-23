@@ -163,6 +163,16 @@ public class MainFrame extends JFrame implements LocationListener {
         JPanel contentPane = new JPanel(new BorderLayout());
         setContentPane(contentPane);
 
+        insetsPane = new JPanel(new BorderLayout()) {
+            // Add an x=3,y=3 gap around content pane
+            @Override
+            public Insets getInsets() {
+                return new Insets(0, 3, 3, 3);      // No top inset
+            }
+        };
+        // Below the toolbar there is the pane with insets
+        contentPane.add(insetsPane, BorderLayout.CENTER);
+
         // Initializes the folder panels and file tables.
         this.leftFolderPanel = leftFolderPanel.get();
         this.rightFolderPanel = rightFolderPanel.get();
@@ -173,6 +183,7 @@ public class MainFrame extends JFrame implements LocationListener {
         // Listen to location change events to display the current folder in the window's title
         this.leftFolderPanel.getLocationManager().addLocationListener(this);
         this.rightFolderPanel.getLocationManager().addLocationListener(this);
+
         // Create the toolbar and corresponding panel wrapping it, and show it only if it hasn't been disabled in the
         // preferences.
         // Note: Toolbar.setVisible() has to be called no matter if Toolbar is visible or not, in order for it to be
@@ -183,17 +194,6 @@ public class MainFrame extends JFrame implements LocationListener {
             this.toolbarPanel.setVisible(MuConfigurations.getPreferences().getVariable(MuPreference.TOOLBAR_VISIBLE, MuPreferences.DEFAULT_TOOLBAR_VISIBLE));
             contentPane.add(toolbarPanel, BorderLayout.NORTH);
         });
-
-        insetsPane = new JPanel(new BorderLayout()) {
-                // Add an x=3,y=3 gap around content pane
-                @Override
-                public Insets getInsets() {
-                    return new Insets(0, 3, 3, 3);      // No top inset 
-                }
-            };
-
-        // Below the toolbar there is the pane with insets
-        contentPane.add(insetsPane, BorderLayout.CENTER);
 
         executor.execute(() -> {
             // Create menu bar (has to be created after toolbar) - ok, but why?
