@@ -213,7 +213,6 @@ public class muCommander
     **/
     public static void main(String[] args) throws Exception
     {
-        System.out.println(new Date() + " muEpoch!");
         logTimeSinceStart("Main started");
         Configuration configuration = new Configuration();
         JCommander jCommander = new JCommander(configuration);

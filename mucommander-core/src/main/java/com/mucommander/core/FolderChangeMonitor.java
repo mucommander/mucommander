@@ -22,6 +22,7 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -105,7 +106,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private static boolean forceRefresh;
 
     static {
-        instances = new ArrayList<>();
+        instances = Collections.synchronizedList(new ArrayList<>());
 
         // Retrieve configuration values
         checkPeriod = MuConfigurations.getPreferences().getVariable(MuPreference.REFRESH_CHECK_PERIOD,
@@ -155,7 +156,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         initMonitoringThread();
     }
 
-    private void initMonitoringThread() {
+    private synchronized void initMonitoringThread() {
         // Create and start the monitor thread on first FolderChangeMonitor instance
         if (monitorThread==null && checkPeriod>=0) {
             monitorThread = new Thread(this, getClass().getName());
