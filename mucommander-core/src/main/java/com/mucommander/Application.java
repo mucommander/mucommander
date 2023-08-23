@@ -18,6 +18,7 @@
 package com.mucommander;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
@@ -518,8 +519,10 @@ public class Application {
                     if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
                         com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
                 }
-                
-                LOGGER.error("muC UI presented");
+
+                long pre = System.currentTimeMillis();
+                LOGGER.error("muC UI presented after: " + ManagementFactory.getRuntimeMXBean().getUptime() +
+                        "ms (RuntimeMXBean loaded in " + (System.currentTimeMillis() - pre) + "ms)");
                 // Done launching, wake up threads waiting for the application being launched.
                 // Important: this must be done before disposing the splash screen, as this would otherwise create a
                 // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
