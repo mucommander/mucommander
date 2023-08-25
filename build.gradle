@@ -40,7 +40,7 @@ repositories.mavenCentral()
 subprojects {
     apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'java-library'
-    compileJava.options.compilerArgs += ['--release', '11']
+    compileJava.options.compilerArgs += ['--release', '20']
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
     dependencies {
@@ -58,7 +58,7 @@ subprojects {
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
-compileJava.options.compilerArgs += ['--release', '11']
+compileJava.options.compilerArgs += ['--release', '20']
 
 dependencies {
     comprise 'org.apache.felix:org.apache.felix.main:7.0.5'
