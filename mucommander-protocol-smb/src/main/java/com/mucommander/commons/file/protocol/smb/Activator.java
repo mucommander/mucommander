@@ -45,71 +45,77 @@ public class Activator implements BundleActivator {
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		FileProtocolService service = new FileProtocolService() {
-			@Override
-			public String getSchema() {
-				return FileProtocols.SMB;
-			}
+		new Thread(() -> {
+			FileProtocolService service = new FileProtocolService() {
+				@Override
+				public String getSchema() {
+				    return FileProtocols.SMB;
+				}
 
-			@Override
-			public ProtocolProvider getProtocolProvider() {
-				return new SMBProtocolProvider();
-			}
+				@Override
+				public ProtocolProvider getProtocolProvider() {
+					return new SMBProtocolProvider();
+				}
 
-			@Override
-			public SchemeHandler getSchemeHandler() {
-				return new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", AuthenticationType.AUTHENTICATION_REQUIRED, new Credentials("GUEST", "")) {
-		            @Override
-		            public FileURL getRealm(FileURL location) {
-		                FileURL realm = new FileURL(this);
+				@Override
+				public SchemeHandler getSchemeHandler() {
+					return new DefaultSchemeHandler(new DefaultSchemeParser(), -1, "/", AuthenticationType.AUTHENTICATION_REQUIRED, new Credentials("GUEST", "")) {
+						@Override
+						public FileURL getRealm(FileURL location) {
+							FileURL realm = new FileURL(this);
 
-		                String newPath = location.getPath();
-		                // Find first path token (share)
-		                int pos = newPath.indexOf('/', 1);
-		                newPath = newPath.substring(0, pos==-1?newPath.length():pos+1);
+							String newPath = location.getPath();
+							// Find first path token (share)
+							int pos = newPath.indexOf('/', 1);
+							newPath = newPath.substring(0, pos==-1?newPath.length():pos+1);
 
-		                realm.setPath(newPath);
-		                realm.setScheme(location.getScheme());
-		                realm.setHost(location.getHost());
-		                realm.setPort(location.getPort());
+							realm.setPath(newPath);
+							realm.setScheme(location.getScheme());
+							realm.setHost(location.getHost());
+							realm.setPort(location.getPort());
 
-		                // Copy properties (if any)
-		                realm.importProperties(location);
+							// Copy properties (if any)
+							realm.importProperties(location);
 
-		                return realm;
-		            }
-		        };
-			}
-		};
-		ProtocolPanelProvider panelProvider = new ProtocolPanelProvider() {
-			@Override
-			public String getSchema() {
-				return "smb";
-			}
+							return realm;
+						}
+					};
+				}
+			};
+			ProtocolPanelProvider panelProvider = new ProtocolPanelProvider() {
+				@Override
+				public String getSchema() {
+					return "smb";
+				}
 
-			@Override
-			public ServerPanel get(ServerPanelListener listener, JFrame mainFrame) {
-				return new SMBPanel(listener, mainFrame);
-			}
+				@Override
+				public ServerPanel get(ServerPanelListener listener, JFrame mainFrame) {
+					return new SMBPanel(listener, mainFrame);
+				}
 
-		    @Override
-		    public int priority() {
-		        return 4000;
-		    }
+				@Override
+				public int priority() {
+					return 4000;
+				}
 
-		    @Override
-		    public Class<? extends ServerPanel> getPanelClass() {
-		        return SMBPanel.class;
-		    }
-		};
-		serviceRegistration = context.registerService(FileProtocolService.class, service, null);
-		uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);
+				@Override
+				public Class<? extends ServerPanel> getPanelClass() {
+					return SMBPanel.class;
+				}
+			};
+			serviceRegistration = context.registerService(FileProtocolService.class, service, null);
+			uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);
+		}).start();
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		serviceRegistration.unregister();
-		uiServiceRegistration.unregister();
+		if (serviceRegistration != null) {
+			serviceRegistration.unregister();
+		}
+		if (uiServiceRegistration != null) {
+			uiServiceRegistration.unregister();
+		}
 	}
 
 }
