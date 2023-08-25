@@ -19,6 +19,7 @@ package com.mucommander.ui.theme;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,6 +52,7 @@ import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.theme.Theme.ThemeType;
+import org.unix4j.io.Input;
 
 /**
  * Offers methods for accessing and modifying themes.
@@ -132,12 +134,13 @@ public class ThemeManager {
 
         // If the current theme couldn't be loaded, uses the default theme as defined in the configuration.
         currentTheme = null;
-        try {currentTheme = readTheme(type, name);}
-        catch(Exception e1) {
+        try {
+            currentTheme = readTheme(type, name);
+        } catch(Exception e1) {
             type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);
             name = MuPreferences.DEFAULT_THEME_NAME;
 
-            if(type == ThemeType.USER_THEME)
+            if (type == ThemeType.USER_THEME)
                 wasUserThemeLoaded = true;
 
             // If the default theme can be loaded, tries to load the user theme if we haven't done so yet.
@@ -768,7 +771,6 @@ public class ThemeManager {
      */
     public static Theme readTheme(ThemeType type, String name) throws Exception {
         ThemeData   data; // Buffer for the theme data.
-        InputStream in;   // Where to read the theme from.
 
         // Do not reload the current theme, both for optimisation purposes and because
         // it might cause user theme modifications to be lost.
@@ -776,13 +778,9 @@ public class ThemeManager {
             return currentTheme;
 
         // Reads the theme data.
-        in = null;
-        try {data = readThemeData(in = getInputStream(type, name));}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
+
+        try (InputStream in = new BufferedInputStream(getInputStream(type, name))) {
+            data = readThemeData(in);
         }
 
         // Creates the corresponding theme.
