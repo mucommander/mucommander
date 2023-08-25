@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.mucommander.ui.theme.ThemeManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,9 +201,13 @@ public class Application {
     }
 
     private void run() {
+        ExecutorService executor = Executors.newFixedThreadPool(8);
+
         System.out.println(new Date() + " -- Application#run");
         SplashScreen splashScreen = null;
         try {
+            executor.execute(ThemeManager::preLoadAvailableFonts);
+
             // Associations handling.
             String assoc = activator.assoc();
             if (assoc != null) {
@@ -365,135 +370,125 @@ public class Application {
                 }
             }
 
-            ExecutorService executor = null;
-            try {
-                var firstBoot = isFirstBoot;
-                executor = Executors.newFixedThreadPool(8);
 
-                executor.execute(() -> {
-                    // Loads the themes.
-                    printStartupMessage("Loading theme...");
-                    try {
-                        SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
-                    } catch (InterruptedException | InvocationTargetException e) {
-                        LOGGER.error("Error loading current theme, continuing without it", e);
-                    }
-                });
+            var firstBoot = isFirstBoot;
 
-                executor.execute(() -> {
-                    // Initializes the desktop.
-                    try {
-                        com.mucommander.core.desktop.DesktopManager.init(firstBoot);
-                    } catch (Exception e) {
-                        printError("Could not initialize desktop", e, true);
-                    }
-                });
 
-                executor.execute(() -> {
-                    // Loads custom commands
-                    printStartupMessage(splashScreen, "Loading file associations..."); // TODO Localize those messages.....
-                    try {
-                        com.mucommander.command.CommandManager.loadCommands();
-                    } catch (Exception e) {
-                        printFileError("Could not load custom commands", e, activator.fatalWarnings());
-                    }
-                });
-
-                executor.execute(() -> {
-                    // Migrates the custom editor and custom viewer if necessary.
-                    migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
-                    migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
-                    try {
-                        CommandManager.writeCommands();
-                    } catch (Exception e) {
-                        System.out.println("###############################");
-                        LOGGER.debug("Caught exception", e);
-                        // There's really nothing we can do about this...
-                    }
-                });
-
-                executor.execute(() -> {
-                    try {
-                        com.mucommander.command.CommandManager.loadAssociations();
-                    } catch (Exception e) {
-                        printFileError("Could not load custom associations", e, activator.fatalWarnings());
-                    }
-                });
-
-                executor.execute(() -> {
-                    // Loads bookmarks
-                    printStartupMessage(splashScreen, "Loading bookmarks...");
-                    try {
-                        com.mucommander.bookmark.BookmarkManager.loadBookmarks();
-                    } catch (Exception e) {
-                        printFileError("Could not load bookmarks", e, activator.fatalWarnings());
-                    }
-                });
-
-                executor.execute(() -> {
-                    // Loads credentials
-                    printStartupMessage(splashScreen, "Loading credentials...");
-                    try {
-                        com.mucommander.auth.CredentialsManager.loadCredentials();
-                    } catch (Exception e) {
-                        printFileError("Could not load credentials", e, activator.fatalWarnings());
-                    }
-                });
-
-                executor.execute(() -> {
-                    // Inits CustomDateFormat to make sure that its ConfigurationListener is added
-                    // before FileTable, so CustomDateFormat gets notified of date format changes first
-                    com.mucommander.text.CustomDateFormat.init();
-
-                    // Initialize file icons
-                    printStartupMessage(splashScreen, "Loading icons...");
-                    // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why
-                    // we do this now
-                    SwingFileIconProvider.forceInit();
-                    setFileIconsScaleFactor();
-                    setSystemIconsPolicy();
-                });
-
-                long pre = System.currentTimeMillis();
-                executor.shutdown();
-                executor.awaitTermination(20L, TimeUnit.SECONDS);
-                System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
-
-                // The code below makes keyboard actions not working (even up/down doesn't work then)
-                //executor.execute(() -> {
-                    // Register actions
-                    printStartupMessage(splashScreen, "Registering actions...");
-                    ActionManager.registerActions();
-
-                    // Loads the ActionKeymap file
-                    printStartupMessage(splashScreen, "Loading actions shortcuts...");
-                    try {
-                        com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();
-                    } catch (Exception e) {
-                        printFileError("Could not load actions shortcuts", e, activator.fatalWarnings());
-                    }
-
-                    // Loads the ToolBar's description file
-                    printStartupMessage(splashScreen, "Loading toolbar description...");
-                    try {
-                        ToolBarIO.loadDescriptionFile();
-                    } catch (Exception e) {
-                        printFileError("Could not load toolbar description", e, activator.fatalWarnings());
-                    }
-
-                    // Loads the CommandBar's description file
-                    printStartupMessage(splashScreen, "Loading command bar description...");
-                    try {
-                        CommandBarIO.loadCommandBar();
-                    } catch (Exception e) {
-                        printFileError("Could not load commandbar description", e, activator.fatalWarnings());
-                    }
-                //});
-            } finally {
-                if (executor != null) {
-                    executor.shutdown();
-                    executor.awaitTermination(20L, TimeUnit.SECONDS);
+            executor.execute(() -> {
+                // Loads the themes.
+                printStartupMessage("Loading theme...");
+                try {
+                    SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
+                } catch (InterruptedException | InvocationTargetException e) {
+                    LOGGER.error("Error loading current theme, continuing without it", e);
                 }
+            });
+
+            executor.execute(() -> {
+                // Initializes the desktop.
+                try {
+                    com.mucommander.core.desktop.DesktopManager.init(firstBoot);
+                } catch (Exception e) {
+                    printError("Could not initialize desktop", e, true);
+                }
+            });
+
+            executor.execute(() -> {
+                // Loads custom commands
+                printStartupMessage(splashScreen, "Loading file associations..."); // TODO Localize those messages.....
+                try {
+                    com.mucommander.command.CommandManager.loadCommands();
+                } catch (Exception e) {
+                    printFileError("Could not load custom commands", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Migrates the custom editor and custom viewer if necessary.
+                migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
+                migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
+                try {
+                    CommandManager.writeCommands();
+                } catch (Exception e) {
+                    System.out.println("###############################");
+                    LOGGER.debug("Caught exception", e);
+                    // There's really nothing we can do about this...
+                }
+            });
+
+            executor.execute(() -> {
+                try {
+                    com.mucommander.command.CommandManager.loadAssociations();
+                } catch (Exception e) {
+                    printFileError("Could not load custom associations", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Loads bookmarks
+                printStartupMessage(splashScreen, "Loading bookmarks...");
+                try {
+                    com.mucommander.bookmark.BookmarkManager.loadBookmarks();
+                } catch (Exception e) {
+                    printFileError("Could not load bookmarks", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Loads credentials
+                printStartupMessage(splashScreen, "Loading credentials...");
+                try {
+                    com.mucommander.auth.CredentialsManager.loadCredentials();
+                } catch (Exception e) {
+                    printFileError("Could not load credentials", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Inits CustomDateFormat to make sure that its ConfigurationListener is added
+                // before FileTable, so CustomDateFormat gets notified of date format changes first
+                com.mucommander.text.CustomDateFormat.init();
+
+                // Initialize file icons
+                printStartupMessage(splashScreen, "Loading icons...");
+                // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why
+                // we do this now
+                SwingFileIconProvider.forceInit();
+                setFileIconsScaleFactor();
+                setSystemIconsPolicy();
+            });
+
+            long pre = System.currentTimeMillis();
+            executor.shutdown();
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+            System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
+
+            // Register actions
+            printStartupMessage(splashScreen, "Registering actions...");
+            ActionManager.registerActions();
+
+            // Loads the ActionKeymap file
+            printStartupMessage(splashScreen, "Loading actions shortcuts...");
+            try {
+                com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();
+            } catch (Exception e) {
+                printFileError("Could not load actions shortcuts", e, activator.fatalWarnings());
+            }
+
+            // Loads the ToolBar's description file
+            printStartupMessage(splashScreen, "Loading toolbar description...");
+            try {
+                ToolBarIO.loadDescriptionFile();
+            } catch (Exception e) {
+                printFileError("Could not load toolbar description", e, activator.fatalWarnings());
+            }
+
+            // Loads the CommandBar's description file
+            printStartupMessage(splashScreen, "Loading command bar description...");
+            try {
+                CommandBarIO.loadCommandBar();
+            } catch (Exception e) {
+                printFileError("Could not load commandbar description", e, activator.fatalWarnings());
             }
 
             LOGGER.error("muC UI about to be presented");
@@ -524,7 +519,7 @@ public class Application {
                     com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
             }
 
-            long pre = System.currentTimeMillis();
+            pre = System.currentTimeMillis();
             LOGGER.error("muC UI presented after: " + ManagementFactory.getRuntimeMXBean().getUptime() +
                     "ms (RuntimeMXBean loaded in " + (System.currentTimeMillis() - pre) + "ms)");
             // Done launching, wake up threads waiting for the application being launched.

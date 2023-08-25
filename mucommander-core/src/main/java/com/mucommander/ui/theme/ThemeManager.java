@@ -20,17 +20,23 @@ package com.mucommander.ui.theme;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -52,14 +58,13 @@ import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.theme.Theme.ThemeType;
-import org.unix4j.io.Input;
 
 /**
  * Offers methods for accessing and modifying themes.
  * @author Nicolas Rinaudo
  */
 public class ThemeManager {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ThemeManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThemeManager.class);
 
     // - Class variables -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -67,6 +72,10 @@ public class ThemeManager {
     private static       AbstractFile userThemeFile;
     /** Default user defined theme file name. */
     private static final String       USER_THEME_FILE_NAME             = "user_theme.xml";
+
+    /** The location of available fonts list as getting them from OS takes long time (impacts startup) */
+    private static final String       AVAILABLE_FONT_CACHE             = "available_fonts_cache.cache";
+
     /** Path to the custom themes repository. */
     private static final String       CUSTOM_THEME_FOLDER              = "themes";
     /** List of all registered theme change listeners. */
@@ -840,14 +849,14 @@ public class ThemeManager {
 
             // Predefined themes.
         case PREDEFINED_THEME:
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Custom themes.
         case CUSTOM_THEME:
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_CUSTOM);
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_CUSTOM);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Error.
@@ -877,6 +886,8 @@ public class ThemeManager {
             writeTheme(currentTheme);
             wasUserThemeModified = false;
         }
+
+        cacheAvailableFonts(getAvailableFontCacheFile());
     }
 
     public static Theme getCurrentTheme() {return currentTheme;}
@@ -929,38 +940,11 @@ public class ThemeManager {
     }
 
     /**
-     * Checks whether setting the specified font would require overwriting of the user theme.
-     * @param  fontId identifier of the font to set.
-     * @param  font   value for the specified font.
-     * @return        <code>true</code> if applying the specified font will overwrite the user theme,
-     *                <code>false</code> otherwise.
-     */
-    public synchronized static boolean willOverwriteUserTheme(int fontId, Font font) {
-        if(currentTheme.isFontDifferent(fontId, font))
-            return currentTheme.getType() != ThemeType.USER_THEME;
-        return false;
-    }
-
-    /**
-     * Checks whether setting the specified color would require overwriting of the user theme.
-     * @param  colorId identifier of the color to set.
-     * @param  color   value for the specified color.
-     * @return         <code>true</code> if applying the specified color will overwrite the user theme,
-     *                 <code>false</code> otherwise.
-     */
-    public synchronized static boolean willOverwriteUserTheme(int colorId, Color color) {
-        if(currentTheme.isColorDifferent(colorId, color))
-            return currentTheme.getType() != ThemeType.USER_THEME;
-        return false;
-    }
-
-    /**
      * Updates the current theme with the specified font.
      * <p>
      * This method might require to overwrite the user theme: custom and predefined themes are
      * read only. In order to modify them, the ThemeManager must overwrite the user theme with
      * the current theme and then set the font.<br/>
-     * If necessary, this can be checked beforehand by a call to {@link #willOverwriteUserTheme(int,Font)}.
      * </p>
      * @param  id   identifier of the font to set.
      * @param  font font to set.
@@ -986,7 +970,6 @@ public class ThemeManager {
      * This method might require to overwrite the user theme: custom and predefined themes are
      * read only. In order to modify them, the ThemeManager must overwrite the user theme with
      * the current theme and then set the color.<br/>
-     * If necessary, this can be checked beforehand by a call to {@link #willOverwriteUserTheme(int,Color)}.
      * </p>
      * @param  id   identifier of the color to set.
      * @param  color color to set.
@@ -1021,9 +1004,6 @@ public class ThemeManager {
             return true;
         return name.equals(currentTheme.getName());
     }
-
-
-
 
     // - Events management ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -1076,15 +1056,57 @@ public class ThemeManager {
     public static void addCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.put(listener, null);}}
 
     /**
-     * Removes the specified object from the list of registered theme listeners.
-     * <p>
-     * Note that since listeners are stored as weak references, calling this method is not strictly necessary. As soon
-     * as a listener instance is not referenced anymore, it will automatically be caught and destroyed by the garbage
-     * collector.
-     * </p>
-     * @param listener current theme listener to remove.
+     * Since loading fonts is slow, we may want to preload it from cache
+     * before Theme is loaded (crucial for start up times).
      */
-    public static void removeCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.remove(listener);}}
+    public static void preLoadAvailableFonts() {
+        try {
+            ThemeReader.preSetAvailableFonts(loadAvailableFonts(getAvailableFontCacheFile()));
+        } catch (IOException e) {
+            LOGGER.error("Error loading cached available fonts", e);
+        }
+    }
+
+    /**
+     * Loads available fonts from cache file.
+     * @param cacheFile a cache file
+     * @return a set with font name, never null, might be empty
+     */
+    private static Set<String> loadAvailableFonts(AbstractFile cacheFile) {
+        var result = new HashSet<String>();
+        if (!cacheFile.exists() || !cacheFile.canRead() || cacheFile.getSize() <= 0) {
+            return result;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(cacheFile.getInputStream()))) {
+            while(reader.ready()) {
+                var line = reader.readLine();
+                if (!StringUtils.isNullOrEmpty(line)) {
+                    result.add(line);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error reading font cache file", e);
+        }
+        return result;
+    }
+
+    /**
+     * Caches available fonts
+     * @param cacheFile a cache file to write to
+     */
+    private static void cacheAvailableFonts(AbstractFile cacheFile) {
+        var result = new HashSet<String>();
+
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(cacheFile.getOutputStream()))) {
+            for (String font : ThemeReader.getAvailableFonts()) {
+                writer.write(font);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error writing font cache file", e);
+        }
+    }
 
     /**
      * Notifies all theme listeners of the specified font event.
@@ -1110,8 +1132,6 @@ public class ThemeManager {
         }
     }
 
-
-
     // - Helper methods ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -1133,7 +1153,9 @@ public class ThemeManager {
         return themeFile.getNameWithoutExtension();
     }
 
-
+    private static AbstractFile getAvailableFontCacheFile() throws IOException {
+        return PlatformManager.getPreferencesFolder().getChild(AVAILABLE_FONT_CACHE);
+    }
 
     // - Listener methods ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
