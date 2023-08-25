@@ -169,7 +169,7 @@ public class Application {
             splashScreen.setLoadingMessage(message);
         }
 
-        LOGGER.info(message);
+        LOGGER.error(message);
     }
 
     // - Boot code --------------------------------------------------------------
@@ -371,6 +371,16 @@ public class Application {
                 executor = Executors.newFixedThreadPool(8);
 
                 executor.execute(() -> {
+                    // Loads the themes.
+                    printStartupMessage("Loading theme...");
+                    try {
+                        SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
+                    } catch (InterruptedException | InvocationTargetException e) {
+                        LOGGER.error("Error loading current theme, continuing without it", e);
+                    }
+                });
+
+                executor.execute(() -> {
                     // Initializes the desktop.
                     try {
                         com.mucommander.core.desktop.DesktopManager.init(firstBoot);
@@ -486,51 +496,44 @@ public class Application {
                 }
             }
 
+            LOGGER.error("muC UI about to be presented");
+            printStartupMessage(splashScreen, "Loading theme...");
+            // Creates the initial main frame using any initial path specified by the command line.
+            printStartupMessage(splashScreen, "Initializing window...");
+            LOGGER.error("folders init");
+            List<String> folders = activator.getInitialFolders();
+            LOGGER.error("muC new main frame to start");
+            if (CollectionUtils.isNotEmpty(folders)) {
+                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+            } else {
+                WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
+            }
+            // Dispose splash screen.
+            if (splashScreen != null) {
+                splashScreen.dispose();
+                splashScreen = null;
+            }
 
-            new Thread(() -> {
-                LOGGER.error("muC UI about to be presented");
-                // Loads the themes.
-                printStartupMessage(splashScreen, "Loading theme...");
-                try {
-                    SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
-                } catch (InterruptedException | InvocationTargetException e) {
-                    LOGGER.error("Error loading current theme, continuing without it", e);
-                }
-                // Creates the initial main frame using any initial path specified by the command line.
-                printStartupMessage(splashScreen, "Initializing window...");
-                List<String> folders = activator.getInitialFolders();
-                if (CollectionUtils.isNotEmpty(folders)) {
-                    WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-                } else {
-                    WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-                }
-                // Dispose splash screen.
-                if (splashScreen != null) {
-                    splashScreen.dispose();
-                    splashScreen = null;
-                }
-
-                // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
-                // a MainFrame instance
-                if (MuConfigurations.getPreferences()
-                        .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
-                                MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+            // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
+            // a MainFrame instance
+            if (MuConfigurations.getPreferences()
+                    .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
+                            MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
                 printStartupMessage(splashScreen, "Enabling system notifications...");
-                    if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
-                        com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
-                }
+                if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
+                    com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
+            }
 
-                long pre = System.currentTimeMillis();
-                LOGGER.error("muC UI presented after: " + ManagementFactory.getRuntimeMXBean().getUptime() +
-                        "ms (RuntimeMXBean loaded in " + (System.currentTimeMillis() - pre) + "ms)");
-                // Done launching, wake up threads waiting for the application being launched.
-                // Important: this must be done before disposing the splash screen, as this would otherwise create a
-                // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
-                synchronized (LAUNCH_LOCK) {
-                    isLaunching = false;
-                    LAUNCH_LOCK.notifyAll();
-                }
-            }).start();
+            long pre = System.currentTimeMillis();
+            LOGGER.error("muC UI presented after: " + ManagementFactory.getRuntimeMXBean().getUptime() +
+                    "ms (RuntimeMXBean loaded in " + (System.currentTimeMillis() - pre) + "ms)");
+            // Done launching, wake up threads waiting for the application being launched.
+            // Important: this must be done before disposing the splash screen, as this would otherwise create a
+            // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
+            synchronized (LAUNCH_LOCK) {
+                isLaunching = false;
+                LAUNCH_LOCK.notifyAll();
+            }
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
@@ -544,6 +547,7 @@ public class Application {
             if (showSetup) {
                 new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
             }
+
         } catch (Throwable t) {
             // Startup failed, dispose the splash screen
             if (splashScreen != null) {
