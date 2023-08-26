@@ -292,6 +292,8 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     from ("$buildDir/osgi/bundle") {
         include '*.jar'
         exclude 'osgiaas*'
+        exclude 'junit*'
+        exclude 'hamcrest*'
         exclude 'jline*'
         into 'bundle'
     }
@@ -329,6 +331,8 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         include '*.jar'
         exclude 'osgiaas*'
         exclude 'jline*'
+        exclude 'junit*'
+        exclude 'hamcrest*'
         exclude 'mucommander-os-win*'
         exclude 'mucommander-os-macos*'
         exclude 'mucommander-os-openvms*'
@@ -422,6 +426,8 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
        delete("${buildDir}/muCommander.app/Contents/app/system-libs")
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'osgiaas*')
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'jline*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'junit*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'hamcrest*')
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-linux*')
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-win*')
        delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-openvms*')
@@ -474,6 +480,8 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
         }
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'osgiaas*')
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'jline*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'junit*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'hamcrest*')
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-win*')
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-macos*')
         delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-openvms*')
@@ -551,6 +559,8 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
         delete("${buildDir}/muCommander/app/system-libs")
         delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'osgiaas*')
         delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'jline*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'junit*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'hamcrest*')
         delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-linux*')
         delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-macos*')
         delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-openvms*')
