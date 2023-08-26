@@ -57,8 +57,10 @@ import com.mucommander.ui.main.FolderPanel;
  * @see <a href="http://trac.mucommander.com/wiki/FolderAutoRefresh">FolderAutoRefresh wiki entry</a>
  */
 public class FolderChangeMonitor implements Runnable, WindowListener, LocationListener, WindowFocusListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FolderChangeMonitor.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(FolderChangeMonitor.class);
+
+    private static final Object INIT_LOCK_OBJ = new Object();
+
     /** Folder panel we are monitoring */
     private FolderPanel folderPanel;
 
@@ -156,12 +158,16 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         initMonitoringThread();
     }
 
-    private synchronized void initMonitoringThread() {
+    private void initMonitoringThread() {
         // Create and start the monitor thread on first FolderChangeMonitor instance
-        if (monitorThread==null && checkPeriod>=0) {
-            monitorThread = new Thread(this, getClass().getName());
-            monitorThread.setDaemon(true);
-            monitorThread.start();
+        if (monitorThread == null && checkPeriod >= 0) {
+            synchronized(INIT_LOCK_OBJ) {
+                if (monitorThread == null && checkPeriod >= 0) {
+                    monitorThread = new Thread(this, getClass().getName());
+                    monitorThread.setDaemon(true);
+                    monitorThread.start();
+                }
+            }
         }
     }
 	
@@ -206,13 +212,14 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
             }
         }
     }
-
-	
+    
     /**
      * Stops monitoring (stops monitoring thread).
      */
     public void stop() {
-        monitorThread = null;
+        synchronized(INIT_LOCK_OBJ) {
+            monitorThread = null;
+        }
     }
 
 
@@ -313,7 +320,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Remove the MainFrame from the list of monitored instances
         instances.remove(this);
         LOGGER.debug("nbInstances="+instances.size());
-    }	
+    }
 
     ////////////////////////////////////////
     // WindowFocusListener implementation //
