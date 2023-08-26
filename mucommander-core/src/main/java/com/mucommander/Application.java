@@ -209,7 +209,8 @@ public class Application {
         try {
             executor.execute(ThemeManager::preLoadAvailableFonts);
             executor.execute(() -> {
-
+                JFrame frame = new JFrame();    // preload
+                frame.dispose();
             });
 
             // Associations handling.
