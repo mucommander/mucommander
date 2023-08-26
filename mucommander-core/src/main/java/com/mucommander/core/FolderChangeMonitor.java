@@ -83,7 +83,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     //////////////////////
 	
     /** Thread in which the actual monitoring is performed */
-    private static Thread monitorThread;
+    private static volatile Thread monitorThread;
 
     /** FolderChangeMonitor instances */
     private static List<FolderChangeMonitor> instances;
