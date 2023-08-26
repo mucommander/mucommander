@@ -151,7 +151,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         factory.setNamespaceAware(false);
         SAXParser parser = factory.newSAXParser();
         parser.parse(in, new ThemeReader(template));
-        availableFonts = null; // free memory?
     }
 
     // - XML interaction -----------------------------------------------------
@@ -163,7 +162,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Ignores the content of unknown elements.
         if (unknownElement != null) {
-            LOGGER.debug("Ignoring element {}", qName);
+            LOGGER.debug("Ignoring element: {}", qName);
             return;
         }
 

@@ -60,6 +60,7 @@ import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
 
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 /**
@@ -201,12 +202,15 @@ public class Application {
     }
 
     private void run() {
-        ExecutorService executor = Executors.newFixedThreadPool(8);
+        ExecutorService executor = Executors.newFixedThreadPool(12);
 
         System.out.println(new Date() + " -- Application#run");
         SplashScreen splashScreen = null;
         try {
             executor.execute(ThemeManager::preLoadAvailableFonts);
+            executor.execute(() -> {
+
+            });
 
             // Associations handling.
             String assoc = activator.assoc();
@@ -514,14 +518,19 @@ public class Application {
             if (MuConfigurations.getPreferences()
                     .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
                             MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
-                printStartupMessage(splashScreen, "Enabling system notifications...");
-                if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
-                    com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
+                    printStartupMessage(splashScreen, "Enabling system notifications...");
+                    // It is slow enough, that's why it's being executed in the background
+                    LOGGER.error("Enabling system notifications...");
+                    if (com.mucommander.ui.notifier.NotifierProvider.isAvailable()) {
+                        com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
+                        LOGGER.error("System notifications enabled.");
+                    } else {
+                        LOGGER.error("System notifications not available.");
+                    }
+                }).start();
             }
 
-            pre = System.currentTimeMillis();
-            LOGGER.error("muC UI presented after: " + ManagementFactory.getRuntimeMXBean().getUptime() +
-                    "ms (RuntimeMXBean loaded in " + (System.currentTimeMillis() - pre) + "ms)");
+            LOGGER.error("muC UI presented after: {} ms", ManagementFactory.getRuntimeMXBean().getUptime());
             // Done launching, wake up threads waiting for the application being launched.
             // Important: this must be done before disposing the splash screen, as this would otherwise create a
             // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
@@ -529,6 +538,7 @@ public class Application {
                 isLaunching = false;
                 LAUNCH_LOCK.notifyAll();
             }
+            LOGGER.error("Launch lock freed");
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
