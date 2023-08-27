@@ -481,7 +481,7 @@ public class StatusBar extends JPanel {
                     }
                     autoUpdateThreadNotified = false;
                 }
-            });
+            }, "DiskFreeUpdater");
             autoUpdateThread.setName("StatusBar autoUpdateThread");
             // Set the thread as a daemon thread
             autoUpdateThread.setDaemon(true);

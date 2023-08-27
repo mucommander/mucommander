@@ -163,7 +163,7 @@ public class OpenWithMenu extends JMenu {
                         setEnabled(false);
                     }
                     super.getPopupMenu().pack();
-                }).start();
+                }, "OpenWithAppThread").start();
             } else {
                 if (DesktopManager.canEnableOpenWithApps()) {
                     if (getItemCount() > 0) {

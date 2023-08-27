@@ -106,7 +106,7 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         this.userInitiated = userInitiated;
 
         // Do all the hard work in a separate thread
-        new Thread(this, "com.mucommander.ui.dialog.startup.CheckVersionDialog's Thread").start();
+        new Thread(this, "CheckVersionDialog").start();
     }
 
 

@@ -105,7 +105,7 @@ public class Activator implements BundleActivator {
 			};
 			serviceRegistration = context.registerService(FileProtocolService.class, service, null);
 			uiServiceRegistration = context.registerService(ProtocolPanelProvider.class, panelProvider, null);
-		}).start();
+		}, "SMBinit").start();
 	}
 
 	@Override
