@@ -49,7 +49,11 @@ public class ClipboardNotifier implements FlavorListener {
         this.action = action;
 
         // Toggle initial state
-        toggleActionState();
+        // commented out since I think it is not needed here and checking clipboard on start-up may introduce delay
+        // (especially if there's something strange in the clipboard, like code piece from Idea -> lots of ClassNotFound exceptions)
+        // see: https://stackoverflow.com/questions/39493232/how-to-determine-current-clipboard-dataflavor-before-get-clip-content
+        // and consider applying the suggested solution
+        //toggleActionState();
 
         // Monitor clipboard changes
         ClipboardSupport.getClipboard().addFlavorListener(this);

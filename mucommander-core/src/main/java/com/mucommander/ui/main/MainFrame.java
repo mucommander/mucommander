@@ -301,9 +301,9 @@ public class MainFrame extends JFrame implements LocationListener {
 
         ExecutorService executor = Executors.newFixedThreadPool(4);
         try {
-            init(executor.submit(() -> new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf)),
-                    executor.submit(() -> new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf)),
-                    executor);
+            var leftFolderPanel = executor.submit(() -> new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf));
+            var rightFolderPanel = executor.submit(() -> new FolderPanel(this, rightTabs, indexOfRightSelectedTab, rightTableConf));
+            init(leftFolderPanel, rightFolderPanel, executor);
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
@@ -334,7 +334,7 @@ public class MainFrame extends JFrame implements LocationListener {
         FileTable leftFileTable = leftFolderPanel.getFileTable();
         FileTable rightFileTable = rightFolderPanel.getFileTable();
 
-        ExecutorService executor = null;
+        ExecutorService executor = Executors.newFixedThreadPool(4);;
         try {
             Executors.newFixedThreadPool(4);
 
