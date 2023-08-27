@@ -209,8 +209,8 @@ public class Application {
         try {
             executor.execute(ThemeManager::preLoadAvailableFonts);
             executor.execute(() -> {
-                JFrame frame = new JFrame();    // preload
-                frame.dispose();
+                var preLoadFrame = new JFrame();    // pre-load (warm-up).
+                preLoadFrame.dispose();
             });
 
             // Associations handling.
@@ -358,7 +358,7 @@ public class Application {
             if (useSplash) {
                 new Thread(() -> {
                     splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
-                }).start();
+                }, "SplashPanel").start();
             }
 
             boolean showSetup;
@@ -496,31 +496,45 @@ public class Application {
                 printFileError("Could not load commandbar description", e, activator.fatalWarnings());
             }
 
-            LOGGER.error("muC UI about to be presented");
-            printStartupMessage(splashScreen, "Loading theme...");
-            // Creates the initial main frame using any initial path specified by the command line.
-            printStartupMessage(splashScreen, "Initializing window...");
-            LOGGER.error("folders init");
-            List<String> folders = activator.getInitialFolders();
-            LOGGER.error("muC new main frame to start");
-            if (CollectionUtils.isNotEmpty(folders)) {
-                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-            } else {
-                WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-            }
-            // Dispose splash screen.
-            if (splashScreen != null) {
-                splashScreen.dispose();
-                splashScreen = null;
-            }
+            // Invoke in a different thread: https://www.oracle.com/technical-resources/articles/javase/swingworker.html
+            new Thread(() -> {
+                LOGGER.error("muC UI about to be presented");
+                printStartupMessage(splashScreen, "Loading theme...");
+                // Creates the initial main frame using any initial path specified by the command line.
+                printStartupMessage(splashScreen, "Initializing window...");
+                LOGGER.error("folders init");
+                List<String> folders = activator.getInitialFolders();
+                LOGGER.error("muC new main frame to start");
+                if (CollectionUtils.isNotEmpty(folders)) {
+                    WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+                } else {
+                    WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
+                }
+                LOGGER.error("muC UI presented after: {} ms", ManagementFactory.getRuntimeMXBean().getUptime());
 
-            // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
-            // a MainFrame instance
-            if (MuConfigurations.getPreferences()
-                    .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
-                            MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+                // Done launching, wake up threads waiting for the application being launched.
+                // Important: this must be done before disposing the splash screen, as this would otherwise create a
+                // deadlock
+                // if the AWT event thread were waiting in #waitUntilLaunched .
+                synchronized (LAUNCH_LOCK) {
+                    isLaunching = false;
+                    LAUNCH_LOCK.notifyAll();
+                }
+                LOGGER.error("Launch lock freed");
+
+                // Dispose splash screen.
+                var localSplashScreen = splashScreen;
+                if (localSplashScreen != null) {
+                    localSplashScreen.dispose();
+                    splashScreen = null;
+                }
+
+                // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
+                // a MainFrame instance
+                if (MuConfigurations.getPreferences()
+                        .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
+                                MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
                     printStartupMessage(splashScreen, "Enabling system notifications...");
-                    // It is slow enough, that's why it's being executed in the background
                     LOGGER.error("Enabling system notifications...");
                     if (com.mucommander.ui.notifier.NotifierProvider.isAvailable()) {
                         com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
@@ -528,18 +542,15 @@ public class Application {
                     } else {
                         LOGGER.error("System notifications not available.");
                     }
-                }).start();
-            }
+                }
 
-            LOGGER.error("muC UI presented after: {} ms", ManagementFactory.getRuntimeMXBean().getUptime());
-            // Done launching, wake up threads waiting for the application being launched.
-            // Important: this must be done before disposing the splash screen, as this would otherwise create a
-            // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
-            synchronized (LAUNCH_LOCK) {
-                isLaunching = false;
-                LAUNCH_LOCK.notifyAll();
-            }
-            LOGGER.error("Launch lock freed");
+                // If no theme is configured in the preferences, ask for an initial theme.
+                if (showSetup) {
+                    SwingUtilities.invokeLater(() -> {
+                        new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
+                    });
+                }
+            }, "MainFrameInit").start();
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
@@ -547,11 +558,6 @@ public class Application {
                 CompletableFuture.runAsync(() -> {
                     new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
                 }, CompletableFuture.delayedExecutor(10L, TimeUnit.SECONDS));
-            }
-
-            // If no theme is configured in the preferences, ask for an initial theme.
-            if (showSetup) {
-                new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
             }
 
         } catch (Throwable t) {

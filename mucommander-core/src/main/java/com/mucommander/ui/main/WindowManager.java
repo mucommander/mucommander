@@ -22,6 +22,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import javax.swing.LookAndFeel;
@@ -32,12 +34,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.violetlib.aqua.AquaLookAndFeel;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import com.mucommander.Application;
 import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
@@ -70,8 +67,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * or last frame to have been used if muCommander doesn't have focus */	
     private MainFrame currentMainFrame;
 
-    private static final WindowManager instance = new WindowManager();
+    /**
+     * Whether additional LaFs are loaded.
+     */
+    private boolean additionalLafsLoaded = false;
 
+    private static final WindowManager instance = new WindowManager();
 
     // - Initialization ---------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -102,23 +103,10 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     private WindowManager() {
         mainFrames = new Vector<MainFrame>();
 
-        FlatDarculaLaf.installLafInfo();
-        FlatDarkLaf.installLafInfo();
-        FlatLightLaf.installLafInfo();
-        FlatIntelliJLaf.installLafInfo();
-
-        if (OsFamily.MAC_OS.isCurrent()) {
-            AquaLookAndFeel aquaLookAndFeel = new AquaLookAndFeel();
-            UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(aquaLookAndFeel.getName(), aquaLookAndFeel.getClass().getName()));
-        }
-
         // Notifies Swing that look&feels must be loaded as extensions.
         // This is necessary to ensure that look and feels placed in the extensions folder
         // are accessible.
         UIManager.getDefaults().put("ClassLoader", ExtensionManager.getClassLoader());
-
-        // Installs all custom look and feels.
-        installCustomLookAndFeels();
         
         // Sets custom lookAndFeel if different from current lookAndFeel
         String lnfName = MuConfigurations.getPreferences().getVariable(MuPreference.LOOK_AND_FEEL);
@@ -129,11 +117,38 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             LOGGER.debug("Could load look'n feel from preferences");
         
         MuConfigurations.addPreferencesListener(this);
+
+        if (!additionalLafsLoaded) {    // defer loading other LAFs
+            new Timer("LAFsLoader").schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    LOGGER.info("Loading additional Look and feels in background...");
+                    loadAdditionalLookAndFeels();
+                }
+            }, 5 * 1000);
+        }
+    }
+
+    private void loadAdditionalLookAndFeels() {
+        com.formdev.flatlaf.FlatDarculaLaf.installLafInfo();
+        com.formdev.flatlaf.FlatDarkLaf.installLafInfo();
+        com.formdev.flatlaf.FlatLightLaf.installLafInfo();
+        com.formdev.flatlaf.FlatIntelliJLaf.installLafInfo();
+
+        if (OsFamily.MAC_OS.isCurrent()) {
+            org.violetlib.aqua.AquaLookAndFeel aquaLookAndFeel = new org.violetlib.aqua.AquaLookAndFeel();
+            UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(aquaLookAndFeel.getName(), aquaLookAndFeel.getClass().getName()));
+        }
+
+        // Installs all custom look and feels.
+        installCustomLookAndFeels();
+
+        additionalLafsLoaded = true;
     }
 
     public static void setDefaultLookAndFeel() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         if (OsFamily.LINUX.isCurrent()) {
-            UIManager.setLookAndFeel(FlatLightLaf.class.getName());
+            UIManager.setLookAndFeel(com.formdev.flatlaf.FlatLightLaf.class.getName());
         }
     }
 
@@ -263,7 +278,17 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             ClassLoader oldLoader = currentThread.getContextClassLoader();
             currentThread.setContextClassLoader(ExtensionManager.getClassLoader());
 
-            UIManager.setLookAndFeel(lnfName);
+            try {
+                var currentLaF = UIManager.getLookAndFeel();
+                if (currentLaF == null || !lnfName.equals(currentLaF.getClass().getName())) {
+                    UIManager.setLookAndFeel(lnfName);
+                }
+            } catch (UnsupportedLookAndFeelException e) {
+                LOGGER.info("The chosen Look and feel (that is non-standard) must be loaded now...");
+                // TODO - load the required LaF and defer the rest?
+                loadAdditionalLookAndFeels(); // we defer that to that point as it takes some time :)
+                UIManager.setLookAndFeel(lnfName);
+            }
 
             // Restores the contextual ClassLoader.
             currentThread.setContextClassLoader(oldLoader);

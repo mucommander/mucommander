@@ -104,7 +104,7 @@ public class IconManager {
     public static ImageIcon getIcon(String iconPath, float scaleFactor) {
         URL resourceURL = ResourceLoader.getResourceAsURL(iconPath);
         if(resourceURL==null) {
-            LOGGER.debug("Warning: attempt to load non-existing icon: {} , icon missing?", iconPath);
+            LOGGER.debug("Warning: attempt to load non-existing icon: {} , icon missing ?", iconPath);
             return null;
         }
 

@@ -672,13 +672,13 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         if (!fontCache.isEmpty()) {
             availableFonts = fontCache;
         }
-        new Timer().schedule(new TimerTask() {
+        new Timer("RefreshFontNames").schedule(new TimerTask() {
             @Override
             public void run() {
                 LOGGER.info("Going to refresh available fonts from OS....");
                 availableFonts = getAvailableFontsFromOS();
             }
-        }, 60 * 1000L);
+        }, 10 * 1000L);
     }
 
     public static Set<String> getAvailableFonts() {
