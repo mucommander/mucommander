@@ -178,7 +178,7 @@ public class MainFrame extends JFrame implements LocationListener {
         this.rightFolderPanel = rightFolderPanel.get();
         leftTable = this.leftFolderPanel.getFileTable();
         rightTable = this.rightFolderPanel.getFileTable();
-        activeTable  = leftTable;
+        activeTable = leftTable;
 
         // Listen to location change events to display the current folder in the window's title
         this.leftFolderPanel.getLocationManager().addLocationListener(this);

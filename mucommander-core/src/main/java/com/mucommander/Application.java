@@ -208,10 +208,10 @@ public class Application {
         SplashScreen splashScreen = null;
         try {
             executor.execute(ThemeManager::preLoadAvailableFonts);
-            executor.execute(() -> {
+           /* executor.execute(() -> {
                 var preLoadFrame = new JFrame();    // pre-load (warm-up).
                 preLoadFrame.dispose();
-            });
+            });*/
 
             // Associations handling.
             String assoc = activator.assoc();

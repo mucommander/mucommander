@@ -20,6 +20,7 @@ package com.mucommander.commons.file.protocol.adb;
 import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -54,6 +55,8 @@ public class AndroidMenu extends JMenu implements MenuListener {
     private MainFrame mainFrame;
     private FolderPanel folderPanel;
 
+    private boolean searching;
+
     /**
      * Creates a new instance of <code>AndroidMenu</code>.
      */
@@ -61,8 +64,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
         super(Translator.get("adb.android_devices"));
         this.mainFrame = mainFrame;
         this.folderPanel = folderPanel;
-        setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
-        SwingUtilities.invokeLater(() -> menuSelected(null));
+        setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png")); // no
 
         // Menu items will be added when menu gets selected
         addMenuListener(this);
@@ -87,8 +89,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
         try {
             return FileURL.getFileURL("adb://" + deviceSerial);
         } catch (MalformedURLException e) {
-            LOGGER.error("failed to get adb device file");
-            LOGGER.debug("failed to get adb device file", e);
+            LOGGER.error("failed to get adb device file", e);
             return null;
         }
     }
@@ -98,27 +99,41 @@ public class AndroidMenu extends JMenu implements MenuListener {
         // Remove previous menu items (if any)
         removeAll();
 
-        List<String> androidDevices = null; //AdbUtils.getDevices(); - defer loading like for Bonjour
-        if (androidDevices == null) {
-            setEnabled(false);
-            setToolTipText(Translator.get("adb.android_disabled"));
+        if (searching) {
             return;
         }
-        setEnabled(true);
-        if (androidDevices.isEmpty()) {
-            add(new JMenuItem(Translator.get("adb.no_devices"))).setEnabled(false);
-            return;
-        }
-        MnemonicHelper mnemonicHelper = new MnemonicHelper();
-        for (String serial : androidDevices) {
-            JMenuItem menuItem = new JMenuItem(getMenuItemAction(serial));
-            menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
-            String name = AdbUtils.getDeviceName(serial);
-            menuItem.setText(name == null ? serial : name);
-            menuItem.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
 
-            add(menuItem);
-        }
+        JMenuItem searchingItem = add(new JMenuItem(Translator.get("adb.searching")));
+        searchingItem.setEnabled(false);
+        CompletableFuture.runAsync(() -> {
+            var androidDevices = AdbUtils.getDevices();
+
+            SwingUtilities.invokeLater(() -> {
+                if (androidDevices == null) {
+                    searchingItem.setText(Translator.get("adb.android_disabled"));
+                    searching = false;
+                    return;
+                }
+                setEnabled(true);
+                if (androidDevices.isEmpty()) {
+                    searchingItem.setText(Translator.get("adb.no_devices"));
+                    searching = false;
+                    return;
+                }
+                MnemonicHelper mnemonicHelper = new MnemonicHelper();
+                for (String serial : androidDevices) {
+                    JMenuItem menuItem = new JMenuItem(getMenuItemAction(serial));
+                    menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
+                    String name = AdbUtils.getDeviceName(serial);
+                    menuItem.setText(name == null ? serial : name);
+                    menuItem.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
+
+                    add(menuItem);
+                }
+                remove(searchingItem);
+                searching = false;
+            });
+        });
     }
 
     @Override
