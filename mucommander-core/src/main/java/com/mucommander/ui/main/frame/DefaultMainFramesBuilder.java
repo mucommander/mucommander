@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +94,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         }
     }
 
-    private MainFrame createMainFrame(int index) {
+    private @NotNull MainFrame createMainFrame(int index) {
         int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
         ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
         for (int i=0; i<nbTabsInLeftPanel; ++i)
