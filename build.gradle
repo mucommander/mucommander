@@ -149,7 +149,7 @@ runOsgi {
 
     def port = System.getenv('DEBUG')
     if (port) {
-        javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=' + port
+        javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=' + port
     }
     javaArgs += ' --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
             --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \

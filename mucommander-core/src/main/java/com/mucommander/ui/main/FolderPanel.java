@@ -31,6 +31,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -109,7 +112,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     private int oldTreeWidth = 150;
 
     /** Array of all the existing pop ups for this panel's FileTable **/
-    private QuickList[] fileTablePopups;
+    private Future<QuickList[]> fileTablePopups;
 
     /* TODO branch private boolean branchView; */
 
@@ -117,7 +120,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * Constructor
      * 
      * @param mainFrame - the MainFrame that contains this panel
-     * @param initialFolders - the initial folders displayed at this panel's tabs
+     * @param initialTabs - the initial folders displayed at this panel's tabs
      * @param conf - configuration for this panel's file table
      */
     FolderPanel(MainFrame mainFrame, ConfFileTableTab[] initialTabs, int indexOfSelectedTab, FileTableConfiguration conf) {
@@ -155,14 +158,17 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
         add(locationPanel, BorderLayout.NORTH);
 
-        // Initialize quick lists
-    	fileTablePopups = new QuickList[]{
-    			new ParentFoldersQL(this),
-    			new RecentLocationsQL(this),
-    			new RecentExecutedFilesQL(this),
-    			new BookmarksQL(this),
-    			new RootFoldersQL(this),
-                new TabsQL(this)};
+        // Initialize quick lists in background
+        fileTablePopups =  CompletableFuture.supplyAsync(() -> {
+            return new QuickList[] {
+                            new ParentFoldersQL(this),
+                            new RecentLocationsQL(this),
+                            new RecentExecutedFilesQL(this),
+                            new BookmarksQL(this),
+                            new RootFoldersQL(this),
+                            new TabsQL(this)
+            };
+        });
 
         // Create the FileTable
         fileTable = new FileTable(mainFrame, this, conf);
@@ -171,7 +177,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         
         // Create the Tabs (Must be called after the fileTable was created and current folder was set)
         tabs = new FileTableTabs(mainFrame, this, initialTabs);
-        
+
 		// Select the tab that was previously selected on last run
 		tabs.selectTab(indexOfSelectedTab);
 		// Select the file-to-select in this tab, if set (note that we already validated
@@ -179,7 +185,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 		AbstractFile fileToSelect = initialTabs[indexOfSelectedTab].getFileToSelect();
 		if (fileToSelect != null)
 		    fileTable.selectFile(fileToSelect);
-		
+
 		tabs.addActiveTabListener(this);
 
         // create folders tree on a JSplitPane 
@@ -409,7 +415,12 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param index - index of the FileTablePopup in fileTablePopups.
      */
     public void showQuickList(int index) {
-    	fileTablePopups[index].show();
+        try {
+            fileTablePopups.get()[index].show();
+        } catch (Exception e) {
+            LOGGER.error("Unable to show QuickList", e);
+            throw new RuntimeException(e);
+        }
     }
     
     /**
