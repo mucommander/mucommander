@@ -34,11 +34,9 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.InputMap;
 import javax.swing.JComponent;
@@ -78,12 +76,17 @@ import com.mucommander.ui.main.tabs.ConfFileTableTab;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.notifier.NotifierProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This is the main frame, which contains all other UI components visible on a mucommander window.
  * 
  * @author Maxence Bernard
  */
 public class MainFrame extends JFrame implements LocationListener {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
 
     private ProportionalSplitPane foldersSplitPane;
 
@@ -123,7 +126,7 @@ public class MainFrame extends JFrame implements LocationListener {
     private boolean singlePanel;
 
     /** Contains all registered ActivePanelListener instances, stored as weak references */
-    private Map<ActivePanelListener, ?> activePanelListeners = Collections.synchronizedMap(new WeakHashMap<>());
+    private final Map<ActivePanelListener, ?> activePanelListeners = Collections.synchronizedMap(new WeakHashMap<>());
 
     /**
      * Sets the window icon, using the best method (Java 1.6's Window#setIconImages when available, Window#setIconImage
@@ -300,7 +303,8 @@ public class MainFrame extends JFrame implements LocationListener {
      */
     public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
                      ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
-
+        super();
+        LOGGER.error("Main frame c-tor");
         ExecutorService executor = Executors.newFixedThreadPool(4);
         try {
             var leftFolderPanel = executor.submit(() -> new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf));

@@ -110,13 +110,18 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
                     snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
                     restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
                     snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
+
+
+        var leftConf = getFileTableConfiguration(FolderPanelType.LEFT, index);
+        var rightConf = getFileTableConfiguration(FolderPanelType.RIGHT, index);
+
         MainFrame mainFrame = new MainFrame(
                 leftTabs,
                 getInitialSelectedTab(FolderPanelType.LEFT, index),
-                getFileTableConfiguration(FolderPanelType.LEFT, index),
+                leftConf,
                 rightTabs,
                 getInitialSelectedTab(FolderPanelType.RIGHT, index),
-                getFileTableConfiguration(FolderPanelType.RIGHT, index));
+                rightConf);
 
         // Retrieve last saved window bounds
         Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
