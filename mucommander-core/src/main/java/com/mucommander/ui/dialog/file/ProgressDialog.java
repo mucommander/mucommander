@@ -127,7 +127,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
 
     public ProgressDialog(MainFrame mainFrame, String title) {
-        super(mainFrame, title, mainFrame);
+        super(mainFrame.getJFrame(), title, mainFrame.getJFrame());
 
         // Sets maximum and minimum dimensions for this dialog
         setMaximumSize(MAXIMUM_DIALOG_DIMENSION);

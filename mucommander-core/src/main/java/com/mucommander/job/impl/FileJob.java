@@ -536,17 +536,17 @@ public abstract class FileJob implements com.mucommander.job.FileJob {
 
         QuestionDialog dialog;
         if(getProgressDialog()==null)
-            dialog = new QuestionDialog(getMainFrame(), 
+            dialog = new QuestionDialog(getMainFrame().getJFrame(),
                                         title,
                                         message,
-                                        getMainFrame(),
+                                        getMainFrame().getJFrame(),
                                         actionChoices,
                                         0);
         else
             dialog = new QuestionDialog(getProgressDialog(), 
                                         title,
                                         message,
-                                        getMainFrame(),
+                                        getMainFrame().getJFrame(),
                                         actionChoices,
                                         0);
 

@@ -298,7 +298,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
     @Override
     public void focusGained(FocusEvent e) {
         // Disable menu bar when this component has gained focus
-        folderPanel.getMainFrame().getJMenuBar().setEnabled(false);
+        folderPanel.getMainFrame().getJFrame().getJMenuBar().setEnabled(false);
 
         String text = getText();
         if (text.startsWith(String.format("%s://", SearchFile.SCHEMA)))
@@ -316,7 +316,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
 //    		locationField.setText(folderPanel.getCurrentFolder().getAbsolutePath());
 
         // Enable menu bar when this component has lost focus
-        folderPanel.getMainFrame().getJMenuBar().setEnabled(true);
+        folderPanel.getMainFrame().getJFrame().getJMenuBar().setEnabled(true);
     }
 
 

@@ -76,7 +76,7 @@ public class LocationChanger {
 	public void tryChangeCurrentFolderInternal(FileTableTab tab, Runnable runnable) {
 		mainFrame.setNoEventsMode(true);
 		// Set cursor to hourglass/wait
-		mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		mainFrame.getJFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		
 		Runnable locationSetter = () -> {
 		    AbstractFile folder = getWorkableLocation(tab.getLocation());
@@ -87,7 +87,7 @@ public class LocationChanger {
 		    } finally {
 		        mainFrame.setNoEventsMode(false);
 		        // Restore default cursor
-		        mainFrame.setCursor(Cursor.getDefaultCursor());
+		        mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 		        // Execute the given runnable
 		        runnable.run();
 		    }
@@ -385,7 +385,7 @@ public class LocationChanger {
      * Displays a popup dialog informing the user that the requested folder doesn't exist or isn't available.
      */
     void showFolderDoesNotExistDialog() {
-        InformationDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
+        InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("table.folder_access_error_title"), Translator.get("folder_does_not_exist"));
     }
 
 

@@ -62,7 +62,7 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
                     parentFolderSelected,
                     tableModel.getMarkedFiles()).show(fileTable, rect.x + rect.width, rect.y);
         } catch (Exception e) {
-            InformationDialog.showErrorDialog(mainFrame);
+            InformationDialog.showErrorDialog(mainFrame.getJFrame());
         }
     }
 

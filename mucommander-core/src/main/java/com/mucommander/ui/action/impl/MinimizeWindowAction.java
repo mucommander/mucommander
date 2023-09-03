@@ -45,7 +45,7 @@ public class MinimizeWindowAction extends MuAction {
 
     @Override
     public void performAction() {
-        mainFrame.setExtendedState(JFrame.ICONIFIED);
+        mainFrame.getJFrame().setExtendedState(JFrame.ICONIFIED);
     }
 
 	@Override

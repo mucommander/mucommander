@@ -53,10 +53,10 @@ public class OpenURLInBrowserAction extends MuAction {
 
         if (url instanceof String) {
             try {
-                InformationDialog.showErrorDialogIfNeeded(getMainFrame(), DesktopManager.browse(new URL((String)url)));
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(), DesktopManager.browse(new URL((String)url)));
             }
             catch(Exception e) {
-                InformationDialog.showErrorDialog(mainFrame);
+                InformationDialog.showErrorDialog(mainFrame.getJFrame());
             }
         }
     }

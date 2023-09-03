@@ -54,24 +54,24 @@ public class ClonedMainFrameBuilder extends MainFrameBuilder {
         // a slight horizontal and vertical offset to make sure we keep both of them visible.
 		
 		Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
-		int x             = currentMainFrame.getX() + X_OFFSET;
-        int y             = currentMainFrame.getY() + Y_OFFSET;
-        int width         = currentMainFrame.getWidth();
-        int height        = currentMainFrame.getHeight();
+		int x             = currentMainFrame.getJFrame().getX() + X_OFFSET;
+        int y             = currentMainFrame.getJFrame().getY() + Y_OFFSET;
+        int width         = currentMainFrame.getJFrame().getWidth();
+        int height        = currentMainFrame.getJFrame().getHeight();
 
         // Make sure we're still within the screen.
         // Note that while the width and height tests look redundant, they are required. Some
         // window managers, such as Gnome, return rather peculiar results.
-        if(!isInsideUsableScreen(currentMainFrame, x + width, -1))
+        if(!isInsideUsableScreen(currentMainFrame.getJFrame(), x + width, -1))
             x = 0;
-        if(!isInsideUsableScreen(currentMainFrame, -1, y + height))
+        if(!isInsideUsableScreen(currentMainFrame.getJFrame(), -1, y + height))
             y = 0;
         if(width + x > screenSize.width)
             width = screenSize.width - x;
         if(height + y > screenSize.height)
             height = screenSize.height - y;
         
-        mainFrame.setBounds(new Rectangle(x, y, width, height));
+        mainFrame.getJFrame().setBounds(new Rectangle(x, y, width, height));
         
 		return Collections.singleton(mainFrame);
 	}

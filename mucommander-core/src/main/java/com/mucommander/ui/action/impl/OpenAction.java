@@ -94,7 +94,7 @@ public class OpenAction extends MuAction {
     		resolvedFile = resolveSymlink(file);
 
     		if (resolvedFile == null) {
-    			InformationDialog.showErrorDialog(mainFrame, Translator.get("cannot_open_cyclic_symlink"));
+    			InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("cannot_open_cyclic_symlink"));
     			return;
     		}
     	}
@@ -136,7 +136,7 @@ public class OpenAction extends MuAction {
                 RecentExecutedFilesQL.addFile(resolvedFile);
             }
             catch(IOException e) {
-                InformationDialog.showErrorDialog(mainFrame);
+                InformationDialog.showErrorDialog(mainFrame.getJFrame());
             }
         }
 
@@ -197,7 +197,7 @@ public class OpenAction extends MuAction {
 					if (MuConfigurations.getPreferences().getVariable(MuPreference.VIEW_ON_ERROR, MuPreferences.DEFAULT_VIEW_ON_ERROR)) {
 						ActionManager.getActionInstance(ActionType.View, mainFrame).performAction();
 					} else {
-						InformationDialog.showErrorDialog(mainFrame, s);
+						InformationDialog.showErrorDialog(mainFrame.getJFrame(), s);
 					}
 				}
 			)

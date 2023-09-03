@@ -116,7 +116,7 @@ public class ViewerRegistrar {
                 // TODO: question the user how does he want to open the file (as image, text..)
                 // Todo: display a proper warning dialog with the appropriate icon
 
-                QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"), Translator.get(e.getMessage()), viewerFrame.getMainFrame(),
+                QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"), Translator.get(e.getMessage()), viewerFrame.getMainFrame().getJFrame(),
                         Arrays.asList(ViewerRegistrarAction.OPEN_ANYWAY, ViewerRegistrarAction.CANCEL),
                         0);
 

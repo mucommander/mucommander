@@ -204,7 +204,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         Collection<MainFrame> newMainFrames = mainFrameBuilder.build();
 
         // To catch user window closing actions
-        newMainFrames.forEach(frame -> frame.addWindowListener(instance));
+        newMainFrames.forEach(frame -> frame.getJFrame().addWindowListener(instance));
 
         // Adds the new MainFrame to the vector
         instance.mainFrames.addAll(newMainFrames);
@@ -215,7 +215,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         LOGGER.error("creating new main frame - update window...");
 
         // Make frames visible
-        newMainFrames.forEach(frame -> frame.setVisible(true));
+        newMainFrames.forEach(frame -> frame.getJFrame().setVisible(true));
         LOGGER.error("creating new main frame - all visible...");
 
         if (!instance.mainFrames.isEmpty()) {
@@ -294,7 +294,9 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             currentThread.setContextClassLoader(oldLoader);
 
             mainFrames.forEach(MainFrame::updateFileTablesHeaderRenderer);
-            mainFrames.forEach(SwingUtilities::updateComponentTreeUI);
+            mainFrames.forEach(e -> {
+                SwingUtilities.updateComponentTreeUI(e.getJFrame());
+            });
         }
         catch(Throwable e) {
             LOGGER.debug("Exception caught", e);

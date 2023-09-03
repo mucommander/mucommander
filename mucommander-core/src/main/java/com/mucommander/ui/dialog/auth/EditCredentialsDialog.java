@@ -84,7 +84,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
 
     public EditCredentialsDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.EditCredentials), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.EditCredentials), mainFrame.getJFrame());
 
         this.mainFrame = mainFrame;
 

@@ -64,7 +64,7 @@ public class ToggleToolBarAction extends MuAction {
         updateLabel(visible);
         // Show/hide the toolbar
         toolBarPanel.setVisible(visible);
-        mainFrame.validate();
+        mainFrame.getJFrame().validate();
     }
 
 	@Override
