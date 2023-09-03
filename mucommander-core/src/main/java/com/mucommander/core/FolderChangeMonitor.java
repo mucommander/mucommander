@@ -146,13 +146,13 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         this.waitBeforeCheckTime = waitAfterRefresh;
 
         // Listen to window changes to know when a folder panel is disposed
-        folderPanel.getMainFrame().addWindowListener(this);
+        folderPanel.getMainFrame().getJFrame().addWindowListener(this);
 
         // Listen to window focus changes to know when a MainFrame gains focus and make sure
         // that only one instance of FolderChangeMonitor is registered per MainFrame (no need for both panels)
-        WindowFocusListener[] listeners = folderPanel.getMainFrame().getWindowFocusListeners();
+        WindowFocusListener[] listeners = folderPanel.getMainFrame().getJFrame().getWindowFocusListeners();
         if (!Arrays.stream(listeners).anyMatch(l -> l instanceof FolderChangeMonitor))
-            folderPanel.getMainFrame().addWindowFocusListener(this);
+            folderPanel.getMainFrame().getJFrame().addWindowFocusListener(this);
 
         instances.add(this);
         initMonitoringThread();

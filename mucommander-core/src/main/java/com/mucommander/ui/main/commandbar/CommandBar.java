@@ -125,7 +125,7 @@ public class CommandBar extends JPanel {
         };
         CommandBarAttributes.addCommandBarAttributesListener(commandBarAttributesListener);
 
-        mainFrame.addWindowListener(new WindowAdapter() {
+        mainFrame.getJFrame().addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 CommandBarAttributes.removeCommandBarAttributesListener(commandBarAttributesListener);

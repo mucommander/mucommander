@@ -67,7 +67,7 @@ public class OpenNativelyAction extends MuAction {
                 RecentExecutedFilesQL.addFile(selectedFile);
         	}
             catch (IOException | UnsupportedOperationException e) {
-                InformationDialog.showErrorDialog(mainFrame);
+                InformationDialog.showErrorDialog(mainFrame.getJFrame());
             }
         }
     }

@@ -145,7 +145,7 @@ public abstract class AbstractCopyJob extends TransferFileJob {
                 FileCollisionDialog.FileCollisionAction choice;
                 // Use default action if one has been set, if not show up a dialog
                 if (defaultFileExistsAction == FileCollisionDialog.FileCollisionAction.ASK) {
-                    FileCollisionDialog dialog = new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, file, destFile, true, true);
+                    FileCollisionDialog dialog = new FileCollisionDialog(getProgressDialog(), getMainFrame().getJFrame(), collision, file, destFile, true, true);
                     choice = (FileCollisionDialog.FileCollisionAction) waitForUserResponse(dialog);
                     // If 'apply to all' was selected, this choice will be used for any other files (user will not be asked again)
                     if (dialog.applyToAllSelected()) {

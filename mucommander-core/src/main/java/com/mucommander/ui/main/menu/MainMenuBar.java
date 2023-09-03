@@ -590,7 +590,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             try {
                 ThemeManager.setCurrentTheme(theme);
             } catch(IllegalArgumentException e) {
-                InformationDialog.showErrorDialog(mainFrame, Translator.get("theme_could_not_be_loaded"));
+                InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("theme_could_not_be_loaded"));
             }
         }
     }
@@ -604,7 +604,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         }
 
         public void actionPerformed(ActionEvent actionEvent) {
-            new ThemeEditorDialog(mainFrame, ThemeManager.getCurrentTheme()).editTheme();
+            new ThemeEditorDialog(mainFrame.getJFrame(), ThemeManager.getCurrentTheme()).editTheme();
         }
     }
 }

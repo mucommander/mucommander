@@ -100,13 +100,13 @@ public abstract class FileFrame extends JFrame {
         setContentPane(contentPane);
 
         setSize(WAIT_DIALOG_SIZE);
-        DialogToolkit.centerOnWindow(this, mainFrame);
+        DialogToolkit.centerOnWindow(this, mainFrame.getJFrame());
 
         setVisible(true);
     }
 
     private void showGenericErrorDialog() {
-        InformationDialog.showErrorDialog(mainFrame, getGenericErrorDialogTitle(), getGenericErrorDialogMessage());
+        InformationDialog.showErrorDialog(mainFrame.getJFrame(), getGenericErrorDialogTitle(), getGenericErrorDialogMessage());
     }
 
     /**
@@ -131,7 +131,7 @@ public abstract class FileFrame extends JFrame {
         DialogToolkit.fitToScreen(this);
         DialogToolkit.fitToMinDimension(this, getMinimumSize());
 
-        DialogToolkit.centerOnWindow(this, mainFrame);
+        DialogToolkit.centerOnWindow(this, mainFrame.getJFrame());
     }
 
     //////////////////////

@@ -78,7 +78,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
 
             // if there is no window saved in the snapshot file, use default settings
             if (nbFrames == 0) {
-                mainFrame.setBounds(getDefaultSize());
+                mainFrame.getJFrame().setBounds(getDefaultSize());
             }
             // otherwise, use the settings of the selected window
             else {
@@ -87,7 +87,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
                 int width  = snapshot.getIntegerVariable(MuSnapshot.getWidth(index));
                 int height = snapshot.getIntegerVariable(MuSnapshot.getHeight(index));
 
-                mainFrame.setBounds(new Rectangle(x, y, width, height));
+                mainFrame.getJFrame().setBounds(new Rectangle(x, y, width, height));
             }
 
             return Collections.singleton(mainFrame);
@@ -149,7 +149,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
             height = (int)(screenSize.height * 0.8);
         }
 
-        mainFrame.setBounds(new Rectangle(x, y, width, height));
+        mainFrame.getJFrame().setBounds(new Rectangle(x, y, width, height));
 
         // Retrieve the Frame's SinglePanelView toggle state...
         if (MuSnapshot.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {

@@ -63,7 +63,7 @@ public class ToggleCommandBarAction extends MuAction {
         updateLabel(visible);
         // Show/hide the command bar
         commandBar.setVisible(visible);
-        mainFrame.validate();
+        mainFrame.getJFrame().validate();
     }
 
 	@Override

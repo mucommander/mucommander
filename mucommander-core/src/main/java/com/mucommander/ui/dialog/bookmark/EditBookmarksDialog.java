@@ -87,7 +87,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
 
     public EditBookmarksDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.EditBookmarks), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.EditBookmarks), mainFrame.getJFrame());
 
         this.mainFrame = mainFrame;
 

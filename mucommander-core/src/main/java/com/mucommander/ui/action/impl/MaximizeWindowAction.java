@@ -45,7 +45,7 @@ public class MaximizeWindowAction extends MuAction {
 
     @Override
     public void performAction() {
-        mainFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        mainFrame.getJFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
 	@Override

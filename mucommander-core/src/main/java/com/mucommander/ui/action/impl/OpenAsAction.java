@@ -60,7 +60,7 @@ public class OpenAsAction extends OpenAction {
         if (file.isSymlink()) {
             resolvedFile = resolveSymlink(file);
             if (resolvedFile == null) {
-                InformationDialog.showErrorDialog(mainFrame, Translator.get("cannot_open_cyclic_symlink"));
+                InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("cannot_open_cyclic_symlink"));
                 return;
             }
         }

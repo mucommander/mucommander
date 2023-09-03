@@ -213,7 +213,7 @@ public class CalculateChecksumJob extends TransferFileJob {
         if(collision!=FileCollisionChecker.NO_COLLISION) {
             // File already exists in destination, ask the user what to do (cancel, overwrite,...) but
             // do not offer the multiple files mode options such as 'skip' and 'apply to all'.
-            DialogAction choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame(), collision, null, checksumFile, false, false));
+            DialogAction choice = waitForUserResponse(new FileCollisionDialog(getProgressDialog(), getMainFrame().getJFrame(), collision, null, checksumFile, false, false));
 
             // Overwrite file
             if (choice== FileCollisionDialog.FileCollisionAction.OVERWRITE) {

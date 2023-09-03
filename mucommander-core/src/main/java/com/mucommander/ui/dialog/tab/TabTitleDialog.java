@@ -65,7 +65,7 @@ public class TabTitleDialog extends FocusDialog implements ActionListener {
     private FolderPanel folderPanel;
 
 	public TabTitleDialog(MainFrame mainFrame, FolderPanel folderPanel) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.SetTabTitle), folderPanel);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.SetTabTitle), folderPanel);
 
         this.folderPanel = folderPanel;
 
