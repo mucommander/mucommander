@@ -127,9 +127,9 @@ public class TerminalIntegration {
             String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
             // If !connected means that terminal process has ended (via `exit` command for ex.).
             if (terminal == null || !terminal.getTtyConnector().isConnected()) {
-                Cursor orgCursor = mainFrame.getCursor();
+                Cursor orgCursor = mainFrame.getJFrame().getCursor();
                 try {
-                    mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
                     terminal.getTerminalPanel().addFocusListener(new FocusAdapter() {
                         public void focusGained(FocusEvent e) {
@@ -143,7 +143,7 @@ public class TerminalIntegration {
                             (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
                     verticalSplitPane.setBottomComponent(terminal);
                 } finally {
-                    mainFrame.setCursor(orgCursor);
+                    mainFrame.getJFrame().setCursor(orgCursor);
                 }
             } else {
                 syncCWD(newCwd);

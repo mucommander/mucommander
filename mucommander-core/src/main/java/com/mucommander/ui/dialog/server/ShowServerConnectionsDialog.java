@@ -68,7 +68,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
     
     public ShowServerConnectionsDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowServerConnections), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.ShowServerConnections), mainFrame.getJFrame());
 
         this.mainFrame = mainFrame;
 

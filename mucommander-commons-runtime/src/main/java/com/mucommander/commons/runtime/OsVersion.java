@@ -17,6 +17,8 @@
 
 package com.mucommander.commons.runtime;
 
+import com.mucommander.preload.PreloadedJFrame;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +79,9 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	MAC_OS_10_16("10.16");
 	
 
+    static {
+        PreloadedJFrame.init();
+    }
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsVersion.class);
 

@@ -1,6 +1,8 @@
 repositories.mavenCentral()
 
 dependencies {
+    compileOnly project(':mucommander-core-preload')
+
     testImplementation 'org.testng:testng:6.11'
 }
 

@@ -90,7 +90,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
 
     public AuthDialog(MainFrame mainFrame, FileURL fileURL, boolean authFailed, String errorMessage) {
-        super(mainFrame, Translator.get("auth_dialog.title"), mainFrame);
+        super(mainFrame.getJFrame(), Translator.get("auth_dialog.title"), mainFrame.getJFrame());
 	
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());

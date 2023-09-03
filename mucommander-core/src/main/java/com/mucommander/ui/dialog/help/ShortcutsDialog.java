@@ -91,7 +91,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     };
 
     public ShortcutsDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowKeyboardShortcuts), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.ShowKeyboardShortcuts), mainFrame.getJFrame());
 
         Container contentPane = getContentPane();
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);

@@ -99,7 +99,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
         try {
             // Set cursor to hourglass/wait
-            mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            mainFrame.getJFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
             // Render all actions inactive while changing folder
             mainFrame.setNoEventsMode(true);
@@ -160,7 +160,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
 
                     if (search.isPausedToDueMaxResults()) {
                         // Restore default cursor
-                        mainFrame.setCursor(Cursor.getDefaultCursor());
+                        mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
                         // Download or browse file ?
                         DialogAction ret = showSearchExceededMaxResults();
@@ -172,7 +172,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
                         }
 
                         // Set cursor to hourglass/wait
-                        mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                        mainFrame.getJFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
                         // continue the paused search
                         search.continueSearch();
                     }
@@ -211,10 +211,10 @@ public class SearchUpdaterThread extends ChangeFolderThread {
     }
 
     private DialogAction showSearchExceededMaxResults() {
-        return new QuestionDialog(mainFrame,
+        return new QuestionDialog(mainFrame.getJFrame(),
                 Translator.get("warning"),
                 Translator.get("search.exceeds_max_results", String.valueOf(SearchFile.MAX_RESULTS)),
-                mainFrame,
+                mainFrame.getJFrame(),
                 Arrays.asList(SearchUpdaterThreadAction.STOP, SearchUpdaterThreadAction.CONTINUE),
                 0).getActionValue();
     }
@@ -229,7 +229,7 @@ public class SearchUpdaterThread extends ChangeFolderThread {
         folderPanel.setProgressValue(0);
 
         // Restore normal mouse cursor
-        mainFrame.setCursor(Cursor.getDefaultCursor());
+        mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
         locationChanger.cleanChangeFolderThread();
 

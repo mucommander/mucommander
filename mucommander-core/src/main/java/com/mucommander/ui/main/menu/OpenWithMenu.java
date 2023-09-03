@@ -172,7 +172,7 @@ public class OpenWithMenu extends JMenu {
                     var howToEnable = super.add(
                             Translator.get("file_menu.open_with_apps_tip"));
                     howToEnable.addActionListener(e ->
-                            DesktopManager.howToEnableOpenWithApps(mainFrame));
+                            DesktopManager.howToEnableOpenWithApps(mainFrame.getJFrame()));
                 }
             }
         }

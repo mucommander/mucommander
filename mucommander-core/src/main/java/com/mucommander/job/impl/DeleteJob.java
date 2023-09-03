@@ -105,7 +105,7 @@ public class DeleteJob extends FileJob {
      * Invokes an error dialog saying that move to trash has failed.
      */
     private void showErrorToMoveToTrash() {
-        InformationDialog.showErrorDialog(WindowManager.getCurrentMainFrame(), Translator.get("delete_dialog.move_to_trash.option"), Translator.get("delete_dialog.move_to_trash.failed"));
+        InformationDialog.showErrorDialog(WindowManager.getCurrentMainFrame().getJFrame(), Translator.get("delete_dialog.move_to_trash.option"), Translator.get("delete_dialog.move_to_trash.failed"));
     }
 
     ////////////////////////////

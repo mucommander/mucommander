@@ -709,7 +709,7 @@ public class MuSnapshot {
     }
 
     private void setWindowAttributes(int index, MainFrame currentMainFrame) {
-        Rectangle bounds = currentMainFrame.getBounds();
+        Rectangle bounds = currentMainFrame.getJFrame().getBounds();
         configuration.setVariable(getX(index), (int)bounds.getX());
         configuration.setVariable(getY(index), (int)bounds.getY());
         configuration.setVariable(getWidth(index), (int)bounds.getWidth());

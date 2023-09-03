@@ -134,7 +134,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      * @param files a list of files to rename
      */
     public BatchRenameDialog(MainFrame mainFrame, FileSet files) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.BatchRename), null);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.BatchRename), null);
         this.mainFrame = mainFrame;
         this.files = files;
         for (AbstractFile f : files) {        	

@@ -98,7 +98,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
      * Creates a new instance of the <code>GeneralPreferencesDialog</code>.
      */
     private GeneralPreferencesDialog() {
-        super(WindowManager.getCurrentMainFrame(), Translator.get("prefs_dialog.title"));
+        super(WindowManager.getCurrentMainFrame().getJFrame(), Translator.get("prefs_dialog.title"));
         modifiedComponents = new LinkedHashSet<PrefComponent>();
 
         // Adds the preference tabs.

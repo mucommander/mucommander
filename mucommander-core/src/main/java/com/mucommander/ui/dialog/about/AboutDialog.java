@@ -97,7 +97,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
      *            frame this dialog is relative to.
      */
     public AboutDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowAbout), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.ShowAbout), mainFrame.getJFrame());
 
         // Initializes the dialog's content.
         Container contentPane = getContentPane();

@@ -118,7 +118,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
      * @param selectPanelClass class of the ServerPanel to select
      */
     public ServerConnectDialog(FolderPanel folderPanel, Class<? extends ServerPanel> selectPanelClass) {
-        super(folderPanel.getMainFrame(), ActionProperties.getActionLabel(ActionType.ConnectToServer), folderPanel.getMainFrame());
+        super(folderPanel.getMainFrame().getJFrame(), ActionProperties.getActionLabel(ActionType.ConnectToServer), folderPanel.getMainFrame().getJFrame());
         this.folderPanel = folderPanel;
         lastPanelClass = selectPanelClass;
 
@@ -163,7 +163,7 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
     }
 
     private void addTab(ProtocolPanelProvider provider) {
-        addTab(provider.getSchema(), provider.get(this, folderPanel.getMainFrame()));
+        addTab(provider.getSchema(), provider.get(this, folderPanel.getMainFrame().getJFrame()));
     }
 
     private void addTab(String protocol, ServerPanel serverPanel) {

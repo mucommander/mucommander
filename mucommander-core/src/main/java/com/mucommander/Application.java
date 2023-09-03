@@ -17,6 +17,7 @@
 
 package com.mucommander;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -61,6 +62,7 @@ import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -208,10 +210,9 @@ public class Application {
         SplashScreen splashScreen = null;
         try {
             executor.execute(ThemeManager::preLoadAvailableFonts);
-           /* executor.execute(() -> {
-                var preLoadFrame = new JFrame();    // pre-load (warm-up).
-                preLoadFrame.dispose();
-            });*/
+//            executor.execute(() -> {
+//                new JPanel(new BorderLayout());
+//            });
 
             // Associations handling.
             String assoc = activator.assoc();
@@ -547,7 +548,7 @@ public class Application {
                 // If no theme is configured in the preferences, ask for an initial theme.
                 if (showSetup) {
                     SwingUtilities.invokeLater(() -> {
-                        new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
+                        new InitialSetupDialog(WindowManager.getCurrentMainFrame().getJFrame()).showDialog();
                     });
                 }
             }, "MainFrameInit").start();

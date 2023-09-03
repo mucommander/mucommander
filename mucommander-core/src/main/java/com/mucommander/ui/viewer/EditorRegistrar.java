@@ -114,7 +114,7 @@ public class EditorRegistrar {
                     counter++;
                 }
             } catch (WarnUserException e) {
-                QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"), Translator.get(e.getMessage()), frame.getMainFrame(),
+                QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"), Translator.get(e.getMessage()), frame.getMainFrame().getJFrame(),
                         Arrays.asList(EditorRegistrarAction.OPEN_ANYWAY, EditorRegistrarAction.CANCEL),
                         0);
 

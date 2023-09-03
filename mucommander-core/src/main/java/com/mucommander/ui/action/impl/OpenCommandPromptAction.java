@@ -38,7 +38,7 @@ public class OpenCommandPromptAction extends ParentFolderAction {
             DesktopManager.openCommandPrompt(mainFrame.getActivePanel().getCurrentFolder());
         }
         catch(Exception e) {
-            InformationDialog.showErrorDialog(mainFrame);
+            InformationDialog.showErrorDialog(mainFrame.getJFrame());
         }
     }
 

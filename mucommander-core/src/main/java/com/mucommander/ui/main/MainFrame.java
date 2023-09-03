@@ -57,6 +57,7 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.preload.PreloadedJFrame;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
@@ -84,9 +85,15 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Maxence Bernard
  */
-public class MainFrame extends JFrame implements LocationListener {
+public class MainFrame implements LocationListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
+
+    private static JFrame instance = PreloadedJFrame.instance;
+
+    public JFrame getJFrame() {
+        return instance;
+    }
 
     private ProportionalSplitPane foldersSplitPane;
 
@@ -149,7 +156,7 @@ public class MainFrame extends JFrame implements LocationListener {
             icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon128_24.png").getImage());
             icons.add(IconManager.getIcon(IconManager.MUCOMMANDER_ICON_SET, "icon256_24.png").getImage());
 
-            setIconImages(icons);
+            getJFrame().setIconImages(icons);
         }
     }
 
@@ -159,14 +166,14 @@ public class MainFrame extends JFrame implements LocationListener {
         // Register jobs listeners for UI notification purposes
         NotifierProvider.registerJobsListeners();
 
-        DesktopManager.customizeMainFrame(this);
+        DesktopManager.customizeMainFrame(getJFrame());
 
         // Enable window resize
-        setResizable(true);
+        getJFrame().setResizable(true);
 
         // The toolbar should have no inset, this is why it is left out of the insetsPane
         JPanel contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
+        getJFrame().setContentPane(contentPane);
 
         insetsPane = new JPanel(new BorderLayout()) {
             // Add an x=3,y=3 gap around content pane
@@ -203,14 +210,14 @@ public class MainFrame extends JFrame implements LocationListener {
         executor.execute(() -> {
             // Create menu bar (has to be created after toolbar) - ok, but why?
             MainMenuBar menuBar = new MainMenuBar(this);
-            setJMenuBar(menuBar);
+            getJFrame().setJMenuBar(menuBar);
         });
 
         // Create the split pane that separates folder panels and allows to resize how much space is allocated to the
         // both of them. The split orientation is loaded from and saved to the preferences.
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
-        foldersSplitPane = new ProportionalSplitPane(this,
+        foldersSplitPane = new ProportionalSplitPane(getJFrame(),
                 MuSnapshot.getSnapshot().getVariable(
                         MuSnapshot.getSplitOrientation(0),
                         MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
@@ -276,8 +283,8 @@ public class MainFrame extends JFrame implements LocationListener {
         });
 
         // Perform CloseAction when the user asked the window to close
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
+        getJFrame().setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        getJFrame().addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 ActionManager.performAction(ActionType.CloseWindow, MainFrame.this);
@@ -290,7 +297,7 @@ public class MainFrame extends JFrame implements LocationListener {
         fireActivePanelChanged(activeTable.getFolderPanel());
 
         // Set the custom FocusTraversalPolicy that manages focus for both FolderPanel and their sub components.
-        setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
+        getJFrame().setFocusTraversalPolicy(new CustomFocusTraversalPolicy());
     }
 
     public MainFrame(ConfFileTableTab leftTab, FileTableConfiguration leftTableConf,
@@ -685,11 +692,11 @@ public class MainFrame extends JFrame implements LocationListener {
      * @return <code>true</code> if this MainFrame is active, or is an ancestor of a Window that is currently active
      */
     public boolean isAncestorOfActiveWindow() {
-        if (isActive()) {
+        if (getJFrame().isActive()) {
             return true;
         }
 
-        Window ownedWindows[] = getOwnedWindows();
+        Window ownedWindows[] = getJFrame().getOwnedWindows();
 
         int nbWindows = ownedWindows.length;
         for (int i = 0; i < nbWindows; i++) {
@@ -718,7 +725,7 @@ public class MainFrame extends JFrame implements LocationListener {
         if (mainFrames.size() > 1) {
             title += " [" + (mainFrames.indexOf(this) + 1) + "]";
         }
-        setTitle(title);
+        getJFrame().setTitle(title);
 
         if (OsFamily.MAC_OS.isCurrent()) {
             // Displays the document icon in the window title bar, works only for local files
@@ -740,7 +747,7 @@ public class MainFrame extends JFrame implements LocationListener {
 
             // Note that for some strange reason (looks like a bug), setting the property to null won't remove
             // the previous icon.
-            getRootPane().putClientProperty("Window.documentFile", javaIoFile);
+            getJFrame().getRootPane().putClientProperty("Window.documentFile", javaIoFile);
         }
     }
 
@@ -771,11 +778,11 @@ public class MainFrame extends JFrame implements LocationListener {
     /**
      * Overrides <code>java.awt.Window#toFront</code> to have the window return to a normal state if it is minimized.
      */
-    @Override
+
     public void toFront() {
-        if((getExtendedState()&Frame.ICONIFIED)!=0)
-            setExtendedState(Frame.NORMAL);
-        super.toFront();
+        if((getJFrame().getExtendedState()&Frame.ICONIFIED)!=0)
+            getJFrame().setExtendedState(Frame.NORMAL);
+        getJFrame().toFront();
     }
 
     ///////////////////
