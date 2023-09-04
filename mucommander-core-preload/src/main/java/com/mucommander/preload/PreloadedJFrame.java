@@ -20,7 +20,9 @@ package com.mucommander.preload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.BorderLayout;
+import java.awt.LayoutManager;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -38,23 +40,60 @@ public class PreloadedJFrame extends JFrame {
         preLoad();
     }
 
-    public static PreloadedJFrame instance;
-    private static JPanel preloadedPanel;
+    private static final Queue<PreloadedJFrame> preloadedFrame = new ConcurrentLinkedDeque<>();
+
+    private static final Queue<JPanel> preloadedPanels = new ConcurrentLinkedDeque<>();
+
+    private Object mainFrameObj;
 
     private static void preLoad() {
         new Thread(() -> {
-            System.out.println("---- FRAME!");
+            LOGGER.error("Going to pre-create a couple of JFrames...");
             var pre = System.currentTimeMillis();
-            instance = new PreloadedJFrame();
-            instance.setVisible(true);
-            instance.setVisible(false);
-            preloadedPanel = new JPanel(new BorderLayout());
-            System.out.println("---- FRAME in " + (System.currentTimeMillis() - pre));
+            preloadedFrame.add(new PreloadedJFrame());
+            preloadedFrame.add(new PreloadedJFrame());
+            LOGGER.error("JFrames pre-creation completed in {}ms", (System.currentTimeMillis() - pre));
 
-        }).start();
+            LOGGER.error("Going to pre-create a couple of JPanels...");
+            pre = System.currentTimeMillis();
+            preloadedPanels.add(new JPanel());
+            preloadedPanels.add(new JPanel());
+            preloadedPanels.add(new JPanel());
+            preloadedPanels.add(new JPanel());
+            preloadedPanels.add(new JPanel());
+            preloadedPanels.add(new JPanel());
+            LOGGER.error("JPanel pre-creation completed in {}ms", (System.currentTimeMillis() - pre));
+
+        }, "Preload-JFrame").start();
+    }
+
+    private void setMainFrameObj(Object mainFrameObj) {
+        this.mainFrameObj = mainFrameObj;
+    }
+
+    public Object getMainFrameObject() {
+        return mainFrameObj;
     }
 
     public static void init() {
-        // do nothing
+        // noop
     }
+
+    public static JFrame getJFrame(Object mainFrame) {
+        var result = preloadedFrame.poll();
+        result = result != null ? result : new PreloadedJFrame();
+        result.setMainFrameObj(mainFrame);
+        return result;
+    }
+
+    public static JPanel getJPanel(LayoutManager layout) {
+        var result = preloadedPanels.poll();
+        if (result == null) {
+            result = new JPanel(layout);
+        } else {
+            result.setLayout(layout);
+        }
+        return result;
+    }
+
 }

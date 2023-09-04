@@ -80,8 +80,10 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	
 
     static {
+        // force it to load as early as possible
         PreloadedJFrame.init();
     }
+
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsVersion.class);
 

@@ -18,6 +18,7 @@
 package com.mucommander.ui.main.tree;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -55,6 +56,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.preload.PreloadedJFrame;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
@@ -75,7 +77,7 @@ import com.mucommander.ui.theme.ThemeListener;
  * @author Mariusz Jakubowski
  * 
  */
-public class FoldersTreePanel extends JPanel implements TreeSelectionListener, 
+public class FoldersTreePanel implements TreeSelectionListener,
 							LocationListener, FocusListener, ThemeListener, 
 							TreeModelListener, ConfigurationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FoldersTreePanel.class);
@@ -92,6 +94,8 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     /** A timer that fires a directory change */
     private ChangeTimer changeTimer = new ChangeTimer();
 
+    private final JPanel panel;
+
     static {
         TreeIOThreadManager.getInstance().start();
     }
@@ -103,9 +107,10 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      */
     public FoldersTreePanel(FolderPanel folderPanel) {
         super();
+        panel = PreloadedJFrame.getJPanel(new FlowLayout());
         this.folderPanel = folderPanel;
         
-        setLayout(new BorderLayout());
+        panel.setLayout(new BorderLayout());
 
         // Filters out the files that should not be displayed in the tree view
         AndFileFilter treeFileFilter = new AndFileFilter(
@@ -130,7 +135,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         // JScrollPane usually comes with a tiny border, remove it
         sp.setBorder(null);
 
-        add(sp, BorderLayout.CENTER);
+        panel.add(sp, BorderLayout.CENTER);
 
         // Create tree renderer. We're not using default tree renderer, because
         // AbstractFile.toString method returns full path, and we want to
@@ -206,9 +211,9 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      * Adds or removes location change listeners depending on the tree
      * visibility.
      */
-    @Override
+//    @Override
     public void setVisible(boolean flag) {
-        super.setVisible(flag);
+        panel.setVisible(flag);
         if (flag) {
             updateSelectedFolder();
             folderPanel.getLocationManager().addLocationListener(this);
@@ -269,7 +274,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
      * @param folder a folder to refresh on the tree
      */
     public void refreshFolder(AbstractFile folder) {
-        if (!isVisible())
+        if (!panel.isVisible())
             return;
         model.fireTreeStructureChanged(tree, new TreePath(model.getPathToRoot(folder)));
     }
@@ -277,7 +282,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
     /**
      * Changes focus to tree.
      */
-    @Override
+    //@Override
     public void requestFocus() {
         tree.requestFocus();
     }
@@ -397,4 +402,7 @@ public class FoldersTreePanel extends JPanel implements TreeSelectionListener,
         }
     }
 
+    public JPanel getPanel() {
+        return panel;
+    }
 }

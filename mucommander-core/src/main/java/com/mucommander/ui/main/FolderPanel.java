@@ -51,6 +51,7 @@ import com.mucommander.core.ChangeFolderThread;
 import com.mucommander.core.LocalLocationHistory;
 import com.mucommander.core.LocationChanger;
 import com.mucommander.desktop.ActionType;
+import com.mucommander.preload.PreloadedJFrame;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.FocusNextAction;
@@ -80,13 +81,15 @@ import com.mucommander.ui.tabs.ActiveTabListener;
  *
  * @author Maxence Bernard, Arik Hadas
  */
-public class FolderPanel extends JPanel implements FocusListener, QuickListContainer, ActiveTabListener {
+public class FolderPanel implements FocusListener, QuickListContainer, ActiveTabListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FolderPanel.class);
 
 	/** The following constants are used to identify the left and right folder panels */
 	public enum FolderPanelType { LEFT, RIGHT }
 
     private MainFrame  mainFrame;
+
+    private final JPanel panel;
 
     private LocationManager locationManager = new LocationManager(this);
 
@@ -124,7 +127,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      * @param conf - configuration for this panel's file table
      */
     FolderPanel(MainFrame mainFrame, ConfFileTableTab[] initialTabs, int indexOfSelectedTab, FileTableConfiguration conf) {
-        super(new BorderLayout());
+        panel = PreloadedJFrame.getJPanel(new BorderLayout());
 
         LOGGER.trace(" initialTabs:");
         for (FileTableTab tab:initialTabs)
@@ -133,30 +136,42 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         this.mainFrame = mainFrame;
         
         // No decoration for this panel
-        setBorder(null);
+        panel.setBorder(null);
 
-        JPanel locationPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridy = 0;
+        JPanel locationPanel = PreloadedJFrame.getJPanel(new GridBagLayout());
+        panel.getTreeLock();
 
-        // Create and add drive button
-        this.driveButton = new DrivePopupButton(this);
-        c.weightx = 0;
-        c.gridx = 0;        
-        locationPanel.add(driveButton, c);
+        panel.add(locationPanel, BorderLayout.NORTH);
 
-        // Create location text field
-        this.locationTextField = new LocationTextField(this);
+        new Thread(() -> {
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridy = 0;
 
-        // Give location field all the remaining space until the PoupupsButton
-        c.weightx = 1;
-        c.gridx = 1;
-        // Add some space between drive button and location combo box (none by default)
-        c.insets = new Insets(0, 4, 0, 0);
-        locationPanel.add(locationTextField, c);
+            // Create and add drive button
+            this.driveButton = new DrivePopupButton(this);
+            c.weightx = 0;
+            c.gridx = 0;
+            locationPanel.add(driveButton, c);
 
-        add(locationPanel, BorderLayout.NORTH);
+            // Create location text field
+            this.locationTextField = new LocationTextField(this);
+
+            // Give location field all the remaining space until the PoupupsButton
+            c.weightx = 1;
+            c.gridx = 1;
+            // Add some space between drive button and location combo box (none by default)
+            c.insets = new Insets(0, 4, 0, 0);
+            locationPanel.add(locationTextField, c);
+            disableCtrlFocusTraversalKeys(locationTextField);
+            registerCycleThruFolderPanelAction(locationTextField);
+
+            // Allow the location field to change the current directory when a file/folder is dropped on it
+            FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, true);
+            new DropTarget(locationTextField, dropTargetListener);
+            new DropTarget(driveButton, dropTargetListener);
+            locationTextField.addFocusListener(this);
+        }).start();
 
         // Initialize quick lists in background
         fileTablePopups =  CompletableFuture.supplyAsync(() -> {
@@ -174,7 +189,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         fileTable = new FileTable(mainFrame, this, conf);
 
         locationChanger = new LocationChanger(mainFrame, this, locationManager);
-        
+
         // Create the Tabs (Must be called after the fileTable was created and current folder was set)
         tabs = new FileTableTabs(mainFrame, this, initialTabs);
 
@@ -188,28 +203,27 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 
 		tabs.addActiveTabListener(this);
 
-        // create folders tree on a JSplitPane 
+        // create folders tree on a JSplitPane
         foldersTreePanel = new FoldersTreePanel(this);
         foldersTreePanel.setVisible(false);
-        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel, tabs);
+        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel.getPanel(), tabs);
         treeSplitPane.setDividerSize(0);
         treeSplitPane.setDividerLocation(0);
         // Remove default border
         treeSplitPane.setBorder(null);
-        add(treeSplitPane, BorderLayout.CENTER);
-                
+        panel.add(treeSplitPane, BorderLayout.CENTER);
+
         // Disable Ctrl+Tab and Shift+Ctrl+Tab focus traversal keys
-        disableCtrlFocusTraversalKeys(locationTextField);
+
         disableCtrlFocusTraversalKeys(foldersTreePanel.getTree());
         disableCtrlFocusTraversalKeys(fileTable);
         disableCtrlFocusTraversalKeys(tabs);
-        registerCycleThruFolderPanelAction(locationTextField);
         registerCycleThruFolderPanelAction(foldersTreePanel.getTree());
-        // No need to register cycle actions for FileTable, they already are 
+        // No need to register cycle actions for FileTable, they already are
 
         // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
         fileTable.addFocusListener(this);
-        locationTextField.addFocusListener(this);
+
         tabs.addFocusListener(this);
 
         // Drag and Drop support
@@ -217,11 +231,6 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
         // Enable drag support on the FileTable
         this.fileDragSourceListener = new FileDragSourceListener(this);
         fileDragSourceListener.enableDrag(fileTable);
-
-        // Allow the location field to change the current directory when a file/folder is dropped on it
-        FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, true);
-        new DropTarget(locationTextField, dropTargetListener);
-        new DropTarget(driveButton, dropTargetListener);
     }
 
 
@@ -492,7 +501,7 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
      */
     @Override
     public String toString() {
-        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+hasFocus();
+        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+panel.hasFocus();
     }
 
     ///////////////////////////
@@ -515,19 +524,24 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
     public Point calcQuickListPosition(Dimension dim) {
     	return new Point(
     			Math.max((getWidth() - (int)dim.getWidth()) / 2, 0),
-    			getLocationTextField().getHeight() + Math.max((getHeight() - (int)dim.getHeight()) / 3, 0)
+    			getLocationTextField().getHeight() + Math.max((panel.getHeight() - (int)dim.getHeight()) / 3, 0)
     			);
 	}
 
 	public Component containerComponent() {
-		return this;
+		return panel;
 	}
 
 	public Component nextFocusableComponent() {
 		return fileTable;
 	}
 
-	///////////////////////////////
+    @Override
+    public int getWidth() {
+        return panel.getWidth();
+    }
+
+    ///////////////////////////////
 	// ActiveTabListener methods //
 	///////////////////////////////
 
@@ -537,4 +551,8 @@ public class FolderPanel extends JPanel implements FocusListener, QuickListConta
 		locationTextField.setEnabled(!isCurrentTabLocked);
 		driveButton.setEnabled(!isCurrentTabLocked);
 	}
+
+    public JPanel getPanel() {
+        return panel;
+    }
 }

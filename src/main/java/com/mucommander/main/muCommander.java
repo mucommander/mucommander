@@ -234,10 +234,21 @@ public class muCommander
             return;
         }
 
+        new Thread(() -> {
+            System.out.println("Preloading fonts in JVM...");
+            var pre = System.currentTimeMillis();
+            try {
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("Preloading fonts completed in: " + (System.currentTimeMillis() - pre) + "ms");
+        }, "Preload-Fonts").start();
+
         Path codeLocation = Paths.get(muCommander.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         if (codeLocation == null) {
-        	System.err.println("Failed to retrieve code location");
-        	return;
+            System.err.println("Failed to retrieve code location");
+            return;
         }
         File codeParentFolder = codeLocation.getParent().toFile();
 

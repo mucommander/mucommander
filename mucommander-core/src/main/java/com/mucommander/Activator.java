@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import com.mucommander.ui.viewer.EditorSnapshot;
 import com.mucommander.ui.viewer.ViewerSnapshot;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
