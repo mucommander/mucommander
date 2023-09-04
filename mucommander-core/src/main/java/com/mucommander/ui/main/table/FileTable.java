@@ -221,7 +221,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         // Initializes event listening.
         addMouseListener(this);
-        folderPanel.addMouseListener(this);
+        folderPanel.getPanel().addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
         mainFrame.addActivePanelListener(this);

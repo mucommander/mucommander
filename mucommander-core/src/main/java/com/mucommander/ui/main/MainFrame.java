@@ -89,11 +89,7 @@ public class MainFrame implements LocationListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MainFrame.class);
 
-    private static JFrame instance = PreloadedJFrame.instance;
-
-    public JFrame getJFrame() {
-        return instance;
-    }
+    private final JFrame frameInstance;
 
     private ProportionalSplitPane foldersSplitPane;
 
@@ -223,8 +219,8 @@ public class MainFrame implements LocationListener {
                         MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
                         JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
                         false,
-                        MainFrame.this.leftFolderPanel,
-                        MainFrame.this.rightFolderPanel) {
+                        MainFrame.this.leftFolderPanel.getPanel(),
+                        MainFrame.this.rightFolderPanel.getPanel()) {
             // We don't want any extra space around split pane
             @Override
             public Insets getInsets() {
@@ -310,7 +306,8 @@ public class MainFrame implements LocationListener {
      */
     public MainFrame(ConfFileTableTab[] leftTabs, int indexOfLeftSelectedTab, FileTableConfiguration leftTableConf,
                      ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
-        super();
+        super();    // left to easily debug the performance
+        frameInstance = PreloadedJFrame.getJFrame(this);
         LOGGER.error("Main frame c-tor");
         ExecutorService executor = Executors.newFixedThreadPool(4);
         try {
@@ -342,6 +339,8 @@ public class MainFrame implements LocationListener {
      * Copy constructor
      */
     public MainFrame(MainFrame mainFrame) {
+        frameInstance = PreloadedJFrame.getJFrame(this);
+
         FolderPanel leftFolderPanel = mainFrame.getLeftPanel();
         FolderPanel rightFolderPanel = mainFrame.getRightPanel();
         FileTable leftFileTable = leftFolderPanel.getFileTable();
@@ -369,6 +368,10 @@ public class MainFrame implements LocationListener {
         } finally {
             executor.shutdown();
         }
+    }
+
+    public JFrame getJFrame() {
+        return frameInstance;
     }
 
     /**
@@ -604,8 +607,8 @@ public class MainFrame implements LocationListener {
      * vice-versa.
      */
     public void swapFolders() {
-        foldersSplitPane.remove(leftFolderPanel);
-        foldersSplitPane.remove(rightFolderPanel);
+        foldersSplitPane.remove(leftFolderPanel.getPanel());
+        foldersSplitPane.remove(rightFolderPanel.getPanel());
 
         // Swaps the folder panels.
         FolderPanel tempPanel = leftFolderPanel;
@@ -640,8 +643,8 @@ public class MainFrame implements LocationListener {
         rightTable.updateColumnsVisibility();
 
         // Do the swap and update the split pane
-        foldersSplitPane.setLeftComponent(leftFolderPanel);
-        foldersSplitPane.setRightComponent(rightFolderPanel);
+        foldersSplitPane.setLeftComponent(leftFolderPanel.getPanel());
+        foldersSplitPane.setRightComponent(rightFolderPanel.getPanel());
 
         foldersSplitPane.doLayout();
 
