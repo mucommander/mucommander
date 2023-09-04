@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import javax.swing.JFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
@@ -43,6 +44,7 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.extension.ExtensionManager;
+import com.mucommander.preload.PreloadedJFrame;
 import com.mucommander.ui.main.commandbar.CommandBar;
 import com.mucommander.ui.main.frame.MainFrameBuilder;
 
@@ -136,6 +138,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         com.formdev.flatlaf.FlatIntelliJLaf.installLafInfo();
 
         if (OsFamily.MAC_OS.isCurrent()) {
+            // don't use import, leave as it is :)
             org.violetlib.aqua.AquaLookAndFeel aquaLookAndFeel = new org.violetlib.aqua.AquaLookAndFeel();
             UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(aquaLookAndFeel.getName(), aquaLookAndFeel.getClass().getName()));
         }
@@ -311,11 +314,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     public void windowActivated(WindowEvent e) {
         Object source = e.getSource();
         
-        // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
-        if(!(source instanceof MainFrame))
+        // Return if event doesn't originate from a MainFrame/PreloadedJFrame (e.g. ViewerFrame or EditorFrame)
+        if(!(source instanceof PreloadedJFrame))
             return;
 
-        currentMainFrame = (MainFrame)e.getSource();
+        currentMainFrame = (MainFrame) ((PreloadedJFrame)source).getMainFrameObject();
         // Let MainFrame know that it is active in the foreground
         currentMainFrame.setForegroundActive(true);
 
@@ -334,11 +337,11 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         MenuSelectionManager.defaultManager().clearSelectedPath();
 
         // Return if event doesn't originate from a MainFrame (e.g. ViewerFrame or EditorFrame)
-        if(!(source instanceof MainFrame))
+        if(!(source instanceof PreloadedJFrame))
             return;
 
         // Let MainFrame know that it is not active anymore
-        ((MainFrame)e.getSource()).setForegroundActive(false);
+        ((MainFrame)((PreloadedJFrame)source).getMainFrameObject()).setForegroundActive(false);
     }
 
     public void windowClosing(WindowEvent e) {
@@ -352,11 +355,12 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
         Object source = e.getSource();
 
-        if(source instanceof MainFrame) {
+        if(source instanceof PreloadedJFrame) {
+            var mainFrame = (MainFrame) ((PreloadedJFrame) source).getMainFrameObject();
             // Remove disposed MainFrame from the MainFrame list
-            int frameIndex = mainFrames.indexOf(source);
+            int frameIndex = mainFrames.indexOf(mainFrame);
 
-            mainFrames.remove(source);
+            mainFrames.remove(mainFrame);
 
             // Update following windows titles to reflect the MainFrame's disposal.
             // Window titles show window number only if there is more than one window.

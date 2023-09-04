@@ -39,11 +39,11 @@ public class ToggleUseSinglePanelAction extends MuAction {
     }
 
     private void hideInactivePanel() {
-        mainFrame.getInactivePanel().setVisible(false);
+        mainFrame.getInactivePanel().getPanel().setVisible(false);
     }
 
     private void showInactivePanel() {
-        mainFrame.getInactivePanel().setVisible(true);
+        mainFrame.getInactivePanel().getPanel().setVisible(true);
     }
 
 

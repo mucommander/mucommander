@@ -17,7 +17,6 @@
 
 package com.mucommander;
 
-import java.awt.BorderLayout;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
@@ -385,6 +384,7 @@ public class Application {
                 printStartupMessage("Loading theme...");
                 try {
                     SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
+                    LOGGER.error("Loading theme DONE");
                 } catch (InterruptedException | InvocationTargetException e) {
                     LOGGER.error("Error loading current theme, continuing without it", e);
                 }
@@ -498,7 +498,7 @@ public class Application {
             }
 
             // Invoke in a different thread: https://www.oracle.com/technical-resources/articles/javase/swingworker.html
-            new Thread(() -> {
+            Thread mainThread = new Thread(() -> {
                 LOGGER.error("muC UI about to be presented");
                 printStartupMessage(splashScreen, "Loading theme...");
                 // Creates the initial main frame using any initial path specified by the command line.
@@ -551,7 +551,8 @@ public class Application {
                         new InitialSetupDialog(WindowManager.getCurrentMainFrame().getJFrame()).showDialog();
                     });
                 }
-            }, "MainFrameInit").start();
+            }, "MainFrameInit");
+            mainThread.start();
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
@@ -638,4 +639,5 @@ public class Application {
             LOGGER.error("failed to shut down", e);
         }
     }
+
 }

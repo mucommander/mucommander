@@ -176,7 +176,7 @@ public class FileDropTargetListener implements DropTargetListener {
         // Change the mouse cursor on this FolderPanel and child components
         Cursor newCursor = getDragActionCursor(currentDropAction, dragAccepted);
         LOGGER.trace("cursor=" + newCursor);
-        folderPanel.setCursor(newCursor);
+        folderPanel.getPanel().setCursor(newCursor);
 
         return dragAccepted;
     }
@@ -259,12 +259,12 @@ public class FileDropTargetListener implements DropTargetListener {
 
     public void dragExit(DropTargetEvent event) {
         // Restore default cursor
-        folderPanel.setCursor(Cursor.getDefaultCursor());
+        folderPanel.getPanel().setCursor(Cursor.getDefaultCursor());
     }
 
     public void drop(DropTargetDropEvent event) {
         // Restore default cursor, no matter what
-        folderPanel.setCursor(Cursor.getDefaultCursor());
+        folderPanel.getPanel().setCursor(Cursor.getDefaultCursor());
 
         // The drop() method is called even if a DropTargetDropEvent was rejected before,
         // so this test is really necessary
@@ -306,7 +306,7 @@ public class FileDropTargetListener implements DropTargetListener {
                 folderPanel.tryChangeCurrentFolder(file.getParent(), file, false);
 
             // Request focus on the FolderPanel
-            folderPanel.requestFocus();
+            folderPanel.getPanel().requestFocus();
         }
         // Normal mode: copy or move dropped files to the FolderPanel's current folder
         else {
