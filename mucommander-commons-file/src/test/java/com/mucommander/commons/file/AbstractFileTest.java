@@ -47,6 +47,7 @@ import com.mucommander.commons.io.BoundedInputStream;
 import com.mucommander.commons.io.ChecksumInputStream;
 import com.mucommander.commons.io.ChecksumOutputStream;
 import com.mucommander.commons.io.FileTransferException;
+import com.mucommander.commons.io.FileUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.commons.io.RandomGeneratorInputStream;
@@ -2235,6 +2236,8 @@ public abstract class AbstractFileTest {
         tempFile.mkdir();
 
         String unicodeFilename = "どうもありがとうミスターロボット";
+        if (OsFamily.MAC_OS.isCurrent())
+            unicodeFilename = FileUtils.normalizeWithNFD(unicodeFilename);
         Locale filenameLocale = Locale.JAPANESE;
 
         testUnicodeFilename(tempFile, unicodeFilename, filenameLocale, false);
