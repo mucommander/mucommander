@@ -17,24 +17,42 @@
 
 package com.mucommander.commons.file;
 
-import com.mucommander.commons.file.util.PathUtilsTest;
-import com.mucommander.commons.io.*;
-import com.mucommander.commons.io.security.MuProvider;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.commons.util.StringUtils;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Vector;
+
+import javax.swing.Icon;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.mucommander.commons.file.archive.zip.ZipFormatProvider;
+import com.mucommander.commons.file.util.PathUtilsTest;
+import com.mucommander.commons.io.BoundedInputStream;
+import com.mucommander.commons.io.ChecksumInputStream;
+import com.mucommander.commons.io.ChecksumOutputStream;
+import com.mucommander.commons.io.FileTransferException;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.io.RandomGeneratorInputStream;
+import com.mucommander.commons.io.security.MuProvider;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.util.StringUtils;
 
 /**
  * A generic JUnit test case for the {@link AbstractFile} class. This class is abstract and must be extended by
@@ -86,6 +104,8 @@ public abstract class AbstractFileTest {
 
         // Use a static seed so that the generated values are reproducible
         random = new Random(0);
+
+        FileFactory.registerArchiveFormat(new ZipFormatProvider());
     }
 
     /**
