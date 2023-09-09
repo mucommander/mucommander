@@ -73,12 +73,7 @@ public final class Credentials {
      * @return the password as a masked string.
      */
     public String getMaskedPassword() {
-        int passwordLength = password.length();
-        StringBuffer maskedPasswordSb = new StringBuffer(passwordLength);
-        for(int i=0; i<passwordLength; i++)
-            maskedPasswordSb.append('*');
-
-        return maskedPasswordSb.toString();
+        return password.replaceAll(".", "*");
     }
 
     /**
