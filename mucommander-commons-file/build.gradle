@@ -14,6 +14,7 @@ dependencies {
 
     testImplementation 'org.testng:testng:6.11'
     testImplementation 'junit:junit:4.12'
+    testImplementation project(':mucommander-format-zip')
 }
 
 jar {
