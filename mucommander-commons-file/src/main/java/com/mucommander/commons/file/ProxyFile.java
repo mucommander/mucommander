@@ -384,4 +384,29 @@ public abstract class ProxyFile extends AbstractFile {
     public String toString() {
         return file.toString();
     }
+
+    @Override
+    public void postCopyHook() {
+        file.postCopyHook();
+    }
+
+    @Override
+    public String getCustomExtension() {
+        return file.getCustomExtension();
+    }
+
+    @Override
+    public void setCustomExtension(String customExtension) {
+        file.setCustomExtension(customExtension);
+    }
+
+    @Override
+    public boolean canRead() {
+        return file.canRead();
+    }
+
+    @Override
+    public AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
+        return file.getChild(relativePath, template);
+    }
 }
