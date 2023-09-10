@@ -465,10 +465,12 @@ public abstract class AbstractFileTest {
             // If the volume exists, it must be a directory
             assert volume.isDirectory();
 
-            // Assert that children of the volume are located on the volume (test the first children only)
-            AbstractFile[] children = volume.ls();
-            if(children.length>0)
-                assert volume.equals(children[0].getVolume());
+            if (volume.canRead()) {
+                // Assert that children of the volume are located on the volume (test the first children only)
+                AbstractFile[] children = volume.ls();
+                if (children.length > 0)
+                    assert volume.equals(children[0].getVolume());
+            }
         }
     }
 
