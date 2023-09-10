@@ -24,6 +24,7 @@ import java.net.URLDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 
@@ -197,10 +198,10 @@ public class DefaultSchemeParser implements SchemeParser {
                         schemeDelimPos = LocalFile.SCHEMA.length();
                     }
                     else {
-                        url = LocalFile.SCHEMA+"://"+url.substring(2).replace('\\', '/');
+                        url = FileProtocols.SMB+"://"+url.substring(2).replace('\\', '/');
 
                         // Update scheme delimiter position
-                        schemeDelimPos = LocalFile.SCHEMA.length();
+                        schemeDelimPos = FileProtocols.SMB.length();
                     }
 
                     // Update URL's length

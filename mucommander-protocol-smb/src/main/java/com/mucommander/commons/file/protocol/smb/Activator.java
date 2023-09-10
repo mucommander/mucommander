@@ -29,6 +29,7 @@ import com.mucommander.commons.file.DefaultSchemeParser;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.SchemeHandler;
 import com.mucommander.commons.file.osgi.FileProtocolService;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
@@ -47,7 +48,7 @@ public class Activator implements BundleActivator {
 		FileProtocolService service = new FileProtocolService() {
 			@Override
 			public String getSchema() {
-				return "smb";
+				return FileProtocols.SMB;
 			}
 
 			@Override
