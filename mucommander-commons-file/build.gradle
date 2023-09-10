@@ -1,5 +1,7 @@
 repositories.mavenCentral()
 
+test.useTestNG()
+
 dependencies {
     api project(':mucommander-commons-io')
     api project(':mucommander-commons-runtime')
