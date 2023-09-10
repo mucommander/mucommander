@@ -22,6 +22,7 @@ import com.mucommander.commons.file.FileFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * This class is a JUnit test case for {@link com.mucommander.commons.file.util.PathUtils}.
@@ -38,7 +39,9 @@ public class PathUtilsTest {
      */
     @Test
     public void testResolveLocalDestination() throws IOException {
-        testResolveDestination(FileFactory.getTemporaryFolder());
+        var folder = Files.createTempDirectory("testResolveLocalDestination-");
+        var tmpFolder = FileFactory.getFile(folder.toString());
+        testResolveDestination(tmpFolder);
     }
 
     /**
