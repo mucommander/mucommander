@@ -21,8 +21,6 @@ import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.ui.icon.IconManager;
 
-// if we want SplashScreen to load faster,
-// then don't load everything from awt.* or swing.* (i.e. no wildcards)
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JWindow;
