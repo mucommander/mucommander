@@ -40,7 +40,7 @@ repositories.mavenCentral()
 subprojects {
     apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'java-library'
-    compileJava.options.compilerArgs += ['--release', '20']
+    compileJava.options.compilerArgs += ['--release', '14']
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
     dependencies {

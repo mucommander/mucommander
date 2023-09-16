@@ -24,7 +24,6 @@ import com.mucommander.ui.icon.IconManager;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JWindow;
-import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -128,7 +127,8 @@ public class SplashScreen extends JWindow {
     /**
      * Repaints this SplashScreen to display the new given loading message, replacing the previous one.
      *
-     * @param msg a new loading message to be displayed
+     * @param msg
+     *            a new loading message to be displayed
      */
     public void setLoadingMessage(String msg) {
         this.loadingMessage = msg;
