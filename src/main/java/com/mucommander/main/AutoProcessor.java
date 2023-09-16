@@ -168,11 +168,11 @@ public class AutoProcessor
             if (files != null)
             {
                 Arrays.sort(files);
-                for (File f : files)
+                for (File file : files)
                 {
-                    if (f.getName().endsWith(".jar"))
+                    if (file.getName().endsWith(".jar"))
                     {
-                        jarList.add(f);
+                        jarList.add(file);
                     }
                 }
             }
@@ -273,8 +273,8 @@ public class AutoProcessor
                                 if (bundle != null) {
                                     if (!isFragment(bundle)) {
                                         sl.setBundleStartLevel(bundle, startLvl);
+                                        bundle.start();
                                     }
-                                    bundle.start();
                                 }
                             }
                             catch (BundleException ex)
