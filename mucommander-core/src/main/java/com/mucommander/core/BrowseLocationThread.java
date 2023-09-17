@@ -395,7 +395,8 @@ public class BrowseLocationThread extends ChangeFolderThread {
                     break;
                 }
                 catch(Exception e) {
-                    LOGGER.debug("Caught exception", e);
+                    LOGGER.error("failed to browse location {}", folderURL);
+                    LOGGER.debug("failed to browse location", e);
 
                     if(killed) {
                         // If #tryKill() called #interrupt(), the exception we just caught was most likely
