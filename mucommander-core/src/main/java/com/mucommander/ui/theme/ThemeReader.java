@@ -166,409 +166,497 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
             return;
         }
 
-        // XML root element.
         switch (qName) {
-        case ELEMENT_ROOT -> {
-            if (state != STATE_UNKNOWN)
-                traceIllegalDeclaration(ELEMENT_ROOT);
-            state = STATE_ROOT;
-        }
-
-        // File table declaration.
-        case ELEMENT_TABLE -> {
-            if (state != STATE_ROOT)
+            // XML root element.
+            case ELEMENT_ROOT:
+                if (state != STATE_UNKNOWN)
+                    traceIllegalDeclaration(ELEMENT_ROOT);
+                state = STATE_ROOT;
+                break;
+            // File table declaration.
+            case ELEMENT_TABLE:
+                if (state != STATE_ROOT)
+                    traceIllegalDeclaration(qName);
+                state = STATE_TABLE;
+                break;
+            // Termnal declaration.
+            case ELEMENT_TERMINAL:
+                if (state != STATE_ROOT)
+                    traceIllegalDeclaration(qName);
+                state = STATE_TERMINAL;
+                break;
+            // Editor declaration.
+            case ELEMENT_EDITOR:
+                if (state != STATE_ROOT)
+                    traceIllegalDeclaration(qName);
+                state = STATE_EDITOR;
+                break;
+            // Location bar declaration.
+            case ELEMENT_LOCATION_BAR:
+                if (state != STATE_ROOT)
+                    traceIllegalDeclaration(qName);
+                state = STATE_LOCATION_BAR;
+                break;
+            // Quick list declaration.
+            case ELEMENT_QUICK_LIST:
+                if (state != STATE_ROOT)
+                    traceIllegalDeclaration(qName);
+                state = STATE_QUICK_LIST;
+                break;
+            // Volume label declaration.
+            case ELEMENT_STATUS_BAR:
+                if (state != STATE_ROOT)
+                    traceIllegalDeclaration(qName);
+                state = STATE_STATUS_BAR;
+                break;
+            case ELEMENT_HIDDEN:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_HIDDEN;
+                break;
+            case ELEMENT_FOLDER:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_FOLDER;
+                break;
+            case ELEMENT_ARCHIVE:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_ARCHIVE;
+                break;
+            case ELEMENT_SYMLINK:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_SYMLINK;
+                break;
+            case ELEMENT_READ_ONLY:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_READ_ONLY;
+                break;
+            case ELEMENT_MARKED:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_MARKED;
+                break;
+            case ELEMENT_FILE:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_FILE;
+                break;
+            case ELEMENT_ALTERNATE:
+                if (state != STATE_TABLE)
+                    traceIllegalDeclaration(qName);
+                state = STATE_TABLE_ALTERNATE;
+                break;
+            // Header declaration.
+            case ELEMENT_HEADER:
+                if (state == STATE_QUICK_LIST)
+                    state = STATE_QUICK_LIST_HEADER;
+                else
+                    traceIllegalDeclaration(qName);
+                break;
+            // Item declaration.
+            case ELEMENT_ITEM:
+                if (state == STATE_QUICK_LIST)
+                    state = STATE_QUICK_LIST_ITEM;
+                else
+                    traceIllegalDeclaration(qName);
+                break;
+            // Normal element declaration.
+            case ELEMENT_NORMAL:
+                switch (state) {
+                    case STATE_TERMINAL:
+                        state = STATE_TERMINAL_NORMAL;
+                        break;
+                    case STATE_EDITOR:
+                        state = STATE_EDITOR_NORMAL;
+                        break;
+                    case STATE_LOCATION_BAR:
+                        state = STATE_LOCATION_BAR_NORMAL;
+                        break;
+                    case STATE_HIDDEN:
+                        state = STATE_HIDDEN_NORMAL;
+                        break;
+                    case STATE_FOLDER:
+                        state = STATE_FOLDER_NORMAL;
+                        break;
+                    case STATE_ARCHIVE:
+                        state = STATE_ARCHIVE_NORMAL;
+                        break;
+                    case STATE_SYMLINK:
+                        state = STATE_SYMLINK_NORMAL;
+                        break;
+                    case STATE_READ_ONLY:
+                        state = STATE_READ_ONLY_NORMAL;
+                        break;
+                    case STATE_MARKED:
+                        state = STATE_MARKED_NORMAL;
+                        break;
+                    case STATE_FILE:
+                        state = STATE_FILE_NORMAL;
+                        break;
+                    case STATE_TABLE:
+                        state = STATE_TABLE_NORMAL;
+                        break;
+                    case STATE_QUICK_LIST_ITEM:
+                        state = STATE_QUICK_LIST_ITEM_NORMAL;
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // Selected element declaration.
+            case ELEMENT_SELECTED:
+                switch (state) {
+                    case STATE_TERMINAL:
+                        state = STATE_TERMINAL_SELECTED;
+                        break;
+                    case STATE_EDITOR:
+                        state = STATE_EDITOR_SELECTED;
+                        break;
+                    case STATE_LOCATION_BAR:
+                        state = STATE_LOCATION_BAR_SELECTED;
+                        break;
+                    case STATE_HIDDEN:
+                        state = STATE_HIDDEN_SELECTED;
+                        break;
+                    case STATE_FOLDER:
+                        state = STATE_FOLDER_SELECTED;
+                        break;
+                    case STATE_ARCHIVE:
+                        state = STATE_ARCHIVE_SELECTED;
+                        break;
+                    case STATE_SYMLINK:
+                        state = STATE_SYMLINK_SELECTED;
+                        break;
+                    case STATE_READ_ONLY:
+                        state = STATE_READ_ONLY_SELECTED;
+                        break;
+                    case STATE_MARKED:
+                        state = STATE_MARKED_SELECTED;
+                        break;
+                    case STATE_FILE:
+                        state = STATE_FILE_SELECTED;
+                        break;
+                    case STATE_TABLE:
+                        state = STATE_TABLE_SELECTED;
+                        break;
+                    case STATE_QUICK_LIST_ITEM:
+                        state = STATE_QUICK_LIST_ITEM_SELECTED;
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // Font creation.
+            case ELEMENT_FONT:
+                switch (state) {
+                    case STATE_TERMINAL:
+                        template.setFont(ThemeData.TERMINAL_FONT, createFont(attributes));
+                        break;
+                    case STATE_EDITOR:
+                        template.setFont(ThemeData.EDITOR_FONT, createFont(attributes));
+                        break;
+                    case STATE_LOCATION_BAR:
+                        template.setFont(ThemeData.LOCATION_BAR_FONT, createFont(attributes));
+                        break;
+                    case STATE_STATUS_BAR:
+                        template.setFont(ThemeData.STATUS_BAR_FONT, createFont(attributes));
+                        break;
+                    case STATE_TABLE:
+                        template.setFont(ThemeData.FILE_TABLE_FONT, createFont(attributes));
+                        break;
+                    case STATE_QUICK_LIST_HEADER:
+                        template.setFont(ThemeData.QUICK_LIST_HEADER_FONT, createFont(attributes));
+                        break;
+                    case STATE_QUICK_LIST_ITEM:
+                        template.setFont(ThemeData.QUICK_LIST_ITEM_FONT, createFont(attributes));
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // Unfocused background color.
+            case ELEMENT_INACTIVE_BACKGROUND:
+                switch (state) {
+                    case STATE_TABLE_NORMAL:
+                        template.setColor(ThemeData.FILE_TABLE_INACTIVE_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TABLE_SELECTED:
+                        template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TABLE_ALTERNATE:
+                        template.setColor(ThemeData.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // Secondary background.
+            case ELEMENT_SECONDARY_BACKGROUND:
+                switch (state) {
+                    case STATE_TABLE_SELECTED:
+                        template.setColor(ThemeData.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_QUICK_LIST_HEADER:
+                        template.setColor(ThemeData.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // Inactive secondary background.
+            case ELEMENT_INACTIVE_SECONDARY_BACKGROUND:
+                if (state == STATE_TABLE_SELECTED) {
+                    template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR,
+                            createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // Unfocused foreground color.
+            case ELEMENT_INACTIVE_FOREGROUND:
+                switch (state) {
+                    case STATE_FILE_NORMAL:
+                        template.setColor(ThemeData.FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_FOLDER_NORMAL:
+                        template.setColor(ThemeData.FOLDER_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_ARCHIVE_NORMAL:
+                        template.setColor(ThemeData.ARCHIVE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_SYMLINK_NORMAL:
+                        template.setColor(ThemeData.SYMLINK_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_READ_ONLY_NORMAL:
+                        template.setColor(ThemeData.READ_ONLY_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_HIDDEN_NORMAL:
+                        template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_MARKED_NORMAL:
+                        template.setColor(ThemeData.MARKED_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_FILE_SELECTED:
+                        template.setColor(ThemeData.FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_FOLDER_SELECTED:
+                        template.setColor(ThemeData.FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_ARCHIVE_SELECTED:
+                        template.setColor(ThemeData.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_SYMLINK_SELECTED:
+                        template.setColor(ThemeData.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_READ_ONLY_SELECTED:
+                        template.setColor(ThemeData.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_HIDDEN_SELECTED:
+                        template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_MARKED_SELECTED:
+                        template.setColor(ThemeData.MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // File table border color.
+            case ELEMENT_BORDER:
+                switch (state) {
+                    case STATE_TABLE:
+                        template.setColor(ThemeData.FILE_TABLE_BORDER_COLOR, createColor(attributes));
+                        break;
+                    case STATE_STATUS_BAR:
+                        template.setColor(ThemeData.STATUS_BAR_BORDER_COLOR, createColor(attributes));
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // File table inactive border color.
+            case ELEMENT_INACTIVE_BORDER:
+                if (state == STATE_TABLE) {
+                    template.setColor(ThemeData.FILE_TABLE_INACTIVE_BORDER_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // File table outline color.
+            case ELEMENT_OUTLINE:
+                if (state == STATE_TABLE) {
+                    template.setColor(ThemeData.FILE_TABLE_SELECTED_OUTLINE_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // File table inactive outline color.
+            case ELEMENT_INACTIVE_OUTLINE:
+                if (state == STATE_TABLE) {
+                    template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // Unmatched file table.
+            case ELEMENT_UNMATCHED:
+                if (state == STATE_TABLE) {
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                state = STATE_TABLE_UNMATCHED;
+                break;
+            // Background color.
+            case ELEMENT_BACKGROUND:
+                switch (state) {
+                    case STATE_TABLE_NORMAL:
+                        template.setColor(ThemeData.FILE_TABLE_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TABLE_SELECTED:
+                        template.setColor(ThemeData.FILE_TABLE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TABLE_ALTERNATE:
+                        template.setColor(ThemeData.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TABLE_UNMATCHED:
+                        template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TERMINAL_NORMAL:
+                        template.setColor(ThemeData.TERMINAL_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_TERMINAL_SELECTED:
+                        template.setColor(ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_EDITOR_NORMAL:
+                        template.setColor(ThemeData.EDITOR_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_EDITOR_SELECTED:
+                        template.setColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_LOCATION_BAR_NORMAL:
+                        template.setColor(ThemeData.LOCATION_BAR_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_LOCATION_BAR_SELECTED:
+                        template.setColor(ThemeData.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_STATUS_BAR:
+                        template.setColor(ThemeData.STATUS_BAR_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_QUICK_LIST_HEADER:
+                        template.setColor(ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_QUICK_LIST_ITEM_NORMAL:
+                        template.setColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    case STATE_QUICK_LIST_ITEM_SELECTED:
+                        template.setColor(ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR, createColor(attributes));
+                        break;
+                    default:
+                        traceIllegalDeclaration(qName);
+                        break;
+                }
+                break;
+            // Progress bar color.
+            case ELEMENT_PROGRESS:
+                if (state == STATE_LOCATION_BAR) {
+                    template.setColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // 'OK' color.
+            case ELEMENT_OK:
+                if (state == STATE_STATUS_BAR) {
+                    template.setColor(ThemeData.STATUS_BAR_OK_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // 'WARNING' color.
+            case ELEMENT_WARNING:
+                if (state == STATE_STATUS_BAR) {
+                    template.setColor(ThemeData.STATUS_BAR_WARNING_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // 'CRITICAL' color.
+            case ELEMENT_CRITICAL:
+                if (state == STATE_STATUS_BAR) {
+                    template.setColor(ThemeData.STATUS_BAR_CRITICAL_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            // Text color.
+            case ELEMENT_FOREGROUND:
+                if (state == STATE_HIDDEN_NORMAL) {
+                    template.setColor(ThemeData.HIDDEN_FILE_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_HIDDEN_SELECTED) {
+                    template.setColor(ThemeData.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_TABLE_UNMATCHED) {
+                    template.setColor(ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_FOLDER_NORMAL) {
+                    template.setColor(ThemeData.FOLDER_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_FOLDER_SELECTED) {
+                    template.setColor(ThemeData.FOLDER_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_ARCHIVE_NORMAL) {
+                    template.setColor(ThemeData.ARCHIVE_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_ARCHIVE_SELECTED) {
+                    template.setColor(ThemeData.ARCHIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_SYMLINK_NORMAL) {
+                    template.setColor(ThemeData.SYMLINK_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_SYMLINK_SELECTED) {
+                    template.setColor(ThemeData.SYMLINK_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_READ_ONLY_NORMAL) {
+                    template.setColor(ThemeData.READ_ONLY_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_READ_ONLY_SELECTED) {
+                    template.setColor(ThemeData.READ_ONLY_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_MARKED_NORMAL) {
+                    template.setColor(ThemeData.MARKED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_MARKED_SELECTED) {
+                    template.setColor(ThemeData.MARKED_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_FILE_NORMAL) {
+                    template.setColor(ThemeData.FILE_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_FILE_SELECTED) {
+                    template.setColor(ThemeData.FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_TERMINAL_NORMAL) {
+                    template.setColor(ThemeData.TERMINAL_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_TERMINAL_SELECTED) {
+                    template.setColor(ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_EDITOR_NORMAL) {
+                    template.setColor(ThemeData.EDITOR_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_EDITOR_SELECTED) {
+                    template.setColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_LOCATION_BAR_NORMAL) {
+                    template.setColor(ThemeData.LOCATION_BAR_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_LOCATION_BAR_SELECTED) {
+                    template.setColor(ThemeData.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_STATUS_BAR) {
+                    template.setColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_QUICK_LIST_HEADER) {
+                    template.setColor(ThemeData.QUICK_LIST_HEADER_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_QUICK_LIST_ITEM_NORMAL) {
+                    template.setColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR, createColor(attributes));
+                } else if (state == STATE_QUICK_LIST_ITEM_SELECTED) {
+                    template.setColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR, createColor(attributes));
+                } else {
+                    traceIllegalDeclaration(qName);
+                }
+                break;
+            default:
                 traceIllegalDeclaration(qName);
-            state = STATE_TABLE;
-        }
-
-        // Shell declaration.
-        case ELEMENT_TERMINAL -> {
-            if (state != STATE_ROOT)
-                traceIllegalDeclaration(qName);
-            state = STATE_TERMINAL;
-        }
-
-        // Editor declaration.
-        case ELEMENT_EDITOR -> {
-            if (state != STATE_ROOT)
-                traceIllegalDeclaration(qName);
-            state = STATE_EDITOR;
-        }
-
-        // Location bar declaration.
-        case ELEMENT_LOCATION_BAR -> {
-            if (state != STATE_ROOT)
-                traceIllegalDeclaration(qName);
-            state = STATE_LOCATION_BAR;
-        }
-
-        // Quick list declaration.
-        case ELEMENT_QUICK_LIST -> {
-            if (state != STATE_ROOT)
-                traceIllegalDeclaration(qName);
-            state = STATE_QUICK_LIST;
-        }
-
-        // Volume label declaration.
-        case ELEMENT_STATUS_BAR -> {
-            if (state != STATE_ROOT)
-                traceIllegalDeclaration(qName);
-            state = STATE_STATUS_BAR;
-        }
-        case ELEMENT_HIDDEN -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_HIDDEN;
-        }
-        case ELEMENT_FOLDER -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_FOLDER;
-        }
-        case ELEMENT_ARCHIVE -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_ARCHIVE;
-        }
-        case ELEMENT_SYMLINK -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_SYMLINK;
-        }
-        case ELEMENT_READ_ONLY -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_READ_ONLY;
-        }
-        case ELEMENT_MARKED -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_MARKED;
-        }
-        case ELEMENT_FILE -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_FILE;
-        }
-        case ELEMENT_ALTERNATE -> {
-            if (state != STATE_TABLE)
-                traceIllegalDeclaration(qName);
-            state = STATE_TABLE_ALTERNATE;
-        }
-
-        // Header declaration.
-        case ELEMENT_HEADER -> {
-            if (state == STATE_QUICK_LIST)
-                state = STATE_QUICK_LIST_HEADER;
-            else
-                traceIllegalDeclaration(qName);
-        }
-
-        // Item declaration.
-        case ELEMENT_ITEM -> {
-            if (state == STATE_QUICK_LIST)
-                state = STATE_QUICK_LIST_ITEM;
-            else
-                traceIllegalDeclaration(qName);
-        }
-
-        // Normal element declaration.
-        case ELEMENT_NORMAL -> {
-            switch (state) {
-            case STATE_TERMINAL -> state = STATE_TERMINAL_NORMAL;
-            case STATE_EDITOR -> state = STATE_EDITOR_NORMAL;
-            case STATE_LOCATION_BAR -> state = STATE_LOCATION_BAR_NORMAL;
-            case STATE_HIDDEN -> state = STATE_HIDDEN_NORMAL;
-            case STATE_FOLDER -> state = STATE_FOLDER_NORMAL;
-            case STATE_ARCHIVE -> state = STATE_ARCHIVE_NORMAL;
-            case STATE_SYMLINK -> state = STATE_SYMLINK_NORMAL;
-            case STATE_READ_ONLY -> state = STATE_READ_ONLY_NORMAL;
-            case STATE_MARKED -> state = STATE_MARKED_NORMAL;
-            case STATE_FILE -> state = STATE_FILE_NORMAL;
-            case STATE_TABLE -> state = STATE_TABLE_NORMAL;
-            case STATE_QUICK_LIST_ITEM -> state = STATE_QUICK_LIST_ITEM_NORMAL;
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Selected element declaration.
-        case ELEMENT_SELECTED -> {
-            switch (state) {
-            case STATE_TERMINAL -> state = STATE_TERMINAL_SELECTED;
-            case STATE_EDITOR -> state = STATE_EDITOR_SELECTED;
-            case STATE_LOCATION_BAR -> state = STATE_LOCATION_BAR_SELECTED;
-            case STATE_HIDDEN -> state = STATE_HIDDEN_SELECTED;
-            case STATE_FOLDER -> state = STATE_FOLDER_SELECTED;
-            case STATE_ARCHIVE -> state = STATE_ARCHIVE_SELECTED;
-            case STATE_SYMLINK -> state = STATE_SYMLINK_SELECTED;
-            case STATE_READ_ONLY -> state = STATE_READ_ONLY_SELECTED;
-            case STATE_MARKED -> state = STATE_MARKED_SELECTED;
-            case STATE_FILE -> state = STATE_FILE_SELECTED;
-            case STATE_TABLE -> state = STATE_TABLE_SELECTED;
-            case STATE_QUICK_LIST_ITEM -> state = STATE_QUICK_LIST_ITEM_SELECTED;
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Font creation.
-        case ELEMENT_FONT -> {
-            switch (state) {
-            case STATE_TERMINAL -> template.setFont(ThemeData.TERMINAL_FONT, createFont(attributes));
-            case STATE_EDITOR -> template.setFont(ThemeData.EDITOR_FONT, createFont(attributes));
-            case STATE_LOCATION_BAR -> template.setFont(ThemeData.LOCATION_BAR_FONT, createFont(attributes));
-            case STATE_STATUS_BAR -> template.setFont(ThemeData.STATUS_BAR_FONT, createFont(attributes));
-            case STATE_TABLE -> template.setFont(ThemeData.FILE_TABLE_FONT, createFont(attributes));
-            case STATE_QUICK_LIST_HEADER ->
-                template.setFont(ThemeData.QUICK_LIST_HEADER_FONT, createFont(attributes));
-            case STATE_QUICK_LIST_ITEM ->
-                template.setFont(ThemeData.QUICK_LIST_ITEM_FONT, createFont(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Unfocused background color.
-        case ELEMENT_INACTIVE_BACKGROUND -> {
-            switch (state) {
-            case STATE_TABLE_NORMAL ->
-                template.setColor(ThemeData.FILE_TABLE_INACTIVE_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TABLE_SELECTED ->
-                template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TABLE_ALTERNATE ->
-                template.setColor(ThemeData.FILE_TABLE_INACTIVE_ALTERNATE_BACKGROUND_COLOR, createColor(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Secondary background.
-        case ELEMENT_SECONDARY_BACKGROUND -> {
-            switch (state) {
-            case STATE_TABLE_SELECTED ->
-                template.setColor(ThemeData.FILE_TABLE_SELECTED_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_HEADER ->
-                template.setColor(ThemeData.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR, createColor(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Inactive secondary background.
-        case ELEMENT_INACTIVE_SECONDARY_BACKGROUND -> {
-            if (state == STATE_TABLE_SELECTED) {
-                template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_SECONDARY_BACKGROUND_COLOR,
-                        createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Unfocused foreground color.
-        case ELEMENT_INACTIVE_FOREGROUND -> {
-            switch (state) {
-            case STATE_FILE_NORMAL ->
-                template.setColor(ThemeData.FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FOLDER_NORMAL ->
-                template.setColor(ThemeData.FOLDER_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_ARCHIVE_NORMAL ->
-                template.setColor(ThemeData.ARCHIVE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_SYMLINK_NORMAL ->
-                template.setColor(ThemeData.SYMLINK_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_READ_ONLY_NORMAL ->
-                template.setColor(ThemeData.READ_ONLY_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_HIDDEN_NORMAL ->
-                template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_MARKED_NORMAL ->
-                template.setColor(ThemeData.MARKED_INACTIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FILE_SELECTED ->
-                template.setColor(ThemeData.FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FOLDER_SELECTED ->
-                template.setColor(ThemeData.FOLDER_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_ARCHIVE_SELECTED ->
-                template.setColor(ThemeData.ARCHIVE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_SYMLINK_SELECTED ->
-                template.setColor(ThemeData.SYMLINK_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_READ_ONLY_SELECTED ->
-                template.setColor(ThemeData.READ_ONLY_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_HIDDEN_SELECTED ->
-                template.setColor(ThemeData.HIDDEN_FILE_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_MARKED_SELECTED ->
-                template.setColor(ThemeData.MARKED_INACTIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // File table border color.
-        case ELEMENT_BORDER -> {
-            switch (state) {
-            case STATE_TABLE -> template.setColor(ThemeData.FILE_TABLE_BORDER_COLOR, createColor(attributes));
-            case STATE_STATUS_BAR ->
-                template.setColor(ThemeData.STATUS_BAR_BORDER_COLOR, createColor(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // File table inactive border color.
-        case ELEMENT_INACTIVE_BORDER -> {
-            if (state == STATE_TABLE) {
-                template.setColor(ThemeData.FILE_TABLE_INACTIVE_BORDER_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // File table outline color.
-        case ELEMENT_OUTLINE -> {
-            if (state == STATE_TABLE) {
-                template.setColor(ThemeData.FILE_TABLE_SELECTED_OUTLINE_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // File table inactive outline color.
-        case ELEMENT_INACTIVE_OUTLINE -> {
-            if (state == STATE_TABLE) {
-                template.setColor(ThemeData.FILE_TABLE_INACTIVE_SELECTED_OUTLINE_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Unmatched file table.
-        case ELEMENT_UNMATCHED -> {
-            if (state == STATE_TABLE) {
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-            state = STATE_TABLE_UNMATCHED;
-        }
-
-        // Background color.
-        case ELEMENT_BACKGROUND -> {
-            switch (state) {
-            case STATE_TABLE_NORMAL ->
-                template.setColor(ThemeData.FILE_TABLE_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TABLE_SELECTED ->
-                template.setColor(ThemeData.FILE_TABLE_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TABLE_ALTERNATE ->
-                template.setColor(ThemeData.FILE_TABLE_ALTERNATE_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TABLE_UNMATCHED ->
-                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TERMINAL_NORMAL ->
-                template.setColor(ThemeData.TERMINAL_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_TERMINAL_SELECTED ->
-                template.setColor(ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_EDITOR_NORMAL ->
-                template.setColor(ThemeData.EDITOR_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_EDITOR_SELECTED ->
-                template.setColor(ThemeData.EDITOR_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_LOCATION_BAR_NORMAL ->
-                template.setColor(ThemeData.LOCATION_BAR_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_LOCATION_BAR_SELECTED ->
-                template.setColor(ThemeData.LOCATION_BAR_SELECTED_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_STATUS_BAR ->
-                template.setColor(ThemeData.STATUS_BAR_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_HEADER ->
-                template.setColor(ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_ITEM_NORMAL ->
-                template.setColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_ITEM_SELECTED ->
-                template.setColor(ThemeData.QUICK_LIST_SELECTED_ITEM_BACKGROUND_COLOR, createColor(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Progress bar color.
-        case ELEMENT_PROGRESS -> {
-            if (state == STATE_LOCATION_BAR) {
-                template.setColor(ThemeData.LOCATION_BAR_PROGRESS_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // 'OK' color.
-        case ELEMENT_OK -> {
-            if (state == STATE_STATUS_BAR) {
-                template.setColor(ThemeData.STATUS_BAR_OK_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // 'WARNING' color.
-        case ELEMENT_WARNING -> {
-            if (state == STATE_STATUS_BAR) {
-                template.setColor(ThemeData.STATUS_BAR_WARNING_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // 'CRITICAL' color.
-        case ELEMENT_CRITICAL -> {
-            if (state == STATE_STATUS_BAR) {
-                template.setColor(ThemeData.STATUS_BAR_CRITICAL_COLOR, createColor(attributes));
-            } else {
-                traceIllegalDeclaration(qName);
-            }
-        }
-
-        // Text color.
-        case ELEMENT_FOREGROUND -> {
-            switch (state) {
-            case STATE_HIDDEN_NORMAL ->
-                template.setColor(ThemeData.HIDDEN_FILE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_HIDDEN_SELECTED ->
-                template.setColor(ThemeData.HIDDEN_FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_TABLE_UNMATCHED ->
-                template.setColor(ThemeData.FILE_TABLE_UNMATCHED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FOLDER_NORMAL ->
-                template.setColor(ThemeData.FOLDER_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FOLDER_SELECTED ->
-                template.setColor(ThemeData.FOLDER_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_ARCHIVE_NORMAL ->
-                template.setColor(ThemeData.ARCHIVE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_ARCHIVE_SELECTED ->
-                template.setColor(ThemeData.ARCHIVE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_SYMLINK_NORMAL ->
-                template.setColor(ThemeData.SYMLINK_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_SYMLINK_SELECTED ->
-                template.setColor(ThemeData.SYMLINK_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_READ_ONLY_NORMAL ->
-                template.setColor(ThemeData.READ_ONLY_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_READ_ONLY_SELECTED ->
-                template.setColor(ThemeData.READ_ONLY_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_MARKED_NORMAL ->
-                template.setColor(ThemeData.MARKED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_MARKED_SELECTED ->
-                template.setColor(ThemeData.MARKED_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FILE_NORMAL ->
-                template.setColor(ThemeData.FILE_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_FILE_SELECTED ->
-                template.setColor(ThemeData.FILE_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_TERMINAL_NORMAL ->
-                template.setColor(ThemeData.TERMINAL_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_TERMINAL_SELECTED ->
-                template.setColor(ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_EDITOR_NORMAL ->
-                template.setColor(ThemeData.EDITOR_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_EDITOR_SELECTED ->
-                template.setColor(ThemeData.EDITOR_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_LOCATION_BAR_NORMAL ->
-                template.setColor(ThemeData.LOCATION_BAR_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_LOCATION_BAR_SELECTED ->
-                template.setColor(ThemeData.LOCATION_BAR_SELECTED_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_STATUS_BAR ->
-                template.setColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_HEADER ->
-                template.setColor(ThemeData.QUICK_LIST_HEADER_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_ITEM_NORMAL ->
-                template.setColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR, createColor(attributes));
-            case STATE_QUICK_LIST_ITEM_SELECTED ->
-                template.setColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR, createColor(attributes));
-            default -> traceIllegalDeclaration(qName);
-            }
-        }
-        default -> traceIllegalDeclaration(qName);
+                break;
         }
     }
 
@@ -587,84 +675,154 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                 return;
         }
 
-        // XML root element.
         switch (qName) {
-        case ELEMENT_ROOT -> state = STATE_UNKNOWN;
-
-        // File table declaration.
-        case ELEMENT_TABLE -> state = STATE_ROOT;
-        case ELEMENT_ALTERNATE -> state = STATE_TABLE;
-        case ELEMENT_UNMATCHED -> state = STATE_TABLE;
-        case ELEMENT_HIDDEN -> state = STATE_TABLE;
-        case ELEMENT_FOLDER -> state = STATE_TABLE;
-        case ELEMENT_ARCHIVE -> state = STATE_TABLE;
-        case ELEMENT_SYMLINK -> state = STATE_TABLE;
-        case ELEMENT_READ_ONLY -> state = STATE_TABLE;
-        case ELEMENT_MARKED -> state = STATE_TABLE;
-        case ELEMENT_FILE -> state = STATE_TABLE;
-
-        // Shell declaration.
-        case ELEMENT_TERMINAL -> state = STATE_ROOT;
-
-        // Editor declaration.
-        case ELEMENT_EDITOR -> state = STATE_ROOT;
-
-        // Location bar declaration.
-        case ELEMENT_LOCATION_BAR -> state = STATE_ROOT;
-
-        // Quick list declaration.
-        case ELEMENT_QUICK_LIST -> state = STATE_ROOT;
-
-        // Volume label declaration
-        case ELEMENT_STATUS_BAR -> state = STATE_ROOT;
-
-        // Header declaration.
-        case ELEMENT_HEADER -> {
-            if (state == STATE_QUICK_LIST_HEADER)
-                state = STATE_QUICK_LIST;
-        }
-
-        // Item declaration.
-        case ELEMENT_ITEM -> {
-            if (state == STATE_QUICK_LIST_ITEM)
-                state = STATE_QUICK_LIST;
-        }
-
-        // Normal element declaration.
-        case ELEMENT_NORMAL -> {
-            switch (state) {
-            case STATE_TERMINAL_NORMAL -> state = STATE_TERMINAL;
-            case STATE_HIDDEN_NORMAL -> state = STATE_HIDDEN;
-            case STATE_FOLDER_NORMAL -> state = STATE_FOLDER;
-            case STATE_ARCHIVE_NORMAL -> state = STATE_ARCHIVE;
-            case STATE_SYMLINK_NORMAL -> state = STATE_SYMLINK;
-            case STATE_READ_ONLY_NORMAL -> state = STATE_READ_ONLY;
-            case STATE_MARKED_NORMAL -> state = STATE_MARKED;
-            case STATE_FILE_NORMAL -> state = STATE_FILE;
-            case STATE_EDITOR_NORMAL -> state = STATE_EDITOR;
-            case STATE_LOCATION_BAR_NORMAL -> state = STATE_LOCATION_BAR;
-            case STATE_TABLE_NORMAL -> state = STATE_TABLE;
-            case STATE_QUICK_LIST_ITEM_NORMAL -> state = STATE_QUICK_LIST_ITEM;
-            }
-        }
-
-        // Selected element declaration.
-        case ELEMENT_SELECTED -> {
-            switch (state) {
-            case STATE_TERMINAL_SELECTED -> state = STATE_TERMINAL;
-            case STATE_HIDDEN_SELECTED -> state = STATE_HIDDEN;
-            case STATE_FOLDER_SELECTED -> state = STATE_FOLDER;
-            case STATE_ARCHIVE_SELECTED -> state = STATE_ARCHIVE;
-            case STATE_SYMLINK_SELECTED -> state = STATE_SYMLINK;
-            case STATE_READ_ONLY_SELECTED -> state = STATE_READ_ONLY;
-            case STATE_MARKED_SELECTED -> state = STATE_MARKED;
-            case STATE_FILE_SELECTED -> state = STATE_FILE;
-            case STATE_EDITOR_SELECTED -> state = STATE_EDITOR;
-            case STATE_LOCATION_BAR_SELECTED -> state = STATE_LOCATION_BAR;
-            case STATE_TABLE_SELECTED -> state = STATE_TABLE;
-            case STATE_QUICK_LIST_ITEM_SELECTED -> state = STATE_QUICK_LIST_ITEM;
-            }
-        }
+            // XML root element.
+            case ELEMENT_ROOT:
+                state = STATE_UNKNOWN;
+                break;
+            // File table declaration.
+            case ELEMENT_TABLE:
+                state = STATE_ROOT;
+                break;
+            case ELEMENT_ALTERNATE:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_UNMATCHED:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_HIDDEN:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_FOLDER:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_ARCHIVE:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_SYMLINK:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_READ_ONLY:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_MARKED:
+                state = STATE_TABLE;
+                break;
+            case ELEMENT_FILE:
+                state = STATE_TABLE;
+                break;
+            // Terminal declaration.
+            case ELEMENT_TERMINAL:
+                state = STATE_ROOT;
+                break;
+            // Editor declaration.
+            case ELEMENT_EDITOR:
+                state = STATE_ROOT;
+                break;
+            // Location bar declaration.
+            case ELEMENT_LOCATION_BAR:
+                state = STATE_ROOT;
+                break;
+            // Quick list declaration.
+            case ELEMENT_QUICK_LIST:
+                state = STATE_ROOT;
+                break;
+            // Volume label declaration
+            case ELEMENT_STATUS_BAR:
+                state = STATE_ROOT;
+                break;
+            // Header declaration.
+            case ELEMENT_HEADER:
+                if (state == STATE_QUICK_LIST_HEADER)
+                    state = STATE_QUICK_LIST;
+                break;
+            // Item declaration.
+            case ELEMENT_ITEM:
+                if (state == STATE_QUICK_LIST_ITEM)
+                    state = STATE_QUICK_LIST;
+                break;
+            // Normal element declaration.
+            case ELEMENT_NORMAL:
+                switch (state) {
+                    case STATE_TERMINAL_NORMAL:
+                        state = STATE_TERMINAL;
+                        break;
+                    case STATE_HIDDEN_NORMAL:
+                        state = STATE_HIDDEN;
+                        break;
+                    case STATE_FOLDER_NORMAL:
+                        state = STATE_FOLDER;
+                        break;
+                    case STATE_ARCHIVE_NORMAL:
+                        state = STATE_ARCHIVE;
+                        break;
+                    case STATE_SYMLINK_NORMAL:
+                        state = STATE_SYMLINK;
+                        break;
+                    case STATE_READ_ONLY_NORMAL:
+                        state = STATE_READ_ONLY;
+                        break;
+                    case STATE_MARKED_NORMAL:
+                        state = STATE_MARKED;
+                        break;
+                    case STATE_FILE_NORMAL:
+                        state = STATE_FILE;
+                        break;
+                    case STATE_EDITOR_NORMAL:
+                        state = STATE_EDITOR;
+                        break;
+                    case STATE_LOCATION_BAR_NORMAL:
+                        state = STATE_LOCATION_BAR;
+                        break;
+                    case STATE_TABLE_NORMAL:
+                        state = STATE_TABLE;
+                        break;
+                    case STATE_QUICK_LIST_ITEM_NORMAL:
+                        state = STATE_QUICK_LIST_ITEM;
+                        break;
+                }
+                break;
+            // Selected element declaration.
+            case ELEMENT_SELECTED:
+                switch (state) {
+                    case STATE_TERMINAL_SELECTED:
+                        state = STATE_TERMINAL;
+                        break;
+                    case STATE_HIDDEN_SELECTED:
+                        state = STATE_HIDDEN;
+                        break;
+                    case STATE_FOLDER_SELECTED:
+                        state = STATE_FOLDER;
+                        break;
+                    case STATE_ARCHIVE_SELECTED:
+                        state = STATE_ARCHIVE;
+                        break;
+                    case STATE_SYMLINK_SELECTED:
+                        state = STATE_SYMLINK;
+                        break;
+                    case STATE_READ_ONLY_SELECTED:
+                        state = STATE_READ_ONLY;
+                        break;
+                    case STATE_MARKED_SELECTED:
+                        state = STATE_MARKED;
+                        break;
+                    case STATE_FILE_SELECTED:
+                        state = STATE_FILE;
+                        break;
+                    case STATE_EDITOR_SELECTED:
+                        state = STATE_EDITOR;
+                        break;
+                    case STATE_LOCATION_BAR_SELECTED:
+                        state = STATE_LOCATION_BAR;
+                        break;
+                    case STATE_TABLE_SELECTED:
+                        state = STATE_TABLE;
+                        break;
+                    case STATE_QUICK_LIST_ITEM_SELECTED:
+                        state = STATE_QUICK_LIST_ITEM;
+                        break;
+                }
+                break;
         }
     }
 
