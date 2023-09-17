@@ -34,6 +34,7 @@ What's new since v1.3.0 ?
 New features:
 - Added Google Cloud Storage as a file protocol that enables browsing and managing files in GCS buckets.
 - Added optional keyboard shortcut visual hints for actions invoked by clicks rather than keyboard.
+- Add OneDrive as a file protocol (including browsing, uploading and downloading capabilities).
 
 Improvements:
 - The 'Space' key can be used to filter filenames with spaces in quick search. Files can be selected during an ongoing

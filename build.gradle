@@ -70,6 +70,7 @@ dependencies {
     osgiRuntime project('jetbrains-jediterm')
     osgiRuntime project('sevenzipjbindings')
     osgiRuntime project('gson')
+    osgiRuntime project('kotlin-reflect')
     osgiRuntime project('mucommander-encoding')
     osgiRuntime project('mucommander-preferences')
     osgiRuntime project('mucommander-process')
@@ -83,6 +84,7 @@ dependencies {
     osgiRuntime project('mucommander-protocol-dropbox')
     osgiRuntime project('mucommander-protocol-gcs')
     osgiRuntime project('mucommander-protocol-gdrive')
+    osgiRuntime project('mucommander-protocol-onedrive')
     osgiRuntime project('mucommander-protocol-nfs')
     osgiRuntime project('mucommander-protocol-smb')
     osgiRuntime project('mucommander-protocol-vsphere')
@@ -171,6 +173,32 @@ runOsgi {
         }
         manifest("sevenzipjbinding.*") {
             instruction 'Bundle-Version', '16.2'
+        }
+        manifest("listenablefuture.*") {
+            instruction 'Bundle-Version', '1.0'
+        }
+        manifest("kotlin-stdlib.*") {
+            instruction 'Bundle-Version', '1.6.20'
+            instruction 'Import-Package', '!android.os', '*'
+        }
+        manifest("jcip-annotations.*") {
+            instruction 'Bundle-Version', '1.0'
+        }
+        manifest("azure-core.*") {
+            instruction 'Import-Package', '!com.fasterxml.jackson.dataformat.xml', '*'
+        }
+        manifest("azure-xml.*") {
+            instruction 'Bundle-Version', '1.0.0'
+        }
+        manifest("msal4j.*") {
+            instruction 'Import-Package', '!com.nimbusds.jose.crypto', '!com.nimbusds.jose.util', '*'
+        }
+        manifest("microsoft-graph-core.*") {
+            instruction 'Import-Package', '!android.os', '*'
+            instruction 'DynamicImport-Package', 'com.microsoft.graph.models'
+        }
+        manifest("okhttp.*") {
+            instruction 'Import-Package', '!sun.security.ssl', '!org.openjsse.javax.net.ssl', '!org.openjsse.net.ssl', '!org.conscrypt', '!org.bouncycastle.jsse.provider', '!org.bouncycastle.jsse', '!dalvik.system', '!android.os', '!android.util', '!android.security', '!android.net.http', '!android.net.ssl', '*'
         }
     }
 }

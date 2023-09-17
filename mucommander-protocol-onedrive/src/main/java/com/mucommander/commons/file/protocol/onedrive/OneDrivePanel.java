@@ -14,17 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mucommander.commons.file.protocol.gdrive;
+package com.mucommander.commons.file.protocol.onedrive;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,12 +35,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.auth.oauth2.StoredCredential;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.util.store.DataStore;
-import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.services.drive.model.About;
+import com.microsoft.graph.models.User;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.protocol.ui.ServerPanel;
@@ -51,39 +43,40 @@ import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
 
 /**
- * This ServerPanel helps initiate Google Drive connections.
- * 
+ * This ServerPanel helps initiate OneDrive connections.
+ *
  * @author Arik Hadas
  */
-public class GoogleDrivePanel extends ServerPanel implements ActionListener {
+public class OneDrivePanel extends ServerPanel implements ActionListener {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDrivePanel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OneDrivePanel.class);
     private static final long serialVersionUID = -3850165192515539062L;
-    public static final String SCHEMA = "gdrive";
+
     // TODO: find a better way to load icons from plugins
-    private static final String GOOGLE_ACCOUNT_ICON_PATH = "/images/file/google.png";
+    private static final String MICROSOFT_ACCOUNT_ICON_PATH = "/images/file/microsoft.png";
 
     private JTextField accountAlias;
     private JButton signingIn;
     private JLabel displayName;
     private JLabel emailAddress;
     private JLabel signingInInstructions;
-    private LocalServerReceiver receiver;
     private LoginPhase loginPhase;
-    private Credential credential;
-    private ImageIcon googleIcon;
+    private ImageIcon microsoftIcon;
     private JLabel accountLabel, accountAliasLabel;
+    private OneDriveClient client;
+
+    private String token;
 
     enum LoginPhase {
         SIGN_IN,
         CANCEL_SIGN_IN,
     }
 
-    GoogleDrivePanel(ServerPanelListener listener, JFrame mainFrame) {
+    OneDrivePanel(ServerPanelListener listener, JFrame mainFrame) {
         super(listener, mainFrame);
 
-        URL resourceURL = ResourceLoader.getResourceAsURL(GOOGLE_ACCOUNT_ICON_PATH);
-        googleIcon = new ImageIcon(resourceURL);
+        URL resourceURL = ResourceLoader.getResourceAsURL(MICROSOFT_ACCOUNT_ICON_PATH);
+        microsoftIcon = new ImageIcon(resourceURL);
         signingIn = new JButton();
         signingIn.addActionListener(this);
         addRow(wrapWithJPanel(signingIn), 5);
@@ -121,7 +114,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
 
     @Override
     public FileURL getServerURL() throws MalformedURLException {
-        return FileURL.getFileURL(String.format("%s://%s", SCHEMA, accountAlias.getText()));
+        return FileURL.getFileURL(String.format("%s://%s", Activator.SCHEMA, accountAlias.getText()));
     }
 
     @Override
@@ -131,59 +124,41 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
 
     @Override
     public void dialogValidated() {
-        String accountName = this.accountAlias.getText();
+        client.saveToken(accountAlias.getText(), token);
+    }
+
+    private User login() {
         try {
-            String tokensDir = GoogleDriveClient.getCredentialsFolder().getAbsolutePath();
-            DataStore<StoredCredential> dataStore = StoredCredential.getDefaultDataStore(new FileDataStoreFactory(new File(tokensDir)));
-            dataStore.set(accountName, new StoredCredential(credential));
+            client = new OneDriveClient(null);
+            token = client.connect();
+            return client.getClient().me().buildRequest().get();
         } catch (IOException e) {
-            LOGGER.warn("failed to store credentials to Google account", e);
+            LOGGER.warn("failed to sign in to OneDrive account", e);
+            return null;
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        switch(loginPhase) {
+        switch (loginPhase) {
         case SIGN_IN:
             setLoginPhase(LoginPhase.CANCEL_SIGN_IN, false);
             SwingUtilities.invokeLater(() -> {
-                new Thread(() ->  {
-                    receiver = new LocalServerReceiver();
-                    About about;
-                    try {
-                        credential = GoogleDriveClient.getCredentials(receiver);
-                        try (GoogleDriveClient client = new GoogleDriveClient(credential)) {
-                            client.connect();
-                            about = client.getConnection().about().get().setFields("user").execute();
-                        };
-                    } catch (IOException | GeneralSecurityException e) {
-                        LOGGER.warn("failed to sign in to Google account", e);
-                        return;
+                new Thread(() -> {
+                    User user = login();
+                    if (user != null) {
+                        displayName.setText(user.displayName);
+                        emailAddress.setText(user.userPrincipalName);
+                        accountAlias.setText(user.displayName.replaceAll(" ", "-"));
+                        setLoginPhase(LoginPhase.SIGN_IN, true);
+                        accountAlias.requestFocus();
+                        accountAlias.selectAll();
                     }
-                    Map<String, String> user = (Map<String, String>) about.get("user");
-                    displayName.setText(user.get("displayName"));
-                    String email = user.get("emailAddress");
-                    emailAddress.setText(email);
-                    int indexOfAt = email.indexOf('@');
-                    String alias = indexOfAt > 0 ? email.substring(0, indexOfAt) : email;
-                    accountAlias.setText(alias);
-                    setLoginPhase(LoginPhase.SIGN_IN, true);
-                    accountAlias.requestFocus();
-                    accountAlias.selectAll();
                 }).start();
             });
             break;
         case CANCEL_SIGN_IN:
             setLoginPhase(LoginPhase.SIGN_IN, false);
-            SwingUtilities.invokeLater(() -> {
-                if (receiver != null) {
-                    try {
-                        receiver.stop();
-                    } catch (IOException e) {
-                        LOGGER.warn("failed to cancel signing in to Google account", e);
-                    }
-                }
-            });
         }
     }
 
@@ -196,7 +171,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
     }
 
     private void setLoginPhase(LoginPhase loginPhase, boolean setAccountFieldsVisible) {
-        switch(loginPhase) {
+        switch (loginPhase) {
         case CANCEL_SIGN_IN:
             signingIn.setText(Translator.get("cancel"));
             signingIn.setIcon(null);
@@ -205,15 +180,10 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
         case SIGN_IN:
             if (setAccountFieldsVisible)
                 setAccountFieldsVisible(true);
-            signingIn.setText(Translator.get("server_connect_dialog.google.sign_in"));
-            signingIn.setIcon(googleIcon);
+            signingIn.setText(Translator.get("server_connect_dialog.microsoft.sign_in"));
+            signingIn.setIcon(microsoftIcon);
             signingInInstructions.setText("");
         }
         this.loginPhase = loginPhase;
-    }
-
-    @Override
-    public boolean privacyPolicyApplicable() {
-        return true;
     }
 }

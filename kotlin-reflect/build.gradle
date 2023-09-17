@@ -1,0 +1,24 @@
+repositories.mavenCentral()
+
+dependencies {
+    comprise ('org.jetbrains.kotlin:kotlin-reflect:1.9.10') {
+        // we only want the resources in kotlin-reflect (kotlin-stdlib is the only dependency)
+        exclude group: 'org.jetbrains.kotlin'
+    }
+}
+
+jar {
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'META-INF/**'
+   } }
+   bnd ('Manifest-Version': '1.0',
+        'Bundle-Description': 'Modified kotlin-reflect',
+        'Bundle-ManifestVersion': '2',
+        'Bundle-Name': 'kotlin-reflect',
+        'Bundle-SymbolicName': 'kotlin-reflect',
+        'Bundle-Vendor': 'Kotlin-Reflect',
+        'Bundle-Version': '1.9.10',
+        'Import-Package': '!android.os',
+        'Export-Package': 'kotlin.reflect.jvm.internal,kotlin.reflect.*')
+}
+
