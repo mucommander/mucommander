@@ -103,7 +103,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
             return;
         }
 
-        JMenuItem searchingItem = add(new JMenuItem(Translator.get("adb.searching")));
+        JMenuItem searchingItem = add(new JMenuItem(Translator.get("loading")));
         searchingItem.setEnabled(false);
         CompletableFuture.runAsync(() -> {
             var androidDevices = AdbUtils.getDevices();
