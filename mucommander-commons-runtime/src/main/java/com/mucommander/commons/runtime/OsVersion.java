@@ -17,10 +17,9 @@
 
 package com.mucommander.commons.runtime;
 
-import com.mucommander.preload.PreloadedJFrame;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * This class represents a major version of an operating system, like <code>Mac OS X 10.5</code> or
@@ -81,7 +80,12 @@ public enum OsVersion implements ComparableRuntimeProperty {
 
     static {
         // force it to load as early as possible
-        PreloadedJFrame.init();
+        // try/catch for tests - btw, find a better place for it!
+        try {
+            com.mucommander.preload.PreloadedJFrame.init();
+        } catch (NoClassDefFoundError e) {
+            // ignore it
+        }
     }
 
     /** Logger used by this class. */
