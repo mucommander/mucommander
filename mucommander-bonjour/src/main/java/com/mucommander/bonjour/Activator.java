@@ -26,10 +26,6 @@ public class Activator implements BundleActivator {
 
     private ServiceRegistration<BrowsableItemsMenuService> menuRegistration;
 
-    {
-        BonjourDirectory.init();
-    }
-
     @Override
     public void start(BundleContext context) throws Exception {
         menuRegistration = context.registerService(BrowsableItemsMenuService.class, BonjourMenu::new, null);
