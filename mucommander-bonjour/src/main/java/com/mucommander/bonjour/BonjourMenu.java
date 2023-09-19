@@ -25,6 +25,9 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
@@ -58,6 +61,10 @@ public class BonjourMenu extends JMenu implements MenuListener {
 
         // Menu items will be added when menu gets selected
         addMenuListener(this);
+        // init Bonjour
+        BonjourDirectory.setActive(MuConfigurations.getPreferences()
+                .getVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY,
+                        MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
     }
 
 

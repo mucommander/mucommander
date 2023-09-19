@@ -49,11 +49,11 @@ import com.mucommander.conf.MuPreferences;
  * @author Maxence Bernard
  * @see BonjourMenu
  */
-public class BonjourDirectory implements ServiceListener, ConfigurationListener {
+public final class BonjourDirectory implements ServiceListener, ConfigurationListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(BonjourDirectory.class);
 
-    /** Singleton instance held to prevent garbage collection and also used for synchronization */
-    private static BonjourDirectory instance;
+    private static final Object LOCK = new Object();
+
     /** Does all the hard work */
     private static JmDNS jmDNS;
 
@@ -76,18 +76,20 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
     /** Number of milliseconds to wait for service info resolution before giving up */
     private final static int SERVICE_RESOLUTION_TIMEOUT = 10000;
 
-    static void init() {
-        if (instance == null)
-            instance = new BonjourDirectory();
+    private static class BonjourDirectoryHolder {
+        private static final BonjourDirectory INSTANCE = new BonjourDirectory();
     }
 
     /**
-     * No-arg contructor made private so that only one instance can exist.
+     * No-arg constructor made private so that only one instance can exist.
      */
     private BonjourDirectory() {
         MuConfigurations.addPreferencesListener(this);
     }
 
+    private static BonjourDirectory getInstance() {
+        return BonjourDirectoryHolder.INSTANCE;
+    }
 
     /**
      * Enables/disables Bonjour services discovery. If currently active and false is specified, current services
@@ -103,6 +105,7 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
         if (enabled && jmDNS == null) {
             // let's defer init of Bonjour (that does a lot of network witchery)
             // so muC can have more resources to start up quicker
+            starting = true;
             var executor = CompletableFuture.delayedExecutor(5L, TimeUnit.SECONDS);
             CompletableFuture.runAsync(BonjourDirectory::initiateBonjour, executor);
         } else if(!enabled && jmDNS!=null) {
@@ -212,7 +215,7 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
 
             BonjourService bs = createBonjourService(serviceInfo);
             // Synchronized to properly handle duplicate calls
-            synchronized(instance) {
+            synchronized(LOCK) {
                 if (bs != null && !services.contains(bs)) {
                     LOGGER.debug("BonjourService "+bs+" added");
                     services.add(bs);
@@ -242,7 +245,7 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
 
             BonjourService bs = createBonjourService(serviceInfo);
             // Synchronized to properly handle duplicate calls
-            synchronized(instance) {
+            synchronized(LOCK) {
                 // Note: BonjourService#equals() uses the service's fully qualified name as the discriminator.
                 if(bs!=null && services.contains(bs)) {
                     LOGGER.debug("BonjourService "+bs+" removed");
@@ -255,18 +258,18 @@ public class BonjourDirectory implements ServiceListener, ConfigurationListener 
     private static void initiateBonjour() {
         // Start JmDNS
         try {
-            starting = true;
             jmDNS = JmDNS.create();
 
             // Listens to service events for known service types
             int nbServices = KNOWN_SERVICE_TYPES.length;
             for (int i=0; i<nbServices; i++) {
-                jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], instance);
+                jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], getInstance());
             }
         } catch(IOException e) {
             LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
+        } finally {
+            starting = false;
         }
-        starting = false;
     }
 
 
