@@ -57,5 +57,6 @@ include 'apache-bzip2'
 include 'jetbrains-jediterm'
 include 'sevenzipjbindings'
 include 'sun-net-www'
+include 'gson'
 
 rootProject.name = 'mucommander'
