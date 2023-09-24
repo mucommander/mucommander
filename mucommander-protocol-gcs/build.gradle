@@ -8,6 +8,7 @@ dependencies {
 
     comprise ('com.google.cloud:google-cloud-storage:2.23.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
+        exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
     }
 
     testImplementation 'junit:junit:4.13.1'
@@ -23,7 +24,6 @@ jar {
         include 'com/google/auth/**'
         include 'com/google/common/**'
         include 'com/google/cloud/**'
-        include 'com/google/gson/**'
         include 'com/google/api/client/**'
         include 'com/google/api/client/**'
         include 'com/google/api/core/**'
@@ -35,7 +35,6 @@ jar {
         include 'io/opencensus/internal/**'
         include 'io/opencensus/contrib/**'
         include 'io/grpc/*'
-        include 'com/fasterxml/jackson/**'
         exclude 'META-INF/**'
     }}
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
