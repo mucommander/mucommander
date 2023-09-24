@@ -4,8 +4,11 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
+    api project(':gson')
 
-    comprise 'com.google.cloud:google-cloud-storage:2.23.0'
+    comprise ('com.google.cloud:google-cloud-storage:2.23.0') {
+        exclude group: 'com.google.code.gson', module: 'gson'
+    }
 
     testImplementation 'junit:junit:4.13.1'
     testImplementation 'org.testng:testng:7.7.0'
