@@ -261,7 +261,6 @@ public class muCommander
                         "sun.misc," +
                         "sun.plugin.protocol," + //optional
                         "com.sun.java.browser.net," + //optional
-                        "javax.annotation," +
                         "javax.activation," +
                         "javax.jms," +
                         "javax.servlet," +
