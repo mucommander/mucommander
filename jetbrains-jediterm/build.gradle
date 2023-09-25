@@ -16,12 +16,6 @@ dependencies {
 
     implementation 'org.jetbrains:annotations:23.0.0'
     runtimeOnly 'org.jetbrains.intellij.deps:trove4j:1.0.20200330'
-    comprise 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
-    comprise 'org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10'
-
-    comprise 'com.google.guava:guava:31.1-jre'
-    comprise 'net.java.dev.jna:jna:5.10.0'
-    comprise 'net.java.dev.jna:jna-platform:5.10.0'
 
     implementation 'log4j:log4j:1.2.17'
 }
@@ -34,11 +28,8 @@ jar {
         include 'gnu/trove/**'
         include 'jtermios/**'
         include 'purejavacomm/**'
-        include 'kotlin/**'
         include 'org/jetbrains/**'
         include 'resources/com/pty4j/**'
-        include 'com/sun/**'
-        include 'com/google/**'
         exclude 'codegen/**'
         exclude 'META-INF/**'
    } }
@@ -55,7 +46,6 @@ jar {
         'Implementation-Version': revision.substring(0, 7),
         'Build-Date': new Date().format('yyyyMMdd'),
         'Build-Url': "https://www.mucommander.com/version/nightly.xml",
-        'Import-Package': '!javax.annotation.*,!com.google.appengine*,!com.google.apphosting.*,!kotlin.internal.*,!com.ibm.uvm.tools,!kotlin.reflect.jvm.internal,*',
         'Export-Package':
             'com.jediterm.core,' +
             'com.jediterm.core.util,' +

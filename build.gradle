@@ -46,6 +46,13 @@ subprojects {
     dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.36'
         implementation 'org.osgi:osgi.core:8.0.0'
+        constraints {
+            implementation 'com.squareup.okio:okio-jvm:3.5.0'
+            implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.10'
+            implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.10'
+            implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10'
+            implementation 'org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10'
+        }
     }
 }
 
@@ -178,7 +185,7 @@ runOsgi {
             instruction 'Bundle-Version', '1.0'
         }
         manifest("kotlin-stdlib.*") {
-            instruction 'Bundle-Version', '1.6.20'
+            instruction 'Bundle-Version', '1.9.10'
             instruction 'Import-Package', '!android.os', '*'
         }
         manifest("jcip-annotations.*") {
