@@ -23,6 +23,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.PrintStream;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -56,7 +58,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
     private static FileSystemView fileSystemView;
 
     /** Swing object used to retrieve file icons, used under Mac OS X only */
-    private static JFileChooser fileChooser;
+    private static Future<JFileChooser> fileChooser;
 
     /** Caches icons for directories, used only for non-local files */
     protected static IconCache directoryIconCache = CachedFileIconProvider.createCache();
@@ -88,7 +90,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             return;
 
         if(OsFamily.MAC_OS.isCurrent())
-            fileChooser = new JFileChooser();
+            fileChooser = CompletableFuture.supplyAsync(() -> new JFileChooser());  // new JFileChooser takes looong to init
         else
             fileSystemView = FileSystemView.getFileSystemView();
 
@@ -129,9 +131,8 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
                 errOut.setSilenced(true);
 
                 return fileSystemView.getSystemIcon(javaIoFile);
-            }
-            else {
-                return fileChooser.getIcon(javaIoFile);
+            } else {
+                return fileChooser.get().getIcon(javaIoFile);
             }
         }
         catch(Exception e) {
