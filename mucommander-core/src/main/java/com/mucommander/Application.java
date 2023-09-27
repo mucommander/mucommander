@@ -62,9 +62,6 @@ public class Application {
 
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
-    private SplashScreen splashScreen;
-    /** Whether or not to display the splash screen. */
-    private boolean useSplash;
     /** true while the application is launching, false after it has finished launching */
     private static boolean isLaunching = true;
     /** Launch lock. */
@@ -166,8 +163,8 @@ public class Application {
     /**
      * Prints the specified startup message.
      */
-    private void printStartupMessage(String message) {
-        if (useSplash) {
+    private void printStartupMessage(SplashScreen splashScreen, String message) {
+        if (splashScreen != null) {
             splashScreen.setLoadingMessage(message);
         }
 
@@ -202,6 +199,7 @@ public class Application {
     }
 
     private void run() {
+        SplashScreen splashScreen = null;
         try {
             // Associations handling.
             String assoc = activator.assoc();
@@ -343,7 +341,7 @@ public class Application {
             System.setProperty("java.net.useSystemProxies", "true");
 
             // Shows the splash screen, if enabled in the preferences
-            useSplash = MuConfigurations.getPreferences()
+            boolean useSplash = MuConfigurations.getPreferences()
                     .getVariable(MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN);
             if (useSplash) {
                 splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
@@ -371,7 +369,7 @@ public class Application {
             }
 
             // Loads custom commands
-            printStartupMessage("Loading file associations..."); // TODO Localize those messages.....
+            printStartupMessage(splashScreen, "Loading file associations..."); // TODO Localize those messages.....
             try {
                 com.mucommander.command.CommandManager.loadCommands();
             } catch (Exception e) {
@@ -396,7 +394,7 @@ public class Application {
             }
 
             // Loads bookmarks
-            printStartupMessage("Loading bookmarks...");
+            printStartupMessage(splashScreen, "Loading bookmarks...");
             try {
                 com.mucommander.bookmark.BookmarkManager.loadBookmarks();
             } catch (Exception e) {
@@ -404,7 +402,7 @@ public class Application {
             }
 
             // Loads credentials
-            printStartupMessage("Loading credentials...");
+            printStartupMessage(splashScreen, "Loading credentials...");
             try {
                 com.mucommander.auth.CredentialsManager.loadCredentials();
             } catch (Exception e) {
@@ -416,7 +414,7 @@ public class Application {
             com.mucommander.text.CustomDateFormat.init();
 
             // Initialize file icons
-            printStartupMessage("Loading icons...");
+            printStartupMessage(splashScreen, "Loading icons...");
             // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why
             // we do this now
             SwingFileIconProvider.forceInit();
@@ -424,11 +422,11 @@ public class Application {
             setSystemIconsPolicy();
 
             // Register actions
-            printStartupMessage("Registering actions...");
+            printStartupMessage(splashScreen, "Registering actions...");
             ActionManager.registerActions();
 
             // Loads the ActionKeymap file
-            printStartupMessage("Loading actions shortcuts...");
+            printStartupMessage(splashScreen, "Loading actions shortcuts...");
             try {
                 com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();
             } catch (Exception e) {
@@ -436,7 +434,7 @@ public class Application {
             }
 
             // Loads the ToolBar's description file
-            printStartupMessage("Loading toolbar description...");
+            printStartupMessage(splashScreen, "Loading toolbar description...");
             try {
                 ToolBarIO.loadDescriptionFile();
             } catch (Exception e) {
@@ -444,7 +442,7 @@ public class Application {
             }
 
             // Loads the CommandBar's description file
-            printStartupMessage("Loading command bar description...");
+            printStartupMessage(splashScreen, "Loading command bar description...");
             try {
                 CommandBarIO.loadCommandBar();
             } catch (Exception e) {
@@ -452,11 +450,11 @@ public class Application {
             }
 
             // Loads the themes.
-            printStartupMessage("Loading theme...");
+            printStartupMessage(splashScreen, "Loading theme...");
             com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
 
             // Creates the initial main frame using any initial path specified by the command line.
-            printStartupMessage("Initializing window...");
+            printStartupMessage(splashScreen, "Initializing window...");
             List<String> folders = activator.getInitialFolders();
             if (CollectionUtils.isNotEmpty(folders)) {
                 WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
@@ -476,7 +474,7 @@ public class Application {
             if (MuConfigurations.getPreferences()
                     .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
                             MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
-                printStartupMessage("Enabling system notifications...");
+                printStartupMessage(splashScreen, "Enabling system notifications...");
                 if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
                     com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
             }
