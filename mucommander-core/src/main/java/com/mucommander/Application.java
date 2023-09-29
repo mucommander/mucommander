@@ -60,8 +60,6 @@ import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -167,10 +165,11 @@ public class Application {
     /**
      * Prints the specified startup message.
      */
-    private void printStartupMessage(SplashScreen splashScreen, String message) {
-        if (splashScreen != null) {
+    private void printStartupMessage(CompletableFuture<SplashScreen> splashScreenProvider,
+                                     String message) {
+        splashScreenProvider.thenAccept(splashScreen -> {
             splashScreen.setLoadingMessage(message);
-        }
+        });
 
         LOGGER.error(message);
     }
@@ -206,12 +205,9 @@ public class Application {
         ExecutorService executor = Executors.newFixedThreadPool(12);
 
         System.out.println(new Date() + " -- Application#run");
-        SplashScreen splashScreen = null;
+
         try {
             executor.execute(ThemeManager::preLoadAvailableFonts);
-//            executor.execute(() -> {
-//                new JPanel(new BorderLayout());
-//            });
 
             // Associations handling.
             String assoc = activator.assoc();
@@ -352,13 +348,13 @@ public class Application {
             // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
             System.setProperty("java.net.useSystemProxies", "true");
 
-            // Shows the splash screen, if enabled in the preferences
-            boolean useSplash = MuConfigurations.getPreferences()
-                    .getVariable(MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN);
-            if (useSplash) {
-                new Thread(() -> {
-                    splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
-                }, "SplashPanel").start();
+            CompletableFuture<SplashScreen> splashScreenProvider = new CompletableFuture<>();
+            // Show the splash screen, if enabled in the preferences
+            if (MuConfigurations.getPreferences().getVariable(
+                    MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN)) {
+                splashScreenProvider.completeAsync(() ->
+                        new SplashScreen(RuntimeConstants.VERSION,
+                            "Loading preferences..."), executor);
             }
 
             boolean showSetup;
@@ -381,7 +377,7 @@ public class Application {
 
             executor.execute(() -> {
                 // Loads the themes.
-                printStartupMessage("Loading theme...");
+                printStartupMessage(splashScreenProvider, "Loading theme...");
                 try {
                     SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
                     LOGGER.error("Loading theme DONE");
@@ -401,7 +397,7 @@ public class Application {
 
             executor.execute(() -> {
                 // Loads custom commands
-                printStartupMessage(splashScreen, "Loading file associations..."); // TODO Localize those messages.....
+                printStartupMessage(splashScreenProvider, "Loading file associations..."); // TODO Localize those messages.....
                 try {
                     com.mucommander.command.CommandManager.loadCommands();
                 } catch (Exception e) {
@@ -432,7 +428,7 @@ public class Application {
 
             executor.execute(() -> {
                 // Loads bookmarks
-                printStartupMessage(splashScreen, "Loading bookmarks...");
+                printStartupMessage(splashScreenProvider, "Loading bookmarks...");
                 try {
                     com.mucommander.bookmark.BookmarkManager.loadBookmarks();
                 } catch (Exception e) {
@@ -442,7 +438,7 @@ public class Application {
 
             executor.execute(() -> {
                 // Loads credentials
-                printStartupMessage(splashScreen, "Loading credentials...");
+                printStartupMessage(splashScreenProvider, "Loading credentials...");
                 try {
                     com.mucommander.auth.CredentialsManager.loadCredentials();
                 } catch (Exception e) {
@@ -456,7 +452,7 @@ public class Application {
                 com.mucommander.text.CustomDateFormat.init();
 
                 // Initialize file icons
-                printStartupMessage(splashScreen, "Loading icons...");
+                printStartupMessage(splashScreenProvider, "Loading icons...");
                 // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why
                 // we do this now
                 SwingFileIconProvider.forceInit();
@@ -470,11 +466,11 @@ public class Application {
             System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
 
             // Register actions
-            printStartupMessage(splashScreen, "Registering actions...");
+            printStartupMessage(splashScreenProvider, "Registering actions...");
             ActionManager.registerActions();
 
             // Loads the ActionKeymap file
-            printStartupMessage(splashScreen, "Loading actions shortcuts...");
+            printStartupMessage(splashScreenProvider, "Loading actions shortcuts...");
             try {
                 com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();
             } catch (Exception e) {
@@ -482,7 +478,7 @@ public class Application {
             }
 
             // Loads the ToolBar's description file
-            printStartupMessage(splashScreen, "Loading toolbar description...");
+            printStartupMessage(splashScreenProvider, "Loading toolbar description...");
             try {
                 ToolBarIO.loadDescriptionFile();
             } catch (Exception e) {
@@ -490,7 +486,7 @@ public class Application {
             }
 
             // Loads the CommandBar's description file
-            printStartupMessage(splashScreen, "Loading command bar description...");
+            printStartupMessage(splashScreenProvider, "Loading command bar description...");
             try {
                 CommandBarIO.loadCommandBar();
             } catch (Exception e) {
@@ -500,9 +496,9 @@ public class Application {
             // Invoke in a different thread: https://www.oracle.com/technical-resources/articles/javase/swingworker.html
             Thread mainThread = new Thread(() -> {
                 LOGGER.error("muC UI about to be presented");
-                printStartupMessage(splashScreen, "Loading theme...");
+                printStartupMessage(splashScreenProvider, "Loading theme...");
                 // Creates the initial main frame using any initial path specified by the command line.
-                printStartupMessage(splashScreen, "Initializing window...");
+                printStartupMessage(splashScreenProvider, "Initializing window...");
                 LOGGER.error("folders init");
                 List<String> folders = activator.getInitialFolders();
                 LOGGER.error("muC new main frame to start");
@@ -524,18 +520,14 @@ public class Application {
                 LOGGER.error("Launch lock freed");
 
                 // Dispose splash screen.
-                var localSplashScreen = splashScreen;
-                if (localSplashScreen != null) {
-                    localSplashScreen.dispose();
-                    splashScreen = null;
-                }
+                splashScreenProvider.thenAccept(splashScreen -> splashScreen.dispose());
 
                 // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
                 // a MainFrame instance
                 if (MuConfigurations.getPreferences()
                         .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
                                 MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
-                    printStartupMessage(splashScreen, "Enabling system notifications...");
+                    printStartupMessage(splashScreenProvider, "Enabling system notifications...");
                     LOGGER.error("Enabling system notifications...");
                     if (com.mucommander.ui.notifier.NotifierProvider.isAvailable()) {
                         com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
@@ -563,12 +555,6 @@ public class Application {
             }
 
         } catch (Throwable t) {
-            // Startup failed, dispose the splash screen
-            if (splashScreen != null) {
-                splashScreen.dispose();
-                splashScreen = null;
-            }
-
             LOGGER.error("Startup failed", t);
 
             // Display an error dialog with a proper message and error details
