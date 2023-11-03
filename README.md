@@ -48,7 +48,7 @@ You can run the application by typing:
 ./gradlew run
 ```
 
-It is recommended that whenever you get an unclear compilation error before submitting your change you do:  
+It is recommended to run the following command when getting an unclear compilation error:
 ```
 ./gradlew clean run
 ```    
