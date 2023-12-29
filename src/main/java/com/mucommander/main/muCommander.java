@@ -265,6 +265,7 @@ public class muCommander
                         "javax.jms," +
                         "javax.servlet," +
                         "javax.servlet.http," +
+                        "javax.script," +
                         "sun.security.action," +
                         "com.apple.eawt," +
                         "com.apple.eio," +
