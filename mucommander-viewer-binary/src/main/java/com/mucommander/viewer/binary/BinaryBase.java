@@ -412,6 +412,7 @@ class BinaryBase {
             super.setBackground(backgroundColor);
             ThemeManager.addCurrentThemeListener(this);
 
+            codeArea.setFocusTraversalKeysEnabled(false);
             codeArea.setPainter(new HighlightCodeAreaPainter(codeArea));
             registerBinaryStatus(statusPanel);
             add(codeArea, BorderLayout.CENTER);

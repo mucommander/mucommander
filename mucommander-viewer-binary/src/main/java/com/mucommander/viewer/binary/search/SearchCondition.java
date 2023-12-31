@@ -20,9 +20,9 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import org.exbin.auxiliary.paged_data.BinaryData;
-import org.exbin.auxiliary.paged_data.ByteArrayEditableData;
-import org.exbin.auxiliary.paged_data.EditableBinaryData;
+import org.exbin.auxiliary.binary_data.BinaryData;
+import org.exbin.auxiliary.binary_data.ByteArrayEditableData;
+import org.exbin.auxiliary.binary_data.EditableBinaryData;
 import org.exbin.bined.CodeAreaUtils;
 
 /**
