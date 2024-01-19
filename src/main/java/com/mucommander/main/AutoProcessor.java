@@ -270,11 +270,9 @@ public class AutoProcessor
                         executor.execute(() -> {
                             try
                             {
-                                if (bundle != null) {
-                                    if (!isFragment(bundle)) {
-                                        sl.setBundleStartLevel(bundle, startLvl);
-                                        bundle.start();
-                                    }
+                                if (bundle != null && !isFragment(bundle)) {
+                                    sl.setBundleStartLevel(bundle, startLvl);
+                                    bundle.start();
                                 }
                             }
                             catch (BundleException ex)

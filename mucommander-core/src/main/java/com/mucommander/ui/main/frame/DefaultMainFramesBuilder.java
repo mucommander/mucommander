@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +37,6 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.action.impl.ToggleUseSinglePanelAction;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
@@ -94,7 +92,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         }
     }
 
-    private @NotNull MainFrame createMainFrame(int index) {
+    private MainFrame createMainFrame(int index) {
         int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
         ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
         for (int i=0; i<nbTabsInLeftPanel; ++i)
