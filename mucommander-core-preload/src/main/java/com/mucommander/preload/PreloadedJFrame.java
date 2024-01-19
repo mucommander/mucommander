@@ -48,13 +48,13 @@ public class PreloadedJFrame extends JFrame {
 
     private static void preLoad() {
         new Thread(() -> {
-            LOGGER.error("Going to pre-create a couple of JFrames...");
+            LOGGER.info("Going to pre-create a couple of JFrames...");
             var pre = System.currentTimeMillis();
             preloadedFrame.add(new PreloadedJFrame());
             preloadedFrame.add(new PreloadedJFrame());
-            LOGGER.error("JFrames pre-creation completed in {}ms", (System.currentTimeMillis() - pre));
+            LOGGER.info("JFrames pre-creation completed in {}ms", (System.currentTimeMillis() - pre));
 
-            LOGGER.error("Going to pre-create a couple of JPanels...");
+            LOGGER.info("Going to pre-create a couple of JPanels...");
             pre = System.currentTimeMillis();
             preloadedPanels.add(new JPanel());
             preloadedPanels.add(new JPanel());
@@ -62,7 +62,7 @@ public class PreloadedJFrame extends JFrame {
             preloadedPanels.add(new JPanel());
             preloadedPanels.add(new JPanel());
             preloadedPanels.add(new JPanel());
-            LOGGER.error("JPanel pre-creation completed in {}ms", (System.currentTimeMillis() - pre));
+            LOGGER.info("JPanel pre-creation completed in {}ms", (System.currentTimeMillis() - pre));
 
         }, "Preload-JFrame").start();
     }

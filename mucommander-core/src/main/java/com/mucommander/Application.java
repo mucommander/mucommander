@@ -171,7 +171,7 @@ public class Application {
             splashScreen.setLoadingMessage(message);
         });
 
-        LOGGER.error(message);
+        LOGGER.trace(message);
     }
 
     // - Boot code --------------------------------------------------------------
@@ -380,7 +380,7 @@ public class Application {
                 printStartupMessage(splashScreenProvider, "Loading theme...");
                 try {
                     SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
-                    LOGGER.error("Loading theme DONE");
+                    LOGGER.debug("Loading theme DONE");
                 } catch (InterruptedException | InvocationTargetException e) {
                     LOGGER.error("Error loading current theme, continuing without it", e);
                 }
@@ -396,25 +396,22 @@ public class Application {
             });
 
             executor.execute(() -> {
-                // Loads custom commands
-                printStartupMessage(splashScreenProvider, "Loading file associations..."); // TODO Localize those messages.....
-                try {
-                    com.mucommander.command.CommandManager.loadCommands();
-                } catch (Exception e) {
-                    printFileError("Could not load custom commands", e, activator.fatalWarnings());
-                }
-            });
-
-            executor.execute(() -> {
                 // Migrates the custom editor and custom viewer if necessary.
                 migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
                 migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
                 try {
                     CommandManager.writeCommands();
                 } catch (Exception e) {
-                    System.out.println("###############################");
                     LOGGER.debug("Caught exception", e);
                     // There's really nothing we can do about this...
+                }
+
+                // Loads custom commands
+                printStartupMessage(splashScreenProvider, "Loading file associations..."); // TODO Localize those messages.....
+                try {
+                    com.mucommander.command.CommandManager.loadCommands();
+                } catch (Exception e) {
+                    printFileError("Could not load custom commands", e, activator.fatalWarnings());
                 }
             });
 
@@ -495,19 +492,19 @@ public class Application {
 
             // Invoke in a different thread: https://www.oracle.com/technical-resources/articles/javase/swingworker.html
             Thread mainThread = new Thread(() -> {
-                LOGGER.error("muC UI about to be presented");
+                LOGGER.debug("muC UI about to be presented");
                 printStartupMessage(splashScreenProvider, "Loading theme...");
                 // Creates the initial main frame using any initial path specified by the command line.
                 printStartupMessage(splashScreenProvider, "Initializing window...");
-                LOGGER.error("folders init");
+                LOGGER.debug("folders init");
                 List<String> folders = activator.getInitialFolders();
-                LOGGER.error("muC new main frame to start");
+                LOGGER.debug("muC new main frame to start");
                 if (CollectionUtils.isNotEmpty(folders)) {
                     WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
                 } else {
                     WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
                 }
-                LOGGER.error("muC UI presented after: {} ms", ManagementFactory.getRuntimeMXBean().getUptime());
+                LOGGER.info("muC UI presented after: {} ms", ManagementFactory.getRuntimeMXBean().getUptime());
 
                 // Done launching, wake up threads waiting for the application being launched.
                 // Important: this must be done before disposing the splash screen, as this would otherwise create a
@@ -517,7 +514,7 @@ public class Application {
                     isLaunching = false;
                     LAUNCH_LOCK.notifyAll();
                 }
-                LOGGER.error("Launch lock freed");
+                LOGGER.debug("Launch lock freed");
 
                 // Dispose splash screen.
                 splashScreenProvider.thenAccept(splashScreen -> splashScreen.dispose());
@@ -528,12 +525,12 @@ public class Application {
                         .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
                                 MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
                     printStartupMessage(splashScreenProvider, "Enabling system notifications...");
-                    LOGGER.error("Enabling system notifications...");
+                    LOGGER.debug("Enabling system notifications...");
                     if (com.mucommander.ui.notifier.NotifierProvider.isAvailable()) {
                         com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
-                        LOGGER.error("System notifications enabled.");
+                        LOGGER.debug("System notifications enabled.");
                     } else {
-                        LOGGER.error("System notifications not available.");
+                        LOGGER.debug("System notifications not available.");
                     }
                 }
 

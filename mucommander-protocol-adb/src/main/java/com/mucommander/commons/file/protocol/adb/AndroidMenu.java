@@ -64,7 +64,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
         super(Translator.get("adb.android_devices"));
         this.mainFrame = mainFrame;
         this.folderPanel = folderPanel;
-        setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png")); // no
+        setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
 
         // Menu items will be added when menu gets selected
         addMenuListener(this);
@@ -102,6 +102,7 @@ public class AndroidMenu extends JMenu implements MenuListener {
         if (searching) {
             return;
         }
+        searching = true;
 
         JMenuItem searchingItem = add(new JMenuItem(Translator.get("loading")));
         searchingItem.setEnabled(false);

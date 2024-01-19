@@ -173,8 +173,6 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         mainPanel.add(fileDetailsPanel);
 
-//        mainPanel.add(new HelpButtonPanel(new HelpButton(mainFrame.getJFrame(), "CalculateChecksum")));
-        
         getContentPane().add(mainPanel);
 
         // Give initial keyboard focus to the 'Delete' button

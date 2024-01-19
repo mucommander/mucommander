@@ -139,7 +139,6 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
         panel.setBorder(null);
 
         JPanel locationPanel = PreloadedJFrame.getJPanel(new GridBagLayout());
-        panel.getTreeLock();
 
         panel.add(locationPanel, BorderLayout.NORTH);
 
