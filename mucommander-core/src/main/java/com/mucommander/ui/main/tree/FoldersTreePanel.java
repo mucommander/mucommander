@@ -100,17 +100,14 @@ public class FoldersTreePanel implements TreeSelectionListener,
         TreeIOThreadManager.getInstance().start();
     }
 
-   
     /**
      * Creates a panel with directory tree attached to a specified folder panel.
      * @param folderPanel a folder panel to attach tree
      */
     public FoldersTreePanel(FolderPanel folderPanel) {
         super();
-        panel = PreloadedJFrame.getJPanel(new FlowLayout());
+        panel = PreloadedJFrame.getJPanel(new BorderLayout());
         this.folderPanel = folderPanel;
-        
-        panel.setLayout(new BorderLayout());
 
         // Filters out the files that should not be displayed in the tree view
         AndFileFilter treeFileFilter = new AndFileFilter(
@@ -211,7 +208,6 @@ public class FoldersTreePanel implements TreeSelectionListener,
      * Adds or removes location change listeners depending on the tree
      * visibility.
      */
-//    @Override
     public void setVisible(boolean flag) {
         panel.setVisible(flag);
         if (flag) {
@@ -282,7 +278,6 @@ public class FoldersTreePanel implements TreeSelectionListener,
     /**
      * Changes focus to tree.
      */
-    //@Override
     public void requestFocus() {
         tree.requestFocus();
     }
