@@ -168,6 +168,8 @@ public class BrowseLocationThread extends ChangeFolderThread {
         if(credentialsMapping!=null) {
             newCredentialsMapping = credentialsMapping;
             CredentialsManager.authenticate(folderURL, newCredentialsMapping);
+        } else if (isSftpWithPrivateKey()) {
+            // Special case: for SFTP connection that uses a private key, no need to re-authenticate
         }
         // If the URL doesn't contain any credentials and authentication for this file protocol is required, or
         // optional and CredentialsManager has credentials for this location, popup the authentication dialog to
@@ -547,5 +549,16 @@ public class BrowseLocationThread extends ChangeFolderThread {
         
         // Show confirmation/path modification dialog
         new DownloadDialog(mainFrame, fileSet).showDialog();
+    }
+
+    private boolean isSftpWithPrivateKey() {
+        boolean sftpWithPrivateKey = false;
+        CredentialsMapping[] matchingCredentials = CredentialsManager.getMatchingCredentials(this.folderURL);
+        if (matchingCredentials.length > 0) {
+            boolean isSftp = matchingCredentials[0].getRealm().getScheme().equals("sftp");
+            boolean hasPrivateKey = matchingCredentials[0].getRealm().getProperty("privateKeyPath") != null;
+            sftpWithPrivateKey = isSftp && hasPrivateKey;
+        }
+        return sftpWithPrivateKey;
     }
 }
