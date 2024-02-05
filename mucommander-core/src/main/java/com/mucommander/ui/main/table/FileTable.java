@@ -1388,7 +1388,16 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         else if(DesktopManager.isLeftMouseButton(e)) {
             // Marks a group of rows, from last current row to clicked row (current row)
             if(e.isShiftDown()) {
-                setRangeMarked(currentRow, lastRow, !tableModel.isRowMarked(currentRow));
+                // Determine the end of the selection range:
+                // - If clickedRow == currentRow, that means changeSelection method was already called.
+                //   In this case, currentRow and lastRow are set correctly and already represents the selection range.
+                // - If not, that means changeSelection method was not called (and will be called later). In this case,
+                //   we cannot relay on lastRow - instead use currentRow (which is actually the previously selected row)
+                //   and clickedRow (which is the currently selected row) to define selection range
+                int clickedRow = rowAtPoint(new Point(e.getX(), e.getY()));
+                int endRow = currentRow == clickedRow ? lastRow : clickedRow;
+
+                setRangeMarked(currentRow, endRow, !tableModel.isRowMarked(currentRow));
             }
             // Marks the clicked row
             else if (e.isControlDown()) {
