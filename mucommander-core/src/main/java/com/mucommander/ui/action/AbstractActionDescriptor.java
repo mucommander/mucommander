@@ -118,8 +118,6 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
 
         // Look for an icon image file with the /action/<action id>.png path and use it if it exists
         iconPath = getStandardIconPath(actionId);
-        if(ResourceLoader.getResourceAsURL(iconPath) == null)
-            return null;
         return IconManager.getIcon(iconPath);
     }
     
