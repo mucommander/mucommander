@@ -1392,7 +1392,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // - If clickedRow == currentRow, that means changeSelection method was already called.
                 //   In this case, currentRow and lastRow are set correctly and already represents the selection range.
                 // - If not, that means changeSelection method was not called (and will be called later). In this case,
-                //   we cannot relay on lastRow - instead use currentRow (which is actually the previously selected row)
+                //   we cannot rely on lastRow - instead use currentRow (which is actually the previously selected row)
                 //   and clickedRow (which is the currently selected row) to define selection range
                 int clickedRow = rowAtPoint(new Point(e.getX(), e.getY()));
                 int endRow = currentRow == clickedRow ? lastRow : clickedRow;
