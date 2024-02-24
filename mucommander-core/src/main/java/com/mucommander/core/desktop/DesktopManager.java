@@ -218,8 +218,11 @@ public final class DesktopManager {
                 desktop = current;
                 LOGGER.debug("Using desktop: " + desktop);
                 desktop.init(install);
-                setTrashProvider(desktop.getTrash());
-                setNotifier(desktop.getNotifier());
+                new Thread(() -> {
+                    // takes a bit longer, lets do that async
+                    setTrashProvider(desktop.getTrash());
+                    setNotifier(desktop.getNotifier());
+                }, "DesktopInit").start();
                 setTabbedPaneCustomizer(desktop.getTabbedPaneCustomizer());
                 setActionShortcuts(desktop.getActionShortcuts());
                 return;
