@@ -555,7 +555,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
         boolean sftpWithPrivateKey = false;
         CredentialsMapping[] matchingCredentials = CredentialsManager.getMatchingCredentials(this.folderURL);
         for (int i = 0; i < matchingCredentials.length; i++) {
-            boolean isSftp = matchingCredentials[i].getRealm().getScheme().equals("sftp");
+            boolean isSftp = matchingCredentials[i].getRealm().getScheme().equals(FileProtocols.SFTP);
             boolean hasPrivateKey = matchingCredentials[i].getRealm().getProperty("privateKeyPath") != null;
             sftpWithPrivateKey = isSftp && hasPrivateKey;
             if (sftpWithPrivateKey) {
