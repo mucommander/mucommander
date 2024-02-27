@@ -9,14 +9,14 @@ jobs:
   upload-macos-artifacts:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name : Get version
         id: mucommander_version
         run: |
           echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
-
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
 
       - name: Checkout 'release'
         uses: actions/checkout@v3
@@ -53,15 +53,15 @@ jobs:
   upload-linux-artifacts:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name : Get version
         id: mucommander_version
         run: |
           echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
-
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
 
       - uses: actions/setup-java@v3
         with:
@@ -125,14 +125,14 @@ jobs:
   upload-windows-artifacts:
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name : Get version
         id: mucommander_version
         run: |
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
-
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
 
       - uses: actions/setup-java@v3
         with:
