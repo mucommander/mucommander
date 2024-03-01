@@ -14,7 +14,7 @@ jobs:
           submodules: recursive
 
       - name : Get version
-        id: mucommander_version
+        id: version_macos
         run: |
           echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
 
@@ -47,8 +47,8 @@ jobs:
         uses: actions/upload-artifact@master
         if: always()
         with:
-          name: "mucommander-${{ steps.mucommander_version.outputs.FULL_VERSION }}.dmg"
-          path: "./build/distributions/mucommander-${{ steps.mucommander_version.outputs.FULL_VERSION }}.dmg"
+          name: "mucommander-${{ steps.version_macos.outputs.FULL_VERSION }}.dmg"
+          path: "./build/distributions/mucommander-${{ steps.version_macos.outputs.FULL_VERSION }}.dmg"
 
   upload-linux-artifacts:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           submodules: recursive
 
       - name : Get version
-        id: mucommander_version
+        id: version_linux
         run: |
           echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
@@ -95,31 +95,31 @@ jobs:
 
       - name: Sign rpm
         run: |
-          rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ steps.mucommander_version.outputs.VERSION }}-1.x86_64.rpm"
+          rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ steps.version_linux.outputs.VERSION }}-1.x86_64.rpm"
 
       - name: Upload portable
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ steps.mucommander_version.outputs.FULL_VERSION }}-portable.zip"
-          path: "./build/distributions/mucommander-${{ steps.mucommander_version.outputs.FULL_VERSION }}-portable.zip"
+          name: "mucommander-${{ steps.version_linux.outputs.FULL_VERSION }}-portable.zip"
+          path: "./build/distributions/mucommander-${{ steps.version_linux.outputs.FULL_VERSION }}-portable.zip"
 
       - name: Upload tgz
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ steps.mucommander_version.outputs.FULL_VERSION }}.tgz"
-          path: "./build/distributions/mucommander-${{ steps.mucommander_version.outputs.FULL_VERSION }}.tgz"
+          name: "mucommander-${{ steps.version_linux.outputs.FULL_VERSION }}.tgz"
+          path: "./build/distributions/mucommander-${{ steps.version_linux.outputs.FULL_VERSION }}.tgz"
 
       - name: Upload deb
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander_${{ steps.mucommander_version.outputs.VERSION }}-1_amd64.deb"
-          path: "./build/distributions/mucommander_${{ steps.mucommander_version.outputs.VERSION }}-1_amd64.deb"
+          name: "mucommander_${{ steps.version_linux.outputs.VERSION }}-1_amd64.deb"
+          path: "./build/distributions/mucommander_${{ steps.version_linux.outputs.VERSION }}-1_amd64.deb"
 
       - name: Upload rpm
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ steps.mucommander_version.outputs.VERSION }}-1.x86_64.rpm"
-          path: "./build/distributions/mucommander-${{ steps.mucommander_version.outputs.VERSION }}-1.x86_64.rpm"
+          name: "mucommander-${{ steps.version_linux.outputs.VERSION }}-1.x86_64.rpm"
+          path: "./build/distributions/mucommander-${{ steps.version_linux.outputs.VERSION }}-1.x86_64.rpm"
 
 
   upload-windows-artifacts:
@@ -130,7 +130,7 @@ jobs:
           submodules: recursive
 
       - name : Get version
-        id: mucommander_version
+        id: version_win
         run: |
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
@@ -161,5 +161,5 @@ jobs:
       - name: Upload msi
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ steps.mucommander_version.outputs.VERSION }}.msi"
-          path: "./build/distributions/mucommander-${{ steps.mucommander_version.outputs.VERSION }}.msi"
+          name: "mucommander-${{ steps.version_win.outputs.VERSION }}.msi"
+          path: "./build/distributions/mucommander-${{ steps.version_win.outputs.VERSION }}.msi"
