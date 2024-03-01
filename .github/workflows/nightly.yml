@@ -132,7 +132,8 @@ jobs:
       - name : Get version
         id: version_win
         run: |
-          echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
+          echo "$(${{github.workspace}}/gradlew -q printVersionName)"
+          echo "version=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
       - uses: actions/setup-java@v3
         with:
@@ -161,5 +162,5 @@ jobs:
       - name: Upload msi
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ steps.version_win.outputs.VERSION }}.msi"
-          path: "./build/distributions/mucommander-${{ steps.version_win.outputs.VERSION }}.msi"
+          name: "mucommander-${{ steps.version_win.outputs.version }}.msi"
+          path: "./build/distributions/mucommander-${{ steps.version_win.outputs.version }}.msi"
