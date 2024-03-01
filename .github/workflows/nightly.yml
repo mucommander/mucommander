@@ -12,6 +12,7 @@ jobs:
       version: ${{ steps.mucommander_version.outputs.VERSION }}
       full_version: ${{ steps.mucommander_version.outputs.FULL_VERSION }}
     steps:
+      - uses: actions/checkout@v3
       - name : Get version
         id: mucommander_version
         run: |
