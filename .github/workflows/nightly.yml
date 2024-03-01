@@ -98,7 +98,7 @@ jobs:
 
       - name: Sign rpm
         run: |
-          rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.}}-1.x86_64.rpm"
+          rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.x86_64.rpm"
 
       - name: Upload portable
         uses: actions/upload-artifact@master
