@@ -42,7 +42,7 @@ jobs:
           git am release/0002-set-credentials-to-Dropbox.patch
           git am release/0005-set-credentials-to-OneDrive.patch
 
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: '20'
           distribution: 'adopt'
@@ -67,7 +67,7 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: '20'
           distribution: 'adopt'
@@ -134,7 +134,7 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: '20'
           distribution: 'adopt'
