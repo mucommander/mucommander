@@ -12,7 +12,7 @@ jobs:
       version: ${{ steps.mucommander_version.outputs.VERSION }}
       full_version: ${{ steps.mucommander_version.outputs.FULL_VERSION }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name : Get version
         id: mucommander_version
         run: |
@@ -23,12 +23,12 @@ jobs:
     runs-on: macos-latest
     needs: get-version
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Checkout 'release'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: mucommander/release
           path: release
@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: get-version
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -73,7 +73,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Checkout 'release'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: mucommander/release
           path: release
@@ -130,7 +130,7 @@ jobs:
     runs-on: windows-latest
     needs: get-version
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -140,7 +140,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Checkout 'release'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: mucommander/release
           path: release
