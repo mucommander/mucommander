@@ -61,10 +61,10 @@ jobs:
           java-version: '20'
           distribution: 'adopt'
 
+      - uses: gradle/actions/setup-gradle@v3
+
       - name: Build dmg
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: dmg
+        run: ./gradlew dmg
 
       - name: Upload dmg
         uses: shogo82148/actions-upload-release-asset@v1
@@ -102,10 +102,10 @@ jobs:
           git am release/0001-set-credentials-to-Google-Drive.patch
           git am release/0002-set-credentials-to-Dropbox.patch
 
+      - uses: gradle/actions/setup-gradle@v3
+
       - name: Build portable, tgz, deb, and rpm
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: tgz portable deb rpm
+        run: ./gradlew tgz portable deb rpm
 
       - name: Upload portable
         uses: shogo82148/actions-upload-release-asset@v1
@@ -165,10 +165,10 @@ jobs:
           git am release/0001-set-credentials-to-Google-Drive.patch
           git am release/0002-set-credentials-to-Dropbox.patch
 
+      - uses: gradle/actions/setup-gradle@v3
+
       - name: Build msi
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: msi
+        run: ./gradlew msi
 
       - name: Upload msi
         uses: shogo82148/actions-upload-release-asset@v1
