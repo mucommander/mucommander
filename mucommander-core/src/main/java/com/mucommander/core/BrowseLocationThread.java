@@ -168,13 +168,13 @@ public class BrowseLocationThread extends ChangeFolderThread {
         if(credentialsMapping!=null) {
             newCredentialsMapping = credentialsMapping;
             CredentialsManager.authenticate(folderURL, newCredentialsMapping);
-        } else if (isSftpWithPrivateKey()) {
-            // Special case: for SFTP connection that uses a private key, no need to re-authenticate
         }
         // If the URL doesn't contain any credentials and authentication for this file protocol is required, or
         // optional and CredentialsManager has credentials for this location, popup the authentication dialog to
         // avoid waiting for an AuthException to be thrown.
-        else if(!folderURL.containsCredentials() &&
+        // There is no need to get credentials from users for locations that we already have non-password based
+        // credentials for in CredentialsManager, like SFTP with a private key
+        else if(!folderURL.containsCredentials() && !isSftpWithPrivateKey() &&
                 (  (authenticationType==AuthenticationType.AUTHENTICATION_REQUIRED)
                         || (authenticationType==AuthenticationType.AUTHENTICATION_OPTIONAL && CredentialsManager.getMatchingCredentials(folderURL).length>0))) {
             AuthDialog authDialog = popAuthDialog(folderURL, false, null);
