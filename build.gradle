@@ -389,7 +389,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--icon', 'package/osx/icon.icns', \
                 '--main-jar', 'mucommander-'+project.version+'.jar', \
                 '--main-class', 'com.mucommander.main.muCommander', \
-                '--runtime-image', 'jre/macOS', \
+                '--runtime-image', 'jre/macOS/x64', \
                 '--java-options', '\
                         -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
                         --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
