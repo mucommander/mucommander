@@ -81,11 +81,12 @@ public class ToggleTerminalAction extends ActiveTabAction {
     }
 
     private void ensureIntegrationIsInitialized() {
-        if (terminalIntegration == null && mainFrame.getVerticalSplitPane() != null) {
+        var verticalSplit = mainFrame.getVerticalSplitPane();
+        if (terminalIntegration == null && verticalSplit != null) {
             // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
             synchronized (this) {
                 if (terminalIntegration == null) {
-                    terminalIntegration = new TerminalIntegration(mainFrame, mainFrame.getVerticalSplitPane());
+                    terminalIntegration = new TerminalIntegration(mainFrame, verticalSplit);
                 }
             }
         }
