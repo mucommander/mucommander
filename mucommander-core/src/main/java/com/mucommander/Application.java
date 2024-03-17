@@ -206,8 +206,6 @@ public class Application {
         System.out.println(new Date() + " -- Application#run");
 
         try {
-            executor.execute(ThemeManager::preLoadAvailableFonts);
-
             // Associations handling.
             String assoc = activator.assoc();
             if (assoc != null) {

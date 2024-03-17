@@ -20,23 +20,17 @@ package com.mucommander.ui.theme;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -72,9 +66,6 @@ public class ThemeManager {
     private static       AbstractFile userThemeFile;
     /** Default user defined theme file name. */
     private static final String       USER_THEME_FILE_NAME             = "user_theme.xml";
-
-    /** The location of available fonts list as getting them from OS takes long time (impacts startup) */
-    private static final String       AVAILABLE_FONT_CACHE             = "available_fonts_cache.cache";
 
     /** Path to the custom themes repository. */
     private static final String       CUSTOM_THEME_FOLDER              = "themes";
@@ -886,8 +877,6 @@ public class ThemeManager {
             writeTheme(currentTheme);
             wasUserThemeModified = false;
         }
-
-        cacheAvailableFonts(getAvailableFontCacheFile());
     }
 
     public static Theme getCurrentTheme() {return currentTheme;}
@@ -1056,59 +1045,6 @@ public class ThemeManager {
     public static void addCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.put(listener, null);}}
 
     /**
-     * Since loading fonts is slow, we may want to preload it from cache
-     * before Theme is loaded (crucial for start up times).
-     */
-    public static void preLoadAvailableFonts() {
-        try {
-            ThemeReader.preSetAvailableFonts(loadAvailableFonts(getAvailableFontCacheFile()));
-        } catch (IOException e) {
-            LOGGER.error("Error loading cached available fonts", e);
-        }
-    }
-
-    /**
-     * Loads available fonts from cache file.
-     * @param cacheFile a cache file
-     * @return a set with font name, never null, might be empty
-     */
-    private static Set<String> loadAvailableFonts(AbstractFile cacheFile) {
-        var result = new HashSet<String>();
-        if (!cacheFile.exists() || !cacheFile.canRead() || cacheFile.getSize() <= 0) {
-            return result;
-        }
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(cacheFile.getInputStream()))) {
-            while(reader.ready()) {
-                var line = reader.readLine();
-                if (!StringUtils.isNullOrEmpty(line)) {
-                    result.add(line);
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.error("Error reading font cache file", e);
-        }
-        return result;
-    }
-
-    /**
-     * Caches available fonts
-     * @param cacheFile a cache file to write to
-     */
-    private static void cacheAvailableFonts(AbstractFile cacheFile) {
-        var result = new HashSet<String>();
-
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(cacheFile.getOutputStream()))) {
-            for (String font : ThemeReader.getAvailableFonts()) {
-                writer.write(font);
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            LOGGER.error("Error writing font cache file", e);
-        }
-    }
-
-    /**
      * Notifies all theme listeners of the specified font event.
      * @param event event to pass down to registered listeners.
      * @see         #triggerThemeChange(Theme,Theme)
@@ -1151,10 +1087,6 @@ public class ThemeManager {
 
     private static String getThemeName(AbstractFile themeFile) {
         return themeFile.getNameWithoutExtension();
-    }
-
-    private static AbstractFile getAvailableFontCacheFile() throws IOException {
-        return PlatformManager.getPreferencesFolder().getChild(AVAILABLE_FONT_CACHE);
     }
 
     // - Listener methods ----------------------------------------------------------------

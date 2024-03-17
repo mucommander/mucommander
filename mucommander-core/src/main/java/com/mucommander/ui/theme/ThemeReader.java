@@ -25,8 +25,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.SAXParser;
@@ -107,11 +105,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     private static final int STATE_READ_ONLY = 43;
     private static final int STATE_READ_ONLY_NORMAL = 44;
     private static final int STATE_READ_ONLY_SELECTED = 45;
-
-    /** Cache of available fonts (it is very slow to initialize):
-     * https://www.mail-archive.com/java2d-interest@capra.eng.sun.com/msg02877.html,
-     * https://stackoverflow.com/questions/3237941/swing-load-available-font-family-slow-down-the-performance
-     */
     private static Set<String> availableFonts;
 
     // - Instance variables --------------------------------------------------------------
@@ -826,19 +819,6 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
         }
     }
 
-    public static void preSetAvailableFonts(Set<String> fontCache) {
-        if (!fontCache.isEmpty()) {
-            availableFonts = fontCache;
-        }
-        new Timer("RefreshFontNames").schedule(new TimerTask() {
-            @Override
-            public void run() {
-                LOGGER.info("Going to refresh available fonts from OS....");
-                availableFonts = getAvailableFontsFromOS();
-            }
-        }, 10 * 1000L);
-    }
-
     public static Set<String> getAvailableFonts() {
         if (availableFonts == null) {
             availableFonts = getAvailableFontsFromOS();
@@ -851,7 +831,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
     private static Set<String> getAvailableFontsFromOS() {
         return new HashSet<>(List.of(
-                        // takes long time....
+                        // takes long time when run first time in JVM (see muCommander#main - preload)
                         GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames())
                 .stream()
                 .map(String::toLowerCase)
