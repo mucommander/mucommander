@@ -235,7 +235,11 @@ public class muCommander
         }
 
         new Thread(() -> {
-            System.out.println("Preloading fonts in JVM...");
+            /** Pre-load into JVM available fonts (as it is very slow to initialize):
+             * https://www.mail-archive.com/java2d-interest@capra.eng.sun.com/msg02877.html,
+             * https://stackoverflow.com/questions/3237941/swing-load-available-font-family-slow-down-the-performance
+             */
+            System.out.println("Preloading fonts into JVM...");
             var pre = System.currentTimeMillis();
             try {
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
