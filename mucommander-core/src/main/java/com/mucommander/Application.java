@@ -165,8 +165,7 @@ public class Application {
     /**
      * Prints the specified startup message.
      */
-    private void printStartupMessage(CompletableFuture<SplashScreen> splashScreenProvider,
-                                     String message) {
+    private void printStartupMessage(CompletableFuture<SplashScreen> splashScreenProvider, String message) {
         splashScreenProvider.thenAccept(splashScreen -> {
             splashScreen.setLoadingMessage(message);
         });
@@ -203,7 +202,7 @@ public class Application {
 
     private void run() {
         ExecutorService executor = Executors.newFixedThreadPool(12);
-
+        // TODO temporary log!
         System.out.println(new Date() + " -- Application#run");
 
         try {
@@ -460,6 +459,7 @@ public class Application {
             long pre = System.currentTimeMillis();
             executor.shutdown();
             executor.awaitTermination(1, TimeUnit.MINUTES);
+            // TODO temporary log!
             System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
 
             // Register actions

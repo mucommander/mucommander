@@ -112,7 +112,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
      * https://www.mail-archive.com/java2d-interest@capra.eng.sun.com/msg02877.html,
      * https://stackoverflow.com/questions/3237941/swing-load-available-font-family-slow-down-the-performance
      */
-    private static Set<String> availableFonts = null;
+    private static Set<String> availableFonts;
 
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -855,7 +855,7 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
                         GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames())
                 .stream()
                 .map(String::toLowerCase)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toSet()));
     }
 
     /**
