@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
  * against each other.
  *
- * @see OsVersions
+ * @see OsVersion
  * @see OsFamily
  * @author Maxence Bernard, Arik Hadas
  */
@@ -77,16 +77,6 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	/** Big Sur */
 	MAC_OS_10_16("10.16");
 	
-
-    static {
-        // force it to load as early as possible
-        // try/catch for tests - btw, find a better place for it!
-        try {
-            com.mucommander.preload.PreloadedJFrame.init();
-        } catch (NoClassDefFoundError e) {
-            // ignore it
-        }
-    }
 
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsVersion.class);

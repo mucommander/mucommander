@@ -12,6 +12,7 @@ jar {
          'Bundle-Vendor': 'muCommander',
          'Bundle-DocURL': 'https://www.mucommander.com',
          'Export-Package': 'com.mucommander.commons.runtime',
+         'Import-Package': 'com.mucommander.preload,*',
          'Specification-Title': "muCommander",
          'Specification-Vendor': "Arik Hadas",
          'Specification-Version': project.version,
