@@ -52,6 +52,8 @@ import com.beust.jcommander.JCommander;
  */
 public class muCommander 
 {
+    private final static long START_EPOCH = System.currentTimeMillis();
+
     /**
      * Switch for specifying bundle directory.
     **/
@@ -210,6 +212,7 @@ public class muCommander
     **/
     public static void main(String[] args) throws Exception
     {
+        logTimeSinceStart("Main started");
         Configuration configuration = new Configuration();
         JCommander jCommander = new JCommander(configuration);
         jCommander.parse(args);
@@ -231,15 +234,31 @@ public class muCommander
             return;
         }
 
+        new Thread(() -> {
+            /** Pre-load into JVM available fonts (as it is very slow to initialize):
+             * https://www.mail-archive.com/java2d-interest@capra.eng.sun.com/msg02877.html,
+             * https://stackoverflow.com/questions/3237941/swing-load-available-font-family-slow-down-the-performance
+             */
+            System.out.println("Preloading fonts into JVM...");
+            var pre = System.currentTimeMillis();
+            try {
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println("Preloading fonts completed in: " + (System.currentTimeMillis() - pre) + "ms");
+        }, "Preload-Fonts").start();
+
         Path codeLocation = Paths.get(muCommander.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         if (codeLocation == null) {
-        	System.err.println("Failed to retrieve code location");
-        	return;
+            System.err.println("Failed to retrieve code location");
+            return;
         }
         File codeParentFolder = codeLocation.getParent().toFile();
 
         // Load system properties.
         muCommander.loadSystemProperties();
+        logTimeSinceStart("System properties loaded");
 
         // Read configuration properties.
         Map<String, String> configProps = muCommander.loadConfigProperties();
@@ -294,6 +313,7 @@ public class muCommander
 
         // Copy framework properties from the system properties.
         muCommander.copySystemProperties(configProps);
+        logTimeSinceStart("Config properties loaded");
 
         File preferencesFolder;
         if (configuration.preferences != null) {
@@ -356,22 +376,30 @@ public class muCommander
                 }
             });
         }
-
+        logTimeSinceStart("Hooks configured");
         try
         {
             // Create an instance of the framework.
             FrameworkFactory factory = getFrameworkFactory();
             m_fwk = factory.newFramework(configProps);
+            logTimeSinceStart("OSGi framework created");
+
             // Initialize the framework, but don't start it yet.
             m_fwk.init();
+            logTimeSinceStart("OSGi framework init'd");
+
             // Use the system bundle context to process the auto-deploy
             // and auto-install/auto-start properties.
             AutoProcessor.process(configProps, m_fwk.getBundleContext());
+            logTimeSinceStart("Bundles deployed and started");
+
             FrameworkEvent event;
             do
             {
                 // Start the framework.
                 m_fwk.start();
+                logTimeSinceStart("OSGi framework with muC fully started");
+
                 // Wait for framework to stop to exit the VM.
                 event = m_fwk.waitForStop(0);
             }
@@ -653,6 +681,10 @@ public class muCommander
                 configProps.put(key, System.getProperty(key));
             }
         }
+    }
+
+    private static void logTimeSinceStart(String text) {
+        System.out.println("[muEpoch+" + (System.currentTimeMillis() - START_EPOCH) + "ms] muCommander: " + text);
     }
 
 }

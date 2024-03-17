@@ -59,7 +59,7 @@ public class ArchivePasswordDialog extends FocusDialog implements ActionListener
      * @param file the file to rename.
      */
     public ArchivePasswordDialog(MainFrame mainFrame) {
-        super(mainFrame, Translator.get("maybe_password_protected"), mainFrame);
+        super(mainFrame.getJFrame(), Translator.get("maybe_password_protected"), mainFrame.getJFrame());
 
         Container contentPane = getContentPane();
 

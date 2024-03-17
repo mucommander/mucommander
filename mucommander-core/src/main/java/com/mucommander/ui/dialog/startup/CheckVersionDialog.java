@@ -101,12 +101,12 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
      *                      the user won't be notified if there is no new version (current version is the latest).
      */
     public CheckVersionDialog(MainFrame mainFrame, boolean userInitiated) {
-        super(mainFrame, "", mainFrame);
+        super(mainFrame.getJFrame(), "", mainFrame.getJFrame());
         this.mainFrame = mainFrame;
         this.userInitiated = userInitiated;
 
         // Do all the hard work in a separate thread
-        new Thread(this, "com.mucommander.ui.dialog.startup.CheckVersionDialog's Thread").start();
+        new Thread(this, "CheckVersionDialog").start();
     }
 
 

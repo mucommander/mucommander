@@ -72,9 +72,9 @@ public class RevealInDesktopAction extends ActiveTabAction {
         try {
             CompletionStage<Optional<String>> completionStage =
                     openInFileManager(selectedFile != null ? selectedFile : currentFolder);
-            InformationDialog.showErrorDialogIfNeeded(getMainFrame(), completionStage);
+            InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(), completionStage);
         } catch (Exception e) {
-            InformationDialog.showErrorDialog(mainFrame);
+            InformationDialog.showErrorDialog(mainFrame.getJFrame());
         }
     }
 

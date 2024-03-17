@@ -63,7 +63,7 @@ public class ToggleStatusBarAction extends MuAction {
         updateLabel(visible);
         // Show/hide the status bar
         statusBar.setVisible(visible);
-        mainFrame.validate();
+        mainFrame.getJFrame().validate();
     }
 
 	@Override

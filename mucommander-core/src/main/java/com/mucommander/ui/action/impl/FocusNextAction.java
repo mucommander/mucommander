@@ -50,7 +50,7 @@ public class FocusNextAction extends MuAction {
 
     @Override
     public void performAction() {
-        Component focusOwner = mainFrame.getFocusOwner();
+        Component focusOwner = mainFrame.getJFrame().getFocusOwner();
 
         // Abort if the focus is not in the MainFrame this action is tied to
         if(focusOwner==null)

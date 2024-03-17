@@ -197,7 +197,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
 
             do {
                 // Set cursor to hourglass/wait
-                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                mainFrame.getJFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
                 // Render all actions inactive while changing folder
                 mainFrame.setNoEventsMode(true);
@@ -225,7 +225,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
                         // or doesn't exist
                         if(file==null || !file.exists()) {
                             // Restore default cursor
-                            mainFrame.setCursor(Cursor.getDefaultCursor());
+                            mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
                             locationChanger.showFolderDoesNotExistDialog();
                             break;
@@ -233,7 +233,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
 
                         if (!file.canRead()) {
                             // Restore default cursor
-                            mainFrame.setCursor(Cursor.getDefaultCursor());
+                            mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
                             showFailedToReadFolderDialog();
                             break;
@@ -253,13 +253,13 @@ public class BrowseLocationThread extends ChangeFolderThread {
                             // of the OpenAction (enter pressed on the file). This works well enough in practice.
                             if(!globalHistory.contains(folderURL) && !file.equals(folderPanel.getFileTable().getSelectedFile())) {
                                 // Restore default cursor
-                                mainFrame.setCursor(Cursor.getDefaultCursor());
+                                mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
                                 // Download or browse file ?
-                                QuestionDialog dialog = new QuestionDialog(mainFrame,
+                                QuestionDialog dialog = new QuestionDialog(mainFrame.getJFrame(),
                                         null,
                                         Translator.get("table.download_or_browse"),
-                                        mainFrame,
+                                        mainFrame.getJFrame(),
                                         Arrays.asList(BrowseLocationThreadAction.BROWSE,
                                                 BrowseLocationThreadAction.DOWNLOAD,
                                                 BrowseLocationThreadAction.CANCEL),
@@ -277,7 +277,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
                                 }
                                 // Continue if BROWSE
                                 // Set cursor to hourglass/wait
-                                mainFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                                mainFrame.getJFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
                             }
                             // else just continue and browse file's contents
                         }
@@ -414,7 +414,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
                     }
 
                     // Restore default cursor
-                    mainFrame.setCursor(Cursor.getDefaultCursor());
+                    mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
                     if(e instanceof AuthException) {
                         AuthException authException = (AuthException)e;
@@ -488,7 +488,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
         folderPanel.setProgressValue(0);
 
         // Restore normal mouse cursor
-        mainFrame.setCursor(Cursor.getDefaultCursor());
+        mainFrame.getJFrame().setCursor(Cursor.getDefaultCursor());
 
         locationChanger.cleanChangeFolderThread();
 
@@ -506,7 +506,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
     }
 
     private void showFailedToReadFolderDialog() {
-        InformationDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("failed_to_read_folder"));
+        InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("table.folder_access_error_title"), Translator.get("failed_to_read_folder"));
     }
 
 
@@ -516,7 +516,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
      * @param e the Exception that was caught while changing the folder
      */
     private void showAccessErrorDialog(Exception e) {
-        InformationDialog.showErrorDialog(mainFrame, Translator.get("table.folder_access_error_title"), Translator.get("table.folder_access_error"), e==null?null:e.getMessage(), e);
+        InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("table.folder_access_error_title"), Translator.get("table.folder_access_error"), e==null?null:e.getMessage(), e);
     }
 
 

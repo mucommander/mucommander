@@ -261,7 +261,7 @@ public class StatusBar extends JPanel {
         mainFrame.addActivePanelListener(activePanelListener);
 
         // Catch main frame close events to make sure autoUpdateThread is finished
-        mainFrame.addWindowListener(new WindowAdapter() {
+        mainFrame.getJFrame().addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 mainFrameDisposed = true;
@@ -270,7 +270,7 @@ public class StatusBar extends JPanel {
         });
 
         // Catch window gained focus events to update the volume info when current windows has changed
-        mainFrame.addWindowFocusListener(new WindowAdapter() {
+        mainFrame.getJFrame().addWindowFocusListener(new WindowAdapter() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
                 triggerVolumeInfoUpdate();
@@ -481,7 +481,7 @@ public class StatusBar extends JPanel {
                     }
                     autoUpdateThreadNotified = false;
                 }
-            });
+            }, "DiskFreeUpdater");
             autoUpdateThread.setName("StatusBar autoUpdateThread");
             // Set the thread as a daemon thread
             autoUpdateThread.setDaemon(true);

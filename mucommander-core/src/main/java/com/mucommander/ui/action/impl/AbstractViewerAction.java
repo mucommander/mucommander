@@ -78,10 +78,10 @@ abstract class AbstractViewerAction extends SelectedFileAction {
                 // If it's local, run the custom editor on it.
                 if (file.hasAncestor(LocalFile.class)) {
                     try {
-                        InformationDialog.showErrorDialogIfNeeded(getMainFrame(), ProcessRunner.executeAsync(customCommand.getTokens(file), file));
+                        InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(), ProcessRunner.executeAsync(customCommand.getTokens(file), file));
                     }
                     catch(Exception e) {
-                        InformationDialog.showErrorDialog(mainFrame);
+                        InformationDialog.showErrorDialog(mainFrame.getJFrame());
                     }
                 } else {
                     // If it's distant, copies it locally before running the custom editor on it.

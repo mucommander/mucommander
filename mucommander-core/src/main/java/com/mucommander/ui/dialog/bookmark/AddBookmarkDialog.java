@@ -63,7 +63,7 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
 
 
     public AddBookmarkDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.AddBookmark), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.AddBookmark), mainFrame.getJFrame());
 
         Container contentPane = getContentPane();
         YBoxPanel mainPanel = new YBoxPanel(5);

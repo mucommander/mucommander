@@ -114,7 +114,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
     private final static int MAX_NUM_OF_SEARCH_THREADS = 0x7fff; // taken from FormJoinPool#MAX_CAP
 
     public SearchDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.Find), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.Find), mainFrame.getJFrame());
         this.mainFrame = mainFrame;
 
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();

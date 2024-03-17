@@ -110,7 +110,7 @@ public class CommandBarDialog extends CustomizeDialog {
 	 * Constructor
 	 */
     public CommandBarDialog(MainFrame mainFrame) {
-		super(mainFrame, ActionProperties.getActionLabel(ActionType.CustomizeCommandBar));
+		super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.CustomizeCommandBar));
 	}
 	
     @Override

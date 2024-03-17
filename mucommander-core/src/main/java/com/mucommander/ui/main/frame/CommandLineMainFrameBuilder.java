@@ -51,7 +51,7 @@ public class CommandLineMainFrameBuilder extends MainFrameBuilder {
                     new ConfFileTableTab(iterator.hasNext() ? iterator.next() : null),
                     getFileTableConfiguration(FolderPanelType.RIGHT, nbMainFrames));
 
-            newMainFrame.setBounds(getDefaultSize());
+            newMainFrame.getJFrame().setBounds(getDefaultSize());
             mainFrames.add(newMainFrame);
         }
         return mainFrames;

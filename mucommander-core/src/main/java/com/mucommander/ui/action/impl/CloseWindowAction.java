@@ -49,7 +49,7 @@ public class CloseWindowAction extends MuAction {
             ActionManager.performAction(ActionType.Quit, mainFrame);
         // Simply dispose the MainFrame
         else
-            mainFrame.dispose();
+            mainFrame.getJFrame().dispose();
     }
 
 	@Override

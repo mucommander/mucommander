@@ -434,7 +434,7 @@ public abstract class MuAction extends AbstractAction {
                     .filter(s -> !StringUtils.isNullOrEmpty(s))
                     .collect(Collectors.joining(" " + Translator.get("or") + " "));
             if (!keyShortcut.isBlank()) {
-                NotifierProvider.displayMainFrameNotification(mainFrame,
+                NotifierProvider.displayMainFrameNotification(mainFrame.getJFrame(),
                         this.getLabel() + ": " + keyShortcut,
                         NOTIFICATION_BG_COLOR, NOTIFICATION_FG_COLOR, NOTIFICATION_TIMEOUT);
             }

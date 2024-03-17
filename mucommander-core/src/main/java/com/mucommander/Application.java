@@ -18,8 +18,16 @@
 package com.mucommander;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import com.mucommander.ui.theme.ThemeManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +59,8 @@ import com.mucommander.ui.main.frame.CommandLineMainFrameBuilder;
 import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
+
+import javax.swing.SwingUtilities;
 
 /**
  * The graphical application.
@@ -95,20 +105,12 @@ public class Application {
     }
 
     /**
-     * Prints muCommander's version to stdout and exits.
-     */
-    private static void printVersion() {
-        System.out.println(RuntimeConstants.APP_STRING);
-        System.out.println("This is free software, distributed under the terms of the GNU General Public License.");
-    }
-
-    /**
      * Prints the specified error message to stderr.
      * 
      * @param msg
      *            error message to print to stderr.
      * @param quit
-     *            whether or not to quit after printing the error message.
+     *            whether to quit after printing the error message.
      * @param exception
      *            exception that triggered the error (for verbose output).
      */
@@ -163,10 +165,10 @@ public class Application {
     /**
      * Prints the specified startup message.
      */
-    private void printStartupMessage(SplashScreen splashScreen, String message) {
-        if (splashScreen != null) {
+    private void printStartupMessage(CompletableFuture<SplashScreen> splashScreenProvider, String message) {
+        splashScreenProvider.thenAccept(splashScreen -> {
             splashScreen.setLoadingMessage(message);
-        }
+        });
 
         LOGGER.trace(message);
     }
@@ -199,7 +201,10 @@ public class Application {
     }
 
     private void run() {
-        SplashScreen splashScreen = null;
+        ExecutorService executor = Executors.newFixedThreadPool(12);
+        // TODO temporary log!
+        System.out.println(new Date() + " -- Application#run");
+
         try {
             // Associations handling.
             String assoc = activator.assoc();
@@ -340,11 +345,13 @@ public class Application {
             // Note that Mac OS X already uses the system HTTP proxy, with or without this property being set.
             System.setProperty("java.net.useSystemProxies", "true");
 
-            // Shows the splash screen, if enabled in the preferences
-            boolean useSplash = MuConfigurations.getPreferences()
-                    .getVariable(MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN);
-            if (useSplash) {
-                splashScreen = new SplashScreen(RuntimeConstants.VERSION, "Loading preferences...");
+            CompletableFuture<SplashScreen> splashScreenProvider = new CompletableFuture<>();
+            // Show the splash screen, if enabled in the preferences
+            if (MuConfigurations.getPreferences().getVariable(
+                    MuPreference.SHOW_SPLASH_SCREEN, MuPreferences.DEFAULT_SHOW_SPLASH_SCREEN)) {
+                splashScreenProvider.completeAsync(() ->
+                        new SplashScreen(RuntimeConstants.VERSION,
+                            "Loading preferences..."), executor);
             }
 
             boolean showSetup;
@@ -361,72 +368,104 @@ public class Application {
                 }
             }
 
-            // Initializes the desktop.
-            try {
-                com.mucommander.core.desktop.DesktopManager.init(isFirstBoot);
-            } catch (Exception e) {
-                printError("Could not initialize desktop", e, true);
-            }
 
-            // Loads custom commands
-            printStartupMessage(splashScreen, "Loading file associations..."); // TODO Localize those messages.....
-            try {
-                com.mucommander.command.CommandManager.loadCommands();
-            } catch (Exception e) {
-                printFileError("Could not load custom commands", e, activator.fatalWarnings());
-            }
+            var firstBoot = isFirstBoot;
 
-            // Migrates the custom editor and custom viewer if necessary.
-            migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
-            migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
-            try {
-                CommandManager.writeCommands();
-            } catch (Exception e) {
-                System.out.println("###############################");
-                LOGGER.debug("Caught exception", e);
-                // There's really nothing we can do about this...
-            }
 
-            try {
-                com.mucommander.command.CommandManager.loadAssociations();
-            } catch (Exception e) {
-                printFileError("Could not load custom associations", e, activator.fatalWarnings());
-            }
+            executor.execute(() -> {
+                // Loads the themes.
+                printStartupMessage(splashScreenProvider, "Loading theme...");
+                try {
+                    SwingUtilities.invokeAndWait(() -> com.mucommander.ui.theme.ThemeManager.loadCurrentTheme());
+                    LOGGER.debug("Loading theme DONE");
+                } catch (InterruptedException | InvocationTargetException e) {
+                    LOGGER.error("Error loading current theme, continuing without it", e);
+                }
+            });
 
-            // Loads bookmarks
-            printStartupMessage(splashScreen, "Loading bookmarks...");
-            try {
-                com.mucommander.bookmark.BookmarkManager.loadBookmarks();
-            } catch (Exception e) {
-                printFileError("Could not load bookmarks", e, activator.fatalWarnings());
-            }
+            executor.execute(() -> {
+                // Initializes the desktop.
+                try {
+                    com.mucommander.core.desktop.DesktopManager.init(firstBoot);
+                } catch (Exception e) {
+                    printError("Could not initialize desktop", e, true);
+                }
+            });
 
-            // Loads credentials
-            printStartupMessage(splashScreen, "Loading credentials...");
-            try {
-                com.mucommander.auth.CredentialsManager.loadCredentials();
-            } catch (Exception e) {
-                printFileError("Could not load credentials", e, activator.fatalWarnings());
-            }
+            executor.execute(() -> {
+                // Migrates the custom editor and custom viewer if necessary.
+                migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
+                migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
+                try {
+                    CommandManager.writeCommands();
+                } catch (Exception e) {
+                    LOGGER.debug("Caught exception", e);
+                    // There's really nothing we can do about this...
+                }
 
-            // Inits CustomDateFormat to make sure that its ConfigurationListener is added
-            // before FileTable, so CustomDateFormat gets notified of date format changes first
-            com.mucommander.text.CustomDateFormat.init();
+                // Loads custom commands
+                printStartupMessage(splashScreenProvider, "Loading file associations..."); // TODO Localize those messages.....
+                try {
+                    com.mucommander.command.CommandManager.loadCommands();
+                } catch (Exception e) {
+                    printFileError("Could not load custom commands", e, activator.fatalWarnings());
+                }
+            });
 
-            // Initialize file icons
-            printStartupMessage(splashScreen, "Loading icons...");
-            // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why
-            // we do this now
-            SwingFileIconProvider.forceInit();
-            setFileIconsScaleFactor();
-            setSystemIconsPolicy();
+            executor.execute(() -> {
+                try {
+                    com.mucommander.command.CommandManager.loadAssociations();
+                } catch (Exception e) {
+                    printFileError("Could not load custom associations", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Loads bookmarks
+                printStartupMessage(splashScreenProvider, "Loading bookmarks...");
+                try {
+                    com.mucommander.bookmark.BookmarkManager.loadBookmarks();
+                } catch (Exception e) {
+                    printFileError("Could not load bookmarks", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Loads credentials
+                printStartupMessage(splashScreenProvider, "Loading credentials...");
+                try {
+                    com.mucommander.auth.CredentialsManager.loadCredentials();
+                } catch (Exception e) {
+                    printFileError("Could not load credentials", e, activator.fatalWarnings());
+                }
+            });
+
+            executor.execute(() -> {
+                // Inits CustomDateFormat to make sure that its ConfigurationListener is added
+                // before FileTable, so CustomDateFormat gets notified of date format changes first
+                com.mucommander.text.CustomDateFormat.init();
+
+                // Initialize file icons
+                printStartupMessage(splashScreenProvider, "Loading icons...");
+                // Initialize the SwingFileIconProvider from the main thread, see method Javadoc for an explanation on why
+                // we do this now
+                SwingFileIconProvider.forceInit();
+                setFileIconsScaleFactor();
+                setSystemIconsPolicy();
+            });
+
+            long pre = System.currentTimeMillis();
+            executor.shutdown();
+            executor.awaitTermination(1, TimeUnit.MINUTES);
+            // TODO temporary log!
+            System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
 
             // Register actions
-            printStartupMessage(splashScreen, "Registering actions...");
+            printStartupMessage(splashScreenProvider, "Registering actions...");
             ActionManager.registerActions();
 
             // Loads the ActionKeymap file
-            printStartupMessage(splashScreen, "Loading actions shortcuts...");
+            printStartupMessage(splashScreenProvider, "Loading actions shortcuts...");
             try {
                 com.mucommander.ui.action.ActionKeymapIO.loadActionKeymap();
             } catch (Exception e) {
@@ -434,7 +473,7 @@ public class Application {
             }
 
             // Loads the ToolBar's description file
-            printStartupMessage(splashScreen, "Loading toolbar description...");
+            printStartupMessage(splashScreenProvider, "Loading toolbar description...");
             try {
                 ToolBarIO.loadDescriptionFile();
             } catch (Exception e) {
@@ -442,60 +481,75 @@ public class Application {
             }
 
             // Loads the CommandBar's description file
-            printStartupMessage(splashScreen, "Loading command bar description...");
+            printStartupMessage(splashScreenProvider, "Loading command bar description...");
             try {
                 CommandBarIO.loadCommandBar();
             } catch (Exception e) {
                 printFileError("Could not load commandbar description", e, activator.fatalWarnings());
             }
 
-            // Loads the themes.
-            printStartupMessage(splashScreen, "Loading theme...");
-            com.mucommander.ui.theme.ThemeManager.loadCurrentTheme();
+            // Invoke in a different thread: https://www.oracle.com/technical-resources/articles/javase/swingworker.html
+            Thread mainThread = new Thread(() -> {
+                LOGGER.debug("muC UI about to be presented");
+                printStartupMessage(splashScreenProvider, "Loading theme...");
+                // Creates the initial main frame using any initial path specified by the command line.
+                printStartupMessage(splashScreenProvider, "Initializing window...");
+                LOGGER.debug("folders init");
+                List<String> folders = activator.getInitialFolders();
+                LOGGER.debug("muC new main frame to start");
+                if (CollectionUtils.isNotEmpty(folders)) {
+                    WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+                } else {
+                    WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
+                }
+                LOGGER.info("muC UI presented after: {} ms", ManagementFactory.getRuntimeMXBean().getUptime());
 
-            // Creates the initial main frame using any initial path specified by the command line.
-            printStartupMessage(splashScreen, "Initializing window...");
-            List<String> folders = activator.getInitialFolders();
-            if (CollectionUtils.isNotEmpty(folders)) {
-                WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
-            } else {
-                WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
-            }
-            // Done launching, wake up threads waiting for the application being launched.
-            // Important: this must be done before disposing the splash screen, as this would otherwise create a
-            // deadlock if the AWT event thread were waiting in #waitUntilLaunched .
-            synchronized (LAUNCH_LOCK) {
-                isLaunching = false;
-                LAUNCH_LOCK.notifyAll();
-            }
+                // Done launching, wake up threads waiting for the application being launched.
+                // Important: this must be done before disposing the splash screen, as this would otherwise create a
+                // deadlock
+                // if the AWT event thread were waiting in #waitUntilLaunched .
+                synchronized (LAUNCH_LOCK) {
+                    isLaunching = false;
+                    LAUNCH_LOCK.notifyAll();
+                }
+                LOGGER.debug("Launch lock freed");
 
-            // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
-            // a MainFrame instance
-            if (MuConfigurations.getPreferences()
-                    .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
-                            MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
-                printStartupMessage(splashScreen, "Enabling system notifications...");
-                if (com.mucommander.ui.notifier.NotifierProvider.isAvailable())
-                    com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
-            }
+                // Dispose splash screen.
+                splashScreenProvider.thenAccept(splashScreen -> splashScreen.dispose());
 
-            // Dispose splash screen.
-            if(splashScreen!=null)
-                splashScreen.dispose();
+                // Enable system notifications, only after MainFrame is created as SystemTrayNotifier needs to retrieve
+                // a MainFrame instance
+                if (MuConfigurations.getPreferences()
+                        .getVariable(MuPreference.ENABLE_SYSTEM_NOTIFICATIONS,
+                                MuPreferences.DEFAULT_ENABLE_SYSTEM_NOTIFICATIONS)) {
+                    printStartupMessage(splashScreenProvider, "Enabling system notifications...");
+                    LOGGER.debug("Enabling system notifications...");
+                    if (com.mucommander.ui.notifier.NotifierProvider.isAvailable()) {
+                        com.mucommander.ui.notifier.NotifierProvider.getNotifier().setEnabled(true);
+                        LOGGER.debug("System notifications enabled.");
+                    } else {
+                        LOGGER.debug("System notifications not available.");
+                    }
+                }
+
+                // If no theme is configured in the preferences, ask for an initial theme.
+                if (showSetup) {
+                    SwingUtilities.invokeLater(() -> {
+                        new InitialSetupDialog(WindowManager.getCurrentMainFrame().getJFrame()).showDialog();
+                    });
+                }
+            }, "MainFrameInit");
+            mainThread.start();
 
             // Check for newer version unless it was disabled
             if (MuConfigurations.getPreferences()
-                    .getVariable(MuPreference.CHECK_FOR_UPDATE, MuPreferences.DEFAULT_CHECK_FOR_UPDATE))
-                new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
+                    .getVariable(MuPreference.CHECK_FOR_UPDATE, MuPreferences.DEFAULT_CHECK_FOR_UPDATE)) {
+                CompletableFuture.runAsync(() -> {
+                    new CheckVersionDialog(WindowManager.getCurrentMainFrame(), false);
+                }, CompletableFuture.delayedExecutor(10L, TimeUnit.SECONDS));
+            }
 
-            // If no theme is configured in the preferences, ask for an initial theme.
-            if (showSetup)
-                new InitialSetupDialog(WindowManager.getCurrentMainFrame()).showDialog();
         } catch (Throwable t) {
-            // Startup failed, dispose the splash screen
-            if(splashScreen!=null)
-                splashScreen.dispose();
-
             LOGGER.error("Startup failed", t);
 
             // Display an error dialog with a proper message and error details
@@ -566,4 +620,5 @@ public class Application {
             LOGGER.error("failed to shut down", e);
         }
     }
+
 }

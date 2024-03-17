@@ -84,7 +84,7 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
      * @param mkfileMode if true, the dialog will operate in 'mkfile' mode, if false in 'mkdir' mode
      */
     public MkdirDialog(MainFrame mainFrame, boolean mkfileMode) {
-        super(mainFrame, ActionManager.getActionInstance(mkfileMode?ActionType.Mkfile:ActionType.Mkdir,mainFrame).getLabel(), mainFrame);
+        super(mainFrame.getJFrame(), ActionManager.getActionInstance(mkfileMode?ActionType.Mkfile:ActionType.Mkdir,mainFrame).getLabel(), mainFrame.getJFrame());
         this.mainFrame = mainFrame;
         this.mkfileMode = mkfileMode;
 
@@ -149,14 +149,14 @@ public class MkdirDialog extends FocusDialog implements ActionListener, ItemList
         PathUtils.ResolvedDestination resolvedDest = PathUtils.resolveDestination(enteredPath, currentFolder, currentFolder);
         // The path entered doesn't correspond to any existing folder
         if (resolvedDest==null) {
-            InformationDialog.showErrorDialog(mainFrame, Translator.get("invalid_path", enteredPath));
+            InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("invalid_path", enteredPath));
             return;
         }
 
         // Checks if the directory already exists and reports the error if that's the case
         DestinationType destinationType = resolvedDest.getDestinationType();
         if(destinationType==DestinationType.EXISTING_FOLDER) {
-            InformationDialog.showErrorDialog(mainFrame, Translator.get("directory_already_exists", enteredPath));
+            InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("directory_already_exists", enteredPath));
             return;
         }
 

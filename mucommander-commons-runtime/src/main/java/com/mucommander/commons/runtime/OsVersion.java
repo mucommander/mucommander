@@ -20,6 +20,7 @@ package com.mucommander.commons.runtime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * This class represents a major version of an operating system, like <code>Mac OS X 10.5</code> or
  * <code>Windows XP</code>. The current runtime value is determined using the value of the <code>os.version</code>
@@ -27,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
  * against each other.
  *
- * @see OsVersions
+ * @see OsVersion
  * @see OsFamily
  * @author Maxence Bernard, Arik Hadas
  */

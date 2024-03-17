@@ -85,7 +85,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * @param mainFrame the {@link MainFrame} to use as a parent
      */
     public DebugConsoleDialog(MainFrame mainFrame) {
-        super(mainFrame, ActionProperties.getActionLabel(ActionType.ShowDebugConsole), mainFrame);
+        super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.ShowDebugConsole), mainFrame.getJFrame());
 
         Container contentPane = getContentPane();
 

@@ -96,17 +96,17 @@ public class Configuration {
     /** Holds the content of the configuration file. */
     private final ConfigurationSection                         root = new ConfigurationSection();
     /** Contains all registered configuration LISTENERS, stored as weak references. */
-    private final WeakHashMap<ConfigurationListener, ?> LISTENERS = new WeakHashMap<ConfigurationListener, Object>();
+    private final Map<ConfigurationListener, ?> LISTENERS = Collections.synchronizedMap(new WeakHashMap<>());
 
 
 
     // - Synchronisation locks -----------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
-    /** Used to synchronise concurent access of the configuration source. */
+    /** Used to synchronise concurrent access of the configuration source. */
     private final Object sourceLock = new Object();
-    /** Used to synchronise concurent access of the reader factory. */
+    /** Used to synchronise concurrent access of the reader factory. */
     private final Object readerLock = new Object();
-    /** Used to synchronise concurent access of the writer factory. */
+    /** Used to synchronise concurrent access of the writer factory. */
     private final Object writerLock = new Object();
 
 

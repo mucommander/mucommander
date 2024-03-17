@@ -127,9 +127,9 @@ public class TerminalIntegration {
             String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
             // If !connected means that terminal process has ended (via `exit` command for ex.).
             if (terminal == null || !terminal.getTtyConnector().isConnected()) {
-                Cursor orgCursor = mainFrame.getCursor();
+                Cursor orgCursor = mainFrame.getJFrame().getCursor();
                 try {
-                    mainFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
                     terminal.getTerminalPanel().addFocusListener(new FocusAdapter() {
                         public void focusGained(FocusEvent e) {
@@ -143,7 +143,7 @@ public class TerminalIntegration {
                             (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
                     verticalSplitPane.setBottomComponent(terminal);
                 } finally {
-                    mainFrame.setCursor(orgCursor);
+                    mainFrame.getJFrame().setCursor(orgCursor);
                 }
             } else {
                 syncCWD(newCwd);
@@ -200,10 +200,19 @@ public class TerminalIntegration {
         try {
             Field field = BasicSplitPaneDivider.class.getDeclaredField(buttonName);
             field.setAccessible(true);
-            JButton oneTouchButton = (JButton) field.get(((BasicSplitPaneUI) splitPane.getUI()).getDivider());
-            oneTouchButton.setToolTipText(tooltip);
-            oneTouchButton.setActionCommand(buttonName);
-            oneTouchButton.addActionListener((e) -> SwingUtilities.invokeLater(action::run));
+            var maxTries = 10;
+            for (int i = 0; i < maxTries; i++) {
+                JButton oneTouchButton = (JButton) field.get(((BasicSplitPaneUI) splitPane.getUI()).getDivider());
+                if (oneTouchButton != null) {
+                    oneTouchButton.setToolTipText(tooltip);
+                    oneTouchButton.setActionCommand(buttonName);
+                    oneTouchButton.addActionListener((e) -> SwingUtilities.invokeLater(action::run));
+                    break;
+                } else {
+                    LOGGER.debug("Vertical split pane is not ready, unable to alter its buttons (attempt {} of {})", i + 1, maxTries);
+                    Thread.sleep(10); // :/ but it should not delay start-up much
+                }
+            }
         } catch (Exception e) {
             LOGGER.error("Problem running reflection on vertical split pane: {}", e.getMessage(), e);
         }

@@ -19,6 +19,7 @@ package com.mucommander.ui.theme;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -57,7 +58,7 @@ import com.mucommander.ui.theme.Theme.ThemeType;
  * @author Nicolas Rinaudo
  */
 public class ThemeManager {
-	private static final Logger LOGGER = LoggerFactory.getLogger(ThemeManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThemeManager.class);
 
     // - Class variables -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -65,6 +66,7 @@ public class ThemeManager {
     private static       AbstractFile userThemeFile;
     /** Default user defined theme file name. */
     private static final String       USER_THEME_FILE_NAME             = "user_theme.xml";
+
     /** Path to the custom themes repository. */
     private static final String       CUSTOM_THEME_FOLDER              = "themes";
     /** List of all registered theme change listeners. */
@@ -132,12 +134,13 @@ public class ThemeManager {
 
         // If the current theme couldn't be loaded, uses the default theme as defined in the configuration.
         currentTheme = null;
-        try {currentTheme = readTheme(type, name);}
-        catch(Exception e1) {
+        try {
+            currentTheme = readTheme(type, name);
+        } catch(Exception e1) {
             type = getThemeTypeFromLabel(MuPreferences.DEFAULT_THEME_TYPE);
             name = MuPreferences.DEFAULT_THEME_NAME;
 
-            if(type == ThemeType.USER_THEME)
+            if (type == ThemeType.USER_THEME)
                 wasUserThemeLoaded = true;
 
             // If the default theme can be loaded, tries to load the user theme if we haven't done so yet.
@@ -768,7 +771,6 @@ public class ThemeManager {
      */
     public static Theme readTheme(ThemeType type, String name) throws Exception {
         ThemeData   data; // Buffer for the theme data.
-        InputStream in;   // Where to read the theme from.
 
         // Do not reload the current theme, both for optimisation purposes and because
         // it might cause user theme modifications to be lost.
@@ -776,13 +778,9 @@ public class ThemeManager {
             return currentTheme;
 
         // Reads the theme data.
-        in = null;
-        try {data = readThemeData(in = getInputStream(type, name));}
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(Exception e) {}
-            }
+
+        try (InputStream in = new BufferedInputStream(getInputStream(type, name))) {
+            data = readThemeData(in);
         }
 
         // Creates the corresponding theme.
@@ -842,14 +840,14 @@ public class ThemeManager {
 
             // Predefined themes.
         case PREDEFINED_THEME:
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_PREDEFINED);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Custom themes.
         case CUSTOM_THEME:
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_CUSTOM);
-        	MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_TYPE, MuPreferences.THEME_CUSTOM);
+            MuConfigurations.getPreferences().setVariable(MuPreference.THEME_NAME, name);
             break;
 
             // Error.
@@ -931,38 +929,11 @@ public class ThemeManager {
     }
 
     /**
-     * Checks whether setting the specified font would require overwriting of the user theme.
-     * @param  fontId identifier of the font to set.
-     * @param  font   value for the specified font.
-     * @return        <code>true</code> if applying the specified font will overwrite the user theme,
-     *                <code>false</code> otherwise.
-     */
-    public synchronized static boolean willOverwriteUserTheme(int fontId, Font font) {
-        if(currentTheme.isFontDifferent(fontId, font))
-            return currentTheme.getType() != ThemeType.USER_THEME;
-        return false;
-    }
-
-    /**
-     * Checks whether setting the specified color would require overwriting of the user theme.
-     * @param  colorId identifier of the color to set.
-     * @param  color   value for the specified color.
-     * @return         <code>true</code> if applying the specified color will overwrite the user theme,
-     *                 <code>false</code> otherwise.
-     */
-    public synchronized static boolean willOverwriteUserTheme(int colorId, Color color) {
-        if(currentTheme.isColorDifferent(colorId, color))
-            return currentTheme.getType() != ThemeType.USER_THEME;
-        return false;
-    }
-
-    /**
      * Updates the current theme with the specified font.
      * <p>
      * This method might require to overwrite the user theme: custom and predefined themes are
      * read only. In order to modify them, the ThemeManager must overwrite the user theme with
      * the current theme and then set the font.<br/>
-     * If necessary, this can be checked beforehand by a call to {@link #willOverwriteUserTheme(int,Font)}.
      * </p>
      * @param  id   identifier of the font to set.
      * @param  font font to set.
@@ -988,7 +959,6 @@ public class ThemeManager {
      * This method might require to overwrite the user theme: custom and predefined themes are
      * read only. In order to modify them, the ThemeManager must overwrite the user theme with
      * the current theme and then set the color.<br/>
-     * If necessary, this can be checked beforehand by a call to {@link #willOverwriteUserTheme(int,Color)}.
      * </p>
      * @param  id   identifier of the color to set.
      * @param  color color to set.
@@ -1023,9 +993,6 @@ public class ThemeManager {
             return true;
         return name.equals(currentTheme.getName());
     }
-
-
-
 
     // - Events management ---------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -1078,17 +1045,6 @@ public class ThemeManager {
     public static void addCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.put(listener, null);}}
 
     /**
-     * Removes the specified object from the list of registered theme listeners.
-     * <p>
-     * Note that since listeners are stored as weak references, calling this method is not strictly necessary. As soon
-     * as a listener instance is not referenced anymore, it will automatically be caught and destroyed by the garbage
-     * collector.
-     * </p>
-     * @param listener current theme listener to remove.
-     */
-    public static void removeCurrentThemeListener(ThemeListener listener) {synchronized (listeners) {listeners.remove(listener);}}
-
-    /**
      * Notifies all theme listeners of the specified font event.
      * @param event event to pass down to registered listeners.
      * @see         #triggerThemeChange(Theme,Theme)
@@ -1112,8 +1068,6 @@ public class ThemeManager {
         }
     }
 
-
-
     // - Helper methods ------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /**
@@ -1134,8 +1088,6 @@ public class ThemeManager {
     private static String getThemeName(AbstractFile themeFile) {
         return themeFile.getNameWithoutExtension();
     }
-
-
 
     // - Listener methods ----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
