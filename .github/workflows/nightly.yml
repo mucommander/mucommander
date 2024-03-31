@@ -20,6 +20,9 @@ jobs:
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
 
   upload-macos-artifacts:
+    strategy:
+      matrix:
+        arch: [aarch64, x86_64]
     runs-on: macos-latest
     needs: get-version
     steps:
@@ -50,14 +53,14 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build dmg
-        run: ./gradlew dmg
+        run: ./gradlew dmg -Parch=${{ matrix.arch }}
 
       - name: Upload dmg
         uses: actions/upload-artifact@master
         if: always()
         with:
-          name: "mucommander-${{ needs.get-version.outputs.full_version }}.dmg"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}.dmg"
+          name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
 
   upload-linux-artifacts:
     runs-on: ubuntu-latest

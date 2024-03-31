@@ -221,6 +221,7 @@ ext {
     revision = git.head().id
     // Whether or not to bundle the JRE in order to create a 'standalone' executable
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
+    arch = project.hasProperty('arch') ? arch : "x86_64"
 }
 
 jar {
@@ -389,7 +390,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--icon', 'package/osx/icon.icns', \
                 '--main-jar', 'mucommander-'+project.version+'.jar', \
                 '--main-class', 'com.mucommander.main.muCommander', \
-                '--runtime-image', 'jre/macOS/x64', \
+                '--runtime-image', 'jre/macOS/'+project.ext.arch, \
                 '--java-options', '\
                         -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
                         --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
@@ -434,7 +435,7 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--app-image', "${buildDir}/muCommander.app", \
-                '--app-version', project.version+'-'+project.ext.release, \
+                '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions"
