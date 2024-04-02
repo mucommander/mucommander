@@ -22,8 +22,12 @@ jobs:
   upload-macos-artifacts:
     strategy:
       matrix:
-        arch: [aarch64, x86_64]
-    runs-on: macos-latest
+        include:
+          - arch: aarch64
+            os: macos-14
+          - arch: x86_64
+            os: macos-12
+    runs-on: ${{ matrix.os }}
     needs: get-version
     steps:
       - uses: actions/checkout@v4
