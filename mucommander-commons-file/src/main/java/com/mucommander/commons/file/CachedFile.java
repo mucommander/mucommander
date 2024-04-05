@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * CachedFile is a ProxyFile that caches the return values of most {@link AbstractFile} getter methods. This allows
@@ -148,7 +149,7 @@ public class CachedFile extends ProxyFile {
             Field fBA_EXISTS = cFileSystem.getDeclaredField("BA_EXISTS");
             Field fBA_DIRECTORY = cFileSystem.getDeclaredField("BA_DIRECTORY");
             Field fBA_HIDDEN = cFileSystem.getDeclaredField("BA_HIDDEN");
-            Field fFs = cFile.getDeclaredField("fs");
+            Field fFs = cFile.getDeclaredField(JavaVersion.JAVA_23.isCurrentHigher() ? "FS" : "fs");
 
             // Allow access to the 'getBooleanAttributes' method and to the fields we're interested in
             mGetBooleanAttributes.setAccessible(true);
