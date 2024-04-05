@@ -52,6 +52,8 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     JAVA_21("21"),
     /** Java 22.x */
     JAVA_22("22"),
+    /** Java 23.x */
+    JAVA_23("23"),
     ;
 
     /** Logger used by this class. */
@@ -168,7 +170,7 @@ public enum JavaVersion implements ComparableRuntimeProperty {
             return JavaVersion.JAVA_11;
 
         // Newer version we don't know of yet, assume latest supported Java version
-        return JavaVersion.JAVA_22;
+        return JavaVersion.JAVA_23;
     }
 
     /**
