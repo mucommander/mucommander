@@ -43,7 +43,7 @@ public class AppleScriptTest {
         if(OsFamily.MAC_OS.isCurrent()) {
             // Assert that the script was executed successfully and that the output matches what is expected
             assert success;
-            assert "6".equals(output.toString());
+            assert "6".equals(output.toString().trim());
         }
         else {
             // We're not running Mac OS X, assert that execute returns false
