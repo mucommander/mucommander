@@ -393,6 +393,14 @@ public class Application {
             });
 
             executor.execute(() -> {
+                // Loads custom commands
+                printStartupMessage(splashScreenProvider, "Loading file associations..."); // TODO Localize those messages.....
+                try {
+                    CommandManager.loadCommands();
+                } catch (Exception e) {
+                    printFileError("Could not load custom commands", e, activator.fatalWarnings());
+                }
+
                 // Migrates the custom editor and custom viewer if necessary.
                 migrateCommand("viewer.use_custom", "viewer.custom_command", CommandManager.VIEWER_ALIAS);
                 migrateCommand("editor.use_custom", "editor.custom_command", CommandManager.EDITOR_ALIAS);
@@ -401,14 +409,6 @@ public class Application {
                 } catch (Exception e) {
                     LOGGER.debug("Caught exception", e);
                     // There's really nothing we can do about this...
-                }
-
-                // Loads custom commands
-                printStartupMessage(splashScreenProvider, "Loading file associations..."); // TODO Localize those messages.....
-                try {
-                    com.mucommander.command.CommandManager.loadCommands();
-                } catch (Exception e) {
-                    printFileError("Could not load custom commands", e, activator.fatalWarnings());
                 }
             });
 
