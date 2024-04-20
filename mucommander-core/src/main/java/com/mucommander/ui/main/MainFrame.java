@@ -308,8 +308,6 @@ public class MainFrame implements LocationListener {
                      ConfFileTableTab[] rightTabs, int indexOfRightSelectedTab, FileTableConfiguration rightTableConf) {
         super();    // left to easily debug the performance
         frameInstance = PreloadedJFrame.getJFrame(this);
-        // TODO temporary log!
-        LOGGER.error("Main frame c-tor");
         ExecutorService executor = Executors.newFixedThreadPool(4);
         try {
             var leftFolderPanel = executor.submit(() -> new FolderPanel(this, leftTabs, indexOfLeftSelectedTab, leftTableConf));

@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
  * Being a {@link com.mucommander.commons.runtime.ComparableRuntimeProperty}, OS versions are ordered and can be compared
  * against each other.
  *
- * @see OsVersion
  * @see OsFamily
  * @author Maxence Bernard, Arik Hadas
  */
