@@ -82,6 +82,15 @@ public class AutoProcessor
     public static final String AUTO_START_PROP = "felix.auto.start";
 
     /**
+     * A list of the biggest jars/bundles to start them as the last (so they have time to load
+     * in the meantime while other smaller bundles are already being started).
+     * Remark: Names are partial match of jar name.
+     */
+    private static final String[] bigBundlesToStartLast = new String[] {"dropbox", "jediterm",
+            "protocol-gcs", "viewer-pdf", "gdrive", "microsoft-graph", "sevenzipjbindings", "sdk-",
+            "bcprov" };
+
+    /**
      * Used to instigate auto-deploy directory process and auto-install/auto-start
      * configuration property processing during.
      * @param configMap Map of configuration properties.
@@ -195,9 +204,7 @@ public class AutoProcessor
                     if ((b == null) && actionList.contains(AUTO_DEPLOY_INSTALL_VALUE))
                     {
                         var jarPath = jarFile.toURI().toString();
-                        if (jarPath.contains("dropbox") || jarPath.contains("jediterm")
-                                || jarPath.contains("protocol-gcs") || jarPath.contains("viewer-pdf")
-                                || jarPath.contains("gdrive")) {
+                        if (Arrays.stream(bigBundlesToStartLast).anyMatch(jarPath::contains)) {
                             defer = true;
                         }
                         futureBundle = executor.submit(() -> {
