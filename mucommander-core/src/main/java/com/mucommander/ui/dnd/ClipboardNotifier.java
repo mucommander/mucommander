@@ -48,14 +48,13 @@ public class ClipboardNotifier implements FlavorListener {
     public ClipboardNotifier(Action action) {
         this.action = action;
 
-        // Toggle initial state
+        // Toggle initial state (it initially disables 'paste' if nothing is in the clipboard)
         // https://github.com/mucommander/mucommander/issues/1137
-        // temporarily commented out as checking clipboard on start-up may introduce delay
+        // Ivocation of toggleActionState below here might introduce delay as checking clipboard can be lengthy operation
         // (especially if there's something strange in the clipboard, like code piece from Idea -> lots of ClassNotFound exceptions)
         // see: https://stackoverflow.com/questions/39493232/how-to-determine-current-clipboard-dataflavor-before-get-clip-content
         // and consider applying the suggested solution
-        // However, it has impact that if nothing is in the clipboard then paste option is enabled.
-        //toggleActionState();
+        toggleActionState();
 
         // Monitor clipboard changes
         ClipboardSupport.getClipboard().addFlavorListener(this);

@@ -67,7 +67,6 @@ jar {
         'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
         'Export-Package':
             'com.mucommander.core.desktop,' +
-            'com.mucommander.preload,' +
             'com.mucommander.job,' +
             'com.mucommander.job.impl,' +
             'com.mucommander.process,' +
