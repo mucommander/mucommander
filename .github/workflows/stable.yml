@@ -32,8 +32,14 @@ jobs:
           target_commitish: "${{ github.ref_name }}"
 
   upload-macos-artifacts:
-
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            os: macos-14
+          - arch: x86_64
+            os: macos-12
+    runs-on: ${{ matrix.os }}
     needs: create-release
 
     steps:
@@ -64,13 +70,13 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build dmg
-        run: ./gradlew dmg
+        run: ./gradlew dmg -Parch=${{ matrix.arch }}
 
       - name: Upload dmg
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.dmg"
+          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg"
           asset_content_type: application/octet-stream
 
   upload-linux-artifacts:
