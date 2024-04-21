@@ -272,7 +272,7 @@ public class AutoProcessor
                     try {
                         long pre = System.currentTimeMillis();
                         var bundle = bundleFuture.get();
-                        System.out.println("------ get bundle " + (System.currentTimeMillis() - pre) + "ms " + bundle);
+                        //System.out.println("------ get bundle " + (System.currentTimeMillis() - pre) + "ms " + bundle);
                         var startLvl = startLevel;
                         executor.execute(() -> {
                             try

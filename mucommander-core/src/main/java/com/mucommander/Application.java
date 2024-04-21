@@ -202,8 +202,6 @@ public class Application {
 
     private void run() {
         ExecutorService executor = Executors.newFixedThreadPool(12);
-        // TODO temporary log!
-        System.out.println(new Date() + " -- Application#run");
 
         try {
             // Associations handling.
@@ -457,8 +455,6 @@ public class Application {
             long pre = System.currentTimeMillis();
             executor.shutdown();
             executor.awaitTermination(1, TimeUnit.MINUTES);
-            // TODO temporary log!
-            System.out.println("------- Application#run pre main took: " + (System.currentTimeMillis() - pre));
 
             // Register actions
             printStartupMessage(splashScreenProvider, "Registering actions...");
