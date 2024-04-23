@@ -487,7 +487,6 @@ public class Application {
             // Invoke in a different thread: https://www.oracle.com/technical-resources/articles/javase/swingworker.html
             Thread mainThread = new Thread(() -> {
                 LOGGER.debug("muC UI about to be presented");
-                printStartupMessage(splashScreenProvider, "Loading theme...");
                 // Creates the initial main frame using any initial path specified by the command line.
                 printStartupMessage(splashScreenProvider, "Initializing window...");
                 LOGGER.debug("folders init");

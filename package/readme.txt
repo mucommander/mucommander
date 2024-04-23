@@ -38,6 +38,7 @@ New features:
 - Added Apple Disk Image file (dmg) for aarch64.
 
 Improvements:
+- Faster start-up of muCommander (2-3 times faster)
 - The 'Space' key can be used to filter filenames with spaces in quick search. Files can be selected during an ongoing
   quick search using CTRL+Space (that was replaced with CTRL+SHIFT+Space for 'Popup menu' action).
 - Changed 'Store login and password' to 'Store credentials' to reflect that additional properties, like ssh-key, are also stored.
