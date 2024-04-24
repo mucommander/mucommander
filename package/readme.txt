@@ -45,6 +45,7 @@ Improvements:
 - Set Shift+F4 as the default alternative keyboard shortcut for "Make file" action.
 - Command line (of Terminal) it can be now visible in folder view  
 - Authenticate with the specified ssh-key when connecting to a different path on a server via SFTP from the location bar.
+- The RPM package is now signed.
 
 Localization:
 -
