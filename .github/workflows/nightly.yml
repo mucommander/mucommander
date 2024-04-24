@@ -99,7 +99,7 @@ jobs:
         run: ./gradlew tgz portable deb rpm
 
       - name: Import GPG
-        run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import ${{ secrets.GPG_PRIVATE_KEY }}
+        run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
 
       - name: Set .rpmmacros
         run: |
