@@ -113,6 +113,20 @@ jobs:
       - name: Build portable, tgz, deb, and rpm
         run: ./gradlew tgz portable deb rpm
 
+      - name: Import GPG
+        run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
+
+      - name: Set .rpmmacros
+          cat << EOF > ~/.rpmmacros
+          %_signature gpg
+          %_gpg_name Arik Hadas
+          %_gpgbin /usr/bin/gpg2
+          %__gpg_sign_cmd %{__gpg} gpg --force-v3-sigs --batch --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --verbose --no-armor --no-secmem-warning -u "%{_gpg_name}" -sbo %{__signature_filename} --digest-algo sha256 %{__plaintext_filename}'
+          EOF
+
+      - name: Sign rpm
+        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.x86_64.rpm"
+
       - name: Upload portable
         uses: shogo82148/actions-upload-release-asset@v1
         with:
