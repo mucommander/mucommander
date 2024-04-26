@@ -223,7 +223,6 @@ ext {
     // Whether or not to bundle the JRE in order to create a 'standalone' executable
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
     arch = project.hasProperty('arch') ? arch : "x86_64"
-    keychain = project.hasProperty('keychain') ? keychain : ""
     identity = project.hasProperty('identity') ? identity : ""
 }
 
@@ -418,7 +417,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--mac-package-identifier', 'com.mucommander.muCommander', \
                 '--type', 'app-image', \
                 '--dest', "${buildDir}", \
-                '--mac-sign', '--mac-package-signing-prefix', 'com.mucommander.', '--mac-signing-keychain', project.ext.keychain, \
+                '--mac-sign', '--mac-package-signing-prefix', 'com.mucommander.', \
                 '--verbose', '--mac-signing-key-user-name', project.ext.identity
     doLast {
        copy {
@@ -453,7 +452,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
        exec {
          workingDir "${rootDir}"
          executable '/usr/bin/codesign'
-         args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--keychain', project.ext.keychain, '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app/Contents/MacOS/muCommander"
+         args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app/Contents/MacOS/muCommander"
        }
     }
 }
