@@ -69,7 +69,9 @@ jobs:
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k mupass build.keychain
 
       - name: Build dmg
-        run: ./gradlew dmg -Parch=${{ matrix.arch }}
+        env:
+          MACOS_IDENTITY: ${{ secrets.MACOS_IDENTITY }}
+        run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pkeychain="build.keychain" -Pidentity="$MACOS_IDENTITY"
 
       - name: Sign dmg
         run: |
