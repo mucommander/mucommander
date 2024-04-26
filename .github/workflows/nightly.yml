@@ -56,10 +56,7 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v3
 
-      - name: Build dmg
-        run: ./gradlew dmg -Parch=${{ matrix.arch }}
-
-      - name: Codesign executable
+      - name: Set keychain
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
@@ -70,7 +67,13 @@ jobs:
           security unlock-keychain -p mupass build.keychain
           security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k mupass build.keychain
-          /usr/bin/codesign --force -s "Developer ID Application: Arik Hadas (CZHQQ65L42)"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
+
+      - name: Build dmg
+        run: ./gradlew dmg -Parch=${{ matrix.arch }}
+
+      - name: Sign dmg
+        run: |
+          /usr/bin/codesign --keychain build.keychain --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
       - name: Upload dmg
         uses: actions/upload-artifact@master
