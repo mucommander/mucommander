@@ -83,6 +83,7 @@ jobs:
         with:
           name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
           path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+          compression-level: 0
 
   upload-linux-artifacts:
     runs-on: ubuntu-latest
