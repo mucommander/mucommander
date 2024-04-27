@@ -454,6 +454,11 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
          executable '/usr/bin/codesign'
          args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app/Contents/MacOS/muCommander"
        }
+       exec {
+         workingDir "${rootDir}"
+         executable '/usr/bin/codesign'
+         args '--verify', '--verbose', "${buildDir}/muCommander.app/Contents/MacOS/muCommander"
+       }
     }
 }
 
