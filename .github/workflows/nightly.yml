@@ -75,7 +75,7 @@ jobs:
 
       - name: Sign dmg
         run: |
-          /usr/bin/codesign --keychain build.keychain --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
+          /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
       - name: Upload dmg
         uses: actions/upload-artifact@master
