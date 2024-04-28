@@ -63,13 +63,10 @@ jobs:
           p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
 
       - name: Build dmg
-        env:
-          MACOS_IDENTITY: ${{ secrets.MACOS_IDENTITY }}
-        run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="$MACOS_IDENTITY"
+        run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}"
 
       - name: Sign dmg
-        run: |
-          /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
+        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
       - name: Notarize dmg
         run: |
@@ -84,7 +81,6 @@ jobs:
 
       - name: Upload dmg
         uses: actions/upload-artifact@master
-        if: always()
         with:
           name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
           path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
