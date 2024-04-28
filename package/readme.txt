@@ -33,9 +33,8 @@ What's new since v1.3.0 ?
 
 New features:
 - Added Google Cloud Storage as a file protocol that enables browsing and managing files in GCS buckets.
-- Added optional keyboard shortcut visual hints for actions invoked by clicks rather than keyboard.
-- Added OneDrive as a file protocol (including browsing, uploading and downloading capabilities).
-- Added Apple Disk Image file (dmg) for aarch64.
+- Added optional keyboard shortcut visual hints for actions invoked by clicks rather than keystroke.
+- Added OneDrive as a file protocol that enables browsing, uploading and downloading capabilities.
 
 Improvements:
 - Faster start-up of muCommander (2-3 times faster)
@@ -46,6 +45,7 @@ Improvements:
 - Command line (of Terminal) it can be now visible in folder view  
 - Authenticate with the specified ssh-key when connecting to a different path on a server via SFTP from the location bar.
 - The rpm and dmg packages are now signed.
+- Added dmg package for aarch64.
 
 Localization:
 -
