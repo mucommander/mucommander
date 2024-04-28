@@ -85,6 +85,9 @@ jobs:
           xcrun notarytool log --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} $ID
           grep -vqz "status: Invalid" output.log
 
+      - name: Staple dmg
+        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+
       - name: Upload dmg
         uses: actions/upload-artifact@master
         if: always()
