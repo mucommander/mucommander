@@ -45,7 +45,7 @@ Improvements:
 - Set Shift+F4 as the default alternative keyboard shortcut for "Make file" action.
 - Command line (of Terminal) it can be now visible in folder view  
 - Authenticate with the specified ssh-key when connecting to a different path on a server via SFTP from the location bar.
-- The RPM package is now signed.
+- The rpm and dmg packages are now signed.
 
 Localization:
 -
@@ -74,9 +74,6 @@ Known issues:
 - macOS: some keyboard shortcuts may conflict with global system shortcuts.
 - Installing the deb package on Debian < 12 fails with: "error: archive ... uses unknown compression for member 'control.tar.zst', giving up".
   A possible workaround is described in: https://unix.stackexchange.com/a/745467.
-- The application fails to run when installed from a dmg package with the error: "muCommander" is damaged and can't be opened.
-  On macOS Ventura, grant permission to the Terminal in Settings>Privacy & Security>App Management and run: sudo xattr -cr /Applications/muCommander.app.
-  On older versions of macOS, run: sudo xattr -dr com.apple.quarantine /Applications/muCommander.app.
 
 License
 -------
