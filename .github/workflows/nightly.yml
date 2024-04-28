@@ -77,6 +77,14 @@ jobs:
         run: |
           /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
+      - name: Notarize dmg
+        run: |
+          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
+          ID=$(grep 'id:' output.log | head -n 1 | awk '{print $2}')
+          echo $ID
+          xcrun notarytool log --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} $ID
+          grep -q "status: Invalid" output.log && exit 1
+
       - name: Upload dmg
         uses: actions/upload-artifact@master
         if: always()
