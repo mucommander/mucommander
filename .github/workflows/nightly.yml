@@ -56,22 +56,16 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v3
 
-      - name: Set keychain
-        env:
-          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
-        run: |
-          echo -n "$MACOS_CERTIFICATE" | base64 -d > certificate.p12
-          security create-keychain -p mupass build.keychain
-          security default-keychain -s build.keychain
-          security unlock-keychain -p mupass build.keychain
-          security import certificate.p12 -k build.keychain -P $MACOS_CERTIFICATE_PWD -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k mupass build.keychain
+      - name: Setup keychain
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
+          p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
 
       - name: Build dmg
         env:
           MACOS_IDENTITY: ${{ secrets.MACOS_IDENTITY }}
-        run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pkeychain="build.keychain" -Pidentity="$MACOS_IDENTITY"
+        run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="$MACOS_IDENTITY"
 
       - name: Sign dmg
         run: |
