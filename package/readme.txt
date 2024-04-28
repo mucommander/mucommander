@@ -47,9 +47,6 @@ Improvements:
 - The rpm and dmg packages are now signed.
 - Added dmg package for aarch64.
 
-Localization:
--
-
 Bug fixes:
 - Fixed copying files to Finder.
 - Fixed drag-and-drop of action buttons in the 'Customize command bar' dialog.
