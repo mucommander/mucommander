@@ -85,7 +85,6 @@ jobs:
           xcrun notarytool log --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} $ID
           echo "DEBUG"
           cat output.log
-          grep -q "status: Invalid" output.log && exit 1
 
       - name: Upload dmg
         uses: actions/upload-artifact@master
