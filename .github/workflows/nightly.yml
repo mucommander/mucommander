@@ -112,6 +112,7 @@ jobs:
           git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
           git am release/0002-set-credentials-to-Dropbox.patch
+          git am release/0005-set-credentials-to-OneDrive.patch
 
       - uses: gradle/actions/setup-gradle@v3
 
@@ -184,6 +185,7 @@ jobs:
           git config --global user.email gh-action
           git am release/0001-set-credentials-to-Google-Drive.patch
           git am release/0002-set-credentials-to-Dropbox.patch
+          git am release/0005-set-credentials-to-OneDrive.patch
 
       - uses: gradle/actions/setup-gradle@v3
 
