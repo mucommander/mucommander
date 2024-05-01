@@ -134,6 +134,9 @@ jobs:
       - name: Build portable, tgz, deb, and rpm
         run: ./gradlew tgz portable deb rpm
 
+      - name: debug
+        run: ls ./build/distributions/
+
       - name: Import GPG
         run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
 
