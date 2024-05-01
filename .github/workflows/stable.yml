@@ -79,18 +79,18 @@ jobs:
         run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}"
 
       - name: Sign dmg
-        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
+        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
       - name: Notarize dmg
         run: |
-          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
+          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
           ID=$(grep 'id:' output.log | head -n 1 | awk '{print $2}')
           echo $ID
           xcrun notarytool log --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} $ID
           grep -vqz "status: Invalid" output.log
 
       - name: Staple dmg
-        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg"
 
       - name: Upload dmg
         uses: shogo82148/actions-upload-release-asset@v1
