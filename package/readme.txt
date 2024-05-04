@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
--
+- When sorting by any column, always start with ascending sort order
 
 Localization:
 -
