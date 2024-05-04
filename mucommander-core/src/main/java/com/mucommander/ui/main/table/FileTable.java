@@ -858,6 +858,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         if (criterion==sortInfo.getCriterion()) {
             reverseSortOrder();
             return;
+        } else {
+            // The selected column is different from the previously selected one.
+            // In this case, default to ascending sort order
+            sortInfo.setAscendingOrder(true);
         }
 
         sortBy(criterion, sortInfo.getAscendingOrder());
