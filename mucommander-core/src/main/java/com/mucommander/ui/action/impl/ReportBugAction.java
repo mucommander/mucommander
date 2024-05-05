@@ -39,7 +39,7 @@ public class ReportBugAction extends OpenURLInBrowserAction {
     private static final String NEW_BUG_FORMAT = "%s?" +
             "labels=bug&" +
             "template=bug_report.yml&" +
-            "title=[Bug]%20&" +
+            "title=[Bug]%%20&" + // To keep String.format at bay
             "version=%s&" +
             "java-version=%s&" +
             "os-version=%s&" +

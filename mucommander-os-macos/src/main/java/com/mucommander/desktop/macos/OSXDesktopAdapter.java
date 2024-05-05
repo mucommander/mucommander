@@ -274,7 +274,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             return result.get();
         }
         // additional checking if 'duty' a) works b) is what it should be
-        runCommand(new String[]{dutiCmdPath, "-h"}, true,1, s -> {
+        runCommand(new String[]{dutiCmdPath, "-h"}, true, 1, s -> {
             // a simple sanity check of 'duti' command output
             if (s.contains("bundle_id")) {
                 result.set(true);
@@ -359,7 +359,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             result.setLength(0);
             result.append(cachedUti);
         } else {
-            runCommand(new String[]{dutiCmdPath, "-e", ext}, false,0, s -> {
+            runCommand(new String[]{dutiCmdPath, "-e", ext}, false, 0, s -> {
                 String typeIdentifier = "UTTypeIdentifier = ";
                 int idx = s.indexOf(typeIdentifier);
                 if (idx >= 0) {
