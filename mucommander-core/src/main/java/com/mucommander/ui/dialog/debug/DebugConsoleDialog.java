@@ -133,11 +133,12 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
         LogLevel logLevel = MuLogging.getLogLevel();
 
         levelComboBox = new JComboBox<>();
-        for(LogLevel level:LogLevel.values())
+        for (LogLevel level:LogLevel.values()) {
             levelComboBox.addItem(level);
-        		
+        }
+
         levelComboBox.setSelectedItem(logLevel);
-        		
+
         levelComboBox.addItemListener(this);
 
         comboPanel.add(levelComboBox);
@@ -149,15 +150,16 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
      * Refreshes the JList with the log records contained by {@link DebugConsoleAppender}.
      */
     private void refreshLogRecords() {
-    	DefaultListModel<LoggingEvent> listModel = new DefaultListModel<>();
+        DefaultListModel<LoggingEvent> listModel = new DefaultListModel<>();
         DebugConsoleAppender handler = MuLogging.getDebugConsoleAppender();
 
         final LoggingEvent[] records = handler.getLogRecords();
         final LogLevel currentLogLevel = MuLogging.getLogLevel();
         
         for (LoggingEvent record : records) {
-        	if (record.isLevelEqualOrHigherThan(currentLogLevel))
-        		listModel.addElement(record);
+            if (record.isLevelEqualOrHigherThan(currentLogLevel)) {
+                listModel.addElement(record);
+            }
         }
 
         loggingEventsList.setModel(listModel);
@@ -182,10 +184,9 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if(source==refreshButton) {
+        if (source == refreshButton) {
             refreshLogRecords();
-        }
-        else if(source==closeButton) {
+        } else if( source == closeButton) {
             dispose();
         }
     }
@@ -198,7 +199,7 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
     public void itemStateChanged(ItemEvent e) {
         // Refresh the log records displayed in the JList whenever the selected level has been changed.
         int selectedIndex = levelComboBox.getSelectedIndex();
-        if(selectedIndex!=-1) {
+        if (selectedIndex != -1) {
             updateLogLevel();
             refreshLogRecords();
         }
@@ -216,8 +217,9 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
 
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            if(value==null)
+            if (value == null) {
                 return null;
+            }
 
             // TODO: line-wrap log items when the text is too long to fit on a single line
             // A single-column JTable may be the easiest way to go, see:
@@ -230,23 +232,31 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
             JLabel label = (JLabel)super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             
             // Change the label's foreground color to match the level of the log record
-            if(!isSelected) {
+            if (!isSelected) {
                 LogLevel level = ((LoggingEvent)value).getLevel();
                 Color color;
 
-                if(level.equals(LogLevel.SEVERE))
-                    color = Color.RED;
-                else if(level.equals(LogLevel.WARNING))
-                    color = new Color(255, 100, 0);     // Dark orange
-                else if(level.equals(LogLevel.CONFIG))
-                    color = Color.BLUE;
-                else if(level.equals(LogLevel.INFO))
-                    color = Color.BLACK;
-                else if(level.equals(LogLevel.FINE))
-                    color = Color.DARK_GRAY;
-                else
-                    color = new Color(110, 110, 110);    // Between Color.GRAY and Color.DARK_GRAY
-
+                switch (level) {
+                    case SEVERE:
+                        color = Color.RED;
+                        break;
+                    case WARNING:
+                        // Dark orange
+                        color = new Color(255, 100, 0);
+                        break;
+                    case CONFIG:
+                        color = Color.BLUE;
+                        break;
+                    case INFO:
+                        color = Color.BLACK;
+                        break;
+                    case FINE:
+                        color = Color.DARK_GRAY;
+                        break;
+                    default:
+                        // Between Color.GRAY and Color.DARK_GRAY
+                        color = new Color(110, 110, 110);
+                };
                 label.setForeground(color);
             }
 
@@ -254,11 +264,12 @@ public class DebugConsoleDialog extends FocusDialog implements ActionListener, I
             // If component's preferred width is larger than the list's width then the component is not entirely
             // visible. In that case, we set a tooltip text that will display the whole text when mouse is over the
             // component
-            if (loggingEventsList.getVisibleRect().getWidth() < label.getPreferredSize().getWidth())
+            if (loggingEventsList.getVisibleRect().getWidth() < label.getPreferredSize().getWidth()) {
                 label.setToolTipText(label.getText());
-            // Have to set it to null because of the rubber-stamp rendering scheme (last value is kept)
-            else
+            } else {
+                // Have to set it to null because of the rubber-stamp rendering scheme (last value is kept)
                 label.setToolTipText(null);
+            }
             
             return label;
         }
