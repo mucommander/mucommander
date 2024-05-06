@@ -41,14 +41,14 @@ public class ShowDebugConsoleAction extends MuAction {
         new DebugConsoleDialog(mainFrame).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowDebugConsole.getId(); }
+        public String getId() { return ActionType.ShowDebugConsole.getId(); }
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public ActionCategory getCategory() { return ActionCategory.MISC; }
     }
 }
