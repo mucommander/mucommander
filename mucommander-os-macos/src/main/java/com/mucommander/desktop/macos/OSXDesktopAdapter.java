@@ -479,9 +479,9 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(
                     useStdErr ? proc.getErrorStream() : proc.getInputStream()));
             int exitCode = Integer.MIN_VALUE;
-            boolean timedOut;
-            if (!(timedOut = proc.waitFor(500, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
-                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", command, timedOut, exitCode);
+            boolean processExited;
+            if (!(processExited = proc.waitFor(1000, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
+                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", command, !processExited, exitCode);
                 return result;
             }
             String s;
