@@ -53,7 +53,7 @@ public class RuntimeConstants {
     /** URL of the muCommander forums. */
     public static final String FORUMS_URL        = GITHUB_URL + "/discussions/";
     /** URL at which to make a donation. */
-    public static final String DONATION_URL      = "https://flattr.com/@mucommander";
+    public static final String DONATION_URL      = "https://github.com/sponsors/mucommander";
     /** URL at which to file a new bug. */
     public static final String REPORT_BUG_URL    = GITHUB_URL + "/issues/new/";
     /** Documentation URL. */
