@@ -32,13 +32,18 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ShowDebugConsoleAction extends MuAction {
 
+    private DebugConsoleDialog dialog;
+
     public ShowDebugConsoleAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-        new DebugConsoleDialog(mainFrame).showDialog();
+        if (dialog == null || !dialog.isVisible()) {
+            dialog = new DebugConsoleDialog(mainFrame);
+        }
+        dialog.showDialog();
     }
 
     @Override

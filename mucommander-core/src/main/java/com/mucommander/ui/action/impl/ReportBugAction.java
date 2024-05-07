@@ -83,14 +83,13 @@ public class ReportBugAction extends OpenURLInBrowserAction {
             var logRecords = new StringBuilder();
             for (LoggingEvent record : lastNRecords) {
                 logRecords.append(record.toString());
-                logRecords.append(System.lineSeparator());
             }
             var newBugUrl = String.format(NEW_BUG_FORMAT, url,
                     URLEncoder.encode(muCVersion, "UTF-8"),
                     URLEncoder.encode(javaVersion, "UTF-8"),
                     URLEncoder.encode(osVersion, "UTF-8"),
-                    URLEncoder.encode(logRecords.toString()
-                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())) + "[...]","UTF-8"));
+                    URLEncoder.encode("[✂]\n" + logRecords.toString()
+                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())) + "\n[✂]","UTF-8"));
             putValue(URL_PROPERTY_KEY, newBugUrl);
         } catch (Exception e) {
             LOGGER.error("Error while preparing a bug report, falling back to generic one", e);
