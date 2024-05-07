@@ -442,7 +442,8 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         if (dutiCmdPath != null) {
             return dutiCmdPath;
         }
-        runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, s -> {
+        // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
+        runCommand(new String[]{getMacOsUserShell(), "-c", "which duti"}, false,0, s -> {
             // a simple sanity check of 'duti' command output
             if (s.contains("duti")) {
                 dutiCmdPath = s;
@@ -450,7 +451,19 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         });
-        if (dutiCmdPath != null && !dutiCmdPath.isEmpty()) {
+        if (StringUtils.isNullOrEmpty(dutiCmdPath)) {
+            // retry the proper way, i.e. with -l - it may take more time to execute, but may have better env settings
+            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, s -> {
+                // a simple sanity check of 'duti' command output
+                if (s.contains("duti")) {
+                    dutiCmdPath = s;
+                    return true;    // we're good, no further searching needed
+                }
+                return false;       // continue searching
+            });
+        }
+
+        if (!StringUtils.isNullOrEmpty(dutiCmdPath)) {
             LOGGER.info("Command 'duti' found here: {}", dutiCmdPath);
         } else {
             dutiCmdPath = null; // nullify if was empty
