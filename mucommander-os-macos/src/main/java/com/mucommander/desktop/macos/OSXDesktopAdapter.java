@@ -442,25 +442,19 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         if (dutiCmdPath != null) {
             return dutiCmdPath;
         }
-        // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
-        runCommand(new String[]{getMacOsUserShell(), "-c", "which duti"}, false,0, s -> {
+        Predicate<String> linePredicate = line -> {
             // a simple sanity check of 'duti' command output
-            if (s.contains("duti")) {
-                dutiCmdPath = s;
+            if (line.contains("duti")) {
+                dutiCmdPath = line;
                 return true;    // we're good, no further searching needed
             }
             return false;       // continue searching
-        });
+        };
+        // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
+        runCommand(new String[]{getMacOsUserShell(), "-c", "which duti"}, false,0, linePredicate);
         if (StringUtils.isNullOrEmpty(dutiCmdPath)) {
             // retry the proper way, i.e. with -l - it may take more time to execute, but may have better env settings
-            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, s -> {
-                // a simple sanity check of 'duti' command output
-                if (s.contains("duti")) {
-                    dutiCmdPath = s;
-                    return true;    // we're good, no further searching needed
-                }
-                return false;       // continue searching
-            });
+            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, linePredicate);
         }
 
         if (!StringUtils.isNullOrEmpty(dutiCmdPath)) {
