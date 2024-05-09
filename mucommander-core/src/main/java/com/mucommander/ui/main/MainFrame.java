@@ -44,6 +44,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.table.TableColumnModel;
 
@@ -205,8 +206,16 @@ public class MainFrame implements LocationListener {
 
         executor.execute(() -> {
             // Create menu bar (has to be created after toolbar) - ok, but why?
+            // PSko - I guess it is related to loading Actions and that icons
+            // for toolbar action should have icons, but in menu they should not.
+            // However, still I don't get how setting the icon to null here in MenuToolkit#addMenuItem
+            // impacts menu icons....... if nullify is commented-out there, then icons all of sudden
+            // show in the menu causing this: https://github.com/mucommander/mucommander/issues/1178
             MainMenuBar menuBar = new MainMenuBar(this);
-            getJFrame().setJMenuBar(menuBar);
+            SwingUtilities.invokeLater(() -> {
+                getJFrame().setJMenuBar(menuBar);
+                getJFrame().revalidate();
+            });
         });
 
         // Create the split pane that separates folder panels and allows to resize how much space is allocated to the
