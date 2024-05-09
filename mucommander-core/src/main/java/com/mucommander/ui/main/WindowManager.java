@@ -426,4 +426,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     			setLookAndFeel(lnfName);
     	}
     }
+
+    public boolean isAdditionalLafsLoaded() {
+        return additionalLafsLoaded;
+    }
 }
