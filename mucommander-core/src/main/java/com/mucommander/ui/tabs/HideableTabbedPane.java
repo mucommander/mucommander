@@ -188,7 +188,10 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	 * @param updater - object that will be used to update the tab
 	 */
 	protected void updateCurrentTab(TabUpdater<T> updater) {
-		tabsCollection.updateTab(getSelectedIndex(), updater);
+		var idx = getSelectedIndex();
+		if (idx >= 0) {
+			tabsCollection.updateTab(idx, updater);
+		}
 	}
 
 	/* Actions that depended on the display type (single/multiple tabs) */
