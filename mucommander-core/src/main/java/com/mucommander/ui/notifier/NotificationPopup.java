@@ -123,6 +123,7 @@ final class NotificationPopup {
         popupListener = new CustomPopupMenuListener();
 
         popup = new CustomPopupMenu();
+        popup.setFocusable(false);
         popup.setLayout(new BorderLayout());
         popup.addPopupMenuListener(popupListener);
         popup.addMouseListener(new MouseAdapter() {
