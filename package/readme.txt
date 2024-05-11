@@ -36,6 +36,8 @@ New features:
 
 Improvements:
 - When sorting by any column, always start with ascending sort order
+- Faster way of finding applications for Open With context menu (macOS)
+-
 
 Localization:
 -
