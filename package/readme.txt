@@ -42,6 +42,8 @@ Localization:
 
 Bug fixes:
 -
+- Fix for random hangs while lauching muCommander
+-
 
 Known issues:
 - Some translations may not be up-to-date.
