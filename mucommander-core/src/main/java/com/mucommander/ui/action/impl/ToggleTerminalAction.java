@@ -36,7 +36,8 @@ import com.mucommander.ui.terminal.TerminalIntegration;
  */
 public class ToggleTerminalAction extends ActiveTabAction {
 
-    private volatile TerminalIntegration terminalIntegration = null;
+    private volatile static TerminalIntegration terminalIntegration = null;
+    private final static Object LOCK = new Object();
 
     public ToggleTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
@@ -84,7 +85,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
         var verticalSplit = mainFrame.getVerticalSplitPane();
         if (terminalIntegration == null && verticalSplit != null) {
             // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
-            synchronized (this) {
+            synchronized (LOCK) {
                 if (terminalIntegration == null) {
                     terminalIntegration = new TerminalIntegration(mainFrame, verticalSplit);
                 }
