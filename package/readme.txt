@@ -43,7 +43,7 @@ Localization:
 -
 
 Bug fixes:
--
+- Fixed undesired beep and undesired character when leaving terminal by pressing F12 (random behavior)
 
 Known issues:
 - Some translations may not be up-to-date.
