@@ -39,6 +39,7 @@ Improvements:
 - Faster way of finding applications for Open With context menu (macOS)
 - Debug Console is able to show logs with stacktraces (if present)
 - Improved Debug Console to display logs using tree view with folded stacktraces and it can be opened in background (non-modal) with logs autorefresh
+- Better concurrency handling while initializing Actions
 
 Localization:
 -
