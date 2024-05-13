@@ -44,6 +44,7 @@ Localization:
 
 Bug fixes:
 - Fixed undesired beep and undesired character when leaving terminal by pressing F12 (random behavior)
+- Fixed a bug in Report Bug where too much logs could cause to fallback to a simple bug reporting on GitHub
 
 Known issues:
 - Some translations may not be up-to-date.
