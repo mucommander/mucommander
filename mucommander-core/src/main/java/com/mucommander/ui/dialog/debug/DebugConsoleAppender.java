@@ -28,6 +28,8 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.utils.MuLogging.LogLevel;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.IThrowableProxy;
+import ch.qos.logback.classic.spi.ThrowableProxyUtil;
 import ch.qos.logback.core.AppenderBase;
 import ch.qos.logback.core.CoreConstants;
 import ch.qos.logback.core.Layout;
@@ -60,7 +62,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      */
     public DebugConsoleAppender() {
         this.loggingEventLayout = new CustomLoggingLayout();
-    	
+
         bufferSize = MuConfigurations.getPreferences().getVariable(MuPreference.LOG_BUFFER_SIZE, MuPreferences.DEFAULT_LOG_BUFFER_SIZE);
         loggingEventsList = new LinkedList<>();
     }
@@ -71,10 +73,10 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      * @return the last records that were collected by this handler.
      */
     public synchronized LoggingEvent[] getLogRecords() {
-    	LogbackLoggingEvent[] records = new LogbackLoggingEvent[0];
-    	records = loggingEventsList.toArray(records);
+        LogbackLoggingEvent[] records = new LogbackLoggingEvent[0];
+        records = loggingEventsList.toArray(records);
 
-    	return records;
+        return records;
     }
 
 
@@ -84,11 +86,12 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
     @Override
     protected void append(ILoggingEvent record) {
-		if(loggingEventsList.size()== bufferSize)
+        if (loggingEventsList.size() == bufferSize) {
             loggingEventsList.remove(0);
+        }
 
         loggingEventsList.add(new LogbackLoggingEvent(record));
-	}
+    }
 
     /**
      * Wraps a {@link ILoggingEvent} and overrides {@link #toString()} to have it return a properly formatted string
@@ -98,11 +101,11 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
      */
     public class LogbackLoggingEvent implements LoggingEvent {
 
-    	/** The logging event */
-    	private ILoggingEvent loggingEvent;
+        /** The logging event */
+        private ILoggingEvent loggingEvent;
 
-    	/** The log level of the event in mucommander's terms */
-    	private LogLevel logLevel;
+        /** The log level of the event in mucommander's terms */
+        private LogLevel logLevel;
 
         LogbackLoggingEvent(ILoggingEvent lr) {
             this.loggingEvent = lr;
@@ -115,7 +118,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
          */
         @Override
         public String toString() {
-        	return loggingEventLayout.doLayout(loggingEvent);
+            return loggingEventLayout.doLayout(loggingEvent);
         }
         
         
@@ -124,12 +127,13 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
         ///////////////////////////////////////
         
         public boolean isLevelEqualOrHigherThan(LogLevel level) {
-        	return getLevel().compareTo(level) <= 0;
+            return getLevel().compareTo(level) <= 0;
         }
         
         public LogLevel getLevel() {
-            if (logLevel == null)
+            if (logLevel == null) {
                 logLevel = getLogLevel(loggingEvent);
+            }
             return logLevel;
         }
     }
@@ -165,6 +169,13 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
             sbuf.append(" ");
             sbuf.append(event.getFormattedMessage());
             sbuf.append(CoreConstants.LINE_SEPARATOR);
+
+            IThrowableProxy throwableProxy = event.getThrowableProxy();
+            if (throwableProxy != null) {
+                String throwableStr = ThrowableProxyUtil.asString(throwableProxy);
+                sbuf.append(throwableStr);
+                sbuf.append(CoreConstants.LINE_SEPARATOR);
+            }
             return sbuf.toString();
         }
     }
