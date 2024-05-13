@@ -83,7 +83,7 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
     /** Refreshes the tree with the latest log records when pressed */
     private JButton refreshButton;
 
-    /** To control periodical auto-refresh */
+    /** To control periodic auto-refresh */
     private JCheckBox autoRefreshCheckBox;
 
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -155,18 +155,11 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
         buttonPanel.add(autoRefreshCheckBox);
 
         refreshButton = new JButton(Translator.get(new RefreshAction.Descriptor().getLabel()));
-        refreshButton.addActionListener((e) -> refreshLogRecords());
+        refreshButton.addActionListener(e -> refreshLogRecords());
         buttonPanel.add(refreshButton);
 
         closeButton = new JButton(Translator.get("close"));
-        closeButton.addActionListener((e) -> {
-            if (periodicUpdater != null) {
-                periodicUpdater.cancel(false);
-                periodicUpdater = null;
-            }
-            executorService.shutdown();
-            dispose();
-        });
+        closeButton.addActionListener(e -> dispose());
         buttonPanel.add(closeButton);
 
         southPanel.add(buttonPanel, BorderLayout.EAST);
@@ -259,6 +252,15 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
         }
     }
 
+    @Override
+    public void dispose() {
+        if (periodicUpdater != null) {
+            periodicUpdater.cancel(false);
+            periodicUpdater = null;
+        }
+        executorService.shutdown();
+        super.dispose();
+    }
 
     ///////////////////
     // Inner classes //
