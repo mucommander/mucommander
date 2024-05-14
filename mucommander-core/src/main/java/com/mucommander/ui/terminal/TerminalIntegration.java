@@ -131,17 +131,18 @@ public class TerminalIntegration {
                 try {
                     mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
+                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
+                    cwd = newCwd;
+                    // TODO do this better? For now 2 lines ~height + 20%
+                    terminal.setMinimumSize(new Dimension(-1,
+                            (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
+                    verticalSplitPane.setBottomComponent(terminal);
+                    // don't know exactly why, but it should be after addCustomKeyListener (https://github.com/mucommander/mucommander/issues/1187)
                     terminal.getTerminalPanel().addFocusListener(new FocusAdapter() {
                         public void focusGained(FocusEvent e) {
                             syncCWD(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath());
                         }
                     });
-                    cwd = newCwd;
-                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
-                    // TODO do this better? For now 2 lines ~height + 20%
-                    terminal.setMinimumSize(new Dimension(-1,
-                            (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
-                    verticalSplitPane.setBottomComponent(terminal);
                 } finally {
                     mainFrame.getJFrame().setCursor(orgCursor);
                 }

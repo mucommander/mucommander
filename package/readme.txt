@@ -36,14 +36,17 @@ New features:
 
 Improvements:
 - When sorting by any column, always start with ascending sort order
+- Faster way of finding applications for Open With context menu (macOS)
+- Debug Console is able to show logs with stacktraces (if present)
 
 Localization:
 -
 
 Bug fixes:
--
 - Fix for random hangs while lauching muCommander
--
+- Fixed undesired beep and undesired character when leaving terminal by pressing F12 (random behavior)
+- Fixed a bug in Report Bug where too much logs could cause to fallback to a simple bug reporting on GitHub
+- Fix for losing keyboard focus in modals when Keyboard Hints turned on
 
 Known issues:
 - Some translations may not be up-to-date.
