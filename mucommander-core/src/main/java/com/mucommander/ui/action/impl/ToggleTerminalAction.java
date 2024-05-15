@@ -36,6 +36,13 @@ import com.mucommander.ui.terminal.TerminalIntegration;
  */
 public class ToggleTerminalAction extends ActiveTabAction {
 
+    /**
+     * A reference to Terminal Integration. Made static (and volatile) to ensure
+     * that TerminalIntegration is initialized only once, otherwise, for some unknown
+     * to me reason even-though ToggleTerminalAction constructor is called once, the
+     * TerminalIntegration is called twice as if there was another instance of
+     * ToggleTerminalAction with terminalIntegration = null - but there's only one instance (!).
+     */
     private volatile static TerminalIntegration terminalIntegration = null;
     private final static Object LOCK = new Object();
 
@@ -86,13 +93,6 @@ public class ToggleTerminalAction extends ActiveTabAction {
         if (terminalIntegration == null && verticalSplit != null) {
             // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
             synchronized (LOCK) {
-                // TODO I'm lost - I see in debugger that finally this class is instantiated only once,
-                // but if I put breakpoint below I can see that mysteriously terminalIntegration
-                // is being set 2 times - first time, OK, good, but second time terminalIntegration
-                // (called via fireActivePanelChanged) is null again on the same instance of ToggleTerminalAction (!) - as if
-                // terminalIntegration was reset to null by reflection or clone, or sth?
-                // In Idea's debugger on the second occurrence there's a note that ToggleTerminalAction
-                // instance "is being initialized". ToggleTerminalAction has the same id!
                 if (terminalIntegration == null) {
                     terminalIntegration = new TerminalIntegration(mainFrame, verticalSplit);
                 }
