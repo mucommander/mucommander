@@ -425,7 +425,9 @@ public class MainFrame implements LocationListener {
         //  // Remove focus from whatever component in FolderPanel which had focus
         //  getGlassPane().requestFocus();
 
-        this.noEventsMode = enabled;
+        if (frameInstance.isDisplayable()) {
+            this.noEventsMode = enabled;
+        }
     }
 
     public JPanel getMainPanel() {
