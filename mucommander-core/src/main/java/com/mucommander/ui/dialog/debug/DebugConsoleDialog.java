@@ -107,8 +107,7 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
      * @param mainFrame the {@link MainFrame} to use as a parent
      */
     public DebugConsoleDialog(MainFrame mainFrame) {
-        super((JFrame)null, ActionProperties.getActionLabel(ActionType.ShowDebugConsole),
-                mainFrame.getJFrame());
+        super((JFrame)null, ActionProperties.getActionLabel(ActionType.ShowDebugConsole), mainFrame.getJFrame());
         this.setModal(false);
         this.setAlwaysOnTop(false);
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -138,7 +137,7 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
         autoRefreshCheckBox = new JCheckBox(Translator.get("debug_console_dialog.auto_refresh"));
-        autoRefreshCheckBox.addItemListener((e) -> {
+        autoRefreshCheckBox.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 refreshButton.setEnabled(false);
                 periodicUpdater = executorService.scheduleAtFixedRate(
@@ -226,9 +225,7 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
         if (loggingEventsTree != null) {
             ((DefaultTreeModel)loggingEventsTree.getModel()).reload();
         }
-        SwingUtilities.invokeLater(() -> {
-            loggingEventsTree.scrollRowToVisible(records.length - 1);
-        });
+        SwingUtilities.invokeLater(() -> loggingEventsTree.scrollRowToVisible(records.length - 1));
     }
     
     /**
@@ -328,29 +325,22 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
             if (level == null) {
                 return Color.BLACK;
             }
-            Color color;
             switch (level) {
                 case SEVERE:
-                    color = Color.RED;
-                    break;
+                    return Color.RED;
                 case WARNING:
                     // Dark orange
-                    color = new Color(255, 100, 0);
-                    break;
+                    return new Color(255, 100, 0);
                 case CONFIG:
-                    color = Color.BLUE;
-                    break;
+                    return Color.BLUE;
                 case INFO:
-                    color = Color.BLACK;
-                    break;
+                    return Color.BLACK;
                 case FINE:
-                    color = Color.DARK_GRAY;
-                    break;
+                    return Color.DARK_GRAY;
                 default:
                     // Between Color.GRAY and Color.DARK_GRAY
-                    color = new Color(110, 110, 110);
-            };
-            return color;
+                    return new Color(110, 110, 110);
+            }
         }
     }
 }
