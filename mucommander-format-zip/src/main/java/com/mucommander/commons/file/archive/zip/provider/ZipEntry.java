@@ -449,7 +449,21 @@ public class ZipEntry implements Cloneable {
      * @return this entry's date/time expressed in the Java time format
      */
     public long getTime() {
-        return javaTime;
+        Long timeExtended = getTimeExtended();
+        return timeExtended != null ? timeExtended : javaTime;
+    }
+
+    public Long getTimeExtended() {
+        if (this.extraFields == null) {
+            return null;
+        }
+        ExtendedTimestampExtraField extendedTimestampExtraField =
+                this.extraFields.stream()
+                        .filter(f -> f instanceof ExtendedTimestampExtraField)
+                        .map(f -> (ExtendedTimestampExtraField)f)
+                        .findFirst()
+                        .orElse(null);
+        return extendedTimestampExtraField != null ? extendedTimestampExtraField.getJavaTime() : null;
     }
 
     /**

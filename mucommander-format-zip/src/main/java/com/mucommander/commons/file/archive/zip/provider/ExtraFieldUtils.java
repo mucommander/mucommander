@@ -44,6 +44,7 @@ public class ExtraFieldUtils {
         implementations = new Hashtable<>();
         register(AsiExtraField.class);
         register(JarMarker.class);
+        register(ExtendedTimestampExtraField.class);
     }
 
     /**
