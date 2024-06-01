@@ -40,7 +40,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
      * A reference to Terminal Integration. Made static (and volatile) to ensure
      * that TerminalIntegration is initialized only once, otherwise, for some unknown
      * to me reason even-though ToggleTerminalAction constructor is called once, the
-     * TerminalIntegration is called twice as if there was another instance of
+     * TerminalIntegration constructor is called twice as if there was another instance of
      * ToggleTerminalAction with terminalIntegration = null - but there's only one instance (!).
      */
     private volatile static TerminalIntegration terminalIntegration = null;
