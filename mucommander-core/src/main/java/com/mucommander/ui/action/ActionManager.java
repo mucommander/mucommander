@@ -380,7 +380,7 @@ public class ActionManager {
         // Looks for an existing MuAction instance used by the specified MainFrame
         // or create one if necessary
         var result = mainFrameActions.computeIfAbsent(
-                actionParameters, (actParam) -> createActionAndIdPair(actParam, mainFrame));
+                actionParameters, params -> createActionAndIdPair(params, mainFrame));
 
         return result != null ? result.getAction() : null;
     }
