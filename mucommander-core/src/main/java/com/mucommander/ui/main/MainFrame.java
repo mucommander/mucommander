@@ -77,6 +77,7 @@ import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.notifier.NotifierProvider;
+import com.mucommander.ui.terminal.TerminalIntegration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,6 +129,9 @@ public class MainFrame implements LocationListener {
 
     /** Is single panel view? */
     private boolean singlePanel;
+
+    /** Terminal integration instance */
+    private TerminalIntegration terminalIntegration;
 
     /** Contains all registered ActivePanelListener instances, stored as weak references */
     private final Map<ActivePanelListener, ?> activePanelListeners = Collections.synchronizedMap(new WeakHashMap<>());
@@ -269,6 +273,8 @@ public class MainFrame implements LocationListener {
         layeredPane.setLayer(verticalSplitPane, JLayeredPane.DEFAULT_LAYER);
         // Split pane will be given any extra space
         insetsPane.add(layeredPane, BorderLayout.CENTER);
+
+        terminalIntegration = new TerminalIntegration(this, verticalSplitPane);
 
         // Add a 2-pixel gap between the file table and status bar
         YBoxPanel southPanel = new YBoxPanel();
@@ -579,12 +585,10 @@ public class MainFrame implements LocationListener {
     }
 
     /**
-     * Returns the JSplitPane component that splits folder panels and optional terminal.
-     *
-     * @return the JSplitPane component that splits folder panels and optional terminal.
+     * Toggles the Terminal, i.e., shows (maximized) or hides it (minimized)
      */
-    public JSplitPane getVerticalSplitPane() {
-        return verticalSplitPane;
+    public void toggleTerminal() {
+        terminalIntegration.toggleTerminal();
     }
 
     /**
