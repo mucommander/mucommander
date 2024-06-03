@@ -19,6 +19,7 @@
 package com.mucommander.commons.file.archive.zip.provider;
 
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.stream.Stream;
 import java.util.zip.ZipException;
@@ -449,21 +450,19 @@ public class ZipEntry implements Cloneable {
      * @return this entry's date/time expressed in the Java time format
      */
     public long getTime() {
-        Long timeExtended = getTimeExtended();
-        return timeExtended != null ? timeExtended : javaTime;
+        Optional<Long> timeExtended = getTimeExtended();
+        return timeExtended.orElse(javaTime);
     }
 
-    public Long getTimeExtended() {
+    public Optional<Long> getTimeExtended() {
         if (this.extraFields == null) {
             return null;
         }
-        ExtendedTimestampExtraField extendedTimestampExtraField =
-                this.extraFields.stream()
+        return this.extraFields.stream()
                         .filter(f -> f instanceof ExtendedTimestampExtraField)
                         .map(f -> (ExtendedTimestampExtraField)f)
-                        .findFirst()
-                        .orElse(null);
-        return extendedTimestampExtraField != null ? extendedTimestampExtraField.getJavaTime() : null;
+                        .map(t -> t.getJavaTime())
+                        .findFirst();
     }
 
     /**
