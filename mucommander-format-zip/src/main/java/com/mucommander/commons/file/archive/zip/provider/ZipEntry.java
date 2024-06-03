@@ -450,18 +450,18 @@ public class ZipEntry implements Cloneable {
      * @return this entry's date/time expressed in the Java time format
      */
     public long getTime() {
-        Optional<Long> timeExtended = getTimeExtended();
+        var timeExtended = getTimeExtended();
         return timeExtended.orElse(javaTime);
     }
 
-    public Optional<Long> getTimeExtended() {
+    private Optional<Long> getTimeExtended() {
         if (this.extraFields == null) {
             return null;
         }
         return this.extraFields.stream()
                         .filter(f -> f instanceof ExtendedTimestampExtraField)
                         .map(f -> (ExtendedTimestampExtraField)f)
-                        .map(t -> t.getJavaTime())
+                        .map(ExtendedTimestampExtraField::getJavaTime)
                         .findFirst();
     }
 
