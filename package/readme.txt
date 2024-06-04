@@ -36,21 +36,20 @@ New features:
 
 Improvements:
 - When sorting by any column, always start with ascending sort order
-- Faster way of finding applications for Open With context menu (macOS)
-- Debug Console is able to show logs with stacktraces (if present)
-- Improved Debug Console to display logs using tree view with folded stacktraces and it can be opened in background (non-modal) with logs autorefresh
-- Better concurrency handling while initializing Actions
+- Applications for the Open With context menu are loaded faster (macOS)
+- Debug Console shows logs with folded stacktraces (if present)
+- Debug Console can be opened in background (non-modal) and with logs autorefresh
 
 Localization:
 -
 
 Bug fixes:
-- Fix occasional hangs when lauching muCommander
-- Fix for erratic behavior(s) after launch (unstable Preferences window, no Menu until switching panels etc)
-- Fixed undesired beep and undesired character when leaving terminal by pressing F12 (random behavior)
-- Fixed a bug in Report Bug where too much logs could cause to fallback to a simple bug reporting on GitHub
-- Fix for losing keyboard focus in modals when Keyboard Hints turned on
-- Fix Shell panel name in Preferences
+- Fixed occasional hangs when lauching muCommander
+- Fixed erratic behavior(s) after launch (unstable Preferences window, no Menu until switching panels, etc)
+- Fixed leaving the terminal by pressing F12 that randomly produced undesired beep and undesired character
+- Fixed falling back to simple bug reporting on GitHub by the 'Report Bug' action in case of too many logs
+- Fixed losing keyboard focus in modals when Keyboard Hints are turned on
+- Fixed the name of the Shell panel in the Preferences dialog
 
 Known issues:
 - Some translations may not be up-to-date.
