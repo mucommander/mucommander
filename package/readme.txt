@@ -50,6 +50,7 @@ Bug fixes:
 - Fixed falling back to simple bug reporting on GitHub by the 'Report Bug' action in case of too many logs
 - Fixed losing keyboard focus in modals when Keyboard Hints are turned on
 - Fixed the name of the Shell panel in the Preferences dialog
+- Fixed incorrect modification date of files within zip archives in which the extended timestamp field is used
 
 Known issues:
 - Some translations may not be up-to-date.
