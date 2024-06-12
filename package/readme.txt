@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.5.0
+muCommander v1.4.1
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -31,17 +31,11 @@ where your Java runtime is installed.
 What's new since v1.4.0 ?
 -----------------------
 
-New features:
--
-
 Improvements:
 - When sorting by any column, always start with ascending sort order
 - Applications for the Open With context menu are loaded faster (macOS)
 - Debug Console shows logs with folded stacktraces (if present)
 - Debug Console can be opened in background (non-modal) and with logs autorefresh
-
-Localization:
--
 
 Bug fixes:
 - Fixed occasional hangs when lauching muCommander
