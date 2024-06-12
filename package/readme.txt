@@ -28,29 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.4.0 ?
+What's new since v1.4.1 ?
 -----------------------
 
 New features:
 -
 
 Improvements:
-- When sorting by any column, always start with ascending sort order
-- Applications for the Open With context menu are loaded faster (macOS)
-- Debug Console shows logs with folded stacktraces (if present)
-- Debug Console can be opened in background (non-modal) and with logs autorefresh
+-
 
 Localization:
 -
 
 Bug fixes:
-- Fixed occasional hangs when lauching muCommander
-- Fixed erratic behavior(s) after launch (unstable Preferences window, no Menu until switching panels, etc)
-- Fixed leaving the terminal by pressing F12 that randomly produced undesired beep and undesired character
-- Fixed falling back to simple bug reporting on GitHub by the 'Report Bug' action in case of too many logs
-- Fixed losing keyboard focus in modals when Keyboard Hints are turned on
-- Fixed the name of the Shell panel in the Preferences dialog
-- Fixed incorrect modification date of files within zip archives in which the extended timestamp field is used
+-
 
 Known issues:
 - Some translations may not be up-to-date.
