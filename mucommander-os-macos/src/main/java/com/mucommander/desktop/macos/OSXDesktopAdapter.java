@@ -282,7 +282,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         });
-        LOGGER.error("Command 'duti' found in the system? {}", result);
+        LOGGER.info("Command 'duti' found in the system? {}", result);
         return result.get();
     }
 
@@ -479,7 +479,6 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             throw new IllegalArgumentException("Given commands value is null or empty");
         }
         boolean result = false;
-        String command = commands[0];
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(commands);
@@ -488,7 +487,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             int exitCode = Integer.MIN_VALUE;
             boolean processExited;
             if (!(processExited = proc.waitFor(1000, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
-                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", command, !processExited, exitCode);
+                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", commands, !processExited, exitCode);
                 return result;
             }
             String s;
@@ -499,7 +498,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             result = true;
         } catch (Exception e) {
-            LOGGER.error("Error executing command: {}. Error msg: {}", command, e.getMessage(), e);
+            LOGGER.error("Error executing command: {}. Error msg: {}", commands, e.getMessage(), e);
         }
         return result;
     }
