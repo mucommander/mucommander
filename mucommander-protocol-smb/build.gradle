@@ -8,8 +8,8 @@ dependencies {
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.testng:testng:7.10.2'
     testImplementation project(':mucommander-commons-file')
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
