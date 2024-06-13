@@ -16,7 +16,7 @@ dependencies {
     api project(":mucommander-commons-file")
     api project(":mucommander-preferences")
 
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 jar {

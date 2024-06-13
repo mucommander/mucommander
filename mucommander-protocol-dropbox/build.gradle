@@ -6,8 +6,8 @@ dependencies {
 
     implementation 'com.dropbox.core:dropbox-core-sdk:5.2.0'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 repositories.mavenCentral()
