@@ -87,7 +87,7 @@ jobs:
           compression-level: 0
 
   upload-linux-artifacts:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: get-version
     steps:
       - uses: actions/checkout@v4
