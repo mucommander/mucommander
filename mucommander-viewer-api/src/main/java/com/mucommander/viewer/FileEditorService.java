@@ -16,7 +16,6 @@
  */
 package com.mucommander.viewer;
 
-import com.mucommander.commons.file.AbstractFile;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -24,42 +23,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * Interface for file editor service.
  */
 @ParametersAreNonnullByDefault
-public interface FileEditorService {
-
-    /**
-     * Returns name for editor.
-     *
-     * @return name title
-     */
-    @Nonnull
-    String getName();
-
-    /**
-     * Returns order priority.
-     *
-     * Reference editors use:<br>
-     * 10 - text<br>
-     * 0 - binary
-     *
-     * @return order priority
-     */
-    int getOrderPriority();
-
-    /**
-     * Returns <code>true</code> if this factory can create a file editor for the specified file.
-     * <p>
-     * The FileEditor may base its decision strictly upon the file's name and its extension or may wish to read some of
-     * the file and compare it to a magic number.
-     * </p>
-     *
-     * @param file
-     *            file for which a editor must be created.
-     * @return <code>true</code> if this factory can create a file editor for the specified file.
-     * @throws WarnUserException
-     *             if the specified file can be edited after the warning message contained in the exception is displayed
-     *             to the end user.
-     */
-    boolean canEditFile(AbstractFile file) throws WarnUserException;
+public interface FileEditorService extends FileOpenService {
 
     /**
      * Returns a new instance of {@link FileEditor}.

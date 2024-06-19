@@ -19,9 +19,9 @@ package com.mucommander.viewer.pdf;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.FileViewerService;
-import com.mucommander.viewer.WarnUserException;
 
 /**
  * Arik Hadas
@@ -41,8 +41,8 @@ public class PdfFileViewer implements FileViewerService {
     }
 
     @Override
-    public boolean canViewFile(AbstractFile file) throws WarnUserException {
-        return !file.isDirectory() && filter.accept(file);
+    public CanOpen canOpenFile(AbstractFile file) {
+        return !file.isDirectory() && filter.accept(file) ? CanOpen.YES : CanOpen.NO;
     }
 
     @Override

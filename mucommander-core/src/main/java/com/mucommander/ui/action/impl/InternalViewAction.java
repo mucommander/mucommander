@@ -63,7 +63,8 @@ public class InternalViewAction extends AbstractViewerAction {
             FileTableModel fileTableModel = (FileTableModel)activeTable.getModel();
             fileTableModel.startDirectorySizeCalculation(activeTable, file);
         } else {
-            ViewerRegistrar.createViewerFrame(mainFrame, file, fromSearchWithContent, getIcon().getImage());
+            ViewerRegistrar.getInstance().createOpenFileFrame(mainFrame, file, fromSearchWithContent,
+                    getIcon().getImage());
         }
     }
 

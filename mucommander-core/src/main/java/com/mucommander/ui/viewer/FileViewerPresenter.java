@@ -43,10 +43,10 @@ import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.ViewerPresenter;
-import com.mucommander.viewer.WarnUserException;
 
 /**
  * File viewer presenter to handle multiple file viewers.
@@ -113,11 +113,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
             }
             fileTable.selectRow(newRow);
             newFile = fileTable.getSelectedFile();
-            try {
-                canView = (newFile != null) && viewerService.canViewFile(newFile);
-            } catch (WarnUserException ex) {
-                canView = false;
-            }
+            canView = newFile != null && viewerService.canOpenFile(newFile) == CanOpen.YES;
         } while (newFile == null || !canView);
 
         setCurrentFile(newFile);
