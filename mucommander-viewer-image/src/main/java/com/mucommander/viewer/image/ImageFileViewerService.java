@@ -18,6 +18,7 @@ package com.mucommander.viewer.image;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
+import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.FileViewer;
 import javax.annotation.Nonnull;
@@ -31,13 +32,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ImageFileViewerService implements FileViewerService {
 
+    private static final String[] ACCEPTED_EXTS = new String[] {".png", ".gif", ".jpg",
+            ".jpeg", ".tif", ".tiff", ".bmp", ".wbmp"};
     /**
      * Used to filter out file extensions that the image viewer cannot open.
      */
     private ExtensionFilenameFilter filter;
 
     public ImageFileViewerService() {
-        filter = new ExtensionFilenameFilter(new String[]{".png", ".gif", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp", ".wbmp"}, false, false);
+        filter = new ExtensionFilenameFilter(ACCEPTED_EXTS, false, false);
     }
 
     @Nonnull
@@ -52,13 +55,13 @@ public class ImageFileViewerService implements FileViewerService {
     }
 
     @Override
-    public boolean canViewFile(AbstractFile file) {
+    public CanOpen canOpenFile(AbstractFile file) {
         // Do not allow directories
         if (file.isDirectory()) {
-            return false;
+            return CanOpen.NO;
         }
 
-        return filter.accept(file);
+        return filter.accept(file) ? CanOpen.YES : CanOpen.NO;
     }
 
     @Nonnull

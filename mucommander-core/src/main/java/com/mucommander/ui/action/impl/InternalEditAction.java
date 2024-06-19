@@ -70,7 +70,8 @@ public class InternalEditAction extends AbstractViewerAction {
             fileSet.add(file);
             new ChangePermissionsDialog(mainFrame, fileSet).showDialog();
         } else {
-            EditorRegistrar.createEditorFrame(mainFrame, file, fromSearchWithContent, getIcon().getImage());
+            EditorRegistrar.getInstance().createOpenFileFrame(mainFrame, file, fromSearchWithContent,
+                    getIcon().getImage());
         }
     }
 
