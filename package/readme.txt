@@ -35,13 +35,14 @@ New features:
 -
 
 Improvements:
+- Don't show warning message about too large file while previewing images files.
 -
 
 Localization:
 -
 
 Bug fixes:
-- Don't show warning message about too large file while previewing images files (ticket #1217)
+-
 
 Known issues:
 - Some translations may not be up-to-date.
