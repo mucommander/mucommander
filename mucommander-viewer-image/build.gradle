@@ -6,17 +6,35 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
+    comprise 'com.twelvemonkeys.imageio:imageio-core:3.11.0'
+
+    // image plugins to handle additional types (like psd) or faster alternatives to built-in ones (jpeg)
+    comprise 'com.twelvemonkeys.imageio:imageio-jpeg:3.11.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-tiff:3.11.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-psd:3.11.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-webp:3.11.0'
+    // requirements for plugins
+    comprise 'com.twelvemonkeys.common:common-lang:3.11.0'
+    comprise 'com.twelvemonkeys.common:common-io:3.11.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-metadata:3.11.0'
+
+
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
     testImplementation 'org.testng:testng:7.10.2'
 }
 
 jar {
+   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'META-INF/**'
+   } }
+   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
    bnd ('Bundle-Name': 'muCommander-viewer-image',
         'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library for hexadecimal viewer/editor',
+        'Bundle-Description': 'Library for previewing image files',
         'Bundle-DocURL': 'https://www.mucommander.com',
         'Export-Package': 'com.mucommander.viewer.image',
+        'Import-Package': '!magick,*',
         'Bundle-Activator': 'com.mucommander.viewer.image.Activator',
         'Specification-Title': "muCommander",
         'Specification-Vendor': "Arik Hadas",
