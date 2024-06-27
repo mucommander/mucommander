@@ -21,8 +21,19 @@ import com.mucommander.commons.file.filter.ExtensionFilenameFilter;
 import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.FileViewer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 
 /**
  * <code>FileViewerService</code> implementation for creating image viewers.
@@ -32,15 +43,29 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ImageFileViewerService implements FileViewerService {
 
-    private static final String[] ACCEPTED_EXTS = new String[] {".png", ".gif", ".jpg",
-            ".jpeg", ".tif", ".tiff", ".bmp", ".wbmp"};
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageFileViewerService.class);
+
     /**
      * Used to filter out file extensions that the image viewer cannot open.
      */
     private ExtensionFilenameFilter filter;
 
     public ImageFileViewerService() {
-        filter = new ExtensionFilenameFilter(ACCEPTED_EXTS, false, false);
+        var acceptedExts = getSupportedImageExtensions();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("The list of supported image formats and their handlers:");
+            acceptedExts.forEach(ext -> {
+                        Iterator<ImageReader> it = ImageIO.getImageReadersBySuffix(ext);
+                        LOGGER.debug("{}:", ext);
+                        while (it.hasNext()) {
+                            LOGGER.debug("\t {}", it.next());
+                        }
+                    }
+            );
+        }
+        filter = new ExtensionFilenameFilter(
+                acceptedExts.stream().map(suffix -> "." + suffix).toArray(String[]::new),
+                false, false);
     }
 
     @Nonnull
@@ -68,5 +93,14 @@ public class ImageFileViewerService implements FileViewerService {
     @Override
     public FileViewer createFileViewer(boolean fromSearchWithContent) {
         return new ImageViewer(this);
+    }
+
+    /**
+     * Returns a set of image extensions supported by JRE and TwelveMonkeys plugins.
+     *
+     * @return set of extensions (without leading dot).
+     */
+    private Set<String> getSupportedImageExtensions() {
+        return Arrays.stream(ImageIO.getReaderFileSuffixes()).collect(Collectors.toSet());
     }
 }

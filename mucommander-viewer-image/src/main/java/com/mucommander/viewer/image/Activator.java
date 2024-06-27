@@ -18,10 +18,19 @@ package com.mucommander.viewer.image;
 
 import com.mucommander.snapshot.MuSnapshot;
 import com.mucommander.viewer.FileViewerService;
-import javax.annotation.ParametersAreNonnullByDefault;
+import com.twelvemonkeys.imageio.plugins.jpeg.JPEGImageReaderSpi;
+import com.twelvemonkeys.imageio.plugins.psd.PSDImageReaderSpi;
+import com.twelvemonkeys.imageio.plugins.tiff.TIFFImageReaderSpi;
+import com.twelvemonkeys.imageio.plugins.webp.WebPImageReaderSpi;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.imageio.spi.IIORegistry;
 
 /**
  * Activator for viewer for image files.
@@ -29,13 +38,24 @@ import org.osgi.framework.ServiceRegistration;
 @ParametersAreNonnullByDefault
 public class Activator implements BundleActivator {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
+
     private ServiceRegistration<FileViewerService> viewerRegistration;
 
     @Override
     public void start(BundleContext context) throws Exception {
         MuSnapshot.registerHandler(new ImageViewerSnapshot());
-
-        viewerRegistration = context.registerService(FileViewerService.class, new ImageFileViewerService(), null);
+        try {
+            IIORegistry registry = IIORegistry.getDefaultInstance();
+            registry.registerServiceProvider(new JPEGImageReaderSpi());
+            registry.registerServiceProvider(new PSDImageReaderSpi());
+            registry.registerServiceProvider(new TIFFImageReaderSpi());
+            registry.registerServiceProvider(new WebPImageReaderSpi());
+        } catch (Exception e) {
+            LOGGER.error("Error registering additional image service providers", e);
+        }
+        viewerRegistration = context.registerService(FileViewerService.class,
+                new ImageFileViewerService(), null);
     }
 
     @Override
