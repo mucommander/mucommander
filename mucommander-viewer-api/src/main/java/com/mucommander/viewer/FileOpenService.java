@@ -64,5 +64,5 @@ public interface FileOpenService {
      * CanOpen.YES_WITH_CONFIRMATION. May return null if CanOpen.YES_WITH_CONFIRMATION is never returned.
      * @return the message (dictionary key), can be null
      */
-    default String getConfirmationMsg() { return null; };
+    default String getConfirmationMsg() { return null; }
 }
