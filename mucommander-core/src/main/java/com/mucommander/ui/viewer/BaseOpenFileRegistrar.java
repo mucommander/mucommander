@@ -21,17 +21,12 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.dialog.DialogAction;
-import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.viewer.FileOpenService;
 
-import java.awt.Frame;
 import java.awt.Image;
-import java.util.Arrays;
 import java.util.List;
-
-import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 
 /**
  * A based for ViewerRegistrar or EditorRegistrar to maintain a list of
@@ -110,21 +105,6 @@ public abstract class BaseOpenFileRegistrar {
         for (FileOpenService service : openFileServices) {
             switch (service.canOpenFile(file)) {
                 case YES_USER_CONSENT:
-                    if (counter == 0) {
-                        // TODO move it to FileViewerPresenter/FileEditorPresenter,
-                        // so it could be presented also when manually switching FileOpenServices
-                        QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"),
-                                Translator.get(service.getConfirmationMsg()), frame.getMainFrame().getJFrame(),
-                                Arrays.asList(OpenFileRegistrarAction.OPEN_ANYWAY, OpenFileRegistrarAction.CANCEL),
-                                0);
-
-                        DialogAction ret = dialog.getActionValue();
-                        if (ret == OpenFileRegistrarAction.CANCEL || ret == DIALOG_DISPOSED_ACTION) {
-                            // User canceled the operation
-                            openFileCanceled = true;
-                            break;
-                        } // else // User confirmed the operation - continue adding service
-                    }
                 case YES:
                     addService(presenter, service);
                     counter++;
