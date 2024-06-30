@@ -319,7 +319,7 @@ class ImageViewer implements FileViewer, ActionListener {
         presenter.getWindowFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         long start = System.currentTimeMillis();
-        BufferedImage image;
+        BufferedImage image = null;
 
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream();
              InputStream in = file.getInputStream()) {
@@ -327,19 +327,29 @@ class ImageViewer implements FileViewer, ActionListener {
             StreamUtils.copyStream(in, bout);
             try (ImageInputStream input = new ByteArrayImageInputStream(bout.toByteArray())) {
                 Iterator<ImageReader> readers = ImageIO.getImageReaders(input);
-                if (!readers.hasNext()) {
-                    throw new IllegalArgumentException("No reader for a given file: " + file);
-                }
-                ImageReader reader = readers.next();
-                try {
-                    reader.setInput(input);
-                    image = reader.read(0);
-                } finally {
-                    reader.dispose();
+                while (readers.hasNext()) {
+                    ImageReader reader = readers.next();
+                    try {
+                        reader.setInput(input);
+                        image = reader.read(0);
+                        break;
+                    } catch (IOException ioe) {
+                        if (!readers.hasNext()) {
+                            throw ioe;   // rethrow
+                        } else {
+                            LOGGER.error("There was an error while reading file: {}," +
+                                    " will retry with another reader...", file, ioe);
+                            input.seek(0);
+                        }
+                    } finally {
+                        reader.dispose();
+                    }
                 }
             }
         }
-
+        if (image == null) {
+            throw new IllegalArgumentException("No reader for a given file: " + file);
+        }
         waitForImage(image);
         imageViewerPanel.setImage(image);
         initialZoom();
