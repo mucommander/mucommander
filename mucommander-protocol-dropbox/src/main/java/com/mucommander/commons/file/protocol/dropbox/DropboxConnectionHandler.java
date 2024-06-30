@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.dropbox.core.DbxRequestConfig;
-import com.dropbox.core.json.JsonReader;
 import com.dropbox.core.oauth.DbxCredential;
 import com.dropbox.core.v2.DbxClientV2;
 import com.mucommander.commons.file.AbstractFile;
@@ -37,7 +36,7 @@ public class DropboxConnectionHandler extends ConnectionHandler implements AutoC
         try {
             credential = DbxCredential.Reader.readFromFile(credentialFileURL.getPath());
         }
-        catch (JsonReader.FileLoadException e) {
+        catch (Exception e) {
         	LOGGER.error("failed to load credentials to dropbox", e);
         	throw new AuthException(fileURL, e.getMessage());
         }
