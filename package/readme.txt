@@ -36,7 +36,7 @@ New features:
 
 Improvements:
 - Don't show warning message about too large file while previewing images files.
--
+- Image preview: faster display of large JPEG files, added support for the following image formats: webp, psd (and psb)
 
 Localization:
 -
