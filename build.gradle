@@ -389,7 +389,10 @@ task(afterEclipseImport).doLast {
 
 task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     workingDir "${projectDir}"
-    commandLine 'jpackage', \
+
+
+    def jpackageCommand = [
+                'jpackage', \
                 '--input', 'build/osgi/', \
                 '--name', 'muCommander', \
                 '--app-version', project.version, \
@@ -417,8 +420,18 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--mac-package-identifier', 'com.mucommander.muCommander', \
                 '--type', 'app-image', \
                 '--dest', "${buildDir}", \
-                '--mac-sign', '--mac-package-signing-prefix', 'com.mucommander.', \
-                '--verbose', '--mac-signing-key-user-name', project.ext.identity
+                '--mac-package-signing-prefix', 'com.mucommander.', \
+                '--mac-signing-key-user-name', project.ext.identity, \
+                '--verbose'
+    ]
+
+    // skip signing if gradle invoked with -PskipDmgSign (for dev purposes only)
+    if (!project.hasProperty('skipDmgSign')) {
+      jpackageCommand += '--mac-sign'
+    }
+
+    commandLine jpackageCommand
+
     doLast {
        copy {
           from "package"
