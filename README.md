@@ -53,12 +53,14 @@ It is recommended to run the following command when getting an unclear compilati
 ./gradlew clean run
 ```    
 
+You can also run directly from within you IDE by executing gradlew `run` task.
+
+
 ### How to Debug
-In order to debug muCommander, you first need to configure a port using an environment variable named `DEBUG`.
+In order to debug muCommander, you need to add `-Pdebug=5005` while running muComander. To control whether you want suspend JVM or not, please use `-Psuspend=n|y` parameter.
 Example of running muCommander in debug mode:
 ```
-export DEBUG=5005
-./gradlew run
+./gradlew run -Pdebug=5005 -Psuspend=y
 ```
 Then, you can run a debugger that connects to this port using your favorite IDE (see [an example for doing this with IntelliJ](https://github.com/mucommander/mucommander/wiki/Debug-from-IntelliJ)).
 
@@ -77,14 +79,19 @@ The creation of an EXE file for Windows (produced in build/launch4j):
 ./gradlew clean createExe
 ```
 
-The creation of a TGZ file for Linux/Unix (produced in build/distributions):
+The creation of TGZ distribution for Linux/Unix (produced in build/distributions):
 ```
 ./gradlew clean tgz
 ```
 
-The creation of an RPM file:  
+The creation of RPM distribution for Red Hat Linux flavors:
 ```
 ./gradlew clean rpm
+```
+
+The creation of DEB distribution for Debian Linux flavors:
+```
+./gradlew clean deb
 ```
 
 More packaging options are described in [our wiki](https://github.com/mucommander/mucommander/wiki/Packaging).
