@@ -148,12 +148,6 @@ runOsgi {
     javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
     javaArgs += ' -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1' // faster start
 
-    def port = System.getenv('DEBUG')
-    // To be removed after 1.4.2 release
-    if (port) {
-        logger.warn('!!! Deprecated DEBUG env variable - it will be removed after 1.4.2 release. Use -Pdebug=PORT_NUMBER instead.')
-        javaArgs += ' -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=' + port
-    }
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
     if (project.hasProperty('debug')) {
         logger.info('Lauching muCommander in debug mode...')
@@ -285,7 +279,7 @@ launch4j {
 // Portable packaging
 task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     group = 'Installer'
-    description = 'Creates EXE window portable package'
+    description = 'Creates a portable package (.exe + .sh)'
 
     from ("$buildDir/launch4j") {
         include 'mucommander.exe'
