@@ -57,10 +57,10 @@ You can also run directly from within you IDE by executing gradlew `run` task.
 
 
 ### How to Debug
-In order to debug muCommander, you need to add `-Pdebug=5005` while running muComander. To control whether you want suspend JVM or not, please use `-Psuspend=n|y` parameter.
+In order to debug muCommander, you need to add `-Pdebug=PORT_NUMBER` while running muComander. To control whether you want suspend JVM or not, please use `-Psuspend=n|y` parameter (suspend=y is a default).
 Example of running muCommander in debug mode:
 ```
-./gradlew run -Pdebug=5005 -Psuspend=y
+./gradlew run -Pdebug=5005 -Psuspend=n
 ```
 Then, you can run a debugger that connects to this port using your favorite IDE (see [an example for doing this with IntelliJ](https://github.com/mucommander/mucommander/wiki/Debug-from-IntelliJ)).
 
