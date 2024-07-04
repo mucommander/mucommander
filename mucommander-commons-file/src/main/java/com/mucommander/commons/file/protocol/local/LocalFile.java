@@ -30,10 +30,14 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileOwnerAttributeView;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFileAttributes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.StringTokenizer;
@@ -153,6 +157,8 @@ public class LocalFile extends ProtocolFile {
     /** Bit mask that indicates which permissions can be changed */
     private final static PermissionBits CHANGEABLE_PERMISSIONS =
             IS_WINDOWS ? CHANGEABLE_PERMISSIONS_WINDOWS : CHANGEABLE_PERMISSIONS_NON_WINDOWS;
+
+    private String owner, group;
 
     /**
      * List of known UNIX filesystems.
@@ -574,7 +580,16 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public String getOwner() {
-        return null;
+        if (owner != null) {
+            return owner;
+        }
+        try {
+            owner = Files.getOwner(file.toPath()).getName();
+        } catch (IOException e) {
+            LOGGER.error("failed to get owner of {}", file);
+            LOGGER.error("failed to get owner", e);
+        }
+        return owner;
     }
 
     /**
@@ -582,7 +597,14 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public boolean canGetOwner() {
-        return false;
+        if (owner != null) {
+            return true;
+        }
+        try {
+            return Files.getFileStore(file.toPath()).supportsFileAttributeView(FileOwnerAttributeView.class);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -590,7 +612,17 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public String getGroup() {
-        return null;
+        if (group != null) {
+            return group;
+        }
+        try {
+            var attributes = Files.readAttributes(file.toPath(), PosixFileAttributes.class);
+            group = attributes.group().getName();
+        } catch (IOException e) {
+            LOGGER.error("failed to get group of {}", file);
+            LOGGER.error("failed to get group", e);
+        }
+        return group;
     }
 
     /**
@@ -598,7 +630,14 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public boolean canGetGroup() {
-        return false;
+        if (group != null) {
+            return true;
+        }
+        try {
+            return Files.getFileStore(file.toPath()).supportsFileAttributeView(PosixFileAttributeView.class);
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override
