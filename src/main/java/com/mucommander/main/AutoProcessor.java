@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -96,12 +95,12 @@ public class AutoProcessor
      * @param configMap Map of configuration properties.
      * @param context The system bundle context.
     **/
-    public static void process(Map configMap, BundleContext context)
+    public static void process(Map<String, String> configMap, BundleContext context)
     {
         ExecutorService executor = null;
         try {
             executor = Executors.newFixedThreadPool(8);
-            var configMapLocal = (configMap == null) ? new HashMap() : configMap;
+            var configMapLocal = (configMap == null) ? new HashMap<String, String>() : configMap;
             processAutoDeploy(executor, configMapLocal, context);
             processAutoProperties(executor, configMapLocal, context);
         } finally {
@@ -117,12 +116,12 @@ public class AutoProcessor
      * specified deploy actions.
      * </p>
      */
-    private static void processAutoDeploy(ExecutorService executor, Map configMap, BundleContext context)
+    private static void processAutoDeploy(ExecutorService executor, Map<String, String> configMap, BundleContext context)
     {
         // Determine if auto deploy actions to perform.
-        String action = (String) configMap.get(AUTO_DEPLOY_ACTION_PROPERTY);
+        String action = configMap.get(AUTO_DEPLOY_ACTION_PROPERTY);
         action = (action == null) ? "" : action;
-        List actionList = new ArrayList();
+        List<String> actionList = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(action, ",");
         while (st.hasMoreTokens())
         {
@@ -151,7 +150,7 @@ public class AutoProcessor
                 try
                 {
                     startLevel = Integer.parseInt(
-                        configMap.get(AUTO_DEPLOY_STARTLEVEL_PROPERTY).toString());
+                        configMap.get(AUTO_DEPLOY_STARTLEVEL_PROPERTY));
                 }
                 catch (NumberFormatException ex)
                 {
@@ -160,7 +159,7 @@ public class AutoProcessor
             }
 
             // Get list of already installed bundles as a map.
-            Map installedBundleMap = new HashMap();
+            Map<String, Bundle> installedBundleMap = new HashMap<>();
             Bundle[] bundles = context.getBundles();
             for (int i = 0; i < bundles.length; i++)
             {
@@ -168,7 +167,7 @@ public class AutoProcessor
             }
 
             // Get the auto deploy directory.
-            String autoDir = (String) configMap.get(AUTO_DEPLOY_DIR_PROPERTY);
+            String autoDir = configMap.get(AUTO_DEPLOY_DIR_PROPERTY);
             autoDir = (autoDir == null) ? AUTO_DEPLOY_DIR_VALUE : autoDir;
             // Look in the specified bundle directory to create a list
             // of all JAR files to install.
@@ -194,7 +193,7 @@ public class AutoProcessor
                 // Look up the bundle by location, removing it from
                 // the map of installed bundles so the remaining bundles
                 // indicate which bundles may need to be uninstalled.
-                Bundle b = (Bundle) installedBundleMap.remove(jarFile.toURI().toString());
+                Bundle b = installedBundleMap.remove(jarFile.toURI().toString());
                 Future<Bundle> futureBundle = CompletableFuture.completedFuture(b);
                 var defer = false;
                 try
@@ -242,10 +241,8 @@ public class AutoProcessor
             // the 'uninstall' action is present.
             if (actionList.contains(AUTO_DEPLOY_UNINSTALL_VALUE))
             {
-                for (Iterator it = installedBundleMap.entrySet().iterator(); it.hasNext(); )
-                {
-                    Map.Entry entry = (Map.Entry) it.next();
-                    Bundle b = (Bundle) entry.getValue();
+                
+                for (Bundle b : installedBundleMap.values()) {
                     if (b.getBundleId() != 0)
                     {
                         try
@@ -302,7 +299,7 @@ public class AutoProcessor
      * specified configuration properties.
      * </p>
      */
-    private static void processAutoProperties(ExecutorService executor, Map configMap, BundleContext context)
+    private static void processAutoProperties(ExecutorService executor, Map<String, String> configMap, BundleContext context)
     {
         // Retrieve the Start Level service, since it will be needed
         // to set the start level of the installed bundles.
@@ -318,9 +315,9 @@ public class AutoProcessor
         // property name, where "n" is the desired start level for the list
         // of bundles. If no start level is specified, the default start
         // level is assumed.
-        for (Object keyObj : configMap.keySet())
+        for (String keyObj : configMap.keySet())
         {
-            String key = ((String) keyObj).toLowerCase();
+            String key = keyObj.toLowerCase();
 
             // Ignore all keys that are not an auto property.
             if (!key.startsWith(AUTO_INSTALL_PROP) && !key.startsWith(AUTO_START_PROP))
@@ -345,7 +342,7 @@ public class AutoProcessor
             }
 
             // Parse and install the bundles associated with the key.
-            StringTokenizer st = new StringTokenizer((String) configMap.get(key), "\" ", true);
+            StringTokenizer st = new StringTokenizer(configMap.get(key), "\" ", true);
             for (String location = nextLocation(st); location != null; location = nextLocation(st))
             {
                 try
@@ -365,12 +362,12 @@ public class AutoProcessor
         }
 
         // Now loop through the auto-start bundles and start them.
-        for (Object keyObj : configMap.keySet())
+        for (String keyObj : configMap.keySet())
         {
-            String key = ((String)keyObj).toLowerCase();
+            String key = keyObj.toLowerCase();
             if (key.startsWith(AUTO_START_PROP))
             {
-                StringTokenizer st = new StringTokenizer((String) configMap.get(key), "\" ", true);
+                StringTokenizer st = new StringTokenizer(configMap.get(key), "\" ", true);
                 for (String location = nextLocation(st); location != null; location = nextLocation(st))
                 {
                     var loc = location;
