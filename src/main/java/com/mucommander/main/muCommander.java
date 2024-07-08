@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 import java.util.AbstractMap;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.jar.Manifest;
@@ -443,7 +444,7 @@ public class muCommander
                     // Try to load first non-empty, non-commented line.
                     if ((s.length() > 0) && (s.charAt(0) != '#'))
                     {
-                        return (FrameworkFactory) Class.forName(s).newInstance();
+                        return (FrameworkFactory) Class.forName(s).getDeclaredConstructor().newInstance();
                     }
                 }
             }
@@ -556,9 +557,9 @@ public class muCommander
         }
 
         // Perform variable substitution on specified properties.
-        for (Enumeration e = props.propertyNames(); e.hasMoreElements(); )
+        for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); )
         {
-            String name = (String) e.nextElement();
+            String name = e.nextElement();
             System.setProperty(name,
                 Util.substVars(props.getProperty(name), name, null, null));
         }
@@ -665,9 +666,9 @@ public class muCommander
         // Perform variable substitution for system properties and
         // convert to dictionary.
         Map<String, String> map = new HashMap<String, String>();
-        for (Enumeration e = props.propertyNames(); e.hasMoreElements(); )
+        for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); )
         {
-            String name = (String) e.nextElement();
+            String name = e.nextElement();
             map.put(name,
                 Util.substVars(props.getProperty(name), name, null, props));
         }
@@ -675,12 +676,12 @@ public class muCommander
         return map;
     }
 
-    public static void copySystemProperties(Map configProps)
+    public static void copySystemProperties(Map<String, String> configProps)
     {
-        for (Enumeration e = System.getProperties().propertyNames();
+        for (Enumeration<String> e = (Enumeration<String>) System.getProperties().propertyNames();
              e.hasMoreElements(); )
         {
-            String key = (String) e.nextElement();
+            String key = e.nextElement();
             if (key.startsWith("felix.") || key.startsWith("org.osgi.framework."))
             {
                 configProps.put(key, System.getProperty(key));

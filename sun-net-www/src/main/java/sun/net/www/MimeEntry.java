@@ -24,7 +24,6 @@
  */
 
 package sun.net.www;
-import java.net.URL;
 import java.io.*;
 import java.util.StringJoiner;
 import java.util.StringTokenizer;
