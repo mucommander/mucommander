@@ -66,6 +66,8 @@ dependencies {
     comprise 'com.formdev:flatlaf:2.6'
     comprise 'org.violetlib:vaqua:10'
 
+    compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
+
     osgiRuntime project('mucommander-core')
     osgiRuntime project('mucommander-command')
     osgiRuntime project('mucommander-commons-collections')

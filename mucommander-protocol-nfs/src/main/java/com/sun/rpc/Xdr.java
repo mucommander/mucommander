@@ -37,6 +37,7 @@
 
 package com.sun.rpc;
 
+import java.io.*;
 
 /**
  * This class handles the marshalling/unmarshalling of

@@ -31,6 +31,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.annotation.Nonnull;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -95,18 +97,15 @@ public class AutoProcessor
      * @param configMap Map of configuration properties.
      * @param context The system bundle context.
     **/
-    public static void process(Map<String, String> configMap, BundleContext context)
+    public static void process(@Nonnull Map<String, String> configMap, BundleContext context)
     {
-        ExecutorService executor = null;
-        try {
-            executor = Executors.newFixedThreadPool(8);
-            var configMapLocal = (configMap == null) ? new HashMap<String, String>() : configMap;
-            processAutoDeploy(executor, configMapLocal, context);
-            processAutoProperties(executor, configMapLocal, context);
-        } finally {
-            if (executor != null) {
-                executor.shutdown();
-            }
+        var executor = Executors.newFixedThreadPool(8);
+        try (AutoCloseable closable = executor::shutdown){
+            processAutoDeploy(executor, configMap, context);
+            processAutoProperties(executor, configMap, context);
+        } catch (Exception ex) {
+            System.err.println("failed to close executor: "
+                    + ex + ((ex.getCause() != null) ? " - " + ex.getCause() : ""));
         }
     }
 

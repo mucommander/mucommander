@@ -39,6 +39,7 @@ package com.sun.nfs;
 
 import com.sun.xfile.*;
 import java.io.*;
+import java.net.*;
 
 /**
  * The XFileAccessor interface is implemented by filesystems that
