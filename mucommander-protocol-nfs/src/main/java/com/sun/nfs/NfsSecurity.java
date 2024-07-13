@@ -37,6 +37,7 @@
 
 package com.sun.nfs;
 
+import java.io.*;
 import java.util.*;
 import com.sun.rpc.*;
 
