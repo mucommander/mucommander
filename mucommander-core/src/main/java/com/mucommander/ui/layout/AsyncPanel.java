@@ -26,6 +26,7 @@ import java.awt.Window;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
@@ -103,19 +104,15 @@ public abstract class AsyncPanel extends JPanel {
      * Loads the target component by calling {@link #getTargetComponent()} and replace the wait component by it.
      */
     private void loadTargetComponent() {
-        new Thread() {
-            @Override
-            public void run() {
-                JComponent targetComponent = getTargetComponent();
-
+        new Thread(() -> {
+            JComponent targetComponent = getTargetComponent();
+            SwingUtilities.invokeLater(() -> {
                 remove(waitComponent);
                 setBorder(new EmptyBorder(0, 0, 0, 0));
-
                 add(targetComponent, BorderLayout.CENTER);
-
                 updateLayout();
-            }
-        }.start();
+            });
+        }).start();
     }
 
     /**

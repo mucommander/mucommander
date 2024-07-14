@@ -131,17 +131,18 @@ public class TerminalIntegration {
                 try {
                     mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
+                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
+                    cwd = newCwd;
+                    // TODO do this better? For now 2 lines ~height + 20%
+                    terminal.setMinimumSize(new Dimension(-1,
+                            (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
+                    verticalSplitPane.setBottomComponent(terminal);
+                    // don't know exactly why, but it should be after addCustomKeyListener (https://github.com/mucommander/mucommander/issues/1187)
                     terminal.getTerminalPanel().addFocusListener(new FocusAdapter() {
                         public void focusGained(FocusEvent e) {
                             syncCWD(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath());
                         }
                     });
-                    cwd = newCwd;
-                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
-                    // TODO do this better? For now 2 lines ~height + 20%
-                    terminal.setMinimumSize(new Dimension(-1,
-                            (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
-                    verticalSplitPane.setBottomComponent(terminal);
                 } finally {
                     mainFrame.getJFrame().setCursor(orgCursor);
                 }
@@ -206,7 +207,7 @@ public class TerminalIntegration {
                 if (oneTouchButton != null) {
                     oneTouchButton.setToolTipText(tooltip);
                     oneTouchButton.setActionCommand(buttonName);
-                    oneTouchButton.addActionListener((e) -> SwingUtilities.invokeLater(action::run));
+                    oneTouchButton.addActionListener(e -> SwingUtilities.invokeLater(action::run));
                     break;
                 } else {
                     LOGGER.debug("Vertical split pane is not ready, unable to alter its buttons (attempt {} of {})", i + 1, maxTries);
@@ -283,19 +284,19 @@ public class TerminalIntegration {
 
     private void prepareVerticalSplitPaneForTerminal() {
         alterSplitPaneButton("leftButton", verticalSplitPane,
-                () -> SwingUtilities.invokeLater(this::showTerminal),
+                this::showTerminal,
                 Translator.get(ActionType.ToggleTerminal + ".show"));
         alterSplitPaneButton("rightButton", verticalSplitPane,
-                () -> SwingUtilities.invokeLater(this::hideTerminal),
+                this::hideTerminal,
                 Translator.get(ActionType.ToggleTerminal + ".hide"));
         alterSplitPaneDivider(
                 verticalSplitPane,
-                () -> SwingUtilities.invokeLater(this::toggleTerminal),
+                this::toggleTerminal,
                 Translator.get(ActionType.ToggleTerminal + ".toggle"));
 
         verticalSplitPane.addPropertyChangeListener(
                 JSplitPane.DIVIDER_LOCATION_PROPERTY,
-                (e) -> {
+                e -> {
                     if (terminal != null) {
                         var location = ((Integer)e.getNewValue()).intValue();
                         if (terminal == null) {

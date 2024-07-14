@@ -112,7 +112,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         // Shell panel
         XAlignedComponentPanel shellPanel = new XAlignedComponentPanel();
         shellPanel.setLabelLeftAligned(true);
-        shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.shell")));
+        shellPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("prefs_dialog.terminal")));
 
         // Create a path field with auto-completion capabilities
         customShellField = new PrefFilePathField(MuConfigurations.getPreferences().getVariable(MuPreference.CUSTOM_SHELL, "")) {

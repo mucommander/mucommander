@@ -28,14 +28,16 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.4.0 ?
+What's new since v1.4.1 ?
 -----------------------
 
 New features:
 -
 
 Improvements:
--
+- Don't show warning message about too large file while previewing images files.
+- Image preview: faster display of large JPEG files, added support for the following image formats: webp, psd (and psb)
+- Retrieve 'owner' and 'group' properties of local files on file systems that support these properties.
 
 Localization:
 -

@@ -10,9 +10,9 @@ dependencies {
     implementation 'com.azure:azure-xml:1.0.0-beta.2'
     implementation 'com.azure:azure-identity:1.9.2'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 repositories.mavenCentral()

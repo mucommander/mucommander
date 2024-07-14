@@ -28,15 +28,12 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.terminal.TerminalIntegration;
 
 /**
  * This action shows built-in terminal (it mimics the behavior of Midnight Commander Ctrl-O command
  * that originates back from Norton Commander).
  */
 public class ToggleTerminalAction extends ActiveTabAction {
-
-    private volatile TerminalIntegration terminalIntegration = null;
 
     public ToggleTerminalAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
@@ -45,8 +42,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     @Override
     public void performAction() {
-        ensureIntegrationIsInitialized();
-        terminalIntegration.toggleTerminal();
+        mainFrame.toggleTerminal();
     }
 
     @Override
@@ -75,20 +71,7 @@ public class ToggleTerminalAction extends ActiveTabAction {
 
     @Override
     protected void toggleEnabledState() {
-        ensureIntegrationIsInitialized();
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
         setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA));
-    }
-
-    private void ensureIntegrationIsInitialized() {
-        var verticalSplit = mainFrame.getVerticalSplitPane();
-        if (terminalIntegration == null && verticalSplit != null) {
-            // doing it lazy, because in c-tor main frame might not be fully built (no vertical split pane yet)
-            synchronized (this) {
-                if (terminalIntegration == null) {
-                    terminalIntegration = new TerminalIntegration(mainFrame, verticalSplit);
-                }
-            }
-        }
     }
 }

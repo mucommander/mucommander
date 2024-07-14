@@ -11,8 +11,8 @@ dependencies {
         exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
     }
 
-    testImplementation 'junit:junit:4.13.1'
-    testImplementation 'org.testng:testng:7.7.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 configurations {

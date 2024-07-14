@@ -134,6 +134,9 @@ jobs:
       - name: Build portable, tgz, deb, and rpm
         run: ./gradlew tgz portable deb rpm
 
+      - name: list artifacts
+        run: ls ./build/distributions
+
       - name: Import GPG
         run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
 
@@ -167,7 +170,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander_${{ needs.create-release.outputs.full_version }}_amd64.deb"
+          asset_path: "./build/distributions/mucommander_${{ needs.create-release.outputs.version }}_amd64.deb"
           asset_content_type: application/octet-stream
 
       - name: Upload rpm

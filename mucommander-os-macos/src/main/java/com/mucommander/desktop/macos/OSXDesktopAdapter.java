@@ -274,7 +274,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             return result.get();
         }
         // additional checking if 'duty' a) works b) is what it should be
-        runCommand(new String[]{dutiCmdPath, "-h"}, true,1, s -> {
+        runCommand(new String[]{dutiCmdPath, "-h"}, true, 1, s -> {
             // a simple sanity check of 'duti' command output
             if (s.contains("bundle_id")) {
                 result.set(true);
@@ -282,7 +282,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         });
-        LOGGER.error("Command 'duti' found in the system? {}", result);
+        LOGGER.info("Command 'duti' found in the system? {}", result);
         return result.get();
     }
 
@@ -359,7 +359,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             result.setLength(0);
             result.append(cachedUti);
         } else {
-            runCommand(new String[]{dutiCmdPath, "-e", ext}, false,0, s -> {
+            runCommand(new String[]{dutiCmdPath, "-e", ext}, false, 0, s -> {
                 String typeIdentifier = "UTTypeIdentifier = ";
                 int idx = s.indexOf(typeIdentifier);
                 if (idx >= 0) {
@@ -442,15 +442,22 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         if (dutiCmdPath != null) {
             return dutiCmdPath;
         }
-        runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, s -> {
+        Predicate<String> linePredicate = line -> {
             // a simple sanity check of 'duti' command output
-            if (s.contains("duti")) {
-                dutiCmdPath = s;
+            if (line.contains("duti")) {
+                dutiCmdPath = line;
                 return true;    // we're good, no further searching needed
             }
             return false;       // continue searching
-        });
-        if (dutiCmdPath != null && !dutiCmdPath.isEmpty()) {
+        };
+        // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
+        runCommand(new String[]{getMacOsUserShell(), "-c", "which duti"}, false,0, linePredicate);
+        if (StringUtils.isNullOrEmpty(dutiCmdPath)) {
+            // retry the proper way, i.e. with -l - it may take more time to execute, but may have better env settings
+            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, linePredicate);
+        }
+
+        if (!StringUtils.isNullOrEmpty(dutiCmdPath)) {
             LOGGER.info("Command 'duti' found here: {}", dutiCmdPath);
         } else {
             dutiCmdPath = null; // nullify if was empty
@@ -472,16 +479,15 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             throw new IllegalArgumentException("Given commands value is null or empty");
         }
         boolean result = false;
-        String command = commands[0];
         try {
             Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec(commands);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(
                     useStdErr ? proc.getErrorStream() : proc.getInputStream()));
             int exitCode = Integer.MIN_VALUE;
-            boolean timedOut;
-            if (!(timedOut = proc.waitFor(500, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
-                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", command, timedOut, exitCode);
+            boolean processExited;
+            if (!(processExited = proc.waitFor(1000, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
+                LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", commands, !processExited, exitCode);
                 return result;
             }
             String s;
@@ -492,7 +498,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             result = true;
         } catch (Exception e) {
-            LOGGER.error("Error executing command: {}. Error msg: {}", command, e.getMessage(), e);
+            LOGGER.error("Error executing command: {}. Error msg: {}", commands, e.getMessage(), e);
         }
         return result;
     }

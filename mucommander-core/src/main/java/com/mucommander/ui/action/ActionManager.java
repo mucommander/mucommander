@@ -19,17 +19,18 @@ package com.mucommander.ui.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class ActionManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionManager.class);
 
     /** MuAction id -> factory map */
-    private static Map<ActionId, ActionFactory> actionFactories = new Hashtable<>();
+    private static Map<ActionId, ActionFactory> actionFactories = new ConcurrentHashMap<>();
 
     /** MainFrame -> MuAction map */
     private static WeakHashMap<MainFrame, Map<ActionParameters, ActionAndIdPair>> mainFrameActionsMap = new WeakHashMap<>();
@@ -367,86 +368,94 @@ public class ActionManager {
     public static MuAction getActionInstance(ActionParameters actionParameters, MainFrame mainFrame) {
         Map<ActionParameters, ActionAndIdPair> mainFrameActions = mainFrameActionsMap.get(mainFrame);
         if (mainFrameActions == null) {
-            mainFrameActions = new Hashtable<ActionParameters, ActionAndIdPair>();
-            mainFrameActionsMap.put(mainFrame, mainFrameActions);
+            synchronized (mainFrameActionsMap) {
+                mainFrameActions = mainFrameActionsMap.get(mainFrame);
+                if (mainFrameActions == null) {
+                    mainFrameActions = new ConcurrentHashMap<>();
+                    mainFrameActionsMap.put(mainFrame, mainFrameActions);
+                }
+            }
         }
 
         // Looks for an existing MuAction instance used by the specified MainFrame
-        if (mainFrameActions.containsKey(actionParameters)) {
-            return mainFrameActions.get(actionParameters).getAction();
-        } else {
-            ActionId actionId = actionParameters.getActionId();
+        // or create one if necessary
+        var result = mainFrameActions.computeIfAbsent(
+                actionParameters, params -> createActionAndIdPair(params, mainFrame));
 
-            // Looks for the action's factory
-            ActionFactory actionFactory = actionFactories.get(actionId);
-            if (actionFactory == null) {
-                LOGGER.error("couldn't initiate action: " + actionId + ", its factory wasn't found");
-                return null;
-            }
-
-            Map<String,Object> properties = actionParameters.getInitProperties();
-            // If no properties hashtable is specified in the action descriptor
-            if (properties == null) {
-                properties = Collections.emptyMap();
-            }
-            // else clone the hashtable to ensure that it doesn't get modified by action instances.
-            // Since cloning is an expensive operation, this is done only if the hashtable is not empty.
-            else if (!properties.isEmpty()) {
-                Map<String,Object> buffer = new Hashtable<String,Object>(properties);
-                properties = buffer;
-            }
-
-            // Instantiate the MuAction class
-            MuAction action = actionFactory.createAction(mainFrame, properties);
-            mainFrameActions.put(actionParameters, new ActionAndIdPair(action, actionId));
-
-            // If the action's label has not been set yet, use the action descriptor's
-            if (action.getLabel() == null) {
-                // Retrieve the standard label entry from the dictionary and use it as this action's label
-                String label = ActionProperties.getActionLabel(actionId);
-
-                // Append '...' to the label if this action invokes a dialog when performed
-                if (action.getClass().isAnnotationPresent(InvokesDialog.class)) {
-                    label += "...";
-                }
-
-                action.setLabel(label);
-
-                // Looks for a standard label entry in the dictionary and if it is defined, use it as this action's tooltip
-                String tooltip = ActionProperties.getActionTooltip(actionId);
-                if (tooltip != null) {
-                    action.setToolTipText(tooltip);
-                }
-            }
-
-            // If the action's accelerators have not been set yet, use the ones from ActionKeymap
-            if (actionId.getType() != ActionId.ActionType.TERMINAL && action.getAccelerator() == null) {
-                // Retrieve the standard accelerator (if any) and use it as this action's accelerator
-                KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
-                if (accelerator!=null) {
-                    action.setAccelerator(accelerator);
-                }
-
-                // Retrieve the standard alternate accelerator (if any) and use it as this action's alternate accelerator
-                accelerator = ActionKeymap.getAlternateAccelerator(actionId);
-                if (accelerator != null) {
-                    action.setAlternateAccelerator(accelerator);
-                }
-            }
-
-            // If the action's icon has not been set yet, use the action descriptor's
-            if (action.getIcon() == null) {
-                // Retrieve the standard icon image (if any) and use it as the action's icon
-                ImageIcon icon = ActionProperties.getActionIcon(actionId);
-                if (icon != null) {
-                    action.setIcon(icon);
-                }
-            }
-
-            return action;
-        }
+        return result != null ? result.getAction() : null;
     }
 
+    @Nullable
+    private static ActionAndIdPair createActionAndIdPair(ActionParameters actionParameters,
+                                                         MainFrame mainFrame) {
+        var actionId = actionParameters.getActionId();
+
+        // Looks for the action's factory
+        var actionFactory = actionFactories.get(actionId);
+        if (actionFactory == null) {
+            LOGGER.error("couldn't initiate action: " + actionId + ", its factory wasn't found");
+            return null;
+        }
+
+        var properties = actionParameters.getInitProperties();
+        // If no properties ConcurrentHashMap is specified in the action descriptor
+        if (properties == null) {
+            properties = Collections.emptyMap();
+        }
+        // else clone the ConcurrentHashMap to ensure that it doesn't get modified by action instances.
+        // Since cloning is an expensive operation, this is done only if the hashtable is not empty.
+        else if (!properties.isEmpty()) {
+            var buffer = new ConcurrentHashMap<String, Object>(properties);
+            properties = buffer;
+        }
+
+        // Instantiate the MuAction class
+        var action = actionFactory.createAction(mainFrame, properties);
+
+        // If the action's label has not been set yet, use the action descriptor's
+        if (action.getLabel() == null) {
+            // Retrieve the standard label entry from the dictionary and use it as this action's label
+            String label = ActionProperties.getActionLabel(actionId);
+
+            // Append '...' to the label if this action invokes a dialog when performed
+            if (action.getClass().isAnnotationPresent(InvokesDialog.class)) {
+                label += "...";
+            }
+
+            action.setLabel(label);
+
+            // Looks for a standard label entry in the dictionary and if it is defined, use it as this action's tooltip
+            String tooltip = ActionProperties.getActionTooltip(actionId);
+            if (tooltip != null) {
+                action.setToolTipText(tooltip);
+            }
+        }
+
+        // If the action's accelerators have not been set yet, use the ones from ActionKeymap
+        if (actionId.getType() != ActionId.ActionType.TERMINAL && action.getAccelerator() == null) {
+            // Retrieve the standard accelerator (if any) and use it as this action's accelerator
+            KeyStroke accelerator = ActionKeymap.getAccelerator(actionId);
+            if (accelerator!=null) {
+                action.setAccelerator(accelerator);
+            }
+
+            // Retrieve the standard alternate accelerator (if any) and use it as this action's alternate accelerator
+            accelerator = ActionKeymap.getAlternateAccelerator(actionId);
+            if (accelerator != null) {
+                action.setAlternateAccelerator(accelerator);
+            }
+        }
+
+        // If the action's icon has not been set yet, use the action descriptor's
+        if (action.getIcon() == null) {
+            // Retrieve the standard icon image (if any) and use it as the action's icon
+            ImageIcon icon = ActionProperties.getActionIcon(actionId);
+            if (icon != null) {
+                action.setIcon(icon);
+            }
+        }
+        return new ActionAndIdPair(action, actionId);
+    }
 
     /**
      * Returns a Vector of all MuAction instances matching the specified action id.

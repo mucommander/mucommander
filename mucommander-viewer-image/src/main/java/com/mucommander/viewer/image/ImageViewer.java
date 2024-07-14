@@ -26,25 +26,11 @@ import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
 import com.mucommander.viewer.image.ui.ImageStatusPanel;
 import com.mucommander.viewer.image.ui.ImageViewerPanel;
+import com.twelvemonkeys.imageio.stream.ByteArrayImageInputStream;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
-import javax.swing.AbstractAction;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JViewport;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -63,13 +49,36 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.function.Function;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import javax.swing.AbstractAction;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+
 /**
- * A simple image viewer, capable of displaying <code>PNG</code>, <code>GIF</code> and <code>JPEG</code> images.
+ * A simple image viewer, capable of displaying the images supported natively by JRE
+ * or with help of TwelveMonkey plugins, most commonly: png, gif, jpeg, psd, webp, tiff, bmp/wbmp.
  *
  * @author Maxence Bernard, Arik Hadas
  */
@@ -86,7 +95,7 @@ class ImageViewer implements FileViewer, ActionListener {
     private JScrollPane scrollPane = new JScrollPane();
     private ImageStatusPanel statusPanel = new ImageStatusPanel();
 
-    private InitialZoom initialZoom = InitialZoom.RESIZE_WINDOW;
+    private InitialZoom initialZoom = InitialZoom.FIT_TO_WINDOW;
     private boolean firstZoomPerformed = false;
 
     /** Menu bar */
@@ -309,17 +318,43 @@ class ImageViewer implements FileViewer, ActionListener {
     private synchronized void loadImage(AbstractFile file) throws IOException {
         presenter.getWindowFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-        Image image;
-        try (ByteArrayOutputStream bout = new ByteArrayOutputStream()) {
-            try (InputStream in = file.getInputStream()) {
-                StreamUtils.copyStream(in, bout);
-                image = imageViewerPanel.getToolkit().createImage(bout.toByteArray());
+        long start = System.currentTimeMillis();
+        BufferedImage image = null;
+
+        try (ByteArrayOutputStream bout = new ByteArrayOutputStream();
+             InputStream in = file.getInputStream()) {
+
+            StreamUtils.copyStream(in, bout);
+            try (ImageInputStream input = new ByteArrayImageInputStream(bout.toByteArray())) {
+                Iterator<ImageReader> readers = ImageIO.getImageReaders(input);
+                while (readers.hasNext()) {
+                    ImageReader reader = readers.next();
+                    try {
+                        reader.setInput(input);
+                        image = reader.read(0);
+                        break;
+                    } catch (IOException ioe) {
+                        if (!readers.hasNext()) {
+                            throw ioe;   // rethrow
+                        } else {
+                            LOGGER.error("There was an error while reading file: {}," +
+                                    " will retry with another reader...", file, ioe);
+                            input.seek(0);
+                        }
+                    } finally {
+                        reader.dispose();
+                    }
+                }
             }
         }
-
+        if (image == null) {
+            throw new IllegalArgumentException("No reader for a given file: " + file);
+        }
         waitForImage(image);
         imageViewerPanel.setImage(image);
         initialZoom();
+        LOGGER.debug("Display of: {}, size: {} took: {} ms", file, file.getSize(),
+                System.currentTimeMillis() - start);
     }
 
     private void initialZoom() {

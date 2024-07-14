@@ -33,6 +33,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.jar.Manifest;
 
 import org.apache.felix.framework.util.Util;
 import org.osgi.framework.Constants;
@@ -306,7 +307,11 @@ public class muCommander
         configProps.computeIfAbsent("mucommander.app.dir", key -> new File(codeParentFolder, "app").getAbsolutePath());
 
         final String appDir = configProps.get("mucommander.app.dir");
-        configProps.computeIfAbsent("felix.auto.start.2", key -> "file:" + new File(appDir, "mucommander-core-1.5.0.jar").getAbsolutePath());
+
+        var manifest = new Manifest(muCommander.class.getClassLoader().getResource("META-INF/MANIFEST.MF").openStream());
+        var attributes = manifest.getMainAttributes();
+        var coreBundleName = String.format("mucommander-core-%s.jar", attributes.getValue("Specification-Version"));
+        configProps.computeIfAbsent("felix.auto.start.2", key -> "file:" + new File(appDir, coreBundleName).getAbsolutePath());
 
         Path cacheDir = Paths.get(System.getProperty("java.io.tmpdir"), "mucommander-felix-cache-"+System.getProperty("user.name"));
         configProps.put(Constants.FRAMEWORK_STORAGE, cacheDir.toFile().getAbsolutePath());
