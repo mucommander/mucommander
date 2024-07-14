@@ -36,7 +36,6 @@ if [ "$(uname)" = "Darwin" ]; then
     EXTRA_OPTIONS='--add-exports java.desktop/com.apple.eawt=ALL-UNNAMED
       --add-exports java.desktop/com.apple.eio=ALL-UNNAMED
       --add-exports java.desktop/com.apple.laf=ALL-UNNAMED'
-    echo $EXTRA_OPTIONS
 fi
 
 cd `dirname "$BASE_FOLDER"`
