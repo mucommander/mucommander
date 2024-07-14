@@ -6,7 +6,7 @@ dependencies {
     comprise 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
     comprise 'net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01'
 
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 jar {

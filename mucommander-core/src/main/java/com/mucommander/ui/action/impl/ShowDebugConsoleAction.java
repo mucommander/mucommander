@@ -32,23 +32,28 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ShowDebugConsoleAction extends MuAction {
 
+    private DebugConsoleDialog dialog;
+
     public ShowDebugConsoleAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-        new DebugConsoleDialog(mainFrame).showDialog();
+        if (dialog == null || !dialog.isVisible()) {
+            dialog = new DebugConsoleDialog(mainFrame);
+        }
+        dialog.showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowDebugConsole.getId(); }
+        public String getId() { return ActionType.ShowDebugConsole.getId(); }
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public ActionCategory getCategory() { return ActionCategory.MISC; }
     }
 }

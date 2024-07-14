@@ -257,7 +257,8 @@ public class CalculateChecksumJob extends TransferFileJob {
         super.jobCompleted();
 
         // Open the checksum file in a viewer
-        ViewerRegistrar.createViewerFrame(getMainFrame(), checksumFile, false, IconManager.getImageIcon(checksumFile.getIcon()).getImage());
+        ViewerRegistrar.getInstance().createOpenFileFrame(getMainFrame(), checksumFile,
+                false, IconManager.getImageIcon(checksumFile.getIcon()).getImage());
     }
 
     @Override

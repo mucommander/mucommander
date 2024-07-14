@@ -17,6 +17,7 @@
 package com.mucommander.ui.viewer;
 
 import java.awt.Cursor;
+import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -24,6 +25,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -42,11 +44,17 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.text.Translator;
+import com.mucommander.ui.dialog.DialogAction;
+import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.main.table.FileTable;
+import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.FileViewerService;
 import com.mucommander.viewer.ViewerPresenter;
-import com.mucommander.viewer.WarnUserException;
+
+import org.jetbrains.annotations.NotNull;
+
+import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 
 /**
  * File viewer presenter to handle multiple file viewers.
@@ -64,9 +72,27 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     private JMenuItem fullScreenMenuItem;
     private JMenuItem closeMenuItem;
 
+    private JRadioButtonMenuItem currentViewerSelected;
+
+    private static class WaitCursor implements AutoCloseable {
+
+        private final JComponent comp;
+
+        WaitCursor(JComponent comp) {
+            this.comp = comp;
+            comp.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        }
+
+        @Override
+        public void close() {
+            comp.setCursor(Cursor.getDefaultCursor());
+        }
+    }
+
     public FileViewerPresenter() {
         MnemonicHelper menuMnemonicHelper = new MnemonicHelper();
-        viewerMenu = MenuToolkit.addMenu(Translator.get("file_viewer.viewer_menu"), menuMnemonicHelper, null);
+        viewerMenu = MenuToolkit.addMenu(Translator.get("file_viewer.viewer_menu"),
+                menuMnemonicHelper, null);
         menuBar = new JMenuBar();
         viewersButtonGroup = new ButtonGroup();
     }
@@ -83,7 +109,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     }
 
     @Override
-    public void extendTitle(String title) {
+    public void extendTitle(@NotNull String title) {
         getFrame().setTitle(super.getTitle() + title);
     }
 
@@ -92,12 +118,13 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
     }
 
     @Override
-    public JFrame getWindowFrame() {
+    public @NotNull JFrame getWindowFrame() {
         return getFrame();
     }
 
     @Override
-    public void goToFile(Function<Integer, Integer> advance, FileViewerService viewerService) throws IOException {
+    public void goToFile(Function<Integer, Integer> advance,
+                         @NotNull FileViewerService viewerService) throws IOException {
         FileTable fileTable = getFrame().getMainFrame().getActiveTable();
 
         AbstractFile newFile;
@@ -113,31 +140,27 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
             }
             fileTable.selectRow(newRow);
             newFile = fileTable.getSelectedFile();
-            try {
-                canView = (newFile != null) && viewerService.canViewFile(newFile);
-            } catch (WarnUserException ex) {
-                canView = false;
-            }
+            canView = newFile != null && viewerService.canOpenFile(newFile) != CanOpen.NO;
         } while (newFile == null || !canView);
 
         setCurrentFile(newFile);
-        fileViewer.open(newFile);
+        try (var ignored = new WaitCursor(this)) {
+            fileViewer.open(newFile);
+        }
     }
 
-    @Override
-    public void longOperation(Runnable operation) {
-        getFrame().setCursor(new Cursor(Cursor.WAIT_CURSOR));
-        operation.run();
-        getFrame().setCursor(Cursor.getDefaultCursor());
-    }
-
-    public void addViewerService(FileViewerService service) throws UserCancelledException {
+    public void addViewerService(FileViewerService service) {
         services.add(service);
         JRadioButtonMenuItem viewerMenuItem = new JRadioButtonMenuItem(service.getName());
         final int serviceIndex = viewersCount;
         viewerMenuItem.addActionListener((e) -> {
             try {
-                switchFileViewer(serviceIndex, false);
+                viewersButtonGroup.getSelection().setSelected(true);
+                if (switchFileViewer(serviceIndex, false)) {
+                    currentViewerSelected = viewerMenuItem;
+                } else {
+                    currentViewerSelected.setSelected(true);    // re-set previous selection
+                }
             } catch (IOException ex) {
                 Logger.getLogger(FileViewerPresenter.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -145,9 +168,17 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         viewersButtonGroup.add(viewerMenuItem);
         viewerMenu.add(viewerMenuItem);
         if (viewersCount == 0) {
+            currentViewerSelected = viewerMenuItem;
             viewerMenuItem.setSelected(true);
         }
         viewersCount++;
+    }
+
+    @Override
+    public void requestFocus() {
+        if (fileViewer != null) {
+            fileViewer.requestFocus();
+        }
     }
 
     @Override
@@ -217,7 +248,22 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         frame.dispose();
     }
 
-    private void switchFileViewer(int index, boolean fromSearchWithContent) throws IOException {
+    private boolean switchFileViewer(int index, boolean fromSearchWithContent) throws IOException {
+        var service = services.get(index);
+        var fileToView = getCurrentFile();
+
+        switch (service.canOpenFile(fileToView)) {
+            case YES_USER_CONSENT:
+                if (userToConfirm(service)) {
+                    break;
+                }
+            case NO:
+                if (fileViewer == null) {
+                    close();
+                }
+                return false;
+        }
+
         if (fileViewer != null) {
             clearComponentToPresent();
             fileViewer.close();
@@ -227,16 +273,18 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         menuBar.removeAll();
         menuBar.add(viewerMenu);
 
-        FileViewerService service = services.get(index);
         fileViewer = service.createFileViewer(fromSearchWithContent);
         fileViewer.setPresenter(this);
 
         JComponent viewerComponent = fileViewer.getUI();
-        fileViewer.open(getCurrentFile());
+        try (var ignored = new WaitCursor(this)) {
+            fileViewer.open(fileToView);
+        }
         fileViewer.extendMenu(menuBar);
         menuBar.revalidate();
         menuBar.repaint();
         setComponentToPresent(viewerComponent);
+        return true;
     }
 
     private void switchFullScreenMode(boolean showFullScreen) {
@@ -245,10 +293,19 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         ViewerPreferences.SHOW_FULLSCREEN.setValue(Boolean.toString(showFullScreen));
     }
 
-    @Override
-    public void requestFocus() {
-        if (fileViewer != null) {
-            fileViewer.requestFocus();
-        }
+    /**
+     * Displays a dialog box to confirm the action.
+     * @param service file viewer service
+     * @return true if user confirmed, false otherwise
+     */
+    private boolean userToConfirm(FileViewerService service) {
+        QuestionDialog dialog = new QuestionDialog((Frame) null, Translator.get("warning"),
+                Translator.get(service.getConfirmationMsg()), getWindowFrame(),
+                Arrays.asList(BaseOpenFileRegistrar.OpenFileRegistrarAction.OPEN_ANYWAY,
+                        BaseOpenFileRegistrar.OpenFileRegistrarAction.CANCEL), 0);
+
+        DialogAction ret = dialog.getActionValue();
+        return ret != BaseOpenFileRegistrar.OpenFileRegistrarAction.CANCEL &&
+                ret != DIALOG_DISPOSED_ACTION;
     }
 }

@@ -10,9 +10,9 @@ dependencies {
     runtimeOnly 'javax.jws:javax.jws-api:1.1'
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     api project(':mucommander-commons-file')
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:7.10.2'
     implementation files('libs/vim25.jar')
 }
 

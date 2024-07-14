@@ -18,6 +18,8 @@
 package com.mucommander.ui.action.impl;
 
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.mucommander.Activator;
@@ -39,11 +41,23 @@ public class ReportBugAction extends OpenURLInBrowserAction {
     private static final String NEW_BUG_FORMAT = "%s?" +
             "labels=bug&" +
             "template=bug_report.yml&" +
-            "title=[Bug]%20&" +
+            "title=[Bug]%%20&" + // To keep String.format at bay
             "version=%s&" +
             "java-version=%s&" +
             "os-version=%s&" +
             "logs=%s";
+
+    /**
+     * A number of last log entries to be considered to be included in bug report
+     * (see MAX_REPORTED_LOG_SIZE below).
+     */
+    private static final int LAST_LOG_ENTRIES = 5;
+
+    /**
+     * The max number of characters to be included in bug report (it may truncate
+     * the log entries).
+     */
+    private static final int MAX_REPORTED_LOG_SIZE = 1000;
 
     public ReportBugAction(MainFrame mainFrame, Map<String,Object> properties) {
         super(mainFrame, properties);
@@ -64,17 +78,18 @@ public class ReportBugAction extends OpenURLInBrowserAction {
                     System.getProperty("os.version"),
                     System.getProperty("os.arch"));
 
-            var records = MuLogging.getDebugConsoleAppender().getLogRecords();
+            var records = Arrays.asList(MuLogging.getDebugConsoleAppender().getLogRecords());
+            var lastNRecords = records.subList(Math.max(records.size() - LAST_LOG_ENTRIES, 0), records.size());
             var logRecords = new StringBuilder();
-            for (LoggingEvent record : records) {
+            for (LoggingEvent record : lastNRecords) {
                 logRecords.append(record.toString());
-                logRecords.append(System.lineSeparator());
             }
             var newBugUrl = String.format(NEW_BUG_FORMAT, url,
                     URLEncoder.encode(muCVersion, "UTF-8"),
                     URLEncoder.encode(javaVersion, "UTF-8"),
                     URLEncoder.encode(osVersion, "UTF-8"),
-                    URLEncoder.encode(logRecords.toString(),"UTF-8"));
+                    URLEncoder.encode("[✂]\n" + logRecords.toString()
+                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())) + "\n[✂]","UTF-8"));
             putValue(URL_PROPERTY_KEY, newBugUrl);
         } catch (Exception e) {
             LOGGER.error("Error while preparing a bug report, falling back to generic one", e);

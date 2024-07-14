@@ -56,13 +56,13 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 	private TabsCollection<T> tabsCollection;
 	/* The tabs display type (with/without tabs headers)
 	 * It is initialize as nullable so that it can be destroyed when it's replaced for the first time (see @{link tabAdded()})*/
-	private TabsViewer<T> tabsViewer = new NullableTabsViewer<T>();
+	private TabsViewer<T> tabsViewer = new NullableTabsViewer<>();
 	/* The factory that will be used to create the viewers for tabs with no headers */	
 	private TabsViewerFactory<T> tabsWithoutHeadersViewerFactory;
 	/* The factory that will be used to create the viewers for tabs with headers */	
 	private TabsViewerFactory<T> tabsWithHeadersViewerFactory;
 	/* Contains all registered active tab change listeners, stored as weak references */
-    private WeakHashMap<ActiveTabListener, ?> activeTabChangedListener = new WeakHashMap<ActiveTabListener, Object>();
+    private WeakHashMap<ActiveTabListener, ?> activeTabChangedListener = new WeakHashMap<>();
 
 	/**
 	 * Constructor
@@ -76,7 +76,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		this.tabsWithHeadersViewerFactory = tabsWithHeadersViewerFactory;
 
 		// Initialize the tabs collection
-		tabsCollection = new TabsCollection<T>();
+		tabsCollection = new TabsCollection<>();
 		// Register for tabs changes
 		tabsCollection.addTabsListener(this);
 
@@ -98,8 +98,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
     /**
      */
     protected synchronized void fireActiveTabChanged() {
-        for(ActiveTabListener listener : activeTabChangedListener.keySet())
-            listener.activeTabChanged();
+        activeTabChangedListener.keySet().forEach(ActiveTabListener::activeTabChanged);
     }
 
 	/**
@@ -350,6 +349,6 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		if (selectedIndex != -1)
 			show(selectedIndex);
 
-		SwingUtilities.invokeLater(() -> tabsViewer.requestFocus());
+		SwingUtilities.invokeLater(tabsViewer::requestFocus);
 	}
 }

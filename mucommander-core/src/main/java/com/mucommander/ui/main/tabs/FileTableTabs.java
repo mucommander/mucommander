@@ -17,6 +17,8 @@
 
 package com.mucommander.ui.main.tabs;
 
+import java.util.Arrays;
+
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.event.LocationEvent;
@@ -25,7 +27,6 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.HideableTabbedPane;
 import com.mucommander.ui.tabs.TabFactory;
-import com.mucommander.ui.tabs.TabUpdater;
 
 /**
 * HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
@@ -55,8 +56,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 		folderPanel.getLocationManager().addLocationListener(this);
 
 		// Add the initial folders
-		for (FileTableTab tab : initialTabs)
-		    addTab(clonedTabsFactory.createTab(tab));
+		Arrays.stream(initialTabs).map(clonedTabsFactory::createTab).forEach(this::addTab);
 	}
 
 	@Override
@@ -81,30 +81,15 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	}
 
 	private void updateTabLocation(final FileURL location) {
-		updateCurrentTab(new TabUpdater<FileTableTab>() {
-
-			public void update(FileTableTab tab) {
-				tab.setLocation(location);
-			}
-		});
+		updateCurrentTab(tab -> tab.setLocation(location));
 	}
 	
 	private void updateTabLocking(final boolean lock) {
-		updateCurrentTab(new TabUpdater<FileTableTab>() {
-			
-			public void update(FileTableTab tab) {
-				tab.setLocked(lock);
-			}
-		});
+		updateCurrentTab(tab -> tab.setLocked(lock));
 	}
 
 	private void updateTabTitle(final String title) {
-		updateCurrentTab(new TabUpdater<FileTableTab>() {
-
-			public void update(FileTableTab tab) {
-				tab.setTitle(title);
-			}
-		});
+		updateCurrentTab(tab -> tab.setTitle(title));
 	}
 
 	@Override

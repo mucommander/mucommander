@@ -16,21 +16,9 @@
  */
 package com.mucommander.viewer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
- * Interface for file viewer service.
+ * Enum used to tell if Viewer or Editor is able to open a given file.
  */
-@ParametersAreNonnullByDefault
-public interface FileViewerService extends FileOpenService {
-
-    /**
-     * Returns a new instance of {@link FileViewer}.
-     *
-     * @param fromSearchWithContent whether opened file is from File Search with Content
-     * @return a new instance of {@link FileViewer}.
-     */
-    @Nonnull
-    FileViewer createFileViewer(boolean fromSearchWithContent);
+public enum CanOpen {
+    YES, YES_USER_CONSENT, NO;
 }

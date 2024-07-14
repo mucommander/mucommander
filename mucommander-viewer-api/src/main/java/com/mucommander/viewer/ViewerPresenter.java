@@ -56,12 +56,4 @@ public interface ViewerPresenter {
      *             exception if loading fails
      */
     void goToFile(Function<Integer, Integer> advance, FileViewerService viewerService) throws IOException;
-
-    /**
-     * Executes long operation.
-     *
-     * @param operation
-     *            operation
-     */
-    void longOperation(Runnable operation);
 }

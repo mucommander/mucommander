@@ -42,7 +42,6 @@ import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.os.api.CoreService;
-import com.mucommander.osgi.BrowsableItemsMenuService;
 import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
 import com.mucommander.osgi.FileEditorServiceTracker;
 import com.mucommander.osgi.FileViewerServiceTracker;
@@ -197,10 +196,6 @@ public class Activator implements BundleActivator {
         return context.getProperty("mucommander.keymap");
     }
 
-    public String shellHistory() {
-        return context.getProperty("mucommander.shellHistory");
-    }
-
     public String toolbar() {
         return context.getProperty("mucommander.toolbar");
     }
@@ -256,10 +251,15 @@ public class Activator implements BundleActivator {
 
                 AbstractFile file = FileFactory.getFile(path);
                 FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
-                if (file.isBrowsable())
+                if (file == null) {
+                    LOGGER.error("Ignoring open file, as File is null for path: {}.", path);
+                    return;
+                }
+                if (file.isBrowsable()) {
                     activePanel.tryChangeCurrentFolder(file);
-                else
+                } else {
                     activePanel.tryChangeCurrentFolder(file.getParent(), file, false);
+                }
             }
         };
     }

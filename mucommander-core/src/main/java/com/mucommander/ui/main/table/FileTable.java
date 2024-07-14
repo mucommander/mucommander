@@ -857,10 +857,11 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     public void sortBy(Column criterion) {
         if (criterion==sortInfo.getCriterion()) {
             reverseSortOrder();
-            return;
+        } else {
+            // The selected column is different from the previously selected one.
+            // In this case, default to ascending sort order
+            sortBy(criterion, true);
         }
-
-        sortBy(criterion, sortInfo.getAscendingOrder());
     }
 
     /**
@@ -1101,8 +1102,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     int rowCount = getModel().getRowCount();
                     for(int rowNum = 0; rowNum < rowCount; rowNum++) {
                         String val = (String)getModel().getValueAt(rowNum, column.getModelIndex());
-                        boolean isDirectorySize = c == Column.SIZE && val.equals(FileTableModel.DIRECTORY_SIZE_STRING);
-                        int stringWidth = val == null ? 0 : isDirectorySize ? dirStringWidth : fm.stringWidth(val);
+                        int stringWidth = val == null ? 0 : isDirectorySize(c, val) ? dirStringWidth : fm.stringWidth(val);
 
                         columnWidth = Math.max(columnWidth, stringWidth);
                     }
@@ -1120,6 +1120,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             }
         }
         nameColumn.setWidth(remainingWidth + RESERVED_NAME_COLUMN_WIDTH);
+    }
+
+    private boolean isDirectorySize(Column c, String val) {
+        return c == Column.SIZE && val.equals(FileTableModel.DIRECTORY_SIZE_STRING);
     }
 
     private void doStaticLayout() {

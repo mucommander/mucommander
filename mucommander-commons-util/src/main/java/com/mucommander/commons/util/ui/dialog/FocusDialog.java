@@ -55,8 +55,8 @@ import com.mucommander.commons.util.ui.helper.FocusRequester;
  * @author Maxence Bernard
  */
 public class FocusDialog extends JDialog implements WindowListener {
-	private static final Logger LOGGER = LoggerFactory.getLogger(FocusDialog.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(FocusDialog.class);
+
     /** Minimum dimensions of this dialog, may be null */
     private Dimension minimumDimension;
 
@@ -96,7 +96,7 @@ public class FocusDialog extends JDialog implements WindowListener {
 
         // Important: dispose (release resources) window on close, default is HIDE_ON_CLOSE
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	
+
         // Catch escape key presses and have them close the dialog by mapping the escape keystroke to a custom dispose Action
         InputMap inputMap = contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = contentPane.getActionMap();
@@ -106,11 +106,11 @@ public class FocusDialog extends JDialog implements WindowListener {
                     cancel();
             }
         };
-	
+
         // Maps the dispose action to the 'Escape' keystroke
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), CUSTOM_DISPOSE_EVENT);
         actionMap.put(CUSTOM_DISPOSE_EVENT, disposeAction);
-		
+
         // Maps the dispose action to the 'Apple+W' keystroke under Mac OS X
         if(OsFamily.MAC_OS.isCurrent())
             inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.META_MASK), CUSTOM_DISPOSE_EVENT);
@@ -145,8 +145,8 @@ public class FocusDialog extends JDialog implements WindowListener {
         else
             addWindowListener(this);
     }
-	
-	
+
+
     /**
      * Sets a maximum width and height for this dialog.
      */
@@ -186,34 +186,26 @@ public class FocusDialog extends JDialog implements WindowListener {
             DialogToolkit.fitToMaxDimension(this, maximumDimension);
         else
             DialogToolkit.fitToScreen(this);
-		
+
         if(minimumDimension!=null)
             DialogToolkit.fitToMinDimension(this, minimumDimension);
     }
 
-	
     /**
      * Packs this dialog, makes it non-resizable and visible.
      */
     public void showDialog() {
         pack();
 
-        if(locationRelativeComp==null)
+        if (locationRelativeComp == null) {
             DialogToolkit.centerOnScreen(this);
-        else
-            setLocation(locationRelativeComp.getX()+(locationRelativeComp.getWidth()-getWidth())/2, locationRelativeComp.getY()+(locationRelativeComp.getHeight()-getHeight())/2);
+        } else {
+            setLocation(
+                    locationRelativeComp.getX() + (locationRelativeComp.getWidth() - getWidth()) / 2,
+                    locationRelativeComp.getY() + (locationRelativeComp.getHeight() - getHeight()) / 2);
+        }
         setVisible(true);
     }
-
-    /**
-     * Return <code>true</code> if the dialog has been activated (see WindowListener.windowActivated()).
-     *
-     * @return <code>true</code> if the dialog has been activated
-     */
-    public boolean isActivated() {
-        return firstTimeActivated;
-    }
-
 
     ////////////////////////////
     // WindowListener methods //
@@ -232,7 +224,7 @@ public class FocusDialog extends JDialog implements WindowListener {
             // "The focus behavior of this method can be implemented uniformly across platforms, and thus developers are
             // strongly encouraged to use this method over requestFocus when possible. Code which relies on requestFocus
             // may exhibit different focus behavior on different platforms."
-            if(!initialFocusComponent.requestFocusInWindow()) {
+            if (!initialFocusComponent.requestFocusInWindow()) {
                 LOGGER.trace("requestFocusInWindow failed, calling requestFocus");
                 FocusRequester.requestFocus(initialFocusComponent);
             }

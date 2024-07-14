@@ -36,7 +36,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets.Details;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
@@ -53,7 +53,9 @@ public class GoogleDriveClient implements Closeable {
 
     private static Logger log = LoggerFactory.getLogger(GoogleDriveClient.class);
 
-    private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
+    private static final String APPLICATION_NAME = "muCommander";
+
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
 //            DriveScopes.DRIVE, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_METADATA);
 
@@ -88,7 +90,9 @@ public class GoogleDriveClient implements Closeable {
         try {
             NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
             Credential credential = this.credential != null ? this.credential : getCredentials(HTTP_TRANSPORT, fileUrl.getHost(), null);
-            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
+            drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                        .setApplicationName(APPLICATION_NAME)
+                        .build();
         } catch (GeneralSecurityException e) {
             throw new AuthException(fileUrl);
         } catch (IOException e) {

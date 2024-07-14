@@ -5,11 +5,12 @@ dependencies {
     api project(':mucommander-translator')
     api project(':mucommander-core')
 
-    comprise 'com.google.oauth-client:google-oauth-client-jetty:1.34.0'
-    comprise 'com.google.apis:google-api-services-drive:v3-rev197-1.25.0'
+    comprise 'com.google.api-client:google-api-client:2.0.0'
+    comprise 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
+    comprise 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 repositories.mavenCentral()

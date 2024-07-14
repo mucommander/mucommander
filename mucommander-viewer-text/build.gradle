@@ -10,9 +10,9 @@ dependencies {
     api project(":mucommander-preferences")
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
-    comprise group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.3.4'
+    comprise group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.5.0'
 
-    testImplementation 'org.testng:testng:6.11'
+    testImplementation 'org.testng:testng:7.10.2'
 }
 
 jar {

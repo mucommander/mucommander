@@ -44,6 +44,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.table.TableColumnModel;
 
@@ -76,6 +77,7 @@ import com.mucommander.ui.main.table.SortInfo;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
 import com.mucommander.ui.main.toolbar.ToolBar;
 import com.mucommander.ui.notifier.NotifierProvider;
+import com.mucommander.ui.terminal.TerminalIntegration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,6 +129,9 @@ public class MainFrame implements LocationListener {
 
     /** Is single panel view? */
     private boolean singlePanel;
+
+    /** Terminal integration instance */
+    private TerminalIntegration terminalIntegration;
 
     /** Contains all registered ActivePanelListener instances, stored as weak references */
     private final Map<ActivePanelListener, ?> activePanelListeners = Collections.synchronizedMap(new WeakHashMap<>());
@@ -205,8 +210,16 @@ public class MainFrame implements LocationListener {
 
         executor.execute(() -> {
             // Create menu bar (has to be created after toolbar) - ok, but why?
+            // PSko - I guess it is related to loading Actions and that icons
+            // for toolbar action should have icons, but in menu they should not.
+            // However, still I don't get how setting the icon to null here in MenuToolkit#addMenuItem
+            // impacts menu icons....... if nullify is commented-out there, then icons all of sudden
+            // show in the menu causing this: https://github.com/mucommander/mucommander/issues/1178
             MainMenuBar menuBar = new MainMenuBar(this);
-            getJFrame().setJMenuBar(menuBar);
+            SwingUtilities.invokeLater(() -> {
+                getJFrame().setJMenuBar(menuBar);
+                getJFrame().revalidate();
+            });
         });
 
         // Create the split pane that separates folder panels and allows to resize how much space is allocated to the
@@ -260,6 +273,8 @@ public class MainFrame implements LocationListener {
         layeredPane.setLayer(verticalSplitPane, JLayeredPane.DEFAULT_LAYER);
         // Split pane will be given any extra space
         insetsPane.add(layeredPane, BorderLayout.CENTER);
+
+        terminalIntegration = new TerminalIntegration(this, verticalSplitPane);
 
         // Add a 2-pixel gap between the file table and status bar
         YBoxPanel southPanel = new YBoxPanel();
@@ -425,7 +440,9 @@ public class MainFrame implements LocationListener {
         //  // Remove focus from whatever component in FolderPanel which had focus
         //  getGlassPane().requestFocus();
 
-        this.noEventsMode = enabled;
+        if (frameInstance.isDisplayable()) {
+            this.noEventsMode = enabled;
+        }
     }
 
     public JPanel getMainPanel() {
@@ -568,12 +585,10 @@ public class MainFrame implements LocationListener {
     }
 
     /**
-     * Returns the JSplitPane component that splits folder panels and optional terminal.
-     *
-     * @return the JSplitPane component that splits folder panels and optional terminal.
+     * Toggles the Terminal, i.e., shows (maximized) or hides it (minimized)
      */
-    public JSplitPane getVerticalSplitPane() {
-        return verticalSplitPane;
+    public void toggleTerminal() {
+        terminalIntegration.toggleTerminal();
     }
 
     /**

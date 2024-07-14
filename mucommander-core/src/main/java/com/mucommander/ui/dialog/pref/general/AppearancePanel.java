@@ -633,6 +633,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      * Initialises the list of available look&feels.
      */
     private void initializeAvailableLookAndFeels() {
+        while (!WindowManager.getInstance().isAdditionalLafsLoaded()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        }
         // Loads all available look and feels.
         lookAndFeels = UIManager.getInstalledLookAndFeels();
 

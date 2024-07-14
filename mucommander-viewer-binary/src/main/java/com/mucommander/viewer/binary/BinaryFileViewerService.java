@@ -21,6 +21,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.text.Translator;
+import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;
 import com.mucommander.viewer.FileViewer;
@@ -46,8 +47,8 @@ public class BinaryFileViewerService implements FileViewerService, FileEditorSer
     }
 
     @Override
-    public boolean canViewFile(AbstractFile file) {
-        return !file.isDirectory();
+    public CanOpen canOpenFile(AbstractFile file) {
+        return !file.isDirectory() ? CanOpen.YES : CanOpen.NO;
     }
 
     @Nonnull
@@ -58,11 +59,6 @@ public class BinaryFileViewerService implements FileViewerService, FileEditorSer
             binaryViewer.performFindFromContent();
         }
         return binaryViewer;
-    }
-
-    @Override
-    public boolean canEditFile(AbstractFile file) {
-        return !file.isDirectory();
     }
 
     @Nonnull

@@ -286,11 +286,12 @@ public class FileTableModel extends AbstractTableModel {
      */
     synchronized void fillCellCache() {
         int len = cellValuesCache.length;
-        if(len==0)
+        if (len == 0)
             return;
 
+        Boolean canGetGroup = null, canGetOwner = null;
         // Special '..' file
-        if(parent!=null) {
+        if (parent != null) {
             cellValuesCache[0][Column.NAME.ordinal()-1] = "..";
             cellValuesCache[0][Column.SIZE.ordinal()-1] = DIRECTORY_SIZE_STRING;
             currentFolderDateSnapshot = currentFolder.getDate();
@@ -300,13 +301,21 @@ public class FileTableModel extends AbstractTableModel {
             cellValuesCache[0][Column.PERMISSIONS.ordinal()-1] = "";
             cellValuesCache[0][Column.OWNER.ordinal()-1] = "";
             cellValuesCache[0][Column.GROUP.ordinal()-1] = "";
+            canGetGroup = parent.canGetGroup();
+            canGetOwner = parent.canGetOwner();
         }
 
-        Function<AbstractFile, String> nameFunc = getNameFunc();
+        var nameFunc = getNameFunc();
         int fileIndex = 0;
         final int indexOffset = parent == null ? 0 : 1;
         for (int i = indexOffset; i < len; i++) {
-            AbstractFile file = getCachedFileAtRow(i);
+            var file = getCachedFileAtRow(i);
+            if (i == indexOffset) {
+                if (canGetGroup == null || canGetOwner == null) {
+                    canGetGroup = file.canGetGroup();
+                    canGetOwner = file.canGetOwner();
+		}
+            }
             int cellIndex = fileArrayIndex[fileIndex] + indexOffset;
             Object sizeValue;
             if (file.isDirectory()) {
@@ -333,8 +342,8 @@ public class FileTableModel extends AbstractTableModel {
             cellValuesCache[cellIndex][Column.SIZE.ordinal()-1] = sizeValue;
             cellValuesCache[cellIndex][Column.DATE.ordinal()-1] = CustomDateFormat.format(new Date(file.getDate()));
             cellValuesCache[cellIndex][Column.PERMISSIONS.ordinal()-1] = file.getPermissionsString();
-            cellValuesCache[cellIndex][Column.OWNER.ordinal()-1] = file.getOwner();
-            cellValuesCache[cellIndex][Column.GROUP.ordinal()-1] = file.getGroup();
+            cellValuesCache[cellIndex][Column.OWNER.ordinal()-1] = canGetOwner ? file.getOwner() : null;
+            cellValuesCache[cellIndex][Column.GROUP.ordinal()-1] = canGetGroup ? file.getGroup() : null;
 
             fileIndex++;
         }

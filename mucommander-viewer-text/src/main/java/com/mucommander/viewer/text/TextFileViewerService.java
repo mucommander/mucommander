@@ -18,14 +18,14 @@ package com.mucommander.viewer.text;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.io.BinaryDetector;
+import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileEditorService;
 import com.mucommander.viewer.FileViewerService;
-import com.mucommander.viewer.WarnUserException;
-import com.mucommander.text.Translator;
 import com.mucommander.viewer.FileEditor;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import com.mucommander.viewer.FileViewer;
 
 /**
@@ -52,10 +52,10 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
     }
 
     @Override
-    public boolean canViewFile(AbstractFile file) throws WarnUserException {
+    public CanOpen canOpenFile(AbstractFile file) {
         // Do not allow directories
         if (file.isDirectory()) {
-            return false;
+            return CanOpen.NO;
         }
 
         // Warn the user if the file looks like a binary file
@@ -63,7 +63,7 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
         try {
             in = file.getInputStream();
             if (BinaryDetector.guessBinary(in)) {
-                return false;
+                return CanOpen.NO;
             }
         } catch (IOException e) {
             // Not much to do
@@ -76,18 +76,18 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
             }
         }
 
-        // Warn the user if the file is large that a certain size as the whole file is loaded into memory
-        // (in a JTextArea)
+        // Requires user confirmation that the file is larger than a certain size,
+        // and as the whole file is loaded into memory (into JTextArea) it may be very slow or OOM
         if (file.getSize() > MAX_FILE_SIZE_FOR_EDIT) {
-            throw new WarnUserException(Translator.get("file_viewer.large_file_warning"));
+            return CanOpen.YES_USER_CONSENT;
         }
 
-        return true;
+        return CanOpen.YES;
     }
 
     @Override
-    public boolean canEditFile(AbstractFile file) throws WarnUserException {
-        return canViewFile(file);
+    public String getConfirmationMsg() {
+        return "file_viewer.large_file_warning";
     }
 
     @Override

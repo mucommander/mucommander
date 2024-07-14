@@ -45,7 +45,7 @@ public class ViewerFrame extends FileFrame {
      * @param icon the icon for the file
      *
      * <p>This constructor has package access only, ViewerFrame need to be created can
-     * {@link ViewerRegistrar#createViewerFrame(MainFrame, AbstractFile, boolean, Image)}.
+     * {@link ViewerRegistrar#createOpenFileFrame(MainFrame, AbstractFile, boolean, Image)}.
      * </p>
      */
     ViewerFrame(MainFrame mainFrame, AbstractFile file, boolean fromSearchWithContent, Image icon) {
@@ -64,7 +64,7 @@ public class ViewerFrame extends FileFrame {
 	@Override
 	protected FilePresenter createFilePresenter(AbstractFile file) throws UserCancelledException {
         FileViewerPresenter presenter = new FileViewerPresenter();
-        int numOfEditors = ViewerRegistrar.registerFileViewers(file, presenter, this);
+        int numOfEditors = ViewerRegistrar.getInstance().registerFileOpeners(file, presenter, this);
         presenter.setFrame(this);
 		return numOfEditors == 0 ? null : presenter;
 	}

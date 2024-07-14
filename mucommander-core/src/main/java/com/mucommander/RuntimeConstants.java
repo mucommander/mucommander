@@ -53,7 +53,7 @@ public class RuntimeConstants {
     /** URL of the muCommander forums. */
     public static final String FORUMS_URL        = GITHUB_URL + "/discussions/";
     /** URL at which to make a donation. */
-    public static final String DONATION_URL      = "https://flattr.com/@mucommander";
+    public static final String DONATION_URL      = "https://github.com/sponsors/mucommander";
     /** URL at which to file a new bug. */
     public static final String REPORT_BUG_URL    = GITHUB_URL + "/issues/new/";
     /** Documentation URL. */
@@ -83,31 +83,20 @@ public class RuntimeConstants {
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        Attributes  attributes = null; // JAR file's manifest's attributes.
-        InputStream in = null;
+        Attributes attributes = null; // JAR file's manifest's attributes.
 
-        try {
-            in = ResourceLoader.getResourceAsStream("META-INF/MANIFEST.MF", ResourceLoader.getDefaultClassLoader(), ResourceLoader.getRootPackageAsFile(RuntimeConstants.class));
+        try (InputStream in = ResourceLoader.getResourceAsStream("META-INF/MANIFEST.MF", ResourceLoader.getDefaultClassLoader(), ResourceLoader.getRootPackageAsFile(RuntimeConstants.class))) {
             if (in != null) {
                 Manifest manifest = new Manifest();
                 manifest.read(in);
                 attributes = manifest.getMainAttributes();
-            }
-            else {
+                LOGGER.info("muCommander version: {}", attributes.getValue("Specification-Version"));
+            } else {
                 LOGGER.warn("MANIFEST.MF not found, default values will be used");
             }
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
             LOGGER.warn("Failed to read MANIFEST.MF, default values will be used", e);
             // Ignore this, attributes is already set to null.
-        }
-        finally {
-            if(in != null) {
-                try {in.close();}
-                catch(IOException e) {
-                    // Ignore this, we don't really care if we can't close this stream.
-                }
-            }
         }
         
         // No MANIFEST.MF found, use default values.

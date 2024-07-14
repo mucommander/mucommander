@@ -33,6 +33,7 @@ public final class ImageViewerSnapshot extends MuSnapshotable<ImageViewerPrefere
         super(ImageViewerPreferences::values,
                 ImageViewerPreferences::getValue,
                 ImageViewerPreferences::setValue,
-                pref -> pref.getPrefKey() != null ? IMAGE_FILE_PRESENTER_SECTION + "." + pref.getPrefKey() : null);
+                pref -> pref.getPrefKey() != null ?
+                        IMAGE_FILE_PRESENTER_SECTION + "." + pref.getPrefKey() : null);
     }
 }

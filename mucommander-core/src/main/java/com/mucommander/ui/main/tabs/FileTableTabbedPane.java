@@ -147,7 +147,7 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 			locationText = PathUtils.removeLeadingSeparator(locationText, "/");
 		setToolTipTextAt(index, locationText);
 
-		SwingUtilities.invokeLater(() -> validate());
+		SwingUtilities.invokeLater(this::validate);
 	}
 
 	//////////////////////////////////
