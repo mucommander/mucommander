@@ -1,6 +1,8 @@
 repositories {
     repositories.mavenCentral()
     maven {
+        // To be able to use a patched version of sevenzipjbinding-all-platforms
+        // From the following repo: https://gitlab.com/shayartzi/sevenzipjbinding/-/packages/27273903
         url = uri("https://gitlab.com/api/v4/projects/59936705/packages/maven")
     }
 }
@@ -9,7 +11,9 @@ dependencies {
     api project(':mucommander-commons-file')
 
     comprise 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
-    // comprise 'net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01'
+
+    // Use a patched version of sevenzipjbinding-all-platforms for Mac M1 support.
+    // See https://github.com/mucommander/mucommander/pull/1237
     comprise 'com.github.shayartzi.sevenzipjbinding:sevenzipjbinding-all-platforms:16.02-2.01'
 
     testImplementation 'org.testng:testng:7.10.2'
