@@ -1,7 +1,6 @@
 repositories {
     repositories.mavenCentral()
     maven {
-        // To be able to use a patched version of sevenzipjbinding-all-platforms
         url = uri("https://www.mucommander.com/maven/")
     }
 }
