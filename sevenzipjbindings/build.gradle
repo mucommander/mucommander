@@ -10,7 +10,7 @@ dependencies {
 
     comprise 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
 
-    // Use a patched version of sevenzipjbinding-all-platforms for Mac M1 support.
+    // Use a patched version of sevenzipjbinding-all-platforms with support for Apple silicon
     // See https://github.com/mucommander/mucommander/pull/1237
     comprise 'com.mucommander:sevenzipjbinding-all-platforms:16.02-2.01'
 
