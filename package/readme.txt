@@ -38,12 +38,13 @@ Improvements:
 - Don't show warning message about too large file while previewing images files.
 - Image preview: faster display of large JPEG files, added support for the following image formats: webp, psd (and psb)
 - Retrieve 'owner' and 'group' properties of local files on file systems that support these properties.
+- RAR files are now handled on Apple silicon the same way as on Intel. This accelerates browsing folders with many RAR files on Apple silicon.
 
 Localization:
 -
 
 Bug fixes:
--
+- 7z and RAR 5.0 files can be browsed and extracted on Apple silicon.
 
 Known issues:
 - Some translations may not be up-to-date.
