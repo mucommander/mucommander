@@ -312,16 +312,17 @@ public class ActionKeymap {
     private static void registerActionAccelerators(ActionId actionId,
             KeyStroke accelerator,
             KeyStroke alternateAccelerator) {
-
         // If accelerator is null, replace it with alternateAccelerator
         if (accelerator == null) {
             accelerator = alternateAccelerator;
             alternateAccelerator = null;
         }
 
+        var defaultAccelerator = ActionProperties.getDefaultAccelerator(actionId);
+        var defaultAltAccelerator = ActionProperties.getDefaultAlternativeAccelerator(actionId);
         // New accelerators are identical to the default action's accelerators
-        if (Objects.equals(accelerator, ActionProperties.getDefaultAccelerator(actionId)) &&
-                Objects.equals(alternateAccelerator, ActionProperties.getDefaultAlternativeAccelerator(actionId))) {
+        if (Objects.equals(accelerator, defaultAccelerator) &&
+                Objects.equals(alternateAccelerator, defaultAltAccelerator)) {
             // Remove all action's accelerators customization
             customPrimaryActionKeymap.remove(actionId);
             customAlternateActionKeymap.remove(actionId);
@@ -339,20 +340,23 @@ public class ActionKeymap {
 
         if (actionId.getType() != ActionId.ActionType.TERMINAL) {
             // Update each MainFrame's action instance and input map
-            for (MuAction action : ActionManager.getActionInstances(actionId)) {
-                MainFrame mainFrame = action.getMainFrame();
-
-                // Remove action from MainFrame's action and input maps
-                unregisterAction(mainFrame, action);
-
-                // Change action's accelerators
-                action.setAccelerator(accelerator);
-                action.setAlternateAccelerator(alternateAccelerator);
-
-                // Add updated action to MainFrame's action and input maps
-                registerAction(mainFrame, action);
+            for (var action : ActionManager.getActionInstances(actionId)) {
+                updateActionInstance(action, accelerator, alternateAccelerator);
             }
         }
     }
 
+    private static void updateActionInstance(MuAction action, KeyStroke accelerator, KeyStroke alternateAccelerator) {
+        MainFrame mainFrame = action.getMainFrame();
+
+        // Remove action from MainFrame's action and input maps
+        unregisterAction(mainFrame, action);
+
+        // Change action's accelerators
+        action.setAccelerator(accelerator);
+        action.setAlternateAccelerator(alternateAccelerator);
+
+        // Add updated action to MainFrame's action and input maps
+        registerAction(mainFrame, action);
+    }
 }
