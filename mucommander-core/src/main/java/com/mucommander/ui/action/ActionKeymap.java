@@ -93,20 +93,17 @@ public class ActionKeymap {
      * @param altAccelerator
      *            - KeyStroke that would be alternative accelerator of the given action.
      */
-    public static void changeActionAccelerators(ActionId actionId,
-            KeyStroke accelerator,
-            KeyStroke altAccelerator) {
+    public static void changeActionAccelerators(ActionId actionId, KeyStroke accelerator, KeyStroke altAccelerator) {
+        var curAccelerator = ActionKeymap.getAccelerator(actionId);
+        var curAltAccelerator = ActionKeymap.getAlternateAccelerator(actionId);
         // Check whether the given actions are already assigned to the given action
-        if (Objects.equals(accelerator, ActionKeymap.getAccelerator(actionId)) &&
-                Objects.equals(altAccelerator, ActionKeymap.getAlternateAccelerator(actionId)))
+        if (Objects.equals(accelerator, curAccelerator) && Objects.equals(altAccelerator, curAltAccelerator))
             return;
 
         // If primary accelerator is already registered to other MuAction, unregister it.
         ActionId previousActionForAccelerator = getRegisteredActionIdForKeystroke(accelerator);
         if (previousActionForAccelerator != null &&
-                !(previousActionForAccelerator.getType() == ActionId.ActionType.TERMINAL ^
-                        actionId.getType() == ActionId.ActionType.TERMINAL)
-                &&
+                isSameType(previousActionForAccelerator, actionId) &&
                 !previousActionForAccelerator.equals(actionId)) {
             unregisterAcceleratorFromAction(previousActionForAccelerator, accelerator);
         }
@@ -114,9 +111,7 @@ public class ActionKeymap {
         // If alternative accelerator is already registered to other MuAction, unregister it.
         ActionId previousActionForAltAccelerator = getRegisteredActionIdForKeystroke(altAccelerator);
         if (previousActionForAltAccelerator != null &&
-                !(previousActionForAltAccelerator.getType() == ActionId.ActionType.TERMINAL ^
-                        actionId.getType() == ActionId.ActionType.TERMINAL)
-                &&
+                isSameType(previousActionForAltAccelerator, actionId) &&
                 !previousActionForAltAccelerator.equals(actionId)) {
             unregisterAcceleratorFromAction(previousActionForAltAccelerator, altAccelerator);
         }
@@ -127,6 +122,10 @@ public class ActionKeymap {
 
         // Register new accelerators
         registerActionAccelerators(actionId, accelerator, altAccelerator);
+    }
+
+    private static boolean isSameType(ActionId id1, ActionId id2) {
+        return !(id1.getType() == ActionId.ActionType.TERMINAL ^ id2.getType() == ActionId.ActionType.TERMINAL);
     }
 
     private static void unregisterAcceleratorFromAction(ActionId actionId, KeyStroke accelerator) {
