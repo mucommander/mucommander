@@ -124,7 +124,7 @@ public class ActionKeymap {
         registerActionAccelerators(actionId, accelerator, altAccelerator);
     }
 
-    private static boolean isSameType(ActionId id1, ActionId id2) {
+    static boolean isSameType(ActionId id1, ActionId id2) {
         return !(id1.getType() == ActionId.ActionType.TERMINAL ^ id2.getType() == ActionId.ActionType.TERMINAL);
     }
 

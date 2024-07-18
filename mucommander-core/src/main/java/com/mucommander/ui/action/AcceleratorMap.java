@@ -21,10 +21,12 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.commons.util.Pair;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Data structure that maps KeyStroke (accelerator) to MuAction id.
@@ -101,9 +103,12 @@ public class AcceleratorMap {
     
     private void put(KeyStroke ks, ActionId actionId, AcceleratorType acceleratorType) {
         if (ks != null) {
-            var actions = map.getOrDefault(ks, new LinkedList<>());
+            var actions = map.getOrDefault(ks, Collections.emptyList());
+            actions = actions.stream()
+                    .filter(pair -> !ActionKeymap.isSameType(pair.first, actionId))
+                    .collect(Collectors.toList());
             actions.add(new Pair<>(actionId, acceleratorType));
-            map.putIfAbsent(ks, actions);
+            map.put(ks, actions);
         }
     }
     
