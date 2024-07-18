@@ -45,6 +45,7 @@ Localization:
 
 Bug fixes:
 - 7z and RAR 5.0 files can be browsed and extracted on Apple silicon.
+- Fix for keyboard shortcuts being removed when reconfiguring action shortcuts.
 
 Known issues:
 - Some translations may not be up-to-date.
