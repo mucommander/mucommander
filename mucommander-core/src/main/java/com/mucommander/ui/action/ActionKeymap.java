@@ -117,8 +117,10 @@ public class ActionKeymap {
         }
 
         // Remove action's previous accelerators (primary and alternate)
-        acceleratorMap.remove(customPrimaryActionKeymap.remove(actionId));
-        acceleratorMap.remove(customAlternateActionKeymap.remove(actionId));
+        customPrimaryActionKeymap.remove(actionId);
+        acceleratorMap.remove(curAccelerator, actionId);
+        customAlternateActionKeymap.remove(actionId);
+        acceleratorMap.remove(curAltAccelerator, actionId);
 
         // Register new accelerators
         registerActionAccelerators(actionId, accelerator, altAccelerator);
@@ -148,13 +150,8 @@ public class ActionKeymap {
      *            - HashMap that maps action id to alternative accelerator.
      */
     public static void registerActions(Map<ActionId, KeyStroke> primary, Map<ActionId, KeyStroke> alternate) {
-        for (ActionId actionId : primary.keySet()) {
-            // Add the action/keystroke mapping
-            ActionKeymap.registerActionAccelerators(
-                    actionId,
-                    primary.get(actionId),
-                    alternate.get(actionId));
-        }
+        // Add the action/keystroke mapping
+        primary.forEach((actionId, ks) ->  ActionKeymap.registerActionAccelerators(actionId, ks, alternate.get(actionId)));
     }
 
     /**
@@ -325,8 +322,8 @@ public class ActionKeymap {
             // Remove all action's accelerators customization
             customPrimaryActionKeymap.remove(actionId);
             customAlternateActionKeymap.remove(actionId);
-            acceleratorMap.remove(accelerator);
-            acceleratorMap.remove(alternateAccelerator);
+            acceleratorMap.remove(accelerator, actionId);
+            acceleratorMap.remove(alternateAccelerator, actionId);
         }
         // New accelerators are different from the default accelerators
         else {

@@ -90,8 +90,16 @@ public class AcceleratorMap {
      * 
      * @param ks - accelerator.
      */
-    public void remove(KeyStroke ks) {
-    	map.remove(ks);
+    public void remove(KeyStroke ks, ActionId actionId) {
+        var actions = map.getOrDefault(ks, Collections.emptyList());
+        actions = actions.stream()
+                .filter(pair -> !ActionKeymap.isSameType(pair.first, actionId))
+                .collect(Collectors.toList());
+        if (actions.isEmpty()) {
+            map.remove(ks);
+        } else {
+            map.put(ks, actions);
+        }
     }
     
     /**
