@@ -26,12 +26,13 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * Opens the trash in the default file manager of the current OS/Desktop manager. This action is enabled only
- * if the current platform has an {@link com.mucommander.desktop.AbstractTrash} implementation and if it is capable
- * of opening the trash, as reported by {@link com.mucommander.desktop.AbstractTrash#canOpen()}.
+ * Opens the trash in the default file manager of the current OS/Desktop manager. This action is enabled only if the
+ * current platform has an {@link com.mucommander.desktop.AbstractTrash} implementation and if it is capable of opening
+ * the trash, as reported by {@link com.mucommander.desktop.AbstractTrash#canOpen()}.
  *
  * @author Maxence Bernard
  */
@@ -57,6 +58,7 @@ public class OpenTrashAction extends MuAction {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
             return ActionType.OpenTrash.getId();

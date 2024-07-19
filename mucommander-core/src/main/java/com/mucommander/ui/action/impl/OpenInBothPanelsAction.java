@@ -24,6 +24,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -32,29 +33,24 @@ import com.mucommander.ui.main.table.FileTableModel;
 /**
  * Opens the currently selected file and its equivalent in the inactive folder panel if it exists.
  * <p>
- * This action will analyse the current selection and, if applicable, any file from the inactive
- * panel that bears the same name and:
+ * This action will analyse the current selection and, if applicable, any file from the inactive panel that bears the
+ * same name and:
  * <ul>
- *   <li>
- *     If both the selection and its inactive equivalent are browsable, both will be explored in their
- *     respective panels.
- *   </li>
- *   <li>
- *     If both are non-browsable, both will be opened as defined in {@link OpenAction}.
- *   </li>
- *   <li>
- *     If one is browsable an not the other one, only the current selection will be opened.
- *   </li>
+ * <li>If both the selection and its inactive equivalent are browsable, both will be explored in their respective
+ * panels.</li>
+ * <li>If both are non-browsable, both will be opened as defined in {@link OpenAction}.</li>
+ * <li>If one is browsable an not the other one, only the current selection will be opened.</li>
  * </ul>
  * </p>
  * <p>
- * Note that this action's behaviour is strictly equivalent to that of {@link OpenAction} in the
- * active panel. Differences will only occur in the inactive panel, and then again only when possible.
+ * Note that this action's behaviour is strictly equivalent to that of {@link OpenAction} in the active panel.
+ * Differences will only occur in the inactive panel, and then again only when possible.
  * </p>
  * <p>
- * This action opens both files synchronously: it will wait for the active panel file to have been
- * opened before opening the inactive panel one.
+ * This action opens both files synchronously: it will wait for the active panel file to have been opened before opening
+ * the inactive panel one.
  * </p>
+ * 
  * @author Nicolas Rinaudo
  */
 public class OpenInBothPanelsAction extends SelectedFileAction {
@@ -62,10 +58,13 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
     // -----------------------------------------------------------------------------------
     /**
      * Creates a new <code>OpenInBothPanelsAction</code> with the specified parameters.
-     * @param mainFrame  frame to which the action is attached.
-     * @param properties action's properties.
+     * 
+     * @param mainFrame
+     *            frame to which the action is attached.
+     * @param properties
+     *            action's properties.
      */
-    public OpenInBothPanelsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenInBothPanelsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform this action in a separate thread, to avoid locking the event thread
@@ -75,21 +74,20 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
     @Override
     public void activePanelChanged(FolderPanel folderPanel) {
         super.activePanelChanged(folderPanel);
-        
+
         if (mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked())
-        	setEnabled(false);
+            setEnabled(false);
     }
 
     /**
-     * This method is overridden to enable this action when the parent folder is selected. 
+     * This method is overridden to enable this action when the parent folder is selected.
      */
     @Override
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
-        return selectedFile!=null && selectedFile.isBrowsable();
+        return selectedFile != null && selectedFile.isBrowsable();
     }
-
 
     // - Action code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -98,60 +96,68 @@ public class OpenInBothPanelsAction extends SelectedFileAction {
      */
     @Override
     public void performAction() {
-        Thread       openThread;
+        Thread openThread;
         AbstractFile selectedFile;
         AbstractFile otherFile = null;
 
         // Retrieves the current selection, aborts if none (should not normally happen).
-        if((selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !selectedFile.isBrowsable())
+        if ((selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true)) == null
+                || !selectedFile.isBrowsable())
             return;
 
         try {
             FileTableModel otherTableModel = mainFrame.getInactiveTable().getFileTableModel();
 
-            if(mainFrame.getActiveTable().isParentFolderSelected()) {
+            if (mainFrame.getActiveTable().isParentFolderSelected()) {
                 otherFile = otherTableModel.getParentFolder();
-            }
-            else {
+            } else {
                 // Look for a file in the other table with the same name as the selected one (case insensitive)
                 int fileCount = otherTableModel.getFileCount();
                 String targetFilename = selectedFile.getName();
-                for(int i=otherTableModel.getFirstMarkableRow(); i<fileCount; i++) {
+                for (int i = otherTableModel.getFirstMarkableRow(); i < fileCount; i++) {
                     otherFile = otherTableModel.getCachedFileAtRow(i);
-                    if(otherFile.getName().equalsIgnoreCase(targetFilename))
+                    if (otherFile.getName().equalsIgnoreCase(targetFilename))
                         break;
 
-                    if(i==fileCount-1)
+                    if (i == fileCount - 1)
                         otherFile = null;
                 }
             }
+        } catch (Exception e) {
+            otherFile = null;
         }
-        catch(Exception e) {otherFile = null;}
 
         // Opens 'file' in the active panel.
         openThread = mainFrame.getActivePanel().tryChangeCurrentFolder(selectedFile);
 
         // Opens 'otherFile' (if any) in the inactive panel.
-        if(otherFile != null) {
+        if (otherFile != null) {
             // Waits for the previous folder change to be finished.
-            if(openThread != null) {
-                while(openThread.isAlive()) {
-                    try {openThread.join();}
-                    catch(InterruptedException e) {}
+            if (openThread != null) {
+                while (openThread.isAlive()) {
+                    try {
+                        openThread.join();
+                    } catch (InterruptedException e) {
+                    }
                 }
             }
             mainFrame.getInactivePanel().tryChangeCurrentFolder(otherFile);
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenInBothPanels.getId(); }
+        public String getId() {
+            return ActionType.OpenInBothPanels.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

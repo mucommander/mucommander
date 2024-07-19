@@ -26,22 +26,23 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * Empties the system trash. This action is enabled only if the current platform has an
- * {@link com.mucommander.desktop.AbstractTrash} implementation and if it is capable of emptying the trash,
- * as reported by {@link com.mucommander.desktop.AbstractTrash#canEmpty()}.
+ * {@link com.mucommander.desktop.AbstractTrash} implementation and if it is capable of emptying the trash, as reported
+ * by {@link com.mucommander.desktop.AbstractTrash#canEmpty()}.
  *
  * @author Maxence Bernard
  */
 public class EmptyTrashAction extends MuAction {
 
-    public EmptyTrashAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public EmptyTrashAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         AbstractTrash trash = DesktopManager.getTrash();
-        setEnabled(trash!=null && trash.canEmpty());
+        setEnabled(trash != null && trash.canEmpty());
     }
 
     @Override
@@ -49,14 +50,19 @@ public class EmptyTrashAction extends MuAction {
         DesktopManager.getTrash().empty();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.EmptyTrash.getId(); }
+        public String getId() {
+            return ActionType.EmptyTrash.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
     }
 }

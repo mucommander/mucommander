@@ -26,6 +26,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -36,7 +37,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ToggleAutoSizeAction extends MuAction {
 
-    public ToggleAutoSizeAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleAutoSizeAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,14 +49,19 @@ public class ToggleAutoSizeAction extends MuAction {
         MuConfigurations.getPreferences().setVariable(MuPreference.AUTO_SIZE_COLUMNS, enabled);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleAutoSize.getId(); }
+        public String getId() {
+            return ActionType.ToggleAutoSize.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
     }
 }

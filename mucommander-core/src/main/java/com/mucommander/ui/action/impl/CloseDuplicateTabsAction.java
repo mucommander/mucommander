@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -32,24 +33,29 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 public class CloseDuplicateTabsAction extends MuAction {
-	
-	public CloseDuplicateTabsAction(MainFrame mainFrame, Map<String,Object> properties) {
+
+    public CloseDuplicateTabsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-    	mainFrame.getActivePanel().getTabs().closeDuplicateTabs();
+        mainFrame.getActivePanel().getTabs().closeDuplicateTabs();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CloseDuplicateTabs.getId(); }
+        public String getId() {
+            return ActionType.CloseDuplicateTabs.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
     }
 }

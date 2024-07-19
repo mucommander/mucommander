@@ -27,13 +27,15 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * Open a file as if it has the specified file extension.
+ * 
  * @author Arik Hadas
-*/
+ */
 public class OpenAsAction extends OpenAction {
 
     private String extension;
@@ -63,8 +65,7 @@ public class OpenAsAction extends OpenAction {
                 InformationDialog.showErrorDialog(mainFrame.getJFrame(), Translator.get("cannot_open_cyclic_symlink"));
                 return;
             }
-        }
-        else
+        } else
             resolvedFile = file;
 
         try {
@@ -85,10 +86,15 @@ public class OpenAsAction extends OpenAction {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.OpenAs.getId(); }
+        public String getId() {
+            return ActionType.OpenAs.getId();
+        }
 
-        public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 
 }

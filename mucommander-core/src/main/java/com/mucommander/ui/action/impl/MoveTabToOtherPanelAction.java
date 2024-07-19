@@ -23,6 +23,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tabs.FileTableTab;
 
@@ -33,36 +34,39 @@ import com.mucommander.ui.main.tabs.FileTableTab;
  */
 public class MoveTabToOtherPanelAction extends ActiveTabAction {
 
-    public MoveTabToOtherPanelAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MoveTabToOtherPanelAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-    
+
     /**
-     * Enables or disables this action based on the currently active folder's
-     * current tab is not locked and is not the only tab in the panel,
-     * this action will be enabled, if not it will be disabled.
+     * Enables or disables this action based on the currently active folder's current tab is not locked and is not the
+     * only tab in the panel, this action will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getTabs().getTabsCount() > 1);
+                mainFrame.getActivePanel().getTabs().getTabsCount() > 1);
     }
 
     @Override
     public void performAction() {
-    	FileTableTab tab = mainFrame.getActivePanel().getTabs().closeCurrentTab();
-    	mainFrame.getInactivePanel().getTabs().add(tab);
+        FileTableTab tab = mainFrame.getActivePanel().getTabs().closeCurrentTab();
+        mainFrame.getInactivePanel().getTabs().add(tab);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MoveTabToOtherPanel.getId(); }
+        public String getId() {
+            return ActionType.MoveTabToOtherPanel.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
     }
 }
-

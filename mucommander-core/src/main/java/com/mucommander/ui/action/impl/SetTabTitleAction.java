@@ -25,35 +25,41 @@ import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.tab.TabTitleDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * Change the title of the selected tab.
- * In case empty string is entered, the title of the tab will be based on its current location.
+ * Change the title of the selected tab. In case empty string is entered, the title of the tab will be based on its
+ * current location.
  * 
  * @author Arik Hadas
  */
 @InvokesDialog
 public class SetTabTitleAction extends MuAction {
 
-	public SetTabTitleAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SetTabTitleAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-    	new TabTitleDialog(mainFrame, mainFrame.getActivePanel()).showDialog();
+        new TabTitleDialog(mainFrame, mainFrame.getActivePanel()).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SetTabTitle.getId(); }
+        public String getId() {
+            return ActionType.SetTabTitle.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
     }
 }

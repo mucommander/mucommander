@@ -24,15 +24,17 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action opens the parent folder of the selected file and keeps the latter file selected.
+ * 
  * @author Arik Hadas
  */
 public class ShowInEnclosingFolderAction extends SelectedFileAction {
 
-    public ShowInEnclosingFolderAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ShowInEnclosingFolderAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,9 +53,14 @@ public class ShowInEnclosingFolderAction extends SelectedFileAction {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.ShowInEnclosingFolder.getId(); }
+        public String getId() {
+            return ActionType.ShowInEnclosingFolder.getId();
+        }
 
-        public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

@@ -23,6 +23,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
@@ -33,7 +34,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class SelectNextRowAction extends SelectForwardAction {
 
-    public SelectNextRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectNextRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,11 +43,12 @@ public class SelectNextRowAction extends SelectForwardAction {
         return 1;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
             return ActionType.SelectNextRow.getId();

@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.help.ShortcutsDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -34,7 +35,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ShowKeyboardShortcutsAction extends MuAction {
 
-    public ShowKeyboardShortcutsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ShowKeyboardShortcutsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,14 +44,19 @@ public class ShowKeyboardShortcutsAction extends MuAction {
         new ShortcutsDialog(mainFrame).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowKeyboardShortcuts.getId(); }
+        public String getId() {
+            return ActionType.ShowKeyboardShortcuts.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public ActionCategory getCategory() {
+            return ActionCategory.MISC;
+        }
     }
 }

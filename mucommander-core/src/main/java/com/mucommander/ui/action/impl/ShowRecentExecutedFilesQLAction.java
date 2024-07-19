@@ -23,6 +23,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.QuickLists;
 
@@ -33,24 +34,29 @@ import com.mucommander.ui.main.QuickLists;
  */
 
 public class ShowRecentExecutedFilesQLAction extends ShowQuickListAction {
-	
-	public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Map<String,Object> properties) {
-		super(mainFrame, properties);
-	}
-	
-	@Override
+
+    public ShowRecentExecutedFilesQLAction(MainFrame mainFrame, Map<String, Object> properties) {
+        super(mainFrame, properties);
+    }
+
+    @Override
     public void performAction() {
-		openQuickList(QuickLists.RECENT_EXECUTED_FILES);
-	}
+        openQuickList(QuickLists.RECENT_EXECUTED_FILES);
+    }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
-	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowRecentExecutedFilesQL.getId(); }
+    @NoIcon
+    public static class Descriptor extends AbstractActionDescriptor {
+        public String getId() {
+            return ActionType.ShowRecentExecutedFilesQL.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

@@ -24,8 +24,8 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
-
 
 /**
  * This action reverses the sort order of the currently active FileTable.
@@ -34,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ReverseSortOrderAction extends MuAction {
 
-    public ReverseSortOrderAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ReverseSortOrderAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,14 +43,19 @@ public class ReverseSortOrderAction extends MuAction {
         mainFrame.getActiveTable().reverseSortOrder();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ReverseSortOrder.getId(); }
+        public String getId() {
+            return ActionType.ReverseSortOrder.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
     }
 }

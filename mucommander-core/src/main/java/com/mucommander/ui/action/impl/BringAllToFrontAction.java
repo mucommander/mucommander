@@ -25,27 +25,27 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 /**
- * Brings all MainFrame windows to front, from the last window index to the first, except for the current
- * (or last active) MainFrame which is brought to the front last. .
- * After this action has been performed, minimized windows will return to a normal state and windows will be stacked
- * in the following order:
+ * Brings all MainFrame windows to front, from the last window index to the first, except for the current (or last
+ * active) MainFrame which is brought to the front last. . After this action has been performed, minimized windows will
+ * return to a normal state and windows will be stacked in the following order:
  * <ul>
- *  <li>Current MainFrame
- *  <li>MainFrame #1
- *  <li>MainFrame #2
- *  <li>...
- *  <li>MainFrame #N
+ * <li>Current MainFrame
+ * <li>MainFrame #1
+ * <li>MainFrame #2
+ * <li>...
+ * <li>MainFrame #N
  * </ul>
  *
  * @author Maxence Bernard
  */
 public class BringAllToFrontAction extends MuAction {
 
-    public BringAllToFrontAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public BringAllToFrontAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -56,9 +56,9 @@ public class BringAllToFrontAction extends MuAction {
 
         int nbMainFrames = mainFrames.size();
         MainFrame mainFrame;
-        for(int i=nbMainFrames-1; i>=0; i--) {
+        for (int i = nbMainFrames - 1; i >= 0; i--) {
             mainFrame = mainFrames.get(i);
-            if(mainFrame!=currentMainFrame) {
+            if (mainFrame != currentMainFrame) {
                 mainFrame.toFront();
             }
         }
@@ -66,14 +66,19 @@ public class BringAllToFrontAction extends MuAction {
         currentMainFrame.toFront();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.BringAllToFront.getId(); }
+        public String getId() {
+            return ActionType.BringAllToFront.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
     }
 }

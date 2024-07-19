@@ -27,11 +27,13 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
 /**
  * A simple action that toggles hidden files visibility on and off.
+ * 
  * @author Nicolas Rinaudo
  */
 public class ToggleHiddenFilesAction extends MuAction {
@@ -40,10 +42,9 @@ public class ToggleHiddenFilesAction extends MuAction {
     /**
      * Creates a new <code>ToggleHiddenFilesAction</code>.
      */
-    public ToggleHiddenFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleHiddenFilesAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-
 
     // - Action code ---------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
@@ -52,19 +53,26 @@ public class ToggleHiddenFilesAction extends MuAction {
      */
     @Override
     public void performAction() {
-    	MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES,
-                                    !MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
+        MuConfigurations.getPreferences()
+                .setVariable(MuPreference.SHOW_HIDDEN_FILES,
+                        !MuConfigurations.getPreferences()
+                                .getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
         WindowManager.tryRefreshCurrentFolders();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleHiddenFiles.getId(); }
+        public String getId() {
+            return ActionType.ToggleHiddenFiles.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
     }
 }

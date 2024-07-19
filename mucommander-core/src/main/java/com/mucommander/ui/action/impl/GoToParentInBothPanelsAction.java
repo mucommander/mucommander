@@ -24,22 +24,24 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * Changes the current directory to its parent and tries to do the same in the inactive panel.
  * <p>
- * When possible, this action will open the active panel's current folder's parent. Additionally,
- * if the inactive panel's current folder has a parent, it will open that one as well.
+ * When possible, this action will open the active panel's current folder's parent. Additionally, if the inactive
+ * panel's current folder has a parent, it will open that one as well.
  * </p>
  * <p>
- * Note that this action's behavior is strictly equivalent to that of {@link GoToParentAction} in the
- * active panel. Differences will only occur in the inactive panel, and then again only when possible.
+ * Note that this action's behavior is strictly equivalent to that of {@link GoToParentAction} in the active panel.
+ * Differences will only occur in the inactive panel, and then again only when possible.
  * </p>
  * <p>
- * This action opens both files synchronously: it will wait for the active panel location change confirmation
- * before performing the inactive one.
+ * This action opens both files synchronously: it will wait for the active panel location change confirmation before
+ * performing the inactive one.
  * </p>
+ * 
  * @author Nicolas Rinaudo
  */
 public class GoToParentInBothPanelsAction extends ActiveTabAction {
@@ -47,10 +49,13 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
     // -----------------------------------------------------------------------------------
     /**
      * Creates a new <code>GoToParentInBothPanelsAction</code> instance with the specified parameters.
-     * @param mainFrame  frame to which the action is attached.
-     * @param properties action's properties.
+     * 
+     * @param mainFrame
+     *            frame to which the action is attached.
+     * @param properties
+     *            action's properties.
      */
-    public GoToParentInBothPanelsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToParentInBothPanelsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform this action in a separate thread, to avoid locking the event thread
@@ -58,15 +63,14 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
     }
 
     /**
-     * Enables or disables this action based on the currently active folder's
-     * has a parent and both tabs in the two panel are not locked,
-     * this action will be enabled, if not it will be disabled.
+     * Enables or disables this action based on the currently active folder's has a parent and both tabs in the two
+     * panel are not locked, this action will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
-        		   !mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+                !mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
+                mainFrame.getActivePanel().getCurrentFolder().getParent() != null);
     }
 
     // - Action code ---------------------------------------------------------------------
@@ -76,20 +80,22 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
      */
     @Override
     public void performAction() {
-        Thread       openThread;
+        Thread openThread;
         AbstractFile parent;
 
         // If the current panel has a parent file, navigate to it.
-        if((parent = mainFrame.getActivePanel().getCurrentFolder().getParent()) != null) {
+        if ((parent = mainFrame.getActivePanel().getCurrentFolder().getParent()) != null) {
             openThread = mainFrame.getActivePanel().tryChangeCurrentFolder(parent);
 
             // If the inactive panel has a parent file, wait for the current panel change to be complete and navigate
             // to it.
-            if((parent = mainFrame.getInactivePanel().getCurrentFolder().getParent()) != null) {
-                if(openThread != null) {
-                    while(openThread.isAlive()) {
-                        try {openThread.join();}
-                        catch(InterruptedException e) {}
+            if ((parent = mainFrame.getInactivePanel().getCurrentFolder().getParent()) != null) {
+                if (openThread != null) {
+                    while (openThread.isAlive()) {
+                        try {
+                            openThread.join();
+                        } catch (InterruptedException e) {
+                        }
                     }
                 }
                 mainFrame.getInactivePanel().tryChangeCurrentFolder(parent);
@@ -97,14 +103,19 @@ public class GoToParentInBothPanelsAction extends ActiveTabAction {
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToParentInBothPanels.getId(); }
+        public String getId() {
+            return ActionType.GoToParentInBothPanels.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

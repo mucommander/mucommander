@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;
 
@@ -34,7 +35,7 @@ import com.mucommander.ui.main.WindowManager;
  */
 public class RecallPreviousWindowAction extends MuAction {
 
-    public RecallPreviousWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public RecallPreviousWindowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,14 +44,19 @@ public class RecallPreviousWindowAction extends MuAction {
         WindowManager.switchToPreviousWindow();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.RecallPreviousWindow.getId(); }
+        public String getId() {
+            return ActionType.RecallPreviousWindow.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
     }
 }

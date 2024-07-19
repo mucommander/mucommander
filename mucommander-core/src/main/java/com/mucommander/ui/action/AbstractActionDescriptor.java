@@ -17,14 +17,13 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.commons.file.util.ResourceLoader;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
+
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.icon.IconManager;
-
-import javax.swing.ImageIcon;
-import javax.swing.KeyStroke;
 
 /**
  * AbstractActionDescriptor is an abstract class which implements ActionDescriptor interface.
@@ -50,7 +49,7 @@ public abstract class AbstractActionDescriptor implements ActionDescriptor {
     }
 
     public ImageIcon getIcon() {
-        return getStandardIcon(ActionId.asGenericAction(getId()));
+        return this.getClass().isAnnotationPresent(NoIcon.class) ? null : getStandardIcon(ActionId.asGenericAction(getId()));
     }
     
     public String getTooltip() {

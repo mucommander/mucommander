@@ -25,6 +25,7 @@ import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.InvokesDialog;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -36,7 +37,7 @@ import com.mucommander.ui.main.MainFrame;
 @InvokesDialog
 public class CheckForUpdatesAction extends MuAction {
 
-    public CheckForUpdatesAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CheckForUpdatesAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,14 +46,19 @@ public class CheckForUpdatesAction extends MuAction {
         new CheckVersionDialog(mainFrame, true);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CheckForUpdates.getId(); }
+        public String getId() {
+            return ActionType.CheckForUpdates.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public ActionCategory getCategory() {
+            return ActionCategory.MISC;
+        }
     }
 }

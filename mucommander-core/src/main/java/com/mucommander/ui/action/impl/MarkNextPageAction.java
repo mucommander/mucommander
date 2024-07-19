@@ -23,35 +23,41 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
 /**
- * Marks/unmarks the next page's rows in the current {@link FileTable}, starting with the
- * current row, and moves the selected row right after the last marked/unmarked row.
+ * Marks/unmarks the next page's rows in the current {@link FileTable}, starting with the current row, and moves the
+ * selected row right after the last marked/unmarked row.
  *
  * @author Maxence Bernard
  */
 public class MarkNextPageAction extends MarkForwardAction {
 
-    public MarkNextPageAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkNextPageAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     protected int getRowIncrement() {
         // Note: the page row increment varies with the file table's height
-        return mainFrame.getActiveTable().getPageRowIncrement()+1;
+        return mainFrame.getActiveTable().getPageRowIncrement() + 1;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkNextPage.getId(); }
+        public String getId() {
+            return ActionType.MarkNextPage.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

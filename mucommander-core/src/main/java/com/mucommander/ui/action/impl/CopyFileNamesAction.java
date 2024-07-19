@@ -24,10 +24,10 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
 import com.mucommander.ui.main.MainFrame;
-
 
 /**
  * This action copies the filename(s) of the currently selected / marked files(s) to the system clipboard.
@@ -36,7 +36,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class CopyFileNamesAction extends SelectedFilesAction {
 
-    public CopyFileNamesAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CopyFileNamesAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -57,14 +57,19 @@ public class CopyFileNamesAction extends SelectedFilesAction {
         ClipboardSupport.setClipboardContents(tfs);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CopyFileNames.getId(); }
+        public String getId() {
+            return ActionType.CopyFileNames.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

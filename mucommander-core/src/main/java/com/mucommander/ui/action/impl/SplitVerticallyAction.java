@@ -24,17 +24,17 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * Splits the folder panels vertically (top/bottom) within the MainFrame.
- * This is the default split orientation.
+ * Splits the folder panels vertically (top/bottom) within the MainFrame. This is the default split orientation.
  *
  * @author Maxence Bernard
  */
 public class SplitVerticallyAction extends MuAction {
 
-    public SplitVerticallyAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SplitVerticallyAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -43,14 +43,19 @@ public class SplitVerticallyAction extends MuAction {
         mainFrame.setSplitPaneOrientation(true);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SplitVertically.getId(); }
+        public String getId() {
+            return ActionType.SplitVertically.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
     }
 }

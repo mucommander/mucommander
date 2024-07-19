@@ -27,19 +27,20 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.InvokesDialog;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.file.CalculateChecksumDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This action invokes the {@link com.mucommander.ui.dialog.file.CalculateChecksumDialog} which allows to calculate
- * the checksum of the selected files and store the results in a pseudo-standard checksum file. 
+ * This action invokes the {@link com.mucommander.ui.dialog.file.CalculateChecksumDialog} which allows to calculate the
+ * checksum of the selected files and store the results in a pseudo-standard checksum file.
  *
  * @author Maxence Bernard
  */
 @InvokesDialog
-public class CalculateChecksumAction extends SelectedFilesAction  {
+public class CalculateChecksumAction extends SelectedFilesAction {
 
-    public CalculateChecksumAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CalculateChecksumAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new FileOperationFilter(FileOperation.READ_FILE));
@@ -50,14 +51,19 @@ public class CalculateChecksumAction extends SelectedFilesAction  {
         new CalculateChecksumDialog(mainFrame, files).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CalculateChecksum.getId(); }
+        public String getId() {
+            return ActionType.CalculateChecksum.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
     }
 }

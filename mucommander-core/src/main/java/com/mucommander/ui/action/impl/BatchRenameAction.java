@@ -29,28 +29,26 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.InvokesDialog;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.file.BatchRenameDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This action invokes the 'Batch-Rename' dialog which allows to
- * rename selected files.
+ * This action invokes the 'Batch-Rename' dialog which allows to rename selected files.
  *
  * @author Mariusz Jakubowski
  */
 @InvokesDialog
 public class BatchRenameAction extends SelectedFilesAction {
 
-    public BatchRenameAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public BatchRenameAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         setSelectedFileFilter(new OrFileFilter(
-            new FileOperationFilter(FileOperation.RENAME),
-            new AndFileFilter(
-                new FileOperationFilter(FileOperation.READ_FILE),
-                new FileOperationFilter(FileOperation.WRITE_FILE)
-            )
-        ));
+                new FileOperationFilter(FileOperation.RENAME),
+                new AndFileFilter(
+                        new FileOperationFilter(FileOperation.READ_FILE),
+                        new FileOperationFilter(FileOperation.WRITE_FILE))));
     }
 
     @Override
@@ -58,14 +56,19 @@ public class BatchRenameAction extends SelectedFilesAction {
         new BatchRenameDialog(mainFrame, files).showDialog();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.BatchRename.getId(); }
+        public String getId() {
+            return ActionType.BatchRename.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.FILES; }
+        public ActionCategory getCategory() {
+            return ActionCategory.FILES;
+        }
     }
 }

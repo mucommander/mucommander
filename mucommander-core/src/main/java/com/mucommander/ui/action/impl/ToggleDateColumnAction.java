@@ -20,27 +20,31 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
 /**
- * Shows/hides the 'Date' column of the currently active FileTable. If the column is currently visible, this action
- * will hide it and vice-versa.
+ * Shows/hides the 'Date' column of the currently active FileTable. If the column is currently visible, this action will
+ * hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
 public class ToggleDateColumnAction extends ToggleColumnAction {
 
-    public ToggleDateColumnAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleDateColumnAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, Column.DATE);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends ToggleColumnAction.Descriptor {
-        public Descriptor() { super(Column.DATE); }
+        public Descriptor() {
+            super(Column.DATE);
+        }
     }
 }

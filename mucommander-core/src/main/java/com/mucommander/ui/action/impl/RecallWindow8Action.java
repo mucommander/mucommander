@@ -20,6 +20,7 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -29,15 +30,16 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class RecallWindow8Action extends RecallWindowAction {
 
-    public RecallWindow8Action(MainFrame mainFrame, Map<String,Object> properties) {
+    public RecallWindow8Action(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, 8);
     }
-    
+
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends RecallWindowAction.Descriptor {
         public Descriptor() {
             super(8);

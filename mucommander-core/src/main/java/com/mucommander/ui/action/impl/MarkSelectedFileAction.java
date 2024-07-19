@@ -24,40 +24,45 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * Marks or unmarks the current selected file (current row) and advance current row to the next one,
- * with the following exceptions:
+ * Marks or unmarks the current selected file (current row) and advance current row to the next one, with the following
+ * exceptions:
  * <ul>
  * <li>if quick search is active, this method does nothing
  * <li>if '..' file is selected, file is not marked but current row is still advanced to the next one
- * <li>if the {@link com.mucommander.ui.action.impl.MarkSelectedFileAction} key event is repeated and the last file has already
- * been marked/unmarked since the key was last released, the file is not marked in order to avoid
+ * <li>if the {@link com.mucommander.ui.action.impl.MarkSelectedFileAction} key event is repeated and the last file has
+ * already been marked/unmarked since the key was last released, the file is not marked in order to avoid
  * marked/unmarked flaps when the mark key is kept pressed.
  *
  * @author Maxence Bernard
  */
 public class MarkSelectedFileAction extends MuAction {
 
-    public MarkSelectedFileAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkSelectedFileAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
-
 
     @Override
     public void performAction() {
         mainFrame.getActiveTable().markSelectedFile();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkSelectedFile.getId(); }
+        public String getId() {
+            return ActionType.MarkSelectedFile.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

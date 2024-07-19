@@ -29,6 +29,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.dnd.ClipboardNotifier;
@@ -36,17 +37,18 @@ import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This action pastes the files contained by the system clipboard to the currently active folder.
- * Does nothing if the clipboard doesn't contain any file.
+ * This action pastes the files contained by the system clipboard to the currently active folder. Does nothing if the
+ * clipboard doesn't contain any file.
  *
- * <p>Under Java 1.5 and up, this action gets automatically enabled/disabled when files are present/not present
- * in the clipboard.
+ * <p>
+ * Under Java 1.5 and up, this action gets automatically enabled/disabled when files are present/not present in the
+ * clipboard.
  *
  * @author Maxence Bernard
  */
 public class PasteClipboardFilesAction extends MuAction {
 
-    public PasteClipboardFilesAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public PasteClipboardFilesAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
         new ClipboardNotifier(this);
     }
@@ -55,24 +57,35 @@ public class PasteClipboardFilesAction extends MuAction {
     public void performAction() {
         // Retrieve clipboard files
         FileSet clipboardFiles = ClipboardSupport.getClipboardFiles();
-        if(clipboardFiles==null || clipboardFiles.isEmpty())
+        if (clipboardFiles == null || clipboardFiles.isEmpty())
             return;
 
         // Start copying files
         ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
         AbstractFile destFolder = mainFrame.getActivePanel().getCurrentFolder();
-        CopyJob job = new CopyJob(progressDialog, mainFrame, clipboardFiles, destFolder, null, TransferMode.COPY, FileCollisionDialog.FileCollisionAction.ASK);
+        CopyJob job = new CopyJob(progressDialog,
+                mainFrame,
+                clipboardFiles,
+                destFolder,
+                null,
+                TransferMode.COPY,
+                FileCollisionDialog.FileCollisionAction.ASK);
         progressDialog.start(job);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.PasteClipboardFiles.getId(); }
+        public String getId() {
+            return ActionType.PasteClipboardFiles.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

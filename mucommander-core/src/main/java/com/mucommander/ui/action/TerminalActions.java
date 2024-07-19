@@ -53,6 +53,7 @@ public class TerminalActions {
         }
     }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
 
         private final Action action;

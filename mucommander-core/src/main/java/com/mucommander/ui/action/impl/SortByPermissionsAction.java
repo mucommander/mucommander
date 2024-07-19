@@ -20,26 +20,28 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
 /**
- * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by permissions.
- * If the table is already sorted by permissions, the sort order will be reversed.
+ * This action sorts the currently active {@link com.mucommander.ui.main.table.FileTable} by permissions. If the table
+ * is already sorted by permissions, the sort order will be reversed.
  *
  * @author Maxence Bernard
  */
 public class SortByPermissionsAction extends SortByAction {
 
-    public SortByPermissionsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SortByPermissionsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, Column.PERMISSIONS);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends SortByAction.Descriptor {
 
         public Descriptor() {
