@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -33,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class SplitEquallyAction extends MuAction {
 
-    public SplitEquallyAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SplitEquallyAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,14 +43,19 @@ public class SplitEquallyAction extends MuAction {
         mainFrame.getFoldersSplitPane().setSplitRatio(0.5f);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SplitEqually.getId(); }
+        public String getId() {
+            return ActionType.SplitEqually.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
     }
 }

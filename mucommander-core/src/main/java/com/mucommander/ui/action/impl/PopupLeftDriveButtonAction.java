@@ -24,46 +24,52 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.ActiveTabListener;
 
 /**
- * Pops up the DrivePopupButton (the drop down button that allows to quickly select a volume or bookmark)
- * of the left FolderPanel.
+ * Pops up the DrivePopupButton (the drop down button that allows to quickly select a volume or bookmark) of the left
+ * FolderPanel.
  *
  * @author Maxence Bernard
  */
 public class PopupLeftDriveButtonAction extends MuAction implements ActiveTabListener {
 
-    public PopupLeftDriveButtonAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public PopupLeftDriveButtonAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-        
+
         mainFrame.getLeftPanel().getTabs().addActiveTabListener(this);
-        
+
         activeTabChanged();
     }
 
     /**
-     * Enables or disables this action based on the current tab is not locked, 
-     * this action will be enabled, if not it will be disabled.
+     * Enables or disables this action based on the current tab is not locked, this action will be enabled, if not it
+     * will be disabled.
      */
-	public void activeTabChanged() {
-		setEnabled(!mainFrame.getLeftPanel().getTabs().getCurrentTab().isLocked());
-	}
+    public void activeTabChanged() {
+        setEnabled(!mainFrame.getLeftPanel().getTabs().getCurrentTab().isLocked());
+    }
 
     @Override
     public void performAction() {
         mainFrame.getLeftPanel().getDriveButton().popupMenu();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.PopupLeftDriveButton.getId(); }
+        public String getId() {
+            return ActionType.PopupLeftDriveButton.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

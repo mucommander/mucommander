@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -36,12 +37,12 @@ import com.mucommander.ui.main.table.FileTableModel;
 public class MarkAllAction extends MuAction {
     private boolean mark;
 
-    protected MarkAllAction(MainFrame mainFrame, Map<String,Object> properties, boolean mark) {
+    protected MarkAllAction(MainFrame mainFrame, Map<String, Object> properties, boolean mark) {
         super(mainFrame, properties);
         this.mark = mark;
     }
 
-    public MarkAllAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkAllAction(MainFrame mainFrame, Map<String, Object> properties) {
         this(mainFrame, properties, true);
     }
 
@@ -51,7 +52,7 @@ public class MarkAllAction extends MuAction {
         FileTableModel tableModel = fileTable.getFileTableModel();
 
         int nbRows = tableModel.getRowCount();
-        for(int i=tableModel.getFirstMarkableRow(); i<nbRows; i++)
+        for (int i = tableModel.getFirstMarkableRow(); i < nbRows; i++)
             tableModel.setRowMarked(i, mark);
         fileTable.repaint();
 
@@ -59,14 +60,19 @@ public class MarkAllAction extends MuAction {
         fileTable.fireMarkedFilesChangedEvent();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkAll.getId(); }
+        public String getId() {
+            return ActionType.MarkAll.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

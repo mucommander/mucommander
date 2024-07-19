@@ -23,21 +23,23 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
 /**
- * Marks/unmarks files in the active FileTable, from the currently selected row to the last row (inclusive).
- * The last row will also become the currently selected row.
+ * Marks/unmarks files in the active FileTable, from the currently selected row to the last row (inclusive). The last
+ * row will also become the currently selected row.
  *
- * <p>The currently selected row's marked state determines whether the rows will be marked or unmarked : if the selected
+ * <p>
+ * The currently selected row's marked state determines whether the rows will be marked or unmarked : if the selected
  * row is marked, the rows will be unmarked and vice-versa.
  *
  * @author Maxence Bernard
  */
 public class MarkToLastRowAction extends MarkForwardAction {
 
-    public MarkToLastRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkToLastRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -45,17 +47,22 @@ public class MarkToLastRowAction extends MarkForwardAction {
     protected int getRowIncrement() {
         FileTable activeTable = mainFrame.getActiveTable();
 
-        return activeTable.getRowCount()-activeTable.getSelectedRow();
+        return activeTable.getRowCount() - activeTable.getSelectedRow();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkToLastRow.getId(); }
+        public String getId() {
+            return ActionType.MarkToLastRow.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

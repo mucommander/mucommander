@@ -24,32 +24,32 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This action changes the current folder of the currently active FolderPanel to the current folder's root.
- * This action only gets enabled when the current folder has a parent.
+ * This action changes the current folder of the currently active FolderPanel to the current folder's root. This action
+ * only gets enabled when the current folder has a parent.
  *
  * @author Maxence Bernard
  */
 public class GoToRootAction extends ActiveTabAction {
 
-    public GoToRootAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToRootAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     /**
-     * Enables or disables this action based on the currently active folder's
-     * has a parent and current tab is not locked, this action will be enabled,
-     * if not it will be disabled.
+     * Enables or disables this action based on the currently active folder's has a parent and current tab is not
+     * locked, this action will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+                mainFrame.getActivePanel().getCurrentFolder().getParent() != null);
     }
-    
+
     @Override
     public void performAction() {
         // Changes the current folder to make it the current folder's root folder.
@@ -59,14 +59,19 @@ public class GoToRootAction extends ActiveTabAction {
         folderPanel.tryChangeCurrentFolder(currentFolder.getRoot());
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToRoot.getId(); }
+        public String getId() {
+            return ActionType.GoToRoot.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

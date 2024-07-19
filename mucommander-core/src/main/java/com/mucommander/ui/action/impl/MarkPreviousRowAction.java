@@ -23,6 +23,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -32,7 +33,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class MarkPreviousRowAction extends MarkBackwardAction {
 
-    public MarkPreviousRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MarkPreviousRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -41,14 +42,19 @@ public class MarkPreviousRowAction extends MarkBackwardAction {
         return 1;
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MarkPreviousRow.getId(); }
+        public String getId() {
+            return ActionType.MarkPreviousRow.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

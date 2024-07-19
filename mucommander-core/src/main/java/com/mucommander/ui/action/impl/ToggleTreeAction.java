@@ -24,19 +24,21 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tree.FoldersTreePanel;
 
 /**
  * This action toggles the visibility of a directory tree.
- * @see FoldersTreePanel   
+ * 
+ * @see FoldersTreePanel
  *
  * @author Mariusz Jakubowski
  */
 public class ToggleTreeAction extends MuAction {
 
-    public ToggleTreeAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleTreeAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -46,14 +48,19 @@ public class ToggleTreeAction extends MuAction {
         folderPanel.setTreeVisible(!folderPanel.isTreeVisible());
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleTree.getId(); }
+        public String getId() {
+            return ActionType.ToggleTree.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
     }
 }

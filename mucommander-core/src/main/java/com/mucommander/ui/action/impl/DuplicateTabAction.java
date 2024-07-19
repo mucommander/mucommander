@@ -41,6 +41,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -49,24 +50,29 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 public class DuplicateTabAction extends MuAction {
-	
-	public DuplicateTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+
+    public DuplicateTabAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-    	mainFrame.getActivePanel().getTabs().duplicate();
+        mainFrame.getActivePanel().getTabs().duplicate();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.DuplicateTab.getId(); }
+        public String getId() {
+            return ActionType.DuplicateTab.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
     }
 }

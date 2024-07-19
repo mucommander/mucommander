@@ -27,6 +27,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
@@ -34,10 +35,9 @@ import com.mucommander.ui.main.table.Column;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
 
-
 /**
- * This action shows the popup menu for currently selected file.
- * Exactly the same popup menu appears also when right-clicking on file/folder.
+ * This action shows the popup menu for currently selected file. Exactly the same popup menu appears also when
+ * right-clicking on file/folder.
  */
 public class ShowFilePopupMenuAction extends SelectedFileAction {
 
@@ -53,7 +53,8 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
             FileTableModel tableModel = (FileTableModel) fileTable.getModel();
             int selectedRow = fileTable.getSelectedRow();
             Rectangle rect = fileTable.getCellRect(selectedRow,
-                    fileTable.convertColumnIndexToView(Column.NAME.ordinal()), true);
+                    fileTable.convertColumnIndexToView(Column.NAME.ordinal()),
+                    true);
             boolean parentFolderSelected = selectedRow == 0 && tableModel.hasParentFolder();
 
             new TablePopupMenu(mainFrame,
@@ -75,6 +76,7 @@ public class ShowFilePopupMenuAction extends SelectedFileAction {
         return new Descriptor();
     }
 
+    @NoIcon
     public static final class Descriptor extends AbstractActionDescriptor {
         public String getId() {
             return ActionType.ShowFilePopupMenu.getId();

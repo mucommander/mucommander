@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -33,7 +34,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class SelectFirstRowAction extends MuAction {
 
-    public SelectFirstRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectFirstRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,14 +43,19 @@ public class SelectFirstRowAction extends MuAction {
         mainFrame.getActiveTable().selectRow(0);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SelectFirstRow.getId(); }
+        public String getId() {
+            return ActionType.SelectFirstRow.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.debug.DebugConsoleDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -34,7 +35,7 @@ public class ShowDebugConsoleAction extends MuAction {
 
     private DebugConsoleDialog dialog;
 
-    public ShowDebugConsoleAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ShowDebugConsoleAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -51,9 +52,14 @@ public class ShowDebugConsoleAction extends MuAction {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-        public String getId() { return ActionType.ShowDebugConsole.getId(); }
+        public String getId() {
+            return ActionType.ShowDebugConsole.getId();
+        }
 
-        public ActionCategory getCategory() { return ActionCategory.MISC; }
+        public ActionCategory getCategory() {
+            return ActionCategory.MISC;
+        }
     }
 }

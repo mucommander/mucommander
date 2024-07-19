@@ -30,6 +30,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
@@ -42,7 +43,7 @@ import com.mucommander.ui.main.quicklist.RecentExecutedFilesQL;
  */
 public class OpenNativelyAction extends MuAction {
 
-    public OpenNativelyAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenNativelyAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -50,36 +51,40 @@ public class OpenNativelyAction extends MuAction {
     public void performAction() {
         AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile(true, true);
 
-        if(selectedFile==null)
+        if (selectedFile == null)
             return;
 
         // Copy file to a temporary local file and execute it with native file associations if
         // file is not on a local filesystem or file is an archive entry
-        if(!LocalFile.SCHEMA.equals(selectedFile.getURL().getScheme()) || selectedFile.hasAncestor(AbstractArchiveEntryFile.class)) {
+        if (!LocalFile.SCHEMA.equals(selectedFile.getURL().getScheme())
+                || selectedFile.hasAncestor(AbstractArchiveEntryFile.class)) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("copy_dialog.copying"));
             TempExecJob job = new TempExecJob(progressDialog, mainFrame, selectedFile);
             progressDialog.start(job);
-        }
-        else {
+        } else {
             // Tries to execute file with native file associations
             try {
                 OpenAction.openFile(getMainFrame(), selectedFile);
                 RecentExecutedFilesQL.addFile(selectedFile);
-        	}
-            catch (IOException | UnsupportedOperationException e) {
+            } catch (IOException | UnsupportedOperationException e) {
                 InformationDialog.showErrorDialog(mainFrame.getJFrame());
             }
         }
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenNatively.getId(); }
+        public String getId() {
+            return ActionType.OpenNatively.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

@@ -20,6 +20,7 @@ package com.mucommander.ui.action.impl;
 import java.awt.Component;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 
@@ -29,6 +30,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -41,7 +43,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class FocusNextAction extends MuAction {
 
-    public FocusNextAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public FocusNextAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -53,7 +55,7 @@ public class FocusNextAction extends MuAction {
         Component focusOwner = mainFrame.getJFrame().getFocusOwner();
 
         // Abort if the focus is not in the MainFrame this action is tied to
-        if(focusOwner==null)
+        if (focusOwner == null)
             return;
 
         FolderPanel folderPanel = mainFrame.getActivePanel();
@@ -63,11 +65,11 @@ public class FocusNextAction extends MuAction {
 
         // Request focus on the 'next' component, the cycle order being from left to right, top to bottom.
         Component nextComponent;
-        if(focusOwner==locationField)
-            nextComponent = folderPanel.isTreeVisible()?tree:fileTable;
-        else if(focusOwner==tree)
+        if (focusOwner == locationField)
+            nextComponent = folderPanel.isTreeVisible() ? tree : fileTable;
+        else if (focusOwner == tree)
             nextComponent = fileTable;
-        else if(focusOwner==fileTable)
+        else if (focusOwner == fileTable)
             nextComponent = locationField;
         else
             return;
@@ -75,14 +77,19 @@ public class FocusNextAction extends MuAction {
         FocusRequester.requestFocusInWindow(nextComponent);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.FocusNext.getId(); }
+        public String getId() {
+            return ActionType.FocusNext.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

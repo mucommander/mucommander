@@ -22,6 +22,7 @@ import java.util.Map;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -31,15 +32,20 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class DonateAction extends OpenURLInBrowserAction {
 
-    public DonateAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public DonateAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         putValue(URL_PROPERTY_KEY, com.mucommander.RuntimeConstants.DONATION_URL);
     }
-    
-    public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Donate.getId(); }
 
-		public ActionCategory getCategory() { return ActionCategory.MISC; }
+    @NoIcon
+    public static class Descriptor extends AbstractActionDescriptor {
+        public String getId() {
+            return ActionType.Donate.getId();
+        }
+
+        public ActionCategory getCategory() {
+            return ActionCategory.MISC;
+        }
     }
 }

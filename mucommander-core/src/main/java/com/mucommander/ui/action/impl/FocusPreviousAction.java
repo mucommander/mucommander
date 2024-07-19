@@ -29,6 +29,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -42,7 +43,7 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class FocusPreviousAction extends MuAction {
 
-    public FocusPreviousAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public FocusPreviousAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
 
         // Perform the action also when in 'no events' mode
@@ -54,7 +55,7 @@ public class FocusPreviousAction extends MuAction {
         Component focusOwner = mainFrame.getJFrame().getFocusOwner();
 
         // Abort if the focus is not in the MainFrame this action is tied to
-        if(focusOwner==null)
+        if (focusOwner == null)
             return;
 
         FolderPanel folderPanel = mainFrame.getActivePanel();
@@ -64,11 +65,11 @@ public class FocusPreviousAction extends MuAction {
 
         // Request focus on the 'previous' component, the cycle order being from right to left, bottom to top.
         Component previousComponent;
-        if(focusOwner==fileTable)
-            previousComponent = folderPanel.isTreeVisible()?tree:locationField;
-        else if(focusOwner==tree)
+        if (focusOwner == fileTable)
+            previousComponent = folderPanel.isTreeVisible() ? tree : locationField;
+        else if (focusOwner == tree)
             previousComponent = locationField;
-        else if(focusOwner==locationField)
+        else if (focusOwner == locationField)
             previousComponent = fileTable;
         else
             return;
@@ -76,14 +77,19 @@ public class FocusPreviousAction extends MuAction {
         FocusRequester.requestFocusInWindow(previousComponent);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.FocusPrevious.getId(); }
+        public String getId() {
+            return ActionType.FocusPrevious.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

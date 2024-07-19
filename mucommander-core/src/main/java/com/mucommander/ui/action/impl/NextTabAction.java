@@ -41,33 +41,39 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * Change the selected tab to the tab which is located to the right of the current displayed tab.
- * If the current displayed tab is the rightmost tab, the leftmost tab will be displayed.
+ * Change the selected tab to the tab which is located to the right of the current displayed tab. If the current
+ * displayed tab is the rightmost tab, the leftmost tab will be displayed.
  * 
  * @author Arik Hadas
  */
 public class NextTabAction extends MuAction {
-	
-	public NextTabAction(MainFrame mainFrame, Map<String,Object> properties) {
+
+    public NextTabAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-    	mainFrame.getActivePanel().getTabs().nextTab();
+        mainFrame.getActivePanel().getTabs().nextTab();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.NextTab.getId(); }
+        public String getId() {
+            return ActionType.NextTab.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.TAB; }
+        public ActionCategory getCategory() {
+            return ActionCategory.TAB;
+        }
     }
 }

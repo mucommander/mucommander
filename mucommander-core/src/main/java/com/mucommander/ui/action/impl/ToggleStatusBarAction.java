@@ -28,36 +28,41 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.StatusBar;
 
 /**
- * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.StatusBar} depending on its
- * current visible state: if it is visible, hides it, if not shows it.
+ * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.StatusBar} depending on its current
+ * visible state: if it is visible, hides it, if not shows it.
  *
- * <p>This action's label will be updated to reflect the current visible state.
+ * <p>
+ * This action's label will be updated to reflect the current visible state.
  *
- * <p>Each time this action is executed, the new current visible state is stored in the configuration so that
- * new MainFrame windows will use it to determine whether the StatusBar has to be made visible or not.
+ * <p>
+ * Each time this action is executed, the new current visible state is stored in the configuration so that new MainFrame
+ * windows will use it to determine whether the StatusBar has to be made visible or not.
  *
  * @author Maxence Bernard
  */
 public class ToggleStatusBarAction extends MuAction {
 
-    public ToggleStatusBarAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleStatusBarAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-        updateLabel(MuConfigurations.getPreferences().getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
+        updateLabel(MuConfigurations.getPreferences()
+                .getVariable(MuPreference.STATUS_BAR_VISIBLE, MuPreferences.DEFAULT_STATUS_BAR_VISIBLE));
     }
 
     private void updateLabel(boolean visible) {
-        setLabel(Translator.get(visible?ActionType.ToggleStatusBar+".hide":ActionType.ToggleStatusBar+".show"));
+        setLabel(Translator.get(visible ? ActionType.ToggleStatusBar + ".hide" : ActionType.ToggleStatusBar + ".show"));
     }
 
     @Override
     public void performAction() {
         StatusBar statusBar = mainFrame.getStatusBar();
         boolean visible = !statusBar.isVisible();
-        // Save the last status bar visible state in the configuration, this will become the default for new MainFrame windows.
+        // Save the last status bar visible state in the configuration, this will become the default for new MainFrame
+        // windows.
         MuConfigurations.getPreferences().setVariable(MuPreference.STATUS_BAR_VISIBLE, visible);
         // Change the label to reflect the new status bar state
         updateLabel(visible);
@@ -66,17 +71,24 @@ public class ToggleStatusBarAction extends MuAction {
         mainFrame.getJFrame().validate();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleStatusBar.getId(); }
+        public String getId() {
+            return ActionType.ToggleStatusBar.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
 
         @Override
-        public String getLabelKey() { return ActionType.ToggleStatusBar+".show"; }
+        public String getLabelKey() {
+            return ActionType.ToggleStatusBar + ".show";
+        }
     }
 }

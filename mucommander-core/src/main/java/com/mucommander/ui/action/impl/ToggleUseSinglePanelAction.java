@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -46,7 +47,6 @@ public class ToggleUseSinglePanelAction extends MuAction {
         mainFrame.getInactivePanel().getPanel().setVisible(true);
     }
 
-
     @Override
     public void performAction() {
         // we want to restore old two panel ratio
@@ -67,6 +67,7 @@ public class ToggleUseSinglePanelAction extends MuAction {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
         public String getId() {
             return ActionType.ToggleUseSinglePanel.getId();

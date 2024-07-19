@@ -29,6 +29,7 @@ import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -39,7 +40,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class MaximizeWindowAction extends MuAction {
 
-    public MaximizeWindowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public MaximizeWindowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,21 +49,26 @@ public class MaximizeWindowAction extends MuAction {
         mainFrame.getJFrame().setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.MaximizeWindow.getId(); }
+        public String getId() {
+            return ActionType.MaximizeWindow.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
 
         @Override
         public String getLabel() {
             // Use a special label for Mac OS X, if it exists, use the standard action label otherwise
-            String macLabelKey = ActionProperties.getActionLabelKey(ActionType.MaximizeWindow)+".mac_os_x";
-            if(OsFamily.MAC_OS.isCurrent() && Translator.hasValue(macLabelKey, false))
+            String macLabelKey = ActionProperties.getActionLabelKey(ActionType.MaximizeWindow) + ".mac_os_x";
+            if (OsFamily.MAC_OS.isCurrent() && Translator.hasValue(macLabelKey, false))
                 return Translator.get(macLabelKey);
 
             return super.getLabel();

@@ -20,27 +20,31 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.Column;
 
 /**
- * Shows/hides the 'Size' column of the currently active FileTable. If the column is currently visible, this action
- * will hide it and vice-versa.
+ * Shows/hides the 'Size' column of the currently active FileTable. If the column is currently visible, this action will
+ * hide it and vice-versa.
  *
  * @author Maxence Bernard
  */
 public class ToggleSizeColumnAction extends ToggleColumnAction {
 
-    public ToggleSizeColumnAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleSizeColumnAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, Column.SIZE);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends ToggleColumnAction.Descriptor {
-        public Descriptor() { super(Column.SIZE); }
+        public Descriptor() {
+            super(Column.SIZE);
+        }
     }
 }

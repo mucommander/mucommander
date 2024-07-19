@@ -25,6 +25,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -36,7 +37,7 @@ import com.mucommander.ui.main.table.FileTableModel;
  */
 public class CompareFoldersAction extends MuAction {
 
-    public CompareFoldersAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CompareFoldersAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -53,37 +54,37 @@ public class CompareFoldersAction extends MuAction {
         int fileIndex;
         String tempFileName;
         AbstractFile tempFile;
-        for(int i=0; i<nbFilesLeft; i++) {
+        for (int i = 0; i < nbFilesLeft; i++) {
             tempFile = leftTableModel.getFileAt(i);
-            if(tempFile.isDirectory())
+            if (tempFile.isDirectory())
                 continue;
 
             tempFileName = tempFile.getName();
             fileIndex = -1;
-            for(int j=0; j<nbFilesRight; j++)
+            for (int j = 0; j < nbFilesRight; j++)
                 if (rightTableModel.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex==-1 || rightTableModel.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
+            if (fileIndex == -1 || rightTableModel.getFileAt(fileIndex).getDate() < tempFile.getDate()) {
                 leftTableModel.setFileMarked(tempFile, true);
                 leftTable.repaint();
             }
         }
 
-        for(int i=0; i<nbFilesRight; i++) {
+        for (int i = 0; i < nbFilesRight; i++) {
             tempFile = rightTableModel.getFileAt(i);
-            if(tempFile.isDirectory())
+            if (tempFile.isDirectory())
                 continue;
 
             tempFileName = tempFile.getName();
             fileIndex = -1;
-            for(int j=0; j<nbFilesLeft; j++)
+            for (int j = 0; j < nbFilesLeft; j++)
                 if (leftTableModel.getFileAt(j).getName().equals(tempFileName)) {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex==-1 || leftTableModel.getFileAt(fileIndex).getDate()<tempFile.getDate()) {
+            if (fileIndex == -1 || leftTableModel.getFileAt(fileIndex).getDate() < tempFile.getDate()) {
                 rightTableModel.setFileMarked(tempFile, true);
                 rightTable.repaint();
             }
@@ -94,14 +95,19 @@ public class CompareFoldersAction extends MuAction {
         rightTable.fireMarkedFilesChangedEvent();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CompareFolders.getId(); }
+        public String getId() {
+            return ActionType.CompareFolders.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

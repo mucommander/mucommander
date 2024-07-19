@@ -24,18 +24,19 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
 /**
- * This action switches the currently active FileTable, that is gives focus to the FileTable that currently doesn't
- * have it.
+ * This action switches the currently active FileTable, that is gives focus to the FileTable that currently doesn't have
+ * it.
  *
  * @author Maxence Bernard
  */
 public class SwitchActiveTableAction extends MuAction {
 
-    public SwitchActiveTableAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SwitchActiveTableAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -44,20 +45,25 @@ public class SwitchActiveTableAction extends MuAction {
         FileTable activeTable = mainFrame.getActiveTable();
         FileTable leftTable = mainFrame.getLeftPanel().getFileTable();
         FileTable rightTable = mainFrame.getRightPanel().getFileTable();
-        if(activeTable == leftTable)
+        if (activeTable == leftTable)
             rightTable.requestFocus();
-        else if(activeTable == rightTable)
+        else if (activeTable == rightTable)
             leftTable.requestFocus();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SwitchActiveTable.getId(); }
+        public String getId() {
+            return ActionType.SwitchActiveTable.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

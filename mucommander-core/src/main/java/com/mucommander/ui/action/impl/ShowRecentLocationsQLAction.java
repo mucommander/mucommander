@@ -23,6 +23,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.QuickLists;
 
@@ -33,24 +34,29 @@ import com.mucommander.ui.main.QuickLists;
  */
 
 public class ShowRecentLocationsQLAction extends ShowQuickListAction {
-	
-	public ShowRecentLocationsQLAction(MainFrame mainFrame, Map<String,Object> properties) {
-		super(mainFrame, properties);
-	}
-	
-	@Override
+
+    public ShowRecentLocationsQLAction(MainFrame mainFrame, Map<String, Object> properties) {
+        super(mainFrame, properties);
+    }
+
+    @Override
     public void performAction() {
-		openQuickList(QuickLists.RECENT_ACCESSED_LOCATIONS);
-	}
+        openQuickList(QuickLists.RECENT_ACCESSED_LOCATIONS);
+    }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
-	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowRecentLocationsQL.getId(); }
+    @NoIcon
+    public static class Descriptor extends AbstractActionDescriptor {
+        public String getId() {
+            return ActionType.ShowRecentLocationsQL.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

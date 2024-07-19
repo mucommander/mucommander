@@ -24,6 +24,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
 import com.mucommander.ui.main.MainFrame;
@@ -35,7 +36,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class CopyFilePathsAction extends SelectedFilesAction {
 
-    public CopyFilePathsAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public CopyFilePathsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -53,14 +54,19 @@ public class CopyFilePathsAction extends SelectedFilesAction {
         ClipboardSupport.setClipboardContents(tfs);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.CopyFilePaths.getId(); }
+        public String getId() {
+            return ActionType.CopyFilePaths.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

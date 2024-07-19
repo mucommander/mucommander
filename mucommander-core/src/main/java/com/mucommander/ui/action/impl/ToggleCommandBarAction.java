@@ -28,36 +28,42 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.commandbar.CommandBar;
 
 /**
- * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.commandbar.CommandBar} depending on its
- * current visible state: if it is visible, hides it, if not shows it.
+ * This action shows/hides the current MainFrame's {@link com.mucommander.ui.main.commandbar.CommandBar} depending on
+ * its current visible state: if it is visible, hides it, if not shows it.
  *
- * <p>This action's label will be updated to reflect the current visible state.
+ * <p>
+ * This action's label will be updated to reflect the current visible state.
  *
- * <p>Each time this action is executed, the new current visible state is stored in the configuration so that
- * new MainFrame windows will use it to determine whether the CommandBar has to be made visible or not.
+ * <p>
+ * Each time this action is executed, the new current visible state is stored in the configuration so that new MainFrame
+ * windows will use it to determine whether the CommandBar has to be made visible or not.
  *
  * @author Maxence Bernard
  */
 public class ToggleCommandBarAction extends MuAction {
 
-    public ToggleCommandBarAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ToggleCommandBarAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
-        updateLabel(MuConfigurations.getPreferences().getVariable(MuPreference.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
+        updateLabel(MuConfigurations.getPreferences()
+                .getVariable(MuPreference.COMMAND_BAR_VISIBLE, MuPreferences.DEFAULT_COMMAND_BAR_VISIBLE));
     }
 
     private void updateLabel(boolean visible) {
-        setLabel(Translator.get(visible?ActionType.ToggleCommandBar+".hide":ActionType.ToggleCommandBar+".show"));
+        setLabel(Translator
+                .get(visible ? ActionType.ToggleCommandBar + ".hide" : ActionType.ToggleCommandBar + ".show"));
     }
 
     @Override
     public void performAction() {
         CommandBar commandBar = mainFrame.getCommandBar();
         boolean visible = !commandBar.isVisible();
-        // Save the last command bar visible state in the configuration, this will become the default for new MainFrame windows.
+        // Save the last command bar visible state in the configuration, this will become the default for new MainFrame
+        // windows.
         MuConfigurations.getPreferences().setVariable(MuPreference.COMMAND_BAR_VISIBLE, visible);
         // Change the label to reflect the new command bar state
         updateLabel(visible);
@@ -66,17 +72,24 @@ public class ToggleCommandBarAction extends MuAction {
         mainFrame.getJFrame().validate();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ToggleCommandBar.getId(); }
+        public String getId() {
+            return ActionType.ToggleCommandBar.getId();
+        }
 
-        public ActionCategory getCategory() { return ActionCategory.VIEW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.VIEW;
+        }
 
         @Override
-        public String getLabelKey() { return ActionType.ToggleCommandBar+".show"; }
+        public String getLabelKey() {
+            return ActionType.ToggleCommandBar + ".show";
+        }
     }
 }

@@ -24,6 +24,7 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
@@ -34,26 +35,30 @@ import com.mucommander.ui.main.table.FileTable;
  * This action is only enabled if the current selection is browsable as defined by
  * {@link com.mucommander.commons.file.AbstractFile#isBrowsable()}.
  * </p>
+ * 
  * @author Nicolas Rinaudo
  */
 public class OpenInOtherPanelAction extends SelectedFileAction {
     /**
      * Creates a new <code>OpenInOtherPanelAction</code> with the specified parameters.
-     * @param mainFrame  frame to which the action is attached.
-     * @param properties action's properties.
+     * 
+     * @param mainFrame
+     *            frame to which the action is attached.
+     * @param properties
+     *            action's properties.
      */
-    public OpenInOtherPanelAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public OpenInOtherPanelAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void activePanelChanged(FolderPanel folderPanel) {
         super.activePanelChanged(folderPanel);
-        
+
         if (mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked())
-        	setEnabled(false);
+            setEnabled(false);
     }
-    
+
     /**
      * This method is overridden to enable this action when the parent folder is selected.
      */
@@ -61,7 +66,7 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
     protected boolean getFileTableCondition(FileTable fileTable) {
         AbstractFile selectedFile = fileTable.getSelectedFile(true, true);
 
-        return selectedFile!=null && selectedFile.isBrowsable();
+        return selectedFile != null && selectedFile.isBrowsable();
     }
 
     /**
@@ -72,21 +77,26 @@ public class OpenInOtherPanelAction extends SelectedFileAction {
         AbstractFile file;
 
         // Retrieves the currently selected file, aborts if none (should not normally happen).
-        if((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
+        if ((file = mainFrame.getActiveTable().getSelectedFile(true, true)) == null || !file.isBrowsable())
             return;
 
         // Opens the currently selected file in the inactive panel.
         mainFrame.getInactivePanel().tryChangeCurrentFolder(file);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.OpenInOtherPanel.getId(); }
+        public String getId() {
+            return ActionType.OpenInOtherPanel.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

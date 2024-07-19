@@ -24,24 +24,29 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * Opens the active panel's parent in the inactive panel.
  * <p>
- * This action is only enabled when the active panel has a parent,
- * and the selected tab in the other panel is not locked.
+ * This action is only enabled when the active panel has a parent, and the selected tab in the other panel is not
+ * locked.
  * </p>
+ * 
  * @author Nicolas Rinaudo
  */
 public class GoToParentInOtherPanelAction extends ParentFolderAction {
     /**
      * Creates a new <code>GoToParentInOtherPanelAction</code> with the specified parameters.
-     * @param mainFrame  frame to which the action is attached.
-     * @param properties action's properties.
+     * 
+     * @param mainFrame
+     *            frame to which the action is attached.
+     * @param properties
+     *            action's properties.
      */
-    public GoToParentInOtherPanelAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public GoToParentInOtherPanelAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -50,47 +55,54 @@ public class GoToParentInOtherPanelAction extends ParentFolderAction {
      * <p>
      * If <code>sourcePanel</code> doesn't have a parent, nothing will happen.
      * </p>
-     * @param  sourcePanel panel whose parent should be used.
-     * @param  destPanel   panel in which to change the location.
-     * @return             <code>true</code> if <code>sourcePanel</code> has a parent, <code>false</code> otherwise.
+     * 
+     * @param sourcePanel
+     *            panel whose parent should be used.
+     * @param destPanel
+     *            panel in which to change the location.
+     * @return <code>true</code> if <code>sourcePanel</code> has a parent, <code>false</code> otherwise.
      */
     private boolean goToParent(FolderPanel sourcePanel, FolderPanel destPanel) {
         AbstractFile parent;
 
-        if((parent = sourcePanel.getCurrentFolder().getParent()) != null) {
+        if ((parent = sourcePanel.getCurrentFolder().getParent()) != null) {
             destPanel.tryChangeCurrentFolder(parent, null, true);
             return true;
         }
         return false;
     }
-    
+
     /**
-     * Enables or disables this action based on the currently active folder's
-     * has a parent and selected tab in the other panel is not locked,
-     * this action will be enabled, if not it will be disabled.
+     * Enables or disables this action based on the currently active folder's has a parent and selected tab in the other
+     * panel is not locked, this action will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getInactivePanel().getTabs().getCurrentTab().isLocked() &&
-        		    mainFrame.getActivePanel().getCurrentFolder().getParent()!=null);
+                mainFrame.getActivePanel().getCurrentFolder().getParent() != null);
     }
-    
+
     /**
      * Opens the active panel's parent in the inactive panel.
      */
     @Override
     public void performAction() {
-    	goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());
+        goToParent(mainFrame.getActivePanel(), mainFrame.getInactivePanel());
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.GoToParentInOtherPanel.getId(); }
+        public String getId() {
+            return ActionType.GoToParentInOtherPanel.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

@@ -24,6 +24,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 
@@ -34,24 +35,29 @@ import com.mucommander.ui.main.table.FileTable;
  */
 public class SelectLastRowAction extends MuAction {
 
-    public SelectLastRowAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public SelectLastRowAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
         FileTable fileTable = mainFrame.getActiveTable();
-        fileTable.selectRow(fileTable.getFileTableModel().getRowCount()-1);
+        fileTable.selectRow(fileTable.getFileTableModel().getRowCount() - 1);
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.SelectLastRow.getId(); }
+        public String getId() {
+            return ActionType.SelectLastRow.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

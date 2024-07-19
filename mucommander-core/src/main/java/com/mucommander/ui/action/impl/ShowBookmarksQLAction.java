@@ -23,28 +23,34 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.QuickLists;
 
 public class ShowBookmarksQLAction extends ShowQuickListAction {
-	
-	public ShowBookmarksQLAction(MainFrame mainFrame, Map<String,Object> properties) {
-		super(mainFrame, properties);
-	}
-	
-	@Override
+
+    public ShowBookmarksQLAction(MainFrame mainFrame, Map<String, Object> properties) {
+        super(mainFrame, properties);
+    }
+
+    @Override
     public void performAction() {
-		openQuickList(QuickLists.BOOKMARKS);
-	}
+        openQuickList(QuickLists.BOOKMARKS);
+    }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
-	public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ShowBookmarksQL.getId(); }
+    @NoIcon
+    public static class Descriptor extends AbstractActionDescriptor {
+        public String getId() {
+            return ActionType.ShowBookmarksQL.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

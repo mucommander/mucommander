@@ -25,35 +25,41 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dialog.shutdown.QuitDialog;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * This action pops up the Quit confirmation dialog (if it hasn't been disabled) and if quit has been confirmed,
- * quits the application.
+ * This action pops up the Quit confirmation dialog (if it hasn't been disabled) and if quit has been confirmed, quits
+ * the application.
  *
  * @author Maxence Bernard
  */
 public class QuitAction extends MuAction {
 
-    public QuitAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public QuitAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
     @Override
     public void performAction() {
-        if(QuitDialog.confirmQuit())
+        if (QuitDialog.confirmQuit())
             Application.initiateShutdown();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.Quit.getId(); }
+        public String getId() {
+            return ActionType.Quit.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.WINDOW; }
+        public ActionCategory getCategory() {
+            return ActionCategory.WINDOW;
+        }
     }
 }

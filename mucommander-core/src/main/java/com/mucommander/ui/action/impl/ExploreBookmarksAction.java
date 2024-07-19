@@ -23,17 +23,19 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
  * This action changes the current folder of the currently active {@link com.mucommander.ui.main.FolderPanel} to
- * <code>bookmark://</code> which is the root of bookmark filesystem, allowing to explore all the bookmarks the user has.
+ * <code>bookmark://</code> which is the root of bookmark filesystem, allowing to explore all the bookmarks the user
+ * has.
  *
  * @author Nicolas Rinaudo
  */
 public class ExploreBookmarksAction extends ActiveTabAction {
 
-    public ExploreBookmarksAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public ExploreBookmarksAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -42,24 +44,28 @@ public class ExploreBookmarksAction extends ActiveTabAction {
         mainFrame.getActivePanel().tryChangeCurrentFolder("bookmark://");
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
     /**
-     * Enables or disables this action based on the currently active folder's
-     * current tab is not locked, this action will be enabled,
-     * if not it will be disabled.
+     * Enables or disables this action based on the currently active folder's current tab is not locked, this action
+     * will be enabled, if not it will be disabled.
      */
     @Override
     protected void toggleEnabledState() {
         setEnabled(!mainFrame.getActivePanel().getTabs().getCurrentTab().isLocked());
     }
-    
-    public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.ExploreBookmarks.getId(); }
 
-		public ActionCategory getCategory() { return ActionCategory.NAVIGATION; }
+    @NoIcon
+    public static class Descriptor extends AbstractActionDescriptor {
+        public String getId() {
+            return ActionType.ExploreBookmarks.getId();
+        }
+
+        public ActionCategory getCategory() {
+            return ActionCategory.NAVIGATION;
+        }
     }
 }

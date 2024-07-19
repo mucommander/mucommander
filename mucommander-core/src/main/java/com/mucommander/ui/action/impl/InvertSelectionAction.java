@@ -25,6 +25,7 @@ import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.MuAction;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
@@ -36,7 +37,7 @@ import com.mucommander.ui.main.table.FileTableModel;
  */
 public class InvertSelectionAction extends MuAction {
 
-    public InvertSelectionAction(MainFrame mainFrame, Map<String,Object> properties) {
+    public InvertSelectionAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);
     }
 
@@ -48,7 +49,7 @@ public class InvertSelectionAction extends MuAction {
         // Starts at 1 if current folder is not root so that '..' is not marked
         AbstractFile file;
         int nbRows = tableModel.getRowCount();
-        for(int i=tableModel.getFirstMarkableRow(); i<nbRows; i++) {
+        for (int i = tableModel.getFirstMarkableRow(); i < nbRows; i++) {
             file = tableModel.getFileAtRow(i);
             tableModel.setRowMarked(i, !tableModel.isRowMarked(i));
         }
@@ -58,14 +59,19 @@ public class InvertSelectionAction extends MuAction {
         fileTable.fireMarkedFilesChangedEvent();
     }
 
-	@Override
-	public ActionDescriptor getDescriptor() {
-		return new Descriptor();
-	}
+    @Override
+    public ActionDescriptor getDescriptor() {
+        return new Descriptor();
+    }
 
+    @NoIcon
     public static class Descriptor extends AbstractActionDescriptor {
-		public String getId() { return ActionType.InvertSelection.getId(); }
+        public String getId() {
+            return ActionType.InvertSelection.getId();
+        }
 
-		public ActionCategory getCategory() { return ActionCategory.SELECTION; }
+        public ActionCategory getCategory() {
+            return ActionCategory.SELECTION;
+        }
     }
 }

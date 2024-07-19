@@ -20,24 +20,26 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.ui.action.ActionDescriptor;
+import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.main.MainFrame;
 
 /**
- * Recalls window number 1 (brings it to the front). 
+ * Recalls window number 1 (brings it to the front).
  *
  * @author Maxence Bernard
  */
 public class RecallWindow1Action extends RecallWindowAction {
 
-    public RecallWindow1Action(MainFrame mainFrame, Map<String,Object> properties) {
+    public RecallWindow1Action(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties, 1);
     }
-    
+
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
     }
 
+    @NoIcon
     public static class Descriptor extends RecallWindowAction.Descriptor {
         public Descriptor() {
             super(1);
