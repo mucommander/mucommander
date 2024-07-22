@@ -20,6 +20,7 @@ package com.mucommander.commons.util.ui.helper;
 
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.function.Function;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
@@ -169,17 +170,17 @@ public class MenuToolkit {
     }
 
     public static JMenuItem addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper) {
-        return addMenuItem(menu, action, mnemonicHelper, false);
+        return addMenuItem(menu, action, mnemonicHelper, JMenuItem::new);
     }
 
 
     public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper) {
-        return (JCheckBoxMenuItem)addMenuItem(menu, action, mnemonicHelper, true);
+        return addMenuItem(menu, action, mnemonicHelper, JCheckBoxMenuItem::new);
     }
 
 
-    private static JMenuItem addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper, boolean createCheckBoxMenuItem) {
-        JMenuItem menuItem = createCheckBoxMenuItem?new JCheckBoxMenuItem(action):new JMenuItem(action);
+    private static <T extends JMenuItem> T addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper, Function<AbstractAction, T> newMenuItem) {
+        T menuItem = newMenuItem.apply(action);
 
         if(mnemonicHelper!=null) {
             char mnemonic = mnemonicHelper.getMnemonic(action.toString());
