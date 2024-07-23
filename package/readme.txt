@@ -39,6 +39,7 @@ Improvements:
 - Image preview: faster display of large JPEG files, added support for the following image formats: webp, psd (and psb)
 - Retrieve 'owner' and 'group' properties of local files on file systems that support these properties.
 - RAR files are now handled on Apple silicon the same way as on Intel. This accelerates browsing folders with many RAR files on Apple silicon.
+- Fix a race condition that lead to having menu items with icons.
 
 Localization:
 -
