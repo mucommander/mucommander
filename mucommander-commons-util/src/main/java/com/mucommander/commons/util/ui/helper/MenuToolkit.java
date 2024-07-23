@@ -170,14 +170,36 @@ public class MenuToolkit {
     }
 
     public static JMenuItem addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper) {
-        return addMenuItem(menu, action, mnemonicHelper, JMenuItem::new);
+        return addMenuItem(menu, action, mnemonicHelper, MenuToolkit::iconlessMenuItem);
     }
 
+    /**
+     * If the provided action has an icon, it would by default get displayed in the menu item.
+     * Since icons have nothing to do in menus, let's make sure the menu item has no icon.
+     */
+    private static JMenuItem iconlessMenuItem(AbstractAction action) {
+        return new JMenuItem(action) {
+            public void setIcon(javax.swing.Icon defaultIcon) {
+                // noop
+            }
+        };
+    }
 
     public static JCheckBoxMenuItem addCheckBoxMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper) {
-        return addMenuItem(menu, action, mnemonicHelper, JCheckBoxMenuItem::new);
+        return addMenuItem(menu, action, mnemonicHelper, MenuToolkit::iconlessCheckBoxMenuItem);
     }
 
+    /**
+     * If the provided action has an icon, it would by default get displayed in the menu item.
+     * Since icons have nothing to do in menus, let's make sure the menu item has no icon.
+     */
+    private static JCheckBoxMenuItem iconlessCheckBoxMenuItem(AbstractAction action) {
+        return new JCheckBoxMenuItem(action) {
+            public void setIcon(javax.swing.Icon defaultIcon) {
+                // noop
+            }
+        };
+    }
 
     private static <T extends JMenuItem> T addMenuItem(JMenu menu, AbstractAction action, MnemonicHelper mnemonicHelper, Function<AbstractAction, T> newMenuItem) {
         T menuItem = newMenuItem.apply(action);
@@ -187,10 +209,6 @@ public class MenuToolkit {
             if(mnemonic!=0)
                 menuItem.setMnemonic(mnemonic);
         }
-
-        // If the provided action has an icon, it would by default get displayed in the menu item.
-        // Since icons have nothing to do in menus, let's make sure the menu item has no icon. 
-        menuItem.setIcon(null);
 
         menu.add(menuItem);
 
