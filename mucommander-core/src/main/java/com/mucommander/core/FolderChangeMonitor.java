@@ -41,6 +41,8 @@ import com.mucommander.job.JobsManager;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
 import com.mucommander.ui.main.FolderPanel;
+import com.mucommander.ui.main.LocationTextField;
+import com.mucommander.ui.main.table.FileTable;
 
 
 /**
@@ -242,7 +244,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
      * Note that folder change check took an average of N milliseconds, the returned value will be at least N*WAIT_MULTIPLIER
      */
     private synchronized long checkAndRefresh(boolean forceRefresh) {
-        if (!mayFolderChangeByFileJob() && isFolderChanged(forceRefresh)) {
+        if (!mayFolderChangeByFileJob() && isFileTableAutoRefreshable() && isFolderChanged(forceRefresh)) {
             // Try and refresh current folder in a separate thread as to not lock monitor thread
             folderPanel.tryRefreshCurrentFolder();
             return nbSamples==0 ?
@@ -253,6 +255,17 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         return nbSamples==0 ?
                 checkPeriod
                 : Math.max(checkPeriod, (int)(WAIT_MULTIPLIER*(totalCheckTime/(float)nbSamples)));
+    }
+
+    /**
+     * Check if the folder that presented in the {@link FileTable} can be refreshed upon a change.
+     * It is not always the case since there are side effects for refreshing the presented folder,
+     * e.g., it resets the path in the {@link LocationTextField}, possibly during user modification.
+     *
+     * @return true if the {@link FileTable} can be refreshed when the presented folder changes, otherwise false
+     */
+    private boolean isFileTableAutoRefreshable() {
+        return !folderPanel.getFileTable().isActiveTable() || folderPanel.getFileTable().isFocusOwner();
     }
 
     private boolean mayFolderChangeByFileJob() {

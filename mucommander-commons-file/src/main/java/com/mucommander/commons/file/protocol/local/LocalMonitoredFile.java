@@ -92,7 +92,7 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
 
         try {
             // if this is not a periodic check then we want to first check by
-            // the modicifation date of the file as it appears to be faster
+            // the modification date of the file as it appears to be faster
             // than getting events from WatchService on macOS
             if (!periodicCheck && super.isChanged(false)) {
                 return true;
