@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -284,12 +285,12 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      * @return the list of volumes to be displayed in the popup menu
      */
     public static AbstractFile[] getDisplayableVolumes() {
-        AbstractFile[] volumes = LocalFile.getVolumes();
+        var volumes = Arrays.stream(LocalFile.getVolumes());
 
         if (volumeFilter != null)
-            return volumeFilter.filter(volumes);
+            volumes = volumes.filter(volumeFilter::match);
 
-        return volumes;
+        return volumes.sorted(Comparator.comparing(AbstractFile::getName)).toArray(AbstractFile[]::new);
     }
 
     ////////////////////////////////

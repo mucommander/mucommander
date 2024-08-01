@@ -41,6 +41,7 @@ Improvements:
 - RAR files are now handled on Apple silicon the same way as on Intel. This accelerates browsing folders with many RAR files on Apple silicon.
 - Fix a race condition that lead to having menu items with icons.
 - When modifying the location path, the text is no longer reverted back to path of the presented location upon a change in the presented location.
+- The list of volumes is now sorted alphabetically.
 
 Localization:
 -
