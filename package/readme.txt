@@ -32,15 +32,15 @@ What's new since v1.4.1 ?
 -----------------------
 
 New features:
--
+- Added support for the following image formats: webp, psd (and psb).
 
 Improvements:
 - Don't show warning message about too large file while previewing images files.
-- Image preview: faster display of large JPEG files, added support for the following image formats: webp, psd (and psb)
+- Faster previewing of large JPEG files.
 - Retrieve 'owner' and 'group' properties of local files on file systems that support these properties.
 - RAR files are now handled on Apple silicon the same way as on Intel. This accelerates browsing folders with many RAR files on Apple silicon.
-- Fix a race condition that lead to having menu items with icons.
-- When modifying the location path, the text is no longer reverted back to path of the presented location upon a change in the presented location.
+- Menu items are no longer occasionally set with icons.
+- When changing the location path, the changes are no longer reverted back to the original path upon change in the presented location.
 - The list of volumes is now sorted alphabetically.
 
 Localization:
