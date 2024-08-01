@@ -30,7 +30,6 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.FileStore;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -40,8 +39,9 @@ import java.nio.file.attribute.PosixFileAttributeView;
 import java.nio.file.attribute.PosixFileAttributes;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -303,7 +303,7 @@ public class LocalFile extends ProtocolFile {
      * @return all local volumes
      */
     public static AbstractFile[] getVolumes() {
-        Vector<AbstractFile> volumes = new Vector<AbstractFile>();
+        Set<AbstractFile> volumes = new HashSet<>();
 
         // Add Mac OS X's /Volumes subfolders and not file roots ('/') since Volumes already contains a named link
         // (like 'Hard drive' or whatever silly name the user gave his primary hard disk) to /
@@ -318,9 +318,8 @@ public class LocalFile extends ProtocolFile {
                 addMountEntries(volumes);
         }
 
-        // Add home folder, if it is not already present in the list
         AbstractFile homeFolder = getUserHome();
-        if (!(homeFolder == null || volumes.contains(homeFolder)))
+        if (homeFolder != null)
             volumes.add(homeFolder);
 
         addDesktopEntry(volumes, homeFolder);
@@ -343,14 +342,15 @@ public class LocalFile extends ProtocolFile {
      * @param v
      *            the <code>Vector</code> to add root folders to
      */
-    private static void addJavaIoFileRoots(Vector<AbstractFile> v) {
+    private static void addJavaIoFileRoots(Set<AbstractFile> volumes) {
         // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
         // dialog to appear for removable drives such as A:\ if no disk is present.
-        for (Path path : FileSystems.getDefault().getRootDirectories())
+        for (Path path : FileSystems.getDefault().getRootDirectories()) {
             try {
-                v.add(FileFactory.getFile(path.toFile().getAbsolutePath(), true));
+                volumes.add(FileFactory.getFile(path.toFile().getAbsolutePath(), true));
             } catch (IOException e) {
             }
+        }
     }
 
     /**
@@ -361,7 +361,7 @@ public class LocalFile extends ProtocolFile {
      * @param v
      *            the <code>Vector</code> to add mount points to
      */
-    private static void addMountEntries(Vector<AbstractFile> v) {
+    private static void addMountEntries(Set<AbstractFile> volumes) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(streamMountPoints()))) {
             String line;
             // read each line in file and parse it
@@ -377,8 +377,8 @@ public class LocalFile extends ProtocolFile {
                 boolean knownFS = Arrays.stream(KNOWN_UNIX_FS).anyMatch(fs -> fs.equals(fsType));
                 if (knownFS) {
                     AbstractFile file = FileFactory.getFile(mountPoint);
-                    if (file != null && !v.contains(file))
-                        v.add(file);
+                    if (file != null)
+                        volumes.add(file);
                 }
             }
         } catch (Exception e) {
@@ -394,14 +394,14 @@ public class LocalFile extends ProtocolFile {
      * @param volumesV the <code>Vector</code> to add mount points to
      * @param homeFolder  a home folder, can be null
      */
-    private static void addDesktopEntry(Vector<AbstractFile> volumesV, AbstractFile homeFolder) {
+    private static void addDesktopEntry(Set<AbstractFile> volumes, AbstractFile homeFolder) {
         if (homeFolder == null) {
             return;
         }
         try {
             AbstractFile desktop = homeFolder.getDirectChild("Desktop");
             if (desktop.exists() && desktop.isDirectory() && desktop.canRead()) {
-                volumesV.add(desktop);
+                volumes.add(desktop);
             }
         } catch (IOException e) {
             LOGGER.debug("Thrown exception while getting Desktop folder", e);
@@ -419,7 +419,7 @@ public class LocalFile extends ProtocolFile {
      * @param v
      *            the <code>Vector</code> to add the volumes to
      */
-    private static void addMacOSXVolumes(Vector<AbstractFile> v) {
+    private static void addMacOSXVolumes(Set<AbstractFile> volumes) {
         // /Volumes not resolved for some reason, giving up
         AbstractFile volumesFolder = FileFactory.getFile("/Volumes");
         if (volumesFolder == null)
@@ -428,15 +428,7 @@ public class LocalFile extends ProtocolFile {
         // Adds subfolders
         try {
             AbstractFile volumesFiles[] = volumesFolder.ls();
-            for (AbstractFile folder : volumesFiles)
-                if (folder.isDirectory()) {
-                    // The primary hard drive (the one corresponding to '/') is listed under Volumes and should be
-                    // returned as the first volume
-                    if (folder.getCanonicalPath().equals("/"))
-                        v.insertElementAt(folder, 0);
-                    else
-                        v.add(folder);
-                }
+            Arrays.stream(volumesFiles).filter(AbstractFile::isDirectory).forEach(volumes::add);
         } catch (IOException e) {
             LOGGER.warn("Can't get /Volumes subfolders", e);
         }
