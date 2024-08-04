@@ -92,6 +92,9 @@ public class FileTableModel extends AbstractTableModel {
     /** SizeFormat format used to create the size column's string */
     private static int sizeFormat;
 
+    /** True if a link to the parent folder is presented */
+    private static boolean showParentFolder;
+
     /** String used as size information for directories */
     public final static String DIRECTORY_SIZE_STRING = "<DIR>";
 
@@ -118,6 +121,8 @@ public class FileTableModel extends AbstractTableModel {
         // Initialize the size column format based on the configuration
         setSizeFormat(MuConfigurations.getPreferences().getVariable(MuPreference.DISPLAY_COMPACT_FILE_SIZE,
                                                   MuPreferences.DEFAULT_DISPLAY_COMPACT_FILE_SIZE));
+        setShowParentFolder(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_PARENT_FOLDER,
+                MuPreferences.DEFAULT_SHOW_PARENT_FOLDER));
     }
 
 
@@ -135,6 +140,9 @@ public class FileTableModel extends AbstractTableModel {
         sizeFormat |= SizeFormat.INCLUDE_SPACE;
     }
 
+    static void setShowParentFolder(boolean showParentFolder) {
+        FileTableModel.showParentFolder = showParentFolder;
+    }
 
     /**
      * Returns the SizeFormat format used to create the size column's string
@@ -228,7 +236,7 @@ public class FileTableModel extends AbstractTableModel {
 
         this.currentFolder = (folder instanceof CachedFile)?folder:new CachedFile(folder, true);
 
-        this.parent = currentFolder.getParent();    // Note: the returned parent is a CachedFile instance
+        this.parent = showParentFolder ? currentFolder.getParent() : null;    // Note: the returned parent is a CachedFile instance
         if(parent!=null) {
             // Pre-fetch the attributes that are used by the table renderer and some actions.
             prefetchCachedFileAttributes(parent);

@@ -111,6 +111,9 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
     // Locale that is used to sort by filenames
     private PrefComboBox<Locale> localeComboBox;
 
+    // Show parent folder (as "..") in the file table
+    private PrefCheckBox showParentFolderCheckBox;
+
     public FoldersPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.folders_tab"));
 
@@ -266,6 +269,12 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
             northPanel.add(showDSStoreFilesCheckBox, 20);
         }
 
+        showParentFolderCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_parent"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.SHOW_PARENT_FOLDER,
+                MuPreferences.DEFAULT_SHOW_PARENT_FOLDER));
+        showParentFolderCheckBox.addDialogListener(parent);
+        northPanel.add(showParentFolderCheckBox);
+
         if (OsFamily.MAC_OS.isCurrent() || OsFamily.WINDOWS.isCurrent()) {
             showSystemFoldersCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_system_folders"), () -> MuConfigurations.getPreferences().getVariable(
                     MuPreference.SHOW_SYSTEM_FOLDERS,
@@ -333,10 +342,11 @@ class FoldersPanel extends PreferencesPanel implements ItemListener, KeyListener
         MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_TAB_HEADER, showTabHeaderCheckBox.isSelected());
         MuConfigurations.getPreferences().setVariable(MuPreference.QUICK_SEARCH_TIMEOUT, (int) quickSearchTimeoutSpinner.getValue());
         MuConfigurations.getPreferences().setVariable(MuPreference.FILENAME_LOCALE, localeComboBox.getSelectedItem().toLanguageTag());
+        MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_PARENT_FOLDER, showParentFolderCheckBox.isSelected());
 
         // If one of the show/hide file filters have changed, refresh current folders of current MainFrame
         boolean refreshFolders = MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_HIDDEN_FILES, showHiddenFilesCheckBox.isSelected());
-        
+
         if(OsFamily.MAC_OS.isCurrent()) {
             refreshFolders |= MuConfigurations.getPreferences().setVariable(MuPreference.SHOW_DS_STORE_FILES, showDSStoreFilesCheckBox.isSelected());
         }

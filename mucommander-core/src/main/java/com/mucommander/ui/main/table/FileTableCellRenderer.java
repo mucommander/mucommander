@@ -173,7 +173,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             return null;
         }
 
-        QuickSearch search = this.table.getQuickSearch();
+        QuickSearch<?> search = this.table.getQuickSearch();
         boolean matches;
         if(!table.hasFocus())
             matches = true;
