@@ -174,6 +174,7 @@ public enum ActionType {
     ToggleHiddenFiles("ToggleHiddenFiles"),
     ToggleLockTab("ToggleLockTab"),
     ToggleOwnerColumn("ToggleOwnerColumn"),
+    ToggleShowParentFolder("ToggleShowParentFolder"),
     TogglePermissionsColumn("TogglePermissionsColumn"),
     ToggleShowFoldersFirst("ToggleShowFoldersFirst"),
     ToggleSizeColumn("ToggleSizeColumn"),

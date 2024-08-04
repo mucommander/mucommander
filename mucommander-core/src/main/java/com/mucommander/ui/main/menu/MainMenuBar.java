@@ -88,6 +88,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
     private JCheckBoxMenuItem toggleToggleAutoSizeItem;
     private JCheckBoxMenuItem toggleShowFoldersFirstItem;
     private JCheckBoxMenuItem toggleShowHiddenFilesItem;
+    private JCheckBoxMenuItem toggleShowParentFolderItem;
     private JCheckBoxMenuItem toggleTreeItem;
     private JCheckBoxMenuItem toggleUseSinglePanel;
 
@@ -220,6 +221,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         viewMenu.add(new JSeparator());
         toggleShowFoldersFirstItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleShowFoldersFirst, mainFrame), menuItemMnemonicHelper);
         toggleShowHiddenFilesItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleHiddenFiles, mainFrame), menuItemMnemonicHelper);
+        toggleShowParentFolderItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleShowParentFolder, mainFrame), menuItemMnemonicHelper);
         toggleTreeItem = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleTree, mainFrame), menuItemMnemonicHelper);
         toggleUseSinglePanel = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ActionType.ToggleUseSinglePanel, mainFrame), menuItemMnemonicHelper);
         /* TODO branch toggleBranchView = MenuToolkit.addCheckBoxMenuItem(viewMenu, ActionManager.getActionInstance(ToggleBranchViewAction.class, mainFrame), menuItemMnemonicHelper); */
@@ -418,6 +420,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
             toggleShowFoldersFirstItem.setSelected(activeTable.getSortInfo().getFoldersFirst());
             toggleShowHiddenFilesItem.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_HIDDEN_FILES, MuPreferences.DEFAULT_SHOW_HIDDEN_FILES));
+            toggleShowParentFolderItem.setSelected(MuConfigurations.getPreferences().getVariable(MuPreference.SHOW_PARENT_FOLDER, MuPreferences.DEFAULT_SHOW_PARENT_FOLDER));
             toggleTreeItem.setSelected(activeTable.getFolderPanel().isTreeVisible());
             toggleToggleAutoSizeItem.setSelected(mainFrame.isAutoSizeColumnsEnabled());
             toggleUseSinglePanel.setSelected(mainFrame.isSinglePanel());

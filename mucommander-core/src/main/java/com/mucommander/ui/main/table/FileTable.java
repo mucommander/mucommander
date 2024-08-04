@@ -473,7 +473,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @return true if the currently selected row/file is the parent folder '..'
      */
     public boolean isParentFolderSelected() {
-        return currentRow == 0 && tableModel.hasParentFolder();
+        return isParentFolder(currentRow);
     }
 
     /**
@@ -1495,6 +1495,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
             FileTableModel.setSizeFormat(event.getBooleanValue());
             tableModel.fillCellCache();
             resizeAndRepaint();
+            break;
+        case MuPreferences.SHOW_PARENT_FOLDER:
+            FileTableModel.setShowParentFolder(event.getBooleanValue());
+            folderPanel.tryRefreshCurrentFolder();
             break;
         case MuPreferences.DATE_FORMAT:
         case MuPreferences.DATE_SEPARATOR:

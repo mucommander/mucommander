@@ -238,6 +238,10 @@ public class MuPreferences implements MuPreferencesAPI {
     public static final String QUICK_SEARCH_TIMEOUT                = FILE_TABLE_SECTION + '.' + "quick_search_timeout";
     /** Default value for 'Quick search timeout' */
     public static final int DEFAULT_QUICK_SEARCH_TIMEOUT           = 2;
+    /** Controls whether a link to the parent folder should be displayed in file tables (".."). */
+    public static final String SHOW_PARENT_FOLDER                  = FILE_TABLE_SECTION + '.' + "show_parent_folder";
+    /** Default value for {@link #SHOW_PARENT_FOLDER}. */
+    public static final boolean DEFAULT_SHOW_PARENT_FOLDER         = true;
 
     /** Name of the root element's attribute that contains the version of muCommander used to write the CONFIGURATION file. */
     static final String VERSION_ATTRIBUTE = "version";

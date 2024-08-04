@@ -222,6 +222,7 @@ public class ActionManager {
         registerAction(new ToggleHiddenFilesAction.Descriptor(),            ToggleHiddenFilesAction::new);
         registerAction(new ToggleLockTabAction.Descriptor(),                ToggleLockTabAction::new);
         registerAction(new ToggleOwnerColumnAction.Descriptor(),            ToggleOwnerColumnAction::new);
+        registerAction(new ToggleShowParentFolderAction.Descriptor(),       ToggleShowParentFolderAction::new);
         registerAction(new TogglePermissionsColumnAction.Descriptor(),      TogglePermissionsColumnAction::new);
         registerAction(new ToggleShowFoldersFirstAction.Descriptor(),       ToggleShowFoldersFirstAction::new);
         registerAction(new ToggleSizeColumnAction.Descriptor(),             ToggleSizeColumnAction::new);

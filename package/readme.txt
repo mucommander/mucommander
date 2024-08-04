@@ -32,6 +32,7 @@ What's new since v1.4.1 ?
 -----------------------
 
 New features:
+- Added configuration for whether to show link to the parent folder in the file table to the main menu and preferences dialog.
 - Added support for the following image formats: webp, psd (and psb).
 
 Improvements:

@@ -17,7 +17,6 @@
 
 package com.mucommander.conf;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,6 +81,7 @@ public enum MuPreference {
     SHOW_TAB_HEADER(MuPreferences.SHOW_SINGLE_TAB_HEADER),
     SET_DROP_ACTION_TO_COPY(MuPreferences.SET_DROP_ACTION_TO_COPY),
     QUICK_SEARCH_TIMEOUT(MuPreferences.QUICK_SEARCH_TIMEOUT),
+    SHOW_PARENT_FOLDER(MuPreferences.SHOW_PARENT_FOLDER),
     ;
 
     private String label;
