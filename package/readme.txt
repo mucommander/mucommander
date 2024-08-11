@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.5.0
+muCommander v1.6.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -28,28 +28,20 @@ If you're having problems launching muCommander, make sure the JAVA_HOME environ
 where your Java runtime is installed.
 
 
-What's new since v1.4.1 ?
+What's new since v1.5.0 ?
 -----------------------
 
 New features:
-- Added configuration for whether to show link to the parent folder in the file table to the main menu and preferences dialog.
-- Added support for the following image formats: webp, psd (and psb).
+-
 
 Improvements:
-- Don't show warning message about too large file while previewing images files.
-- Faster previewing of large JPEG files.
-- Retrieve 'owner' and 'group' properties of local files on file systems that support these properties.
-- RAR files are now handled on Apple silicon the same way as on Intel. This accelerates browsing folders with many RAR files on Apple silicon.
-- Menu items are no longer occasionally set with icons.
-- When changing the location path, the changes are no longer reverted back to the original path upon change in the presented location.
-- The list of volumes is now sorted alphabetically.
+-
 
 Localization:
 -
 
 Bug fixes:
-- 7z and RAR 5.0 files can be browsed and extracted on Apple silicon.
-- Fix for keyboard shortcuts being removed when reconfiguring action shortcuts.
+-
 
 Known issues:
 - Some translations may not be up-to-date.

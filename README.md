@@ -1,6 +1,6 @@
 # muCommander
 
-[![Version](http://img.shields.io/badge/version-1.5.0-blue.svg?style=flat)](https://github.com/mucommander/mucommander/releases/tag/nightly)
+[![Version](http://img.shields.io/badge/version-1.6.0-blue.svg?style=flat)](https://github.com/mucommander/mucommander/releases/tag/nightly)
 [![License](http://img.shields.io/badge/License-GPL-blue.svg)](http://www.gnu.org/copyleft/gpl.html)
 [![Build Status](https://github.com/mucommander/mucommander/actions/workflows/nightly.yml/badge.svg)](https://github.com/mucommander/mucommander/actions/workflows/nightly.yml)
 [![Coverity Scan](https://scan.coverity.com/projects/3642/badge.svg)](https://scan.coverity.com/projects/3642)
