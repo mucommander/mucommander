@@ -32,20 +32,17 @@ What's new since v1.4.1 ?
 -----------------------
 
 New features:
-- Added configuration for whether to show link to the parent folder in the file table to the main menu and preferences dialog.
+- Added configuration for whether to show a link to the parent folder ("..") to the main menu and preferences dialog.
 - Added support for the following image formats: webp, psd (and psb).
 
 Improvements:
-- Don't show warning message about too large file while previewing images files.
+- Dropped the warning message about file too large when previewing image files.
 - Faster previewing of large JPEG files.
-- Retrieve 'owner' and 'group' properties of local files on file systems that support these properties.
+- Retrieve 'owner' and 'group' properties of local files on file systems in which these properties are provided.
 - RAR files are now handled on Apple silicon the same way as on Intel. This accelerates browsing folders with many RAR files on Apple silicon.
 - Menu items are no longer occasionally set with icons.
 - When changing the location path, the changes are no longer reverted back to the original path upon change in the presented location.
 - The list of volumes is now sorted alphabetically.
-
-Localization:
--
 
 Bug fixes:
 - 7z and RAR 5.0 files can be browsed and extracted on Apple silicon.
