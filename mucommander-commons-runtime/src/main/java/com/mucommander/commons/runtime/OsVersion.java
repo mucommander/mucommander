@@ -74,8 +74,14 @@ public enum OsVersion implements ComparableRuntimeProperty {
 	/** Catalina */
 	MAC_OS_10_15("10.15"),
 	/** Big Sur */
-	MAC_OS_10_16("10.16");
-	
+	MAC_OS_11("11"),
+    /** Monterey */
+    MAC_OS_12("12"),
+    /** Ventura */
+    MAC_OS_13("13"),
+    /** Sonoma */
+    MAC_OS_14("14");
+
 
     /** Logger used by this class. */
     private static final Logger LOGGER = LoggerFactory.getLogger(OsVersion.class);
@@ -156,8 +162,17 @@ public enum OsVersion implements ComparableRuntimeProperty {
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS) {
-            if(osVersionProp.startsWith("10.16"))
-                return MAC_OS_10_16;
+            if(osVersionProp.startsWith("14"))
+                return MAC_OS_14;
+
+            if(osVersionProp.startsWith("13"))
+                return MAC_OS_13;
+
+            if(osVersionProp.startsWith("12"))
+                return MAC_OS_12;
+
+            if(osVersionProp.startsWith("11"))
+                return MAC_OS_11;
 
             if(osVersionProp.startsWith("10.15"))
                 return MAC_OS_10_15;
@@ -187,7 +202,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
                 return MAC_OS_10_7;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_10_16;
+            return MAC_OS_14;
         }
 
         return OsVersion.UNKNOWN_VERSION;
