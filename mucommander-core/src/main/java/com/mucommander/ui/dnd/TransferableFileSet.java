@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
+import com.mucommander.commons.runtime.OsFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,22 +69,22 @@ public class TransferableFileSet implements Transferable {
     private FileSet fileSet;
 
     /** Is FileSet DataFlavor supported ? */
-    private boolean fileSetFlavorSupported = true;
+    private boolean fileSetFlavorSupported;
 
     /** Is DataFlavor.javaFileListFlavor supported ? */
-    private boolean javaFileListFlavorSupported = true;
+    private boolean javaFileListFlavorSupported;
 
     /** Is DataFlavor.stringFlavor supported ? */
-    private boolean stringFlavorSupported = true;
+    private boolean stringFlavorSupported;
 
     /** Is text/uri-list (RFC 2483) flavor supported ? */
-    private boolean textUriFlavorSupported = true;
+    private boolean textUriFlavorSupported;
 
     /** Does DataFlavor.stringFlavor transfer the files' full paths or filenames only ? */
-    private boolean stringFlavourTransfersFilename = false;
+    private boolean stringFlavourTransfersFilename;
 
     /** Does DataFlavor.stringFlavor transfer the files' filenames with extension or without ? */
-    private boolean stringFlavourTransfersFileBaseName = false;
+    private boolean stringFlavourTransfersFileBaseName;
     
 	/** DataFlavor used for GNOME/KDE transfers */
     private static DataFlavor TEXT_URI_FLAVOR;
@@ -111,6 +112,14 @@ public class TransferableFileSet implements Transferable {
      */
     public TransferableFileSet(FileSet fileSet) {
         this.fileSet = fileSet;
+        if (OsFamily.MAC_OS.isCurrent()) {
+            javaFileListFlavorSupported = true;
+        } else {
+            fileSetFlavorSupported = true;
+            javaFileListFlavorSupported = true;
+            stringFlavorSupported = true;
+            textUriFlavorSupported = true;
+        }
     }
 
 
