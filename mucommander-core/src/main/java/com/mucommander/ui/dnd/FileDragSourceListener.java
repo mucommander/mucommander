@@ -47,8 +47,10 @@ import com.mucommander.ui.main.table.FileTableModel;
  */
 public class FileDragSourceListener implements DragGestureListener, DragSourceListener {
 
-    /** the FolderPanel instance used to retrieve dragged files */
-    private FolderPanel folderPanel;
+    /**
+     * the FolderPanel instance used to retrieve dragged files
+     */
+    private final FolderPanel folderPanel;
 
 
     /**
@@ -70,7 +72,7 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
      */
     public void enableDrag(Component c) {
         DragSource dragSource = DragSource.getDefaultDragSource();
-        dragSource.createDefaultDragGestureRecognizer(c, DnDConstants.ACTION_COPY|DnDConstants.ACTION_MOVE|DnDConstants.ACTION_LINK, this);
+        dragSource.createDefaultDragGestureRecognizer(c, DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE | DnDConstants.ACTION_LINK, this);
     }
 
 
@@ -103,14 +105,14 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
     /////////////////////////////////
 
     public void dragGestureRecognized(DragGestureEvent event) {
-        if(folderPanel.getMainFrame().getNoEventsMode())
+        if (folderPanel.getMainFrame().getNoEventsMode())
             return;
 
         FileTable fileTable = folderPanel.getFileTable();
         FileTableModel tableModel = fileTable.getFileTableModel();
 
         // Return (do not initiate drag) if mouse button2 or button3 was used
-        if((event.getTriggerEvent().getModifiers() & (InputEvent.BUTTON2_MASK|InputEvent.BUTTON3_MASK))!=0)
+        if ((event.getTriggerEvent().getModifiers() & (InputEvent.BUTTON2_MASK | InputEvent.BUTTON3_MASK)) != 0)
             return;
 
 // Do not use that to retrieve the current selected file as it is inaccurate: the selection could have changed since the
@@ -123,7 +125,7 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
         // Find out which row was clicked
         int clickedRow = fileTable.rowAtPoint(event.getDragOrigin());
         // Return (do not initiate drag) if the selected file is the parent folder '..'
-        if (clickedRow==-1 || fileTable.isParentFolder(clickedRow))
+        if (clickedRow == -1 || fileTable.isParentFolder(clickedRow))
             return;
 
         // Retrieve the file corresponding to the clicked row
@@ -134,10 +136,9 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
         // In any other case, only drag the selected file.
         FileSet markedFiles;
         FileSet draggedFiles;
-        if(tableModel.getNbMarkedFiles()>0 && (markedFiles=fileTable.getSelectedFiles()).contains(selectedFile)) {
+        if (tableModel.getNbMarkedFiles() > 0 && (markedFiles = fileTable.getSelectedFiles()).contains(selectedFile)) {
             draggedFiles = markedFiles;
-        }
-        else {
+        } else {
             draggedFiles = new FileSet(folderPanel.getCurrentFolder(), selectedFile);
         }
 
@@ -148,7 +149,6 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
 
         // Start dragging
         DragSource.getDefaultDragSource().startDrag(event, null, new TransferableFileSet(draggedFiles), this);
-//        DragSource.getDefaultDragSource().startDrag(createCustomDragGestureEvent(event, DnDConstants.ACTION_MOVE), null, new TransferableFileSet(draggedFiles), this);
     }
 
 
