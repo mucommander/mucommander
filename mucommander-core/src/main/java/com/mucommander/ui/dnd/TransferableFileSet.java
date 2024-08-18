@@ -23,11 +23,10 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
-import com.mucommander.commons.runtime.OsFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,7 @@ public class TransferableFileSet implements Transferable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferableFileSet.class);
 	
     /** Transferred FileSet */
-    private FileSet fileSet;
+    private final FileSet fileSet;
 
     /** Is FileSet DataFlavor supported ? */
     private boolean fileSetFlavorSupported;
@@ -112,7 +111,8 @@ public class TransferableFileSet implements Transferable {
      */
     public TransferableFileSet(FileSet fileSet) {
         this.fileSet = fileSet;
-        if (OsFamily.MAC_OS.isCurrent()) {
+        var baseFolder = fileSet.getBaseFolder();
+        if (baseFolder != null && baseFolder.getURL().getScheme().equals(LocalFile.SCHEMA)) {
             javaFileListFlavorSupported = true;
         } else {
             fileSetFlavorSupported = true;
@@ -298,35 +298,32 @@ public class TransferableFileSet implements Transferable {
     //////////////////////////
 
     public DataFlavor[] getTransferDataFlavors() {
-        List<DataFlavor> supportedDataFlavorsV = new Vector<DataFlavor>();
+        List<DataFlavor> supportedDataFlavorsV = new ArrayList<>();
 
-        if(fileSetFlavorSupported)
+        if (fileSetFlavorSupported)
             supportedDataFlavorsV.add(FILE_SET_DATA_FLAVOR);
 
-        if(javaFileListFlavorSupported)
+        if (javaFileListFlavorSupported)
             supportedDataFlavorsV.add(DataFlavor.javaFileListFlavor);
 
-        if(stringFlavorSupported)
+        if (stringFlavorSupported)
             supportedDataFlavorsV.add(DataFlavor.stringFlavor);
 
-        if(textUriFlavorSupported)
+        if (textUriFlavorSupported)
             supportedDataFlavorsV.add(TEXT_URI_FLAVOR);
 
-        DataFlavor supportedDataFlavors[] = new DataFlavor[supportedDataFlavorsV.size()];
-        supportedDataFlavorsV.toArray(supportedDataFlavors);
-
-        return supportedDataFlavors;
+        return supportedDataFlavorsV.toArray(new DataFlavor[0]);
     }
 
 
     public boolean isDataFlavorSupported(DataFlavor dataFlavor) {
-        if(dataFlavor.equals(FILE_SET_DATA_FLAVOR))
+        if (dataFlavor.equals(FILE_SET_DATA_FLAVOR))
             return fileSetFlavorSupported;
-        else if(dataFlavor.equals(DataFlavor.javaFileListFlavor))
+        else if (dataFlavor.equals(DataFlavor.javaFileListFlavor))
             return javaFileListFlavorSupported;
-        else if(dataFlavor.equals(DataFlavor.stringFlavor))
+        else if (dataFlavor.equals(DataFlavor.stringFlavor))
             return stringFlavorSupported;
-        else if(dataFlavor.equals(TEXT_URI_FLAVOR))
+        else if (dataFlavor.equals(TEXT_URI_FLAVOR))
             return textUriFlavorSupported;
 
         return false;

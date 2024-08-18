@@ -22,6 +22,7 @@ package com.mucommander.commons.file.util;
 import com.mucommander.commons.file.AbstractFile;
 
 import java.util.Vector;
+import java.util.stream.Stream;
 
 
 /**
@@ -90,10 +91,8 @@ public class FileSet extends Vector<AbstractFile> {
      * @param files the files to add to this FileSet.
      */
     public void addAll(AbstractFile[] files) {
-        if(files==null)
-            return;
-
-        for (AbstractFile file : files)
-            add(file);
+        if (files != null) {
+            Stream.of(files).forEach(this::add);
+        }
     }
 }
