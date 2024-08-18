@@ -35,7 +35,7 @@ New features:
 -
 
 Improvements:
--
+- Local files can be dragged and dropped into WhatsApp Desktop on macOS
 
 Localization:
 -
