@@ -448,7 +448,6 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     doLast {
        copy {
           from "package"
-          include "license.txt"
           include "readme.txt"
           into "${buildDir}/muCommander.app/Contents"
        }
