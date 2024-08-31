@@ -449,7 +449,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
        copy {
           from "package"
           include "readme.txt"
-          into "${buildDir}/muCommander.app/Contents"
+          into "${buildDir}/muCommander.app/Contents/Resources"
        }
        delete("${buildDir}/muCommander.app/Contents/app/run.bat")
        delete("${buildDir}/muCommander.app/Contents/app/run.sh")
