@@ -30,6 +30,7 @@ import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 import java.util.Map;
 
+import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.ui.action.ActionId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     private boolean isEnabled;
 
     /** Name of the tray icon image */
-    private final static String TRAY_ICON_NAME = "icon16_8.png";
+    private final static String TRAY_ICON_NAME = OsFamily.MAC_OS.isCurrent() ? "macos_menubar_icon.png" : "icon16_8.png";
 
     /** Width of the muCommander tray icon */
     private final static int TRAY_ICON_WIDTH = 16;
