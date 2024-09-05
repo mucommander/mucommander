@@ -37,6 +37,7 @@ New features:
 Improvements:
 - Local files can be dragged and dropped into WhatsApp Desktop on macOS
 - Add a monochrome tray icon for macOS
+- Add a dock icon for macOS
 
 Localization:
 -
