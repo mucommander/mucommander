@@ -22,7 +22,6 @@ Requirements
 ------------
 
 A Java Runtime Environment (JRE) 11 or later is required to run muCommander.
-Java 20 is recommended, you can download it from https://adoptium.net/temurin.
 
 If you're having problems launching muCommander, make sure the JAVA_HOME environment variable points to the directory
 where your Java runtime is installed.
