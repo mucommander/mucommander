@@ -47,13 +47,8 @@ Bug fixes:
 
 Known issues:
 - Some translations may not be up-to-date.
-- SMB support may not work properly on non-multi-language JRE.
-- 'Copy files to clipboard' not working with some applications (files are not pasted).
 - Authentication issues when using several sets of credentials (login/password) for the same server.
 - Untrusted HTTPS connections are allowed without a warning.
-- Windows Vista/7: "java.net.SocketException: Permission denied: recv failed" error can appear when trying to access FTP
-  sites. This seems to be a Windows firewall problem, with a possible workaround:
-  http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=7077696
 - Need to enable NTLM authentication manually in order to authenticate to Samba >= 4.5. This is done by adding 'ntlm auth = yes' to smb.conf.
 - macOS: issues with browsing Documents/Desktop/Downloads may be solved by resetting Security and Privacy settings.
   See https://github.com/mucommander/mucommander/wiki/Reset-Security-&-Privacy-Settings-on-macOS for more details.
