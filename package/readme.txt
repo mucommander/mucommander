@@ -130,60 +130,7 @@ muCommander uses the following great third party works :
 Credits
 -------
 
-Core developers: 
-- Maxence Bernard
-- Nicolas Rinaudo
-- Arik Hadas
-- Mariusz Jakubowski
-
-Contributors:
-- Ivan Baidakov
-- Vassil Dichev
-- Karel Klic
-- David Kovar
-- Joshua Lebo
-- LeO
-- Xavier Martin
-- Alejandro Scandroli
-- Piotr Skowronek
-- Alexander Yerenkow
-- Johann Schmitz
-- Thomas Uebel
-- Tomer Gabel
-
-Translators: 
-- Frank Berger and Tony Klüver (German)
-- Marcos Cobeña and Xavi Miró (Spanish)
-- Jaromír Mára and Peter Vasko (Czech)
-- Kent Hsu (Traditional Chinese)
-- Jioh L. Jung (Korean)
-- Andrzej Kosiński (Polish)
-- György Varga and Tamás Balogh-Walder (Hungarian)
-- 4X_Pro and Evgeny Morozov (Russian)
-- whiteriver and Woodie (Simplified Chinese)
-- Joze Kovacic (Slovenian)
-- Catalin Hritcu (Romanian)
-- Roberto Angeletti (Italian)
-- Cristiano Duarte (Brazilian Portuguese)
-- Pieter Kristensen (Dutch)
-- Ján Ľudvík (Slovak)
-- Jonathan Murphy (British English)
-- Nardog (Japanese)
-- Jakob Ekström (Swedish)
-- Jeppe Toustrup (Danish)
-- Mykola Bilovus (Ukrainian)
-- ChArLoK_16 (Arabic)
-- vboo (Belarusian)
-- Ingrid Amundsen (Norwegian)
-- Emre Aytaç (Turkish)
-- Jordi Plantalech (Catalan)
-
-Special thanks:
-- Semyon Filippov (muCommander icon)
-- Stefano Perelli (former muCommander icon)
-
-Many thanks to all of you who suggested new features, reported bugs, sent warm emails or generously donated to the
-project !
+Many thanks to all active and past contributors (https://github.com/mucommander/mucommander/graphs/contributors) and all of you who suggested new features, reported bugs, sent warm emails or generously donated (https://github.com/sponsors/mucommander) to the project !
 
 
 Command Line Interface
