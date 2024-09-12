@@ -428,7 +428,6 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                         --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
                         --add-opens java.sql/java.sql=ALL-UNNAMED \
                         --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-                        --add-opens java.scripting/javax.script=ALL-UNNAMED \
                         --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED', \
                 '--mac-package-identifier', 'com.mucommander.muCommander', \
                 '--type', 'app-image', \
@@ -521,7 +520,6 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                                    --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
                                    --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
                                    --add-opens jdk.httpserver/com.sun.net.httpserver=ALL-UNNAMED \
-                                   --add-opens java.scripting/javax.script=ALL-UNNAMED \
                                    --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/linux', \
@@ -602,7 +600,6 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                     --add-opens java.sql/java.sql=ALL-UNNAMED \
                     --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
                     --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-                    --add-opens java.scripting/javax.script=ALL-UNNAMED \
                     --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/win', \
