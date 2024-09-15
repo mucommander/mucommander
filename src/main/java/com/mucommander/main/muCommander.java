@@ -17,6 +17,13 @@
 
 package com.mucommander.main;
 
+import com.beust.jcommander.JCommander;
+import org.apache.felix.framework.util.Util;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.launch.Framework;
+import org.osgi.framework.launch.FrameworkFactory;
+
 import java.awt.GraphicsEnvironment;
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,58 +38,48 @@ import java.nio.file.Paths;
 import java.util.AbstractMap;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-
-import org.apache.felix.framework.util.Util;
-import org.osgi.framework.Constants;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.launch.Framework;
-import org.osgi.framework.launch.FrameworkFactory;
-
-import com.beust.jcommander.JCommander;
 
 /**
  * muCommander launcher.
  * <p>
- * This class is used to start muCommander. It will analyse command line
- * arguments and initialize the OSGi framework.
+ * This class is used to start muCommander. It will analyse command line arguments and initialize the OSGi framework.
  * </p>
+ *
  * @author Arik Hadas
  */
-public class muCommander 
-{
+public class muCommander {
     private final static long START_EPOCH = System.currentTimeMillis();
 
     /**
      * Switch for specifying bundle directory.
-    **/
+     **/
     public static final String BUNDLE_DIR_SWITCH = "-b";
 
     /**
-     * The property name used to specify whether the launcher should
-     * install a shutdown hook.
-    **/
+     * The property name used to specify whether the launcher should install a shutdown hook.
+     **/
     public static final String SHUTDOWN_HOOK_PROP = "felix.shutdown.hook";
     /**
-     * The property name used to specify an URL to the system
-     * property file.
-    **/
+     * The property name used to specify an URL to the system property file.
+     **/
     public static final String SYSTEM_PROPERTIES_PROP = "felix.system.properties";
     /**
      * The default name used for the system properties file.
-    **/
+     **/
     public static final String SYSTEM_PROPERTIES_FILE_VALUE = "system.properties";
     /**
-     * The property name used to specify an URL to the configuration
-     * property file to be used for the created the framework instance.
-    **/
+     * The property name used to specify an URL to the configuration property file to be used for the created the
+     * framework instance.
+     **/
     public static final String CONFIG_PROPERTIES_PROP = "felix.config.properties";
     /**
      * The default name used for the configuration properties file.
-    **/
+     **/
     public static final String CONFIG_PROPERTIES_FILE_VALUE = "config.properties";
     /**
      * Name of the configuration directory.
@@ -93,9 +90,8 @@ public class muCommander
 
     /**
      * <p>
-     * This method performs the main task of constructing an framework instance
-     * and starting its execution. The following functions are performed
-     * when invoked:
+     * This method performs the main task of constructing an framework instance and starting its execution. The
+     * following functions are performed when invoked:
      * </p>
      * <ol>
      *   <li><i><b>Examine and verify command-line arguments.</b></i> The launcher
@@ -208,12 +204,13 @@ public class muCommander
      * so that they can be processed by the launcher during the framework
      * startup process.
      * </p>
-     * @param args Accepts arguments to set the auto-deploy directory and/or
-     *        the bundle cache directory.
-     * @throws Exception If an error occurs.
-    **/
-    public static void main(String[] args) throws Exception
-    {
+     *
+     * @param args
+     *         Accepts arguments to set the auto-deploy directory and/or the bundle cache directory.
+     * @throws Exception
+     *         If an error occurs.
+     **/
+    public static void main(String[] args) throws Exception {
         logTimeSinceStart("Main started");
         Configuration configuration = new Configuration();
         JCommander jCommander = new JCommander(configuration);
@@ -226,8 +223,18 @@ public class muCommander
         }
 
         if (configuration.version) {
-//            printVersion();
-//            return;
+            var version = "?";
+            var classUrl = muCommander.class.getProtectionDomain().getCodeSource().getLocation();
+            var jarFile = new File(classUrl.toURI());
+            Attributes attributes = null;
+            try (var jar = new JarFile(jarFile)) {
+                Manifest manifest = jar.getManifest();
+                attributes = manifest.getMainAttributes();
+            }
+            if (attributes != null)
+                version = attributes.getValue("Specification-Version");
+            jCommander.getConsole().println(version);
+            return;
         }
 
         // Ensure that a graphics environment is available
@@ -266,8 +273,7 @@ public class muCommander
         Map<String, String> configProps = muCommander.loadConfigProperties();
         // If no configuration properties were found, then create
         // an empty properties object.
-        if (configProps == null)
-        {
+        if (configProps == null) {
             System.err.println("No " + CONFIG_PROPERTIES_FILE_VALUE + " found.");
             configProps = new HashMap<>();
         }
@@ -298,9 +304,11 @@ public class muCommander
                         "org.violetlib.aqua"
         );
 
-        configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY, key -> new File(codeParentFolder, "bundle").getAbsolutePath());
+        configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY,
+                key -> new File(codeParentFolder, "bundle").getAbsolutePath());
 
-        configProps.computeIfAbsent("mucommander.conf.dir", key -> new File(codeParentFolder, "conf").getAbsolutePath());
+        configProps.computeIfAbsent("mucommander.conf.dir",
+                key -> new File(codeParentFolder, "conf").getAbsolutePath());
 
         String confDir = configProps.get("mucommander.conf.dir");
         System.setProperty("logback.configurationFile", new File(confDir, "logback.xml").getAbsolutePath());
@@ -309,12 +317,15 @@ public class muCommander
 
         final String appDir = configProps.get("mucommander.app.dir");
 
-        var manifest = new Manifest(muCommander.class.getClassLoader().getResource("META-INF/MANIFEST.MF").openStream());
+        var manifest =
+                new Manifest(muCommander.class.getClassLoader().getResource("META-INF/MANIFEST.MF").openStream());
         var attributes = manifest.getMainAttributes();
         var coreBundleName = String.format("mucommander-core-%s.jar", attributes.getValue("Specification-Version"));
-        configProps.computeIfAbsent("felix.auto.start.2", key -> "file:" + new File(appDir, coreBundleName).getAbsolutePath());
+        configProps.computeIfAbsent("felix.auto.start.2",
+                key -> "file:" + new File(appDir, coreBundleName).getAbsolutePath());
 
-        Path cacheDir = Paths.get(System.getProperty("java.io.tmpdir"), "mucommander-felix-cache-"+System.getProperty("user.name"));
+        Path cacheDir = Paths.get(System.getProperty("java.io.tmpdir"),
+                "mucommander-felix-cache-" + System.getProperty("user.name"));
         configProps.put(Constants.FRAMEWORK_STORAGE, cacheDir.toFile().getAbsolutePath());
 
         // Copy framework properties from the system properties.
@@ -325,7 +336,7 @@ public class muCommander
         if (configuration.preferences != null) {
             try {
                 preferencesFolder = UserPreferencesDir.getPreferencesFolder(configuration.preferences);
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
                 System.err.println("Failed to retrieve specified preferences folder: " + configuration.preferences);
                 return;
             }
@@ -334,14 +345,14 @@ public class muCommander
             configProps.put("app_mode", "portable");
             try {
                 preferencesFolder = UserPreferencesDir.getPreferencesFolder(portableDir);
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
                 System.err.println("Failed to retrieve portable preferences folder: " + portableDir);
                 return;
             }
         } else {
             try {
                 preferencesFolder = UserPreferencesDir.getDefaultPreferencesFolder();
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
                 System.err.println("Failed to retrieve default preferences folder: " + e.getMessage());
                 return;
             }
@@ -352,9 +363,9 @@ public class muCommander
         System.setProperty("MUCOMMANDER_USER_PREFERENCES", configuration.preferences);
 
         // Copy configuration provided by command line arguments
-        configProps.putAll(new AbstractMap<String,String>() {
+        configProps.putAll(new AbstractMap<String, String>() {
             @Override
-            public java.util.Set<Map.Entry<String,String>> entrySet() {
+            public java.util.Set<Map.Entry<String, String>> entrySet() {
                 return configuration.entrySet();
             }
         });
@@ -362,29 +373,22 @@ public class muCommander
         // If enabled, register a shutdown hook to make sure the framework is
         // cleanly shutdown when the VM exits.
         String enableHook = configProps.get(SHUTDOWN_HOOK_PROP);
-        if ((enableHook == null) || !enableHook.equalsIgnoreCase("false"))
-        {
+        if ((enableHook == null) || !enableHook.equalsIgnoreCase("false")) {
             Runtime.getRuntime().addShutdownHook(new Thread("Felix Shutdown Hook") {
-                public void run()
-                {
-                    try
-                    {
-                        if (m_fwk != null)
-                        {
+                public void run() {
+                    try {
+                        if (m_fwk != null) {
                             m_fwk.stop();
                             m_fwk.waitForStop(0);
                         }
-                    }
-                    catch (Exception ex)
-                    {
+                    } catch (Exception ex) {
                         System.err.println("Error stopping framework: " + ex);
                     }
                 }
             });
         }
         logTimeSinceStart("Hooks configured");
-        try
-        {
+        try {
             // Create an instance of the framework.
             FrameworkFactory factory = getFrameworkFactory();
             m_fwk = factory.newFramework(configProps);
@@ -400,8 +404,7 @@ public class muCommander
             logTimeSinceStart("Bundles deployed and started");
 
             FrameworkEvent event;
-            do
-            {
+            do {
                 // Start the framework.
                 m_fwk.start();
                 logTimeSinceStart("OSGi framework with muC fully started");
@@ -413,9 +416,7 @@ public class muCommander
             while (event.getType() == FrameworkEvent.STOPPED_UPDATE);
             // Otherwise, exit.
             System.exit(0);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             System.err.println("Could not create framework: " + ex);
             ex.printStackTrace();
             System.exit(0);
@@ -423,34 +424,29 @@ public class muCommander
     }
 
     /**
-     * Simple method to parse META-INF/services file for framework factory.
-     * Currently, it assumes the first non-commented line is the class name
-     * of the framework factory implementation.
+     * Simple method to parse META-INF/services file for framework factory. Currently, it assumes the first
+     * non-commented line is the class name of the framework factory implementation.
+     *
      * @return The created <tt>FrameworkFactory</tt> instance.
-     * @throws Exception if any errors occur.
-    **/
-    private static FrameworkFactory getFrameworkFactory() throws Exception
-    {
+     * @throws Exception
+     *         if any errors occur.
+     **/
+    private static FrameworkFactory getFrameworkFactory() throws Exception {
         URL url = muCommander.class.getClassLoader().getResource(
-            "META-INF/services/org.osgi.framework.launch.FrameworkFactory");
-        if (url != null)
-        {
+                "META-INF/services/org.osgi.framework.launch.FrameworkFactory");
+        if (url != null) {
             BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            try
-            {
-                for (String s = br.readLine(); s != null; s = br.readLine())
-                {
+            try {
+                for (String s = br.readLine(); s != null; s = br.readLine()) {
                     s = s.trim();
                     // Try to load first non-empty, non-commented line.
-                    if ((s.length() > 0) && (s.charAt(0) != '#'))
-                    {
+                    if ((s.length() > 0) && (s.charAt(0) != '#')) {
                         return (FrameworkFactory) Class.forName(s).getDeclaredConstructor().newInstance();
                     }
                 }
-            }
-            finally
-            {
-                if (br != null) br.close();
+            } finally {
+                if (br != null)
+                    br.close();
             }
         }
 
@@ -459,20 +455,17 @@ public class muCommander
 
     /**
      * <p>
-     * Loads the properties in the system property file associated with the
-     * framework installation into <tt>System.setProperty()</tt>. These properties
-     * are not directly used by the framework in anyway. By default, the system
-     * property file is located in the <tt>conf/</tt> directory of the Felix
-     * installation directory and is called "<tt>system.properties</tt>". The
-     * installation directory of Felix is assumed to be the parent directory of
-     * the <tt>felix.jar</tt> file as found on the system class path property.
-     * The precise file from which to load system properties can be set by
-     * initializing the "<tt>felix.system.properties</tt>" system property to an
-     * arbitrary URL.
+     * Loads the properties in the system property file associated with the framework installation into
+     * <tt>System.setProperty()</tt>. These properties are not directly used by the framework in anyway. By default,
+     * the system property file is located in the <tt>conf/</tt> directory of the Felix installation directory and is
+     * called "<tt>system.properties</tt>". The installation directory of Felix is assumed to be the parent directory of
+     * the
+     * <tt>felix.jar</tt> file as found on the system class path property. The precise file from which to load system
+     * properties can be set by initializing the "<tt>felix.system.properties</tt>" system property to an arbitrary
+     * URL.
      * </p>
-    **/
-    public static void loadSystemProperties()
-    {
+     **/
+    public static void loadSystemProperties() {
         // The system properties file is either specified by a system
         // property or it is in the same directory as the Felix JAR file.
         // Try to load it from one of these places.
@@ -480,48 +473,36 @@ public class muCommander
         // See if the property URL was specified as a property.
         URL propURL = null;
         String custom = System.getProperty(SYSTEM_PROPERTIES_PROP);
-        if (custom != null)
-        {
-            try
-            {
+        if (custom != null) {
+            try {
                 propURL = new URL(custom);
-            }
-            catch (MalformedURLException ex)
-            {
+            } catch (MalformedURLException ex) {
                 System.err.print("muCommander: " + ex);
                 return;
             }
-        }
-        else
-        {
+        } else {
             // Determine where the configuration directory is by figuring
             // out where felix.jar is located on the system class path.
             File confDir = null;
             String classpath = System.getProperty("java.class.path");
             int index = classpath.toLowerCase().indexOf("felix.jar");
             int start = classpath.lastIndexOf(File.pathSeparator, index) + 1;
-            if (index >= start)
-            {
+            if (index >= start) {
                 // Get the path of the felix.jar file.
                 String jarLocation = classpath.substring(start, index);
                 // Calculate the conf directory based on the parent
                 // directory of the felix.jar directory.
                 confDir = new File(
-                    new File(new File(jarLocation).getAbsolutePath()).getParent(),
-                    CONFIG_DIRECTORY);
-            }
-            else
-            {
+                        new File(new File(jarLocation).getAbsolutePath()).getParent(),
+                        CONFIG_DIRECTORY);
+            } else {
                 // Can't figure it out so use the current directory as default.
                 confDir = new File(System.getProperty("user.dir"), CONFIG_DIRECTORY);
             }
 
-            try
-            {
+            try {
                 propURL = new File(confDir, SYSTEM_PROPERTIES_FILE_VALUE).toURL();
-            }
-            catch (MalformedURLException ex)
-            {
+            } catch (MalformedURLException ex) {
                 System.err.print("muCommander: " + ex);
                 return;
             }
@@ -530,59 +511,47 @@ public class muCommander
         // Read the properties file.
         Properties props = new Properties();
         InputStream is = null;
-        try
-        {
+        try {
             is = propURL.openConnection().getInputStream();
             props.load(is);
             is.close();
-        }
-        catch (FileNotFoundException ex)
-        {
+        } catch (FileNotFoundException ex) {
             // Ignore file not found.
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             System.err.println(
-                "muCommander: Error loading system properties from " + propURL);
+                    "muCommander: Error loading system properties from " + propURL);
             System.err.println("muCommander: " + ex);
-            try
-            {
-                if (is != null) is.close();
-            }
-            catch (IOException ex2)
-            {
+            try {
+                if (is != null)
+                    is.close();
+            } catch (IOException ex2) {
                 // Nothing we can do.
             }
             return;
         }
 
         // Perform variable substitution on specified properties.
-        for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); )
-        {
+        for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); ) {
             String name = e.nextElement();
             System.setProperty(name,
-                Util.substVars(props.getProperty(name), name, null, null));
+                    Util.substVars(props.getProperty(name), name, null, null));
         }
     }
 
     /**
      * <p>
-     * Loads the configuration properties in the configuration property file
-     * associated with the framework installation; these properties
-     * are accessible to the framework and to bundles and are intended
-     * for configuration purposes. By default, the configuration property
-     * file is located in the <tt>conf/</tt> directory of the Felix
-     * installation directory and is called "<tt>config.properties</tt>".
-     * The installation directory of Felix is assumed to be the parent
-     * directory of the <tt>felix.jar</tt> file as found on the system class
-     * path property. The precise file from which to load configuration
-     * properties can be set by initializing the "<tt>felix.config.properties</tt>"
-     * system property to an arbitrary URL.
+     * Loads the configuration properties in the configuration property file associated with the framework installation;
+     * these properties are accessible to the framework and to bundles and are intended for configuration purposes. By
+     * default, the configuration property file is located in the <tt>conf/</tt> directory of the Felix installation
+     * directory and is called "<tt>config.properties</tt>". The installation directory of Felix is assumed to be the
+     * parent directory of the <tt>felix.jar</tt> file as found on the system class path property. The precise file from
+     * which to load configuration properties can be set by initializing the "<tt>felix.config.properties</tt>" system
+     * property to an arbitrary URL.
      * </p>
+     *
      * @return A <tt>Properties</tt> instance or <tt>null</tt> if there was an error.
-    **/
-    public static Map<String, String> loadConfigProperties()
-    {
+     **/
+    public static Map<String, String> loadConfigProperties() {
         // The config properties file is either specified by a system
         // property or it is in the conf/ directory of the Felix
         // installation directory.  Try to load it from one of these
@@ -591,48 +560,36 @@ public class muCommander
         // See if the property URL was specified as a property.
         URL propURL = null;
         String custom = System.getProperty(CONFIG_PROPERTIES_PROP);
-        if (custom != null)
-        {
-            try
-            {
+        if (custom != null) {
+            try {
                 propURL = new URL(custom);
-            }
-            catch (MalformedURLException ex)
-            {
+            } catch (MalformedURLException ex) {
                 System.err.print("muCommander: " + ex);
                 return null;
             }
-        }
-        else
-        {
+        } else {
             // Determine where the configuration directory is by figuring
             // out where felix.jar is located on the system class path.
             File confDir = null;
             String classpath = System.getProperty("java.class.path");
             int index = classpath.toLowerCase().indexOf("felix.jar");
             int start = classpath.lastIndexOf(File.pathSeparator, index) + 1;
-            if (index >= start)
-            {
+            if (index >= start) {
                 // Get the path of the felix.jar file.
                 String jarLocation = classpath.substring(start, index);
                 // Calculate the conf directory based on the parent
                 // directory of the felix.jar directory.
                 confDir = new File(
-                    new File(new File(jarLocation).getAbsolutePath()).getParent(),
-                    CONFIG_DIRECTORY);
-            }
-            else
-            {
+                        new File(new File(jarLocation).getAbsolutePath()).getParent(),
+                        CONFIG_DIRECTORY);
+            } else {
                 // Can't figure it out so use the current directory as default.
                 confDir = new File(System.getProperty("user.dir"), CONFIG_DIRECTORY);
             }
 
-            try
-            {
+            try {
                 propURL = new File(confDir, CONFIG_PROPERTIES_FILE_VALUE).toURL();
-            }
-            catch (MalformedURLException ex)
-            {
+            } catch (MalformedURLException ex) {
                 System.err.print("muCommander: " + ex);
                 return null;
             }
@@ -641,22 +598,17 @@ public class muCommander
         // Read the properties file.
         Properties props = new Properties();
         InputStream is = null;
-        try
-        {
+        try {
             // Try to load config.properties.
             is = propURL.openConnection().getInputStream();
             props.load(is);
             is.close();
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             // Try to close input stream if we have one.
-            try
-            {
-                if (is != null) is.close();
-            }
-            catch (IOException ex2)
-            {
+            try {
+                if (is != null)
+                    is.close();
+            } catch (IOException ex2) {
                 // Nothing we can do.
             }
 
@@ -666,24 +618,20 @@ public class muCommander
         // Perform variable substitution for system properties and
         // convert to dictionary.
         Map<String, String> map = new HashMap<String, String>();
-        for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); )
-        {
+        for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); ) {
             String name = e.nextElement();
             map.put(name,
-                Util.substVars(props.getProperty(name), name, null, props));
+                    Util.substVars(props.getProperty(name), name, null, props));
         }
 
         return map;
     }
 
-    public static void copySystemProperties(Map<String, String> configProps)
-    {
+    public static void copySystemProperties(Map<String, String> configProps) {
         for (Enumeration<String> e = (Enumeration<String>) System.getProperties().propertyNames();
-             e.hasMoreElements(); )
-        {
+             e.hasMoreElements(); ) {
             String key = e.nextElement();
-            if (key.startsWith("felix.") || key.startsWith("org.osgi.framework."))
-            {
+            if (key.startsWith("felix.") || key.startsWith("org.osgi.framework.")) {
                 configProps.put(key, System.getProperty(key));
             }
         }

@@ -29,63 +29,60 @@ import com.mucommander.commons.file.util.ResourceLoader;
 
 /**
  * Defines various generic muCommander constants.
+ *
  * @author Nicolas Rinaudo
  */
 public class RuntimeConstants {
-	private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeConstants.class);
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeConstants.class);
+
     // - Constant paths ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Path to the themes directory. */
-    public static final String THEMES_PATH     = "/themes";
+    public static final String THEMES_PATH = "/themes";
     /** Path to the muCommander license file. */
-    public static final String LICENSE         = "/license.txt";
-
+    public static final String LICENSE = "/license.txt";
 
     // - URLs ----------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Homepage URL. */
-    public static final String HOMEPAGE_URL      = "https://www.mucommander.com";
+    public static final String HOMEPAGE_URL = "https://www.mucommander.com";
     /** GitHub URL */
-    public static final String GITHUB_URL        = "https://github.com/mucommander/mucommander";
+    public static final String GITHUB_URL = "https://github.com/mucommander/mucommander";
     /** URL at which to download the latest version description. */
     public static final String VERSION_URL;
     /** URL of the muCommander forums. */
-    public static final String FORUMS_URL        = GITHUB_URL + "/discussions/";
+    public static final String FORUMS_URL = GITHUB_URL + "/discussions/";
     /** URL at which to make a donation. */
-    public static final String DONATION_URL      = "https://github.com/sponsors/mucommander";
+    public static final String DONATION_URL = "https://github.com/sponsors/mucommander";
     /** URL at which to file a new bug. */
-    public static final String REPORT_BUG_URL    = GITHUB_URL + "/issues/new/";
+    public static final String REPORT_BUG_URL = GITHUB_URL + "/issues/new/";
     /** Documentation URL. */
     public static final String DOCUMENTATION_URL = GITHUB_URL + "/wiki/";
-
-
 
     // - Misc. ---------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /**
-     * Release date to use in case the JAR file doesn't contain the information.
-     * This is guaranteed to trigger a software update - the JAR file is corrupt, so we might as well get the latest
-     * version.
+     * Release date to use in case the JAR file doesn't contain the information. This is guaranteed to trigger a
+     * software update - the JAR file is corrupt, so we might as well get the latest version.
      */
     private static final String DEFAULT_RELEASE_DATE = "20020101";
     /** Current muCommander version (<code>MAJOR.MINOR.DEV</code>). */
-    public  static final String VERSION;
+    public static final String VERSION;
     /** Date at which the build was generated (<code>YYYYMMDD</code>). */
-    public  static final String BUILD_DATE;
+    public static final String BUILD_DATE;
     /** String describing the software (<code>muCommander vMAJOR.MINOR.DEV</code>). */
-    public  static final String APP_STRING;
+    public static final String APP_STRING;
     /** String describing the muCommander build number. */
-    public  static final String BUILD_NUMBER;
-
-    
+    public static final String BUILD_NUMBER;
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
         Attributes attributes = null; // JAR file's manifest's attributes.
 
-        try (InputStream in = ResourceLoader.getResourceAsStream("META-INF/MANIFEST.MF", ResourceLoader.getDefaultClassLoader(), ResourceLoader.getRootPackageAsFile(RuntimeConstants.class))) {
+        try (InputStream in = ResourceLoader.getResourceAsStream("META-INF/MANIFEST.MF",
+                ResourceLoader.getDefaultClassLoader(),
+                ResourceLoader.getRootPackageAsFile(RuntimeConstants.class))) {
             if (in != null) {
                 Manifest manifest = new Manifest();
                 manifest.read(in);
@@ -94,26 +91,26 @@ public class RuntimeConstants {
             } else {
                 LOGGER.warn("MANIFEST.MF not found, default values will be used");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.warn("Failed to read MANIFEST.MF, default values will be used", e);
             // Ignore this, attributes is already set to null.
         }
-        
+
         // No MANIFEST.MF found, use default values.
-        if(attributes == null) {
+        if (attributes == null) {
             VERSION = "?";
             // We use a date that we are sure is later than the latest version to trigger the version checker.
             // After all, the JAR appears to be corrupt and should be upgraded.
             BUILD_DATE = DEFAULT_RELEASE_DATE;
-            VERSION_URL  = HOMEPAGE_URL + "/version/version.xml";
+            VERSION_URL = HOMEPAGE_URL + "/version/version.xml";
             BUILD_NUMBER = "?";
         }
 
         // A MANIFEST.MF file was found, extract data from it.
         else {
-            VERSION      = getAttribute(attributes, "Specification-Version");
+            VERSION = getAttribute(attributes, "Specification-Version");
             BUILD_DATE = getAttribute(attributes, "Build-Date");
-            VERSION_URL  = getAttribute(attributes, "Build-URL");
+            VERSION_URL = getAttribute(attributes, "Build-URL");
             BUILD_NUMBER = getAttribute(attributes, "Implementation-Version");
         }
         APP_STRING = String.format("muCommander v%s", VERSION);
@@ -121,14 +118,17 @@ public class RuntimeConstants {
 
     /**
      * Extract the requested attribute value.
-     * @param  attributes attributes from which to extract the requested value.
-     * @param  name       name of the attribute to retrieve.
-     * @return            the requested attribute value.
+     *
+     * @param attributes
+     *         attributes from which to extract the requested value.
+     * @param name
+     *         name of the attribute to retrieve.
+     * @return the requested attribute value.
      */
     private static String getAttribute(Attributes attributes, String name) {
         String buffer;
 
-        if((buffer = attributes.getValue(name)) == null)
+        if ((buffer = attributes.getValue(name)) == null)
             return "?";
         return buffer;
     }
