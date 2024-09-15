@@ -211,7 +211,6 @@ public class muCommander {
      *         If an error occurs.
      **/
     public static void main(String[] args) throws Exception {
-        logTimeSinceStart("Main started");
         Configuration configuration = new Configuration();
         JCommander jCommander = new JCommander(configuration);
         jCommander.parse(args);
@@ -237,6 +236,7 @@ public class muCommander {
             return;
         }
 
+        logTimeSinceStart("Main started");
         // Ensure that a graphics environment is available
         if (GraphicsEnvironment.isHeadless()) {
             System.err.println("Error: no graphical environment detected.");
