@@ -42,7 +42,7 @@ Localization:
 -
 
 Bug fixes:
--
+- A password was requested when attempting to browse some non-password protected zip files.
 
 Known issues:
 - Some translations may not be up-to-date.
