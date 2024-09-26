@@ -4,6 +4,7 @@ buildscript {
   }
   dependencies {
     classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:6.4.0'
+    classpath files('libs/mucommander-gradle-macappbundle.jar')
   }
 }
 
@@ -13,6 +14,10 @@ plugins {
     id 'org.ajoberstar.grgit' version '5.0.0'
     id 'edu.sc.seis.launch4j' version '2.5.4'
 }
+
+// This is the only syntax that appears to work for a local plugin
+// TODO: replace this with an official release of gradle-macappbundle
+apply plugin: 'edu.sc.seis.macAppBundle'
 
 allprojects {
     tasks.withType(JavaCompile).configureEach {
@@ -645,3 +650,101 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
                 '--vendor', 'Arik Hadas'
 }
 
+configurations.default.canBeResolved=true
+
+macAppBundle {
+    appName = "muCommander"
+    dmgName = 'mucommander-'+project.version+'-'+project.ext.release+'-noarch'
+    mainClassName = "com.mucommander.main.muCommander"
+    appStyle = "universalJavaApplicationStub"
+    bundleJRE = false
+    bundleIdentifier = "com.mucommander.muCommander"
+    jvmVersion = "1.6+"
+    icon = "package/osx/icon.icns"
+    bundleAllowMixedLocalizations = "true"
+    bundleExtras.put("NSHighResolutionCapable", "true")
+    bundleExtras.put("NSSupportsAutomaticGraphicsSwitching", "true")
+    backgroundImage = "package/osx/bg.gif"
+    backgroundImageWidth = 450
+    backgroundImageHeight = 475
+    appIconX = 225
+    appIconY = 75
+    appFolderX = 225
+    appFolderY = 350
+    backgroundScript = """
+    tell application "Finder"
+      tell disk "\${VOL_NAME}"
+           open
+           set current view of container window to icon view
+           set toolbar visible of container window to false
+           set statusbar visible of container window to false
+           set the bounds of container window to { 0, 0, \${IMAGE_WIDTH}, \${IMAGE_HEIGHT} }
+           set the position of the container window to {400, 100}
+           set viewOptions to the icon view options of container window
+           set arrangement of viewOptions to not arranged
+           set icon size of viewOptions to 72
+           set background picture of viewOptions to file ".background:\${DMG_BACKGROUND_IMG}"
+           set position of item "\${APP_NAME}.app" of container window to { \${APPICONX}, \${APPICONY} }
+           set position of item "Applications" of container window to { \${APPFOLDERX}, \${APPFOLDERY} }
+           close
+           open
+           update without registering applications
+           delay 2
+      end tell
+    end tell
+    """
+
+    if (!project.hasProperty('skipDmgSign') && project.ext.identity?.trim()) {
+        certIdentity = project.ext.identity
+    }
+    javaProperties.put("com.apple.smallTabs", "true")
+    javaProperties.put("com.apple.hwaccel", "true")
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    javaProperties.put("file.encoding", "UTF-8")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.desktop/com.apple.eawt=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.desktop/com.apple.laf=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.desktop/com.apple.laf=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.desktop/com.apple.eio=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.desktop/com.apple.eawt=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.desktop/javax.swing.plaf.basic=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.base/java.io=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.base/java.net=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.transaction.xa/javax.transaction.xa=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.management/javax.management=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.rmi/java.rmi=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.security.jgss/org.ietf.jgss=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.sql/java.sql=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.base/sun.net.www.protocol.http=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("java.base/sun.net.www.protocol.https=ALL-UNNAMED")
+}
+
+copyToResourcesJava.dependsOn createBundlesDir
+copyToResourcesJava.doLast {
+    copy {
+        from "build/osgi"
+        include 'app/**'
+        include 'bundle/**'
+        include 'conf/**'
+        exclude 'bundle/osgiaas*'
+        exclude 'bundle/jline*'
+        exclude 'bundle/mucommander-os-linux*'
+        exclude 'bundle/mucommander-os-openvms*'
+        exclude 'bundle/mucommander-os-win*'
+        into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
+    }
+}
