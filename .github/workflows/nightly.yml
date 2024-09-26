@@ -66,11 +66,11 @@ jobs:
 
       - name: Build dmg
         run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}"
-        if: ${{ matrix.arch }} != 'noarch'
+        if: ${{ matrix.arch != 'noarch' }}
 
       - name: Build dmg
         run: ./gradlew createDmg -Pidentity="${{ secrets.MACOS_IDENTITY }}"
-        if: ${{ matrix.arch }} == 'noarch'
+        if: ${{ matrix.arch == 'noarch' }}
 
       - name: Sign dmg
         run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
