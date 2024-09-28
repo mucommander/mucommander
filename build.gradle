@@ -761,11 +761,6 @@ copyToResourcesJava.doLast {
       exec {
         workingDir "${rootDir}"
         executable '/usr/bin/codesign'
-        args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/MacOS/universalJavaApplicationStub"
-      }
-      exec {
-        workingDir "${rootDir}"
-        executable '/usr/bin/codesign'
         args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app"
       }
    }
