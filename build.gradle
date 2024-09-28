@@ -751,12 +751,12 @@ copyToResourcesJava.doLast {
       exec {
         workingDir "${rootDir}"
         executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/app/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
       }
       exec {
         workingDir "${rootDir}"
         executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/app", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
       }
    }
 }
