@@ -40,7 +40,7 @@ Improvements:
 -
 
 Localization:
--
+- Korean translation updated.
 
 Bug fixes:
 -
