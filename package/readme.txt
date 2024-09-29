@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.6.0
+muCommander v1.5.1
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -33,16 +33,10 @@ the directory where your Java runtime is installed.
 What's new since v1.5.0 ?
 -----------------------
 
-New features:
--
-
 Improvements:
 - Local files can be dragged and dropped into WhatsApp Desktop on macOS
 - Add a monochrome tray icon for macOS
 - Add a dock icon for macOS
-
-Localization:
--
 
 Bug fixes:
 - A password was requested when attempting to browse some non-password protected zip files.
