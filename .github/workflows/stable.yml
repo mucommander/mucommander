@@ -76,7 +76,12 @@ jobs:
           p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
 
       - name: Build dmg
-        run: ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}"
+        run: |
+          if [ "${{ matrix.arch }}" == 'noarch' ]; then
+            ./gradlew createDmg -Pidentity="${{ secrets.MACOS_IDENTITY }}"
+          else
+            ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}"
+          fi
 
       - name: Sign dmg
         run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
