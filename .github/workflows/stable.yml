@@ -39,6 +39,8 @@ jobs:
             os: macos-14
           - arch: x86_64
             os: macos-12
+          - arch: noarch
+            os: macos-15
     runs-on: ${{ matrix.os }}
     needs: create-release
 
