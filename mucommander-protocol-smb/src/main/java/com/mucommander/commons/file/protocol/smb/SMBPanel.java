@@ -20,9 +20,7 @@ package com.mucommander.commons.file.protocol.smb;
 
 import java.net.MalformedURLException;
 
-import javax.swing.JFrame;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
@@ -44,6 +42,7 @@ public class SMBPanel extends ServerPanel {
     private JTextField shareField;
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JCheckBox useSmbjCheckbox;
 
     private static String lastDomain = "";
     private static String lastServer = "";
@@ -51,6 +50,7 @@ public class SMBPanel extends ServerPanel {
     private static String lastUsername = "";
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
+    private boolean useSmbj = false;
 
 	
     SMBPanel(ServerPanelListener listener, JFrame mainFrame) {
@@ -83,7 +83,11 @@ public class SMBPanel extends ServerPanel {
         // Password field
         passwordField = new JPasswordField();
         addTextFieldListeners(passwordField, false);
-        addRow(Translator.get("password"), passwordField, 0);
+        addRow(Translator.get("password"), passwordField, 5);
+
+        // SMBJ
+        useSmbjCheckbox = new JCheckBox("Use sbmj?" /* TODO - use translator! */, true);
+        addRow("", useSmbjCheckbox, 5);
     }
 
 	
@@ -93,6 +97,7 @@ public class SMBPanel extends ServerPanel {
         lastDomain = domainField.getText();
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
+        useSmbj = this.useSmbjCheckbox.isSelected();
     }
 	
 	
@@ -111,6 +116,7 @@ public class SMBPanel extends ServerPanel {
             userInfo = lastDomain+";"+userInfo;
 
         url.setCredentials(new Credentials(userInfo, lastPassword));
+        url.setProperty("useSmbj", "true");
 
         return url;
     }
