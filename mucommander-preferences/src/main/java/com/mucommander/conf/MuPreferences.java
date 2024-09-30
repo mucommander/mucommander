@@ -201,7 +201,7 @@ public class MuPreferences implements MuPreferencesAPI {
     /** Whether or not to display hidden files. */
     public static final String  SHOW_HIDDEN_FILES                  = FILE_TABLE_SECTION + '.' + "show_hidden_files";
     /** Default hidden files visibility. */
-    public static final boolean DEFAULT_SHOW_HIDDEN_FILES          = true;
+    public static final boolean DEFAULT_SHOW_HIDDEN_FILES          = false;
     /** Whether or not to display OS X .DS_Store files. */
     public static final String  SHOW_DS_STORE_FILES                = FILE_TABLE_SECTION + '.' + "show_ds_store_files";
     /** Default .DS_Store files visibility. */
