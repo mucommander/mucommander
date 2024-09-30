@@ -9,12 +9,12 @@ dependencies {
     // The following libs are required by JediTerm.
     implementation 'org.checkerframework:checker-qual:3.24.0'
 
-    comprise 'org.jetbrains.jediterm:jediterm-core:3.17'        // if you change version here, remember to change it also in mucommander-core
-    comprise 'org.jetbrains.jediterm:jediterm-ui:3.17'          // if you change version here, remember to change it also in mucommander-core
-    comprise 'org.jetbrains.pty4j:pty4j:0.12.3'
+    comprise 'org.jetbrains.jediterm:jediterm-core:3.44'        // if you change version here, remember to change it also in mucommander-core
+    comprise 'org.jetbrains.jediterm:jediterm-ui:3.44'          // if you change version here, remember to change it also in mucommander-core
+    comprise 'org.jetbrains.pty4j:pty4j:0.12.35'
     comprise 'org.jetbrains.pty4j:purejavacomm:0.0.11.1'
 
-    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation 'org.jetbrains:annotations:25.0.0'
     runtimeOnly 'org.jetbrains.intellij.deps:trove4j:1.0.20200330'
 
     implementation 'org.apache.logging.log4j:log4j-1.2-api:2.22.1'

@@ -43,7 +43,7 @@ Localization:
 - Korean translation updated.
 
 Bug fixes:
--
+- Terminal doesn't start (stuck for a couple of minutes before a proper prompt appeared)
 
 Known issues:
 - Some translations may not be up-to-date.
