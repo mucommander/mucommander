@@ -37,7 +37,7 @@ New features:
 -
 
 Improvements:
--
+- Do not display hidden files by default.
 
 Localization:
 - Korean translation updated.
