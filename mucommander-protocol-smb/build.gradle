@@ -6,6 +6,7 @@ dependencies {
     api project(':mucommander-translator')
 
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
+    implementation 'com.hierynomus:smbj:0.13.0'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13.2'
