@@ -38,6 +38,7 @@ New features:
 
 Improvements:
 - Do not display hidden files by default.
+- The scope for Google Drive was changed to the non-sensitive scope https://www.googleapis.com/auth/drive.file.
 
 Localization:
 - Korean translation updated.
