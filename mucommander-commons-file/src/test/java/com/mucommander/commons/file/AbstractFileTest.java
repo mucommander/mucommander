@@ -17,31 +17,6 @@
 
 package com.mucommander.commons.file;
 
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.io.ByteArrayInputStream;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-import java.util.Vector;
-
-import javax.swing.Icon;
-
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-
 import com.mucommander.commons.file.archive.zip.ZipFormatProvider;
 import com.mucommander.commons.file.util.PathUtilsTest;
 import com.mucommander.commons.io.BoundedInputStream;
@@ -55,6 +30,29 @@ import com.mucommander.commons.io.RandomGeneratorInputStream;
 import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import javax.swing.Icon;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.io.ByteArrayInputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.Vector;
+import java.util.stream.Stream;
 
 /**
  * A generic JUnit test case for the {@link AbstractFile} class. This class is abstract and must be extended by
@@ -454,9 +452,10 @@ public abstract class AbstractFileTest {
      * Tests the given volume folder and assert certain properties that a volume folder should have.
      *
      * @param volume a volume folder
+     * @param volumes optional array of volumes, used to filter out nested volumes
      * @throws IOException should not happen
      */
-    protected void testVolume(AbstractFile volume) throws IOException {
+    protected void testVolume(AbstractFile volume, AbstractFile[] volumes) throws IOException {
         // Test basic volume properties
         assert volume != null;
         assert volume.equals(volume.getVolume());
@@ -467,10 +466,14 @@ public abstract class AbstractFileTest {
             assert volume.isDirectory();
 
             if (volume.canRead()) {
-                // Assert that children of the volume are located on the volume (test the first children only)
+                // Assert that children of the volume are located on the volume (test one child only)
                 AbstractFile[] children = volume.ls();
-                if (children.length > 0)
-                    assert volume.equals(children[0].getVolume());
+                for (AbstractFile child : children) {
+                    if (Stream.of(volumes).noneMatch(child::equals)) {
+                        assert volume.equals(child.getVolume());
+                        break;
+                    }
+                }
             }
         }
     }
@@ -1710,7 +1713,7 @@ public abstract class AbstractFileTest {
     public void testVolume() throws IOException {
         AbstractFile volume = tempFile.getVolume();
 
-        testVolume(volume);
+        testVolume(volume, new AbstractFile[0]);
 
         // Test the relationship between the temporary file and its volume
         assert volume.isParentOf(tempFile);

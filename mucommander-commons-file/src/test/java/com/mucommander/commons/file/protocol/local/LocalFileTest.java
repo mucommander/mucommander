@@ -21,14 +21,11 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.AbstractFileTest;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileOperation;
-import com.mucommander.commons.file.protocol.local.LocalFile;
-
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
-
 
 /**
  * An {@link AbstractFileTest} implementation for {@link LocalFile}.
@@ -137,7 +134,7 @@ public class LocalFileTest extends AbstractFileTest {
         assert volumes.length>0;
 
         for (AbstractFile volume : volumes)
-            testVolume(volume);
+            testVolume(volume, volumes);
     }
 
     /**
