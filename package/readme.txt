@@ -38,13 +38,13 @@ New features:
 
 Improvements:
 - Do not display hidden files by default.
-- The scope for Google Drive was changed to the non-sensitive scope https://www.googleapis.com/auth/drive.file.
+- The scope we connect to Google Drive with was changed to the non-sensitive scope https://www.googleapis.com/auth/drive.file.
 
 Localization:
 - Korean translation updated.
 
 Bug fixes:
-- Terminal doesn't start (stuck for a couple of minutes before a proper prompt appeared)
+- The terminal is no longer stuck for a couple of minutes before a proper prompt appears.
 
 Known issues:
 - Some translations may not be up-to-date.
