@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.6.0
+muCommander v1.5.2
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -32,9 +32,6 @@ the directory where your Java runtime is installed.
 
 What's new since v1.5.1 ?
 -----------------------
-
-New features:
--
 
 Improvements:
 - Do not display hidden files by default.
