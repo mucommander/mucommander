@@ -30,21 +30,20 @@ having problems launching muCommander from these packages, make sure the JAVA_HO
 the directory where your Java runtime is installed.
 
 
-What's new since v1.5.1 ?
+What's new since v1.5.2 ?
 -----------------------
 
 New features:
 -
 
 Improvements:
-- Do not display hidden files by default.
-- The scope we connect to Google Drive with was changed to the non-sensitive scope https://www.googleapis.com/auth/drive.file.
+-
 
 Localization:
-- Korean translation updated.
+-
 
 Bug fixes:
-- The terminal is no longer stuck for a couple of minutes before a proper prompt appears.
+-
 
 Known issues:
 - Some translations may not be up-to-date.
