@@ -26,10 +26,13 @@ dependencies {
 
     compileOnly 'com.formdev:flatlaf:2.2'
     compileOnly 'org.violetlib:vaqua:10'
-    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.44'
-    compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.44'
-    compileOnly 'org.jetbrains.pty4j:pty4j:0.12.35'
-    compileOnly 'org.jetbrains:annotations:25.0.0'
+
+    // JediTerm deps: if you change any version below, remember to change it also in jetbrains-jediterm
+    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.47'
+    compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.47'
+    compileOnly 'org.jetbrains.pty4j:pty4j:0.13.2'
+    compileOnly 'org.jetbrains:annotations:26.0.1'
+    // JediTerm deps end
 
     implementation 'ch.qos.logback:logback-core:1.2.3'
     implementation 'ch.qos.logback:logback-classic:1.2.3'
