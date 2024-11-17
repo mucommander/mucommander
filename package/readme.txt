@@ -21,13 +21,14 @@ Official website: https://www.mucommander.com
 Requirements
 ------------
 
-Java Runtime Environment (JRE) version 11 or later is required to run muCommander.
+It is recommended to install muCommander from a package that comes with Java Runtime
+Environment (JRE). The version of JRE that is included for macOS (dmg), Windows (msi) and
+Linux  (rpm / deb), in this version of muCommander is 24, 20, and 20, respectively.
 
-Please note that muCommander is packaged with a newer version of JRE for macOS, Windows, and Linux. Consequently,
-installations from the dmg, msi, deb, and rpm packages may not work on machines that run JRE 11+.
-In that case, you can check the noarch-dmg or portable or tgz packages that are not bundled with JRE. If you're
-having problems launching muCommander from these packages, make sure the JAVA_HOME environment variable points to
-the directory where your Java runtime is installed.
+However, in case the included JRE is not supported on your machine, you can check the
+noarch-dmg, portable, or tgz packages that require Java 11+ to be installed separately.
+If you are having problems launching muCommander from these packages, make sure the JAVA_HOME
+environment variable points to the directory where your Java runtime is installed.
 
 
 What's new since v1.5.2 ?
