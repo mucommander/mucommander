@@ -4,7 +4,7 @@
 [![License](http://img.shields.io/badge/License-GPL-blue.svg)](http://www.gnu.org/copyleft/gpl.html)
 [![Build Status](https://github.com/mucommander/mucommander/actions/workflows/nightly.yml/badge.svg)](https://github.com/mucommander/mucommander/actions/workflows/nightly.yml)
 [![Coverity Scan](https://scan.coverity.com/projects/3642/badge.svg)](https://scan.coverity.com/projects/3642)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/mucommander/Lobby)
+[![GitHub Discussion](https://img.shields.io/github/discussions/mucommander/mucommander.svg)](https://github.com/mucommander/mucommander/discussions)
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
 It runs on any operating system with Java support (macOS, Windows, Linux, *BSD, Solaris...).
@@ -20,7 +20,7 @@ There are several ways to contribute to muCommander:
 - Want to fix a bug or implement a feature? We are using the standard [GitHub flow](https://guides.github.com/introduction/flow/): fork, make the changes, and submit a pull request. Changes are merged to the *master* branch. See the next section for tips for developing muCommander.
 - If you happen to speak a language that muCommander is not available in or able to improve existing translations, you can help translate the interface, see more details [here](https://github.com/mucommander/mucommander/wiki/Translate).
 
-If you want to get involved in muCommander or have any question or issue to discuss, you are more than welcome to join our rooms on [Gitter](https://gitter.im/mucommander).  
+If you want to get involved in muCommander or have any question or issue to discuss, you are more than welcome to join [GitHub Discussions](https://github.com/mucommander/mucommander/discussions).  
 
 ## Development
 
