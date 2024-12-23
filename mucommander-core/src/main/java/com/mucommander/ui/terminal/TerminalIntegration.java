@@ -62,6 +62,7 @@ public class TerminalIntegration {
      * When divider is close to max by this value we conclude it is maximised.
      */
     private static final float TREAT_AS_MAXIMIZED = 0.3f;
+    private static final String CHANGE_DIR_FORMAT = "cd \"%s\"" + System.lineSeparator();
 
     private String cwd; // keep it as String or as MonitoredFile maybe?
     private boolean terminalMaximized; // is terminal maximized?
@@ -118,13 +119,15 @@ public class TerminalIntegration {
     }
 
     private JediTermWidget getTerminal(String initialPath) {
-        return TerminalWidget.createTerminal(initialPath);
+        var terminal = TerminalWidget.createTerminal(initialPath);
+        cwd = initialPath;
+        return terminal;
     }
 
     private void showTerminal() {
         try {
             LOGGER.info("Going to show Terminal...");
-            String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
+            var newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
             // If !connected means that terminal process has ended (via `exit` command for ex.).
             if (terminal == null || !terminal.getTtyConnector().isConnected()) {
                 Cursor orgCursor = mainFrame.getJFrame().getCursor();
@@ -132,7 +135,6 @@ public class TerminalIntegration {
                     mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
                     terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
-                    cwd = newCwd;
                     // TODO do this better? For now 2 lines ~height + 20%
                     terminal.setMinimumSize(new Dimension(-1,
                             (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
@@ -166,13 +168,12 @@ public class TerminalIntegration {
             // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
             // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
             try {
-                terminal.getTtyConnector().write(
-                        " cd \"" + newCwd + "\""
-                                + System.getProperty("line.separator"));
+                var cmd = String.format(CHANGE_DIR_FORMAT, newCwd);
+                terminal.getTtyConnector().write(cmd);
+                cwd = newCwd;
             } catch (IOException e) {
                 LOGGER.error("Cannot sync table's CWD with terminal", e);
             }
-            cwd = newCwd;
         }
     }
 
@@ -207,7 +208,7 @@ public class TerminalIntegration {
                 if (oneTouchButton != null) {
                     oneTouchButton.setToolTipText(tooltip);
                     oneTouchButton.setActionCommand(buttonName);
-                    oneTouchButton.addActionListener(e -> SwingUtilities.invokeLater(action::run));
+                    oneTouchButton.addActionListener(e -> SwingUtilities.invokeLater(action));
                     break;
                 } else {
                     LOGGER.debug("Vertical split pane is not ready, unable to alter its buttons (attempt {} of {})", i + 1, maxTries);
@@ -231,7 +232,7 @@ public class TerminalIntegration {
                 Timer tooltipTimer;
 
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(action::run);
+                    SwingUtilities.invokeLater(action);
                 }
 
                 // force tooltip when mouse enters divider
@@ -298,7 +299,7 @@ public class TerminalIntegration {
                 JSplitPane.DIVIDER_LOCATION_PROPERTY,
                 e -> {
                     if (terminal != null) {
-                        var location = ((Integer)e.getNewValue()).intValue();
+                        var location = (Integer) e.getNewValue();
                         if (terminal == null) {
                             setTerminalMaximized(false);
                         } else if (location > verticalSplitPane.getMaximumDividerLocation() * TREAT_AS_MAXIMIZED) {
