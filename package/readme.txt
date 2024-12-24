@@ -38,7 +38,7 @@ New features:
 -
 
 Improvements:
--
+- When selecting a different shell, the change takes effect immediately in the terminal.
 
 Localization:
 -
