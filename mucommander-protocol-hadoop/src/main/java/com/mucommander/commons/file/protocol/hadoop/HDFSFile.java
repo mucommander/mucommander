@@ -23,7 +23,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.permission.FsPermission;
-import org.apache.hadoop.security.UnixUserGroupInformation;
+import org.apache.hadoop.security.UserGroupInformation;
 
 import java.io.IOException;
 import java.net.URI;
@@ -53,7 +53,7 @@ public class HDFSFile extends HadoopFile {
 
     static {
         try {
-            UnixUserGroupInformation ugi = UnixUserGroupInformation.login(DEFAULT_CONFIGURATION);
+            UserGroupInformation ugi = UserGroupInformation.getLoginUser();
             DEFAULT_USERNAME = ugi.getUserName();
             // Do not use default groups, as these are pretty much useless
         }
@@ -116,7 +116,7 @@ public class HDFSFile extends HadoopFile {
 
         // Import the user from the URL's authority, if set
         // TODO: for some reason, setting the group has no effect: files are still created with the default supergroup
-        conf.setStrings(UnixUserGroupInformation.UGI_PROPERTY_NAME, getUsername(url), getGroup(url));
+//        conf.setStrings(UserGroupInformation.UGI_PROPERTY_NAME, getUsername(url), getGroup(url));
 
         return FileSystem.get(URI.create(realm.toString(false)), conf);
     }
