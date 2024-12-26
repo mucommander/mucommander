@@ -10,7 +10,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-    implementation 'net.java.dev.jets3t:jets3t:0.9.4'
+    implementation 'org.jets3t:jets3t:0.9.7'
     implementation 'commons-logging:commons-logging:1.3.2'
     implementation 'javax.xml:jaxrpc-api:1.1'
     implementation 'org.glassfish:javax.xml.soap:10.0-b28'
