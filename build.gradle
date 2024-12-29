@@ -647,7 +647,8 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
                 '--win-shortcut', \
                 '--win-shortcut-prompt', \
                 '--win-dir-chooser', \
-                '--vendor', 'Arik Hadas'
+                '--vendor', 'Arik Hadas', \
+                '--win-menu-group', "muCommander"
 }
 
 configurations.default.canBeResolved=true
