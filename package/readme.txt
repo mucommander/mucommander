@@ -44,7 +44,7 @@ Localization:
 -
 
 Bug fixes:
--
+- MSI installer: change start menu directory name from `Unknown` to `muCommander`
 
 Known issues:
 - Some translations may not be up-to-date.
