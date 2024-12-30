@@ -14,19 +14,21 @@ dependencies {
 repositories.mavenCentral()
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-dropbox',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Plugin for Dropbox',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.file.protocol.dropbox',
-        'Import-Package': 'com.google.api.client.auth.oauth2,*',
-        'Bundle-Activator': 'com.mucommander.commons.file.protocol.dropbox.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-dropbox',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Plugin for Dropbox',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.commons.file.protocol.dropbox',
+                'Import-Package': 'com.google.api.client.auth.oauth2,*',
+                'Bundle-Activator': 'com.mucommander.commons.file.protocol.dropbox.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

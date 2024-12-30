@@ -17,6 +17,11 @@
 package com.mucommander.ui.terminal;
 
 import com.jediterm.terminal.ui.JediTermWidget;
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionId;
@@ -62,11 +67,15 @@ public class TerminalIntegration {
      * When divider is close to max by this value we conclude it is maximised.
      */
     private static final float TREAT_AS_MAXIMIZED = 0.3f;
+    private static final String CHANGE_DIR_FORMAT = " cd \"%s\"" + System.lineSeparator(); // leading space added deliberately to skip history (sometimes doesn't work, tho :/)
 
     private String cwd; // keep it as String or as MonitoredFile maybe?
     private boolean terminalMaximized; // is terminal maximized?
     private int lastMinDividerLocation; // last vertical split pane divider location when minimized
     private int lastMaxDividerLocation; // last vertical split pane divider location when maximised
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private final ConfigurationListener shellConfigurationListener;
 
     /**
      * Integrates Terminal in provided verticalSplitPane belonging to a given mainFrame.
@@ -77,6 +86,29 @@ public class TerminalIntegration {
         this.mainFrame = mainFrame;
         this.verticalSplitPane = verticalSplitPane;
         prepareVerticalSplitPaneForTerminal();
+        shellConfigurationListener = new ConfigurationListener() {
+            @Override
+            public void configurationChanged(ConfigurationEvent event) {
+                switch (event.getVariable()) {
+                case MuPreferences.CUSTOM_SHELL:
+                    if (!MuConfigurations.getPreferences().getVariable(
+                            MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL)) {
+                        return;
+                    }
+                case MuPreferences.USE_CUSTOM_SHELL:
+                    if (terminal != null) {
+                        terminal.close();
+                        // if the terminal is not visible, it will be set with the selected shell when we show it.
+                        // otherwise, we need to refresh it. however, it seems we can't discover whether the terminal
+                        // had the focus before updating the configuration so in this case we show the terminal anyway.
+                        if (terminal.isVisible()) {
+                            SwingUtilities.invokeLater(TerminalIntegration.this::showTerminal);
+                        }
+                    }
+                }
+            }
+        };
+        MuConfigurations.addPreferencesListener(shellConfigurationListener);
     }
 
     /**
@@ -118,13 +150,15 @@ public class TerminalIntegration {
     }
 
     private JediTermWidget getTerminal(String initialPath) {
-        return TerminalWidget.createTerminal(initialPath);
+        var terminal = TerminalWidget.createTerminal(initialPath);
+        cwd = initialPath;
+        return terminal;
     }
 
     private void showTerminal() {
         try {
             LOGGER.info("Going to show Terminal...");
-            String newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
+            var newCwd = mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath();
             // If !connected means that terminal process has ended (via `exit` command for ex.).
             if (terminal == null || !terminal.getTtyConnector().isConnected()) {
                 Cursor orgCursor = mainFrame.getJFrame().getCursor();
@@ -132,7 +166,6 @@ public class TerminalIntegration {
                     mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
                     terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
-                    cwd = newCwd;
                     // TODO do this better? For now 2 lines ~height + 20%
                     terminal.setMinimumSize(new Dimension(-1,
                             (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
@@ -164,15 +197,13 @@ public class TerminalIntegration {
         if (cwd == null || !cwd.equals(newCwd)) {
             // TODO check somehow if term is busy..... or find another way to set CWD
             // TODO cont'd: In Idea they've got TerminalUtil#hasRunningCommands for that...
-            // trailing space added deliberately to skip history (sometimes doesn't work, tho :/)
             try {
-                terminal.getTtyConnector().write(
-                        " cd \"" + newCwd + "\""
-                                + System.getProperty("line.separator"));
+                var cmd = String.format(CHANGE_DIR_FORMAT, newCwd);
+                terminal.getTtyConnector().write(cmd);
+                cwd = newCwd;
             } catch (IOException e) {
                 LOGGER.error("Cannot sync table's CWD with terminal", e);
             }
-            cwd = newCwd;
         }
     }
 
@@ -207,7 +238,7 @@ public class TerminalIntegration {
                 if (oneTouchButton != null) {
                     oneTouchButton.setToolTipText(tooltip);
                     oneTouchButton.setActionCommand(buttonName);
-                    oneTouchButton.addActionListener(e -> SwingUtilities.invokeLater(action::run));
+                    oneTouchButton.addActionListener(e -> SwingUtilities.invokeLater(action));
                     break;
                 } else {
                     LOGGER.debug("Vertical split pane is not ready, unable to alter its buttons (attempt {} of {})", i + 1, maxTries);
@@ -231,7 +262,7 @@ public class TerminalIntegration {
                 Timer tooltipTimer;
 
                 public void mouseClicked(MouseEvent e) {
-                    SwingUtilities.invokeLater(action::run);
+                    SwingUtilities.invokeLater(action);
                 }
 
                 // force tooltip when mouse enters divider
@@ -298,7 +329,7 @@ public class TerminalIntegration {
                 JSplitPane.DIVIDER_LOCATION_PROPERTY,
                 e -> {
                     if (terminal != null) {
-                        var location = ((Integer)e.getNewValue()).intValue();
+                        var location = (Integer) e.getNewValue();
                         if (terminal == null) {
                             setTerminalMaximized(false);
                         } else if (location > verticalSplitPane.getMaximumDividerLocation() * TREAT_AS_MAXIMIZED) {

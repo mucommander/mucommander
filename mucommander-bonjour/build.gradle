@@ -11,19 +11,21 @@ dependencies {
 }
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-bonjour',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Menu of Bonjour services',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.bonjour',
-        'Import-Package': '*',
-        'Bundle-Activator': 'com.mucommander.bonjour.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-bonjour',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Menu of Bonjour services',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.bonjour',
+                'Import-Package': '*',
+                'Bundle-Activator': 'com.mucommander.bonjour.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

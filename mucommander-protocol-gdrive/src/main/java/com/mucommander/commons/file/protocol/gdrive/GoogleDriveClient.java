@@ -17,16 +17,6 @@
 
 package com.mucommander.commons.file.protocol.gdrive;
 
-import java.io.Closeable;
-import java.io.IOError;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -45,6 +35,15 @@ import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.conf.PlatformManager;
 import com.mucommander.core.desktop.DesktopManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Closeable;
+import java.io.IOError;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Arik Hadas
@@ -56,7 +55,7 @@ public class GoogleDriveClient implements Closeable {
     private static final String APPLICATION_NAME = "muCommander";
 
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE);
+    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
 //            DriveScopes.DRIVE, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_METADATA);
 
     private static final String CLIENT_ID = "";

@@ -3,7 +3,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:6.4.0'
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:7.1.0'
     classpath files('libs/mucommander-gradle-macappbundle.jar')
   }
 }
@@ -647,7 +647,8 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
                 '--win-shortcut', \
                 '--win-shortcut-prompt', \
                 '--win-dir-chooser', \
-                '--vendor', 'Arik Hadas'
+                '--vendor', 'Arik Hadas', \
+                '--win-menu-group', "muCommander"
 }
 
 configurations.default.canBeResolved=true

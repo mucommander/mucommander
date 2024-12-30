@@ -17,23 +17,8 @@
 
 package com.mucommander.ui.terminal;
 
-import java.awt.event.KeyListener;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
-import com.jediterm.terminal.ui.TerminalWidgetListener;
 import com.jediterm.terminal.ui.settings.SettingsProvider;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.conf.MuConfigurations;
@@ -42,6 +27,18 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.pty4j.PtyProcess;
 import com.pty4j.PtyProcessBuilder;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Creates JediTerm widget.

@@ -26,13 +26,16 @@ dependencies {
 
     compileOnly 'com.formdev:flatlaf:2.2'
     compileOnly 'org.violetlib:vaqua:10'
-    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.17'
-    compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.17'
-    compileOnly 'org.jetbrains.pty4j:pty4j:0.12.3'
-    compileOnly 'org.jetbrains:annotations:23.0.0'
 
-    implementation 'ch.qos.logback:logback-core:1.2.3'
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    // JediTerm deps: if you change any version below, remember to change it also in jetbrains-jediterm
+    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.47'
+    compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.47'
+    compileOnly 'org.jetbrains.pty4j:pty4j:0.13.2'
+    compileOnly 'org.jetbrains:annotations:26.0.1'
+    // JediTerm deps end
+
+    implementation 'ch.qos.logback:logback-core:1.2.13'
+    implementation 'ch.qos.logback:logback-classic:1.2.13'
     implementation 'org.apache.commons:commons-collections4:4.4'
 
     comprise 'org.unix4j:unix4j-command:0.6'
@@ -46,47 +49,49 @@ dependencies {
 }
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         include 'org/unix4j/**'
         exclude 'codegen/**'
         exclude 'META-INF/**'
-   } }
-   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-   bnd ('Bundle-Name': 'muCommander-core',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'The core part of muCommander',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml",
-        'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
-        'Export-Package':
-            'com.mucommander.core.desktop,' +
-            'com.mucommander.job,' +
-            'com.mucommander.job.impl,' +
-            'com.mucommander.process,' +
-            'com.mucommander.osgi,' +
-            'com.mucommander.search,' +
-            'com.mucommander.ui.action,' +
-            'com.mucommander.ui.action.impl,' +
-            'com.mucommander.ui.dialog,' +
-            'com.mucommander.ui.dialog.file,' +
-            'com.mucommander.ui.dialog.server,' +
-            'com.mucommander.ui.encoding,' +
-            'com.mucommander.ui.icon,' +
-            'com.mucommander.ui.text,' +
-            'com.mucommander.ui.theme,' +
-            'com.mucommander.snapshot,' +
-            'com.mucommander.search,' +
-            'com.mucommander.text,' +
-            'com.mucommander.ui.icon,' +
-            'com.mucommander.ui.main,' +
-            'com.mucommander.ui.main.table,' +
-            'com.mucommander.ui.viewer',
-        'Bundle-Activator': 'com.mucommander.Activator')
+    } }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-core',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'The core part of muCommander',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml",
+                'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
+                'Export-Package':
+                        'com.mucommander.core.desktop,' +
+                                'com.mucommander.job,' +
+                                'com.mucommander.job.impl,' +
+                                'com.mucommander.process,' +
+                                'com.mucommander.osgi,' +
+                                'com.mucommander.search,' +
+                                'com.mucommander.ui.action,' +
+                                'com.mucommander.ui.action.impl,' +
+                                'com.mucommander.ui.dialog,' +
+                                'com.mucommander.ui.dialog.file,' +
+                                'com.mucommander.ui.dialog.server,' +
+                                'com.mucommander.ui.encoding,' +
+                                'com.mucommander.ui.icon,' +
+                                'com.mucommander.ui.text,' +
+                                'com.mucommander.ui.theme,' +
+                                'com.mucommander.snapshot,' +
+                                'com.mucommander.search,' +
+                                'com.mucommander.text,' +
+                                'com.mucommander.ui.icon,' +
+                                'com.mucommander.ui.main,' +
+                                'com.mucommander.ui.main.table,' +
+                                'com.mucommander.ui.viewer',
+                'Bundle-Activator': 'com.mucommander.Activator')
+    }
 }

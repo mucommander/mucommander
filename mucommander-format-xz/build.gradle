@@ -10,19 +10,21 @@ dependencies {
 }
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-xz',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library for supporting files in the XZ format',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.file.archive.xz',
-        'Bundle-Activator': 'com.mucommander.commons.file.archive.xz.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Giorgos Retsinas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-xz',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Library for supporting files in the XZ format',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.commons.file.archive.xz',
+                'Bundle-Activator': 'com.mucommander.commons.file.archive.xz.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Giorgos Retsinas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }
 

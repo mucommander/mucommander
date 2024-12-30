@@ -35,31 +35,33 @@ jar {
         exclude 'META-INF/**'
     } }
 
-    bnd ('Bundle-Name': 'muCommander-commons-file',
-         'Bundle-Vendor': 'muCommander',
-         'Bundle-Description': 'Component with file-level utilities',
-         'Bundle-DocURL': 'https://www.mucommander.com',
-         'Bundle-Activator': 'com.mucommander.commons.file.osgi.Activator',
-         'Export-Package':
-            'com.mucommander.commons.file,' +
-            'com.mucommander.commons.file.archive,' +
-            'com.mucommander.commons.file.connection,' +
-            'com.mucommander.commons.file.filter,' +
-            'com.mucommander.commons.file.icon,' +
-            'com.mucommander.commons.file.icon.impl,' +
-            'com.mucommander.commons.file.osgi,' +
-            'com.mucommander.commons.file.protocol,' +
-            'com.mucommander.commons.file.protocol.local,' +
-            'com.mucommander.commons.file.protocol.search,' +
-            'com.mucommander.commons.file.util,' +
-            'com.sun.jna.platform.win32',
-         'Specification-Title': "muCommander",
-         'Specification-Vendor': "Arik Hadas",
-         'Specification-Version': project.version,
-         'Implementation-Title': "muCommander",
-         'Implementation-Vendor': "Arik Hadas",
-         'Implementation-Version': revision.substring(0, 7),
-         'Build-Date': new Date().format('yyyyMMdd'),
-         'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-commons-file',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Component with file-level utilities',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Bundle-Activator': 'com.mucommander.commons.file.osgi.Activator',
+                'Export-Package':
+                        'com.mucommander.commons.file,' +
+                                'com.mucommander.commons.file.archive,' +
+                                'com.mucommander.commons.file.connection,' +
+                                'com.mucommander.commons.file.filter,' +
+                                'com.mucommander.commons.file.icon,' +
+                                'com.mucommander.commons.file.icon.impl,' +
+                                'com.mucommander.commons.file.osgi,' +
+                                'com.mucommander.commons.file.protocol,' +
+                                'com.mucommander.commons.file.protocol.local,' +
+                                'com.mucommander.commons.file.protocol.search,' +
+                                'com.mucommander.commons.file.util,' +
+                                'com.sun.jna.platform.win32',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }
 

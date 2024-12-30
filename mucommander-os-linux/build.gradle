@@ -20,21 +20,23 @@
      // Use JUnit test framework
      testImplementation 'junit:junit:4.13.2'
  }
- 
- jar {
-     bnd ('Bundle-Name': 'muCommander-os-linux',
-          'Bundle-Vendor': 'muCommander',
-          'Bundle-Description': 'Linux specifics',
-          'Bundle-DocURL': 'https://www.mucommander.com',
-          'Bundle-Activator': 'com.mucommander.desktop.linux.Activator',
-          'Export-Package': 'com.mucommander.ui.process',
-          'Import-Package': '*',
-          'Specification-Title': "muCommander",
-          'Specification-Vendor': "Arik Hadas",
-          'Specification-Version': project.version,
-          'Implementation-Title': "muCommander",
-          'Implementation-Vendor': "Arik Hadas",
-          'Implementation-Version': revision.substring(0, 7),
-          'Build-Date': new Date().format('yyyyMMdd'),
-          'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+
+jar {
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-os-linux',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Linux specifics',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Bundle-Activator': 'com.mucommander.desktop.linux.Activator',
+                'Export-Package': 'com.mucommander.ui.process',
+                'Import-Package': '*',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

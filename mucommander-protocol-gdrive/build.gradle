@@ -16,23 +16,25 @@ dependencies {
 repositories.mavenCentral()
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-       exclude 'META-INF/**'
-   }}
-   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-   bnd ('Bundle-Name': 'muCommander-gdrive',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Plugin for Google-Drive',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.protocol.gdrive,com.google.api.client.auth.oauth2',
-        'Import-Package': '!org.apache.avalon.framework.logger,!org.apache.log,!org.apache.log4j,!com.google.appengine.api,!com.google.apphosting.api,!com.google.appengine.api.utils,!io.grpc.override,*',
-        'Bundle-Activator': 'com.mucommander.commons.file.protocol.gdrive.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'META-INF/**'
+    }}
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-gdrive',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Plugin for Google-Drive',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.commons.protocol.gdrive,com.google.api.client.auth.oauth2',
+                'Import-Package': '!org.apache.avalon.framework.logger,!org.apache.log,!org.apache.log4j,!com.google.appengine.api,!com.google.apphosting.api,!com.google.appengine.api.utils,!io.grpc.override,*',
+                'Bundle-Activator': 'com.mucommander.commons.file.protocol.gdrive.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

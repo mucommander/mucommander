@@ -11,18 +11,20 @@ dependencies {
 }
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-http',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Plugin for HTTP protocol',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.file.protocol.http',
-        'Bundle-Activator': 'com.mucommander.commons.file.protocol.http.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-URL': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-http',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Plugin for HTTP protocol',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.commons.file.protocol.http',
+                'Bundle-Activator': 'com.mucommander.commons.file.protocol.http.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-URL': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

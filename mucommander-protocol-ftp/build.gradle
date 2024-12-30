@@ -15,18 +15,20 @@ dependencies {
 }
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-ftp',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library with configuration tools',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.protocol.ftp',
-        'Bundle-Activator': 'com.mucommander.commons.file.protocol.ftp.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-ftp',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Library with configuration tools',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.commons.protocol.ftp',
+                'Bundle-Activator': 'com.mucommander.commons.file.protocol.ftp.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }
