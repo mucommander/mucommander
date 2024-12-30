@@ -24,7 +24,7 @@ dependencies {
 }
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         include 'com/jediterm/**'
         include 'com/intellij/**'
         include 'com/pty4j/**'
@@ -35,27 +35,29 @@ jar {
         include 'resources/com/pty4j/**'
         exclude 'codegen/**'
         exclude 'META-INF/**'
-   } }
-   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-   bnd ('Bundle-Name': 'jetbrains-jediterm',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'JediTerm and its dependencies',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml",
-        'Export-Package':
-            'com.jediterm.core,' +
-            'com.jediterm.core.util,' +
-            'com.jediterm.terminal,' +
-            'com.jediterm.terminal.ui,' +
-            'com.jediterm.terminal.ui.settings,' +
-            'com.jediterm.pty,' +
-            'org.jetbrains.annotations,' +
-            'com.pty4j')
+    } }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    bundle {
+        bnd ('Bundle-Name': 'jetbrains-jediterm',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'JediTerm and its dependencies',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml",
+                'Export-Package':
+                        'com.jediterm.core,' +
+                                'com.jediterm.core.util,' +
+                                'com.jediterm.terminal,' +
+                                'com.jediterm.terminal.ui,' +
+                                'com.jediterm.terminal.ui.settings,' +
+                                'com.jediterm.pty,' +
+                                'org.jetbrains.annotations,' +
+                                'com.pty4j')
+    }
 }

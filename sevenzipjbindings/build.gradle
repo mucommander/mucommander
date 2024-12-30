@@ -18,22 +18,24 @@ dependencies {
 }
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         exclude 'META-INF/**'
-   } }
-   bnd ('Bundle-Name': 'muCommander-sevenzipjbindings',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Wrapper for SevenZipJBindings',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.sevenzipjbindings,net.sf.sevenzipjbinding',
-        'Import-Package': '*',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    } }
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-sevenzipjbindings',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Wrapper for SevenZipJBindings',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.sevenzipjbindings,net.sf.sevenzipjbinding',
+                'Import-Package': '*',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }
 

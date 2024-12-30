@@ -10,18 +10,20 @@ dependencies {
 }
 
 jar {
-    bnd ('Bundle-Name': 'muCommander-preferences',
-         'Bundle-Activator': 'com.mucommander.conf.Activator',
-         'Bundle-Vendor': 'muCommander',
-         'Bundle-Description': 'Tunable preferences handling',
-         'Bundle-DocURL': 'https://www.mucommander.com',
-         'Export-Package': 'com.mucommander.conf,com.mucommander.io.backup',
-         'Specification-Title': "muCommander",
-         'Specification-Vendor': "Arik Hadas",
-         'Specification-Version': project.version,
-         'Implementation-Title': "muCommander",
-         'Implementation-Vendor': "Arik Hadas",
-         'Implementation-Version': revision.substring(0, 7),
-         'Build-Date': new Date().format('yyyyMMdd'),
-         'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-preferences',
+                'Bundle-Activator': 'com.mucommander.conf.Activator',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Tunable preferences handling',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.conf,com.mucommander.io.backup',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

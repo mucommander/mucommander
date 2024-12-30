@@ -1,19 +1,21 @@
 repositories.mavenCentral()
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-apache-bzip2',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'The org.apache.tools.bzip2 part of ant',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'org.apache.tools.bzip2',
-        'Import-Package': '*',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-apache-bzip2',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'The org.apache.tools.bzip2 part of ant',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'org.apache.tools.bzip2',
+                'Import-Package': '*',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }
 
