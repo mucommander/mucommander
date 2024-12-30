@@ -11,24 +11,26 @@ jar {
         include 'com/ibm/icu/text/**'
     } }
 
-    bnd ('Bundle-Name': 'muCommander-commons-io',
-         'Bundle-Vendor': 'muCommander',
-         'Bundle-Description': 'Library with I/O tools',
-         'Import-Package':
-                '!com.ibm.icu.*,' +
-                '!com.mucommander.commons.io.bom,' +
-                ' *',
-         'Export-Package':
-                'com.mucommander.commons.io,' +
-                'com.mucommander.commons.io.base64,' +
-                'com.mucommander.commons.io.bom,' +
-                'com.mucommander.commons.io.security',
-         'Specification-Title': "muCommander",
-         'Specification-Vendor': "Arik Hadas",
-         'Specification-Version': project.version,
-         'Implementation-Title': "muCommander",
-         'Implementation-Vendor': "Arik Hadas",
-         'Implementation-Version': revision.substring(0, 7),
-         'Build-Date': new Date().format('yyyyMMdd'),
-         'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-commons-io',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Library with I/O tools',
+                'Import-Package':
+                        '!com.ibm.icu.*,' +
+                                '!com.mucommander.commons.io.bom,' +
+                                ' *',
+                'Export-Package':
+                        'com.mucommander.commons.io,' +
+                                'com.mucommander.commons.io.base64,' +
+                                'com.mucommander.commons.io.bom,' +
+                                'com.mucommander.commons.io.security',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

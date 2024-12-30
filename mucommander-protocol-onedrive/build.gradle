@@ -18,18 +18,20 @@ dependencies {
 repositories.mavenCentral()
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-onedrive',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Plugin for OneDrive',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.commons.protocol.onedrive',
-        'Bundle-Activator': 'com.mucommander.commons.file.protocol.onedrive.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version+'-'+project.ext.release,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-onedrive',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Plugin for OneDrive',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.commons.protocol.onedrive',
+                'Bundle-Activator': 'com.mucommander.commons.file.protocol.onedrive.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version+'-'+project.ext.release,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

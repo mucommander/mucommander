@@ -16,21 +16,23 @@ dependencies {
 }
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it)}
-   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-   bnd ('Bundle-Name': 'muCommander-viewer-text',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library for textual viewer/editor',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.viewer.text',
-        'Import-Package': 'com.mucommander.ui.text,com.mucommander.search,org.fife.ui.rsyntaxtextarea;resolution:=dynamic,*',
-        'Bundle-Activator': 'com.mucommander.viewer.text.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it)}
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-viewer-text',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Library for textual viewer/editor',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.viewer.text',
+                'Import-Package': 'com.mucommander.ui.text,com.mucommander.search,org.fife.ui.rsyntaxtextarea;resolution:=dynamic,*',
+                'Bundle-Activator': 'com.mucommander.viewer.text.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

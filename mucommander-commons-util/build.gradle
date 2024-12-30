@@ -7,17 +7,19 @@ dependencies {
 }
 
 jar {
-    bnd ('Bundle-Name': 'muCommander-commons-utils',
-         'Bundle-Vendor': 'muCommander',
-         'Bundle-Description': 'Other utilities',
-         'Bundle-DocURL': 'https://www.mucommander.com',
-         'Export-Package': "com.mucommander.*",
-         'Specification-Title': "muCommander",
-         'Specification-Vendor': "Arik Hadas",
-         'Specification-Version': project.version,
-         'Implementation-Title': "muCommander",
-         'Implementation-Vendor': "Arik Hadas",
-         'Implementation-Version': revision.substring(0, 7),
-         'Build-Date': new Date().format('yyyyMMdd'),
-         'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-commons-utils',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Other utilities',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': "com.mucommander.*",
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

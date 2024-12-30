@@ -23,18 +23,20 @@ dependencies {
 }
 
 jar {
-   bnd ('Bundle-Name': 'muCommander-viewer-binary',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library for binary/hexadecimal viewer/editor',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.viewer.binary',
-        'Bundle-Activator': 'com.mucommander.viewer.binary.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Miroslav Hajda",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Miroslav Hajda",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-viewer-binary',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Library for binary/hexadecimal viewer/editor',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.viewer.binary',
+                'Bundle-Activator': 'com.mucommander.viewer.binary.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Miroslav Hajda",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Miroslav Hajda",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }

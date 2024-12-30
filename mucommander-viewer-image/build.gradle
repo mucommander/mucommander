@@ -25,23 +25,25 @@ dependencies {
 }
 
 jar {
-   from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         exclude 'META-INF/**'
-   } }
-   duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-   bnd ('Bundle-Name': 'muCommander-viewer-image',
-        'Bundle-Vendor': 'muCommander',
-        'Bundle-Description': 'Library for previewing image files',
-        'Bundle-DocURL': 'https://www.mucommander.com',
-        'Export-Package': 'com.mucommander.viewer.image',
-        'Import-Package': '!magick,*',
-        'Bundle-Activator': 'com.mucommander.viewer.image.Activator',
-        'Specification-Title': "muCommander",
-        'Specification-Vendor': "Arik Hadas",
-        'Specification-Version': project.version,
-        'Implementation-Title': "muCommander",
-        'Implementation-Vendor': "Arik Hadas",
-        'Implementation-Version': revision.substring(0, 7),
-        'Build-Date': new Date().format('yyyyMMdd'),
-        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    } }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    bundle {
+        bnd ('Bundle-Name': 'muCommander-viewer-image',
+                'Bundle-Vendor': 'muCommander',
+                'Bundle-Description': 'Library for previewing image files',
+                'Bundle-DocURL': 'https://www.mucommander.com',
+                'Export-Package': 'com.mucommander.viewer.image',
+                'Import-Package': '!magick,*',
+                'Bundle-Activator': 'com.mucommander.viewer.image.Activator',
+                'Specification-Title': "muCommander",
+                'Specification-Vendor': "Arik Hadas",
+                'Specification-Version': project.version,
+                'Implementation-Title': "muCommander",
+                'Implementation-Vendor': "Arik Hadas",
+                'Implementation-Version': revision.substring(0, 7),
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
 }
