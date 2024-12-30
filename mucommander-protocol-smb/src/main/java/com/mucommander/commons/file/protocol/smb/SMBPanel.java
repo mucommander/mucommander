@@ -116,7 +116,7 @@ public class SMBPanel extends ServerPanel {
             userInfo = lastDomain+";"+userInfo;
 
         url.setCredentials(new Credentials(userInfo, lastPassword));
-        url.setProperty("useSmbj", "true");
+        url.setProperty("useSmbj", "true" /* TODO - take from property */);
 
         return url;
     }
