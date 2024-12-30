@@ -34,8 +34,8 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:26.0.1'
     // JediTerm deps end
 
-    implementation 'ch.qos.logback:logback-core:1.2.3'
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-core:1.2.13'
+    implementation 'ch.qos.logback:logback-classic:1.2.13'
     implementation 'org.apache.commons:commons-collections4:4.4'
 
     comprise 'org.unix4j:unix4j-command:0.6'
