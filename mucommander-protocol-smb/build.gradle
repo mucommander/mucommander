@@ -6,6 +6,10 @@ dependencies {
     api project(':mucommander-translator')
 
     implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
+
+    implementation 'javax.el:el-api:2.2'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'net.engio:mbassador:1.3.0'
     implementation 'com.hierynomus:smbj:0.13.0'
 
     // Use JUnit test framework
@@ -16,20 +20,18 @@ dependencies {
 }
 
 jar {
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-smb',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Library with configuration tools',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.commons.protocol.smb',
-                'Bundle-Activator': 'com.mucommander.commons.file.protocol.smb.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision.substring(0, 7),
-                'Build-Date': new Date().format('yyyyMMdd'),
-                'Build-Url': "https://www.mucommander.com/version/nightly.xml")
-    }
+   bnd ('Bundle-Name': 'muCommander-smb',
+        'Bundle-Vendor': 'muCommander',
+        'Bundle-Description': 'Library with configuration tools',
+        'Bundle-DocURL': 'https://www.mucommander.com',
+        'Export-Package': 'com.mucommander.commons.protocol.smb',
+        'Bundle-Activator': 'com.mucommander.commons.file.protocol.smb.Activator',
+        'Specification-Title': "muCommander",
+        'Specification-Vendor': "Arik Hadas",
+        'Specification-Version': project.version,
+        'Implementation-Title': "muCommander",
+        'Implementation-Vendor': "Arik Hadas",
+        'Implementation-Version': revision.substring(0, 7),
+        'Build-Date': new Date().format('yyyyMMdd'),
+        'Build-Url': "https://www.mucommander.com/version/nightly.xml")
 }

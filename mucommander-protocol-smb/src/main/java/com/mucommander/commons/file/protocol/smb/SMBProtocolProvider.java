@@ -111,7 +111,7 @@ public class SMBProtocolProvider implements ProtocolProvider {
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
         if ("true".equals(url.getProperty("useSmbj"))) {
             // TODO - handle nested file
-            return new SmbjFile(url);
+            return SmbjFile.create(url);
         } else {
             return instantiationParams.isEmpty()
                     ?new SMBFile(url)

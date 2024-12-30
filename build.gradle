@@ -219,6 +219,12 @@ runOsgi {
         manifest("okhttp.*") {
             instruction 'Import-Package', '!sun.security.ssl', '!org.openjsse.javax.net.ssl', '!org.openjsse.net.ssl', '!org.conscrypt', '!org.bouncycastle.jsse.provider', '!org.bouncycastle.jsse', '!dalvik.system', '!android.os', '!android.util', '!android.security', '!android.net.http', '!android.net.ssl', '*'
         }
+        manifest("smbj.*") {
+            // instruction 'Import-Package', '!android.os', '!com.ibm.security.jgss', '!javax.el', '!net.engio.mbassy.bus','!net.engio.mbassy.bus.common','!net.engio.mbassy.bus.error','!net.engio.mbassy.listener', '*'
+            instruction 'Import-Package', '!android.os', '!com.ibm.security.jgss', '*'
+        }
+
+
     }
 }
 
