@@ -35,8 +35,6 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
     public void startConnection() throws IOException, AuthException {
         System.out.println("startConnection"); // TODO - remove
 
-        // TODO - this should be PER SHARE, not PER FILE!
-
         Credentials credentials = serverURL.getCredentials();
         String login = credentials.getLogin();
         String domain;
@@ -53,7 +51,6 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
         String hostname = serverURL.getHost();
         System.out.println(hostname); // TODO
 
-        // SmbjFile smbjFile = new SmbjFile(url);
         AuthenticationContext authenticationContext = new AuthenticationContext(login, password.toCharArray(), domain);
 
         SmbConfig smbConfig = SmbConfig.builder()
