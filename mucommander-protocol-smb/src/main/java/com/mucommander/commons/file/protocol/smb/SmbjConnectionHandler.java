@@ -2,6 +2,7 @@ package com.mucommander.commons.file.protocol.smb;
 
 import com.hierynomus.msfscc.fileinformation.FileAllInformation;
 import com.hierynomus.smbj.SMBClient;
+import com.hierynomus.smbj.SmbConfig;
 import com.hierynomus.smbj.auth.AuthenticationContext;
 import com.hierynomus.smbj.connection.Connection;
 import com.hierynomus.smbj.session.Session;
@@ -55,7 +56,11 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
         // SmbjFile smbjFile = new SmbjFile(url);
         AuthenticationContext authenticationContext = new AuthenticationContext(login, password.toCharArray(), domain);
 
-        client = new SMBClient();
+        SmbConfig smbConfig = SmbConfig.builder()
+                .withEncryptData(true)
+                .build();
+
+        client = new SMBClient(smbConfig);
         connection = client.connect(serverURL.getHost());
         session = connection.authenticate(authenticationContext);
         Share share = session.connectShare(serverURL.getPath().substring(1));
