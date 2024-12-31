@@ -94,6 +94,7 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
             }
 
         }
+        releaseLock();
     }
 
     @Override

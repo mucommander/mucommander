@@ -1,8 +1,6 @@
 package com.mucommander.commons.file.protocol.smb;
 
 import com.hierynomus.msfscc.fileinformation.FileIdBothDirectoryInformation;
-import com.hierynomus.smbj.auth.AuthenticationContext;
-import com.hierynomus.smbj.share.DiskShare;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
@@ -14,23 +12,27 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
 import java.util.List;
 
 public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
-    private SmbjFile(FileURL url) {
+    private final SmbjFile parentFile;
+
+    private final FileIdBothDirectoryInformation fileIdBothDirectoryInformation;
+
+    private SmbjFile(FileURL url, SmbjFile parentFile, FileIdBothDirectoryInformation fileIdBothDirectoryInformation) {
         super(url);
+        this.parentFile = parentFile;
+        this.fileIdBothDirectoryInformation = fileIdBothDirectoryInformation;
     }
 
     public static SmbjFile create(FileURL url) {
-        return new SmbjFile(url);
+        return new SmbjFile(url, null, null);
     }
 
     @Override
     public long getDate() {
-        System.out.println("getDate"); // TODO - debug only
-        return 0;
+        return fileIdBothDirectoryInformation != null ? fileIdBothDirectoryInformation.getChangeTime().toEpochMillis() : 0;
     }
 
     @Override
@@ -40,14 +42,12 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public long getSize() {
-        System.out.println("getSize"); // TODO - debug only
-        return 0;
+        return fileIdBothDirectoryInformation != null ? fileIdBothDirectoryInformation.getAllocationSize() : 0;
     }
 
     @Override
     public AbstractFile getParent() {
-        System.out.println("getParent"); // TODO - debug only
-        return null;
+        return this.parentFile;
     }
 
     @Override
@@ -58,27 +58,32 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     @Override
     public boolean exists() {
         try {
-            boolean parentShare = isParentShare();
-
-            // TODO - child
-            return parentShare;
+            return doWithConnectionHandler(c -> {
+                try {
+                    c.getDiskShare();
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace(); // TODO - log
+                    return false;
+                }
+            });
         } catch (Exception e) {
-            e.printStackTrace(); // TODO - log
+            e.printStackTrace();
+            return false; // TODO - find a better solution (for the startup case)
         }
 
-        return false;
     }
 
     @Override
     public FilePermissions getPermissions() {
         System.out.println("getPermissions"); // TODO - debug only
-        if (isParentShare()) {
-            return new SimpleFilePermissions(0, 0);
-        } else {
-            // TODO
-            System.out.println("child");
-        }
-        return null;
+//        if (isParentShare()) {
+//            return new SimpleFilePermissions(0, 0);
+//        } else {
+//            // TODO
+//            System.out.println("child");
+//        }
+        return new SimpleFilePermissions(0, 0); // TODO
     }
 
     @Override
@@ -118,9 +123,13 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public boolean isDirectory() {
-        System.out.println("isDirectory"); // TODO - debug only
-        boolean parentShare = isParentShare();
-        return parentShare; // TODO - there are more cases
+        if (this.parentFile == null) {
+            return true;
+        }
+
+        // TODO - there are other cases!
+
+        return false;
     }
 
     @Override
@@ -138,28 +147,26 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         System.out.println("ls"); // TODO - debug only
-        if (isParentShare()) {
-            List<FileIdBothDirectoryInformation> list = getDiskShare().list("");
-            return list.stream()
-                    .filter(f -> !f.getFileName().equals("."))
-                    .filter(f -> !f.getFileName().equals(".."))
-                    .map(f -> {
-                        FileURL childURL = (FileURL)fileURL.clone();
-                        // childURL.setHost(f.getServer());
-                        // childURL.setPath(file.getURL().getPath());
-                        try {
-                            return FileFactory.getFile(childURL, this, Collections.singletonMap("parentSmbFile", f));
-                        } catch (IOException e) {
-                            System.out.println("Error getting file: " + childURL);
-                            return null;
-                        }
-                    })
-                    .toArray(AbstractFile[]::new);
-        } else {
-            // TODO
-        }
+        return doWithConnectionHandler(c -> {
+            if (parentFile == null) {
+                List<FileIdBothDirectoryInformation> list = c.getDiskShare().list("");
+                return list.stream()
+                        .filter(f -> !f.getFileName().equals("."))
+                        .filter(f -> !f.getFileName().equals(".."))
+                        .map(f -> {
+                            FileURL childURL = (FileURL)fileURL.clone();
+                            childURL.setHost(fileURL.getHost());
+                            childURL.setPath(fileURL.getPath() + "/" + f.getFileName());
 
-        return new AbstractFile[0];
+                            return new SmbjFile(childURL, this, f); // TODO - propagate connection handler?
+                        })
+                        .toArray(AbstractFile[]::new);
+            } else {
+                // TODO
+            }
+
+            return new AbstractFile[0];
+        });
     }
 
     @Override
@@ -235,23 +242,20 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
         return new SmbjConnectionHandler(location);
     }
 
-    private DiskShare getDiskShare() throws IOException {
-        SmbjConnectionHandler connectionHandler = (SmbjConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, false /* TODO - should be true? */);
-        if (!connectionHandler.checkConnection()) {
-            throw new RuntimeException("Connection failed"); // TODO - log
+    private <T> T doWithConnectionHandler(SmbjLogic<T> smbjLogic) {
+        SmbjConnectionHandler connectionHandler = null;
+        try {
+            connectionHandler = (SmbjConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+            connectionHandler.checkConnection();
+            return smbjLogic.doLogic(connectionHandler);
+        } catch (Exception e) {
+            throw new RuntimeException(e); // TODO - consider a special case for IOException
         }
-        return connectionHandler.getDiskShare();
+        finally {
+            if (connectionHandler != null) {
+                connectionHandler.releaseLock();
+            }
+        }
     }
 
-    private boolean isParentShare() {
-        DiskShare diskShare = null;
-        try {
-            diskShare = getDiskShare();
-            return diskShare != null &&
-                    diskShare.getSmbPath().getHostname().equals(fileURL.getHost()) &&
-                    diskShare.getSmbPath().getShareName().equals(fileURL.getFilename());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
