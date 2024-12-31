@@ -44,7 +44,7 @@ Localization:
 -
 
 Bug fixes:
-- MSI installer: change start menu directory name from `Unknown` to `muCommander`
+- The Start Menu group the application is placed in is now named 'muCommander' instead of 'Unknown' on Windows.
 
 Known issues:
 - Some translations may not be up-to-date.
