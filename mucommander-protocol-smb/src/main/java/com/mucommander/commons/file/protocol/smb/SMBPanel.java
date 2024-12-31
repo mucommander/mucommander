@@ -86,7 +86,7 @@ public class SMBPanel extends ServerPanel {
         addRow(Translator.get("password"), passwordField, 5);
 
         // SMBJ
-        useSmbjCheckbox = new JCheckBox("Use sbmj?" /* TODO - use translator! */, true);
+        useSmbjCheckbox = new JCheckBox("Use smbj?" /* TODO - use translator! */, true);
         addRow("", useSmbjCheckbox, 5);
     }
 
