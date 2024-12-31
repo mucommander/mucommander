@@ -1,12 +1,8 @@
 package com.mucommander.commons.file.protocol.smb;
 
 import com.hierynomus.msfscc.fileinformation.FileIdBothDirectoryInformation;
-import com.hierynomus.smbj.SMBClient;
 import com.hierynomus.smbj.auth.AuthenticationContext;
-import com.hierynomus.smbj.connection.Connection;
-import com.hierynomus.smbj.session.Session;
 import com.hierynomus.smbj.share.DiskShare;
-import com.hierynomus.smbj.share.Share;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
@@ -17,39 +13,18 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 
 public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
-    private AuthenticationContext authenticationContext = null;
-
     private SmbjFile(FileURL url) {
         super(url);
     }
 
     public static SmbjFile create(FileURL url) {
-//        Credentials credentials = url.getCredentials();
-//        String login = credentials.getLogin();
-//        String domain;
-//        int domainStart = login.indexOf(";");
-//        if(domainStart!=-1) {
-//            domain = login.substring(0, domainStart);
-//            login = login.substring(domainStart + 1);
-//        }
-//        else {
-//            domain = null;
-//        }
-//        String password = credentials.getPassword();
-//
-//        String hostname = url.getHost();
-//        System.out.println(hostname); // TODO
-
         SmbjFile smbjFile = new SmbjFile(url);
-        // smbjFile.authenticationContext = new AuthenticationContext(login, password.toCharArray(), domain);
-
         return smbjFile;
     }
 
