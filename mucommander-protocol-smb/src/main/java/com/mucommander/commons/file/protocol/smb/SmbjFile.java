@@ -24,8 +24,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     public static SmbjFile create(FileURL url) {
-        SmbjFile smbjFile = new SmbjFile(url);
-        return smbjFile;
+        return new SmbjFile(url);
     }
 
     @Override
