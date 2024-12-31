@@ -1,6 +1,11 @@
 package com.mucommander.commons.file.protocol.smb;
 
+import com.hierynomus.msdtyp.AccessMask;
+import com.hierynomus.msfscc.FileAttributes;
 import com.hierynomus.msfscc.fileinformation.FileIdBothDirectoryInformation;
+import com.hierynomus.mssmb2.SMB2CreateDisposition;
+import com.hierynomus.mssmb2.SMB2ShareAccess;
+import com.hierynomus.smbj.share.File;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
@@ -12,6 +17,7 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.EnumSet;
 import java.util.List;
 
 public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
@@ -99,49 +105,57 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public String getOwner() {
-        System.out.println("getOwner"); // TODO - debug only
-        return "";
+        // Not available for SMB
+        return null;
     }
 
     @Override
     public boolean canGetOwner() {
-        System.out.println("canGetOwner"); // TODO - debug only
+        // Not available for SMB
         return false;
     }
 
     @Override
     public String getGroup() {
-        System.out.println("getGroup"); // TODO - debug only
-        return "";
+        // Not available for SMB
+        return null;
     }
 
     @Override
     public boolean canGetGroup() {
-        System.out.println("canGetGroup"); // TODO - debug only
+        // Not available for SMB
         return false;
     }
 
     @Override
     public boolean isDirectory() {
         if (this.parentFile == null) {
+            // This is a share root
             return true;
+        } else if (fileIdBothDirectoryInformation != null) {
+            return isDirectory(fileIdBothDirectoryInformation);
+        } else {
+            // Edge case - should not happen
+            return false;
         }
-
-        // TODO - there are other cases!
-
-        return false;
     }
 
     @Override
     public boolean isSymlink() {
-        System.out.println("isSymlink"); // TODO - debug only
-        return false;
+        if (fileIdBothDirectoryInformation != null) {
+            return isSymlink(fileIdBothDirectoryInformation);
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean isSystem() {
-        System.out.println("isSystem"); // TODO - debug only
-        return false;
+        if (fileIdBothDirectoryInformation != null) {
+            return isSystem(fileIdBothDirectoryInformation);
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -176,8 +190,16 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
-        System.out.println("getInputStream"); // TODO - debug only
-        return null;
+        return doWithConnectionHandler(c -> {
+            File file = c.getDiskShare().openFile(
+                    fileIdBothDirectoryInformation.getFileName(),
+                    EnumSet.of(AccessMask.GENERIC_READ),
+                    null,
+                    SMB2ShareAccess.ALL,
+                    SMB2CreateDisposition.FILE_OPEN,
+                    null);
+            return file.getInputStream();
+        }); // TODO - consider catching RuntimeException and examining internal exception for IOException or UnsupportedFileOperationException
     }
 
     @Override
@@ -193,6 +215,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
+    @UnsupportedFileOperation // TODO - remove after implementing random access
     public RandomAccessInputStream getRandomAccessInputStream() throws IOException, UnsupportedFileOperationException {
         System.out.println("getRandomAccessInputStream"); // TODO - debug only
         return null;
@@ -256,6 +279,18 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
                 connectionHandler.releaseLock();
             }
         }
+    }
+
+    private boolean isDirectory(FileIdBothDirectoryInformation info) {
+        return (info.getFileAttributes() & com.hierynomus.msfscc.FileAttributes.FILE_ATTRIBUTE_DIRECTORY.getValue()) != 0;
+    }
+
+    private boolean isSymlink(FileIdBothDirectoryInformation info) {
+        return (info.getFileAttributes() & com.hierynomus.msfscc.FileAttributes.FILE_ATTRIBUTE_REPARSE_POINT.getValue()) != 0;
+    }
+
+    private boolean isSystem(FileIdBothDirectoryInformation info) {
+        return (info.getFileAttributes() & FileAttributes.FILE_ATTRIBUTE_SYSTEM.getValue()) != 0;
     }
 
 }
