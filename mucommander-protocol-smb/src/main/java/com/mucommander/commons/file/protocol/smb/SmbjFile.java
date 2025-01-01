@@ -191,6 +191,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
         return doWithConnectionHandler(c -> {
+            // TODO - file might never get closed
             File file = c.getDiskShare().openFile(
                     fileIdBothDirectoryInformation.getFileName(),
                     EnumSet.of(AccessMask.GENERIC_READ),
@@ -204,14 +205,12 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public OutputStream getOutputStream() throws IOException, UnsupportedFileOperationException {
-        System.out.println("getOutputStream"); // TODO - debug only
-        return null;
+        return getOutputStream(false);
     }
 
     @Override
     public OutputStream getAppendOutputStream() throws IOException, UnsupportedFileOperationException {
-        System.out.println("getAppendOutputStream"); // TODO - debug only
-        return null;
+        return getOutputStream(true);
     }
 
     @Override
@@ -229,12 +228,26 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public void delete() throws IOException, UnsupportedFileOperationException {
-        System.out.println("delete"); // TODO - debug only
+        doWithConnectionHandler(c -> {
+            c.getDiskShare().rm(fileIdBothDirectoryInformation.getFileName());
+            return null;
+        });
     }
 
     @Override
     public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
-        System.out.println("renameTo"); // TODO - debug only
+        doWithConnectionHandler(c -> {
+            try (File file = c.getDiskShare().openFile(
+                    fileIdBothDirectoryInformation.getFileName(),
+                    EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.DELETE),
+                    EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
+                    SMB2ShareAccess.ALL,
+                    SMB2CreateDisposition.FILE_OPEN,
+                    null)) {
+                file.rename(destFile.getName());
+            }
+            return null;
+        });
     }
 
     @Override
@@ -244,19 +257,17 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public long getFreeSpace() throws IOException, UnsupportedFileOperationException {
-        System.out.println("getFreeSpace"); // TODO - debug only
-        return 0;
+        return doWithConnectionHandler(c -> c.getDiskShare().getShareInformation().getFreeSpace());
     }
 
     @Override
     public long getTotalSpace() throws IOException, UnsupportedFileOperationException {
-        System.out.println("getTotalSpace"); // TODO - debug only
-        return 0;
+        return doWithConnectionHandler(c -> c.getDiskShare().getShareInformation().getTotalSpace());
     }
 
     @Override
     public Object getUnderlyingFileObject() {
-        System.out.println("getUnderlyingFileObject"); // TODO - debug only
+        // No point externalizing file info as it useless without the DiskShare object
         return null;
     }
 
@@ -291,6 +302,21 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     private boolean isSystem(FileIdBothDirectoryInformation info) {
         return (info.getFileAttributes() & FileAttributes.FILE_ATTRIBUTE_SYSTEM.getValue()) != 0;
+    }
+
+    private OutputStream getOutputStream(boolean append) {
+        return doWithConnectionHandler(c -> {
+            // TODO - file might never get closed - consider wrapping it with the returned OutputStream
+            // and piggyback into its close method
+            File file = c.getDiskShare().openFile(
+                    fileIdBothDirectoryInformation.getFileName(),
+                    EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.FILE_WRITE_DATA),
+                    EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
+                    SMB2ShareAccess.ALL,
+                    SMB2CreateDisposition.FILE_OVERWRITE_IF,
+                    null);
+            return file.getOutputStream(append);
+        });
     }
 
 }
