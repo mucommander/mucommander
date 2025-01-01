@@ -72,8 +72,6 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
 
     @Override
     public boolean isConnected() {
-        System.out.println("isConnected");
-
         if (diskShare != null) {
             return diskShare.isConnected();
         } else {
