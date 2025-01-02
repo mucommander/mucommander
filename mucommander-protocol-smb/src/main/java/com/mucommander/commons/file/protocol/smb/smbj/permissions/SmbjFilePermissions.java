@@ -5,7 +5,7 @@ import com.mucommander.commons.file.*;
 public class SmbjFilePermissions extends IndividualPermissionBits implements FilePermissions {
 
     // Permissions bit are octal
-    private final static PermissionBits EMPTY_MASK = new GroupedPermissionBits(0000);       // ---------
+    public final static PermissionBits EMPTY_MASK = new GroupedPermissionBits(0000);       // ---------
     private final static PermissionBits READ_MASK = new GroupedPermissionBits(0400);        // r--------
     private final static PermissionBits WRITE_MASK = new GroupedPermissionBits(0200);       // -w-------
     private final static PermissionBits READ_WRITE_MASK = new GroupedPermissionBits(0600);  // rw-------
