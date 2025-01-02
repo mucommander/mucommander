@@ -114,13 +114,12 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public PermissionBits getChangeablePermissions() {
-        System.out.println("getChangeablePermissions"); // TODO - debug only
-        return null;
+        return SmbjFilePermissions.EMPTY_MASK;
     }
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        System.out.println("changePermission"); // TODO - debug only
+        // t available for SMB
     }
 
     @Override
@@ -180,44 +179,37 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
-        System.out.println("ls"); // TODO - debug only
         return doWithConnectionHandler(c -> {
-            if (parentFile == null) {
-                List<FileIdBothDirectoryInformation> list = c.getDiskShare().list("");
-                return list.stream()
-                        .filter(f -> !f.getFileName().equals("."))
-                        .filter(f -> !f.getFileName().equals(".."))
-                        .map(f -> {
-                            FileURL childURL = (FileURL)fileURL.clone();
-                            childURL.setHost(fileURL.getHost());
-                            childURL.setPath(fileURL.getPath() + "/" + f.getFileName());
+            String path = parentFile == null ? "" : this.fileIdBothDirectoryInformation.getFileName(); // TODO - this is wrong!
 
-                            return new SmbjFile(childURL, this, f); // TODO - propagate connection handler?
-                        })
-                        .toArray(AbstractFile[]::new);
-            } else {
-                // TODO
-            }
+            List<FileIdBothDirectoryInformation> list = c.getDiskShare().list(path);
+            return list.stream()
+                    .filter(f -> !f.getFileName().equals("."))
+                    .filter(f -> !f.getFileName().equals(".."))
+                    .map(f -> {
+                        FileURL childURL = (FileURL)fileURL.clone();
+                        childURL.setHost(fileURL.getHost());
+                        childURL.setPath(fileURL.getPath() + "/" + f.getFileName());
 
-            return new AbstractFile[0];
+                        return new SmbjFile(childURL, this, f); // TODO - propagate connection handler?
+                    })
+                    .toArray(AbstractFile[]::new);
         });
     }
 
     @Override
     public void mkdir() throws IOException, UnsupportedFileOperationException {
-        System.out.println("mkdir"); // TODO - debug only
+        doWithConnectionHandler(c -> {
+            String filename = this.fileURL.getFilename();
+            c.getDiskShare().mkdir(filename);
+            return null;
+        });
     }
 
     @Override
     public InputStream getInputStream() throws IOException, UnsupportedFileOperationException {
         return doWithConnectionHandler(c -> {
-            File file = c.getDiskShare().openFile(
-                    fileIdBothDirectoryInformation.getFileName(),
-                    EnumSet.of(AccessMask.GENERIC_READ),
-                    null,
-                    SMB2ShareAccess.ALL,
-                    SMB2CreateDisposition.FILE_OPEN,
-                    null);
+            File file = openFileForRead(c);
             return new SmbjInputStreamWrapper(file.getInputStream(), file);
         }); // TODO - consider catching RuntimeException and examining internal exception for IOException or UnsupportedFileOperationException
     }
@@ -240,6 +232,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     @Override
+    @UnsupportedFileOperation // TODO - remove after implementing random access
     public RandomAccessOutputStream getRandomAccessOutputStream() throws IOException, UnsupportedFileOperationException {
         System.out.println("getRandomAccessOutputStream"); // TODO - debug only
         return null;
@@ -271,7 +264,14 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public void copyRemotelyTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
-        System.out.println("copyRemotelyTo"); // TODO - debug only
+        checkCopyRemotelyPrerequisites(destFile, false, false);
+        doWithConnectionHandler(c -> {
+            try (File source = openFileForRead(c);
+                File dest = openFileForWrite(c, destFile.getPath())) {
+                source.remoteCopyTo(dest);
+            }
+            return null;
+        });
     }
 
     @Override
@@ -327,16 +327,29 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
         return doWithConnectionHandler(c -> {
             String path = fileIdBothDirectoryInformation != null ?
                     fileIdBothDirectoryInformation.getFileName() : this.fileURL.getFilename();
-
-            File file = c.getDiskShare().openFile(
-                    path,
-                    EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.FILE_WRITE_DATA),
-                    EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
-                    SMB2ShareAccess.ALL,
-                    SMB2CreateDisposition.FILE_OVERWRITE_IF,
-                    null);
+            File file = openFileForWrite(c, path);
             return new SmbjOutputStreamWrapper(file.getOutputStream(append), file);
         });
+    }
+
+    private File openFileForRead(SmbjConnectionHandler ch) {
+        return ch.getDiskShare().openFile(
+                fileIdBothDirectoryInformation.getFileName(),
+                EnumSet.of(AccessMask.GENERIC_READ),
+                null,
+                SMB2ShareAccess.ALL,
+                SMB2CreateDisposition.FILE_OPEN,
+                null);
+    }
+
+    private File openFileForWrite(SmbjConnectionHandler ch, String path) {
+        return ch.getDiskShare().openFile(
+                path,
+                EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.FILE_WRITE_DATA),
+                EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
+                SMB2ShareAccess.ALL,
+                SMB2CreateDisposition.FILE_OVERWRITE_IF,
+                null);
     }
 
 }
