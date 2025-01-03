@@ -75,7 +75,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     @Override
     public long getSize() {
         return fileIdBothDirectoryInformation != null ?
-                fileIdBothDirectoryInformation.getAllocationSize() : 0;
+                fileIdBothDirectoryInformation.getEndOfFile() : 0;
     }
 
     @Override
