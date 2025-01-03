@@ -22,7 +22,7 @@ public class SmbjOutputStreamWrapper extends OutputStream {
 
     @Override
     public void close() throws IOException {
-        super.close();
+        delegate.close();
         if (resourcesToClose != null) {
             for (Closeable closeable : resourcesToClose) {
                 try {
