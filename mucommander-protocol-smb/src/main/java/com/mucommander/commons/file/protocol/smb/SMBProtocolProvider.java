@@ -109,8 +109,12 @@ public class SMBProtocolProvider implements ProtocolProvider {
     /////////////////////////////////////
 
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
-        return instantiationParams.isEmpty()
-            ?new SMBFile(url)
-            :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));
+        if ("true".equals(url.getProperty("useSmbj"))) {
+            return SmbjFile.create(url);
+        } else {
+            return instantiationParams.isEmpty()
+                    ?new SMBFile(url)
+                    :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));
+        }
     }
 }
