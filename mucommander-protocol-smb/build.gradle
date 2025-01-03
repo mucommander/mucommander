@@ -5,10 +5,13 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-    implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
+    // implementation 'org.bouncycastle:bcprov-jdk15on:1.52'
+    // implementation 'eu.agno3.jcifs:jcifs-ng:2.1.7'
+    implementation 'eu.agno3.jcifs:jcifs-ng:2.1.10'
 
     implementation 'javax.el:el-api:2.2'
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    // implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.79'
     implementation 'net.engio:mbassador:1.3.0'
     implementation 'com.hierynomus:smbj:0.13.0'
 
