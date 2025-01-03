@@ -51,17 +51,21 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public void changeDate(long lastModified) throws IOException, UnsupportedFileOperationException {
+        if (parentFile == null) {
+            // Don't try to change date for the actual share
+            return;
+        }
+
         doWithConnectionHandler(c -> {
             try (File file = openFileForWrite(c)) {
-                long fileAttributes = file.getFileInformation().getBasicInformation().getFileAttributes();
-                FileTime fileTime = FileTime.ofEpochMillis(lastModified);
+                FileBasicInformation basicInformation = file.getFileInformation().getBasicInformation();
 
                 file.setFileInformation(new FileBasicInformation(
-                        null,    // Creation time (null means no change)
-                        null,               // Last access time (null means no change)
-                        fileTime,           // Last write (modified) time
-                        null,               // Change time (null means no change)
-                        fileAttributes      // Keep existing attributes
+                        basicInformation.getCreationTime(),
+                        basicInformation.getLastAccessTime(),
+                        FileTime.ofEpochMillis(lastModified),
+                        basicInformation.getChangeTime(),
+                        basicInformation.getFileAttributes()
                 ));
             }
             return null;
@@ -137,7 +141,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        // t available for SMB
+        // Not available for SMB
     }
 
     @Override
@@ -318,7 +322,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     private <T> T doWithConnectionHandler(SmbjLogic<T> smbjLogic) {
         SmbjConnectionHandler connectionHandler = null;
         try {
-            connectionHandler = (SmbjConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
+           connectionHandler = (SmbjConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
             connectionHandler.checkConnection();
             return smbjLogic.doLogic(connectionHandler);
         } catch (Exception e) {
@@ -367,10 +371,10 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     private File openFileForWrite(SmbjConnectionHandler ch, String path) {
         return ch.getDiskShare().openFile(
                 path,
-                EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.FILE_WRITE_DATA),
+                EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.FILE_WRITE_DATA, AccessMask.FILE_READ_ATTRIBUTES),
                 EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
                 SMB2ShareAccess.ALL,
-                SMB2CreateDisposition.FILE_OVERWRITE_IF,
+                SMB2CreateDisposition.FILE_OPEN_IF,
                 null);
     }
 

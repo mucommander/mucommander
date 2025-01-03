@@ -60,7 +60,7 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
         client = new SMBClient(smbConfig);
         connection = client.connect(serverURL.getHost());
         session = connection.authenticate(authenticationContext);
-        Share share = session.connectShare(serverURL.getPath().substring(1));
+        Share share = session.connectShare(serverURL.getRealm().getPath().substring(1));
 
         if (!(share instanceof DiskShare)) {
             share.close();
