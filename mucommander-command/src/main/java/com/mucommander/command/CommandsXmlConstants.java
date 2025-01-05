@@ -21,9 +21,8 @@ package com.mucommander.command;
  * Defines the structure of a custom commands XML file.
  * <p>
  * This interface is only meant as a convenient way of sharing the XML
- * file format between the {@link com.mucommander.command.CommandWriter}
- * and {@link CommandReader}. It will be removed
- * at bytecode optimisation time.
+ * file format between {@link CommandReader} and CommandWriter (that was
+ * removed). It will be removed at bytecode optimisation time.
  * </p>
  * <p>
  * Commands XML files must match the following DTD:
@@ -44,9 +43,9 @@ package com.mucommander.command;
  * </ul>
  * </p>
  * @see CommandReader
- * @see CommandWriter
  * @author Nicolas Rinaudo
  */
+@Deprecated
 interface CommandsXmlConstants {
     // - XML elements ----------------------------------------------------------
     // -------------------------------------------------------------------------
