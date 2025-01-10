@@ -22,6 +22,7 @@ import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 import com.mucommander.commons.util.ui.combobox.EditableComboBoxListener;
@@ -76,6 +77,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
     private JPasswordField passwordField;
 
     private JCheckBox saveCredentialsCheckBox;
+    private JCheckBox useLegacyCheckbox;
 
     private CredentialsMapping selectedCredentialsMapping;
     private boolean guestCredentialsSelected;
@@ -190,6 +192,11 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
         yPanel.add(compPanel);
 
+        if (fileURL.getScheme().equals(FileProtocols.SMB)) {
+            this.useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), false);
+            yPanel.add(useLegacyCheckbox);
+        }
+
         this.saveCredentialsCheckBox = new JCheckBox(Translator.get("auth_dialog.store_credentials"), saveCredentialsCheckBoxSelected);
         yPanel.add(saveCredentialsCheckBox);
 
@@ -290,6 +297,10 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
                     break;
                 }
             }
+        }
+
+        if (this.useLegacyCheckbox != null) {
+            this.fileURL.setProperty("useLegacy", this.useLegacyCheckbox.isSelected() ? "true" : "false");
         }
     }
 
