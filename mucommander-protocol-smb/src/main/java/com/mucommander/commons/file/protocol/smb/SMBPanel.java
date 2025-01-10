@@ -42,7 +42,7 @@ public class SMBPanel extends ServerPanel {
     private JTextField shareField;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JCheckBox useSmbjCheckbox;
+    private JCheckBox useLegacyCheckbox;
 
     private static String lastDomain = "";
     private static String lastServer = "";
@@ -50,7 +50,7 @@ public class SMBPanel extends ServerPanel {
     private static String lastUsername = "";
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
-    private boolean useSmbj = false;
+    private boolean useLegacy = false;
 
 	
     SMBPanel(ServerPanelListener listener, JFrame mainFrame) {
@@ -85,9 +85,9 @@ public class SMBPanel extends ServerPanel {
         addTextFieldListeners(passwordField, false);
         addRow(Translator.get("password"), passwordField, 5);
 
-        // SMBJ
-        useSmbjCheckbox = new JCheckBox("Use smbj?" /* TODO - use translator! */, true);
-        addRow("", useSmbjCheckbox, 5);
+        // Legacy checkbox: if checked, use jcifs-ng (for SMB v1 support), else use sbmj (modern SMB v2/3)
+        useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), false);
+        addRow("", useLegacyCheckbox, 5);
     }
 
 	
@@ -97,7 +97,7 @@ public class SMBPanel extends ServerPanel {
         lastDomain = domainField.getText();
         lastUsername = usernameField.getText();
         lastPassword = new String(passwordField.getPassword());
-        useSmbj = this.useSmbjCheckbox.isSelected();
+        useLegacy = this.useLegacyCheckbox.isSelected();
     }
 	
 	
@@ -116,7 +116,7 @@ public class SMBPanel extends ServerPanel {
             userInfo = lastDomain+";"+userInfo;
 
         url.setCredentials(new Credentials(userInfo, lastPassword));
-        url.setProperty("useSmbj", "true" /* TODO - take from property */);
+        url.setProperty("useLegacy", this.useLegacyCheckbox.isSelected() ? "true" : "false");
 
         return url;
     }
