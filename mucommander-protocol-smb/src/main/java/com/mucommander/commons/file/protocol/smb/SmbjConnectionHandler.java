@@ -21,10 +21,10 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
 
     private final FileURL serverURL;
 
-    private SMBClient client = null;
-    private Connection connection = null;
-    private Session session = null;
-    private DiskShare diskShare = null;
+    private SMBClient client;
+    private Connection connection;
+    private Session session;
+    private DiskShare diskShare;
 
     public SmbjConnectionHandler(FileURL serverURL) {
         super(serverURL);
@@ -60,7 +60,14 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
         client = new SMBClient(smbConfig);
         connection = client.connect(serverURL.getHost());
         session = connection.authenticate(authenticationContext);
-        Share share = session.connectShare(serverURL.getRealm().getPath().substring(1));
+
+        // Strip first and last slash
+        String shareName = serverURL.getRealm().getPath().substring(1);
+        if (shareName.endsWith("/")) {
+            shareName = shareName.substring(0, shareName.length() - 1);
+        }
+
+        Share share = session.connectShare(shareName);
 
         if (!(share instanceof DiskShare)) {
             share.close();
