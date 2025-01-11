@@ -97,8 +97,17 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
         try {
             return doWithConnectionHandler(c -> {
                 try {
-                    c.getDiskShare();
-                    return true;
+                    if (parentFile == null) {
+                        // Top level share
+                        c.getDiskShare();
+                        return true;
+                    } else {
+                        // Actual file
+                        try (File f = openFileForRead(c)) {
+                            return true;
+                        }
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace(); // TODO - log
                     return false;
