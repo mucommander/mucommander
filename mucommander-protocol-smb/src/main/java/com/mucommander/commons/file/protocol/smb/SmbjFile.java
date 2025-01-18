@@ -7,6 +7,8 @@ import com.hierynomus.msfscc.fileinformation.FileBasicInformation;
 import com.hierynomus.msfscc.fileinformation.FileIdBothDirectoryInformation;
 import com.hierynomus.mssmb2.SMB2CreateDisposition;
 import com.hierynomus.mssmb2.SMB2ShareAccess;
+import com.hierynomus.smbj.common.SmbPath;
+import com.hierynomus.smbj.share.DiskShare;
 import com.hierynomus.smbj.share.File;
 import com.mucommander.commons.file.*;
 import com.mucommander.commons.file.connection.ConnectionHandler;
@@ -20,18 +22,23 @@ import com.mucommander.commons.file.protocol.smb.smbj.stream.random.SmbjRandomAc
 import com.mucommander.commons.file.protocol.smb.smbj.stream.random.SmbjRandomAccessOutputStream;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmbjFile.class);
+
     private final FileIdBothDirectoryInformation fileIdBothDirectoryInformation;
 
-    private SmbjFile parentFile;
+    private AbstractFile parentFile;
+
+    private boolean parentValSet;
 
     private SmbjFile(FileURL url, SmbjFile parentFile, FileIdBothDirectoryInformation fileIdBothDirectoryInformation) {
         super(url);
@@ -40,7 +47,62 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     public static SmbjFile create(FileURL url) {
-        return new SmbjFile(url, null, null);
+        return SmbjFile.create(url, null, null);
+    }
+
+    public static SmbjFile create(FileURL url, SmbjFile parent, FileIdBothDirectoryInformation fileIdBothDirectoryInformation) {
+        SmbjFile smbjFile = new SmbjFile(url, parent, fileIdBothDirectoryInformation);
+
+        if (parent == null) {
+            try {
+                smbjFile.doWithConnectionHandler(c -> {
+
+                    DiskShare diskShare = c.getDiskShare();
+                    SmbPath smbPath = diskShare.getSmbPath();
+                    String fileUrlcleanPath = smbjFile.fileURL.getPath().replace("/", "");
+
+                    if (fileUrlcleanPath.equals(smbPath.getShareName())) {
+                        // top level
+                        smbjFile.parentValSet = true;
+                    }
+                    return null;
+                });
+            } catch (Exception e) {
+                e.printStackTrace(); // TODO
+            }
+        }
+
+        // TODO - document this (to support equals etc...)
+        if (url.getProperty("useLegacy") == null) {
+            url.setProperty("useLegacy", "false");
+        }
+
+
+
+        /*
+        try {
+            smbjFile.doWithConnectionHandler(c -> {
+
+                DiskShare diskShare = c.getDiskShare();
+                SmbPath smbPath = diskShare.getSmbPath();
+                String fileUrlcleanPath = smbjFile.fileURL.getPath().replace("/", "");
+
+                if (fileUrlcleanPath.equals(smbPath.getShareName())) {
+                    // top level
+                } else {
+                    AbstractFile parentFile = FileFactory.getFile(url.getParent());
+                    System.out.println(parentFile); // TODO - parent smbj?
+                    smbjFile.setParent(parentFile);
+
+                }
+                return null;
+            });
+        } catch (Exception e) {
+            e.printStackTrace(); // TODO
+        }
+        */
+
+        return smbjFile;
     }
 
     @Override
@@ -80,16 +142,26 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public AbstractFile getParent() {
+        if(!parentValSet) {
+            if (fileURL.getParent() != null) {
+                this.parentFile = FileFactory.getFile(fileURL.getParent());
+            }
+
+            this.parentValSet = true;
+        }
+
         return this.parentFile;
     }
 
     @Override
     public void setParent(AbstractFile parent) {
-        if (parent instanceof SmbjFile smbjFileParent) {
-            this.parentFile = smbjFileParent;
-        } else {
-            throw new RuntimeException(String.format("Parent is not a SmbjFile [parent = %s]", parent));
-        }
+        this.parentFile = parent;
+        this.parentValSet = true;
+//        if (parent instanceof SmbjFile smbjFileParent) {
+//            this.parentFile = smbjFileParent;
+//        } else {
+//            throw new RuntimeException(String.format("Parent is not a SmbjFile [parent = %s]", parent));
+//        }
     }
 
     @Override
@@ -99,12 +171,27 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
                 try {
                     if (parentFile == null) {
                         // Top level share
-                        c.getDiskShare();
-                        return true;
+
+                        DiskShare diskShare = c.getDiskShare();
+                        SmbPath smbPath = diskShare.getSmbPath();
+                        String fileUrlcleanPath = this.fileURL.getPath().replace("/", "");
+                        if (fileUrlcleanPath.equals(smbPath.getShareName())) {
+                            // Actual top level share
+                            return true;
+                        } else {
+                            // New directory being created
+                            return false;
+                        }
+
+                        // return true;
                     } else {
                         // Actual file
-                        try (File f = openFileForRead(c)) {
+                        if (isDirectory()) {
                             return true;
+                        } else {
+                            try (File f = openFileForRead(c)) {
+                                return true;
+                            }
                         }
                     }
 
@@ -222,7 +309,16 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
                         childURL.setHost(fileURL.getHost());
                         childURL.setPath(fileURL.getPath() + "/" + f.getFileName());
 
-                        return new SmbjFile(childURL, this, f); // TODO - propagate connection handler?
+                         // return new SmbjFile(childURL, this, f); // TODO - propagate connection handler?
+                        try {
+                            Map<String, Object> initParams = new HashMap<>();
+                            initParams.put("parent", this);
+                            initParams.put("fileIdBothDirectoryInformation", f);
+                            return FileFactory.getFile(childURL, this, initParams);
+                        } catch (IOException e) {
+                            LOGGER.debug("failed to get file {}", childURL);
+                            return null;
+                        }
                     })
                     .toArray(AbstractFile[]::new);
         });
@@ -282,14 +378,8 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     @Override
     public void renameTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
         doWithConnectionHandler(c -> {
-            try (File file = c.getDiskShare().openFile(
-                    getFileName(),
-                    EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.DELETE),
-                    EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
-                    SMB2ShareAccess.ALL,
-                    SMB2CreateDisposition.FILE_OPEN,
-                    null)) {
-                file.rename(destFile.getName());
+            try (File file = openFileForWrite(c)) {
+                file.rename(getFileName(destFile, "\\"));
             }
             return null;
         });
@@ -301,7 +391,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
         doWithConnectionHandler(c -> {
             try (File source = openFileForRead(c);
                 File dest = openFileForWrite(c, destFile.getPath())) {
-                source.remoteCopyTo(dest);
+                source.remoteCopyTo(dest); // TODO - validate this!
             }
             return null;
         });
@@ -380,7 +470,11 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     private File openFileForWrite(SmbjConnectionHandler ch, String path) {
         return ch.getDiskShare().openFile(
                 path,
-                EnumSet.of(AccessMask.GENERIC_WRITE, AccessMask.FILE_WRITE_DATA, AccessMask.FILE_READ_ATTRIBUTES),
+                EnumSet.of(
+                        AccessMask.GENERIC_WRITE,
+                        AccessMask.FILE_WRITE_DATA,
+                        AccessMask.FILE_READ_ATTRIBUTES,
+                        AccessMask.DELETE),
                 EnumSet.of(FileAttributes.FILE_ATTRIBUTE_NORMAL),
                 SMB2ShareAccess.ALL,
                 SMB2CreateDisposition.FILE_OPEN_IF,
@@ -388,8 +482,53 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     }
 
     private String getFileName() {
-        return fileIdBothDirectoryInformation != null ?
-                fileIdBothDirectoryInformation.getFileName() : this.fileURL.getFilename();
+        if (1 == 1) {
+            return getFileName(this);
+        }
+
+        // TODO - remove everything from this point on!
+        if (1 == 2 && fileIdBothDirectoryInformation != null) {
+            return fileIdBothDirectoryInformation.getFileName();
+        } else {
+
+            String fileName = this.fileURL.getFilename();
+
+            AbstractFile t = this.parentFile;
+            while (t.getParent() != null) {
+                fileName = t.getURL().getFilename() + "/" + fileName;
+                t = t.getParent();
+            }
+
+
+//            FileURL tempUrl = this.fileURL;
+//            String fileName = tempUrl.getFilename();
+//
+//            tempUrl = tempUrl.getParent();
+//            while (tempUrl.getFilename() != null && !tempUrl.getFilename().isEmpty()) {
+//                fileName = tempUrl.getFilename() + "/" + fileName;
+//                tempUrl = tempUrl.getParent();
+//            }
+
+            return fileName;
+
+        }
     }
+
+
+    private String getFileName(AbstractFile f) {
+        return getFileName(f, "/");
+    }
+
+    private String getFileName(AbstractFile f, String separator) {
+        String fileName = f.getURL().getFilename();
+        AbstractFile t = f.getParent();
+        while (t.getParent() != null) {
+            fileName = t.getURL().getFilename() + separator + fileName;
+            t = t.getParent();
+        }
+        return fileName;
+    }
+
+
 
 }
