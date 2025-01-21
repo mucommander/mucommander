@@ -178,6 +178,8 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         // Whether the 'save credentials' checkbox should be enabled
         boolean saveCredentialsCheckBoxSelected = false;
 
+        Boolean useLegacy = null;
+
         // If the provided URL contains credentials, use them
         if(urlCredentials!=null) {
             selectedCredentials = urlCredentials;
@@ -188,12 +190,19 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
             selectedCredentials = bestCredentialsMapping.getCredentials();
             saveCredentialsCheckBoxSelected = bestCredentialsMapping.isPersistent();
+
+            if (bestCredentialsMapping.getRealm().getProperty("useLegacy") != null) {
+                useLegacy = "true".equals(bestCredentialsMapping.getRealm().getProperty("useLegacy"));
+            }
         }
 
         yPanel.add(compPanel);
 
         if (fileURL.getScheme().equals(FileProtocols.SMB)) {
-            this.useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), false);
+            if (useLegacy == null) {
+                useLegacy = "true".equals(fileURL.getProperty("useLegacy"));
+            }
+            this.useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), useLegacy);
             yPanel.add(useLegacyCheckbox);
         }
 
@@ -281,6 +290,11 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             guestCredentialsSelected = false;
 
             boolean isPersistent = saveCredentialsCheckBox.isSelected();
+
+            if (this.useLegacyCheckbox != null) {
+                this.fileURL.setProperty("useLegacy", this.useLegacyCheckbox.isSelected() ? "true" : "false");
+            }
+
             selectedCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, isPersistent);
 
             // Look for an existing matching CredentialsMapping instance to re-use the realm which may contain
@@ -293,14 +307,16 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
                     // Create a new CredentialsMapping instance in case the 'isPersistent' flag has changed.
                     // (original credentials may have originally been added as 'volatile' and then made persistent by
                     // ticking the checkbox, or vice-versa)
+
+                    // Copy the useLegacy property to make sure it persists
+                    if (fileURL.getProperty("useLegacy") != null) {
+                        cm.getRealm().setProperty("useLegacy", fileURL.getProperty("useLegacy"));
+                    }
+
                     selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
                     break;
                 }
             }
-        }
-
-        if (this.useLegacyCheckbox != null) {
-            this.fileURL.setProperty("useLegacy", this.useLegacyCheckbox.isSelected() ? "true" : "false");
         }
     }
 
