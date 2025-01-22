@@ -1,6 +1,5 @@
 package com.mucommander.commons.file.protocol.smb;
 
-import com.hierynomus.msfscc.fileinformation.FileAllInformation;
 import com.hierynomus.smbj.SMBClient;
 import com.hierynomus.smbj.SmbConfig;
 import com.hierynomus.smbj.auth.AuthenticationContext;
@@ -12,12 +11,16 @@ import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class SmbjConnectionHandler extends ConnectionHandler  {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmbjConnectionHandler.class);
 
     private final FileURL serverURL;
 
@@ -33,8 +36,6 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
 
     @Override
     public void startConnection() throws IOException, AuthException {
-        System.out.println("startConnection"); // TODO - remove
-
         Credentials credentials = serverURL.getCredentials();
         String login = credentials.getLogin();
         String domain;
@@ -49,7 +50,6 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
         String password = credentials.getPassword();
 
         String hostname = serverURL.getHost();
-        System.out.println(hostname); // TODO
 
         AuthenticationContext authenticationContext = new AuthenticationContext(login, password.toCharArray(), domain);
 
@@ -95,7 +95,7 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
                     closeable.close();
                 }
             } catch (Exception e) {
-                e.printStackTrace(); // TODO - log?
+                LOGGER.error("Error closing smbj connection", e);
             }
 
         }
@@ -104,10 +104,8 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
 
     @Override
     public void keepAlive() {
-        System.out.println("keepAlive");
         if (diskShare != null) {
-            FileAllInformation fileInformation = diskShare.getFileInformation("");
-            System.out.println(fileInformation); // TODO - remove
+            diskShare.getFileInformation("");
         }
     }
 
