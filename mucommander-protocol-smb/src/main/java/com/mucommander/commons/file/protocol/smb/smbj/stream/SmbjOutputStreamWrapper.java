@@ -1,12 +1,15 @@
 package com.mucommander.commons.file.protocol.smb.smbj.stream;
 
 import com.hierynomus.smbj.share.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 
 public class SmbjOutputStreamWrapper extends OutputStream {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmbjOutputStreamWrapper.class);
 
     private final OutputStream delegate;
 
@@ -36,7 +39,7 @@ public class SmbjOutputStreamWrapper extends OutputStream {
             try {
                 file.close();
             } catch (Exception e) {
-                e.printStackTrace(); // TODO - log
+                LOGGER.error("Error closing resource", e);
             }
         }
     }
