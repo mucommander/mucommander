@@ -59,6 +59,8 @@ public class SMBProtocolProvider implements ProtocolProvider {
         System.setProperty("jcifs.smb.client.dfs.disabled", "true");
     }
 
+    public static final String PROPERTY_SMB_USE_LEGACY = "useLegacy";
+
 
     /**
      * Sets the authentication protocol to use when connecting to SMB servers. This configuration method must be called
@@ -110,7 +112,7 @@ public class SMBProtocolProvider implements ProtocolProvider {
     /////////////////////////////////////
 
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
-        if ("true".equals(url.getProperty("useLegacy"))) {
+        if ("true".equals(url.getProperty(PROPERTY_SMB_USE_LEGACY))) {
             return instantiationParams.isEmpty()
                     ?new SMBFile(url)
                     :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));

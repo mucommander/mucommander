@@ -73,8 +73,8 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
         }
 
         // TODO - document this (to support equals etc...)
-        if (url.getProperty("useLegacy") == null) {
-            url.setProperty("useLegacy", "false");
+        if (url.getProperty(SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY) == null) {
+            url.setProperty(SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY, "false");
         }
 
 
