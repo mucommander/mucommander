@@ -38,7 +38,6 @@ import java.io.InputStream;
  * </p>
  * @see    CommandsXmlConstants
  * @see    CommandBuilder
- * @see    CommandWriter
  * @author Nicolas Rinaudo
  */
 public class CommandReader extends DefaultHandler implements CommandsXmlConstants {

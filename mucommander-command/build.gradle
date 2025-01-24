@@ -16,6 +16,8 @@ dependencies {
     api project(":mucommander-commons-file")
     api project(":mucommander-preferences")
 
+    implementation 'org.yaml:snakeyaml:2.3'
+
     testImplementation 'org.testng:testng:7.10.2'
 }
 
