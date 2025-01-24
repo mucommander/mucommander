@@ -298,7 +298,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
         return doWithConnectionHandler(c -> {
             File file = openFileForRead(c);
             return new SmbjInputStreamWrapper(file.getInputStream(), file);
-        }); // TODO - consider catching RuntimeException and examining internal exception for IOException or UnsupportedFileOperationException
+        });
     }
 
     @Override
@@ -389,7 +389,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
             connectionHandler.checkConnection();
             return smbjLogic.doLogic(connectionHandler);
         } catch (Exception e) {
-            throw new RuntimeException(e); // TODO - consider a special case for IOException
+            throw new RuntimeException(e);
         }
         finally {
             if (connectionHandler != null) {
