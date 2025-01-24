@@ -65,6 +65,9 @@ import java.awt.event.ActionListener;
  */
 public class AuthDialog extends FocusDialog implements ActionListener, EditableComboBoxListener {
 
+    // Identical to SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY
+    public static final String PROPERTY_SMB_USE_LEGACY = "useLegacy";
+
     private JButton okButton;
     private JButton cancelButton;
 
@@ -191,8 +194,8 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             selectedCredentials = bestCredentialsMapping.getCredentials();
             saveCredentialsCheckBoxSelected = bestCredentialsMapping.isPersistent();
 
-            if (bestCredentialsMapping.getRealm().getProperty("useLegacy") != null) {
-                useLegacy = "true".equals(bestCredentialsMapping.getRealm().getProperty("useLegacy"));
+            if (bestCredentialsMapping.getRealm().getProperty(PROPERTY_SMB_USE_LEGACY) != null) {
+                useLegacy = "true".equals(bestCredentialsMapping.getRealm().getProperty(PROPERTY_SMB_USE_LEGACY));
             }
         }
 
@@ -200,7 +203,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
         if (fileURL.getScheme().equals(FileProtocols.SMB)) {
             if (useLegacy == null) {
-                useLegacy = "true".equals(fileURL.getProperty("useLegacy"));
+                useLegacy = "true".equals(fileURL.getProperty(PROPERTY_SMB_USE_LEGACY));
             }
             this.useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), useLegacy);
             yPanel.add(useLegacyCheckbox);
@@ -292,7 +295,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             boolean isPersistent = saveCredentialsCheckBox.isSelected();
 
             if (this.useLegacyCheckbox != null) {
-                this.fileURL.setProperty("useLegacy", this.useLegacyCheckbox.isSelected() ? "true" : "false");
+                this.fileURL.setProperty(PROPERTY_SMB_USE_LEGACY, this.useLegacyCheckbox.isSelected() ? "true" : "false");
             }
 
             selectedCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, isPersistent);
@@ -309,8 +312,8 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
                     // ticking the checkbox, or vice-versa)
 
                     // Copy the useLegacy property to make sure it persists
-                    if (fileURL.getProperty("useLegacy") != null) {
-                        cm.getRealm().setProperty("useLegacy", fileURL.getProperty("useLegacy"));
+                    if (fileURL.getProperty(PROPERTY_SMB_USE_LEGACY) != null) {
+                        cm.getRealm().setProperty(PROPERTY_SMB_USE_LEGACY, fileURL.getProperty(PROPERTY_SMB_USE_LEGACY));
                     }
 
                     selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
