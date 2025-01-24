@@ -20,6 +20,7 @@ import com.mucommander.commons.file.protocol.smb.smbj.stream.SmbjInputStreamWrap
 import com.mucommander.commons.file.protocol.smb.smbj.stream.SmbjOutputStreamWrapper;
 import com.mucommander.commons.file.protocol.smb.smbj.stream.random.SmbjRandomAccessInputStream;
 import com.mucommander.commons.file.protocol.smb.smbj.stream.random.SmbjRandomAccessOutputStream;
+import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 import org.slf4j.Logger;
@@ -268,7 +269,7 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
                     .map(f -> {
                         FileURL childURL = (FileURL)fileURL.clone();
                         childURL.setHost(fileURL.getHost());
-                        childURL.setPath(fileURL.getPath() + "/" + f.getFileName());
+                        childURL.setPath(PathUtils.removeTrailingSeparator(childURL.getPath()) + "/" + f.getFileName());
 
                         try {
                             Map<String, Object> initParams = new HashMap<>();
