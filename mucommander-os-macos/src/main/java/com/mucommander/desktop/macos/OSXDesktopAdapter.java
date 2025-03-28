@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -435,7 +436,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     /**
-     * Tries to locate 'duty' command by invoking 'which', the result is cached.
+     * Tries to locate 'duty' command by invoking 'type', the result is cached.
      * @return the path of 'duty' command, or null if not located
      */
     private String getPathOfDutiCmd() {
@@ -451,10 +452,10 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             return false;       // continue searching
         };
         // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
-        runCommand(new String[]{getMacOsUserShell(), "-c", "which duti"}, false,0, linePredicate);
+        runCommand(new String[]{getMacOsUserShell(), "-c", "type -p -f duti"}, false, 0, linePredicate);
         if (StringUtils.isNullOrEmpty(dutiCmdPath)) {
             // retry the proper way, i.e. with -l - it may take more time to execute, but may have better env settings
-            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "which duti"}, false,0, linePredicate);
+            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "type -p -f duti"}, false, 0, linePredicate);
         }
 
         if (!StringUtils.isNullOrEmpty(dutiCmdPath)) {
@@ -488,6 +489,11 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             boolean processExited;
             if (!(processExited = proc.waitFor(1000, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
                 LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", commands, !processExited, exitCode);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Stderr output of running the command: {}",
+                            new BufferedReader(new InputStreamReader(proc.getErrorStream())).lines().
+                                    collect(Collectors.joining(System.lineSeparator())));
+                }
                 return result;
             }
             String s;
