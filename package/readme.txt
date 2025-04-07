@@ -46,6 +46,7 @@ Localization:
 
 Bug fixes:
 - The Start Menu group the application is placed in is now named 'muCommander' instead of 'Unknown' on Windows.
+- The application sometimes cannot start after being killed.
 
 Known issues:
 - Some translations may not be up-to-date.
