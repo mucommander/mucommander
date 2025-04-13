@@ -451,11 +451,12 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         };
+        var findDutiCmd = "command -v duti";
         // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
-        runCommand(new String[]{getMacOsUserShell(), "-c", "type -p -f duti"}, false, 0, linePredicate);
+        runCommand(new String[]{getMacOsUserShell(), "-c", findDutiCmd}, false, 0, linePredicate);
         if (StringUtils.isNullOrEmpty(dutiCmdPath)) {
             // retry the proper way, i.e. with -l - it may take more time to execute, but may have better env settings
-            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", "type -p -f duti"}, false, 0, linePredicate);
+            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", findDutiCmd}, false, 0, linePredicate);
         }
 
         if (!StringUtils.isNullOrEmpty(dutiCmdPath)) {
