@@ -490,6 +490,9 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             if (!(processExited = proc.waitFor(1000, TimeUnit.MILLISECONDS)) || (exitCode = proc.exitValue()) != expectedExitCode) {
                 LOGGER.error("Unexpected result from running: '{}', timed out?: {}, exit code: {}", commands, !processExited, exitCode);
                 if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Stdout output of running the command: {}",
+                            new BufferedReader(new InputStreamReader(proc.getInputStream())).lines().
+                                    collect(Collectors.joining(System.lineSeparator())));
                     LOGGER.debug("Stderr output of running the command: {}",
                             new BufferedReader(new InputStreamReader(proc.getErrorStream())).lines().
                                     collect(Collectors.joining(System.lineSeparator())));
