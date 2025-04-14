@@ -47,6 +47,9 @@ Localization:
 Bug fixes:
 - The Start Menu group the application is placed in is now named 'muCommander' instead of 'Unknown' on Windows.
 - The application sometimes cannot start after being killed.
+- Fixed unnecessary stack-traces in the logs while starting or running the appliaction.
+- Bumped JediTerm and its dependencies to the newest version
+- Bumped RSyntaxTextArea to the newest version
 
 Known issues:
 - Some translations may not be up-to-date.

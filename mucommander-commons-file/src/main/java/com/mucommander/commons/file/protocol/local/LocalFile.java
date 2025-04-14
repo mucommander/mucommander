@@ -174,9 +174,10 @@ public class LocalFile extends ProtocolFile {
         // inserted.
         // This has been fixed in Java 1.6 b55 but this fixes previous versions of Java.
         // See http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4089199
-        if (IS_WINDOWS && Kernel32.isAvailable())
+        if (IS_WINDOWS && Kernel32.isAvailable()) {
             Kernel32.getInstance()
                     .SetErrorMode(Kernel32API.SEM_NOOPENFILEERRORBOX | Kernel32API.SEM_FAILCRITICALERRORS);
+        }
     }
 
     /**
@@ -197,35 +198,41 @@ public class LocalFile extends ProtocolFile {
         if (file == null) {
             String path = fileURL.getPath();
             // see https://github.com/mucommander/mucommander/issues/898
-            if (OsFamily.MAC_OS.isCurrent())
+            if (OsFamily.MAC_OS.isCurrent()) {
                 path = FileUtils.normalizeWithNFD(path);
+            }
 
             // Remove the leading '/' for Windows-like paths
-            if (USES_ROOT_DRIVES)
+            if (USES_ROOT_DRIVES) {
                 path = path.substring(1, path.length());
+            }
 
             // Create the java.io.File instance and throw an exception if the path is not absolute.
             file = new File(path);
-            if (!file.isAbsolute())
+            if (!file.isAbsolute()) {
                 throw new IOException();
+            }
 
             absPath = file.getAbsolutePath();
 
             // Remove the trailing separator if present
-            if (absPath.endsWith(SEPARATOR))
+            if (absPath.endsWith(SEPARATOR)) {
                 absPath = absPath.substring(0, absPath.length() - 1);
+            }
         }
         // the java.io.File instance was created by ls(), no need to re-create it or call the costly
         // File#getAbsolutePath()
         else {
             absPath = fileURL.getPath();
             // see https://github.com/mucommander/mucommander/issues/898
-            if (OsFamily.MAC_OS.isCurrent())
+            if (OsFamily.MAC_OS.isCurrent()) {
                 absPath = FileUtils.normalizeWithNFD(absPath);
+            }
 
             // Remove the leading '/' for Windows-like paths
-            if (USES_ROOT_DRIVES)
+            if (USES_ROOT_DRIVES) {
                 absPath = absPath.substring(1, absPath.length());
+            }
         }
 
         this.absPath = absPath;
@@ -245,8 +252,9 @@ public class LocalFile extends ProtocolFile {
      */
     public static AbstractFile getUserHome() {
         String userHomePath = System.getProperty("user.home");
-        if (userHomePath == null)
+        if (userHomePath == null) {
             return null;
+        }
 
         return FileFactory.getFile(userHomePath);
     }
@@ -260,8 +268,9 @@ public class LocalFile extends ProtocolFile {
     public boolean guessRemovableDrive() {
         if (IS_WINDOWS && Kernel32.isAvailable()) {
             int driveType = Kernel32.getInstance().GetDriveType(getAbsolutePath(true));
-            if (driveType != Kernel32API.DRIVE_UNKNOWN)
+            if (driveType != Kernel32API.DRIVE_UNKNOWN) {
                 return driveType == Kernel32API.DRIVE_REMOVABLE || driveType == Kernel32API.DRIVE_CDROM;
+            }
         }
 
         // For other OS that have root drives (OS/2), a weak way to characterize removable drives is by checking if the
@@ -314,13 +323,15 @@ public class LocalFile extends ProtocolFile {
             addJavaIoFileRoots(volumes);
 
             // Add /proc/mounts folders under UNIX-based systems.
-            if (OsFamily.getCurrent().isUnixBased())
+            if (OsFamily.getCurrent().isUnixBased()) {
                 addMountEntries(volumes);
+            }
         }
 
         AbstractFile homeFolder = getUserHome();
-        if (homeFolder != null)
+        if (homeFolder != null) {
             volumes.add(homeFolder);
+        }
 
         addDesktopEntry(volumes, homeFolder);
 
@@ -349,6 +360,7 @@ public class LocalFile extends ProtocolFile {
             try {
                 volumes.add(FileFactory.getFile(path.toFile().getAbsolutePath(), true));
             } catch (IOException e) {
+                LOGGER.trace(e.getMessage());
             }
         }
     }
@@ -358,8 +370,7 @@ public class LocalFile extends ProtocolFile {
      * otherwise, resolves all the mount points that look like regular filesystems it contains and adds them to the
      * given <code>Vector</code>.
      *
-     * @param v
-     *            the <code>Vector</code> to add mount points to
+     * @param volumes the <code>Vector</code> to add mount points to
      */
     private static void addMountEntries(Set<AbstractFile> volumes) {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(streamMountPoints()))) {
@@ -416,14 +427,14 @@ public class LocalFile extends ProtocolFile {
     /**
      * Adds all <code>/Volumes</code> subfolders to the given <code>Vector</code>.
      *
-     * @param v
-     *            the <code>Vector</code> to add the volumes to
+     * @param volumes the <code>Vector</code> to add the volumes to
      */
     private static void addMacOSXVolumes(Set<AbstractFile> volumes) {
         // /Volumes not resolved for some reason, giving up
         AbstractFile volumesFolder = FileFactory.getFile("/Volumes");
-        if (volumesFolder == null)
+        if (volumesFolder == null) {
             return;
+        }
 
         // Adds subfolders
         try {
@@ -457,8 +468,9 @@ public class LocalFile extends ProtocolFile {
             return MacOsSystemFolder.isSystemFile(this);
         }
         if (OsFamily.WINDOWS.isCurrent()) {
-            if (!Kernel32.isAvailable())
+            if (!Kernel32.isAvailable()) {
                 return false;
+            }
 
             String filePath = file.getAbsolutePath();
             int attributes = Kernel32.getInstance().GetFileAttributes(filePath);
@@ -496,11 +508,13 @@ public class LocalFile extends ProtocolFile {
     public void changeDate(long lastModified) throws IOException {
         // java.io.File#setLastModified(long) throws an IllegalArgumentException if time is negative.
         // If specified time is negative, set it to 0 (01/01/1970).
-        if (lastModified < 0)
+        if (lastModified < 0) {
             lastModified = 0;
+        }
 
-        if (!file.setLastModified(lastModified))
+        if (!file.setLastModified(lastModified)) {
             throw new IOException();
+        }
     }
 
     @Override
@@ -548,8 +562,9 @@ public class LocalFile extends ProtocolFile {
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled)
             throws IOException {
         // Only the 'user' permissions are supported
-        if (access != PermissionAccess.USER)
+        if (access != PermissionAccess.USER) {
             throw new IOException();
+        }
 
         boolean success = false;
         switch (permission) {
@@ -563,13 +578,11 @@ public class LocalFile extends ProtocolFile {
             success = file.setExecutable(enabled);
         }
 
-        if (!success)
+        if (!success) {
             throw new IOException();
+        }
     }
 
-    /**
-     * Always returns <code>null</code>, this information is not available unfortunately.
-     */
     @Override
     public String getOwner() {
         if (owner != null) {
@@ -578,15 +591,15 @@ public class LocalFile extends ProtocolFile {
         try {
             owner = Files.getOwner(file.toPath()).getName();
         } catch (IOException e) {
-            LOGGER.error("failed to get owner of {}", file);
-            LOGGER.error("failed to get owner", e);
+            if (e instanceof NoSuchFileException) {
+                LOGGER.info("failed to get owner of {}, either doesn't exist anymore or is protected by the system", file);
+            } else {
+                LOGGER.error("failed to get owner of {}", file, e);
+            }
         }
         return owner;
     }
 
-    /**
-     * Always returns <code>false</code>, this information is not available unfortunately.
-     */
     @Override
     public boolean canGetOwner() {
         if (owner != null) {
@@ -595,13 +608,11 @@ public class LocalFile extends ProtocolFile {
         try {
             return Files.getFileStore(file.toPath()).supportsFileAttributeView(FileOwnerAttributeView.class);
         } catch (Exception e) {
+            LOGGER.trace(e.getMessage());
             return false;
         }
     }
 
-    /**
-     * Always returns <code>null</code>, this information is not available unfortunately.
-     */
     @Override
     public String getGroup() {
         if (group != null) {
@@ -611,15 +622,15 @@ public class LocalFile extends ProtocolFile {
             var attributes = Files.readAttributes(file.toPath(), PosixFileAttributes.class);
             group = attributes.group().getName();
         } catch (IOException e) {
-            LOGGER.error("failed to get group of {}", file);
-            LOGGER.error("failed to get group", e);
+            if (e instanceof NoSuchFileException) {
+                LOGGER.info("Failed to get group of {}, either doesn't exist anymore or is protected by the system", file);
+            } else {
+                LOGGER.error("Failed to get group of {}", file, e);
+            }
         }
         return group;
     }
 
-    /**
-     * Always returns <code>false</code>, this information is not available unfortunately.
-     */
     @Override
     public boolean canGetGroup() {
         if (group != null) {
@@ -628,6 +639,7 @@ public class LocalFile extends ProtocolFile {
         try {
             return Files.getFileStore(file.toPath()).supportsFileAttributeView(PosixFileAttributeView.class);
         } catch (IOException e) {
+            LOGGER.trace(e.getMessage());
             return false;
         }
     }
@@ -699,8 +711,9 @@ public class LocalFile extends ProtocolFile {
     public void delete() throws IOException {
         boolean ret = file.delete();
 
-        if (!ret)
+        if (!ret) {
             throw new IOException();
+        }
     }
 
     @Override
@@ -710,8 +723,9 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public void mkdir() throws IOException {
-        if (!file.mkdir())
+        if (!file.mkdir()) {
             throw new IOException();
+        }
     }
 
     @Override
@@ -799,8 +813,9 @@ public class LocalFile extends ProtocolFile {
         // If this file has no parent, return:
         // - the drive's name under OSes with root drives such as Windows, e.g. "C:"
         // - "/" under Unix-based systems
-        if (isRoot())
+        if (isRoot()) {
             return hasRootDrives() ? absPath : "/";
+        }
 
         return file.getName();
     }
@@ -808,8 +823,9 @@ public class LocalFile extends ProtocolFile {
     @Override
     public String getAbsolutePath() {
         // Append separator for root folders (C:\ , /) and for directories
-        if (isRoot() || (isDirectory() && !absPath.endsWith(SEPARATOR)))
+        if (isRoot() || (isDirectory() && !absPath.endsWith(SEPARATOR))) {
             return absPath + SEPARATOR;
+        }
 
         return absPath;
     }
@@ -828,16 +844,18 @@ public class LocalFile extends ProtocolFile {
                 Path targetPath = Files.readSymbolicLink(file.toPath());
                 ResolvedDestination resolvedTarget = PathUtils.resolveDestination(targetPath.toString(), getParent());
                 canonicalPath = resolvedTarget.getDestinationFile().getCanonicalPath();
-            } else
+            } else {
                 canonicalPath = file.getCanonicalPath();
+            }
         } catch (IOException e) {
             LOGGER.error("failed to retrieve canonical path of {}, returning {}", this, absPath);
             LOGGER.error("exception", e);
             return absPath;
         }
 
-        if (isDirectory())
+        if (isDirectory()) {
             canonicalPath = addTrailingSeparator(canonicalPath);
+        }
 
         return canonicalPath;
     }
@@ -851,8 +869,9 @@ public class LocalFile extends ProtocolFile {
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         File files[] = file.listFiles(filenameFilter == null ? null : new LocalFilenameFilter(filenameFilter));
 
-        if (files == null)
+        if (files == null) {
             throw new IOException();
+        }
 
         int nbFiles = files.length;
         AbstractFile children[] = new AbstractFile[nbFiles];
@@ -892,13 +911,15 @@ public class LocalFile extends ProtocolFile {
             Matcher matcher = DRIVE_ROOT_PATTERN.matcher(absPath + SEPARATOR);
 
             // Test if this file already is the root folder
-            if (matcher.matches())
+            if (matcher.matches()) {
                 return this;
+            }
 
             // Extract the drive from the path
             matcher.reset();
-            if (matcher.find())
+            if (matcher.find()) {
                 return FileFactory.getFile(matcher.group());
+            }
         }
 
         return super.getRoot();
@@ -910,8 +931,9 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public boolean isRoot() {
-        if (USES_ROOT_DRIVES)
+        if (USES_ROOT_DRIVES) {
             return DRIVE_ROOT_PATTERN.matcher(absPath + SEPARATOR).matches();
+        }
 
         return super.isRoot();
     }
@@ -944,8 +966,9 @@ public class LocalFile extends ProtocolFile {
             }
         }
 
-        if (bestMatch != null)
+        if (bestMatch != null) {
             return bestMatch;
+        }
 
         // If no volume matched this file (shouldn't normally happen), return the root folder
         return getRoot();
@@ -1127,8 +1150,9 @@ public class LocalFile extends ProtocolFile {
             if (newLength < currentLength) {
                 // Truncate the file and position the offset to the new EOF if it was beyond
                 channel.truncate(newLength);
-                if (currentPos > newLength)
+                if (currentPos > newLength) {
                     channel.position(newLength);
+                }
             } else {
                 // Expand the file by positionning the offset at the new EOF and writing a byte, and reposition the
                 // offset to where it was
@@ -1178,8 +1202,9 @@ public class LocalFile extends ProtocolFile {
 
         public boolean getBitValue(PermissionAccess access, PermissionType type) {
             // Only the 'user' permissions are supported
-            if (access != PermissionAccess.USER)
+            if (access != PermissionAccess.USER) {
                 return false;
+            }
 
             switch (type) {
             case READ:
@@ -1200,14 +1225,17 @@ public class LocalFile extends ProtocolFile {
         public int getIntValue() {
             int userPerms = 0;
 
-            if (getBitValue(PermissionAccess.USER, PermissionType.READ))
+            if (getBitValue(PermissionAccess.USER, PermissionType.READ)) {
                 userPerms |= PermissionType.READ.toInt();
+            }
 
-            if (getBitValue(PermissionAccess.USER, PermissionType.WRITE))
+            if (getBitValue(PermissionAccess.USER, PermissionType.WRITE)) {
                 userPerms |= PermissionType.WRITE.toInt();
+            }
 
-            if (getBitValue(PermissionAccess.USER, PermissionType.EXECUTE))
+            if (getBitValue(PermissionAccess.USER, PermissionType.EXECUTE)) {
                 userPerms |= PermissionType.EXECUTE.toInt();
+            }
 
             return userPerms << 6;
         }
