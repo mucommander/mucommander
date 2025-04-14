@@ -68,7 +68,7 @@ Then, you can run a debugger that connects to this port using your favorite IDE 
 ### Packaging
 The creation of a DMG file for macOS (produced in build/distributions):
 ```
-./gradlew clean dmg -PskipDmgSign
+./gradlew clean dmg -PskipDmgSign -Parch=[x86_64|aarch64]
 ```
 
 Note: as the application is not signed, the following error may appear when trying to start it on macOS: "muCommander damaged and cannot be opened".

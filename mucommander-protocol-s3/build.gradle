@@ -12,6 +12,8 @@ dependencies {
 
     implementation ('org.jets3t:jets3t:0.9.7') {
         exclude group: 'ch.qos.logback', module: 'logback-classic'
+        exclude group: 'org.apache.tomcat', module: 'tomcat-servlet-api'
+
     }
     implementation 'commons-logging:commons-logging:1.3.2'
     implementation 'javax.xml:jaxrpc-api:1.1'
