@@ -33,6 +33,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileOwnerAttributeView;
 import java.nio.file.attribute.PosixFileAttributeView;
@@ -350,8 +351,7 @@ public class LocalFile extends ProtocolFile {
     /**
      * Resolves the root folders returned by {@link FileSystem#getRootDirectories()} and adds them to the given <code>Vector</code>.
      *
-     * @param v
-     *            the <code>Vector</code> to add root folders to
+     * @param volumes the <code>Vector</code> to add root folders to
      */
     private static void addJavaIoFileRoots(Set<AbstractFile> volumes) {
         // Warning : No file operation should be performed on the resolved folders as under Win32, this would cause a
@@ -402,7 +402,7 @@ public class LocalFile extends ProtocolFile {
     /**
      * Adds Desktop to the given volumes entries if home directory is defined and Desktop folder
      * is present and is writable (~/Desktop)
-     * @param volumesV the <code>Vector</code> to add mount points to
+     * @param volumes the <code>Vector</code> to add mount points to
      * @param homeFolder  a home folder, can be null
      */
     private static void addDesktopEntry(Set<AbstractFile> volumes, AbstractFile homeFolder) {
