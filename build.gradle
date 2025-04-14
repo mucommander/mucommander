@@ -234,7 +234,7 @@ ext {
     revision = git.head().id
     // Whether or not to bundle the JRE in order to create a 'standalone' executable
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
-    arch = project.hasProperty('arch') ? arch : "x86_64"
+    arch = project.hasProperty('arch') ? arch : System.getProperty('os.arch') // defaults to system architecture
     identity = project.hasProperty('identity') ? identity : ""
 }
 
