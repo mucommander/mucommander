@@ -42,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import com.mucommander.commons.runtime.JavaVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -451,13 +452,21 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             }
             return false;       // continue searching
         };
+        var userShell = getMacOsUserShell();
         var findDutiCmd = "command -v duti";
-        // first try without '-l' - it is ~10x faster, may not have a proper env settings tho
-        runCommand(new String[]{getMacOsUserShell(), "-c", findDutiCmd}, false, 0, linePredicate);
-        if (StringUtils.isNullOrEmpty(dutiCmdPath)) {
-            // retry the proper way, i.e. with -l - it may take more time to execute, but may have better env settings
-            runCommand(new String[]{getMacOsUserShell(), "-l", "-c", findDutiCmd}, false, 0, linePredicate);
-        }
+
+        // first try well known locations per architecture (arm vs x86), then try without '-l' - it is ~10x faster, but
+        // may not have a proper env settings though, later with -l (login, may have better env settings),
+        // and finally with -i (interactive, it sources .zshrc)
+        List<String[]> dutiCheckCmds = List.of(
+                new String[]{ "ls",
+                        JavaVersion.isArm64Architecture() ?  "/opt/homebrew/bin/duti" : "/usr/local/bin/duti" },
+                new String[]{ userShell, "-c", findDutiCmd },
+                new String[]{ userShell, "-l", "-c", findDutiCmd },
+                new String[]{ userShell, "-i", "-c", findDutiCmd }
+
+        );
+        dutiCheckCmds.stream().anyMatch(cmd -> runCommand(cmd, false, 0, linePredicate));
 
         if (!StringUtils.isNullOrEmpty(dutiCmdPath)) {
             LOGGER.info("Command 'duti' found here: {}", dutiCmdPath);
