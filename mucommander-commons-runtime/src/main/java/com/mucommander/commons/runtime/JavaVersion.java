@@ -99,6 +99,15 @@ public enum JavaVersion implements ComparableRuntimeProperty {
     }
 
     /**
+     * Returns <code>true</code> if the JVM architecture is ARM (aarch64)
+     *
+     * @return <code>true</code> if the JVM architecture is ARM, and <code>false</code> otherwise.
+     */
+    public static boolean isArm64Architecture() {
+        return "aarch64".equals(currentArchitecture);
+    }
+
+    /**
      * Returns the Java version of the current runtime environment.
      *
      * @return the Java version of the current runtime environment
