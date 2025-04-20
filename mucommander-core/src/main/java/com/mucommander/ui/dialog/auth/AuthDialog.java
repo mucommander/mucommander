@@ -194,8 +194,9 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             selectedCredentials = bestCredentialsMapping.getCredentials();
             saveCredentialsCheckBoxSelected = bestCredentialsMapping.isPersistent();
 
-            if (bestCredentialsMapping.getRealm().getProperty(PROPERTY_SMB_USE_LEGACY) != null) {
-                useLegacy = "true".equals(bestCredentialsMapping.getRealm().getProperty(PROPERTY_SMB_USE_LEGACY));
+            String useLegacyProperty = bestCredentialsMapping.getRealm().getProperty(PROPERTY_SMB_USE_LEGACY) ;
+            if (useLegacyProperty != null) {
+                useLegacy = Boolean.parseBoolean(useLegacyProperty);
             }
         }
 
