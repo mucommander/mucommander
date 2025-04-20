@@ -296,7 +296,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             boolean isPersistent = saveCredentialsCheckBox.isSelected();
 
             if (this.useLegacyCheckbox != null) {
-                this.fileURL.setProperty(PROPERTY_SMB_USE_LEGACY, this.useLegacyCheckbox.isSelected() ? "true" : "false");
+                this.fileURL.setProperty(PROPERTY_SMB_USE_LEGACY, String..valueOf(this.useLegacyCheckbox.isSelected()));
             }
 
             selectedCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, isPersistent);
