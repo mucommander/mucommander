@@ -1,7 +1,7 @@
 repositories.mavenCentral()
 
 dependencies {
-    comprise ('org.jetbrains.kotlin:kotlin-reflect:1.9.10') {
+    comprise ('org.jetbrains.kotlin:kotlin-reflect:2.1.20') {
         // we only want the resources in kotlin-reflect (kotlin-stdlib is the only dependency)
         exclude group: 'org.jetbrains.kotlin'
     }
