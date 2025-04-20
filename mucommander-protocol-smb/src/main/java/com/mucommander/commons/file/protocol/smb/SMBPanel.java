@@ -118,7 +118,7 @@ public class SMBPanel extends ServerPanel {
             userInfo = lastDomain+";"+userInfo;
 
         url.setCredentials(new Credentials(userInfo, lastPassword));
-        url.setProperty(SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY, this.useLegacyCheckbox.isSelected() ? "true" : "false");
+        url.setProperty(SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY, String.valueOf(this.useLegacyCheckbox.isSelected()));
 
         return url;
     }
