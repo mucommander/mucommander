@@ -112,7 +112,7 @@ public class SMBProtocolProvider implements ProtocolProvider {
     /////////////////////////////////////
 
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
-        if ("true".equals(url.getProperty(PROPERTY_SMB_USE_LEGACY))) {
+        if (Boolean.parseBoolean(url.getProperty(PROPERTY_SMB_USE_LEGACY))) {
             return instantiationParams.isEmpty()
                     ?new SMBFile(url)
                     :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));
