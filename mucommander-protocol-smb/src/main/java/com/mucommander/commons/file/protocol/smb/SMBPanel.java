@@ -50,7 +50,7 @@ public class SMBPanel extends ServerPanel {
     private static String lastUsername = "";
     // Not static so that it is not saved (for security reasons)
     private String lastPassword = "";
-    private boolean useLegacy = false;
+    private boolean useLegacy;
 
 	
     SMBPanel(ServerPanelListener listener, JFrame mainFrame) {
