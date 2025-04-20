@@ -313,8 +313,9 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
                     // ticking the checkbox, or vice-versa)
 
                     // Copy the useLegacy property to make sure it persists
-                    if (fileURL.getProperty(PROPERTY_SMB_USE_LEGACY) != null) {
-                        cm.getRealm().setProperty(PROPERTY_SMB_USE_LEGACY, fileURL.getProperty(PROPERTY_SMB_USE_LEGACY));
+                   var smbUseLegacyProperty = fileURL.getProperty(PROPERTY_SMB_USE_LEGACY);
+                    if (smbUseLegacyProperty != null) {
+                        cm.getRealm().setProperty(PROPERTY_SMB_USE_LEGACY, smbUseLegacyProperty);
                     }
 
                     selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
