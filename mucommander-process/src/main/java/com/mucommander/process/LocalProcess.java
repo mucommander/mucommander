@@ -17,13 +17,13 @@
 
 package com.mucommander.process;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Process running on the local computer.
@@ -54,6 +54,7 @@ class LocalProcess extends AbstractProcess {
         // Merge the process' stdout and stderr
         pb.redirectErrorStream(true);
 
+        LOGGER.debug("Starting local process, tokens: {}, dir: {}", tokens, dir);
         process = pb.start();
 
         // Safeguard: makes sure that an exception is raised if the process could not be created.

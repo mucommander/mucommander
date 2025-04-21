@@ -17,27 +17,24 @@
 
 package com.mucommander.ui.main.tabs;
 
-import java.awt.Point;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.runtime.JavaVersion;
-import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.TabbedPane;
+
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
+import java.awt.Point;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * TabbedPane that present the FileTable tabs.
@@ -56,7 +53,12 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	private MainFrame mainFrame;
 	private FolderPanel folderPanel;
 	private FileTableTabHeaderFactory headersFactory;
-	
+
+	/**
+	 * cache the index of the last selected tab since apparently in some cases we look for this value (in order to
+	 * store it in the snapshot.xml file) after the tab selection is cleared.
+	 */
+	private int lastSelectedIndex = -1;
 
 	public FileTableTabbedPane(MainFrame mainFrame, FolderPanel folderPanel, JComponent fileTableComponent, FileTableTabHeaderFactory headersFactory) {
 		this.fileTableComponent = fileTableComponent;
@@ -131,10 +133,16 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 	public void setSelectedIndex(int index) {
 		// Allow tabs switching only when no-events-mode is disabled
 		if (!mainFrame.getNoEventsMode()) {
-
-		    super.setSelectedIndex(index);
+			super.setSelectedIndex(index);
+			lastSelectedIndex = index;
 			requestFocusInWindow();
 		}
+	}
+
+	@Override
+	public int getSelectedIndex() {
+		var index = super.getSelectedIndex();
+		return index != -1 ? index : lastSelectedIndex;
 	}
 
 	@Override

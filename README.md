@@ -96,4 +96,5 @@ The creation of DEB distribution for Debian Linux flavors:
 
 More packaging options are described in [our wiki](https://github.com/mucommander/mucommander/wiki/Packaging).
 
-
+### Powered by
+[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)

@@ -17,21 +17,6 @@
 
 package com.mucommander.command;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.AttributeFileFilter;
@@ -41,6 +26,28 @@ import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.conf.PlatformManager;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * Manages custom commands and associations.
@@ -99,11 +106,14 @@ public class CommandManager implements CommandBuilder {
     private static       AbstractFile         commandsFile;
     /** Whether the custom commands have been modified since the last time they were saved. */
     protected static     boolean              wereCommandsModified;
-    /** Default name of the custom commands file. */
-    public  static final String               DEFAULT_COMMANDS_FILE_NAME    = "commands.xml";
+    /** Default name of the deprecated XML custom commands file. */
+    public  static final String DEFAULT_COMMANDS_FILE_NAME_XML = "commands.xml";
+    /** Default name of the deprecated XML custom commands file. */
+    public  static final String DEFAULT_COMMANDS_FILE_NAME_YAML = "commands.yaml";
     /** Default command used when no other command is found for a specific file type. */
     private static       Command              defaultCommand;
 
+    private enum FORMAT { XML, YAML };
 
 
     // - Initialization --------------------------------------------------------
@@ -175,7 +185,7 @@ public class CommandManager implements CommandBuilder {
      * Returns a sorted collection of all registered commands.
      * @return a sorted collection of all registered commands.
      */
-    public static Collection<Command> commands() {
+    public static List<Command> commands() {
         // Copy the registered commands to a new list
         List<Command> list = new Vector<>(commands.values());
         // Sorts the list.
@@ -524,7 +534,7 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * <p>
      * This method's return value can be modified through {@link #setCommandFile(String)}.
-     * If this wasn't called, the default path will be used: {@link #DEFAULT_COMMANDS_FILE_NAME}
+     * If this wasn't called, the default path will be used: {@link #DEFAULT_COMMANDS_FILE_NAME_XML}
      * in the {@link com.mucommander.conf.PlatformManager#getPreferencesFolder() preferences} folder.
      * </p>
      * @return the path to the custom commands XML file.
@@ -533,9 +543,14 @@ public class CommandManager implements CommandBuilder {
      * @see    #writeCommands()
      * @throws IOException if there was some error locating the default commands file.
      */
-    public static AbstractFile getCommandsFile() throws IOException {
+    public static AbstractFile getCommandsFile(FORMAT format) throws IOException {
         if (commandsFile == null) {
-            return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMANDS_FILE_NAME);
+            switch (format) {
+            case XML:
+                return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMANDS_FILE_NAME_XML);
+            case YAML:
+                return PlatformManager.getPreferencesFolder().getChild(DEFAULT_COMMANDS_FILE_NAME_YAML);
+            }
         }
         return commandsFile;
     }
@@ -547,7 +562,7 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * @param  path                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
-     * @see    #getCommandsFile()
+     * @see    #getCommandsFile(FORMAT)
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
@@ -568,7 +583,7 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * @param  file                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
-     * @see    #getCommandsFile()
+     * @see    #getCommandsFile(FORMAT)
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
@@ -580,7 +595,7 @@ public class CommandManager implements CommandBuilder {
      * Sets the path to the custom commands file.
      * @param  file                  path to the custom commands file.
      * @throws FileNotFoundException if <code>file</code> is not accessible.
-     * @see    #getCommandsFile()
+     * @see    #getCommandsFile(FORMAT)
      * @see    #loadCommands()
      * @see    #writeCommands()
      */
@@ -596,7 +611,7 @@ public class CommandManager implements CommandBuilder {
     /**
      * Writes all registered commands to the custom commands file.
      * <p>
-     * Data will be written to the path returned by {@link #getCommandsFile()}. Note, however,
+     * Data will be written to the path returned by {@link #getCommandsFile(FORMAT)}. Note, however,
      * that this method will not actually do anything if the command list hasn't been modified
      * since the last time it was saved.
      * </p>
@@ -607,23 +622,41 @@ public class CommandManager implements CommandBuilder {
      * @throws IOException      if an I/O error occurs.
      * @throws CommandException if an error occurs.
      * @see                     #loadCommands()
-     * @see                     #getCommandsFile()
+     * @see                     #getCommandsFile(FORMAT)
      * @see                     #setCommandFile(String)
      */
     public static void writeCommands() throws IOException, CommandException {
         // Only saves the command if they were modified since the last time they were written.
         if (wereCommandsModified) {
-            AbstractFile commandsFile = getCommandsFile();
+            var commandsFile = getCommandsFile(FORMAT.YAML);
             LOGGER.debug("Writing custom commands to file: " + commandsFile);
 
             // Writes the commands.
-            try (BackupOutputStream out = new BackupOutputStream(commandsFile)) {
-                buildCommands(new CommandWriter(out));
-                wereCommandsModified = false;
+            var options = new DumperOptions();
+            options.setPrettyFlow(true); // Enable readable formatting
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+
+            var representer = new Representer(options);
+            representer.addTypeDescription(getCommandTypeDescription());
+            representer.addClassTag(Commands.class, Tag.MAP); // Suppress the tag
+            representer.addClassTag(Command.class, Tag.MAP); // Suppress the tag
+
+            var yaml = new Yaml(representer, options);
+            try (FileWriter writer = new FileWriter(commandsFile.getPath())) {
+                yaml.dump(new Commands(commands()), writer);
             }
+            wereCommandsModified = false;
         } else {
             LOGGER.debug("Custom commands not modified, skip saving.");
         }
+    }
+
+    private static TypeDescription getCommandTypeDescription() {
+        var typeDescription = new TypeDescription(Command.class);
+        typeDescription.substituteProperty("value", String.class, "getCommand", "setCommand");
+        typeDescription.substituteProperty("display", String.class, "getDisplayName", "setDisplayName");
+        typeDescription.setExcludes("command", "displayName");
+        return typeDescription;
     }
 
     /**
@@ -634,17 +667,33 @@ public class CommandManager implements CommandBuilder {
      * </p>
      * @throws IOException if an I/O error occurs.
      * @see                #writeCommands()
-     * @see                #getCommandsFile()
+     * @see                #getCommandsFile(FORMAT)
      * @see                #setCommandFile(String)
      */
     public static void loadCommands() throws IOException, CommandException {
-        AbstractFile commandsFile = getCommandsFile();
-        LOGGER.debug("Loading custom commands from: " + commandsFile.getAbsolutePath());
+        var commandsFile = getCommandsFile(FORMAT.YAML);
+        if (commandsFile.exists()) {
+            LOGGER.debug("Loading custom commands from: " + commandsFile.getAbsolutePath());
+            var constructor = new Constructor(Commands.class, new LoaderOptions());
+            constructor.addTypeDescription(getCommandTypeDescription());
+            var yaml = new Yaml(constructor);
+            Commands commands;
+            try (FileReader reader = new FileReader(commandsFile.getPath())) {
+                commands = yaml.load(reader);
+            }
 
-        // Tries to load the commands file.
-        // Commands are not considered to be modified by this.
-        try(InputStream in = new BackupInputStream(commandsFile)) {
-            CommandReader.read(in , new CommandManager());
+            var manager = new CommandManager();
+            for (Command command : commands) {
+                manager.addCommand(command);
+            }
+        } else {
+            commandsFile = getCommandsFile(FORMAT.XML);
+            LOGGER.debug("Loading custom commands from: " + commandsFile.getAbsolutePath());
+
+            try (InputStream in = new BackupInputStream(commandsFile)) {
+                CommandReader.read(in, new CommandManager());
+            }
+            wereCommandsModified = true; // so that the commands would be written in YAML format
         }
     }
 
@@ -659,4 +708,27 @@ public class CommandManager implements CommandBuilder {
      * This method is public as an implementation side effect and must not be called directly.
      */
     public void endBuilding() {}
+
+    private static class Commands implements Iterable<Command> {
+        private List<Command> commands;
+
+        public Commands() {}
+
+        public Commands(List<Command> commands) {
+            setCommands(commands);
+        }
+
+        public List<Command> getCommands() {
+            return commands;
+        }
+
+        public void setCommands(List<Command> commands) {
+            this.commands = commands;
+        }
+
+        @Override
+        public Iterator<Command> iterator() {
+            return commands.iterator();
+        }
+    }
 }

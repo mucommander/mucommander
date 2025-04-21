@@ -20,11 +20,10 @@ package com.mucommander.command;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.FileSet;
 
+import javax.swing.Icon;
 import java.io.File;
 import java.util.List;
 import java.util.Vector;
-
-import javax.swing.Icon;
 
 /**
  * Compiled shell commands.
@@ -96,15 +95,15 @@ public class Command implements Comparable<Command> {
     // - Instance variables --------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Command's alias. */
-    private final String      alias;
+    private String alias;
     /** Original command. */
-    private final String      command;
+    private String command;
     /** Name used to display the command to users. */
-    private final String      displayName;
+    private String displayName;
     /** Command type. */
-    private final CommandType type;
+    private CommandType type;
     /** Icon associated with command */
-    private final Icon icon;
+    private Icon icon;
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -163,6 +162,8 @@ public class Command implements Comparable<Command> {
     public Command(String alias, String command, CommandType type) {
         this(alias, command, type, null);
     }
+
+    public Command() {}
 
     // - Token retrieval -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -445,6 +446,10 @@ public class Command implements Comparable<Command> {
         return command;
     }
 
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
     /**
      * Returns this command's alias.
      * @return this command's alias.
@@ -453,12 +458,20 @@ public class Command implements Comparable<Command> {
         return alias;
     }
 
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
     /**
      * Returns the command's type.
      * @return the command's type.
      */
     public synchronized CommandType getType() {
         return type;
+    }
+
+    public void setType(CommandType type) {
+        this.type = type;
     }
 
     /**
@@ -470,6 +483,10 @@ public class Command implements Comparable<Command> {
      */
     public synchronized String getDisplayName() {
         return displayName != null ? displayName : alias;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     /**

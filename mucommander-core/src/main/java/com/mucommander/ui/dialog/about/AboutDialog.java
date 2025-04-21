@@ -195,6 +195,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
                     "RSyntaxTextArea",
                     "BSD 3-Clause New or Revised License",
                     "https://bobbylight.github.io/RSyntaxTextArea/");
+            insertDetailedUrl(doc, "SnakeYAML", "Apache License", "https://bitbucket.org/snakeyaml");
 
             insertDetailedUrl(doc, "Unix4j", "MIT License", "http://unix4j.org");
             insertDetailedUrl(doc, "FlatLaf", "Apache License", "https://www.formdev.com/flatlaf");

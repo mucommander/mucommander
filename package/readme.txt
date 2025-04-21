@@ -39,12 +39,14 @@ New features:
 
 Improvements:
 - When selecting a different shell, the change takes effect immediately in the terminal.
+- The configuration of custom commands is now stored in YAML format rather than XML.
 
 Localization:
 -
 
 Bug fixes:
 - The Start Menu group the application is placed in is now named 'muCommander' instead of 'Unknown' on Windows.
+- The application sometimes cannot start after being killed.
 
 Known issues:
 - Some translations may not be up-to-date.
@@ -115,6 +117,9 @@ muCommander uses the following great third party works :
 
 - the JCommander library released under the Apache License.
  JCommander can be found at http://jcommander.org .
+
+- the SnakeYAML library released under the Apache License.
+ SnakeYAML can be found at https://bitbucket.org/snakeyaml .
 
 - the ICEpdf library released under the Apache License.
  ICEpdf can be found at https://github.com/pcorless/icepdf .
