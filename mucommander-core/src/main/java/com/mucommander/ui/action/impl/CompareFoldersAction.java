@@ -50,6 +50,7 @@ public class CompareFoldersAction extends MuAction {
         FileTableModel leftTableModel = leftTable.getFileTableModel();
         FileTableModel rightTableModel = rightTable.getFileTableModel();
 
+        // SFTP protocol uses second-based timestamps, so when comparing two timestamps milliseconds should be ignored
         boolean ignoreMs =
                 leftTableModel.getCurrentFolder().getURL().getScheme().equals(FileProtocols.SFTP) ||
                 rightTableModel.getCurrentFolder().getURL().getScheme().equals(FileProtocols.SFTP);
