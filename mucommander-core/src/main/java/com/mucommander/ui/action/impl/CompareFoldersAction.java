@@ -20,6 +20,7 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -49,6 +50,10 @@ public class CompareFoldersAction extends MuAction {
         FileTableModel leftTableModel = leftTable.getFileTableModel();
         FileTableModel rightTableModel = rightTable.getFileTableModel();
 
+        boolean ignoreMs =
+                leftTableModel.getCurrentFolder().getURL().getScheme().equals(FileProtocols.SFTP) ||
+                rightTableModel.getCurrentFolder().getURL().getScheme().equals(FileProtocols.SFTP);
+
         int nbFilesLeft = leftTableModel.getFileCount();
         int nbFilesRight = rightTableModel.getFileCount();
         int fileIndex;
@@ -66,7 +71,7 @@ public class CompareFoldersAction extends MuAction {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex == -1 || rightTableModel.getFileAt(fileIndex).getDate() < tempFile.getDate()) {
+            if (fileIndex == -1 || isLessThanDate(rightTableModel.getFileAt(fileIndex).getDate(), tempFile.getDate(), ignoreMs)) {
                 leftTableModel.setFileMarked(tempFile, true);
                 leftTable.repaint();
             }
@@ -84,7 +89,7 @@ public class CompareFoldersAction extends MuAction {
                     fileIndex = j;
                     break;
                 }
-            if (fileIndex == -1 || leftTableModel.getFileAt(fileIndex).getDate() < tempFile.getDate()) {
+            if (fileIndex == -1 || isLessThanDate(leftTableModel.getFileAt(fileIndex).getDate(), tempFile.getDate(), ignoreMs)) {
                 rightTableModel.setFileMarked(tempFile, true);
                 rightTable.repaint();
             }
@@ -98,6 +103,14 @@ public class CompareFoldersAction extends MuAction {
     @Override
     public ActionDescriptor getDescriptor() {
         return new Descriptor();
+    }
+
+    private boolean isLessThanDate(long a, long b, boolean ignoreMs) {
+        if (ignoreMs) {
+            a = (a / 1000) * 1000;
+            b = (b / 1000) * 1000;
+        }
+        return a < b;
     }
 
     @NoIcon
