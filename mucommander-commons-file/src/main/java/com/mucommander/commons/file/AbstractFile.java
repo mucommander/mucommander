@@ -2017,4 +2017,8 @@ public abstract class AbstractFile implements FileAttributes {
     public void setCustomExtension(String customExtension) {
         this.customExtension = customExtension;
     }
+
+    public boolean supportsMillisecondTimestamps() {
+        return true;
+    }
 }
