@@ -409,4 +409,9 @@ public abstract class ProxyFile extends AbstractFile {
     public AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
         return file.getChild(relativePath, template);
     }
+
+    @Override
+    public boolean supportsMillisecondTimestamps() {
+        return file.supportsMillisecondTimestamps();
+    }
 }
