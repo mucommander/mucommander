@@ -749,6 +749,9 @@ public class SFTPFile extends ProtocolFile {
         }
     }
 
+    /**
+     * SFTP protocol uses unit32 to represent time, hence millisecond is not supported
+     */
     @Override
     public boolean supportsMillisecondTimestamps() {
         return false;
