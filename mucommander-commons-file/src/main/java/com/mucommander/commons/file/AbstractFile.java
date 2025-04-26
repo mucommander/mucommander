@@ -804,7 +804,12 @@ public abstract class AbstractFile implements FileAttributes {
         FileURL childURL = (FileURL)getURL().clone();
 
         if (childURL.getScheme().equals(FileProtocols.FILE) && OsFamily.WINDOWS.isCurrent()) {
-            relativePath = WindowsFileNameSanitizer.sanitizeFileName(relativePath);
+            String sanitizedRelativePath = WindowsFileNameSanitizer.sanitizeFileName(relativePath);
+            if (!relativePath.equals(sanitizedRelativePath)) {
+                LOGGER.warn("Windows file renamed [relativePath = {}, sanitizedRelativePath = {}]",
+                        relativePath, sanitizedRelativePath);
+                relativePath = sanitizedRelativePath;
+            }
         }
 
         childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
