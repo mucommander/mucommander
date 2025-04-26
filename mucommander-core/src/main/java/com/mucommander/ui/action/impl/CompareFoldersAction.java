@@ -51,8 +51,8 @@ public class CompareFoldersAction extends MuAction {
         FileTableModel rightTableModel = rightTable.getFileTableModel();
 
         boolean ignoreMs =
-                !leftTableModel.getCurrentFolder().getCanonicalFile().supportsMillisecondTimestamps() ||
-                !rightTableModel.getCurrentFolder().getCanonicalFile().supportsMillisecondTimestamps();
+                !leftTableModel.getCurrentFolder().getAncestor().supportsMillisecondTimestamps() ||
+                !rightTableModel.getCurrentFolder().getAncestor().supportsMillisecondTimestamps();
 
         int nbFilesLeft = leftTableModel.getFileCount();
         int nbFilesRight = rightTableModel.getFileCount();
