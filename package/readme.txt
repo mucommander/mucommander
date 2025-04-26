@@ -40,6 +40,7 @@ New features:
 Improvements:
 - When selecting a different shell, the change takes effect immediately in the terminal.
 - The configuration of custom commands is now stored in YAML format rather than XML.
+- Improved reliability of "duti" command execution for "Open With" functionality on macOS.
 
 Localization:
 -
