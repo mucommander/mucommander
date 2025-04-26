@@ -108,8 +108,8 @@ public class CompareFoldersAction extends MuAction {
 
     private boolean isLessThanDate(long a, long b, boolean ignoreMs) {
         if (ignoreMs) {
-            a = (a / 1000) * 1000;
-            b = (b / 1000) * 1000;
+            a -= (a % 1000);
+            b -= (b % 1000);
         }
         return a < b;
     }
