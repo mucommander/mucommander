@@ -30,6 +30,9 @@ import java.security.NoSuchAlgorithmException;
 
 import javax.swing.Icon;
 
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.util.WindowsFileNameSanitizer;
+import com.mucommander.commons.runtime.OsFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -799,6 +802,11 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
         FileURL childURL = (FileURL)getURL().clone();
+
+        if (childURL.getScheme().equals(FileProtocols.FILE) && OsFamily.WINDOWS.isCurrent()) {
+            relativePath = WindowsFileNameSanitizer.sanitizeFileName(relativePath);
+        }
+
         childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
 
         return FileFactory.getFile(childURL, true);
