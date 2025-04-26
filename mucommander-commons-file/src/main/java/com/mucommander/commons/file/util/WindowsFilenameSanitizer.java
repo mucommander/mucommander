@@ -31,7 +31,7 @@ public class WindowsFilenameSanitizer {
 
         for (char c : input.toCharArray()) {
             if (ILLEGAL_CHARS.contains(c)) {
-                sanitized.append(String.format("%%%02X", (int) c));
+                sanitized.append('_');
             } else {
                 sanitized.append(c);
             }

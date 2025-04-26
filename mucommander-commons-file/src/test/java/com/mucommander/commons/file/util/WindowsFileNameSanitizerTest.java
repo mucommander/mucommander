@@ -8,7 +8,7 @@ public class WindowsFileNameSanitizerTest {
     @Test
     public void sanitizeFilename_whenCalledWithIllegalChars_thenSanitizeCorrectly() {
         String input = "report<final>*version?.txt";
-        String expected = "report%3Cfinal%3E%2Aversion%3F.txt";
+        String expected = "report_final__version_.txt";
 
         Assert.assertEquals(expected, WindowsFilenameSanitizer.sanitizeFileName(input));
     }
