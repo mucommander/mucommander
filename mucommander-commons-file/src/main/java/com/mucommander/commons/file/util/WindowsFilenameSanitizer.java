@@ -20,7 +20,7 @@ package com.mucommander.commons.file.util;
 
 import java.util.Set;
 
-public class WindowsFileNameSanitizer {
+public class WindowsFilenameSanitizer {
 
     private static final Set<Character> ILLEGAL_CHARS = Set.of(
             '<', '>', ':', '"', '/', '\\', '|', '?', '*', '`'
