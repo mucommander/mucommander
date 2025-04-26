@@ -749,6 +749,11 @@ public class SFTPFile extends ProtocolFile {
         }
     }
 
+    @Override
+    public boolean supportsMillisecondTimestamps() {
+        return false;
+    }
+
     /**
      * SFTPRandomAccessInputStream extends RandomAccessInputStream to provide random read access to an SFTPFile.
      */
