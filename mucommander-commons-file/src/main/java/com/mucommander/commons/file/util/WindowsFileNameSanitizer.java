@@ -22,11 +22,4 @@ public class WindowsFileNameSanitizer {
         return sanitized.toString();
     }
 
-    // Example usage
-    public static void main(String[] args) {
-        String original = "report<final>*version?.txt";
-        String safe = sanitizeFileName(original);
-        System.out.println("Sanitized: " + safe);
-    }
-
 }
