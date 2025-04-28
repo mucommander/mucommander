@@ -40,6 +40,7 @@ New features:
 Improvements:
 - When selecting a different shell, the change takes effect immediately in the terminal.
 - The configuration of custom commands is now stored in YAML format rather than XML.
+- Improved reliability of "duti" command execution for "Open With" functionality on macOS.
 - Fixed unnecessary stack-traces in the logs while starting or running the appliaction.
 - Bumped JediTerm and its dependencies to the newest version.
 - Bumped RSyntaxTextArea to the newest version.
