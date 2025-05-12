@@ -37,13 +37,12 @@ import com.mucommander.viewer.CloseCancelledException;
 import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
 import org.exbin.auxiliary.binary_data.BinaryData;
-import org.exbin.auxiliary.binary_data.paged.PagedData;
+import org.exbin.auxiliary.binary_data.array.paged.ByteArrayPagedData;
 import org.exbin.bined.operation.BinaryDataCommand;
-import org.exbin.bined.operation.BinaryDataOperationException;
 import org.exbin.bined.operation.swing.CodeAreaOperationCommandHandler;
-import org.exbin.bined.operation.swing.CodeAreaUndoHandler;
-import org.exbin.bined.operation.undo.BinaryDataUndoHandler;
-import org.exbin.bined.operation.undo.BinaryDataUndoUpdateListener;
+import org.exbin.bined.operation.swing.CodeAreaUndoRedo;
+import org.exbin.bined.operation.undo.BinaryDataUndoRedo;
+import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
 import org.exbin.bined.swing.basic.CodeArea;
 
 import javax.annotation.Nonnull;
@@ -77,7 +76,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     private static final Logger LOGGER = Logger.getLogger(BinaryEditor.class.getName());
     private EditorPresenter presenter;
     private AbstractFile currentFile;
-    private BinaryDataUndoHandler undoHandler;
+    private BinaryDataUndoRedo undoRedo;
 
     private JMenu fileMenu;
 
@@ -195,16 +194,11 @@ class BinaryEditor extends BinaryBase implements FileEditor {
         CodeArea codeArea = binaryComponent.getCodeArea();
         codeArea.addSelectionChangedListener(this::updateClipboardActionsStatus);
 
-        undoHandler = new CodeAreaUndoHandler(codeArea);
-        codeArea.setCommandHandler(new CodeAreaOperationCommandHandler(codeArea, undoHandler));
-        undoHandler.addUndoUpdateListener(new BinaryDataUndoUpdateListener() {
+        undoRedo = new CodeAreaUndoRedo(codeArea);
+        codeArea.setCommandHandler(new CodeAreaOperationCommandHandler(codeArea, undoRedo));
+        undoRedo.addChangeListener(new BinaryDataUndoRedoChangeListener() {
             @Override
-            public void undoCommandPositionChanged() {
-                updateUndoStatus();
-            }
-
-            @Override
-            public void undoCommandAdded(BinaryDataCommand command) {
+            public void undoChanged() {
                 updateUndoStatus();
             }
         });
@@ -214,26 +208,18 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     }
 
     private void performUndo() {
-        try {
-            undoHandler.performUndo();
-        } catch (BinaryDataOperationException ex) {
-            LOGGER.log(Level.FINE, "Undo operation failed", ex);
-        }
+        undoRedo.performUndo();
     }
 
     private void performRedo() {
-        try {
-            undoHandler.performRedo();
-        } catch (BinaryDataOperationException ex) {
-            LOGGER.log(Level.FINE, "Redo operation failed", ex);
-        }
+        undoRedo.performRedo();
     }
 
     private void updateUndoStatus() {
-        undoMenuItem.setEnabled(undoHandler.canUndo());
-        redoMenuItem.setEnabled(undoHandler.canRedo());
-        undoPopupMenuItem.setEnabled(undoHandler.canUndo());
-        redoPopupMenuItem.setEnabled(undoHandler.canRedo());
+        undoMenuItem.setEnabled(undoRedo.canUndo());
+        redoMenuItem.setEnabled(undoRedo.canRedo());
+        undoPopupMenuItem.setEnabled(undoRedo.canUndo());
+        redoPopupMenuItem.setEnabled(undoRedo.canRedo());
 
         // Marks/unmarks the window as dirty under Mac OS X (symbolized by a dot in the window closing icon)
         if (OsFamily.MAC_OS.isCurrent()) {
@@ -272,13 +258,13 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     private synchronized void loadFile(AbstractFile file) throws IOException {
         final IOException[] operationException = new IOException[1];
         presenter.longOperation(() -> {
-            PagedData data = new PagedData();
+            ByteArrayPagedData data = new ByteArrayPagedData();
             try (InputStream in = file.getInputStream()) {
                 data.loadFromStream(in);
 
                 currentFile = file;
                 binaryComponent.getCodeArea().setContentData(data);
-                undoHandler.setSyncPoint();
+                undoRedo.setSyncPosition();
                 notifyOrigFileChanged();
                 binaryComponent.updateCurrentMemoryMode();
             } catch (IOException ex) {
@@ -297,7 +283,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                 BinaryData data = Objects.requireNonNull(binaryComponent.getCodeArea().getContentData());
                 data.saveToStream(out);
                 currentFile = file;
-                undoHandler.setSyncPoint();
+                undoRedo.setSyncPosition();
                 notifyOrigFileChanged();
 
                 // Change the parent folder's date to now, so that changes are picked up by folder auto-refresh
@@ -370,7 +356,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     }
 
     protected boolean isSaveNeeded() {
-        return undoHandler.getSyncPoint() != undoHandler.getCommandPosition();
+        return undoRedo.getSyncPosition() != undoRedo.getCommandPosition();
     }
 
     /**
@@ -423,7 +409,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
             throw new CloseCancelledException();
         }
 
-        PagedData data = Objects.requireNonNull((PagedData) binaryComponent.getCodeArea().getContentData());
+        ByteArrayPagedData data = Objects.requireNonNull((ByteArrayPagedData) binaryComponent.getCodeArea().getContentData());
         data.dispose();
     }
 
