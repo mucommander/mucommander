@@ -55,8 +55,9 @@ import org.exbin.bined.CodeType;
 import org.exbin.bined.EditMode;
 import org.exbin.bined.EditOperation;
 import org.exbin.bined.capability.EditModeCapable;
-import org.exbin.bined.highlight.swing.HighlightCodeAreaPainter;
+import org.exbin.bined.highlight.swing.SearchCodeAreaColorAssessor;
 import org.exbin.bined.swing.basic.CodeArea;
+import org.exbin.bined.swing.basic.DefaultCodeAreaPainter;
 
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
@@ -281,7 +282,7 @@ class BinaryBase {
                 goToPanel.acceptInput();
 
                 long targetPosition = goToPanel.getTargetPosition();
-                codeArea.setCaretPosition(targetPosition);
+                codeArea.setActiveCaretPosition(targetPosition);
                 codeArea.revealCursor();
             }
             dialog.dispose();
@@ -412,9 +413,10 @@ class BinaryBase {
             super.setBackground(backgroundColor);
             ThemeManager.addCurrentThemeListener(this);
 
-            codeArea.setFocusTraversalKeysEnabled(false);
-            codeArea.setPainter(new HighlightCodeAreaPainter(codeArea));
+            DefaultCodeAreaPainter painter = (DefaultCodeAreaPainter) codeArea.getPainter();
+            painter.setColorAssessor(new SearchCodeAreaColorAssessor(painter.getColorAssessor()));
             registerBinaryStatus(statusPanel);
+            codeArea.setFocusTraversalKeysEnabled(false);
             add(codeArea, BorderLayout.CENTER);
             add(statusPanel, BorderLayout.SOUTH);
         }
