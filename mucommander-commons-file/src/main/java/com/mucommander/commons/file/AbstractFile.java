@@ -18,6 +18,20 @@
 
 package com.mucommander.commons.file;
 
+import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
+import com.mucommander.commons.file.archive.AbstractArchiveFile;
+import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
+import com.mucommander.commons.file.compat.CompatURLStreamHandler;
+import com.mucommander.commons.file.filter.FileFilter;
+import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.commons.file.protocol.FileProtocols;
+import com.mucommander.commons.file.util.WindowsFilenameSanitizer;
+import com.mucommander.commons.io.*;
+import com.mucommander.commons.runtime.OsFamily;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.Icon;
 import java.awt.Dimension;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -27,25 +41,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import javax.swing.Icon;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.archive.AbstractArchiveEntryFile;
-import com.mucommander.commons.file.archive.AbstractArchiveFile;
-import com.mucommander.commons.file.archive.AbstractRWArchiveFile;
-import com.mucommander.commons.file.compat.CompatURLStreamHandler;
-import com.mucommander.commons.file.filter.FileFilter;
-import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.io.BufferPool;
-import com.mucommander.commons.io.ChecksumInputStream;
-import com.mucommander.commons.io.FileTransferError;
-import com.mucommander.commons.io.FileTransferException;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.io.StreamUtils;
 
 /**
  * <code>AbstractFile</code> is the superclass of all files.
@@ -799,6 +794,16 @@ public abstract class AbstractFile implements FileAttributes {
      */
     public AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
         FileURL childURL = (FileURL)getURL().clone();
+
+        if (childURL.getScheme().equals(FileProtocols.FILE) && OsFamily.WINDOWS.isCurrent()) {
+            String sanitizedRelativePath = WindowsFilenameSanitizer.sanitizeFileName(relativePath);
+            if (!relativePath.equals(sanitizedRelativePath)) {
+                LOGGER.warn("Windows file renamed [relativePath = {}, sanitizedRelativePath = {}]",
+                        relativePath, sanitizedRelativePath);
+                relativePath = sanitizedRelativePath;
+            }
+        }
+
         childURL.setPath(addTrailingSeparator(childURL.getPath())+ relativePath);
 
         return FileFactory.getFile(childURL, true);
