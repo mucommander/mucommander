@@ -1331,13 +1331,29 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     protected final void deleteRecursively(AbstractFile file) throws IOException, UnsupportedFileOperationException {
-        if(file.isDirectory() && !file.isSymlink()) {
-            AbstractFile children[] = file.ls();
-            for (AbstractFile child : children)
-                deleteRecursively(child);
+        // Security Check: Ensure file is within base directory bounds
+        if (baseDir != null) {
+            try {
+                Path filePath = file.getCanonicalFile().toPath();
+                Path basePath = baseDir.getCanonicalFile().toPath();
+                
+                if (!filePath.startsWith(basePath)) {
+                    throw new IOException("Attempting to delete file outside base directory: " + file.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                throw new IOException("Path validation failed for: " + file.getAbsolutePath(), e);
+            }
         }
 
-        file.delete();
+        if(file.isDirectory() && !file.isSymlink()) {
+                AbstractFile children[] = file.ls();
+                for (AbstractFile child : children)
+                    deleteRecursively(child);
+            }
+
+        if (!file.delete()) {
+        throw new IOException("Failed to delete file: " + file.getAbsolutePath());
+        }
     }
 
     /**
