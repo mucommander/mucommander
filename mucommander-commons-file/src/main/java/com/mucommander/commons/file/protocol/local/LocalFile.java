@@ -17,6 +17,36 @@
 
 package com.mucommander.commons.file.protocol.local;
 
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FileOperation;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.GroupedPermissionBits;
+import com.mucommander.commons.file.IndividualPermissionBits;
+import com.mucommander.commons.file.MacOsSystemFolder;
+import com.mucommander.commons.file.MonitoredFile;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperation;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.filter.FilenameFilter;
+import com.mucommander.commons.file.protocol.ProtocolFile;
+import com.mucommander.commons.file.util.Kernel32;
+import com.mucommander.commons.file.util.Kernel32API;
+import com.mucommander.commons.file.util.PathUtils;
+import com.mucommander.commons.file.util.PathUtils.ResolvedDestination;
+import com.mucommander.commons.file.util.WindowsFilenameSanitizer;
+import com.mucommander.commons.io.BufferPool;
+import com.mucommander.commons.io.FileUtils;
+import com.mucommander.commons.io.FilteredOutputStream;
+import com.mucommander.commons.io.RandomAccessInputStream;
+import com.mucommander.commons.io.RandomAccessOutputStream;
+import com.mucommander.commons.runtime.OsFamily;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,36 +75,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.FileOperation;
-import com.mucommander.commons.file.FilePermissions;
-import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.GroupedPermissionBits;
-import com.mucommander.commons.file.IndividualPermissionBits;
-import com.mucommander.commons.file.MacOsSystemFolder;
-import com.mucommander.commons.file.MonitoredFile;
-import com.mucommander.commons.file.PermissionAccess;
-import com.mucommander.commons.file.PermissionBits;
-import com.mucommander.commons.file.PermissionType;
-import com.mucommander.commons.file.UnsupportedFileOperation;
-import com.mucommander.commons.file.UnsupportedFileOperationException;
-import com.mucommander.commons.file.filter.FilenameFilter;
-import com.mucommander.commons.file.protocol.ProtocolFile;
-import com.mucommander.commons.file.util.Kernel32;
-import com.mucommander.commons.file.util.Kernel32API;
-import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.file.util.PathUtils.ResolvedDestination;
-import com.mucommander.commons.io.BufferPool;
-import com.mucommander.commons.io.FileUtils;
-import com.mucommander.commons.io.FilteredOutputStream;
-import com.mucommander.commons.io.RandomAccessInputStream;
-import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * LocalFile provides access to files located on a locally-mounted filesystem. Note that despite the class' name,
@@ -556,6 +556,19 @@ public class LocalFile extends ProtocolFile {
     @Override
     public PermissionBits getChangeablePermissions() {
         return CHANGEABLE_PERMISSIONS;
+    }
+
+    @Override
+    public AbstractFile getChild(String relativePath, AbstractFile template) throws IOException {
+        if (IS_WINDOWS) {
+            String sanitizedRelativePath = WindowsFilenameSanitizer.sanitizeFileName(relativePath);
+            if (!relativePath.equals(sanitizedRelativePath)) {
+                LOGGER.warn("Windows file renamed [relativePath = {}, sanitizedRelativePath = {}]",
+                        relativePath, sanitizedRelativePath);
+                relativePath = sanitizedRelativePath;
+            }
+        }
+        return super.getChild(relativePath, template);
     }
 
     @Override
