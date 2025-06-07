@@ -52,7 +52,7 @@ Bug fixes:
 - The Start Menu group the application is placed in is now named 'muCommander' instead of 'Unknown' on Windows.
 - The application sometimes cannot start after being killed.
 - Ignore milliseconds when comparing a folder that resides in an SFTP server.
-- Replace illegal file name characters (i.e. '*', ':') with an underscore when copying from a non-windows remote.
+- When copying files from a non-Windows source, replace characters that are invalid in Windows filenames (e.g., '*', ':') with an underscore.
 
 Known issues:
 - Some translations may not be up-to-date.
