@@ -22,6 +22,7 @@ import com.mucommander.auth.CredentialsManager;
 import com.mucommander.auth.CredentialsMapping;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.commons.util.ui.combobox.EditableComboBox;
 import com.mucommander.commons.util.ui.combobox.EditableComboBoxListener;
@@ -64,6 +65,9 @@ import java.awt.event.ActionListener;
  */
 public class AuthDialog extends FocusDialog implements ActionListener, EditableComboBoxListener {
 
+    // Identical to SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY
+    public static final String PROPERTY_SMB_USE_LEGACY = "useLegacy";
+
     private JButton okButton;
     private JButton cancelButton;
 
@@ -76,6 +80,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
     private JPasswordField passwordField;
 
     private JCheckBox saveCredentialsCheckBox;
+    private JCheckBox useLegacyCheckbox;
 
     private CredentialsMapping selectedCredentialsMapping;
     private boolean guestCredentialsSelected;
@@ -176,6 +181,8 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
         // Whether the 'save credentials' checkbox should be enabled
         boolean saveCredentialsCheckBoxSelected = false;
 
+        Boolean useLegacy = null;
+
         // If the provided URL contains credentials, use them
         if(urlCredentials!=null) {
             selectedCredentials = urlCredentials;
@@ -186,9 +193,22 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
             selectedCredentials = bestCredentialsMapping.getCredentials();
             saveCredentialsCheckBoxSelected = bestCredentialsMapping.isPersistent();
+
+            String useLegacyProperty = bestCredentialsMapping.getRealm().getProperty(PROPERTY_SMB_USE_LEGACY) ;
+            if (useLegacyProperty != null) {
+                useLegacy = Boolean.parseBoolean(useLegacyProperty);
+            }
         }
 
         yPanel.add(compPanel);
+
+        if (fileURL.getScheme().equals(FileProtocols.SMB)) {
+            if (useLegacy == null) {
+                useLegacy = "true".equals(fileURL.getProperty(PROPERTY_SMB_USE_LEGACY));
+            }
+            this.useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), useLegacy);
+            yPanel.add(useLegacyCheckbox);
+        }
 
         this.saveCredentialsCheckBox = new JCheckBox(Translator.get("auth_dialog.store_credentials"), saveCredentialsCheckBoxSelected);
         yPanel.add(saveCredentialsCheckBox);
@@ -274,6 +294,11 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
             guestCredentialsSelected = false;
 
             boolean isPersistent = saveCredentialsCheckBox.isSelected();
+
+            if (this.useLegacyCheckbox != null) {
+                this.fileURL.setProperty(PROPERTY_SMB_USE_LEGACY, String.valueOf(this.useLegacyCheckbox.isSelected()));
+            }
+
             selectedCredentialsMapping = new CredentialsMapping(enteredCredentials, fileURL, isPersistent);
 
             // Look for an existing matching CredentialsMapping instance to re-use the realm which may contain
@@ -286,6 +311,13 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
                     // Create a new CredentialsMapping instance in case the 'isPersistent' flag has changed.
                     // (original credentials may have originally been added as 'volatile' and then made persistent by
                     // ticking the checkbox, or vice-versa)
+
+                    // Copy the useLegacy property to make sure it persists
+                   var smbUseLegacyProperty = fileURL.getProperty(PROPERTY_SMB_USE_LEGACY);
+                    if (smbUseLegacyProperty != null) {
+                        cm.getRealm().setProperty(PROPERTY_SMB_USE_LEGACY, smbUseLegacyProperty);
+                    }
+
                     selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
                     break;
                 }

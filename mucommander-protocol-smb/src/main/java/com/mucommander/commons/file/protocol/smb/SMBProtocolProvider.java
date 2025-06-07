@@ -21,6 +21,7 @@ package com.mucommander.commons.file.protocol.smb;
 import java.io.IOException;
 import java.util.Map;
 
+import com.hierynomus.msfscc.fileinformation.FileIdBothDirectoryInformation;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.ProtocolProvider;
@@ -57,6 +58,8 @@ public class SMBProtocolProvider implements ProtocolProvider {
         // on the local machine without a network like on a laptop)."
         System.setProperty("jcifs.smb.client.dfs.disabled", "true");
     }
+
+    public static final String PROPERTY_SMB_USE_LEGACY = "useLegacy";
 
 
     /**
@@ -109,8 +112,14 @@ public class SMBProtocolProvider implements ProtocolProvider {
     /////////////////////////////////////
 
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
-        return instantiationParams.isEmpty()
-            ?new SMBFile(url)
-            :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));
+        if (Boolean.parseBoolean(url.getProperty(PROPERTY_SMB_USE_LEGACY))) {
+            return instantiationParams.isEmpty()
+                    ?new SMBFile(url)
+                    :new SMBFile(url, (SmbFile)instantiationParams.get("parent"));
+        } else {
+            return instantiationParams.isEmpty()
+                    ? SmbjFile.create(url)
+                    : SmbjFile.create(url, (SmbjFile)instantiationParams.get("parent"), (FileIdBothDirectoryInformation)instantiationParams.get("fileIdBothDirectoryInformation"));
+        }
     }
 }
