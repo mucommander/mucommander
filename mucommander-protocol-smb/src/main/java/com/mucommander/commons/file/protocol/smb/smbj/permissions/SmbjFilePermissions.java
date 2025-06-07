@@ -53,11 +53,15 @@ public class SmbjFilePermissions extends IndividualPermissionBits implements Fil
 
     @Override
     public boolean getBitValue(PermissionAccess access, PermissionType type) {
-        return switch (type) {
-            case READ -> this.canRead;
-            case WRITE -> this.canWrite;
-            case EXECUTE -> false;
-        };
+        switch (type) {
+            case READ:
+                return this.canRead;
+            case WRITE:
+                return this.canWrite;
+            case EXECUTE:
+            default:
+                return false;
+        }
     }
 
 }
