@@ -204,7 +204,8 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
         if (fileURL.getScheme().equals(FileProtocols.SMB)) {
             if (useLegacy == null) {
-                useLegacy = "true".equals(fileURL.getProperty(PROPERTY_SMB_USE_LEGACY));
+                String useLegacyStr = fileURL.getProperty(PROPERTY_SMB_USE_LEGACY);
+                useLegacy = useLegacyStr == null || Boolean.parseBoolean(useLegacyStr);
             }
             this.useLegacyCheckbox = new JCheckBox(Translator.get("server_connect_dialog.smb.use_legacy"), useLegacy);
             yPanel.add(useLegacyCheckbox);
