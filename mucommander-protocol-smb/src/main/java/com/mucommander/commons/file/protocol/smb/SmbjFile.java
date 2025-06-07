@@ -368,7 +368,8 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
     public void copyRemotelyTo(AbstractFile destFile) throws IOException, UnsupportedFileOperationException {
         checkCopyRemotelyPrerequisites(destFile, false, false);
         doWithConnectionHandler(c -> {
-            if (destFile instanceof SmbjFile smbjFile) {
+            if (destFile instanceof SmbjFile) {
+                SmbjFile smbjFile = (SmbjFile)destFile;
                 try (File source = openFileForRead(c);
                      File dest = openFileForWrite(c, smbjFile.getFileName())) {
                     source.remoteCopyTo(dest);
