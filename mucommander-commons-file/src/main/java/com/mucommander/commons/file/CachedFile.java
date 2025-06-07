@@ -151,9 +151,9 @@ public class CachedFile extends ProxyFile {
             Field fBA_HIDDEN = cFileSystem.getDeclaredField("BA_HIDDEN");
             Field fFs = null;
             try {
-                fFs = cFile.getDeclaredField(JavaVersion.JAVA_23.isCurrentOrHigher() ? "FS" : "fs");
-            } catch (NoSuchFieldException e) {
                 fFs = cFile.getDeclaredField("FS");
+            } catch (NoSuchFieldException e) {
+                fFs = cFile.getDeclaredField("fs");
             }
 
             // Allow access to the 'getBooleanAttributes' method and to the fields we're interested in
