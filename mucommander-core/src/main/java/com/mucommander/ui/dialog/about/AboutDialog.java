@@ -17,6 +17,30 @@
 
 package com.mucommander.ui.dialog.about;
 
+import com.mucommander.Activator;
+import com.mucommander.RuntimeConstants;
+import com.mucommander.commons.util.ui.dialog.FocusDialog;
+import com.mucommander.commons.util.ui.layout.FluentPanel;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.icon.IconManager;
+import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -30,31 +54,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.SwingUtilities;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
-
-import com.mucommander.Activator;
-import com.mucommander.RuntimeConstants;
-import com.mucommander.commons.util.ui.dialog.FocusDialog;
-import com.mucommander.commons.util.ui.layout.FluentPanel;
-import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.icon.IconManager;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeManager;
 
 /**
  * Dialog displaying information about muCommander.
@@ -183,6 +182,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedUrl(doc, "J7Zip", "LGPL", "http://sourceforge.net/projects/p7zip/");
             insertDetailedUrl(doc, "7-Zip-JBinding", "LGPL", "http://sevenzipjbind.sourceforge.net");
             insertDetailedUrl(doc, "jCIFS", "LGPL", "http://jcifs.samba.org");
+            insertDetailedUrl(doc, "SMBJ", "Apache License", "https://github.com/hierynomus/smbj");
             insertDetailedUrl(doc, "JetS3t", "Apache License", "http://jets3t.s3.amazonaws.com/index.html");
             insertDetailedUrl(doc, "JediTerm", "LGPL and Apache License", "https://github.com/JetBrains/jediterm");
             insertDetailedUrl(doc, "JmDNS", "LGPL", "http://jmdns.sourceforge.net");

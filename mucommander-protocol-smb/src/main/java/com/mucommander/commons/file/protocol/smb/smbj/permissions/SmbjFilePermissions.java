@@ -19,7 +19,12 @@
 
 package com.mucommander.commons.file.protocol.smb.smbj.permissions;
 
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.GroupedPermissionBits;
+import com.mucommander.commons.file.IndividualPermissionBits;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
 
 public class SmbjFilePermissions extends IndividualPermissionBits implements FilePermissions {
 
