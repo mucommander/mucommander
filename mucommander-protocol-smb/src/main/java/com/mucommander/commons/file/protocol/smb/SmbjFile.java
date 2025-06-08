@@ -28,7 +28,14 @@ import com.hierynomus.mssmb2.SMB2ShareAccess;
 import com.hierynomus.smbj.common.SmbPath;
 import com.hierynomus.smbj.share.DiskShare;
 import com.hierynomus.smbj.share.File;
-import com.mucommander.commons.file.*;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.FilePermissions;
+import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.PermissionAccess;
+import com.mucommander.commons.file.PermissionBits;
+import com.mucommander.commons.file.PermissionType;
+import com.mucommander.commons.file.UnsupportedFileOperationException;
 import com.mucommander.commons.file.connection.ConnectionHandler;
 import com.mucommander.commons.file.connection.ConnectionHandlerFactory;
 import com.mucommander.commons.file.connection.ConnectionPool;
@@ -47,7 +54,10 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
@@ -78,9 +88,9 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
                     DiskShare diskShare = c.getDiskShare();
                     SmbPath smbPath = diskShare.getSmbPath();
-                    String fileUrlcleanPath = smbjFile.fileURL.getPath().replace("/", "");
+                    var fileUrlCleanPath = smbjFile.fileURL.getPath().replace("/", "");
 
-                    if (fileUrlcleanPath.equals(smbPath.getShareName())) {
+                    if (fileUrlCleanPath.equals(smbPath.getShareName())) {
                         // top level
                         smbjFile.parentValSet = true;
                     }

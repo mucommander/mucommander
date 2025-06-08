@@ -122,9 +122,6 @@ public class SmbjConnectionHandler extends ConnectionHandler  {
 
     @Override
     public void keepAlive() {
-        if (diskShare != null) {
-            diskShare.getFileInformation("");
-        }
     }
 
     public DiskShare getDiskShare() {

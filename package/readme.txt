@@ -35,13 +35,13 @@ What's new since v1.5.2 ?
 -----------------------
 
 New features:
--
+- SMBv2 and SMBv3 are now supported.
 
 Improvements:
 - When selecting a different shell, the change takes effect immediately in the terminal.
 - The configuration of custom commands is now stored in YAML format rather than XML.
 - Improved reliability of "duti" command execution for "Open With" functionality on macOS.
-- Dropped unnecessary stack-traces in the logs while starting or running the appliaction.
+- Dropped unnecessary stack-traces in the logs while starting or running the application.
 - Bumped JediTerm and its dependencies to the newest version.
 - Bumped RSyntaxTextArea to the newest version.
 
@@ -99,6 +99,9 @@ muCommander uses the following great third party works :
 
 - the jCIFS library released under the GNU LGPL.
  jCIFS can be found at http://jcifs.samba.org .
+
+- the SMBJ library released under the Apache License.
+ SMBJ can be found at https://github.com/hierynomus/smbj .
 
 - JediTerm library released under dual GNU LGPL and Apache License.
  JediTerm can be found at https://github.com/JetBrains/jediterm .
