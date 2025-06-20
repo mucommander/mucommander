@@ -293,6 +293,7 @@ public class muCommander {
                         "javax.servlet," +
                         "javax.servlet.http," +
                         "javax.script," +
+                        "com.sun.security.jgss," +
                         "sun.security.action," +
                         "com.apple.eawt," +
                         "com.apple.eio," +
