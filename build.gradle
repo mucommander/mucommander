@@ -430,6 +430,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                         --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
                         --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
                         --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
+                        --add-exports jdk.security.jgss/com.sun.security.jgss=ALL-UNNAMED \
                         --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
                         --add-opens java.base/java.io=ALL-UNNAMED \
                         --add-opens java.base/java.net=ALL-UNNAMED \
@@ -721,6 +722,8 @@ macAppBundle {
     javaExtrasList.add("java.desktop/com.apple.eio=ALL-UNNAMED")
     javaExtrasList.add("--add-exports")
     javaExtrasList.add("java.desktop/com.apple.eawt=ALL-UNNAMED")
+    javaExtrasList.add("--add-exports")
+    javaExtrasList.add("jdk.security.jgss/com.sun.security.jgss=ALL-UNNAMED")
     javaExtrasList.add("--add-opens")
     javaExtrasList.add("java.desktop/javax.swing.plaf.basic=ALL-UNNAMED")
     javaExtrasList.add("--add-opens")
