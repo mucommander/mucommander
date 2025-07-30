@@ -17,8 +17,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -28,6 +26,8 @@ import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Map;
 
 /**
  * This action copies the path(s) of the currently selected / marked files(s) to the system clipboard.
@@ -50,6 +50,8 @@ public class CopyFilePathsAction extends SelectedFilesAction {
         tfs.setTextUriFlavorSupported(false);
         // Note: not disabling this flavor would throw an exception because the flavor data is not serializable
         tfs.setFileSetDataFlavorSupported(false);
+
+        tfs.setStringDataFlavorSupported(true);
 
         ClipboardSupport.setClipboardContents(tfs);
     }

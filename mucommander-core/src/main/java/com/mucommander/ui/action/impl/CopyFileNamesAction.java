@@ -17,8 +17,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -28,6 +26,8 @@ import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Map;
 
 /**
  * This action copies the filename(s) of the currently selected / marked files(s) to the system clipboard.
@@ -52,6 +52,7 @@ public class CopyFileNamesAction extends SelectedFilesAction {
         tfs.setFileSetDataFlavorSupported(false);
 
         // Transfer filenames, not file paths
+        tfs.setStringDataFlavorSupported(true);
         tfs.setStringDataFlavourTransfersFilename(true);
 
         ClipboardSupport.setClipboardContents(tfs);
