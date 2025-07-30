@@ -53,6 +53,7 @@ Bug fixes:
 - The application sometimes cannot start after being killed.
 - Ignore milliseconds when comparing a folder that resides in an SFTP server.
 - When copying files from a non-Windows source, replace characters that are invalid in Windows filenames (e.g., '*', ':') with an underscore.
+- Copying names, basenames, and paths of files to the clipboard stopped working (regression).
 
 Known issues:
 - Some translations may not be up-to-date.

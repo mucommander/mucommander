@@ -17,8 +17,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Map;
-
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
@@ -28,6 +26,8 @@ import com.mucommander.ui.action.NoIcon;
 import com.mucommander.ui.dnd.ClipboardSupport;
 import com.mucommander.ui.dnd.TransferableFileSet;
 import com.mucommander.ui.main.MainFrame;
+
+import java.util.Map;
 
 /**
  * This action copies the file base name(s) (without extension) of the currently selected / marked files(s) to the
@@ -56,6 +56,8 @@ public class CopyFileBaseNamesAction extends SelectedFilesAction {
         tfs.setStringDataFlavourTransfersFilename(true);
 
         // Transfer base names (filename without its extension)
+        tfs.setStringDataFlavorSupported(true);
+        tfs.setStringDataFlavourTransfersFilename(true);
         tfs.setStringDataFlavourTransfersFileBaseName(true);
 
         ClipboardSupport.setClipboardContents(tfs);
