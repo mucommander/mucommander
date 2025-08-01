@@ -52,5 +52,5 @@ $JAVA --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
       --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
       --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
       $EXTRA_OPTIONS \
-      -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander $@
+      -Djava.library.path=/usr/local/lib -cp mucommander-@MU_VERSION@.jar com.mucommander.main.muCommander "$@"
 
