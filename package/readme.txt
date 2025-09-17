@@ -44,6 +44,7 @@ Improvements:
 - Dropped unnecessary stack-traces in the logs while starting or running the application.
 - Bumped JediTerm and its dependencies to the newest version.
 - Bumped RSyntaxTextArea to the newest version.
+- Startup arguments on Linux can now accept paths with spaces.
 
 Localization:
 -
