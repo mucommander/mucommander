@@ -603,12 +603,10 @@ public class LocalFile extends ProtocolFile {
         }
         try {
             owner = Files.getOwner(file.toPath()).getName();
+        } catch (NoSuchFileException e) {
+            LOGGER.info("failed to get owner of {}, either doesn't exist anymore or is protected by the system", file);
         } catch (IOException e) {
-            if (e instanceof NoSuchFileException) {
-                LOGGER.info("failed to get owner of {}, either doesn't exist anymore or is protected by the system", file);
-            } else {
-                LOGGER.error("failed to get owner of {}", file, e);
-            }
+            LOGGER.error("failed to get owner of {}", file, e);
         }
         return owner;
     }
