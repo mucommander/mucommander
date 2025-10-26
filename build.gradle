@@ -153,6 +153,9 @@ createBundlesDir.doLast {
 
 runOsgi {
     javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
+    
+    // see: https://github.com/mucommander/mucommander/issues/1372
+    javaArgs += ' -Dsun.java2d.metal=false' // (use -Dsun.java2d.metal=true to debug)
     javaArgs += ' -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1' // faster start
 
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
@@ -424,7 +427,7 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--main-class', 'com.mucommander.main.muCommander', \
                 '--runtime-image', 'jre/macOS/'+project.ext.arch, \
                 '--java-options', '\
-                         -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=false -Dsun.java2d.metal=true \
+                         -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=false -Dsun.java2d.metal=false \
                          -Dapple.awt.enableTemplateImages=true \
                          -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
                         --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
@@ -710,7 +713,7 @@ macAppBundle {
     javaProperties.put("file.encoding", "UTF-8")
     javaProperties.put("sun.java2d.d3d", "false")
     javaProperties.put("sun.java2d.noddraw", "false")
-    javaProperties.put("sun.java2d.metal", "true")
+    javaProperties.put("sun.java2d.metal", "false") // see: https://github.com/mucommander/mucommander/issues/1372
     javaProperties.put("apple.awt.enableTemplateImages", "true")
     javaProperties.put("-Xshare:auto", null)
     javaProperties.put("-XX:-UsePerfData", null)
