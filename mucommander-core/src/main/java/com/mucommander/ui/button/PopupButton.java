@@ -30,6 +30,8 @@ import javax.swing.event.PopupMenuListener;
 
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.ui.action.impl.MuteProxyAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PopupButton is a compound component that combines a JButton with a JPopupMenu.
@@ -44,6 +46,8 @@ import com.mucommander.ui.action.impl.MuteProxyAction;
  * @author Maxence Bernard
  */
 public abstract class PopupButton extends NonFocusableButton {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PopupButton.class);
 
     /** Custom action performed when the button is clicked. If null, popup menu will be displayed when mouse is clicked */
     private Action buttonClickedAction;
@@ -191,7 +195,7 @@ public abstract class PopupButton extends NonFocusableButton {
         /** Returns true to indicate that a mouse event should currently be ignored because the popup menu
          * is visible, or was closed recently (less than POPUP_DELAY ms ago) */
         private boolean shouldIgnoreMouseEvent() {
-            return isPopupMenuVisible() || System.currentTimeMillis()- popupMenuClosedTime<POPUP_DELAY;
+            return isPopupMenuVisible() || System.currentTimeMillis() - popupMenuClosedTime<POPUP_DELAY;
         }
 
         //////////////////////////////////
@@ -199,8 +203,11 @@ public abstract class PopupButton extends NonFocusableButton {
         //////////////////////////////////
 
         public synchronized void mousePressed(MouseEvent mouseEvent) {
-            if(!isEnabled() || shouldIgnoreMouseEvent())    // Ignore event if button is disabled
+            LOGGER.trace("Popup button mousePressed");
+            if (!isEnabled() || shouldIgnoreMouseEvent()) {   // Ignore event if button is disabled
+                LOGGER.trace("Popup button mousePressed, but not enabled or should be ignored");
                 return;
+            }
 
             if (DesktopManager.isRightMouseButton(mouseEvent)) {
                 popupMenu();
@@ -215,19 +222,24 @@ public abstract class PopupButton extends NonFocusableButton {
         }
 
         public synchronized void mouseClicked(MouseEvent mouseEvent) {
-            if(!isEnabled() || shouldIgnoreMouseEvent())    // Ignore event if button is disabled
+            LOGGER.trace("Popup button mouseClicked");
+            if (!isEnabled() || shouldIgnoreMouseEvent()) {   // Ignore event if button is disabled
+                LOGGER.trace("Popup button mouseClicked, but not enabled or should be ignored");
                 return;
+            }
 
             // Indicate to Thread spawn by mousePressed that mouse is not pressed anymore
             pressedTime = 0;
 
-            if(buttonClickedAction !=null)    // Perform the action if there is one
+            if (buttonClickedAction !=null) {   // Perform the action if there is one
                 buttonClickedAction.actionPerformed(new ActionEvent(PopupButton.this, ActionEvent.ACTION_PERFORMED, "clicked"));
-            else                // No action, popup menu
+            } else {               // No action, popup menu
                 popupMenu();
+            }
         }
 
         public synchronized void mouseReleased(MouseEvent mouseEvent) {
+            LOGGER.trace("Popup button mouseReleased");
             // Indicate to Thread spawn by mousePressed that mouse is not pressed anymore
             pressedTime = 0;
         }
@@ -246,8 +258,11 @@ public abstract class PopupButton extends NonFocusableButton {
         /////////////////////////////
 
         public void run() {
-            try { Thread.sleep(POPUP_DELAY); }
-            catch(InterruptedException e) {}
+            try {
+                Thread.sleep(POPUP_DELAY);
+            } catch(InterruptedException e) {
+                LOGGER.trace("Sleep loop interrupted", e);
+            }
 
             synchronized(this) {
                 // Popup menu if a popup menu is not already being displayed and if mouse is still pressed
