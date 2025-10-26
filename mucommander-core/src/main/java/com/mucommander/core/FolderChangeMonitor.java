@@ -176,10 +176,13 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     public void run() {
         // TODO: it would be more efficient to use a wait/notify scheme rather than sleeping. 
         // It would also allow folders to be checked immediately upon certain conditions such as a window becoming activated.
-        while (monitorThread!=null) {
+        while (monitorThread != null) {
             // Sleep for a while
-            try { Thread.sleep(TICK);}
-            catch(InterruptedException e) {}
+            try {
+                Thread.sleep(TICK);
+            } catch(InterruptedException e) {
+                LOGGER.trace("Folder Changer Monitor interrupted", e);
+            }
 			
             // Loop on instances
             int nbInstances = instances.size();
