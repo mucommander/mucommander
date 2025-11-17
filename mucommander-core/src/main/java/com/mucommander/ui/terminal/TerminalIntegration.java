@@ -37,6 +37,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
+
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.FocusAdapter;
@@ -140,17 +141,17 @@ public class TerminalIntegration {
                         ActionId.asTerminalAction(ActionType.ToggleTerminal.getId()));
                 if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                     keyEvent.consume();
-                    hideTerminal();
+                    SwingUtilities.invokeLater(() -> toggleTerminal());
                 } else if (!terminal.getTtyConnector().isConnected()) {
                     // just close terminal if it is not active/connected (for example when sb typed 'exit')
-                    hideTerminal();
+                    SwingUtilities.invokeLater(() -> hideTerminal());
                 }
             }
         };
     }
 
     private JediTermWidget getTerminal(String initialPath) {
-        var terminal = TerminalWidget.createTerminal(initialPath);
+        var terminal = TerminalWidget.createTerminal(initialPath, termCloseKeyHandler());
         cwd = initialPath;
         return terminal;
     }
@@ -165,17 +166,15 @@ public class TerminalIntegration {
                 try {
                     mainFrame.getJFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     terminal = getTerminal(newCwd);
-                    terminal.getTerminalPanel().addCustomKeyListener(termCloseKeyHandler());
-                    // TODO do this better? For now 2 lines ~height + 20%
-                    terminal.setMinimumSize(new Dimension(-1,
-                            (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
-                    verticalSplitPane.setBottomComponent(terminal);
-                    // don't know exactly why, but it should be after addCustomKeyListener (https://github.com/mucommander/mucommander/issues/1187)
                     terminal.getTerminalPanel().addFocusListener(new FocusAdapter() {
                         public void focusGained(FocusEvent e) {
                             syncCWD(mainFrame.getActivePanel().getCurrentFolder().getAbsolutePath());
                         }
                     });
+                    // TODO do this better? For now 2 lines ~height + 20%
+                    terminal.setMinimumSize(new Dimension(-1,
+                            (int) (terminal.getFontMetrics(terminal.getFont()).getHeight() * 2 * 1.2)));
+                    verticalSplitPane.setBottomComponent(terminal);
                 } finally {
                     mainFrame.getJFrame().setCursor(orgCursor);
                 }
@@ -217,13 +216,14 @@ public class TerminalIntegration {
         // try to use last location falling back to the minimum of terminal constraints
         // however, user may move divider below terminal constraints (hide it completely) and we
         // should accept that
-        verticalSplitPane.setDividerLocation(
-                lastMinDividerLocation <= 0 ||    // ignore unknown or max
-                        lastMinDividerLocation > verticalSplitPane.getHeight() || // or outside vertical height
-                        lastMinDividerLocation < verticalSplitPane.getHeight() * TREAT_AS_MAXIMIZED // or too close to max
-                        ? verticalSplitPane.getMaximumDividerLocation() : lastMinDividerLocation);
-
-        SwingUtilities.invokeLater(mainFrame.getActiveTable()::requestFocusInWindow);
+        SwingUtilities.invokeLater(() -> {
+            mainFrame.getActiveTable().requestFocusInWindow();
+            verticalSplitPane.setDividerLocation(
+                    lastMinDividerLocation <= 0 ||    // ignore unknown or max
+                            lastMinDividerLocation > verticalSplitPane.getHeight() || // or outside vertical height
+                            lastMinDividerLocation < verticalSplitPane.getHeight() * TREAT_AS_MAXIMIZED // or too close to max
+                            ? verticalSplitPane.getMaximumDividerLocation() : lastMinDividerLocation);
+        });
         setTerminalMaximized(false);
     }
 

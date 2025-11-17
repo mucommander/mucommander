@@ -55,6 +55,8 @@ Bug fixes:
 - Ignore milliseconds when comparing a folder that resides in an SFTP server.
 - When copying files from a non-Windows source, replace characters that are invalid in Windows filenames (e.g., '*', ':') with an underscore.
 - Copying names, basenames, and paths of files to the clipboard stopped working (regression).
+- Fixed undesired beep and character when leaving Terminal with F12.
+- Updated JediTerm version to the newest.
 
 Known issues:
 - Some translations may not be up-to-date.

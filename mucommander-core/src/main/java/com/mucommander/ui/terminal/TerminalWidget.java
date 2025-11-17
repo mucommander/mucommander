@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.KeyAdapter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -51,13 +52,16 @@ public final class TerminalWidget {
     private TerminalWidget() {
     }
 
-    public static JediTermWidget createTerminal(String currentFolder) {
-        return createTerminalWidget(currentFolder, new TerminalSettingsProvider());
+    public static JediTermWidget createTerminal(String currentFolder, KeyAdapter keyListener) {
+        return createTerminalWidget(currentFolder, keyListener, new TerminalSettingsProvider());
     }
 
-    private static JediTermWidget createTerminalWidget(String currentFolder, SettingsProvider settings) {
+    private static JediTermWidget createTerminalWidget(String currentFolder, KeyAdapter keyListener, SettingsProvider settings) {
         JediTermWidget widget = new JediTermWidget(settings);
         widget.setTtyConnector(createTtyConnector(currentFolder));
+        // We must add key listeners before starting the terminal! Otherwise, terminal may receive muC hot key
+        // events first resulting in random escape sequences visible in the terminal (#start adds its own key listener).
+        widget.getTerminalPanel().addCustomKeyListener(keyListener);
         widget.start();
         return widget;
     }
