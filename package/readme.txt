@@ -45,6 +45,7 @@ Improvements:
 - Bumped JediTerm and its dependencies to the newest version.
 - Bumped RSyntaxTextArea to the newest version.
 - Startup arguments on Linux can now accept paths with spaces.
+- Updated JediTerm version to the newest.
 
 Localization:
 -
@@ -56,7 +57,6 @@ Bug fixes:
 - When copying files from a non-Windows source, replace characters that are invalid in Windows filenames (e.g., '*', ':') with an underscore.
 - Copying names, basenames, and paths of files to the clipboard stopped working (regression).
 - Fixed undesired beep and character when leaving Terminal with F12.
-- Updated JediTerm version to the newest.
 
 Known issues:
 - Some translations may not be up-to-date.

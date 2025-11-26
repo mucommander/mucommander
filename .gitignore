@@ -12,6 +12,7 @@ DEBIAN
 .classpath
 .project
 .DS_Store
+settings.json
 
 /bin
 /classes

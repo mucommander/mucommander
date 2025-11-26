@@ -141,10 +141,10 @@ public class TerminalIntegration {
                         ActionId.asTerminalAction(ActionType.ToggleTerminal.getId()));
                 if (pressedKeyStroke.equals(accelerator) || pressedKeyStroke.equals(alternateAccelerator)) {
                     keyEvent.consume();
-                    SwingUtilities.invokeLater(() -> toggleTerminal());
+                    SwingUtilities.invokeLater(TerminalIntegration.this::toggleTerminal);
                 } else if (!terminal.getTtyConnector().isConnected()) {
                     // just close terminal if it is not active/connected (for example when sb typed 'exit')
-                    SwingUtilities.invokeLater(() -> hideTerminal());
+                    SwingUtilities.invokeLater(TerminalIntegration.this::hideTerminal);
                 }
             }
         };
