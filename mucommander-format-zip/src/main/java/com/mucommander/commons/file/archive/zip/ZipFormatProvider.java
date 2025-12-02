@@ -38,7 +38,7 @@ public class ZipFormatProvider implements ArchiveFormatProvider {
 
     /** extensions of archive filenames */
     public static final String[] EXTENSIONS = new String[]
-            {".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf", ".egg", ".epub", ".cbz"};
+            {".zip", ".jar", ".war", ".wal", ".wmz", ".xpi", ".ear", ".sar", ".odt", ".ods", ".odp", ".odg", ".odf", ".egg", ".epub", ".cbz", ".kar"};
 
 
     @Override
