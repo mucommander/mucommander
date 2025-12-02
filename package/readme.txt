@@ -46,6 +46,7 @@ Improvements:
 - Bumped RSyntaxTextArea to the newest version.
 - Startup arguments on Linux can now accept paths with spaces.
 - Updated JediTerm version to the newest.
+- Added support for KAR (KAraf aRchive) files.
 
 Localization:
 -
