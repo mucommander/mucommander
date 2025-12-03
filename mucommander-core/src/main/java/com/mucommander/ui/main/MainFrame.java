@@ -360,10 +360,8 @@ public class MainFrame implements LocationListener {
         FileTable leftFileTable = leftFolderPanel.getFileTable();
         FileTable rightFileTable = rightFolderPanel.getFileTable();
 
-        ExecutorService executor = Executors.newFixedThreadPool(4);;
+        ExecutorService executor = Executors.newFixedThreadPool(4);
         try {
-            Executors.newFixedThreadPool(4);
-
             init(CompletableFuture.completedFuture( // non-async
                         new FolderPanel(this, new ConfFileTableTab[] {
                                 new ConfFileTableTab(leftFolderPanel.getCurrentFolder().getURL())},
