@@ -24,7 +24,7 @@ jobs:
       matrix:
         include:
           - arch: aarch64
-            os: macos-14
+            os: macos-15
           - arch: x86_64
             os: macos-15-intel
           - arch: noarch
