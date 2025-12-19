@@ -7,8 +7,17 @@ dependencies {
     implementation 'com.dropbox.core:dropbox-core-sdk:7.0.0'
     implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     testImplementation 'org.testng:testng:7.11.0'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 repositories.mavenCentral()
