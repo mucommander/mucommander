@@ -47,9 +47,6 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
     /** Multi-click interval, cached to avoid polling the value every time {@link #getMultiClickInterval()} is called */
     private int multiClickInterval;
 
-    /** Key to the double-click interval value in the GNOME configuration */
-    private String DOUBLE_CLICK_CONFIG_KEY = "/desktop/gnome/peripherals/mouse/double_click";
-
     @Override
     public abstract boolean isAvailable();
 
@@ -77,17 +74,16 @@ abstract class GnomeDesktopAdapter extends DefaultDesktopAdapter {
 
             CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, filter);
 
-            // Multi-click interval retrieval
             try {
-                String value = GnomeConfig.getValue(DOUBLE_CLICK_CONFIG_KEY);
-                if(value==null)
+                multiClickInterval = GSettings.getMultiClickInterval();
+            } catch (Exception e1) {
+                LOGGER.debug("Error while retrieving double-click interval from GSettings", e1);
+                try {
+                    multiClickInterval = GConfTool.getMultiClickInterval();
+                } catch (Exception e2) {
+                    LOGGER.debug("Error while retrieving double-click interval from GConfTool", e2);
                     multiClickInterval = super.getMultiClickInterval();
-                
-                multiClickInterval = Integer.parseInt(value);
-            }
-            catch(Exception e) {
-            	LOGGER.debug("Error while retrieving double-click interval from gconftool", e);
-                multiClickInterval = super.getMultiClickInterval();
+                }
             }
         }
         catch(CommandException e) {throw new DesktopInitialisationException(e);}
