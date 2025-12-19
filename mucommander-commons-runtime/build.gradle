@@ -3,7 +3,7 @@ repositories.mavenCentral()
 dependencies {
     compileOnly project(':mucommander-core-preload')
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {
