@@ -10,7 +10,7 @@ dependencies {
     comprise 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 repositories.mavenCentral()

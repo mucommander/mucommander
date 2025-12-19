@@ -13,7 +13,7 @@ dependencies {
     implementation 'org.apache.commons:commons-vfs2:2.3'
     implementation 'com.github.junrar:junrar:7.5.5'
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {
