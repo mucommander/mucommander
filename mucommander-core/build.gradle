@@ -36,7 +36,7 @@ dependencies {
 
     implementation 'ch.qos.logback:logback-core:1.2.13'
     implementation 'ch.qos.logback:logback-classic:1.2.13'
-    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.apache.commons:commons-collections4:4.5.0'
 
     comprise 'org.unix4j:unix4j-command:0.6'
 
