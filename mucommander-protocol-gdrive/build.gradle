@@ -9,7 +9,9 @@ dependencies {
     comprise 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
     comprise 'com.google.apis:google-api-services-drive:v3-rev20220815-2.0.0'
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     testImplementation 'org.testng:testng:7.10.2'
 }
 
@@ -36,5 +38,12 @@ jar {
                 'Implementation-Version': revision.substring(0, 7),
                 'Build-Date': new Date().format('yyyyMMdd'),
                 'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }
