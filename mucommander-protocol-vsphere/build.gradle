@@ -12,7 +12,7 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.13.2'
     api project(':mucommander-commons-file')
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
     implementation files('libs/vim25.jar')
 }
 

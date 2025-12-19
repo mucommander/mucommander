@@ -7,7 +7,7 @@ dependencies {
 
     implementation 'com.github.mwiede:jsch:0.2.10'
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
