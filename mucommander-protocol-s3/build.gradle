@@ -20,7 +20,7 @@ dependencies {
     implementation 'org.glassfish:javax.xml.soap:10.0-b28'
     implementation files('libs/mail.osgi-1.4.jar')
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
     testImplementation project(':mucommander-commons-file')
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }

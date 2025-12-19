@@ -20,7 +20,7 @@ dependencies {
     implementation('org.exbin.auxiliary:binary_data:0.2.2')
     implementation('org.exbin.auxiliary:binary_data-array:0.2.2')
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {

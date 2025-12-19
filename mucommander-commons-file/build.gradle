@@ -12,7 +12,7 @@ dependencies {
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.14.0'
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation project(':mucommander-format-zip')
 }
