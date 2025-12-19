@@ -10,7 +10,9 @@ dependencies {
     implementation 'com.azure:azure-xml:1.0.0-beta.2'
     implementation 'com.azure:azure-identity:1.9.2'
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 
     testImplementation 'org.testng:testng:7.10.2'
 }
@@ -33,5 +35,12 @@ jar {
                 'Implementation-Version': revision.substring(0, 7),
                 'Build-Date': new Date().format('yyyyMMdd'),
                 'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

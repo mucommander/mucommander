@@ -41,7 +41,9 @@ dependencies {
     comprise 'org.unix4j:unix4j-command:0.6'
 
     testImplementation 'org.testng:testng:7.10.2'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     testImplementation project(':mucommander-commons-file')
     testImplementation project(':mucommander-commons-conf')
     testImplementation project(':mucommander-commons-collections')
@@ -93,5 +95,12 @@ jar {
                                 'com.mucommander.ui.main.table,' +
                                 'com.mucommander.ui.viewer',
                 'Bundle-Activator': 'com.mucommander.Activator')
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

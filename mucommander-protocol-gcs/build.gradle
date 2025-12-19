@@ -12,7 +12,9 @@ dependencies {
     // the version of gson here needs to be in sync with that in the 'gson' project
     compileOnly 'com.google.code.gson:gson:2.11.0'
 
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     testImplementation 'org.testng:testng:7.10.2'
 }
 
@@ -59,5 +61,8 @@ jar {
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
