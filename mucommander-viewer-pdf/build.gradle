@@ -3,9 +3,9 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.1.3'
-    comprise 'com.twelvemonkeys.imageio:imageio-psd:3.11.0'
-    comprise 'avalon-framework:avalon-framework-api:4.3'
+    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.3.1'
+    comprise 'com.twelvemonkeys.imageio:imageio-psd:3.12.0'
+    comprise 'org.apache.avalon.framework:avalon-framework-api:4.3.1'
     implementation 'org.jmdns:jmdns:3.5.5'
 
     // Use JUnit test framework
