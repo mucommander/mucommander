@@ -6,17 +6,17 @@ dependencies {
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    comprise 'com.twelvemonkeys.imageio:imageio-core:3.11.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-core:3.12.0'
 
     // image plugins to handle additional types (like psd) or faster alternatives to built-in ones (jpeg)
-    comprise 'com.twelvemonkeys.imageio:imageio-jpeg:3.11.0'
-    comprise 'com.twelvemonkeys.imageio:imageio-tiff:3.11.0'
-    comprise 'com.twelvemonkeys.imageio:imageio-psd:3.11.0'
-    comprise 'com.twelvemonkeys.imageio:imageio-webp:3.11.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-jpeg:3.12.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-tiff:3.12.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-psd:3.12.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-webp:3.12.0'
     // requirements for plugins
-    comprise 'com.twelvemonkeys.common:common-lang:3.11.0'
-    comprise 'com.twelvemonkeys.common:common-io:3.11.0'
-    comprise 'com.twelvemonkeys.imageio:imageio-metadata:3.11.0'
+    comprise 'com.twelvemonkeys.common:common-lang:3.12.0'
+    comprise 'com.twelvemonkeys.common:common-io:3.12.0'
+    comprise 'com.twelvemonkeys.imageio:imageio-metadata:3.12.0'
 
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
