@@ -4,7 +4,9 @@ dependencies {
     api project(":mucommander-preferences")
 
     testImplementation 'org.testng:testng:7.11.0'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
 jar {
@@ -27,5 +29,8 @@ jar {
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }

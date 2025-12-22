@@ -1,6 +1,6 @@
 package com.mucommander.commons.file.util;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.*;
 import org.testng.annotations.Test;
 
 public class WindowsFileNameSanitizerTest {
@@ -10,7 +10,7 @@ public class WindowsFileNameSanitizerTest {
         String input = "report<final>*version?.txt";
         String expected = "report_final__version_.txt";
 
-        Assert.assertEquals(expected, WindowsFilenameSanitizer.sanitizeFileName(input));
+        assertEquals(expected, WindowsFilenameSanitizer.sanitizeFileName(input));
     }
 
 }

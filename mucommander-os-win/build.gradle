@@ -19,7 +19,9 @@ dependencies {
     comprise 'net.java.dev.jna:jna-platform:5.5.0'
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
 jar {
@@ -39,5 +41,12 @@ jar {
                 'Implementation-Version': revision.substring(0, 7),
                 'Build-Date': new Date().format('yyyyMMdd'),
                 'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

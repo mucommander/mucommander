@@ -10,7 +10,9 @@ dependencies {
     runtimeOnly 'javax.jws:javax.jws-api:1.1'
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     api project(':mucommander-commons-file')
     testImplementation 'org.testng:testng:7.11.0'
     implementation files('libs/vim25.jar')
@@ -32,5 +34,12 @@ jar {
                 'Implementation-Version': revision.substring(0, 7),
                 'Build-Date': new Date().format('yyyyMMdd'),
                 'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

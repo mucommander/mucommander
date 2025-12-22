@@ -1,10 +1,10 @@
 package com.mucommander.commons.file.protocol.gcs;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.google.cloud.storage.BlobInfo;
 import com.mucommander.commons.file.FileURL;
@@ -29,13 +29,13 @@ public class GoogleCloudStorageBucketTest {
         var bucket6 = new GoogleCloudStorageBucket(file6);
         var bucket7 = new GoogleCloudStorageBucket(file7);
 
-        assertEquals(bucket1.getBucketName(), "bucket-name1");
-        assertEquals(bucket2.getBucketName(), "bucket-name2");
-        assertEquals(bucket3.getBucketName(), "bucket-name3");
-        assertEquals(bucket4.getBucketName(), "bucket-name4");
-        assertEquals(bucket5.getBucketName(), "bucket-name5");
-        assertEquals(bucket6.getBucketName(), "");
-        assertEquals(bucket7.getBucketName(), "");
+        assertEquals("bucket-name1", bucket1.getBucketName());
+        assertEquals("bucket-name2", bucket2.getBucketName());
+        assertEquals("bucket-name3", bucket3.getBucketName());
+        assertEquals("bucket-name4", bucket4.getBucketName());
+        assertEquals("bucket-name5", bucket5.getBucketName());
+        assertEquals("", bucket6.getBucketName());
+        assertEquals("", bucket7.getBucketName());
     }
 
     @Test

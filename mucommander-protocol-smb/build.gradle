@@ -13,7 +13,9 @@ dependencies {
     implementation 'com.hierynomus:smbj:0.13.0'
 
     // Use JUnit test framework
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
     testImplementation 'org.testng:testng:7.11.0'
     testImplementation project(':mucommander-commons-file')
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
@@ -35,5 +37,12 @@ jar {
                 'Implementation-Version': revision.substring(0, 7),
                 'Build-Date': new Date().format('yyyyMMdd'),
                 'Build-Url': "https://www.mucommander.com/version/nightly.xml")
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }
