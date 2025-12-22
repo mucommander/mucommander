@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import org.junit.jupiter.api.Test;
 
 import com.mucommander.commons.file.FileURL;
+import org.junit.jupiter.api.Test;
 
 public class GoogleCloudStorageFileTest {
 

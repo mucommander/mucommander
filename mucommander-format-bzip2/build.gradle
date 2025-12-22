@@ -5,7 +5,7 @@ dependencies {
     api project(':mucommander-commons-file')
     api project(':apache-bzip2')
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {

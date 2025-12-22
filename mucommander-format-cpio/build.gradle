@@ -6,7 +6,7 @@ dependencies {
     api project(':sevenzipjbindings')
     api 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {
