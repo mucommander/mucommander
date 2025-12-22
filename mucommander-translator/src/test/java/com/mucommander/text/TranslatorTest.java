@@ -16,11 +16,14 @@
  */
 package com.mucommander.text;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.Locale;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * A test case for {@link Translator}
@@ -32,7 +35,7 @@ public class TranslatorTest {
     /**
      * Initializes the Translator.
      */
-    @BeforeClass
+    @BeforeAll
     public static void init() {
         Locale locale = Activator.loadLocale();
         Translator.init(Activator.getDictionaryBundle(locale), Activator.getLanguageBundle(locale), Collections.emptyList());

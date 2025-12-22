@@ -1,10 +1,10 @@
 package com.mucommander.commons.file.protocol.gcs;
 
-import static org.testng.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.MalformedURLException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mucommander.commons.file.FileURL;
 
@@ -30,14 +30,14 @@ public class GoogleCloudStorageFileTest {
         var bucket7 = new GoogleCloudStorageFile(file7);
         var bucket8 = new GoogleCloudStorageFile(file8);
 
-        assertEquals(bucket1.getBlobPath(), "folder/folder2/file.txt");
-        assertEquals(bucket2.getBlobPath(), "folder/folder2");
-        assertEquals(bucket3.getBlobPath(), "folder/");
+        assertEquals("folder/folder2/file.txt", bucket1.getBlobPath());
+        assertEquals("folder/folder2", bucket2.getBlobPath());
+        assertEquals("folder/", bucket3.getBlobPath());
         // Paths without any blob names
-        assertEquals(bucket4.getBlobPath(), "");
-        assertEquals(bucket5.getBlobPath(), "");
-        assertEquals(bucket6.getBlobPath(), "");
-        assertEquals(bucket7.getBlobPath(), "");
-        assertEquals(bucket8.getBlobPath(), "");
+        assertEquals("", bucket4.getBlobPath());
+        assertEquals("", bucket5.getBlobPath());
+        assertEquals("", bucket6.getBlobPath());
+        assertEquals("", bucket7.getBlobPath());
+        assertEquals("", bucket8.getBlobPath());
     }
 }
