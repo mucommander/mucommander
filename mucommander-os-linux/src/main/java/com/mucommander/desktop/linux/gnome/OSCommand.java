@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.function.Function;
 
 /**
  * Utility class for executing OS commands and capturing their output.
@@ -69,15 +70,16 @@ class OSCommand {
     }
 
     /**
-     * Executes an OS command and returns its output as an integer.
+     * Executes an OS command and transforms its output using the provided parser function.
      *
+     * @param <T> the type of the parsed result
+     * @param parser a function that transforms the command output string into the desired type
      * @param command the command and its arguments to execute
-     * @return the command output parsed as an integer
+     * @return the command output transformed by the parser function
      * @throws IOException if an I/O error occurs during command execution
      * @throws InterruptedException if the current thread is interrupted while waiting
-     * @throws NumberFormatException if the output cannot be parsed as an integer
      */
-    static int runCommandWithIntReturn(String... command) throws IOException, InterruptedException {
-        return Integer.parseInt(runCommand(command));
+    static <T> T runCommand(Function<String, T> parser, String... command) throws IOException, InterruptedException {
+        return parser.apply(runCommand(command));
     }
 }

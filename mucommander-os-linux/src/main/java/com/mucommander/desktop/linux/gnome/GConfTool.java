@@ -45,7 +45,7 @@ public class GConfTool {
      * @throws NumberFormatException if the output cannot be parsed as an integer
      */
     public static int getIntValue(String key) throws IOException, InterruptedException {
-        return OSCommand.runCommandWithIntReturn(COMMAND, "-g", key);
+        return OSCommand.runCommand(Integer::parseInt, COMMAND, "-g", key);
     }
 
     /**
