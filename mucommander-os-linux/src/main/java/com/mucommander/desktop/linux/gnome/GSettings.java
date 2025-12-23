@@ -47,7 +47,7 @@ public class GSettings {
      * @throws NumberFormatException if the output cannot be parsed as an integer
      */
     public static int getIntValue(String path, String key) throws IOException, InterruptedException {
-        return OSCommand.runCommandWithIntReturn(COMMAND, "get", path, key);
+        return OSCommand.runCommand(Integer::parseInt, COMMAND, "get", path, key);
     }
 
     /**
