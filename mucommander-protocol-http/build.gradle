@@ -5,7 +5,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
     testImplementation project(':mucommander-commons-file')
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }

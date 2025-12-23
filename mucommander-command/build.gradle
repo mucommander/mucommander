@@ -18,7 +18,7 @@ dependencies {
 
     implementation 'org.yaml:snakeyaml:2.3'
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {

@@ -40,7 +40,7 @@ dependencies {
 
     comprise 'org.unix4j:unix4j-command:0.6'
 
-    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'org.testng:testng:7.11.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation project(':mucommander-commons-file')
     testImplementation project(':mucommander-commons-conf')
