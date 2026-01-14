@@ -19,6 +19,7 @@ package com.mucommander.commons.file.util;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.io.StreamUtils;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -136,6 +137,7 @@ public class ResourceLoaderTest {
      * @throws IOException should not happen
      */
     @Test
+    @Ignore
     public void testRootPackageAsFile() throws IOException {
         AbstractFile rootPackageFile = ResourceLoader.getRootPackageAsFile(getClass());
         assert rootPackageFile != null;

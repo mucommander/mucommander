@@ -626,6 +626,11 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public String getGroup() {
+        if (IS_WINDOWS) {
+            // Windows does not have POSIX groups
+            return null;
+        }
+
         if (group != null) {
             return group;
         }
