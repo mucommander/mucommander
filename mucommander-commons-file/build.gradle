@@ -68,7 +68,7 @@ jar {
 }
 
 test {
-    useJUnitPlatform()
+    useTestNG()
     testLogging {
         events "passed", "skipped", "failed"
     }

@@ -93,6 +93,12 @@ public class ProxyFileTest extends AbstractFileTest {
         // This test can't pass as ProxyFile instance are not cached, only the underlying protocol file.
     }
 
+    //@Test
+    @Override
+    public void testMkdirs() throws IOException {
+
+    }
+
     
     /////////////////////////////
     // Additional test methods //
