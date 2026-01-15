@@ -41,6 +41,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.mucommander.commons.file.util.FileComparatorModeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,7 +118,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
 
         var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
         var locale = LocaleUtils.forLanguageTag(languageTag);
-        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale);
+        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, FileComparatorModeEnum.NATURAL);
         model = new FilesTreeModel(treeFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
@@ -189,7 +190,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
         case MuPreferences.FILENAME_LOCALE:
             var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
             var locale = LocaleUtils.forLanguageTag(languageTag);
-            FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale);
+            FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, FileComparatorModeEnum.NATURAL);
             model.setFilenameLocale(sort);
             updateSelectedFolder();
             break;
