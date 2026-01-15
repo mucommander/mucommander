@@ -54,15 +54,17 @@ import com.mucommander.commons.file.AbstractFile;
 public class FileComparator implements Comparator<AbstractFile> {
 
     /** Comparison criterion */
-    private CRITERION criterion;
+    private final CRITERION criterion;
     /** Ascending or descending order ? */
-    private boolean ascending;
+    private final boolean ascending;
     /** Specifies whether directories should precede files or be handled as regular files */
-    private boolean directoriesFirst;
+    private final boolean directoriesFirst;
     /** Returns the value for the 'name' column for a file */
-    private Function<AbstractFile, String> nameFunc;
+    private final Function<AbstractFile, String> nameFunc;
     /** Locale that is used to sort by filenames */
-    private Locale locale;
+    private final Locale locale;
+
+    private final FileComparatorModeEnum mode;
 
     public enum CRITERION {
         /** Criterion for filename comparison. */
@@ -94,12 +96,13 @@ public class FileComparator implements Comparator<AbstractFile> {
      * @param nameFunc function that returns the value for the 'name' column for a file
      * @param locale the local by which filenames are sorted
      */
-    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc, Locale locale) {
+    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc, Locale locale, FileComparatorModeEnum mode) {
         this.criterion = criterion;
         this.ascending = ascending;
         this.directoriesFirst = directoriesFirst;
         this.nameFunc = nameFunc;
         this.locale = locale;
+        this.mode = mode;
     }
 
 
@@ -163,7 +166,7 @@ public class FileComparator implements Comparator<AbstractFile> {
         //
         // This special order applies only if both strings contain a number and have the same prefix. Otherwise, the general order applies.
         Matcher m1 = FILENAME_WITH_NUMBER_PATTERN.matcher(s1);
-        if(m1.find()) {
+        if(FileComparatorModeEnum.NATURAL.equals(this.mode) && m1.find()) {
             Matcher m2 = FILENAME_WITH_NUMBER_PATTERN.matcher(s2);
             if(m2.find()) {
                 // So we got two filenames that both contain a number, check if they have the same prefix

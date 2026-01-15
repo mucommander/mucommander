@@ -22,6 +22,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.TestFile;
 import com.mucommander.commons.file.util.FileComparator.CRITERION;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -57,7 +58,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareNameDir() {
-        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert A.equals(files[2]);
@@ -66,7 +67,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareNameDirDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.NAME, false, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, false, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -75,7 +76,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareName() {
-        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert A.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -84,7 +85,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareNameDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.NAME, false, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, false, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert D.equals(files[0]);
         assert C.equals(files[1]);
         assert B.equals(files[2]);
@@ -93,7 +94,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSizeDir() {
-        Arrays.sort(files, new FileComparator(CRITERION.SIZE, true, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.SIZE, true, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert C.equals(files[2]);
@@ -102,7 +103,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSize() {
-        Arrays.sort(files, new FileComparator(CRITERION.SIZE, true, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.SIZE, true, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert C.equals(files[2]);
@@ -111,7 +112,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSizeDirDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.SIZE, false, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.SIZE, false, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert A.equals(files[2]);
@@ -120,7 +121,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareSizeDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.SIZE, false, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.SIZE, false, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert A.equals(files[0]);
         assert C.equals(files[1]);
         assert D.equals(files[2]);
@@ -129,7 +130,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDateDir() {
-        Arrays.sort(files, new FileComparator(CRITERION.DATE, true, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.DATE, true, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert A.equals(files[2]);
@@ -138,7 +139,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDate() {
-        Arrays.sort(files, new FileComparator(CRITERION.DATE, true, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.DATE, true, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert A.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -147,7 +148,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDateDirDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.DATE, false, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.DATE, false, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -156,7 +157,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareDateDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.DATE, false, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.DATE, false, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert D.equals(files[0]);
         assert C.equals(files[1]);
         assert B.equals(files[2]);
@@ -165,7 +166,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExtDir() {
-        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, true, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, true, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert B.equals(files[0]);
         assert D.equals(files[1]);
         assert A.equals(files[2]);
@@ -174,7 +175,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExt() {
-        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, true, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, true, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert A.equals(files[0]);
         assert B.equals(files[1]);
         assert D.equals(files[2]);
@@ -183,7 +184,7 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExtDirDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, false, true, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, false, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert D.equals(files[0]);
         assert B.equals(files[1]);
         assert C.equals(files[2]);
@@ -192,11 +193,39 @@ public class FileComparatorTest {
 
     @Test
     public void testCompareExtDesc() {
-        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, false, false, AbstractFile::getName, Locale.getDefault()));
+        Arrays.sort(files, new FileComparator(CRITERION.EXTENSION, false, false, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
         assert C.equals(files[0]);
         assert D.equals(files[1]);
         assert B.equals(files[2]);
         assert A.equals(files[3]);
+    }
+
+    @Test
+    public void testFileComparatorMode_LEXICOGRAPHIC() throws Exception {
+        TestFile fileA = new TestFile(FileFactory.getTemporaryFolder() + "20_test", false, 500, 1, null);
+        TestFile fileB = new TestFile(FileFactory.getTemporaryFolder() + "60_test", false, 500, 1, null);
+        TestFile fileC = new TestFile(FileFactory.getTemporaryFolder() + "201_test", false, 500, 1, null);
+
+        AbstractFile[] files = new AbstractFile[]{fileA, fileB, fileC};
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.LEXICOGRAPHIC));
+
+        Assert.assertEquals(files[0], fileA);
+        Assert.assertEquals(files[1], fileC);
+        Assert.assertEquals(files[2], fileB);
+    }
+
+    @Test
+    public void testFileComparatorMode_NATURAL() throws Exception {
+        TestFile fileA = new TestFile(FileFactory.getTemporaryFolder() + "20_test", false, 500, 1, null);
+        TestFile fileB = new TestFile(FileFactory.getTemporaryFolder() + "60_test", false, 500, 1, null);
+        TestFile fileC = new TestFile(FileFactory.getTemporaryFolder() + "201_test", false, 500, 1, null);
+
+        AbstractFile[] files = new AbstractFile[]{fileA, fileB, fileC};
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, true, AbstractFile::getName, Locale.getDefault(), FileComparatorModeEnum.NATURAL));
+
+        Assert.assertEquals(files[0], fileA);
+        Assert.assertEquals(files[1], fileB);
+        Assert.assertEquals(files[2], fileC);
     }
     
 }

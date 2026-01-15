@@ -36,6 +36,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileComparator;
+import com.mucommander.commons.file.util.FileComparatorModeEnum;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -700,7 +701,8 @@ public class FileTableModel extends AbstractTableModel {
                 sortInfo.getAscendingOrder(),
                 sortInfo.getFoldersFirst(),
                 getNameFunc(),
-                locale);
+                locale,
+                FileComparatorModeEnum.NATURAL);
     }
 
 
