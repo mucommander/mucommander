@@ -697,12 +697,18 @@ public class FileTableModel extends AbstractTableModel {
     //////////////////
 
     private FileComparator getFileComparator(SortInfo sortInfo, Locale locale) {
+        FileComparatorModeEnum fileComparatorMode = FileComparatorModeEnum.getMode(
+                MuConfigurations.getPreferences().getVariable(
+                        MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
+                        MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
+        );
+
         return new FileComparator(sortInfo.getCriterion().getFileComparatorCriterion(),
                 sortInfo.getAscendingOrder(),
                 sortInfo.getFoldersFirst(),
                 getNameFunc(),
                 locale,
-                FileComparatorModeEnum.NATURAL);
+                fileComparatorMode );
     }
 
 

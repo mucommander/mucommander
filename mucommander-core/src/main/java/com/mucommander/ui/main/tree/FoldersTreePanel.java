@@ -118,7 +118,14 @@ public class FoldersTreePanel implements TreeSelectionListener,
 
         var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
         var locale = LocaleUtils.forLanguageTag(languageTag);
-        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, FileComparatorModeEnum.NATURAL);
+
+        FileComparatorModeEnum fileComparatorMode = FileComparatorModeEnum.getMode(
+                MuConfigurations.getPreferences().getVariable(
+                        MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
+                        MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
+        );
+
+        FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, fileComparatorMode);
         model = new FilesTreeModel(treeFileFilter, sort);
         tree = new JTree(model);
 		tree.setFont(ThemeCache.tableFont);
@@ -190,7 +197,14 @@ public class FoldersTreePanel implements TreeSelectionListener,
         case MuPreferences.FILENAME_LOCALE:
             var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
             var locale = LocaleUtils.forLanguageTag(languageTag);
-            FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, FileComparatorModeEnum.NATURAL);
+
+            FileComparatorModeEnum fileComparatorMode = FileComparatorModeEnum.getMode(
+                    MuConfigurations.getPreferences().getVariable(
+                            MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
+                            MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
+            );
+
+            FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, fileComparatorMode);
             model.setFilenameLocale(sort);
             updateSelectedFolder();
             break;
