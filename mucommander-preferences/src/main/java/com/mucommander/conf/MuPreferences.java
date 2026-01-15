@@ -95,6 +95,10 @@ public class MuPreferences implements MuPreferencesAPI {
     /** Default file drag and drop behavior */
     public static final boolean DEFAULT_SET_DROP_ACTION_TO_COPY   =  true;
 
+    public static final String FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT = "file_comparator_use_lexicographic_sort";
+
+    public static final boolean DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT = false;
+
     // - Log variables -------------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the log CONFIGURATION. */

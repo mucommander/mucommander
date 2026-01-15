@@ -82,6 +82,8 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Use Option as Meta key in Terminal' checkbox */
     private PrefCheckBox useOptionAsMetaKey;
 
+    private PrefCheckBox fileComparatorModeCheckBox;
+
     public MiscPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.misc_tab"));
 
@@ -193,6 +195,12 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         setDropActionToCopyCheckBox.addDialogListener(parent);
         northPanel.add(setDropActionToCopyCheckBox);
 
+        fileComparatorModeCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.file_comparator_use_lexicographic_sort"), () -> MuConfigurations.getPreferences().getVariable(
+                MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
+                MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT));
+        fileComparatorModeCheckBox.addDialogListener(parent);
+        northPanel.add(fileComparatorModeCheckBox);
+
         add(northPanel, BorderLayout.NORTH);
 
         customShellField.addDialogListener(parent);
@@ -243,5 +251,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         if (OsFamily.MAC_OS.isCurrent()) {
             MuConfigurations.getPreferences().setVariable(MuPreference.USE_OPTION_AS_META_KEY, useOptionAsMetaKey.isSelected());
         }
+
+        MuConfigurations.getPreferences().setVariable(MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT, fileComparatorModeCheckBox.isSelected());
     }
 }
