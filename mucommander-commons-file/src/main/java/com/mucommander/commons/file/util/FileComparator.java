@@ -172,35 +172,37 @@ public class FileComparator implements Comparator<AbstractFile> {
         String s1 = nameFunc.apply(file1);
         String s2 = nameFunc.apply(file2);
 
-        // Special treatment for strings that contain a number, so they are ordered by the number's value, e.g.:
-        // 1 < 1a < 2 < 10, like Mac OS X Finder and Windows Explorer do.
-        //
-        // This special order applies only if both strings contain a number and have the same prefix. Otherwise, the general order applies.
-        Matcher m1 = FILENAME_WITH_NUMBER_PATTERN.matcher(s1);
-        if(FileComparatorModeEnum.NATURAL.equals(this.mode) && m1.find()) {
-            Matcher m2 = FILENAME_WITH_NUMBER_PATTERN.matcher(s2);
-            if(m2.find()) {
-                // So we got two filenames that both contain a number, check if they have the same prefix
-                int start1 = m1.start();
-                int start2 = m2.start();
+        if (this.mode == FileComparatorModeEnum.NATURAL) {
+            // Special treatment for strings that contain a number, so they are ordered by the number's value, e.g.:
+            // 1 < 1a < 2 < 10, like Mac OS X Finder and Windows Explorer do.
+            //
+            // This special order applies only if both strings contain a number and have the same prefix. Otherwise, the general order applies.
+            Matcher m1 = FILENAME_WITH_NUMBER_PATTERN.matcher(s1);
+            if(m1.find()) {
+                Matcher m2 = FILENAME_WITH_NUMBER_PATTERN.matcher(s2);
+                if(m2.find()) {
+                    // So we got two filenames that both contain a number, check if they have the same prefix
+                    int start1 = m1.start();
+                    int start2 = m2.start();
 
-                // Note: compare prefixes only if start indexes match, faster that way
-                if(start1==start2 && (start1==0 || s1.substring(0, start1).equals(s2.substring(0, start2)))) {
-                    String g1 = removeLeadingZeros(m1.group());
-                    String g2 = removeLeadingZeros(m2.group());
+                    // Note: compare prefixes only if start indexes match, faster that way
+                    if(start1==start2 && (start1==0 || s1.substring(0, start1).equals(s2.substring(0, start2)))) {
+                        String g1 = removeLeadingZeros(m1.group());
+                        String g2 = removeLeadingZeros(m2.group());
 
-                    int g1Len = g1.length();
-                    int g2Len = g2.length();
+                        int g1Len = g1.length();
+                        int g2Len = g2.length();
 
-                    if(g1Len!=g2Len)
-                        return g1Len - g2Len;
+                        if(g1Len!=g2Len)
+                            return g1Len - g2Len;
 
-                    int c1, c2;
-                    for (int i=0; i<g1Len && i<g2Len; i++) {
-                        c1 = g1.charAt(i);
-                        c2 = g2.charAt(i);
-                        if(c1 != c2)
-                            return c1 - c2;
+                        int c1, c2;
+                        for (int i=0; i<g1Len && i<g2Len; i++) {
+                            c1 = g1.charAt(i);
+                            c2 = g2.charAt(i);
+                            if(c1 != c2)
+                                return c1 - c2;
+                        }
                     }
                 }
             }
