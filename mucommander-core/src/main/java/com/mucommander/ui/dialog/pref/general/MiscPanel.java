@@ -197,7 +197,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
 
         fileComparatorModeCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.file_comparator_use_lexicographic_sort"), () -> MuConfigurations.getPreferences().getVariable(
                 MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
-                MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT));
+                MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER));
         fileComparatorModeCheckBox.addDialogListener(parent);
         northPanel.add(fileComparatorModeCheckBox);
 

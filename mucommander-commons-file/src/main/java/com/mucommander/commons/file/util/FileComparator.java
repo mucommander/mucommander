@@ -63,7 +63,7 @@ public class FileComparator implements Comparator<AbstractFile> {
     private final Function<AbstractFile, String> nameFunc;
     /** Locale that is used to sort by filenames */
     private final Locale locale;
-
+    /** Sort mode to use when comparing files (ie natural/lexicographic) */
     private final FileComparatorModeEnum mode;
 
     public enum CRITERION {
