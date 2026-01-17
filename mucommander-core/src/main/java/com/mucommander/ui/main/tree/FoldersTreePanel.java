@@ -18,7 +18,6 @@
 package com.mucommander.ui.main.tree;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -41,7 +40,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.mucommander.commons.file.util.FileComparatorModeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +117,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
         var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
         var locale = LocaleUtils.forLanguageTag(languageTag);
 
-        FileComparatorModeEnum fileComparatorMode = FileComparatorModeEnum.getMode(
+        FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
                 MuConfigurations.getPreferences().getVariable(
                         MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
                         MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
@@ -198,7 +196,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
             var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
             var locale = LocaleUtils.forLanguageTag(languageTag);
 
-            FileComparatorModeEnum fileComparatorMode = FileComparatorModeEnum.getMode(
+            FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
                     MuConfigurations.getPreferences().getVariable(
                             MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
                             MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)

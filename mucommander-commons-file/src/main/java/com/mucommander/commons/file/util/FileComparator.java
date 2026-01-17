@@ -83,6 +83,17 @@ public class FileComparator implements Comparator<AbstractFile> {
         GROUP
     }
 
+    public enum FileComparatorModeEnum {
+
+        LEXICOGRAPHIC,
+        NATURAL;
+
+        public static FileComparatorModeEnum getMode(boolean useLexicographicSort) {
+            return useLexicographicSort ? LEXICOGRAPHIC : NATURAL;
+        }
+
+    }
+
     /** Matches filenames that contain a number, like "01 - Do the Joy.mp3" */
     private final static Pattern FILENAME_WITH_NUMBER_PATTERN = Pattern.compile("\\d+");
 

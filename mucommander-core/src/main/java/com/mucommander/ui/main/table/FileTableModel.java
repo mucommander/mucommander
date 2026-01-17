@@ -36,7 +36,6 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileComparator;
-import com.mucommander.commons.file.util.FileComparatorModeEnum;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
@@ -697,7 +696,7 @@ public class FileTableModel extends AbstractTableModel {
     //////////////////
 
     private FileComparator getFileComparator(SortInfo sortInfo, Locale locale) {
-        FileComparatorModeEnum fileComparatorMode = FileComparatorModeEnum.getMode(
+        FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
                 MuConfigurations.getPreferences().getVariable(
                         MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
                         MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
