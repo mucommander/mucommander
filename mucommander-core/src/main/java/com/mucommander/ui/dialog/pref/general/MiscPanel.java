@@ -195,7 +195,7 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         setDropActionToCopyCheckBox.addDialogListener(parent);
         northPanel.add(setDropActionToCopyCheckBox);
 
-        fileComparatorModeCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.file_comparator_use_lexicographic_sort"), () -> MuConfigurations.getPreferences().getVariable(
+        fileComparatorModeCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.lexicographic_order_of_files"), () -> MuConfigurations.getPreferences().getVariable(
                 MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
                 MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER));
         fileComparatorModeCheckBox.addDialogListener(parent);
