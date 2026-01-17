@@ -160,6 +160,8 @@ public class LocalFileTest extends AbstractFileTest {
     // @Test
     @Override
     public void testMkdirs() throws IOException {
-
+        // Tech debt warning:
+        // This test is ignored since it is currently broken.
+        // We should restore and fix this test in the future.
     }
 }
