@@ -120,7 +120,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
         FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
                 MuConfigurations.getPreferences().getVariable(
                         MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
-                        MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
+                        MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER)
         );
 
         FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, fileComparatorMode);
@@ -199,7 +199,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
             FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
                     MuConfigurations.getPreferences().getVariable(
                             MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
-                            MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
+                            MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER)
             );
 
             FileComparator sort = new FileComparator(FileComparator.CRITERION.NAME, true, true, folderPanel.getFileTable().getFileTableModel().getNameFunc(), locale, fileComparatorMode);

@@ -699,7 +699,7 @@ public class FileTableModel extends AbstractTableModel {
         FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
                 MuConfigurations.getPreferences().getVariable(
                         MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
-                        MuPreferences.DEFAULT_FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT)
+                        MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER)
         );
 
         return new FileComparator(sortInfo.getCriterion().getFileComparatorCriterion(),
