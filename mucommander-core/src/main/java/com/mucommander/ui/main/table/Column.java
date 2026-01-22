@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import com.mucommander.commons.file.util.FileComparator;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionId;
 
 /**

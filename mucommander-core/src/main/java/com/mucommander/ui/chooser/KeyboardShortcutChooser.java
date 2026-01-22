@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.util.ui.combobox.ComboBoxListener;
 import com.mucommander.commons.util.ui.combobox.SaneComboBox;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.text.KeyStrokeUtils;
 
 /**

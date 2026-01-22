@@ -21,9 +21,7 @@ import java.awt.Dimension;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.InformationDialog;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;

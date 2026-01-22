@@ -40,7 +40,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * This ServerPanel helps initiate OneDrive connections.
@@ -114,7 +114,7 @@ public class OneDrivePanel extends ServerPanel implements ActionListener {
 
     @Override
     public FileURL getServerURL() throws MalformedURLException {
-        return FileURL.getFileURL(String.format("%s://%s", Activator.SCHEMA, accountAlias.getText()));
+        return FileURL.getFileURL(String.format("%s://%s", OnedriveProtocolServiceProvider.SCHEMA, accountAlias.getText()));
     }
 
     @Override

@@ -16,106 +16,95 @@
  */
 package com.mucommander;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
+import com.mucommander.commons.file.module.FileServicesLoader;
+import com.mucommander.module.BrowsableMenuItemsLoader;
+import com.mucommander.module.OperatingSystemsLoader;
+import com.mucommander.module.ProtocolPanelProvidersLoader;
+import com.mucommander.module.TranslationLoader;
 import com.mucommander.ui.viewer.EditorSnapshot;
 import com.mucommander.ui.viewer.ViewerSnapshot;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.bookmark.file.BookmarkProtocolProvider;
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.DefaultSchemeHandler;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.commons.file.SchemeHandler;
-import com.mucommander.commons.file.osgi.FileProtocolService;
-import com.mucommander.commons.file.protocol.ProtocolProvider;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
-import com.mucommander.desktop.ActionType;
-import com.mucommander.os.api.CoreService;
-import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
-import com.mucommander.osgi.FileEditorServiceTracker;
-import com.mucommander.osgi.FileViewerServiceTracker;
-import com.mucommander.osgi.OperatingSystemServiceTracker;
+import com.mucommander.module.FileEditorsLoader;
+import com.mucommander.module.FileViewersLoader;
 import com.mucommander.search.SearchSnapshot;
 import com.mucommander.snapshot.MuSnapshot;
-import com.mucommander.text.TranslationTracker;
-import com.mucommander.ui.action.ActionManager;
-import com.mucommander.ui.dialog.about.AboutDialog;
-import com.mucommander.ui.dialog.shutdown.QuitDialog;
-import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.MainFrame;
-import com.mucommander.ui.main.WindowManager;
-import com.mucommander.ui.main.osgi.ProtocolPanelProviderTracker;
 
 /**
- * This is the OSGi bundle-activator of the core component of muCommander.
- * Besides reacting to the {@link #start(BundleContext)} and {@link #stop(BundleContext)} operations,
- * this activator also handles executing shutdown tasks when:
+ * This is the initialization class for the core component of muCommander.
+ * This class handles executing shutdown tasks when:
  * 1. Shutdown action is initiated by the application
  * 2. When the Java virtual machine goes down (e.g., via CNTL+C)
  * @author Arik Hadas
  */
-public class Activator implements BundleActivator {
+public class Activator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
-
-    private ProtocolPanelProviderTracker protocolPanelTracker;
-    private TranslationTracker translationTracker;
-    private FileViewerServiceTracker viewersTracker;
-    private FileEditorServiceTracker editorsTracker;
-    private OperatingSystemServiceTracker osTracker;
-    private BrowsableItemsMenuServiceTracker menuTracker;
-
-    private ServiceRegistration<CoreService> coreRegistration;
-    private ServiceRegistration<FileProtocolService> bookmarksRegistration;
 
     /** Registered shutdown-hook */
     private ShutdownHook shutdownHook;
 
-    private BundleContext context;
+    private static Activator instance;
 
     public static boolean portable;
 
-    @Override
-    public void start(BundleContext context) throws Exception {
+    private static String appMode;
+    private static String initialFolders;
+    private static String silentMode;
+    private static String fatalWarningsMode;
+    private static String assocProperty;
+    private static String bookmarkProperty;
+    private static String configurationProperty;
+    private static String commandbarProperty;
+    private static String extensionsProperty;
+    private static String commandsProperty;
+    private static String keymapProperty;
+    private static String toolbarProperty;
+    private static String credentialsProperty;
+
+    static {
+        // Static initialization - load system properties
+        appMode = System.getProperty("app_mode");
+        initialFolders = System.getProperty("mucommander.folders");
+        silentMode = System.getProperty("mucommander.silent");
+        fatalWarningsMode = System.getProperty("mucommander.fatalWarnings");
+        assocProperty = System.getProperty("mucommander.assoc");
+        bookmarkProperty = System.getProperty("mucommander.bookmark");
+        configurationProperty = System.getProperty("mucommander.configuration");
+        commandbarProperty = System.getProperty("mucommander.commandbar");
+        extensionsProperty = System.getProperty("mucommander.extensions");
+        commandsProperty = System.getProperty("mucommander.commands");
+        keymapProperty = System.getProperty("mucommander.keymap");
+        toolbarProperty = System.getProperty("mucommander.toolbar");
+        credentialsProperty = System.getProperty("mucommander.credentials");
+
+        instance = new Activator();
+    }
+
+    public static Activator getInstance() {
+        return instance;
+    }
+
+    public void start() {
         LOGGER.debug("starting");
-        this.context = context;
-        portable = "portable".equals(context.getProperty("app_mode"));
+        portable = "portable".equals(appMode);
         MuSnapshot.registerHandler(new SearchSnapshot());
         MuSnapshot.registerHandler(new ViewerSnapshot());
         MuSnapshot.registerHandler(new EditorSnapshot());
-        // Register the application-specific 'bookmark' protocol.
-        FileProtocolService bookmarksService = createBookmarkProtocolService();
-        bookmarksRegistration = context.registerService(FileProtocolService.class, bookmarksService, null);
-        // Listen to protocol panel services
-        protocolPanelTracker = new ProtocolPanelProviderTracker(context);
-        protocolPanelTracker.open();
-        // Listen to translation service
-        translationTracker = new TranslationTracker(context);
-        translationTracker.open();
-        // Listen to file viewer services
-        viewersTracker = new FileViewerServiceTracker(context);
-        viewersTracker.open();
-        // Listen to file editor services
-        editorsTracker = new FileEditorServiceTracker(context);
-        editorsTracker.open();
-        // Listen to operating system services
-        osTracker = new OperatingSystemServiceTracker(context);
-        osTracker.open();
-        menuTracker = new BrowsableItemsMenuServiceTracker(context);
-        menuTracker.open();
-        // Register core functionality service
-        CoreService coreService = createCoreService();
-        coreRegistration = context.registerService(CoreService.class, coreService, null);
+
+        FileServicesLoader.load();
+        ProtocolPanelProvidersLoader.load();
+        TranslationLoader.load();
+        FileViewersLoader.load();
+        FileEditorsLoader.load();
+        OperatingSystemsLoader.load();
+        BrowsableMenuItemsLoader.load();
+
         // Traps VM shutdown
         Runtime.getRuntime().addShutdownHook(shutdownHook = new ShutdownHook());
 
@@ -127,160 +116,54 @@ public class Activator implements BundleActivator {
         Application.run(this);
     }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        LOGGER.debug("stopping");
-        protocolPanelTracker.close();
-        translationTracker.close();
-        viewersTracker.close();
-        editorsTracker.close();
-        osTracker.close();
-        menuTracker.close();
-        coreRegistration.unregister();
-        bookmarksRegistration.unregister();
-        // if the activator performs the shutdown tasks, no need for the shutdown-hook
-        if (ShutdownHook.performShutdownTasks())
-            Runtime.getRuntime().removeShutdownHook(shutdownHook);
-    }
-
-    /**
-     * Stops the whole application
-     */
-    public void stopAll() throws BundleException {
-        // stop the system bundle
-        context.getBundle(0).stop();
-    }
-
-    public List<String> getInitialFolders() {
-        String folders = context.getProperty("mucommander.folders");
-        if (folders == null || folders.length() == 0) {
-            return Collections.emptyList();
+    public java.util.List<String> getInitialFolders() {
+        if (initialFolders == null || initialFolders.length() == 0) {
+            return java.util.Collections.emptyList();
         }
-
-        return Arrays.asList(folders.split(","));
+        return java.util.Arrays.asList(initialFolders.split(","));
     }
 
     public boolean silent() {
-        return Boolean.parseBoolean(context.getProperty("mucommander.silent"));
+        return Boolean.parseBoolean(silentMode);
     }
 
     public boolean fatalWarnings() {
-        return Boolean.parseBoolean(context.getProperty("mucommander.fatalWarnings"));
+        return Boolean.parseBoolean(fatalWarningsMode);
     }
 
     public String assoc() {
-        return context.getProperty("mucommander.assoc");
+        return assocProperty;
     }
 
     public String bookmark() {
-        return context.getProperty("mucommander.bookmark");
+        return bookmarkProperty;
     }
 
     public String configuration() {
-        return context.getProperty("mucommander.configuration");
+        return configurationProperty;
     }
 
     public String commandbar() {
-        return context.getProperty("mucommander.commandbar");
+        return commandbarProperty;
     }
 
     public String extensions() {
-        return context.getProperty("mucommander.extensions");
+        return extensionsProperty;
     }
 
     public String commands() {
-        return context.getProperty("mucommander.commands");
+        return commandsProperty;
     }
 
     public String keymap() {
-        return context.getProperty("mucommander.keymap");
+        return keymapProperty;
     }
 
     public String toolbar() {
-        return context.getProperty("mucommander.toolbar");
+        return toolbarProperty;
     }
 
     public String credentials() {
-        return context.getProperty("mucommander.credentials");
-    }
-
-    private CoreService createCoreService() {
-        return new CoreService() {
-
-            @Override
-            public void showAbout() {
-                MainFrame mainFrame = WindowManager.getCurrentMainFrame();
-
-                // Do nothing (return) when in 'no events mode'
-                if(mainFrame.getNoEventsMode())
-                    return;
-
-                new AboutDialog(mainFrame).showDialog();
-            }
-
-            @Override
-            public void showPreferences() {
-                MainFrame mainFrame = WindowManager.getCurrentMainFrame();
-
-                // Do nothing (return) when in 'no events mode'
-                if(mainFrame.getNoEventsMode())
-                    return;
-
-                ActionManager.performAction(ActionType.ShowPreferences, mainFrame);
-            }
-
-            @Override
-            public boolean doQuit() {
-                // Ask the user for confirmation and abort if user refused to quit.
-                if(!QuitDialog.confirmQuit())
-                    return false;
-
-                // We got a green -> quit!
-                Application.initiateShutdown();
-
-                return true;
-            }
-
-            @Override
-            public void openFile(String path) {
-                // Wait until the application has been launched. This step is required to properly handle the case where the
-                // application is launched with a file to open, for instance when drag-n-dropping a file to the Dock icon
-                // when muCommander is not started yet. In this case, this method is called while Launcher is still busy
-                // launching the application (no mainframe exists yet).
-                Application.waitUntilLaunched();
-
-                AbstractFile file = FileFactory.getFile(path);
-                FolderPanel activePanel = WindowManager.getCurrentMainFrame().getActivePanel();
-                if (file == null) {
-                    LOGGER.error("Ignoring open file, as File is null for path: {}.", path);
-                    return;
-                }
-                if (file.isBrowsable()) {
-                    activePanel.tryChangeCurrentFolder(file);
-                } else {
-                    activePanel.tryChangeCurrentFolder(file.getParent(), file, false);
-                }
-            }
-        };
-    }
-
-    private FileProtocolService createBookmarkProtocolService() {
-        return new FileProtocolService() {
-
-            @Override
-            public SchemeHandler getSchemeHandler() {
-                return new DefaultSchemeHandler();
-            }
-
-            @Override
-            public String getSchema() {
-                return BookmarkProtocolProvider.BOOKMARK;
-            }
-
-            @Override
-            public ProtocolProvider getProtocolProvider() {
-                return new BookmarkProtocolProvider();
-            }
-        };
+        return credentialsProperty;
     }
 }

@@ -21,7 +21,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.WeakHashMap;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * @author Nicolas Rinaudo

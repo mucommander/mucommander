@@ -1,11 +1,36 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 repositories.mavenCentral()
 
 dependencies {
     api project(':mucommander-commons-file')
+    api project(':mucommander-commons-io')
+    api project(':mucommander-commons-util')
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-    implementation 'javax.xml.ws:jaxws-api:2.2.12'
+    implementation ('javax.xml.ws:jaxws-api:2.2.12') {
+        exclude group: 'javax.xml.soap', module: 'javax.xml.soap-api'
+    }
+    // Use Glassfish implementation instead of API to avoid split packages
+    implementation ('org.glassfish:javax.xml.soap:10.0-b28') {
+        exclude group: 'javax.xml.soap', module: 'javax.xml.soap-api'
+    }
 
     runtimeOnly 'javax.jws:javax.jws-api:1.1'
 
@@ -13,27 +38,17 @@ dependencies {
     testImplementation(platform('org.junit:junit-bom:5.14.1'))
     testImplementation('org.junit.jupiter:junit-jupiter')
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
-    api project(':mucommander-commons-file')
     testImplementation 'org.testng:testng:7.11.0'
-    implementation files('libs/vim25.jar')
+    api files('libs/vim25.jar')
+}
+
+// JPMS module - allow reading vim25 from unnamed module (classpath)
+compileJava {
+    options.compilerArgs += ['--add-reads', 'org.mucommander.protocol.vsphere=ALL-UNNAMED']
 }
 
 jar {
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-vSphere',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Library with configuration tools',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.commons.protocol.vsphere',
-                'Bundle-Activator': 'com.mucommander.commons.file.protocol.vsphere.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 test {

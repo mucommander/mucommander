@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.os.notifier.AbstractNotifier;
 import com.mucommander.os.notifier.NotificationType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.macos.AppleScript;
 
 /**

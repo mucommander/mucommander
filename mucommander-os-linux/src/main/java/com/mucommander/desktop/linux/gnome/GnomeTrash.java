@@ -32,7 +32,7 @@ import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.desktop.QueuedTrash;
 import com.mucommander.job.impl.DeleteJob;
 import com.mucommander.process.ProcessRunner;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.WindowManager;

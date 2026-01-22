@@ -45,8 +45,8 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
-import com.mucommander.text.Translator;
+import com.mucommander.module.BrowsableMenuItemsLoader;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;
@@ -291,7 +291,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
 
         // Add service menus, like Bonjour
         goMenu.add(new JSeparator());
-        BrowsableItemsMenuServiceTracker.getMenuServices().forEach(service -> {
+        BrowsableMenuItemsLoader.getMenuServices().forEach(service -> {
             JMenu menu = service.getMenu(mainFrame, null);
             char mnemonic = menuItemMnemonicHelper.getMnemonic(menu.getName());
             if (mnemonic != 0) {

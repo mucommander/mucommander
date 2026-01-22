@@ -17,7 +17,7 @@
 
 package com.mucommander.ui.action;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.main.MainFrame;
 
 import java.util.Arrays;

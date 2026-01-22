@@ -44,7 +44,7 @@ import com.mucommander.commons.io.security.MuProvider;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

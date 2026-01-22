@@ -19,7 +19,7 @@ package com.mucommander.job;
 
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.DurationFormat;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * Contains information about job progress.

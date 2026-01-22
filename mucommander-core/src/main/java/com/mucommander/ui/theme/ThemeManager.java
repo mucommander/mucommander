@@ -50,7 +50,7 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.PlatformManager;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.theme.Theme.ThemeType;
 
 /**

@@ -3,13 +3,11 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:7.1.0'
     classpath files('libs/mucommander-gradle-macappbundle.jar')
   }
 }
 
 plugins {
-    id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '5.0.0'
     id 'edu.sc.seis.launch4j' version '2.5.4'
@@ -19,15 +17,40 @@ plugins {
 // TODO: replace this with an official release of gradle-macappbundle
 apply plugin: 'edu.sc.seis.macAppBundle'
 
+ext {
+    // Open the Git repository in the project's root directory.
+    // Handle both regular repos and worktrees
+    try {
+        git = grgit.open(currentDir: project.rootDir)
+        // Get commit id of HEAD.
+        revision = git.head().abbreviatedId
+    } catch (Exception e) {
+        println "Warning: Could not access git repository (${e.message}), using 'dev' as revision"
+        revision = "dev"
+    }
+    // Whether or not to bundle the JRE in order to create a 'standalone' executable
+    bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
+    arch = project.hasProperty('arch') ? arch : System.getProperty('os.arch') // defaults to system architecture
+    identity = project.hasProperty('identity') ? identity : ""
+}
+
 allprojects {
     tasks.withType(JavaCompile).configureEach {
         options.fork = true
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url = uri("https://www.mucommander.com/maven/")
+        }
     }
 
     group = 'org.mucommander'
     version = '1.6.3'
     ext.release = 'snapshot'
     configurations {
+        comprise
         compileOnly.extendsFrom comprise
     }
 }
@@ -40,17 +63,157 @@ task printVersionName {
   doLast { println project.version }
 }
 
-repositories.mavenCentral()
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://www.mucommander.com/maven/")
+    }
+}
+
+ext.nonModulePathJpmsModules = [
+    'mucommander-core',
+    'mucommander-protocol-adb',
+    'mucommander-protocol-dropbox',
+    'mucommander-protocol-gcs',
+    'mucommander-protocol-nfs',
+    'mucommander-protocol-onedrive',
+    'mucommander-protocol-ovirt',
+    'mucommander-protocol-s3',
+    'mucommander-protocol-smb',
+    'mucommander-format-libguestfs',
+    'mucommander-format-rpm',
+    'mucommander-viewer-text',
+    'mucommander-viewer-binary',
+    'mucommander-viewer-image',
+    'mucommander-viewer-pdf',
+    'mucommander-os-macos',
+    'mucommander-os-linux',
+    'mucommander-os-openvms',
+    'mucommander-os-win',
+    'mucommander-bonjour'
+]
+
+// JPMS modules that should not use BND plugin
+ext.jpmsModules = [
+    'mucommander-core',
+    'mucommander-commons-collections',
+    'mucommander-commons-runtime',
+    'mucommander-commons-util',
+    'mucommander-commons-io',
+    'mucommander-commons-conf',
+    'mucommander-commons-file',
+    'mucommander-protocol-api',
+    'mucommander-viewer-api',
+    'mucommander-os-api',
+    'mucommander-preferences',
+    'mucommander-process',
+    'mucommander-command',
+    'mucommander-translator',
+    'mucommander-encoding',
+    'mucommander-core-preload',
+    // Protocol modules
+    'mucommander-protocol-ftp',
+    'mucommander-protocol-sftp',
+    'mucommander-protocol-http',
+    'mucommander-protocol-smb',
+    'mucommander-protocol-s3',
+    'mucommander-protocol-nfs',
+    'mucommander-protocol-gcs',
+    'mucommander-protocol-adb',
+    'mucommander-protocol-dropbox',
+    'mucommander-protocol-gdrive',
+    'mucommander-protocol-onedrive',
+    'mucommander-protocol-ovirt',
+    'mucommander-protocol-registry',
+    'mucommander-protocol-vsphere',
+    // Format modules
+    'mucommander-format-zip',
+    'mucommander-format-tar',
+    'mucommander-format-gzip',
+    'mucommander-format-bzip2',
+    'mucommander-format-xz',
+    'mucommander-format-sevenzip',
+    'mucommander-format-iso',
+    'mucommander-format-rpm',
+    'mucommander-format-lst',
+    'mucommander-format-libguestfs',
+    'mucommander-format-rar',
+    'mucommander-format-ar',
+    'mucommander-format-cpio',
+    // Viewer modules
+    'mucommander-viewer-text',
+    'mucommander-viewer-binary',
+    'mucommander-viewer-image',
+    'mucommander-viewer-pdf',
+    // OS modules
+    'mucommander-os-macos',
+    'mucommander-os-linux',
+    'mucommander-os-openvms',
+    'mucommander-os-win',
+    // Other modules
+    'jetbrains-jediterm',
+    'apache-bzip2',
+    'gson',
+    'kotlin-reflect',
+    'sevenzipjbindings',
+    'sun-net-www',
+    'mucommander-archiver',
+    'mucommander-bonjour',
+    'mucommander-protocol-hadoop'
+]
 
 subprojects {
-    apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'java-library'
+
     compileJava.options.compilerArgs += ['--release', '11']
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
+
+    // Enable JPMS for modules with module-info.java
+    if (rootProject.ext.jpmsModules.contains(project.name)) {
+        java {
+            // Only infer module path for modules that don't have non-modularized dependencies
+            if (!rootProject.ext.nonModulePathJpmsModules.contains(project.name)) {
+                modularity.inferModulePath = true
+            }
+            // Note: nonModulePathJpmsModules compile on classpath (not module path)
+            // They have module-info.java in resources/ which gets added to the JAR
+            // No --add-reads needed since they compile without module-info
+        }
+    }
+
+    // Ensure ALL modules that depend on mucommander-core wait for compileModuleInfo task
+    // This applies to both JPMS and non-JPMS modules
+    afterEvaluate {
+        def coreProject = rootProject.project(':mucommander-core')
+        def isCore = project.name == 'mucommander-core'
+
+        // Check if this project depends on mucommander-core
+        def dependsOnCore = project.configurations.findByName('compileClasspath')?.allDependencies?.any { dep ->
+            (dep instanceof ProjectDependency) && dep.dependencyProject == coreProject
+        } ?: false
+
+        def isNonModulePathModule = rootProject.ext.nonModulePathJpmsModules.contains(project.name)
+
+        // All nonModulePathJpmsModules (viewer/os modules) depend on core, even if not explicitly in dependencies
+        // But exclude mucommander-core itself to avoid circular dependency
+        if (!isCore && (dependsOnCore || isNonModulePathModule)) {
+            // Ensure core project is evaluated first
+            evaluationDependsOn(':mucommander-core')
+
+            // Check if compileModuleInfo task exists before depending on it
+            def compileModuleInfoTask = coreProject.tasks.findByName('compileModuleInfo')
+            if (compileModuleInfoTask != null) {
+                tasks.named('compileJava').configure {
+                    dependsOn(compileModuleInfoTask)
+                }
+            }
+        }
+    }
+
     dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.36'
-        implementation 'org.osgi:osgi.core:8.0.0'
+
         constraints {
             implementation 'com.squareup.okio:okio-jvm:3.11.0'
             implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.1.20'
@@ -65,191 +228,309 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 compileJava.options.compilerArgs += ['--release', '11']
 
+// Enable JPMS for root launcher module
+java {
+    modularity.inferModulePath = true
+}
+
+// Force SLF4J 1.7.36 for compatibility with logback-classic 1.2.13
+configurations.all {
+    resolutionStrategy {
+        force 'org.slf4j:slf4j-api:1.7.36'
+    }
+}
+
+// Configure JPMS compilation - put comprise dependencies on module path
+// Exclude dependencies that are embedded in other modules
+compileJava {
+    doFirst {
+        def filteredClasspath = classpath.filter {
+            !it.name.contains('vappearances') &&
+            !it.name.startsWith('jnr-') &&
+            !it.name.contains('javax.activation')
+        }
+        def filteredComprise = configurations.comprise.filter {
+            !it.name.contains('vappearances') &&
+            !it.name.startsWith('jnr-') &&
+            !it.name.contains('javax.activation')
+        }
+        options.compilerArgs += [
+            '--module-path', (filteredClasspath + filteredComprise).asPath
+        ]
+        classpath = files()
+    }
+}
+
 dependencies {
-    comprise 'org.apache.felix:org.apache.felix.main:7.0.5'
     comprise 'com.beust:jcommander:1.82'
     comprise 'com.formdev:flatlaf:2.6'
     comprise 'org.violetlib:vaqua:10'
+    comprise project(':jetbrains-jediterm')
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
-    osgiRuntime project('mucommander-core')
-    osgiRuntime project('mucommander-command')
-    osgiRuntime project('mucommander-commons-collections')
-    osgiRuntime project('mucommander-commons-conf')
-    osgiRuntime project('mucommander-commons-file')
-    osgiRuntime project('mucommander-commons-io')
-    osgiRuntime project('mucommander-commons-runtime')
-    osgiRuntime project('mucommander-core-preload')
-    osgiRuntime project('apache-bzip2')
-    osgiRuntime project('jetbrains-jediterm')
-    osgiRuntime project('sevenzipjbindings')
-    osgiRuntime project('gson')
-    osgiRuntime project('kotlin-reflect')
-    osgiRuntime project('mucommander-encoding')
-    osgiRuntime project('mucommander-preferences')
-    osgiRuntime project('mucommander-process')
-    osgiRuntime project('mucommander-translator')
+    // Logging dependencies for logback reconfiguration
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'ch.qos.logback:logback-core:1.2.13'
+    implementation 'ch.qos.logback:logback-classic:1.2.13'
 
-    osgiRuntime project('mucommander-protocol-adb')
-    osgiRuntime project('mucommander-protocol-ftp')
-    osgiRuntime project('mucommander-protocol-sftp')
-    osgiRuntime project('mucommander-format-rar')
-    osgiRuntime project('mucommander-protocol-http')
-    osgiRuntime project('mucommander-protocol-dropbox')
-    osgiRuntime project('mucommander-protocol-gcs')
-    osgiRuntime project('mucommander-protocol-gdrive')
-    osgiRuntime project('mucommander-protocol-onedrive')
-    osgiRuntime project('mucommander-protocol-nfs')
-    osgiRuntime project('mucommander-protocol-smb')
-    osgiRuntime project('mucommander-protocol-vsphere')
-    osgiRuntime project('mucommander-format-ar')
-    osgiRuntime project('mucommander-format-sevenzip')
-    osgiRuntime project('mucommander-format-rpm')
-    osgiRuntime project('mucommander-format-cpio')
-    osgiRuntime project('mucommander-format-zip')
-    osgiRuntime project('mucommander-format-tar')
-    osgiRuntime project('mucommander-format-bzip2')
-    osgiRuntime project('mucommander-format-gzip')
-    osgiRuntime project('mucommander-format-xz')
-    osgiRuntime project('mucommander-format-iso')
-    osgiRuntime project('mucommander-format-lst')
-    osgiRuntime project('mucommander-archiver')
-//    osgiRuntime project('mucommander-hadoop')
-    osgiRuntime project('mucommander-protocol-s3')
-    osgiRuntime project('mucommander-protocol-registry')
-    osgiRuntime project('mucommander-protocol-ovirt')
-    osgiRuntime project('mucommander-format-libguestfs') // Note that this is a work-in-progress
+    // Add direct dependencies on JPMS modules for compilation
+    implementation project(':mucommander-core')
+    implementation project(':mucommander-commons-file')
+    implementation project(':mucommander-commons-conf')
+    implementation project(':mucommander-commons-collections')
+    implementation project(':mucommander-commons-io')
+    implementation project(':mucommander-commons-runtime')
+    implementation project(':mucommander-commons-util')
+    implementation project(':mucommander-command')
+    implementation project(':mucommander-encoding')
+    implementation project(':mucommander-preferences')
+    implementation project(':mucommander-process')
+    implementation project(':mucommander-translator')
+    implementation project(':mucommander-protocol-api')
+    implementation project(':mucommander-os-api')
+    implementation project(':mucommander-viewer-api')
+    implementation project(':mucommander-core-preload')
 
-    osgiRuntime project('mucommander-viewer-text')
-    osgiRuntime project('mucommander-viewer-image')
-    osgiRuntime project('mucommander-viewer-pdf')
-    osgiRuntime project('mucommander-viewer-binary')
+    // Protocol modules for JPMS runtime (ServiceLoader discovery)
+    runtimeOnly project(':mucommander-protocol-ftp')
+    runtimeOnly project(':mucommander-protocol-sftp')
+    runtimeOnly project(':mucommander-protocol-http')
+    runtimeOnly project(':mucommander-protocol-smb')
+    runtimeOnly project(':mucommander-protocol-nfs')
+    runtimeOnly project(':mucommander-protocol-s3')
+    runtimeOnly project(':mucommander-protocol-adb')
+    runtimeOnly project(':mucommander-protocol-dropbox')
+    runtimeOnly project(':mucommander-protocol-gdrive')
+    runtimeOnly project(':mucommander-protocol-onedrive')
+    runtimeOnly project(':mucommander-protocol-gcs')
+    runtimeOnly project(':mucommander-protocol-ovirt')
+    runtimeOnly project(':mucommander-protocol-registry')
+    runtimeOnly project(':mucommander-protocol-vsphere')
 
-    osgiRuntime project('mucommander-bonjour')
+    // Format modules for JPMS runtime (ServiceLoader discovery)
+    runtimeOnly project(':mucommander-format-ar')
+    runtimeOnly project(':mucommander-format-bzip2')
+    runtimeOnly project(':mucommander-format-cpio')
+    runtimeOnly project(':mucommander-format-gzip')
+    runtimeOnly project(':mucommander-format-iso')
+    runtimeOnly project(':mucommander-format-lst')
+    runtimeOnly project(':mucommander-format-rar')
+    runtimeOnly project(':mucommander-format-rpm')
+    runtimeOnly project(':mucommander-format-sevenzip')
+    runtimeOnly project(':mucommander-format-tar')
+    runtimeOnly project(':mucommander-format-xz')
+    runtimeOnly project(':mucommander-format-zip')
+    runtimeOnly project(':mucommander-format-libguestfs')
 
-    osgiRuntime project('mucommander-os-api')
-    osgiRuntime project('mucommander-os-macos')
-    // osgiRuntime project('mucommander-os-macos-java8')
-    osgiRuntime project('mucommander-os-linux')
-    osgiRuntime project('mucommander-os-win')
-    osgiRuntime project('mucommander-os-openvms')
+    // Viewer modules for JPMS runtime (ServiceLoader discovery)
+    runtimeOnly project(':mucommander-viewer-text')
+    runtimeOnly project(':mucommander-viewer-image')
+    runtimeOnly project(':mucommander-viewer-pdf')
+    runtimeOnly project(':mucommander-viewer-binary')
+
+    // OS modules for JPMS runtime (ServiceLoader discovery)
+    runtimeOnly project(':mucommander-os-macos')
+    runtimeOnly project(':mucommander-os-linux')
+    runtimeOnly project(':mucommander-os-openvms')
+    runtimeOnly project(':mucommander-os-win')
+
+    // Other runtime modules
+    runtimeOnly project(':mucommander-archiver')
+    runtimeOnly project(':mucommander-bonjour')
 }
 
-createBundlesDir.doLast {
-   ant.move file: "${buildDir}/osgi/bundle/${project('mucommander-core').jar.archiveFileName.get()}",
-            todir: "${buildDir}/osgi/app"
-   copy {
-       from "build/libs"
-       include project(':').jar.archiveFileName.get()
-       into "${buildDir}/osgi"
-   }
-   copy {
-       from "package"
-       include "logback.xml"
-       into "${buildDir}/osgi/conf"
-   }
+// Task to prepare proper JPMS module directories (classes + resources combined)
+task prepareJpmsModules {
+    dependsOn classes
+
+    project.subprojects.each { subproject ->
+        if (subproject.plugins.hasPlugin('java')) {
+            dependsOn subproject.tasks.classes
+        }
+    }
+
+    doLast {
+        // Copy resources into classes directory for the main project
+        def mainResources = sourceSets.main.output.resourcesDir
+        if (mainResources.exists()) {
+            copy {
+                from mainResources
+                into sourceSets.main.java.destinationDirectory
+            }
+        }
+
+        // Copy resources into classes directory for each subproject
+        project.subprojects.findAll { it.plugins.hasPlugin('java') }.each { subproject ->
+            def subResources = subproject.sourceSets.main.output.resourcesDir
+            if (subResources.exists()) {
+                copy {
+                    from subResources
+                    into subproject.sourceSets.main.java.destinationDirectory
+                }
+            }
+        }
+    }
 }
 
-runOsgi {
-    javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
-    
-    // see: https://github.com/mucommander/mucommander/issues/1372
-    javaArgs += ' -Dsun.java2d.metal=false' // (use -Dsun.java2d.metal=true to debug)
-    javaArgs += ' -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1' // faster start
+task runJpms(type: JavaExec) {
+    group = 'Run'
+    description = 'Runs muCommander with JPMS (Java Platform Module System), optional parameters: -Pdebug=5005 -Psuspend=n'
 
+    dependsOn 'prepareJpmsModules', 'copyConfigForJpms',
+              ':mucommander-core:jar',
+              ':jetbrains-jediterm:jar',
+              ':mucommander-os-macos:jar'
+
+    // Build module path using classes directories (which now include resources)
+    // For external dependencies, use JARs
+    // Exclude sun-net-www as it conflicts with java.base
+    // For modules that embed dependencies (comprise), use JAR files instead of class directories
+    // Note: Cloud protocols are excluded - they compile with --add-reads=ALL-UNNAMED and should
+    // use classes directory while their dependencies remain on classpath as unnamed modules
+    def modulesWithEmbeddedDeps = ['mucommander-core', 'jetbrains-jediterm', 'mucommander-os-macos', 'mucommander-viewer-text', 'mucommander-viewer-binary', 'mucommander-viewer-image', 'mucommander-viewer-pdf']
+    def ourProjectClasses = files()
+    project.subprojects.findAll { it.plugins.hasPlugin('java') && it.name != 'sun-net-www' }.each {
+        if (modulesWithEmbeddedDeps.contains(it.name)) {
+            // Use JAR file for modules with embedded dependencies
+            ourProjectClasses += files(it.tasks.jar.archiveFile)
+        } else {
+            // Use compiled classes directory for regular modules
+            ourProjectClasses += files(it.sourceSets.main.java.destinationDirectory)
+        }
+    }
+
+    // External dependencies only (not our subprojects' compiled classes)
+    // Include local JARs from libs directories (libguestfs.jar, jadb.jar, vim25.jar, etc.)
+    def externalDeps = configurations.runtimeClasspath.filter {
+        (!it.path.contains('/mucommander-') ||
+         it.name == 'jadb.jar' ||
+         it.name == 'libguestfs.jar' ||
+         it.name == 'vim25.jar') &&
+        !it.path.contains('/mucommander/') &&
+        !it.name.startsWith('annotations-') &&
+        !it.name.contains('vappearances') &&
+        !it.name.startsWith('jnr-') &&
+        !it.name.contains('javax.activation') &&
+        !it.name.contains('sun-net-www') &&
+        !it.name.contains('gson-') &&  // Exclude gson wrapper JAR - use external gson instead
+        !it.name.contains('junit') &&  // Exclude test dependencies
+        !it.name.contains('hamcrest') &&  // Exclude test dependencies
+        !it.name.contains('gapic-google-cloud') &&  // Exclude GCS dependencies with split packages
+        !it.name.contains('proto-google-cloud') &&  // Exclude GCS dependencies with split packages
+        !it.name.contains('proto-google-common') &&  // Exclude GCS dependencies with split packages
+        !it.name.contains('proto-google-iam') &&  // Exclude GCS dependencies with split packages
+        !it.name.contains('grpc-') &&  // Exclude grpc dependencies with split packages (for GCS, GDrive)
+        !it.name.contains('jsr305') &&  // Exclude jsr305 - conflicts with java.annotation module
+        !it.name.contains('google-http-client') &&  // Exclude Google HTTP client libraries (for GCS, GDrive on classpath)
+        !it.name.contains('google-api-client') &&  // Exclude Google API client libraries (for GCS, GDrive on classpath)
+        !it.name.contains('google-auth') &&  // Exclude Google auth libraries (for GCS, GDrive on classpath)
+        !it.name.contains('google-cloud-') &&  // Exclude Google Cloud libraries (for GCS on classpath)
+        !it.name.matches('sevenzipjbinding-.*\\.jar') &&  // Exclude external sevenzipjbinding JAR (without 's')
+        !it.name.matches('sevenzipjbinding-all-platforms.*\\.jar')  // Exclude sevenzipjbinding-all-platforms
+    }
+
+    // Add local library JARs from subprojects
+    def localLibs = files()
+    localLibs += files('mucommander-protocol-adb/libs/jadb.jar')
+    localLibs += files('mucommander-format-libguestfs/libs/libguestfs.jar')
+    localLibs += files('mucommander-protocol-vsphere/libs/vim25.jar')
+
+    // For cloud protocols (GCS, GDrive) and format modules (RPM) that use --add-reads=ALL-UNNAMED,
+    // their Google Cloud/API dependencies and sevenzipjbinding need to be on classpath (unnamed modules)
+    def classpathLibs = configurations.runtimeClasspath.filter {
+        it.name.contains('google-http-client') ||
+        it.name.contains('google-api-client') ||
+        it.name.contains('google-auth') ||
+        it.name.contains('google-cloud-') ||
+        it.name.contains('gapic-google-cloud') ||
+        it.name.contains('proto-google-cloud') ||
+        it.name.contains('proto-google-common') ||
+        it.name.contains('proto-google-iam') ||
+        it.name.contains('grpc-') ||
+        it.name.contains('jsr305') ||
+        it.name.matches('sevenzipjbinding-.*\\.jar') ||  // Include sevenzipjbinding for RPM module
+        it.name.matches('sevenzipjbinding-all-platforms.*\\.jar') ||  // Include sevenzipjbinding-all-platforms
+        (it.name.startsWith('gson-') && !it.name.contains('mucommander'))  // Include real Gson, exclude wrapper
+    }
+
+    def modulePath = files(sourceSets.main.java.destinationDirectory) +
+                     ourProjectClasses +
+                     configurations.comprise.filter {
+                         !it.name.contains('vappearances') &&
+                         !it.name.startsWith('jnr-') &&
+                         !it.name.contains('javax.activation') &&
+                         !it.name.startsWith('annotations-')
+                     } +
+                     externalDeps +
+                     localLibs
+
+    classpath = classpathLibs  // Cloud protocol dependencies as unnamed modules
+    mainClass = 'com.mucommander.main.muCommander' // Required by Gradle even when using --module
+
+    jvmArgs '--class-path', classpathLibs.asPath  // Explicitly set classpath for unnamed modules
+    jvmArgs '--module-path', modulePath.asPath
+    jvmArgs '--add-modules', 'ALL-MODULE-PATH,jdk.httpserver'  // Add jdk.httpserver for Google OAuth
+
+    // Required JVM access grants for JPMS (must come before --module)
+    jvmArgs '--add-exports', 'java.desktop/com.apple.laf=ALL-UNNAMED'
+    jvmArgs '--add-exports', 'java.desktop/com.apple.eio=ALL-UNNAMED'
+    jvmArgs '--add-exports', 'java.desktop/com.apple.eawt=ALL-UNNAMED'
+    jvmArgs '--add-exports', 'java.desktop/com.apple.laf=org.mucommander.os.macos'
+    jvmArgs '--add-exports', 'java.desktop/com.apple.eio=org.mucommander.os.macos'
+    jvmArgs '--add-exports', 'java.desktop/com.apple.eawt=org.mucommander.os.macos'
+    jvmArgs '--add-opens', 'java.desktop/javax.swing.plaf.basic=org.mucommander.core'
+    jvmArgs '--add-opens', 'java.base/java.io=org.mucommander.commons.file'
+    jvmArgs '--add-opens', 'java.base/java.net=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.transaction.xa/javax.transaction.xa=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.management/javax.management=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.rmi/java.rmi=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.security.jgss/org.ietf.jgss=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.sql/java.sql=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.base/sun.net.www.protocol.http=ALL-UNNAMED'
+    jvmArgs '--add-opens', 'java.base/sun.net.www.protocol.https=ALL-UNNAMED'
+
+    // Allow cloud protocols to read from unnamed module (classpath) for their non-modular dependencies
+    jvmArgs '--add-reads', 'org.mucommander.protocol.gcs=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.protocol.gdrive=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.protocol.dropbox=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.protocol.onedrive=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.protocol.s3=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.protocol.registry=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.os.macos=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.os.linux=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.os.win=ALL-UNNAMED'
+    jvmArgs '--add-reads', 'org.mucommander.os.openvms=ALL-UNNAMED'
+
+    jvmArgs '--module', 'org.mucommander/com.mucommander.main.muCommander'
+
+    // Java library path for Libguestfs
+    jvmArgs '-Djava.library.path=/usr/local/lib'
+
+    // Performance optimizations
+    jvmArgs '-Dsun.java2d.metal=false' // see: https://github.com/mucommander/mucommander/issues/1372
+    jvmArgs '-Xshare:auto', '-XX:-UsePerfData', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1' // faster start
+
+    // Debug configuration
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
     if (project.hasProperty('debug')) {
-        logger.info('Lauching muCommander in debug mode...')
-        javaArgs += " -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
-    }
-
-    javaArgs += ' --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
-            --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
-            --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
-            --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-            --add-opens java.base/java.io=ALL-UNNAMED \
-            --add-opens java.base/java.net=ALL-UNNAMED \
-            --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
-            --add-opens java.management/javax.management=ALL-UNNAMED \
-            --add-opens java.rmi/java.rmi=ALL-UNNAMED \
-            --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
-            --add-opens java.sql/java.sql=ALL-UNNAMED \
-            --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-            --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-            --add-opens mucommander.command/com.mucommander.command=ALL-UNNAMED'
-    configSettings = 'felix'
-    osgiMain = project(':')
-    config += [
-        'org.osgi.framework.storage': 'felix-cache',
-        'felix.auto.deploy.dir': 'bundle',
-        'mucommander.app.dir': 'app',
-        'mucommander.conf.dir': 'conf',
-    ]
-    wrapInstructions {
-        manifest("httpclient.*") {
-            // enable httpclient to instantiate factories that reside in jets3t
-            instruction 'DynamicImport-Package', 'org.jets3t.service.utils', '*'
-        }
-        manifest("sdk-.*") {
-            instruction 'Bundle-Name', 'ovirt-sdk'
-        }
-        manifest("sevenzipjbinding.*") {
-            instruction 'Bundle-Version', '16.2'
-        }
-        manifest("listenablefuture.*") {
-            instruction 'Bundle-Version', '1.0'
-        }
-        manifest("kotlin-stdlib.*") {
-            instruction 'Bundle-Version', '1.9.10'
-            instruction 'Import-Package', '!android.os', '*'
-        }
-        manifest("jcip-annotations.*") {
-            instruction 'Bundle-Version', '1.0'
-        }
-        manifest("azure-core.*") {
-            instruction 'Import-Package', '!com.fasterxml.jackson.dataformat.xml', '*'
-        }
-        manifest("azure-xml.*") {
-            instruction 'Bundle-Version', '1.0.0'
-        }
-        manifest("msal4j.*") {
-            instruction 'Import-Package', '!com.nimbusds.jose.crypto', '!com.nimbusds.jose.util', '*'
-        }
-        manifest("microsoft-graph-core.*") {
-            instruction 'Import-Package', '!android.os', '*'
-            instruction 'DynamicImport-Package', 'com.microsoft.graph.models'
-        }
-        manifest("okhttp.*") {
-            instruction 'Import-Package', '!sun.security.ssl', '!org.openjsse.javax.net.ssl', '!org.openjsse.net.ssl', '!org.conscrypt', '!org.bouncycastle.jsse.provider', '!org.bouncycastle.jsse', '!dalvik.system', '!android.os', '!android.util', '!android.security', '!android.net.http', '!android.net.ssl', '*'
-        }
-        manifest("smbj.*") {
-            instruction 'Import-Package', '!android.os', '!com.ibm.security.jgss', '*'
-        }
-
-
+        logger.info('Launching muCommander in debug mode...')
+        jvmArgs "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
     }
 }
 
-task run(dependsOn: 'runOsgi') {
+task run(dependsOn: 'runJpms') {
     group = 'Run'
-    description = 'Runs muCommander from sources (basically a shorthand for runOsgi task), optional parameters: -Pdebug=5005 -Psuspend=n'
-}
-
-ext {
-    // Open the Git repository in the project's root directory.
-    git = grgit.open(dir: project.rootDir)
-    // Get commit id of HEAD.
-    revision = project.hasProperty('revision') ? revision : git.head().abbreviatedId
-    // Whether or not to bundle the JRE in order to create a 'standalone' executable
-    bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
-    arch = project.hasProperty('arch') ? arch : System.getProperty('os.arch') // defaults to system architecture
-    identity = project.hasProperty('identity') ? identity : ""
+    description = 'Runs muCommander from sources (runs with JPMS by default), optional parameters: -Pdebug=5005 -Psuspend=n'
 }
 
 jar {
     from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Exclude signature files from signed JARs to avoid "Invalid signature file digest" error
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+
     manifest {
         attributes("Main-Class": "com.mucommander.main.muCommander",
                    "Specification-Title": "muCommander",
@@ -262,9 +543,192 @@ jar {
     }
 }
 
+// JPMS packaging JAR - does NOT embed comprise dependencies (they must be separate modules)
+task jpmsJar(type: Jar) {
+    archiveClassifier = 'jpms'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from sourceSets.main.output
+
+    // Exclude signature files
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+
+    manifest {
+        attributes("Main-Class": "com.mucommander.main.muCommander",
+                   "Specification-Title": "muCommander",
+                   "Specification-Vendor": "Arik Hadas",
+                   "Specification-Version": project.version,
+                   "Implementation-Title": "muCommander",
+                   "Implementation-Vendor": "Arik Hadas",
+                   "Implementation-Version": revision,
+                   "Build-Date": new Date().format('yyyyMMdd'))
+    }
+}
+
+task copyConfigForJpms(type: Copy) {
+    from "package"
+    include "logback.xml"
+    into "${buildDir}/libs/conf"
+}
+
+task copyConfigForJpmsSource(type: Copy) {
+    from "package"
+    include "logback.xml"
+    into "${buildDir}/classes/java/conf"
+}
+
+jar.finalizedBy copyConfigForJpms
+compileJava.finalizedBy copyConfigForJpmsSource
+
 test.useTestNG()
 
 import org.apache.tools.ant.filters.ReplaceTokens
+
+// Task to prepare JPMS packaging structure for jpackage
+task createJpmsPackaging {
+    dependsOn build, jpmsJar
+
+    // Ensure all subproject JARs are built
+    project.subprojects.each { subproject ->
+        if (subproject.plugins.hasPlugin('java')) {
+            dependsOn subproject.tasks.jar
+        }
+    }
+
+    doLast {
+        // Create jpms directory structure
+        def jpmsDir = file("${buildDir}/jpms")
+        jpmsDir.mkdirs()
+
+        // Copy JPMS-specific main launcher JAR (without embedded comprise dependencies)
+        copy {
+            from jpmsJar.archiveFile
+            into jpmsDir
+            rename { 'mucommander-' + project.version + '.jar' }
+        }
+
+        // Copy configuration
+        copy {
+            from "package"
+            include "logback.xml"
+            into "${jpmsDir}/conf"
+        }
+
+        // For jpackage with JPMS, we need all module JARs in the input directory
+        // Exclude only sun-net-www (conflicts with java.base)
+        project.subprojects.findAll {
+            it.plugins.hasPlugin('java') && it.name != 'sun-net-www'
+        }.each { subproject ->
+            copy {
+                from subproject.tasks.jar.archiveFile
+                into jpmsDir
+            }
+        }
+
+        // Copy comprise dependencies (required by main module) as separate JARs
+        // These are declared as 'requires' in module-info.java so they must be on module path
+        // Only copy the main comprise artifacts (jcommander, flatlaf, vaqua)
+        // Exclude transitive dependencies which will be handled by runtimeClasspath
+        copy {
+            from configurations.comprise.filter {
+                // Only include the direct comprise dependencies
+                (it.name.contains('jcommander') ||
+                 it.name.contains('flatlaf') ||
+                 it.name.contains('vaqua')) &&
+                // Exclude project dependencies
+                !it.path.contains('/mucommander-') &&
+                !it.path.contains('/mucommander/')
+            }
+            into jpmsDir
+        }
+
+        // Copy external runtime dependencies with automatic deduplication
+        // Separate into module path (JPMS compatible) and classpath (problematic dependencies)
+        def modulePathDeps = [:] as Map<String, File>
+        def classpathDeps = [] as List<File>
+
+        configurations.runtimeClasspath.each { file ->
+            // Skip basic exclusions
+            if (file.path.contains('/mucommander-') ||
+                file.path.contains('/mucommander/') ||
+                file.name.contains('sun-net-www') ||
+                file.name.contains('junit') ||
+                file.name.contains('hamcrest') ||
+                // Skip comprise deps (already copied)
+                file.name.contains('jcommander') ||
+                file.name.contains('flatlaf') ||
+                file.name.contains('vaqua') ||
+                // Skip old JDK-specific versions (keep newer ones)
+                file.name.startsWith('bcprov-jdk15on-') ||
+                file.name.startsWith('annotations-4.') ||
+                // Exclude jsr305 - conflicts with java.annotation module
+                file.name.contains('jsr305') ||
+                // Exclude standalone gson - we use the wrapper module
+                (file.name.startsWith('gson-') && !file.name.contains('mucommander')) ||
+                // Exclude errorprone-annotations - causes split package conflicts
+                file.name.contains('error_prone_annotations') ||
+                file.name.contains('errorprone-annotations') ||
+                // Exclude jetbrains annotations - embedded in jetbrains-jediterm
+                file.name.startsWith('annotations-13.') ||
+                // Exclude checker-qual - embedded in main JAR
+                file.name.startsWith('checker-qual-')) {
+                return
+            }
+
+            // Cloud protocol dependencies go on classpath (have split packages)
+            if (file.name.contains('google-http-client') ||
+                file.name.contains('google-api-client') ||
+                file.name.contains('google-auth') ||
+                file.name.contains('google-cloud-') ||
+                file.name.contains('gapic-google-cloud') ||
+                file.name.contains('proto-google-cloud') ||
+                file.name.contains('proto-google-common') ||
+                file.name.contains('proto-google-iam') ||
+                file.name.contains('grpc-') ||
+                file.name.contains('dropbox-core-sdk') ||
+                file.name.contains('microsoft-graph') ||
+                file.name.contains('azure-') ||
+                file.name.contains('msal4j') ||
+                file.name.contains('aws-java-sdk') ||
+                file.name.contains('aws-sdk-')) {
+                classpathDeps.add(file)
+                return
+            }
+
+            // Extract base name for deduplication
+            def baseName = file.name.replaceAll(/-\d+[\d.\-\w]*\.jar$/, '')
+
+            // Special case: keep slf4j-api 1.7.36 (not 2.0.9) to match logback-classic 1.2.13
+            if (baseName == 'slf4j-api') {
+                if (file.name.contains('1.7.')) {
+                    modulePathDeps[baseName] = file
+                }
+                return
+            }
+
+            // Keep only the latest version (by file name length as a heuristic)
+            if (!modulePathDeps.containsKey(baseName) || file.name > modulePathDeps[baseName].name) {
+                modulePathDeps[baseName] = file
+            }
+        }
+
+        // Copy module path dependencies to main jpms directory
+        copy {
+            from modulePathDeps.values()
+            into jpmsDir
+        }
+
+        // Copy classpath dependencies to lib subdirectory (for cloud protocols)
+        if (!classpathDeps.isEmpty()) {
+            def libDir = file("${jpmsDir}/lib")
+            libDir.mkdirs()
+            copy {
+                from classpathDeps
+                into libDir
+            }
+        }
+    }
+}
 
 launch4j {
     icon = "$projectDir/package/windows/mucommander.ico"
@@ -292,41 +756,22 @@ launch4j {
 }
 
 // Portable packaging
-task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
+task portable(dependsOn: [createExe, createJpmsPackaging], type: Zip) {
     group = 'Installer'
     description = 'Creates a portable package (.exe + .sh)'
 
     from ("$buildDir/launch4j") {
         include 'mucommander.exe'
     }
-    from ("$buildDir/osgi") {
-        include '*.jar'
+    from ("$buildDir/jpms") {
+        include 'mucommander*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
-    def tempDir = File.createTempDir()
-    tempDir.deleteOnExit()
-    from ({ new File(temporaryDir, '.portable').createNewFile(); new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
-        include '.portable'
-        include 'felix-cache'
-        dirMode 0777
-    }
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
     into ""
-    from ("$buildDir/osgi/bundle") {
-        include '*.jar'
-        exclude 'osgiaas*'
-        exclude 'junit*'
-        exclude 'hamcrest*'
-        exclude 'jline*'
-        into 'bundle'
-    }
-    from ("$buildDir/osgi/app") {
-        include '*.jar'
-        into 'app'
-    }
-    from ("$buildDir/osgi/conf") {
+    from ("$buildDir/jpms/conf") {
         include '*'
         into 'conf'
     }
@@ -336,41 +781,23 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
 }
 
 // Unix packaging
-task tgz(dependsOn: createBundlesDir, type: Tar) {
+task tgz(dependsOn: createJpmsPackaging, type: Tar) {
     group = 'Installer'
     description = 'Creates TGZ unix package'
 
-    from ("$buildDir/osgi") {
+    from ("$buildDir/jpms") {
         include '*.jar'
+        exclude 'mucommander-os-win*'
+        exclude 'mucommander-os-macos*'
+        exclude 'mucommander-os-openvms*'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
-    def tempDir = File.createTempDir()
-    tempDir.deleteOnExit()
-    from ({ new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
-        include 'felix-cache'
-        dirMode 0777
-    }
     from ('package/unix/mucommander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
     into ""
 
-    from ("$buildDir/osgi/bundle") {
-        include '*.jar'
-        exclude 'osgiaas*'
-        exclude 'jline*'
-        exclude 'junit*'
-        exclude 'hamcrest*'
-        exclude 'mucommander-os-win*'
-        exclude 'mucommander-os-macos*'
-        exclude 'mucommander-os-openvms*'
-        into 'bundle'
-    }
-    from ("$buildDir/osgi/app") {
-        include '*.jar'
-        into 'app'
-    }
-    from ("$buildDir/osgi/conf") {
+    from ("$buildDir/jpms/conf") {
         include '*'
         into 'conf'
     }
@@ -413,29 +840,36 @@ task(afterEclipseImport).doLast {
     f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
 }
 
-task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
+task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     workingDir "${projectDir}"
 
+    // Clean existing app before creating new one
+    doFirst {
+        delete("${buildDir}/muCommander.app")
+    }
 
     def jpackageCommand = [
                 'jpackage', \
-                '--input', 'build/osgi/', \
+                '--module-path', 'build/jpms/', \
+                '--module', 'org.mucommander/com.mucommander.main.muCommander', \
                 '--name', 'muCommander', \
                 '--app-version', project.version, \
                 '--icon', 'package/osx/icon.icns', \
-                '--main-jar', 'mucommander-'+project.version+'.jar', \
-                '--main-class', 'com.mucommander.main.muCommander', \
                 '--runtime-image', 'jre/macOS/'+project.ext.arch, \
                 '--java-options', '\
                          -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=false -Dsun.java2d.metal=false \
                          -Dapple.awt.enableTemplateImages=true \
                          -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
+                        -cp $APPDIR/mods/lib/* \
+                        --add-modules ALL-MODULE-PATH,jdk.httpserver \
                         --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
                         --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
                         --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
-                        --add-exports jdk.security.jgss/com.sun.security.jgss=ALL-UNNAMED \
-                        --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-                        --add-opens java.base/java.io=ALL-UNNAMED \
+                        --add-exports java.desktop/com.apple.laf=org.mucommander.os.macos \
+                        --add-exports java.desktop/com.apple.eio=org.mucommander.os.macos \
+                        --add-exports java.desktop/com.apple.eawt=org.mucommander.os.macos \
+                        --add-opens java.desktop/javax.swing.plaf.basic=org.mucommander.core \
+                        --add-opens java.base/java.io=org.mucommander.commons.file \
                         --add-opens java.base/java.net=ALL-UNNAMED \
                         --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
                         --add-opens java.management/javax.management=ALL-UNNAMED \
@@ -443,7 +877,17 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                         --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
                         --add-opens java.sql/java.sql=ALL-UNNAMED \
                         --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-                        --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED', \
+                        --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
+                        --add-reads org.mucommander.protocol.gcs=ALL-UNNAMED \
+                        --add-reads org.mucommander.protocol.gdrive=ALL-UNNAMED \
+                        --add-reads org.mucommander.protocol.dropbox=ALL-UNNAMED \
+                        --add-reads org.mucommander.protocol.onedrive=ALL-UNNAMED \
+                        --add-reads org.mucommander.protocol.s3=ALL-UNNAMED \
+                        --add-reads org.mucommander.protocol.registry=ALL-UNNAMED \
+                        --add-reads org.mucommander.os.macos=ALL-UNNAMED \
+                        --add-reads org.mucommander.os.linux=ALL-UNNAMED \
+                        --add-reads org.mucommander.os.win=ALL-UNNAMED \
+                        --add-reads org.mucommander.os.openvms=ALL-UNNAMED', \
                 '--mac-package-identifier', 'com.mucommander.muCommander', \
                 '--type', 'app-image', \
                 '--dest', "${buildDir}", \
@@ -465,25 +909,14 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
           include "readme.txt"
           into "${buildDir}/muCommander.app/Contents/Resources"
        }
-       delete("${buildDir}/muCommander.app/Contents/app/run.bat")
-       delete("${buildDir}/muCommander.app/Contents/app/run.sh")
-       delete("${buildDir}/muCommander.app/Contents/app/system-libs")
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'osgiaas*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'jline*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'junit*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'hamcrest*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-linux*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-win*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-openvms*')
+       // Delete unwanted OS-specific modules from the app
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/", include: 'mucommander-os-linux*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/", include: 'mucommander-os-win*')
+       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/", include: 'mucommander-os-openvms*')
        exec {
           executable "package/osx/muCommander-post-image.sh"
        }
        if (project.ext.identity?.trim()) {
-         exec {
-           workingDir "${rootDir}"
-           executable 'java'
-           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/muCommander.app/Contents/app/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
-         }
          exec {
            workingDir "${rootDir}"
            executable 'java'
@@ -516,18 +949,25 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
                 '--dest', "${buildDir}/distributions"
 }
 
-task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
+task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     workingDir "${projectDir}"
+
+    // Clean existing app before creating new one
+    doFirst {
+        delete("${buildDir}/muCommander")
+    }
+
     commandLine 'jpackage', \
-                '--input', 'build/osgi/', \
+                '--module-path', 'build/jpms/', \
+                '--module', 'org.mucommander/com.mucommander.main.muCommander', \
                 '--name', 'muCommander', \
                 '--app-version', project.version, \
-                '--main-jar', 'mucommander-'+project.version+'.jar', \
-                '--main-class', 'com.mucommander.main.muCommander', \
-                '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED \
+                '--java-options', '-cp $APPDIR/mods/lib/* \
+                                   --add-modules ALL-MODULE-PATH,jdk.httpserver \
+                                   --add-opens java.base/java.io=org.mucommander.commons.file \
                                    --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED \
                                    --add-opens java.base/java.net=ALL-UNNAMED \
-                                   --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
+                                   --add-opens java.desktop/javax.swing.plaf.basic=org.mucommander.core \
                                    --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
                                    --add-opens java.management/javax.management=ALL-UNNAMED \
                                    --add-opens java.rmi/java.rmi=ALL-UNNAMED \
@@ -536,7 +976,14 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                                    --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
                                    --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
                                    --add-opens jdk.httpserver/com.sun.net.httpserver=ALL-UNNAMED \
-                                   --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED', \
+                                   --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED \
+                                   --add-reads org.mucommander.protocol.gcs=ALL-UNNAMED \
+                                   --add-reads org.mucommander.protocol.gdrive=ALL-UNNAMED \
+                                   --add-reads org.mucommander.protocol.dropbox=ALL-UNNAMED \
+                                   --add-reads org.mucommander.protocol.onedrive=ALL-UNNAMED \
+                                   --add-reads org.mucommander.protocol.s3=ALL-UNNAMED \
+                                   --add-reads org.mucommander.protocol.registry=ALL-UNNAMED \
+                                   --add-reads org.mucommander.os.linux=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/linux/'+project.ext.arch, \
                 '--dest', "${buildDir}"
@@ -547,16 +994,10 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
            include "readme.txt"
            into "${buildDir}/muCommander/lib/app"
         }
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'osgiaas*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'jline*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'junit*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'hamcrest*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-win*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-macos*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-openvms*')
-        delete("${buildDir}/muCommander/lib/app/run.bat")
-        delete("${buildDir}/muCommander/lib/app/run.sh")
-        delete("${buildDir}/muCommander/lib/app/system-libs")
+        // Delete unwanted OS-specific modules
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/", include: 'mucommander-os-win*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/", include: 'mucommander-os-macos*')
+        delete fileTree(dir: "${buildDir}/muCommander/lib/app/", include: 'mucommander-os-openvms*')
     }
 }
 
@@ -597,17 +1038,24 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
                 '--linux-menu-group', 'Application;FileManager;Utility;'
 }
 
-task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
+task winAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     workingDir "${projectDir}"
+
+    // Clean existing app before creating new one
+    doFirst {
+        delete("${buildDir}/muCommander")
+    }
+
     commandLine 'jpackage', \
-                '--input', "${buildDir}/osgi/", \
+                '--module-path', "${buildDir}/jpms/", \
+                '--module', 'org.mucommander/com.mucommander.main.muCommander', \
                 '--name', 'muCommander', \
                 '--app-version', project.version, \
-                '--main-jar', 'mucommander-'+project.version+'.jar', \
-                '--main-class', 'com.mucommander.main.muCommander', \
                 '--java-options', \
-                '--add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-                    --add-opens java.base/java.io=ALL-UNNAMED \
+                '-cp $APPDIR/mods/lib/* \
+                    --add-modules ALL-MODULE-PATH,jdk.httpserver \
+                    --add-opens java.desktop/javax.swing.plaf.basic=org.mucommander.core \
+                    --add-opens java.base/java.io=org.mucommander.commons.file \
                     --add-opens java.base/java.net=ALL-UNNAMED \
                     --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
                     --add-opens java.management/javax.management=ALL-UNNAMED \
@@ -616,7 +1064,14 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                     --add-opens java.sql/java.sql=ALL-UNNAMED \
                     --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
                     --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-                    --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED', \
+                    --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED \
+                    --add-reads org.mucommander.protocol.gcs=ALL-UNNAMED \
+                    --add-reads org.mucommander.protocol.gdrive=ALL-UNNAMED \
+                    --add-reads org.mucommander.protocol.dropbox=ALL-UNNAMED \
+                    --add-reads org.mucommander.protocol.onedrive=ALL-UNNAMED \
+                    --add-reads org.mucommander.protocol.s3=ALL-UNNAMED \
+                    --add-reads org.mucommander.protocol.registry=ALL-UNNAMED \
+                    --add-reads org.mucommander.os.win=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/win/'+project.ext.arch, \
                 '--dest', "${buildDir}", \
@@ -628,16 +1083,10 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
            include "readme.txt"
            into "${buildDir}/muCommander/"
         }
-        delete("${buildDir}/muCommander/app/run.bat")
-        delete("${buildDir}/muCommander/app/run.sh")
-        delete("${buildDir}/muCommander/app/system-libs")
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'osgiaas*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'jline*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'junit*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'hamcrest*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-linux*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-macos*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-openvms*')
+        // Delete unwanted OS-specific modules
+        delete fileTree(dir: "${buildDir}/muCommander/app/", include: 'mucommander-os-linux*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/", include: 'mucommander-os-macos*')
+        delete fileTree(dir: "${buildDir}/muCommander/app/", include: 'mucommander-os-openvms*')
     }
 }
 
@@ -750,7 +1199,8 @@ macAppBundle {
     javaExtrasList.add("java.base/sun.net.www.protocol.https=ALL-UNNAMED")
 }
 
-copyToResourcesJava.dependsOn createBundlesDir
+// TODO: Update for JPMS
+/*copyToResourcesJava.dependsOn build
 copyToResourcesJava.doLast {
     copy {
         from "build/osgi"
@@ -773,7 +1223,7 @@ copyToResourcesJava.doLast {
       exec {
         workingDir "${rootDir}"
         executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppander.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
       }
    }
-}
+}*/

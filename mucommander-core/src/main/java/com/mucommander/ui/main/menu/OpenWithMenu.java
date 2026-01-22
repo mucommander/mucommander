@@ -29,7 +29,7 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.process.ProcessRunner;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionDescriptor;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.MuAction;

@@ -39,7 +39,7 @@ import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.os.notifier.NotificationType;
 import com.mucommander.text.CustomDateFormat;
 import com.mucommander.text.SizeFormat;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.QuestionDialog;
 import com.mucommander.ui.layout.InformationPane;

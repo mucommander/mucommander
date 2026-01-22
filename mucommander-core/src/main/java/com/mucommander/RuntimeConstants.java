@@ -78,9 +78,7 @@ public class RuntimeConstants {
     static {
         Attributes attributes = null; // JAR file's manifest's attributes.
 
-        try (InputStream in = ResourceLoader.getResourceAsStream("META-INF/MANIFEST.MF",
-                ResourceLoader.getDefaultClassLoader(),
-                ResourceLoader.getRootPackageAsFile(RuntimeConstants.class))) {
+        try (InputStream in = RuntimeConstants.class.getResourceAsStream("/META-INF/MANIFEST.MF")) {
             if (in != null) {
                 Manifest manifest = new Manifest();
                 manifest.read(in);

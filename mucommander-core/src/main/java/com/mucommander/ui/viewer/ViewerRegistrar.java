@@ -17,7 +17,7 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.osgi.FileViewerServiceTracker;
+import com.mucommander.module.FileViewersLoader;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.viewer.FileOpenService;
 import com.mucommander.viewer.FileViewerService;
@@ -47,7 +47,7 @@ public final class ViewerRegistrar extends BaseOpenFileRegistrar {
 
     @Override
     List<? extends FileOpenService> getOpenFileServices() {
-        return FileViewerServiceTracker.getViewerServices();
+        return FileViewersLoader.getViewerServices();
     }
 
     @Override

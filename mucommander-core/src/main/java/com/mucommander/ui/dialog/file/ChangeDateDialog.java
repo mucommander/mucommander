@@ -44,9 +44,8 @@ import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.CustomDateFormat;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ChangeDateAction;
 import com.mucommander.ui.main.MainFrame;
 
 /**

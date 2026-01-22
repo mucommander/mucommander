@@ -22,7 +22,7 @@ import javax.swing.Icon;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.FolderPanel;

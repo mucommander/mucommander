@@ -29,7 +29,7 @@ import com.mucommander.commons.util.StringUtils;
 import com.mucommander.job.impl.TempOpenWithJob;
 import com.mucommander.process.ProcessRunner;
 import com.mucommander.search.SearchProperty;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.MainFrame;

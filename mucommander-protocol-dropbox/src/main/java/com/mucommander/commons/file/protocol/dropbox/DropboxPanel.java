@@ -34,7 +34,7 @@ import com.mucommander.commons.file.protocol.dropbox.authentication.PkceAuthoriz
 import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 public class DropboxPanel extends ServerPanel implements ActionListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DropboxPanel.class);

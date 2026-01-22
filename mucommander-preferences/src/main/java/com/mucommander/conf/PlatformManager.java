@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.runtime.OsFamily;
 
 /**
  * This class takes care of platform-specific issues, such as getting screen dimensions and issuing commands.
@@ -54,7 +55,60 @@ public class PlatformManager {
      * @see    #setPreferencesFolder(String)
      */
     public static AbstractFile getPreferencesFolder() {
+        if (prefFolder == null) {
+            try {
+                prefFolder = getDefaultPreferencesFolder();
+                LOGGER.info("Using default preferences folder: {}", prefFolder);
+            } catch (IOException e) {
+                LOGGER.error("Failed to get default preferences folder", e);
+                throw new RuntimeException("Failed to initialize preferences folder", e);
+            }
+        }
         return prefFolder;
+    }
+
+    /**
+     * Returns the default preferences folder based on the operating system.
+     * <p>
+     * The default location varies by platform:
+     * <ul>
+     *   <li>macOS: ~/Library/Preferences/muCommander</li>
+     *   <li>Windows: %APPDATA%/muCommander</li>
+     *   <li>Linux/Unix: ~/.mucommander</li>
+     * </ul>
+     * </p>
+     * @return the default preferences folder
+     * @throws IOException if the folder cannot be created
+     */
+    public static AbstractFile getDefaultPreferencesFolder() throws IOException {
+        String userHome = System.getProperty("user.home");
+        String prefsPath;
+
+        OsFamily osFamily = OsFamily.getCurrent();
+        if (osFamily == OsFamily.MAC_OS) {
+            // macOS: ~/Library/Preferences/muCommander
+            prefsPath = userHome + "/Library/Preferences/muCommander";
+        } else if (osFamily == OsFamily.WINDOWS) {
+            // Windows: %APPDATA%/muCommander
+            String appData = System.getenv("APPDATA");
+            if (appData != null && !appData.isEmpty()) {
+                prefsPath = appData + "/muCommander";
+            } else {
+                // Fallback if APPDATA is not set
+                prefsPath = userHome + "/muCommander";
+            }
+        } else {
+            // Linux/Unix: ~/.mucommander
+            prefsPath = userHome + "/.mucommander";
+        }
+
+        AbstractFile folder = FileFactory.getFile(prefsPath);
+        if (!folder.exists()) {
+            folder.mkdir();
+            LOGGER.info("Created default preferences folder: {}", folder);
+        }
+
+        return folder;
     }
 
     public static AbstractFile getCredentialsFolder() throws IOException {

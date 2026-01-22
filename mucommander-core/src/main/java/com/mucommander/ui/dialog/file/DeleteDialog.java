@@ -36,7 +36,7 @@ import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.DeleteJob;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.layout.InformationPane;

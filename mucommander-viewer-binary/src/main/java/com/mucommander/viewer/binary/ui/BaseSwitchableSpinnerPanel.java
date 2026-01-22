@@ -46,7 +46,7 @@ import org.exbin.bined.CodeAreaUtils;
 import org.exbin.bined.CodeCharactersCase;
 import org.exbin.bined.PositionCodeType;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * Spinner supporting multiple bases.

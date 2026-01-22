@@ -49,7 +49,7 @@ import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.PassThroughFileFilter;
 import com.mucommander.commons.file.filter.RegexpFilenameFilter;
 import com.mucommander.commons.file.filter.StartsWithFilenameFilter;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.table.FileTable;
 

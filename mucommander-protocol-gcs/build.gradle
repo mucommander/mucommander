@@ -1,16 +1,36 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 repositories.mavenCentral()
 
 dependencies {
     api project(':mucommander-commons-file')
+    api project(':mucommander-commons-io')
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
+    api project(':mucommander-preferences')
 
-    comprise ('com.google.cloud:google-cloud-storage:2.23.0') {
+    implementation project(':gson')  // Use non-modular wrapper for classpath compilation
+
+    api ('com.google.cloud:google-cloud-storage:2.23.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
     }
-    // the version of gson here needs to be in sync with that in the 'gson' project
-    compileOnly 'com.google.code.gson:gson:2.11.0'
+    api 'com.google.http-client:google-http-client-gson:1.42.3'  // GsonFactory for Google API
 
     testImplementation(platform('org.junit:junit-bom:5.14.1'))
     testImplementation('org.junit.jupiter:junit-jupiter')
@@ -18,44 +38,16 @@ dependencies {
     testImplementation 'org.testng:testng:7.11.0'
 }
 
-configurations {
-    testImplementation.extendsFrom comprise
-}
+// JPMS module - configuration in module-info.java
+// Note: GCS protocol uses non-modular Google Cloud Storage SDK
+// We compile on classpath (not module path) with --add-reads=ALL-UNNAMED
 
 jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-        include 'com/google/auth/**'
-        include 'com/google/common/**'
-        include 'com/google/cloud/**'
-        include 'com/google/api/client/**'
-        include 'com/google/api/client/**'
-        include 'com/google/api/core/**'
-        include 'com/google/api/gax/**'
-        include 'com/google/api/services/storage/**'
-        include 'org/threeten/bp/**'
-        include 'io/opencensus/trace/**'
-        include 'io/opencensus/common/**'
-        include 'io/opencensus/internal/**'
-        include 'io/opencensus/contrib/**'
-        include 'io/grpc/*'
-        exclude 'META-INF/**'
-    }}
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    bundle {
-        bnd('Bundle-Name': 'muCommander-gcs',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Plugin for Google-Cloud Storage',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.commons.file.protocol.gcs',
-                'Import-Package': 'org.osgi.framework.*,com.mucommander.*,javax.swing.*,org.slf4j.*,javax.net.ssl.*,com.google.gson.stream',
-                'Bundle-Activator': 'com.mucommander.commons.file.protocol.gcs.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Miroslav Spak",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
+
+    from('src/main/resources/module-info') {
+        include 'module-info.java'
+        into 'META-INF'
     }
 }
 
@@ -64,4 +56,44 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+// Note: GCS uses Google Cloud libraries which have split package issues in JPMS
+// Compile on classpath with access to unnamed module dependencies (including gson wrapper)
+compileJava {
+    options.compilerArgs += [
+        '--add-reads', 'org.mucommander.protocol.gcs=ALL-UNNAMED'
+    ]
+}
+
+// JPMS module - compile module-info separately
+task compileModuleInfo(type: JavaCompile) {
+    dependsOn compileJava
+    source = fileTree('src/main/resources/module-info') {
+        include 'module-info.java'
+    }
+    destinationDirectory = compileJava.destinationDirectory
+    classpath = files()
+
+    doFirst {
+        def filteredClasspath = compileJava.classpath.filter {
+            !it.name.contains('google-cloud-') &&
+            !it.name.contains('google-api-') &&
+            !it.name.contains('google-http-') &&
+            !it.name.contains('google-auth-') &&
+            !it.name.contains('gapic-') &&
+            !it.name.contains('proto-google-') &&
+            !it.name.contains('grpc-') &&
+            !it.name.contains('gson-') &&
+            !it.name.contains('jsr305')
+        }
+        options.compilerArgs += [
+            '--module-path', filteredClasspath.asPath,
+            '--patch-module', 'org.mucommander.protocol.gcs=' + compileJava.destinationDirectory.get().asFile.path
+        ]
+    }
+}
+
+classes {
+    dependsOn compileModuleInfo
 }

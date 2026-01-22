@@ -34,7 +34,7 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.job.impl.CopyJob;
 import com.mucommander.job.impl.CopyJob.TransferMode;
 import com.mucommander.job.impl.MoveJob;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;

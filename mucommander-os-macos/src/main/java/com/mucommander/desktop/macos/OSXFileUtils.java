@@ -27,7 +27,6 @@ import com.dd.plist.BinaryPropertyListParser;
 import com.dd.plist.NSString;
 import com.dd.plist.PropertyListFormatException;
 import com.mucommander.commons.file.AbstractFile;
-import com.sun.jna.platform.mac.XAttrUtils;
 
 /**
  * This class contains methods for file operations that are specific to Mac OS X.

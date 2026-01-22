@@ -1,4 +1,24 @@
-apply plugin: 'java'
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ext {
+    // Use revision from parent project (already set in main build.gradle)
+    revision = rootProject.ext.revision
+}
 
 repositories {
     mavenCentral()
@@ -6,8 +26,35 @@ repositories {
         url "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies"
     }
 }
+// Exclude module-info.java from resources to prevent it from being compiled with main sources
+sourceSets {
+    main {
+        resources {
+            exclude 'module-info/**'
+        }
+    }
+}
 
 dependencies {
+    api project(':mucommander-core-preload')
+    api project(':mucommander-viewer-api')
+    api project(':mucommander-os-api')
+    api project(':mucommander-protocol-api')
+    api project(':mucommander-translator')
+    api project(':mucommander-process')
+    api project(':mucommander-preferences')
+    api project(':mucommander-encoding')
+    api project(':mucommander-command')
+    api project(':mucommander-commons-util')
+    api project(':mucommander-commons-runtime')
+    api project(':mucommander-commons-io')
+    api project(':mucommander-commons-collections')
+    api project(':mucommander-commons-conf')
+    api project(':mucommander-commons-file')
+
+    implementation 'com.formdev:flatlaf:2.6'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
     compileOnly project(':mucommander-commons-file')
     compileOnly project(':mucommander-commons-conf')
     compileOnly project(':mucommander-commons-collections')
@@ -52,51 +99,56 @@ dependencies {
     testImplementation project(':mucommander-commons-io')
 }
 
+// Compile module-info separately
+// Note: module-info.java needs modules on module path, but main code compiles on classpath
+task compileModuleInfo(type: JavaCompile) {
+    dependsOn compileJava
+    source = fileTree('src/main/resources/module-info') {
+        include 'module-info.java'
+    }
+    destinationDirectory = compileJava.destinationDirectory
+    classpath = files()  // Empty classpath since we're using module path
+
+    doFirst {
+        // Filter out dependencies with split packages or conflicts
+        // Keep project dependencies but filter problematic external JARs
+        def filteredClasspath = compileJava.classpath.filter {
+            !it.name.contains('vappearances') &&
+            !it.name.startsWith('jnr-') &&
+            !it.name.contains('javax.activation') &&
+            !it.name.contains('unix4j') &&
+            !it.name.startsWith('jediterm-')  // jediterm-core and jediterm-ui have split packages
+        }
+
+        // Put dependencies on module path for module-info compilation
+        options.compilerArgs += [
+            '--module-path', filteredClasspath.asPath,
+            '--patch-module', 'org.mucommander.core=' + compileJava.destinationDirectory.get().asFile.path
+        ]
+    }
+}
+
+classes {
+    dependsOn compileModuleInfo
+}
+
 jar {
+    dependsOn compileModuleInfo
     from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
         include 'org/unix4j/**'
         exclude 'codegen/**'
         exclude 'META-INF/**'
     } }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-core',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'The core part of muCommander',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Specification-Title': "muCommander",
+    manifest {
+        attributes('Specification-Title': "muCommander",
                 'Specification-Vendor': "Arik Hadas",
                 'Specification-Version': project.version,
                 'Implementation-Title': "muCommander",
                 'Implementation-Vendor': "Arik Hadas",
                 'Implementation-Version': revision,
                 'Build-Date': new Date().format('yyyyMMdd'),
-                'Build-Number': project.ext.release,
-                'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
-                'Export-Package':
-                        'com.mucommander.core.desktop,' +
-                                'com.mucommander.job,' +
-                                'com.mucommander.job.impl,' +
-                                'com.mucommander.process,' +
-                                'com.mucommander.osgi,' +
-                                'com.mucommander.search,' +
-                                'com.mucommander.ui.action,' +
-                                'com.mucommander.ui.action.impl,' +
-                                'com.mucommander.ui.dialog,' +
-                                'com.mucommander.ui.dialog.file,' +
-                                'com.mucommander.ui.dialog.server,' +
-                                'com.mucommander.ui.encoding,' +
-                                'com.mucommander.ui.icon,' +
-                                'com.mucommander.ui.text,' +
-                                'com.mucommander.ui.theme,' +
-                                'com.mucommander.snapshot,' +
-                                'com.mucommander.search,' +
-                                'com.mucommander.text,' +
-                                'com.mucommander.ui.icon,' +
-                                'com.mucommander.ui.main,' +
-                                'com.mucommander.ui.main.table,' +
-                                'com.mucommander.ui.viewer',
-                'Bundle-Activator': 'com.mucommander.Activator')
+                'Build-Number': project.ext.release)
     }
 }
 

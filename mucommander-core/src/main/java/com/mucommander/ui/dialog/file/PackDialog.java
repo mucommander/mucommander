@@ -37,7 +37,7 @@ import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.ArchiveJob;
 import com.mucommander.job.impl.TransferFileJob;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;

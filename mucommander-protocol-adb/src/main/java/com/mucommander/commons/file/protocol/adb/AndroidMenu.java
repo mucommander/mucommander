@@ -19,7 +19,6 @@ package com.mucommander.commons.file.protocol.adb;
 
 import java.net.MalformedURLException;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import javax.swing.JMenu;
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.icon.IconManager;

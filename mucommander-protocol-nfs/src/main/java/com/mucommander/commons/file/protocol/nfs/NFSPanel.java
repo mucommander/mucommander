@@ -28,7 +28,7 @@ import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * This ServerPanel helps initiate NFS connections.

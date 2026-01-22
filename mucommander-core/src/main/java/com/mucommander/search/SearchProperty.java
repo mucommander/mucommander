@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import com.mucommander.commons.util.Pair;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 public enum SearchProperty {
     SEARCH_IN_ARCHIVES("archives", "search_dialog.search_in_archives", Boolean.FALSE.toString()),

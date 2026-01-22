@@ -16,7 +16,7 @@
  */
 package com.mucommander.viewer.binary.search.ui;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.viewer.binary.search.ReplaceParameters;
 import com.mucommander.viewer.binary.search.SearchCondition;
 import com.mucommander.viewer.binary.search.SearchParameters;

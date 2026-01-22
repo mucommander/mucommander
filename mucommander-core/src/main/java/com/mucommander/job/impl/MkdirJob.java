@@ -34,7 +34,7 @@ import com.mucommander.commons.io.RandomAccessOutputStream;
 import com.mucommander.job.FileCollisionChecker;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.FileCollisionDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;

@@ -29,7 +29,7 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
 import com.mucommander.ui.action.ActionDescriptor;

@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import org.jetbrains.annotations.NotNull;
 
 import com.jediterm.terminal.TerminalColor;

@@ -33,7 +33,7 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.encoding.EncodingListener;
 import com.mucommander.ui.encoding.EncodingSelectBox;
 

@@ -1,7 +1,25 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 repositories.mavenCentral()
 
 dependencies {
     api project(':mucommander-commons-file')
+    api project(':mucommander-commons-io')
     api project(':mucommander-commons-util')
     api project(':mucommander-protocol-api')
     api project(':mucommander-format-gzip')
@@ -16,19 +34,20 @@ dependencies {
 }
 
 jar {
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-registry',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Library with configuration tools',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.commons.protocol.registry',
-                'Bundle-Activator': 'com.mucommander.commons.file.protocol.registry.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+jar {
+    from('src/main/resources/module-info') {
+        include 'module-info.java'
+        into 'META-INF'
     }
+}
+
+// Note: Registry protocol uses libraries with split package issues (hamcrest)
+// Compile on classpath with access to unnamed module dependencies
+compileJava {
+    options.compilerArgs += [
+        '--add-reads', 'org.mucommander.protocol.registry=ALL-UNNAMED'
+    ]
 }

@@ -31,7 +31,7 @@ import javax.swing.text.PlainDocument;
 
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * A dialog that allows select a range of characters from file name. 

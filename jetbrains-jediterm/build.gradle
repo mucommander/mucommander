@@ -1,3 +1,20 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 repositories {
     mavenCentral()
     maven {
@@ -14,6 +31,8 @@ dependencies {
     comprise 'org.jetbrains.jediterm:jediterm-ui:3.57'
     comprise 'org.jetbrains.pty4j:pty4j:0.13.11'
     comprise 'org.jetbrains.pty4j:purejavacomm:0.0.11.1'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.23'  // On module path, not embedded
+    comprise 'net.java.dev.jna:jna:5.13.0'  // JNA for pty4j native access
 
     implementation 'org.jetbrains:annotations:26.0.2-1'
     runtimeOnly 'org.jetbrains.intellij.deps:trove4j:1.0.20200330'
@@ -33,30 +52,10 @@ jar {
         include 'purejavacomm/**'
         include 'org/jetbrains/**'
         include 'resources/com/pty4j/**'
+        exclude 'kotlin/**'  // Excluded - on module path
+        exclude 'com/sun/jna/**'  // Excluded - on module path
         exclude 'codegen/**'
         exclude 'META-INF/**'
     } }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    bundle {
-        bnd ('Bundle-Name': 'jetbrains-jediterm',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'JediTerm and its dependencies',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'),
-                'Export-Package':
-                        'com.jediterm.core,' +
-                                'com.jediterm.core.util,' +
-                                'com.jediterm.terminal,' +
-                                'com.jediterm.terminal.ui,' +
-                                'com.jediterm.terminal.ui.settings,' +
-                                'com.jediterm.pty,' +
-                                'org.jetbrains.annotations,' +
-                                'com.pty4j')
-    }
 }

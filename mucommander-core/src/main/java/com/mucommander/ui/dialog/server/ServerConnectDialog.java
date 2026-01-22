@@ -57,13 +57,10 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.MainFrame;
-
 
 /**
  * Dialog that assists the user in connecting to a filesystem. It contains tabs and associated panels for each of the
@@ -94,10 +91,6 @@ public class ServerConnectDialog extends FocusDialog implements ServerPanelListe
 
     public static void register(ProtocolPanelProvider panelProvider) {
         schemaToPanelProvider.put(panelProvider.getSchema(), panelProvider);
-    }
-
-    public static void unregister(ProtocolPanelProvider panelProvider) {
-        schemaToPanelProvider.remove(panelProvider.getSchema());
     }
 
     /**

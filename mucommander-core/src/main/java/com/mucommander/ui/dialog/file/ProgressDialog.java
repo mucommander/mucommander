@@ -63,7 +63,7 @@ import com.mucommander.job.JobsManager;
 import com.mucommander.job.impl.TransferFileJob;
 import com.mucommander.text.DurationFormat;
 import com.mucommander.text.SizeFormat;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.button.CollapseExpandButton;
 import com.mucommander.ui.chooser.SizeChooser;
 import com.mucommander.ui.icon.IconManager;

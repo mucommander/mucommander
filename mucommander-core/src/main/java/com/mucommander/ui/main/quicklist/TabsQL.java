@@ -25,7 +25,7 @@ import java.util.List;
 import javax.swing.Icon;
 
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionProperties;
 import com.mucommander.ui.icon.EmptyIcon;
 import com.mucommander.ui.icon.IconManager;

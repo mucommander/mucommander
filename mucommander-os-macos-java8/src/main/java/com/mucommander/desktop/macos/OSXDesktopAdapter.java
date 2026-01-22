@@ -51,12 +51,12 @@ import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
 import com.mucommander.desktop.TrashProvider;
 import com.mucommander.os.notifier.AbstractNotifier;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.macos.AppleScript;
 import com.mucommander.ui.macos.OSXIntegration;
 import com.mucommander.ui.macos.TabbedPaneUICustomizer;
 import com.mucommander.ui.notifier.GrowlNotifier;
-import com.sun.jna.platform.mac.XAttrUtils;
+
 
 /**
  * @author Nicolas Rinaudo, Arik Hadas
