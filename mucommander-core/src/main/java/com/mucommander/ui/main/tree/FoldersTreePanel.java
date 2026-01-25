@@ -117,7 +117,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
         var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
         var locale = LocaleUtils.forLanguageTag(languageTag);
 
-        FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
+        FileComparator.Mode fileComparatorMode = FileComparator.Mode.getMode(
                 MuConfigurations.getPreferences().getVariable(
                         MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
                         MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER)
@@ -196,7 +196,7 @@ public class FoldersTreePanel implements TreeSelectionListener,
             var languageTag = MuConfigurations.getPreferences().getVariable(MuPreference.FILENAME_LOCALE);
             var locale = LocaleUtils.forLanguageTag(languageTag);
 
-            FileComparator.FileComparatorModeEnum fileComparatorMode = FileComparator.FileComparatorModeEnum.getMode(
+            FileComparator.Mode fileComparatorMode = FileComparator.Mode.getMode(
                     MuConfigurations.getPreferences().getVariable(
                             MuPreference.FILE_COMPARATOR_USE_LEXICOGRAPHIC_SORT,
                             MuPreferences.DEFAULT_FILES_LEXICOGRAPHIC_ORDER)
