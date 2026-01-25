@@ -64,7 +64,7 @@ public class FileComparator implements Comparator<AbstractFile> {
     /** Locale that is used to sort by filenames */
     private final Locale locale;
     /** Sort mode to use when comparing files (ie natural/lexicographic) */
-    private final FileComparatorModeEnum mode;
+    private final Mode mode;
 
     public enum CRITERION {
         /** Criterion for filename comparison. */
@@ -83,12 +83,12 @@ public class FileComparator implements Comparator<AbstractFile> {
         GROUP
     }
 
-    public enum FileComparatorModeEnum {
+    public enum Mode {
 
         LEXICOGRAPHIC,
         NATURAL;
 
-        public static FileComparatorModeEnum getMode(boolean useLexicographicSort) {
+        public static Mode getMode(boolean useLexicographicSort) {
             return useLexicographicSort ? LEXICOGRAPHIC : NATURAL;
         }
 
@@ -107,7 +107,7 @@ public class FileComparator implements Comparator<AbstractFile> {
      * @param nameFunc function that returns the value for the 'name' column for a file
      * @param locale the local by which filenames are sorted
      */
-    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc, Locale locale, FileComparatorModeEnum mode) {
+    public FileComparator(CRITERION criterion, boolean ascending, boolean directoriesFirst, Function<AbstractFile, String> nameFunc, Locale locale, Mode mode) {
         this.criterion = criterion;
         this.ascending = ascending;
         this.directoriesFirst = directoriesFirst;
@@ -172,7 +172,7 @@ public class FileComparator implements Comparator<AbstractFile> {
         String s1 = nameFunc.apply(file1);
         String s2 = nameFunc.apply(file2);
 
-        if (this.mode == FileComparatorModeEnum.NATURAL) {
+        if (this.mode == Mode.NATURAL) {
             // Special treatment for strings that contain a number, so they are ordered by the number's value, e.g.:
             // 1 < 1a < 2 < 10, like Mac OS X Finder and Windows Explorer do.
             //
