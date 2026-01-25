@@ -55,7 +55,7 @@ public class Configuration {
     // Allows users to tweak how custom commands are loaded / saved.
     @Parameter(names={"-f", "--commands"}, description="Load custom commands from FILE.")
     public String commands;
-    @Parameter(names={"-w", "--fail-on-warnings"}, description="Quits when a warning is encountered during")
+    @Parameter(names={"-w", "--fail-on-warnings"}, description="Quits when a warning is encountered during startup")
     public boolean fatalWarnings;
     // Allows users to tweak how keymaps are loaded.
     @Parameter(names={"-k", "--keymap"}, description="Load keymap from FILE")
