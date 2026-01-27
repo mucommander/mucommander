@@ -36,6 +36,7 @@ What's new since v1.5.2 ?
 
 New features:
 - SMBv2 and SMBv3 are now supported.
+- Introduced lexicographical sorting for filenames.
 
 Improvements:
 - When selecting a different shell, the change takes effect immediately in the terminal.
