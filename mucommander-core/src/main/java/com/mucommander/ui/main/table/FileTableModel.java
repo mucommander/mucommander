@@ -707,7 +707,7 @@ public class FileTableModel extends AbstractTableModel {
                 sortInfo.getFoldersFirst(),
                 getNameFunc(),
                 locale,
-                fileComparatorMode );
+                fileComparatorMode);
     }
 
 

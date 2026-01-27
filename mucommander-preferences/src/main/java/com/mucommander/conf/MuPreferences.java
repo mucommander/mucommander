@@ -94,9 +94,9 @@ public class MuPreferences implements MuPreferencesAPI {
     public static final String  SET_DROP_ACTION_TO_COPY           = "change_drop_action_to_copy";
     /** Default file drag and drop behavior */
     public static final boolean DEFAULT_SET_DROP_ACTION_TO_COPY   =  true;
-
+    /** Whether to sort files lexicographically (or naturally) */
     public static final String FILES_LEXICOGRAPHIC_ORDER = "lexicographic_order_of_files";
-
+    /** Default value for {@link #FILES_LEXICOGRAPHIC_ORDER} */
     public static final boolean DEFAULT_FILES_LEXICOGRAPHIC_ORDER = false;
 
     // - Log variables -------------------------------------------------------
