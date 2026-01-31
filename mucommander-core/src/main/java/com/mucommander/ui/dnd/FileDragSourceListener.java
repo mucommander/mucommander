@@ -34,7 +34,7 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
 
-import javax.swing.*;
+import javax.swing.ListSelectionModel;
 
 
 /**
