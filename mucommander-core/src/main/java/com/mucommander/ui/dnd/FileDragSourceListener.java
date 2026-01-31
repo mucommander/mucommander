@@ -107,15 +107,17 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
     /////////////////////////////////
 
     public void dragGestureRecognized(DragGestureEvent event) {
-        if (folderPanel.getMainFrame().getNoEventsMode())
+        if (folderPanel.getMainFrame().getNoEventsMode()) {
             return;
+        }
 
         FileTable fileTable = folderPanel.getFileTable();
         FileTableModel tableModel = fileTable.getFileTableModel();
 
         // Return (do not initiate drag) if mouse button2 or button3 was used
-        if ((event.getTriggerEvent().getModifiers() & (InputEvent.BUTTON2_MASK | InputEvent.BUTTON3_MASK)) != 0)
+        if ((event.getTriggerEvent().getModifiersEx() & (InputEvent.BUTTON2_DOWN_MASK | InputEvent.BUTTON3_DOWN_MASK)) != 0) {
             return;
+        }
 
 // Do not use that to retrieve the current selected file as it is inaccurate: the selection could have changed since the
 // the mouse was clicked.         
@@ -127,8 +129,9 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
         // Find out which row was clicked
         int clickedRow = fileTable.rowAtPoint(event.getDragOrigin());
         // Return (do not initiate drag) if the selected file is the parent folder '..'
-        if (clickedRow == -1 || fileTable.isParentFolder(clickedRow))
+        if (clickedRow == -1 || fileTable.isParentFolder(clickedRow)) {
             return;
+        }
 
         // Retrieve the file corresponding to the clicked row
         AbstractFile selectedFile = tableModel.getFileAtRow(clickedRow);
