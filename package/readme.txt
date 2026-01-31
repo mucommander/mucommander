@@ -59,6 +59,7 @@ Bug fixes:
 - When copying files from a non-Windows source, replace characters that are invalid in Windows filenames (e.g., '*', ':') with an underscore.
 - Copying names, basenames, and paths of files to the clipboard stopped working (regression).
 - Fixed undesired beep and character when leaving Terminal with F12.
+- Fixed unstable file panel after Drag and drop.
 
 Known issues:
 - Some translations may not be up-to-date.

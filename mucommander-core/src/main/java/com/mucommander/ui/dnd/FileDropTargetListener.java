@@ -45,6 +45,8 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
+import javax.swing.*;
+
 /**
  * Provides file(s) 'drop' support to components that add a <code>DropTarget</code> using this
  * <code>DropTargetListener</code>. A {@link com.mucommander.ui.main.FolderPanel} instance has to be specified at
@@ -176,7 +178,7 @@ public class FileDropTargetListener implements DropTargetListener {
         // Change the mouse cursor on this FolderPanel and child components
         Cursor newCursor = getDragActionCursor(currentDropAction, dragAccepted);
         LOGGER.trace("cursor=" + newCursor);
-        folderPanel.getPanel().setCursor(newCursor);
+        SwingUtilities.invokeLater(() -> folderPanel.getPanel().setCursor(newCursor));
 
         return dragAccepted;
     }
@@ -259,12 +261,12 @@ public class FileDropTargetListener implements DropTargetListener {
 
     public void dragExit(DropTargetEvent event) {
         // Restore default cursor
-        folderPanel.getPanel().setCursor(Cursor.getDefaultCursor());
+        SwingUtilities.invokeLater(() -> folderPanel.getPanel().setCursor(Cursor.getDefaultCursor()));
     }
 
     public void drop(DropTargetDropEvent event) {
         // Restore default cursor, no matter what
-        folderPanel.getPanel().setCursor(Cursor.getDefaultCursor());
+        SwingUtilities.invokeLater(() -> folderPanel.getPanel().setCursor(Cursor.getDefaultCursor()));
 
         // The drop() method is called even if a DropTargetDropEvent was rejected before,
         // so this test is really necessary

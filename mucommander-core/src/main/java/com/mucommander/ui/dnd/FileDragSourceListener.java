@@ -34,6 +34,8 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.main.table.FileTableModel;
 
+import javax.swing.*;
+
 
 /**
  * This class adds 'drag' support to components that are registered using the {@link #enableDrag(java.awt.Component)}
@@ -177,5 +179,14 @@ public class FileDragSourceListener implements DragGestureListener, DragSourceLi
         DnDContext.setDragInitiatedByMucommander(false);
         DnDContext.setDragInitiator(null);
         DnDContext.setDragGestureModifiersEx(0);
+
+        // Fix for https://github.com/mucommander/mucommander/issues/643
+        FileTable fileTable;
+        ListSelectionModel model;
+        if ((fileTable = folderPanel.getFileTable()) != null &&
+                (model = fileTable.getSelectionModel()) != null) {
+            model.setValueIsAdjusting(false);
+            fileTable.repaint();
+        }
     }
 }
