@@ -83,10 +83,10 @@ public class FileDropTargetListener implements DropTargetListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileDropTargetListener.class);
 
     /** the FolderPanel instance used to change the current folder when a file is dropped */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     /** Mode that specifies what to do when files are dropped */
-    private boolean changeFolderOnlyMode;
+    private final boolean changeFolderOnlyMode;
 
     /** Drop action (copy or move) currently specified by the user */
     private int currentDropAction;
@@ -158,17 +158,15 @@ public class FileDropTargetListener implements DropTargetListener {
      * <code>DnDConstants.ACTION_COPY</code> instead of <code>DnDConstants.ACTION_MOVE</code>. For a move action to be
      * performed when the mouse is released, the modifiers defined by {@link #MOVE_ACTION_MODIFIERS_EX} must be down.
      * </p>
-     *
-     * @return <code>true</code> if the event was accepted, false otherwise
      */
-    private boolean acceptOrRejectDragEvent(DropTargetDragEvent event) {
+    private void acceptOrRejectDragEvent(DropTargetDragEvent event) {
         this.dragAccepted = isDragAccepted(event);
 
         if (dragAccepted) {
             this.currentDropAction = determineDropAction(event);
             // Accept the drag event with our drop action
             event.acceptDrag(currentDropAction);
-            LOGGER.trace("drag accepted, dropAction=" + currentDropAction);
+            LOGGER.trace("drag accepted, dropAction={}", currentDropAction);
         } else {
             // Reject the drag event
             event.rejectDrag();
@@ -177,10 +175,8 @@ public class FileDropTargetListener implements DropTargetListener {
 
         // Change the mouse cursor on this FolderPanel and child components
         Cursor newCursor = getDragActionCursor(currentDropAction, dragAccepted);
-        LOGGER.trace("cursor=" + newCursor);
+        LOGGER.trace("cursor={}", newCursor);
         SwingUtilities.invokeLater(() -> folderPanel.getPanel().setCursor(newCursor));
-
-        return dragAccepted;
     }
 
     private int determineDropAction(DropTargetDragEvent event) {
@@ -225,15 +221,13 @@ public class FileDropTargetListener implements DropTargetListener {
                 || event.isDataFlavorSupported(DataFlavor.javaFileListFlavor)
                 || event.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor());
 
-        if (!dataFlavorSupported)
+        if (!dataFlavorSupported) {
             return false;
+        }
 
         // Refuse drag if the drag was initiated by the same FolderPanel, or if its current folder is the same
         // as this one
-        if (DnDContext.isDragInitiatedByMucommander() && isPointToTargetFolder(DnDContext.getDragInitiator()))
-            return false;
-
-        return true;
+        return !DnDContext.isDragInitiatedByMucommander() || !isPointToTargetFolder(DnDContext.getDragInitiator());
     }
 
     private boolean isPointToTargetFolder(FolderPanel dragInitiator) {
@@ -283,7 +277,7 @@ public class FileDropTargetListener implements DropTargetListener {
         FileSet droppedFiles = TransferableFileSet.getTransferFiles(event.getTransferable());
 
         // Stop and report failure if no file could not be retrieved
-        if (droppedFiles == null || droppedFiles.size() == 0) {
+        if (droppedFiles == null || droppedFiles.isEmpty()) {
             // Report drop failure
             event.dropComplete(false);
 
@@ -300,13 +294,14 @@ public class FileDropTargetListener implements DropTargetListener {
             AbstractFile file = droppedFiles.elementAt(0);
 
             // If file is a directory, change current folder to that directory
-            if (file.isDirectory())
+            if (file.isDirectory()) {
                 folderPanel.tryChangeCurrentFolder(file);
+            }
             // For any other file kind (archive, regular file...), change directory to the file's parent folder
             // and select the file
-            else
+            else {
                 folderPanel.tryChangeCurrentFolder(file.getParent(), file, false);
-
+            }
             // Request focus on the FolderPanel
             folderPanel.getPanel().requestFocus();
         }
