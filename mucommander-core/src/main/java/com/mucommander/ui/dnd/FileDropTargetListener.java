@@ -45,7 +45,7 @@ import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 
 /**
  * Provides file(s) 'drop' support to components that add a <code>DropTarget</code> using this
