@@ -218,5 +218,5 @@ jobs:
       - name: Upload msi
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.version }}.msi"
+          name: "mucommander-${{ needs.get-version.outputs.version }}-${{ matrix.arch }}.msi"
           path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}.msi"

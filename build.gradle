@@ -649,7 +649,7 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
                 '--type', 'msi', \
                 '--app-image', "${buildDir}/muCommander", \
                 '--license-file', "${buildDir}/muCommander/license.txt", \
-                '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
+                '--app-version', project.version, \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions", \
                 '--win-menu', \
