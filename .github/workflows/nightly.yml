@@ -182,7 +182,7 @@ jobs:
             java: '23'
           - arch: x86_64
             os: windows-2025
-            java: '25'
+            java: '24'
     runs-on: ${{ matrix.os }}
     needs: get-version
     steps:
