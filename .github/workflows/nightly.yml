@@ -131,7 +131,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build portable, tgz, deb, and rpm
-        run: ./gradlew -Parch=${{ matrix.arch }} tgz portable deb rpm
+        run: ./gradlew tgz portable deb rpm -Parch=${{ matrix.arch }}
 
       - name: Import GPG
         run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
