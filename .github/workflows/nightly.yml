@@ -179,8 +179,10 @@ jobs:
         include:
           - arch: aarch64
             os: windows-11-arm
+            java: '23'
           - arch: x86_64
             os: windows-2025
+            java: '25'
     runs-on: ${{ matrix.os }}
     needs: get-version
     steps:
@@ -190,7 +192,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '20'
+          java-version: ${{ matrix.java }}
           distribution: 'adopt'
 
       - name: Checkout 'release'
