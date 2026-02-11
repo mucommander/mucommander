@@ -94,7 +94,14 @@ jobs:
           compression-level: 0
 
   upload-linux-artifacts:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            os: ubuntu-22.04-arm
+          - arch: x86_64
+            os: ubuntu-22.04
+    runs-on: ${{ matrix.os }}
     needs: get-version
     steps:
       - uses: actions/checkout@v4
@@ -124,7 +131,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build portable, tgz, deb, and rpm
-        run: ./gradlew tgz portable deb rpm
+        run: ./gradlew -Parch=${{ matrix.arch }} tgz portable deb rpm
 
       - name: Import GPG
         run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
@@ -167,7 +174,14 @@ jobs:
 
 
   upload-windows-artifacts:
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            os: windows-11-arm
+          - arch: x86_64
+            os: windows-2025
+    runs-on: ${{ matrix.os }}
     needs: get-version
     steps:
       - uses: actions/checkout@v4
@@ -197,7 +211,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build msi
-        run: ./gradlew msi
+        run: ./gradlew -Parch=${{ matrix.arch }} msi
 
       - name: Upload msi
         uses: actions/upload-artifact@master
