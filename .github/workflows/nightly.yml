@@ -130,8 +130,12 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v3
 
-      - name: Build portable, tgz, deb, and rpm
-        run: ./gradlew tgz portable deb rpm -Parch=${{ matrix.arch }}
+      - name: Build tgz, deb, and rpm
+        run: ./gradlew tgz deb rpm -Parch=${{ matrix.arch }}
+
+      - name: Build portable
+        if: matrix.arch == 'x86_64'
+        run: ./gradlew portable -Parch=${{ matrix.arch }}
 
       - name: Import GPG
         run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
@@ -149,6 +153,7 @@ jobs:
         run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.x86_64.rpm"
 
       - name: Upload portable
+        if: matrix.arch == 'x86_64'
         uses: actions/upload-artifact@master
         with:
           name: "mucommander-${{ needs.get-version.outputs.full_version }}-portable.zip"
