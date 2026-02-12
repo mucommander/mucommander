@@ -150,7 +150,7 @@ jobs:
           EOF
 
       - name: Sign rpm
-        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.x86_64.rpm"
+        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
 
       - name: Upload portable
         if: matrix.arch == 'x86_64'
@@ -162,20 +162,20 @@ jobs:
       - name: Upload tgz
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.full_version }}.tgz"
+          name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.tgz"
           path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}.tgz"
 
       - name: Upload deb
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander_${{ needs.get-version.outputs.version }}_amd64.deb"
-          path: "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_amd64.deb"
+          name: "mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch }}.deb"
+          path: "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch == 'x86_64' && 'amd64' || matrix.arch == 'aarch64' && 'arm64' || matrix.arch }}.deb"
 
       - name: Upload rpm
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.version }}-1.x86_64.rpm"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.x86_64.rpm"
+          name: "mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
+          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
 
 
   upload-windows-artifacts:

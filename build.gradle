@@ -567,7 +567,7 @@ task rpm(dependsOn: 'linuxAppImage', type: Exec) {
     commandLine 'jpackage', \
                 '--type', 'rpm', \
                 '--app-image', "${buildDir}/muCommander", \
-                '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
+                '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions", \
@@ -585,7 +585,7 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
                 '--type', 'deb', \
                 '--description', 'a lightweight, cross-platform file manager', \
                 '--app-image', "${buildDir}/muCommander", \
-                '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
+                '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions", \
