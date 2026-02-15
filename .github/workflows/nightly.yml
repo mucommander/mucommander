@@ -93,6 +93,17 @@ jobs:
           path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
           compression-level: 0
 
+      - name: Upload to nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: "Nightly Build"
+          body: "Automated nightly build from ${{ github.sha }}"
+          prerelease: true
+          files: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   upload-linux-artifacts:
     strategy:
       matrix:
@@ -152,6 +163,11 @@ jobs:
       - name: Sign rpm
         run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
 
+      - name: Rename artifacts
+        run: |
+          mv "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}.tgz" "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.tgz"
+          mv "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch == 'x86_64' && 'amd64' || matrix.arch == 'aarch64' && 'arm64' || matrix.arch }}.deb" "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch }}.deb"
+
       - name: Upload portable
         if: matrix.arch == 'x86_64'
         uses: actions/upload-artifact@master
@@ -163,13 +179,13 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.tgz"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}.tgz"
+          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.tgz"
 
       - name: Upload deb
         uses: actions/upload-artifact@master
         with:
           name: "mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch }}.deb"
-          path: "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch == 'x86_64' && 'amd64' || matrix.arch == 'aarch64' && 'arm64' || matrix.arch }}.deb"
+          path: "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch }}.deb"
 
       - name: Upload rpm
         uses: actions/upload-artifact@master
@@ -177,6 +193,19 @@ jobs:
           name: "mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
           path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
 
+      - name: Upload all to nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: "Nightly Build"
+          prerelease: true
+          files: |
+            ./build/distributions/*-portable.zip
+            ./build/distributions/*.tgz
+            ./build/distributions/*.deb
+            ./build/distributions/*.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-windows-artifacts:
     strategy:
@@ -220,8 +249,22 @@ jobs:
       - name: Build msi
         run: ./gradlew -Parch=${{ matrix.arch }} msi
 
+      - name: Rename msi
+        run: |
+          mv "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}.msi" "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-${{ matrix.arch }}.msi"
+
       - name: Upload msi
         uses: actions/upload-artifact@master
         with:
           name: "mucommander-${{ needs.get-version.outputs.version }}-${{ matrix.arch }}.msi"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}.msi"
+          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-${{ matrix.arch }}.msi"
+
+      - name: Upload to nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: "Nightly Build"
+          prerelease: true
+          files: "./build/distributions/*.msi"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
