@@ -6,13 +6,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-version:
+  init:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.mucommander_version.outputs.VERSION }}
       full_version: ${{ steps.mucommander_version.outputs.FULL_VERSION }}
     steps:
       - uses: actions/checkout@v4
+      - name: Delete existing Release and Tag
+        run: |
+          gh release delete nightly --yes --cleanup-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name : Get version
         id: mucommander_version
         run: |
@@ -30,7 +35,7 @@ jobs:
           - arch: noarch
             os: macos-15
     runs-on: ${{ matrix.os }}
-    needs: get-version
+    needs: init
     steps:
       - uses: actions/checkout@v4
         with:
@@ -73,25 +78,36 @@ jobs:
           fi
 
       - name: Sign dmg
-        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
+        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
       - name: Notarize dmg
         run: |
-          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
+          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
           ID=$(grep 'id:' output.log | head -n 1 | awk '{print $2}')
           echo $ID
           xcrun notarytool log --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} $ID
           grep -vqz "status: Invalid" output.log
 
       - name: Staple dmg
-        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg"
 
       - name: Upload dmg
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.dmg"
+          name: "mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg"
+          path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg"
           compression-level: 0
+
+      - name: Upload to nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: "Nightly Build"
+          body: "Automated nightly build from ${{ github.sha }}"
+          prerelease: true
+          files: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-linux-artifacts:
     strategy:
@@ -102,7 +118,7 @@ jobs:
           - arch: x86_64
             os: ubuntu-22.04
     runs-on: ${{ matrix.os }}
-    needs: get-version
+    needs: init
     steps:
       - uses: actions/checkout@v4
         with:
@@ -150,33 +166,53 @@ jobs:
           EOF
 
       - name: Sign rpm
-        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
+        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.init.outputs.version }}-1.${{ matrix.arch }}.rpm"
+
+      - name: Rename artifacts
+        run: |
+          mv "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}.tgz" "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.tgz"
+          mv "./build/distributions/mucommander_${{ needs.init.outputs.version }}_${{ matrix.arch == 'x86_64' && 'amd64' || matrix.arch == 'aarch64' && 'arm64' || matrix.arch }}.deb" "./build/distributions/mucommander_${{ needs.init.outputs.version }}_${{ matrix.arch }}.deb"
+          mv "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-portable.zip" "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-portable-${{ matrix.arch }}.zip" || true
 
       - name: Upload portable
         if: matrix.arch == 'x86_64'
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.full_version }}-portable.zip"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}-portable.zip"
+          name: "mucommander-${{ needs.init.outputs.full_version }}-portable-${{ matrix.arch }}.zip"
+          path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-portable-${{ matrix.arch }}.zip"
 
       - name: Upload tgz
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.full_version }}-${{ matrix.arch }}.tgz"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.full_version }}.tgz"
+          name: "mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.tgz"
+          path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.tgz"
 
       - name: Upload deb
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch }}.deb"
-          path: "./build/distributions/mucommander_${{ needs.get-version.outputs.version }}_${{ matrix.arch == 'x86_64' && 'amd64' || matrix.arch == 'aarch64' && 'arm64' || matrix.arch }}.deb"
+          name: "mucommander_${{ needs.init.outputs.version }}_${{ matrix.arch }}.deb"
+          path: "./build/distributions/mucommander_${{ needs.init.outputs.version }}_${{ matrix.arch }}.deb"
 
       - name: Upload rpm
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}-1.${{ matrix.arch }}.rpm"
+          name: "mucommander-${{ needs.init.outputs.version }}-1.${{ matrix.arch }}.rpm"
+          path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}-1.${{ matrix.arch }}.rpm"
 
+      - name: Upload all to nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: "Nightly Build"
+          body: "Automated nightly build from ${{ github.sha }}"
+          prerelease: true
+          files: |
+            ./build/distributions/*-portable*.zip
+            ./build/distributions/*.tgz
+            ./build/distributions/*.deb
+            ./build/distributions/*.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-windows-artifacts:
     strategy:
@@ -189,7 +225,7 @@ jobs:
             os: windows-2025
             java: '24'
     runs-on: ${{ matrix.os }}
-    needs: get-version
+    needs: init
     steps:
       - uses: actions/checkout@v4
         with:
@@ -220,8 +256,23 @@ jobs:
       - name: Build msi
         run: ./gradlew -Parch=${{ matrix.arch }} msi
 
+      - name: Rename msi
+        run: |
+          mv "./build/distributions/mucommander-${{ needs.init.outputs.version }}.msi" "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
+
       - name: Upload msi
         uses: actions/upload-artifact@master
         with:
-          name: "mucommander-${{ needs.get-version.outputs.version }}-${{ matrix.arch }}.msi"
-          path: "./build/distributions/mucommander-${{ needs.get-version.outputs.version }}.msi"
+          name: "mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
+          path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
+
+      - name: Upload to nightly release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: "Nightly Build"
+          body: "Automated nightly build from ${{ github.sha }}"
+          prerelease: true
+          files: "./build/distributions/*.msi"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
