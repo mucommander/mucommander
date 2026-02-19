@@ -17,7 +17,6 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.net.URL;
 import java.util.Map;
 
 import com.mucommander.core.desktop.DesktopManager;
@@ -53,11 +52,13 @@ public class OpenURLInBrowserAction extends MuAction {
 
         if (url instanceof String) {
             try {
-                InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(), DesktopManager.browse(new URL((String)url)));
-            }
-            catch(Exception e) {
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(), DesktopManager.browse((String)url));
+            } catch(Exception e) {
+                LOGGER.error("Error performing action", e);
                 InformationDialog.showErrorDialog(mainFrame.getJFrame());
             }
+        } else {
+            LOGGER.debug("URL property is not a String: {} of class: {}", url, url.getClass());
         }
     }
 
