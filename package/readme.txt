@@ -35,30 +35,29 @@ What's new since v1.5.2 ?
 -----------------------
 
 New features:
-- SMBv2 and SMBv3 are now supported.
-- Introduced lexicographical sorting for filenames.
+- Added support for SMBv2 and SMBv3 protocols.
+- Added an optional lexicographical sorting mode for filenames in the file table.
+- Added support for the KAR (KAraf aRchive) file format.
 
 Improvements:
-- When selecting a different shell, the change takes effect immediately in the terminal.
-- The configuration of custom commands is now stored in YAML format rather than XML.
-- Improved reliability of "duti" command execution for "Open With" functionality on macOS.
-- Dropped unnecessary stack-traces in the logs while starting or running the application.
-- Bumped JediTerm and its dependencies to the newest version.
-- Bumped RSyntaxTextArea to the newest version.
-- Startup arguments on Linux can now accept paths with spaces.
-- Updated JediTerm version to the newest.
-- Added support for KAR (KAraf aRchive) files.
+- Shell configuration changes are now reflected immediately in the terminal.
+- Custom command settings are now stored in YAML format instead of XML.
+- Enhanced "Open With" stability on macOS.
+- Reduced log noise by removing unnecessary stack-traces during the startup process.
+- Users can now provide paths with spaces as startup arguments on Linux.
 - Updated the bundled Java Runtime Environment (JRE) to version 25.
+- Updated JediTerm version.
+- Updated RSyntaxTextArea.
 
 Localization:
 -
 
 Bug fixes:
-- The Start Menu group the application is placed in is now named 'muCommander' instead of 'Unknown' on Windows.
-- The application sometimes cannot start after being killed.
-- Ignore milliseconds when comparing a folder that resides in an SFTP server.
-- When copying files from a non-Windows source, replace characters that are invalid in Windows filenames (e.g., '*', ':') with an underscore.
-- Copying names, basenames, and paths of files to the clipboard stopped working (regression).
+- Updated the Windows installer to ensure the Start Menu group is set to 'muCommander'.
+- Fixed a bug that occasionally prevented the app from restarting after a forced exit or crash.
+- Timestamp comparisons for SFTP folders are now limited to second-level precision.
+- When copying files to Windows, invalid characters in filenames are now replaced with underscores.
+- Restored the ability to copy filenames, basenames, and full paths to the clipboard.
 - Fixed undesired beep and character when leaving Terminal with F12.
 - Fixed unstable file panel after dragging a file and dropping it on a separate application.
 
