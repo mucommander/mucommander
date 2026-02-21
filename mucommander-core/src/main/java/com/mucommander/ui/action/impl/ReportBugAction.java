@@ -17,9 +17,7 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import com.mucommander.Activator;
@@ -41,7 +39,7 @@ public class ReportBugAction extends OpenURLInBrowserAction {
     private static final String NEW_BUG_FORMAT = "%s?" +
             "labels=bug&" +
             "template=bug_report.yml&" +
-            "title=[Bug]%%20&" + // To keep String.format at bay
+            "title=[Bug] &" +
             "version=%s&" +
             "java-version=%s&" +
             "os-version=%s&" +
@@ -85,14 +83,14 @@ public class ReportBugAction extends OpenURLInBrowserAction {
                 logRecords.append(record.toString());
             }
             var newBugUrl = String.format(NEW_BUG_FORMAT, url,
-                    URLEncoder.encode(muCVersion, "UTF-8"),
-                    URLEncoder.encode(javaVersion, "UTF-8"),
-                    URLEncoder.encode(osVersion, "UTF-8"),
-                    URLEncoder.encode("[✂]\n" + logRecords.toString()
-                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())) + "\n[✂]","UTF-8"));
+                    muCVersion,
+                    javaVersion,
+                    osVersion,
+                    "[✂]\n" + logRecords.toString()
+                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())) + "\n[✂]");
             putValue(URL_PROPERTY_KEY, newBugUrl);
         } catch (Exception e) {
-            LOGGER.error("Error while preparing a bug report, falling back to generic one", e);
+            LOGGER.error("Error while preparing a bug report, falling back to a generic one", e);
             putValue(URL_PROPERTY_KEY, url);
         }
         super.performAction();
