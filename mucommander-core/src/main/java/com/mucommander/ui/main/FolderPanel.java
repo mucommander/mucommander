@@ -485,7 +485,9 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
 	        // hide completely divider if a tree isn't visible
 	        treeSplitPane.setDividerLocation(treeVisible ? oldTreeWidth : 0);
 	        treeSplitPane.setDividerSize(treeVisible ? 5 : 0);
-	        foldersTreePanel.requestFocus();
+	        if (treeVisible) {
+	            foldersTreePanel.requestFocus();
+	        }
     	}
     }
 
