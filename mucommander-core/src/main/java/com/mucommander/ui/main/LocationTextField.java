@@ -17,38 +17,31 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.Cursor;
-import java.awt.event.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.swing.SwingUtilities;
-
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
-import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.UNCFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.core.LocationChanger;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.autocomplete.TextFieldCompletion;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
-import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.progress.ProgressTextField;
-import com.mucommander.ui.theme.ColorChangedEvent;
-import com.mucommander.ui.theme.FontChangedEvent;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeListener;
-import com.mucommander.ui.theme.ThemeManager;
+import com.mucommander.ui.theme.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.SwingUtilities;
+import java.awt.Cursor;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A TextField which is located on each panel and used to display the location presented in the panel's file-table,
@@ -82,6 +75,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
             windowsTrailingSpacePattern = Pattern.compile("[ ]+[\\\\]*$");
     }
 
+    private boolean ctrlDown = false;
     private boolean mouseInside = false;
 
 
@@ -112,9 +106,9 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Not doing so would trigger unwanted menu bar actions when typing.
         addFocusListener(this);
 
-        setupClickToSwitchDirectory();
-
         enableAutoCompletion();
+
+        setupClickToSwitchDirectory();
 
         ThemeManager.addCurrentThemeListener(this);
     }
@@ -190,7 +184,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
                 int pos = LocationTextField.this.viewToModel2D(e.getPoint());
                 String text = LocationTextField.this.getText();
 
-                if (pos >= 0 && pos < text.length()) {
+                if (e.isControlDown() && pos >= 0 && pos < text.length()) {
                     try {
                         AbstractFile clickedDirectory = calculateClickedDirectory(text, pos);
                         folderPanel.tryChangeCurrentFolder(clickedDirectory);
@@ -202,17 +196,31 @@ public class LocationTextField extends ProgressTextField implements LocationList
         });
 
         // Track CTRL press/release
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                updateCursor(e.isControlDown());
-            }
+//        addKeyListener(new KeyAdapter() {
+//            @Override
+//            public void keyPressed(KeyEvent e) {
+//                updateCursor(e.isControlDown());
+//            }
+//
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//                updateCursor(e.isControlDown());
+//            }
+//        });
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-                updateCursor(e.isControlDown());
-            }
-        });
+        KeyboardFocusManager.getCurrentKeyboardFocusManager()
+                .addKeyEventDispatcher(e -> {
+                    if (e.getID() == KeyEvent.KEY_PRESSED || e.getID() == KeyEvent.KEY_RELEASED) {
+                        boolean newCtrlDown = e.isControlDown();
+                        if (newCtrlDown != ctrlDown) {
+                            ctrlDown = newCtrlDown;
+                            updateCursor(ctrlDown);
+                        }
+                    }
+                    return false; // don't consume
+                });
+
+        System.out.println("KL: " + getKeyListeners().length);
     }
 
     private AbstractFile calculateClickedDirectory(String text, int pos) {
@@ -220,7 +228,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         AbstractFile currentDir = folderPanel.getCurrentFolder();
         AbstractFile prevDir = currentDir;
         int i = 0;
-        while (currentDir.getAbsolutePath().startsWith(prefix)) {
+        while (currentDir != null && currentDir.getAbsolutePath().startsWith(prefix)) {
             if (i >= 1_000) {
                 // For safety
                 throw new RuntimeException("Couldn't calculate clicked directory");
@@ -236,6 +244,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         if (!mouseInside) {
             return;
         }
+        System.out.println("mouseInside = " + mouseInside + ", ctrlDown = " + ctrlDown);
         if (ctrlDown) {
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         } else {
