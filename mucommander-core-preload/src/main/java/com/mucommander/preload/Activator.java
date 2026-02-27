@@ -23,6 +23,7 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
+        setWMClass();
         PreloadedJFrame.init();
     }
 
@@ -30,4 +31,22 @@ public class Activator implements BundleActivator {
     public void stop(BundleContext context) throws Exception {
     }
 
+     /**
+     * Sets the WM_CLASS for Linux window managers.
+     */
+     private static void setWMClass() {
+        try {
+            java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
+            java.lang.reflect.Field awtAppClassNameField = toolkit.getClass().getDeclaredField("awtAppClassName");
+            awtAppClassNameField.setAccessible(true);
+            awtAppClassNameField.set(null, "mucommander-muCommander");
+        } catch (NoSuchFieldException e) {
+            // Not running on X11/Linux, or field doesn't exist in this JDK version
+            System.out.println("DEBUG: Could not set WM_CLASS - field not found (probably not Linux/X11)");
+        } catch (IllegalAccessException e) {
+            System.err.println("Warning: Could not set WM_CLASS due to access restrictions: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Warning: Unexpected error setting WM_CLASS: " + e.getMessage());
+        }
+    }
 }

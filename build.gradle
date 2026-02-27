@@ -525,6 +525,7 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                 '--main-jar', 'mucommander-'+project.version+'.jar', \
                 '--main-class', 'com.mucommander.main.muCommander', \
                 '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED \
+                                   --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED \
                                    --add-opens java.base/java.net=ALL-UNNAMED \
                                    --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
                                    --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \

@@ -45,6 +45,7 @@ Improvements:
 - Enhanced "Open With" stability on macOS.
 - Reduced log noise by removing unnecessary stack-traces during the startup process.
 - Users can now provide paths with spaces as startup arguments on Linux.
+- The application icon and name now display correctly in the GNOME taskbar.
 - Updated the bundled Java Runtime Environment (JRE) to version 25.
 - Updated JediTerm version.
 - Updated RSyntaxTextArea.
