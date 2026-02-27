@@ -17,9 +17,8 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
+import java.awt.Cursor;
+import java.awt.event.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,16 +28,19 @@ import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
+import com.mucommander.commons.file.MonitoredFile;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.UNCFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.core.LocationChanger;
 import com.mucommander.ui.autocomplete.AutocompleterTextComponent;
 import com.mucommander.ui.autocomplete.CompleterFactory;
 import com.mucommander.ui.autocomplete.TextFieldCompletion;
 import com.mucommander.ui.event.LocationEvent;
 import com.mucommander.ui.event.LocationListener;
+import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.progress.ProgressTextField;
 import com.mucommander.ui.theme.ColorChangedEvent;
 import com.mucommander.ui.theme.FontChangedEvent;
@@ -76,6 +78,8 @@ public class LocationTextField extends ProgressTextField implements LocationList
             windowsTrailingSpacePattern = Pattern.compile("[ ]+[\\\\]*$");
     }
 
+    private boolean mouseInside = false;
+
 
     /**
      * Creates a new LocationTextField for use in the given FolderPanel.
@@ -103,6 +107,8 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Listen to focus events to temporarily disable the MainFrame's JMenuBar when this component has the keyboard focus.
         // Not doing so would trigger unwanted menu bar actions when typing.
         addFocusListener(this);
+
+        setupClickToSwitchDirectory();
 
         enableAutoCompletion();
 
@@ -158,6 +164,84 @@ public class LocationTextField extends ProgressTextField implements LocationList
 
         // Reset field for next folder change
         folderChangeInitiatedByLocationField = false;
+    }
+
+    private void setupClickToSwitchDirectory() {
+        // Track mouse presence
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                mouseInside = true;
+                updateCursor(e.isControlDown());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                mouseInside = false;
+                updateCursor(e.isControlDown());
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int pos = LocationTextField.this.viewToModel2D(e.getPoint());
+                String text = LocationTextField.this.getText();
+
+                if (pos >= 0 && pos < text.length()) {                    
+                    AbstractFile clickedDirectory = calculateClickedDirectory(text, pos);
+                    
+                    String prefix = text.substring(0, pos + 1);
+                    AbstractFile f = folderPanel.getCurrentFolder();
+                    AbstractFile f2 = f;
+                    while (f.getAbsolutePath().startsWith(prefix)) {
+                        f2 = f;
+                        f = f.getParent();
+                    }
+                    // fire
+                    folderPanel.tryChangeCurrentFolder(f2);
+                }
+            }
+        });
+
+        // Track CTRL press/release
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                updateCursor(e.isControlDown());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                updateCursor(e.isControlDown());
+            }
+        });
+    }
+
+    private AbstractFile calculateClickedDirectory(String text, int pos) {
+        String prefix = text.substring(0, pos + 1);
+        AbstractFile currentDir = folderPanel.getCurrentFolder();
+        AbstractFile prevDir = currentDir;
+        int i = 0;
+        while (currentDir.getAbsolutePath().startsWith(prefix)) {
+            if (i >= 1_000) {
+                // For safety
+                throw new RuntimeException("Couldn't calculate clicked directory");
+            }
+            prevDir = currentDir;
+            currentDir = currentDir.getParent();
+            i++;
+        }
+        return prevDir;
+    }
+
+    private void updateCursor(boolean ctrlDown) {
+        if (!mouseInside) {
+            return;
+        }
+        if (ctrlDown) {
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        } else {
+            setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR)); // restore I-beam
+        }
     }
 
 
