@@ -47,6 +47,8 @@ import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A TextField which is located on each panel and used to display the location presented in the panel's file-table,
@@ -61,6 +63,8 @@ import com.mucommander.ui.theme.ThemeManager;
  */
 
 public class LocationTextField extends ProgressTextField implements LocationListener, FocusListener, ThemeListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LocationTextField.class);
+
     /** FolderPanel this text field is displayed in */
     private FolderPanel folderPanel;
 
@@ -186,18 +190,13 @@ public class LocationTextField extends ProgressTextField implements LocationList
                 int pos = LocationTextField.this.viewToModel2D(e.getPoint());
                 String text = LocationTextField.this.getText();
 
-                if (pos >= 0 && pos < text.length()) {                    
-                    AbstractFile clickedDirectory = calculateClickedDirectory(text, pos);
-                    
-                    String prefix = text.substring(0, pos + 1);
-                    AbstractFile f = folderPanel.getCurrentFolder();
-                    AbstractFile f2 = f;
-                    while (f.getAbsolutePath().startsWith(prefix)) {
-                        f2 = f;
-                        f = f.getParent();
+                if (pos >= 0 && pos < text.length()) {
+                    try {
+                        AbstractFile clickedDirectory = calculateClickedDirectory(text, pos);
+                        folderPanel.tryChangeCurrentFolder(clickedDirectory);
+                    } catch (Exception ex) {
+                        LOGGER.warn("Could not change dir on LocationTextField click [pos = {}, text = {}]", pos, text, ex);
                     }
-                    // fire
-                    folderPanel.tryChangeCurrentFolder(f2);
                 }
             }
         });
