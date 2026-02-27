@@ -170,13 +170,15 @@ public class LocationTextField extends ProgressTextField implements LocationList
             @Override
             public void mouseEntered(MouseEvent e) {
                 mouseInside = true;
-                updateCursor(e.isControlDown());
+                ctrlDown = e.isControlDown();
+                updateCursor();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 mouseInside = false;
-                updateCursor(e.isControlDown());
+                ctrlDown = e.isControlDown();
+                updateCursor();
             }
 
             @Override
@@ -196,31 +198,17 @@ public class LocationTextField extends ProgressTextField implements LocationList
         });
 
         // Track CTRL press/release
-//        addKeyListener(new KeyAdapter() {
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//                updateCursor(e.isControlDown());
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                updateCursor(e.isControlDown());
-//            }
-//        });
-
         KeyboardFocusManager.getCurrentKeyboardFocusManager()
                 .addKeyEventDispatcher(e -> {
                     if (e.getID() == KeyEvent.KEY_PRESSED || e.getID() == KeyEvent.KEY_RELEASED) {
                         boolean newCtrlDown = e.isControlDown();
                         if (newCtrlDown != ctrlDown) {
                             ctrlDown = newCtrlDown;
-                            updateCursor(ctrlDown);
+                            updateCursor();
                         }
                     }
                     return false; // don't consume
                 });
-
-        System.out.println("KL: " + getKeyListeners().length);
     }
 
     private AbstractFile calculateClickedDirectory(String text, int pos) {
@@ -240,11 +228,11 @@ public class LocationTextField extends ProgressTextField implements LocationList
         return prevDir;
     }
 
-    private void updateCursor(boolean ctrlDown) {
+    private void updateCursor() {
         if (!mouseInside) {
             return;
         }
-        System.out.println("mouseInside = " + mouseInside + ", ctrlDown = " + ctrlDown);
+
         if (ctrlDown) {
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         } else {
