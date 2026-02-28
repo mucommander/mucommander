@@ -17,17 +17,21 @@
 
 package com.mucommander.ui.action.impl;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import com.mucommander.Activator;
 import com.mucommander.RuntimeConstants;
+import com.mucommander.core.desktop.InternalBrowse;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
+import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.debug.LoggingEvent;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.utils.MuLogging;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * This action opens the mucommander.com bug repository URL in the system's default browser.
@@ -36,10 +40,10 @@ import com.mucommander.utils.MuLogging;
  */
 public class ReportBugAction extends OpenURLInBrowserAction {
 
-    private static final String NEW_BUG_FORMAT = "%s?" +
+    private static final String EXTENDED_BUG_FORMAT = "%s?" +
             "labels=bug&" +
             "template=bug_report.yml&" +
-            "title=[Bug] &" +
+            "title=[Bug]%%20&" +
             "version=%s&" +
             "java-version=%s&" +
             "os-version=%s&" +
@@ -82,18 +86,34 @@ public class ReportBugAction extends OpenURLInBrowserAction {
             for (LoggingEvent record : lastNRecords) {
                 logRecords.append(record.toString());
             }
-            var newBugUrl = String.format(NEW_BUG_FORMAT, url,
-                    muCVersion,
-                    javaVersion,
-                    osVersion,
-                    "[✂]\n" + logRecords.toString()
-                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())) + "\n[✂]");
-            putValue(URL_PROPERTY_KEY, newBugUrl);
+            var extendedBugUrl = String.format(EXTENDED_BUG_FORMAT, url,
+                    URLEncoder.encode(muCVersion, StandardCharsets.UTF_8),
+                    URLEncoder.encode(javaVersion, StandardCharsets.UTF_8),
+                    URLEncoder.encode(osVersion, StandardCharsets.UTF_8),
+                    URLEncoder.encode("[✂]\n" + logRecords.toString()
+                            .substring(0, Math.min(MAX_REPORTED_LOG_SIZE, logRecords.length())).trim() + "\n[✂]",
+                            StandardCharsets.UTF_8));
+            putValue(URL_PROPERTY_KEY, extendedBugUrl);
+
+            // Force the use of InternalBrowse instead of CommandBrowse to avoid issues with shell escaping on some platforms (e.g. Linux).
+            // See https://github.com/mucommander/mucommander/issues/1417 for details on this workaround.
+            var internalBrowse = new InternalBrowse();
+            if (internalBrowse.isAvailable()) {
+                LOGGER.trace("Using InternalBrowse to open the bug report URL: {}", extendedBugUrl);
+                InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(),
+                        internalBrowse.execute(new java.net.URI(extendedBugUrl).toURL()));
+            } else {
+                LOGGER.debug("Using safe fallback to open the bug report URL: {}", url);
+                putValue(URL_PROPERTY_KEY, url);
+                // uses DesktopManager.browse() as safe fallback and opens the generic bug report URL without pre-filling the form.
+                super.performAction();
+            }
         } catch (Exception e) {
             LOGGER.error("Error while preparing a bug report, falling back to a generic one", e);
             putValue(URL_PROPERTY_KEY, url);
+            // uses DesktopManager.browse() as safe fallback and opens the generic bug report URL without pre-filling the form.
+            super.performAction();
         }
-        super.performAction();
     }
 
     public static class Descriptor extends AbstractActionDescriptor {

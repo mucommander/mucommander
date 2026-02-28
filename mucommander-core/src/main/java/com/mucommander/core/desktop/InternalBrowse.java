@@ -30,7 +30,7 @@ import com.mucommander.desktop.UrlOperation;
 /**
  * @author Nicolas Rinaudo
  */
-class InternalBrowse extends UrlOperation {
+public class InternalBrowse extends UrlOperation {
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Underlying desktop instance. */
