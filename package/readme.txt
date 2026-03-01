@@ -38,6 +38,7 @@ New features:
 - Added support for SMBv2 and SMBv3 protocols.
 - Added an optional lexicographical sorting mode for filenames in the file table.
 - Added support for the KAR (KAraf aRchive) file format.
+- We now provide native .deb, .rpm, and .tgz packages for AArch64 Linux systems.
 
 Improvements:
 - Shell configuration changes are now reflected immediately in the terminal.
