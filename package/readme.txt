@@ -38,11 +38,11 @@ New features:
 - Added support for SMBv2 and SMBv3 protocols.
 - Added an optional lexicographical sorting mode for filenames in the file table.
 - Added support for the KAR (KAraf aRchive) file format.
-- We now provide native .deb, .rpm, and .tgz packages for AArch64 Linux systems.
+- We now provide native .deb, .rpm, and .tgz packages for AArch64 (ARM64) Linux systems.
 
 Improvements:
 - Shell configuration changes are now reflected immediately in the terminal.
-- Custom command settings are now stored in YAML format instead of XML.
+- Custom commands are now stored in YAML instead of XML for easier manual configuration.
 - Enhanced "Open With" stability on macOS.
 - Reduced log noise by removing unnecessary stack-traces during the startup process.
 - Users can now provide paths with spaces as startup arguments on Linux.
