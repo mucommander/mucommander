@@ -85,6 +85,12 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(OSXDesktopAdapter.class);
 
     private static final String OPENER_COMMAND = "open $f";
+    /**
+     * we use AppleScript for opening URLs rather than the 'open' command since in recent macOS
+     * versions the latter always encodes the specified URL, even when it is already encoded
+     * see https://github.com/mucommander/mucommander/issues/1417
+     */
+    private static final String OPENER_LOCATION_COMMAND = "osascript -e open\\ location\\ \"$f\"";
     private static final String FINDER_COMMAND = "open -R $f";
     private static final String FINDER_NAME    = "Finder";
     // HINT: will work almost for every directory BUT NOT for /tmp on MacOS
@@ -121,7 +127,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         // Registers OS X specific commands.
         try {
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_OPENER_ALIAS,  OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
-            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new Command(CommandManager.URL_OPENER_ALIAS,   OPENER_LOCATION_COMMAND, CommandType.SYSTEM_COMMAND, null));
             CommandManager.registerDefaultCommand(new Command(CommandManager.FILE_MANAGER_ALIAS, FINDER_COMMAND, CommandType.SYSTEM_COMMAND, FINDER_NAME));
             CommandManager.registerDefaultCommand(new Command(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
 

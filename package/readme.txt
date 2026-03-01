@@ -61,6 +61,7 @@ Bug fixes:
 - Restored the ability to copy filenames, basenames, and full paths to the clipboard.
 - Fixed undesired beep and character when leaving Terminal with F12.
 - Fixed unstable file panel after dragging a file and dropping it on a separate application.
+- Fixed data encoding when launching the "Report a bug" action on macOS to ensure content displays properly.
 
 Known issues:
 - Some translations may not be up-to-date.
