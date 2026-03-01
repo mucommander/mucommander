@@ -32,7 +32,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import javax.swing.JComponent;
@@ -478,8 +477,9 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
     	if (this.treeVisible != treeVisible) {
 	        this.treeVisible = treeVisible;
 	        if (!treeVisible) {
-	            // save width of a tree panel
-	            oldTreeWidth = treeSplitPane.getDividerLocation();
+                // save width of a tree panel
+                oldTreeWidth = treeSplitPane.getDividerLocation();
+                fileTable.requestFocusInWindow();
 	        }
 	        foldersTreePanel.setVisible(treeVisible);
 	        // hide completely divider if a tree isn't visible
