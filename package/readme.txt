@@ -63,6 +63,7 @@ Bug fixes:
 - Fixed undesired beep and character when leaving Terminal with F12.
 - Fixed unstable file panel after dragging a file and dropping it on a separate application.
 - Fixed data encoding when launching the "Report a bug" action on macOS to ensure content displays properly.
+- Fixed occasional focus shifting to the opposite panel when hiding the Tree-view.
 
 Known issues:
 - Some translations may not be up-to-date.
