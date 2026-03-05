@@ -4,8 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-release:
-
+  init:
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
@@ -42,7 +41,7 @@ jobs:
           - arch: noarch
             os: macos-15
     runs-on: ${{ matrix.os }}
-    needs: create-release
+    needs: init
 
     steps:
       - uses: actions/checkout@v4
@@ -86,30 +85,30 @@ jobs:
           fi
 
       - name: Sign dmg
-        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
+        run: /usr/bin/codesign --entitlements package/osx/mucommander-entitlements --timestamp --options runtime --deep --force -s "${{ secrets.MACOS_IDENTITY }}"  "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg" -v
 
       - name: Notarize dmg
         run: |
-          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
+          xcrun notarytool submit  "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg" --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} --wait | tee output.log
           ID=$(grep 'id:' output.log | head -n 1 | awk '{print $2}')
           echo $ID
           xcrun notarytool log --apple-id ${{ secrets.MACOS_APPLE_ID }} --password ${{ secrets.MACOS_APP_SPECIFIC_PASSWORD }} --team-id ${{ secrets.MACOS_TEAM_ID }} $ID
           grep -vqz "status: Invalid" output.log
 
       - name: Staple dmg
-        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg"
+        run: xcrun stapler staple "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg"
 
       - name: Upload dmg
         uses: shogo82148/actions-upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-${{ matrix.arch }}.dmg"
+          upload_url: ${{ needs.init.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-${{ matrix.arch }}.dmg"
           asset_content_type: application/octet-stream
 
   upload-linux-artifacts:
 
     runs-on: ubuntu-latest
-    needs: create-release
+    needs: init
 
     steps:
       - uses: actions/checkout@v4
@@ -157,41 +156,41 @@ jobs:
           EOF
 
       - name: Sign rpm
-        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.x86_64.rpm"
+        run: rpmsign --key-id='Arik Hadas' --addsign "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}.x86_64.rpm"
 
       - name: Upload portable
         uses: shogo82148/actions-upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}-portable.zip"
+          upload_url: ${{ needs.init.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}-portable.zip"
           asset_content_type: application/zip
 
       - name: Upload tgz
         uses: shogo82148/actions-upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.tgz"
+          upload_url: ${{ needs.init.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}.tgz"
           asset_content_type: application/gzip
 
       - name: Upload deb
         uses: shogo82148/actions-upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander_${{ needs.create-release.outputs.version }}_amd64.deb"
+          upload_url: ${{ needs.init.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander_${{ needs.init.outputs.version }}_amd64.deb"
           asset_content_type: application/octet-stream
 
       - name: Upload rpm
         uses: shogo82148/actions-upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.full_version }}.x86_64.rpm"
+          upload_url: ${{ needs.init.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.full_version }}.x86_64.rpm"
           asset_content_type: application/octet-stream
 
 
   upload-windows-artifacts:
 
     runs-on: windows-latest
-    needs: create-release
+    needs: init
 
     steps:
       - uses: actions/checkout@v4
@@ -226,7 +225,7 @@ jobs:
       - name: Upload msi
         uses: shogo82148/actions-upload-release-asset@v1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.create-release.outputs.version }}.msi"
+          upload_url: ${{ needs.init.outputs.upload_url }}
+          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}.msi"
           asset_content_type: application/octet-stream
 
