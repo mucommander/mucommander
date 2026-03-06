@@ -23,7 +23,7 @@ Requirements
 
 It is recommended to install muCommander from a package that comes with Java Runtime
 Environment (JRE). The version of JRE that is included for macOS (dmg), Windows (msi) and
-Linux  (rpm / deb), in this version of muCommander is 24, 20, and 20, respectively.
+Linux  (rpm / deb), in this version of muCommander is 25.
 
 However, in case the included JRE is not supported on your machine, you can check the
 noarch-dmg, portable, or tgz packages that require Java 11+ to be installed separately.
