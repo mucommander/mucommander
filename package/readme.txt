@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.6.0
+muCommander v1.7.0
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -31,39 +31,20 @@ If you are having problems launching muCommander from these packages, make sure 
 environment variable points to the directory where your Java runtime is installed.
 
 
-What's new since v1.5.2 ?
+What's new since v1.6.0 ?
 -----------------------
 
 New features:
-- Added support for SMBv2 and SMBv3 protocols.
-- Added an optional lexicographical sorting mode for filenames in the file table.
-- Added support for the KAR (KAraf aRchive) file format.
-- We now provide native .deb, .rpm, and .tgz packages for AArch64 (ARM64) Linux systems.
+-
 
 Improvements:
-- Shell configuration changes are now reflected immediately in the terminal.
-- Custom commands are now stored in YAML instead of XML for easier manual configuration.
-- Enhanced "Open With" stability on macOS.
-- Reduced log noise by removing unnecessary stack-traces during the startup process.
-- Users can now provide paths with spaces as startup arguments on Linux.
-- The application icon and name now display correctly in the GNOME taskbar.
-- Updated the bundled Java Runtime Environment (JRE) to version 25.
-- Updated JediTerm version.
-- Updated RSyntaxTextArea.
+-
 
 Localization:
 -
 
 Bug fixes:
-- Updated the Windows installer to ensure the Start Menu group is set to 'muCommander'.
-- Fixed a bug that occasionally prevented the app from restarting after a forced exit or crash.
-- Timestamp comparisons for SFTP folders are now limited to second-level precision.
-- When copying files to Windows, invalid characters in filenames are now replaced with underscores.
-- Restored the ability to copy filenames, basenames, and full paths to the clipboard.
-- Fixed undesired beep and character when leaving Terminal with F12.
-- Fixed unstable file panel after dragging a file and dropping it on a separate application.
-- Fixed data encoding when launching the "Report a bug" action on macOS to ensure content displays properly.
-- Fixed occasional focus shifting to the opposite panel when hiding the Tree-view.
+-
 
 Known issues:
 - Some translations may not be up-to-date.
