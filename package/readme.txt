@@ -51,9 +51,6 @@ Improvements:
 - Updated JediTerm version.
 - Updated RSyntaxTextArea.
 
-Localization:
--
-
 Bug fixes:
 - Updated the Windows installer to ensure the Start Menu group is set to 'muCommander'.
 - Fixed a bug that occasionally prevented the app from restarting after a forced exit or crash.
