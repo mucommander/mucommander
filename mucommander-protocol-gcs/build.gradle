@@ -47,7 +47,7 @@ jar {
                 'Bundle-Description': 'Plugin for Google-Cloud Storage',
                 'Bundle-DocURL': 'https://www.mucommander.com',
                 'Export-Package': 'com.mucommander.commons.file.protocol.gcs',
-                'Import-Package': 'org.osgi.framework.*,com.mucommander.*,javax.swing.*,org.slf4j.*,javax.net.ssl.*',
+                'Import-Package': 'org.osgi.framework.*,com.mucommander.*,javax.swing.*,org.slf4j.*,javax.net.ssl.*,com.google.gson.stream',
                 'Bundle-Activator': 'com.mucommander.commons.file.protocol.gcs.Activator',
                 'Specification-Title': "muCommander",
                 'Specification-Vendor': "Arik Hadas",
