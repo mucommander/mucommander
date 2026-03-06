@@ -237,7 +237,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build msi
-        run: ./gradlew msi
+        run: ./gradlew -Parch=x86_64 msi
 
       - name: Upload msi
         uses: shogo82148/actions-upload-release-asset@v1
