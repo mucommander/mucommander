@@ -50,7 +50,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public abstract void write(byte b[]) throws IOException;
+    public abstract void write(byte[] b) throws IOException;
 
     /**
      * Writes <code>len</code> bytes from the specified byte array starting at offset <code>off</code> to this file.
@@ -61,7 +61,7 @@ public abstract class RandomAccessOutputStream extends OutputStream implements R
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public abstract void write(byte b[], int off, int len) throws IOException;
+    public abstract void write(byte[] b, int off, int len) throws IOException;
 
     /**
      * Sets the length of the file.

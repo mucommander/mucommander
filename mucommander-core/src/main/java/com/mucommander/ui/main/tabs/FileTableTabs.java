@@ -36,13 +36,13 @@ import com.mucommander.ui.tabs.TabFactory;
 public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements LocationListener {
 
 	/** FolderPanel containing those tabs */
-	private FolderPanel folderPanel;
+	private final FolderPanel folderPanel;
 
 	/** Factory of instances of FileTableTab */
-	private DefaultFileTableTabFactory defaultTabsFactory;
+	private final DefaultFileTableTabFactory defaultTabsFactory;
 
 	/** Factory of instances of FileTableTab */
-	private TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
+	private final TabFactory<FileTableTab, FileTableTab> clonedTabsFactory;
 
 	public FileTableTabs(MainFrame mainFrame, FolderPanel folderPanel, ConfFileTableTab[] initialTabs) {
 		super(new FileTableTabsWithoutHeadersViewerFactory(folderPanel), new FileTableTabsWithHeadersViewerFactory(mainFrame, folderPanel));
@@ -109,7 +109,7 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 	
 	@Override
 	protected FileTableTab removeTab() {
-		return !getCurrentTab().isLocked() ? super.removeTab() : null;
+		return getCurrentTab().isLocked() ? null : super.removeTab();
 	}
 	
 	/********************

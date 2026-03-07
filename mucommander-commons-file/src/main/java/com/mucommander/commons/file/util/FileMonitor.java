@@ -58,11 +58,11 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileMonitor.class);
 
     /** Monitored file */
-    private AbstractFile file;
+    private final AbstractFile file;
     /** Monitored attributes */
-    private int attributes;
+    private final int          attributes;
     /** Poll period in milliseconds, i.e. the time to elapse between two file attributes polls */
-    private long pollPeriod;
+    private final long         pollPeriod;
 
     /** The thread that actually does the file attributes polling and event firing */
     private Thread monitorThread;
@@ -74,7 +74,7 @@ public class FileMonitor implements FileMonitorConstants, Runnable {
     private boolean isInitialized;
 
     /** Registered FileChangeListener instances, stored as weak references */
-    private WeakHashMap<FileChangeListener, ?> listeners = new WeakHashMap<FileChangeListener, Object>();
+    private final WeakHashMap<FileChangeListener, ?> listeners = new WeakHashMap<>();
 
 
     /**

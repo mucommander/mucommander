@@ -20,7 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.util.Map;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.protocol.FileProtocols;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.ui.action.AbstractActionDescriptor;
 import com.mucommander.ui.action.ActionCategory;
@@ -107,8 +106,8 @@ public class CompareFoldersAction extends MuAction {
 
     private boolean isLessThanDate(long a, long b, boolean ignoreMs) {
         if (ignoreMs) {
-            a -= (a % 1000);
-            b -= (b % 1000);
+            a -= a % 1000;
+            b -= b % 1000;
         }
         return a < b;
     }

@@ -53,10 +53,10 @@ public class DeleteJob extends FileJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteJob.class);
 	
     /** Title used for error dialogs */
-    private String errorDialogTitle;
+    private final String errorDialogTitle;
 
     /** If true, files will be moved to the trash instead of being deleted */
-    private boolean moveToTrash;
+    private final boolean moveToTrash;
 
     /** Trash instance, null if moveToTrash is false */
     private AbstractTrash trash;
@@ -169,8 +169,8 @@ public class DeleteJob extends FileJob {
                 LOGGER.debug("IOException caught", e);
 
                 ret = showErrorDialog(errorDialogTitle,
-                                      Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
-                                      );
+                    Translator.get(file.isDirectory()?"cannot_delete_folder":"cannot_delete_file", file.getName())
+                );
                 // Retry loops
                 if(ret==FileJobAction.RETRY)
                     continue;
@@ -209,7 +209,7 @@ public class DeleteJob extends FileJob {
         if(archiveFile!=null && archiveFile.isArchive() && archiveFile.isWritable()) {
             while(true) {
                 try {
-                    archiveToOptimize = ((AbstractRWArchiveFile)archiveFile);
+                    archiveToOptimize = (AbstractRWArchiveFile)archiveFile;
                     isOptimizingArchive = true;
 
                     archiveToOptimize.optimizeArchive();

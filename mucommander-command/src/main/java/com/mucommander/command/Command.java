@@ -238,7 +238,7 @@ public class Command implements Comparable<Command> {
      * @return         the specified command's tokens after replacing keywords by the corresponding values from the specified files.
      */
     public String[] getTokens(String command, AbstractFile[] files) {
-        List<String> tokens = new Vector<String>(); // All tokens.
+        List<String> tokens = new Vector<>(); // All tokens.
         StringBuilder currentToken = new StringBuilder(command.length()); // Buffer for the current token.
         char[] buffer = command.toCharArray(); // All the characters that compose command.
         boolean isInQuotes = false; // Whether we're currently within quotes or not.
@@ -331,7 +331,7 @@ public class Command implements Comparable<Command> {
             tokens.add(currentToken.toString());
 
         // Empty commands are returned as an empty token rather than an empty array.
-        if(tokens.size() == 0)
+        if(tokens.isEmpty())
             return new String[] {""};
 
         return tokens.toArray(new String[tokens.size()]);
@@ -419,13 +419,13 @@ public class Command implements Comparable<Command> {
     }
 
     public boolean equals(Object object) {
-        if(object == null || !(object instanceof Command))
+        if(!(object instanceof Command))
             return false;
 
         Command cmd;
         cmd = (Command)object;
         return command.equals(cmd.command) && alias.equals(cmd.alias) && type == cmd.type &&
-               getDisplayName().equals(cmd.getDisplayName());
+            getDisplayName().equals(cmd.getDisplayName());
     }
 
     public int compareTo(Command command) {

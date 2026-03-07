@@ -55,10 +55,10 @@ public enum OsFamily {
     private static final Logger LOGGER = LoggerFactory.getLogger(OsFamily.class);
 
     /** The String representation of this RuntimeProperty, set at creation time */
-    protected final String stringRepresentation;
+	private final String stringRepresentation;
 
     /** Holds the OsFamily of the current runtime environment  */
-    private static OsFamily currentValue;
+    private static final OsFamily currentValue;
 
     /*
      * Determines the current value by parsing the corresponding system property. This method is called automatically

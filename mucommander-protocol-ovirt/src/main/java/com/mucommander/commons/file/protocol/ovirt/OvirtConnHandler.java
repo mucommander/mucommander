@@ -38,12 +38,12 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
  */
 public class OvirtConnHandler extends ConnectionHandler implements AutoCloseable {
 
-    private static Logger log = LoggerFactory.getLogger(OvirtConnHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(OvirtConnHandler.class);
 
     public final static int STANDARD_PORT = FileURL.getRegisteredHandler("ovirt").getStandardPort();
 
-    private FileURL location;
-    private OvirtClient client;
+    private final FileURL     location;
+    private       OvirtClient client;
 
     public Connection getConnection() throws IOException {
         return client.getConnection();

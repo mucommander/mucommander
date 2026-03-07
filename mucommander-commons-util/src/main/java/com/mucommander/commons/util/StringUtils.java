@@ -272,7 +272,7 @@ public final class StringUtils {
      * @param s the string array to flatten
      * @return the flattened string array
      */
-    public static String flatten(String s[]) {
+    public static String flatten(String[] s) {
         return flatten(s, " ");
     }
 
@@ -287,27 +287,23 @@ public final class StringUtils {
      * @param separator the String that separates each
      * @return the flattened string array
      */
-    public static String flatten(String s[], String separator) {
+    public static String flatten(String[] s, String separator) {
         if(s==null)
             return null;
 
         StringBuilder sb = new StringBuilder();
-        int sLen = s.length;
-        boolean first = true;
+		boolean first = true;
         String el;
 
-        for(int i=0; i<sLen; i++) {
-            el = s[i];
-            if (isNullOrEmpty(el))
-                continue;
+		for (String string : s) {
+			el = string;
+			if (isNullOrEmpty(el)) continue;
 
-            if(first)
-                first = false;
-            else
-                sb.append(separator);
+			if (first) first = false;
+			else sb.append(separator);
 
-            sb.append(el);
-        }
+			sb.append(el);
+		}
 
         return sb.toString();
     }

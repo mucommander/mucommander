@@ -34,7 +34,7 @@ public class ConfigurationEventTest {
     /** Test string value. */
     private static final String         STRING_VALUE  = "value";
     /** Test list value. */
-    private static final Vector<String> LIST_VALUE    = new Vector<String>();
+    private static final Vector<String> LIST_VALUE    = new Vector<>();
     /** Test integer value. */
     private static final int            INTEGER_VALUE = 10;
     /** Test long value. */
@@ -183,7 +183,7 @@ public class ConfigurationEventTest {
 
         // Makes sure unset values are returned as 0.
         event = new ConfigurationEvent(conf, VARIABLE_NAME, null);
-        assert false == event.getBooleanValue();
+        assert !event.getBooleanValue();
     }
 
 

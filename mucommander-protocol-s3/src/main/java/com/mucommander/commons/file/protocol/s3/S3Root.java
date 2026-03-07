@@ -46,7 +46,7 @@ import com.mucommander.commons.io.RandomAccessInputStream;
  */
 public class S3Root extends S3File {
 
-    private SimpleFileAttributes atts;
+    private final SimpleFileAttributes atts;
 
     /** Default permissions for the S3 root */
     private final static FilePermissions DEFAULT_PERMISSIONS = new SimpleFilePermissions(448);   // rwx------
@@ -93,10 +93,10 @@ public class S3Root extends S3File {
     @Override
     public AbstractFile[] ls() throws IOException {
         try {
-            org.jets3t.service.model.S3Bucket buckets[] = service.listAllBuckets();
+            org.jets3t.service.model.S3Bucket[] buckets = service.listAllBuckets();
             int nbBuckets = buckets.length;
 
-            AbstractFile bucketFiles[] = new AbstractFile[nbBuckets];
+            AbstractFile[] bucketFiles = new AbstractFile[nbBuckets];
             FileURL bucketURL;
             for(int i=0; i<nbBuckets; i++) {
                 bucketURL = (FileURL)fileURL.clone();

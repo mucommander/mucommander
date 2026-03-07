@@ -42,7 +42,7 @@ public interface BZip2Constants {
     int N_GROUPS = 6;
     int G_SIZE = 50;
     int N_ITERS = 4;
-    int MAX_SELECTORS = (2 + (900000 / G_SIZE));
+    int MAX_SELECTORS = 2 + (900000 / G_SIZE);
     int NUM_OVERSHOOT_BYTES = 20;
 
     /**

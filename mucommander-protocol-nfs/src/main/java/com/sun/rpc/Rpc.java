@@ -135,7 +135,7 @@ public class Rpc {
     
             call.xdr_int(prog);
             call.xdr_int(vers);
-            call.xdr_int(proto.equals("tcp") ? 6 : 17);
+            call.xdr_int("tcp".equals(proto) ? 6 : 17);
             call.xdr_int(0); // no port
     
             Xdr reply = pmap.rpc_call(call, 5 * 1000, 3);
@@ -160,7 +160,7 @@ public class Rpc {
             conn = Connection.getCache(server, port, proto);
     
             if (conn == null) {
-                if (proto.equals("tcp"))
+                if ("tcp".equals(proto))
                     conn = new ConnectSocket(server, port, maxReply);
                 else
                     conn = new ConnectDatagram(server, port, maxReply);

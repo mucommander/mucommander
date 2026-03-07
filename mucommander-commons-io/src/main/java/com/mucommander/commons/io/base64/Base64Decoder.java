@@ -56,19 +56,13 @@ public abstract class Base64Decoder {
             throw new IOException("Byte array length is not a multiple of 4");
         }
 
-        Base64InputStream bin = new Base64InputStream(new ByteArrayInputStream(b), table);
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        int i;
+		try (Base64InputStream bin = new Base64InputStream(new ByteArrayInputStream(b), table)) {
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			int i;
+			while ((i = bin.read()) != -1) bout.write(i);
 
-        try {
-            while((i=bin.read())!=-1)
-                bout.write(i);
-
-            return bout.toByteArray();
-        }
-        finally {
-            bin.close();
-        }
+			return bout.toByteArray();
+		}
     }
 
     /**
@@ -84,19 +78,14 @@ public abstract class Base64Decoder {
      * @throws java.io.IOException if the given String isn't properly Base64-encoded
      */
     public static String decode(String s, String encoding, Base64Table table) throws UnsupportedEncodingException, IOException {
-        InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(decodeAsBytes(s, table)), encoding);
-        StringBuffer sb = new StringBuffer();
-        int i;
 
-        try {
-            while((i=isr.read())!=-1)
-                sb.append((char)i);
+		try (InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(decodeAsBytes(s, table)), encoding)) {
+			StringBuilder sb = new StringBuilder();
+			int           i;
+			while ((i = isr.read()) != -1) sb.append((char) i);
 
-            return sb.toString();
-        }
-        finally {
-            isr.close();
-        }
+			return sb.toString();
+		}
     }
 
     /**

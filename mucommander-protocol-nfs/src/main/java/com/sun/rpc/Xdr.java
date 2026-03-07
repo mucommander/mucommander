@@ -37,8 +37,6 @@
 
 package com.sun.rpc;
 
-import java.io.*;
-
 /**
  * This class handles the marshalling/unmarshalling of
  * primitive data types into and out of a buffer.
@@ -60,9 +58,9 @@ import java.io.*;
  * @author Brent Callaghan
  */
 public class Xdr {
-    private static int XDRUNIT = 4;
-    private byte[] buf;
-    private int size, off, wrap_offset;
+    private static final int    XDRUNIT = 4;
+    private final        byte[] buf;
+    private        int    size, off, wrap_offset;
     int xid;
 
     /**
@@ -161,10 +159,10 @@ public class Xdr {
      * @return integer
      */
     public int xdr_int() {
-	return ((buf[off++] & 0xff) << 24 |
+	return (buf[off++] & 0xff) << 24 |
 	        (buf[off++] & 0xff) << 16 |
 	        (buf[off++] & 0xff) << 8  |
-	        (buf[off++] & 0xff));
+	        (buf[off++] & 0xff);
     }
 
     /**
@@ -188,10 +186,10 @@ public class Xdr {
      * @return long
      */
     public long xdr_u_int() {
-	return ((buf[off++] & 0xff) << 24 |
+	return (buf[off++] & 0xff) << 24 |
 	        (buf[off++] & 0xff) << 16 |
 	        (buf[off++] & 0xff) << 8  |
-	        (buf[off++] & 0xff));
+	        (buf[off++] & 0xff);
     }
 
     /**
@@ -215,14 +213,14 @@ public class Xdr {
      * @return long
      */
     public long xdr_hyper() {
-	return ((long)(buf[off++] & 0xff) << 56 |
+	return (long)(buf[off++] & 0xff) << 56 |
 	       	(long)(buf[off++] & 0xff) << 48 |
 	        (long)(buf[off++] & 0xff) << 40 |
 	        (long)(buf[off++] & 0xff) << 32 |
 	        (long)(buf[off++] & 0xff) << 24 |
 	        (long)(buf[off++] & 0xff) << 16 |
 	        (long)(buf[off++] & 0xff) << 8  |
-	        (long)(buf[off++] & 0xff));
+	        (long)(buf[off++] & 0xff);
     }
 
     /**
@@ -255,7 +253,7 @@ public class Xdr {
      * @return boolean
      */
     public boolean xdr_bool() {
-	return (xdr_int() != 0);
+	return xdr_int() != 0;
     }
 
     /**
@@ -273,7 +271,7 @@ public class Xdr {
      * @return float
      */
     public float xdr_float() {
-	return (Float.intBitsToFloat(xdr_int()));
+	return Float.intBitsToFloat(xdr_int());
     }
 
     /**
@@ -313,7 +311,7 @@ public class Xdr {
      * @return bytes
      */
     public byte[] xdr_bytes() {
-	return (xdr_raw(xdr_int()));
+	return xdr_raw(xdr_int());
     }
 
     /**

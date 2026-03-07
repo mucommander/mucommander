@@ -27,5 +27,5 @@ public enum DestinationType {
      * refered to as a regular file, i.e. without a trailing separator character in the path. */
     EXISTING_FILE,
     /** Designates a new file that doesn't exist on the filesystem. The file's parent however does always exist. */
-    NEW_FILE;
+    NEW_FILE
 }

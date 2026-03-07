@@ -40,8 +40,8 @@ public class SearchUtils {
     }
 
     public static String wildcardToRegex(String wildcard){
-        boolean convert = false;
-        StringBuffer s = new StringBuffer(wildcard.length());
+        boolean       convert = false;
+        StringBuilder s       = new StringBuilder(wildcard.length());
         for (int i = 0, is = wildcard.length(); i < is; i++) {
             char c = wildcard.charAt(i);
             switch(c) {

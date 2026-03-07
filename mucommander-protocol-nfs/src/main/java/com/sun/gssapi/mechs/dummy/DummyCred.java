@@ -119,7 +119,7 @@ public class DummyCred implements GSSCredSpi {
        		if (m_freed)
 			throw new GSSException(GSSException.NO_CRED);
 
-		return (m_myName);
+		return m_myName;
 	}
 
 
@@ -137,9 +137,9 @@ public class DummyCred implements GSSCredSpi {
 		
 		//return time based on usage
 		if (getUsage() == GSSCredential.ACCEPT_ONLY)
-			return (0);
+			return 0;
 		
-		return (m_initLifetime);
+		return m_initLifetime;
 	}
 
        	/**
@@ -157,9 +157,9 @@ public class DummyCred implements GSSCredSpi {
 
 		//take usage into account
 		if (getUsage() == GSSCredential.INITIATE_ONLY)
-			return (0);
+			return 0;
 		
-		return (m_acceptLifetime);
+		return m_acceptLifetime;
 	}
 
 
@@ -179,14 +179,12 @@ public class DummyCred implements GSSCredSpi {
 
 		//take usage into account, return minimum remaining time
 		if (getUsage() == GSSCredential.ACCEPT_ONLY)
-			return (m_acceptLifetime);
+			return m_acceptLifetime;
 		else if (getUsage() == GSSCredential.INITIATE_ONLY)
-			return (m_initLifetime);
+			return m_initLifetime;
 
-		if (m_initLifetime < m_acceptLifetime)
-			return (m_initLifetime);
+		return Math.min(m_initLifetime, m_acceptLifetime);
 
-		return (m_acceptLifetime);
 	}
 
 
@@ -202,7 +200,7 @@ public class DummyCred implements GSSCredSpi {
        		if (m_freed)
 			throw new GSSException(GSSException.NO_CRED);
 
-		return (m_usage);
+		return m_usage;
 	}
 
 	/**
@@ -211,7 +209,7 @@ public class DummyCred implements GSSCredSpi {
 	 */
 	public Oid getMechanism() {
 
-		return (Dummy.getMyOid());
+		return Dummy.getMyOid();
 	}
 
 

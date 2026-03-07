@@ -61,16 +61,16 @@ import com.mucommander.ui.text.FilePathField;
  */
 public class MkdirDialog extends FocusDialog implements ActionListener, ItemListener {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 	
-    private JTextField pathField;
+    private final JTextField pathField;
 
     private JCheckBox allocateSpaceCheckBox;
     private SizeChooser allocateSpaceChooser;
 
-    private JButton okButton;
+    private final JButton okButton;
 
-    private boolean mkfileMode;
+    private final boolean mkfileMode;
 
     // Dialog size constraints
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	

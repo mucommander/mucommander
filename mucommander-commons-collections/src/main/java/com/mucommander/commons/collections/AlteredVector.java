@@ -38,7 +38,7 @@ import java.util.WeakHashMap;
 public class AlteredVector<E> extends Vector<E> {
 
     /** Contains all registered listeners, stored as weak references */
-    private WeakHashMap<VectorChangeListener, Object> listeners = new WeakHashMap<VectorChangeListener, Object>();
+    private final WeakHashMap<VectorChangeListener, Object> listeners = new WeakHashMap<>();
 
 
     public AlteredVector() {

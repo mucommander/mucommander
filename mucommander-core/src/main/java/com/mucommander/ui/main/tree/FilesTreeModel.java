@@ -57,10 +57,10 @@ public class FilesTreeModel implements TreeModel, CachedDirectoryListener {
     private int cachingNum = 0;
 
     /** icon used to show that a children of a directory are being cached */
-    private SpinningDial spinningIcon = new SpinningDial(16, 16, false);
+    private final SpinningDial spinningIcon = new SpinningDial(16, 16, false);
 
     /** filter out the files that appear in the tree view */
-    private FileFilter filter;
+    private final FileFilter filter;
 
     public FilesTreeModel(FileFilter filter, FileComparator sort) {
         this.filter = filter;

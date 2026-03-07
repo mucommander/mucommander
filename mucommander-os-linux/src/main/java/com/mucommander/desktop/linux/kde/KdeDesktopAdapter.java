@@ -26,7 +26,6 @@ import com.mucommander.command.CommandManager;
 import com.mucommander.command.CommandType;
 import com.mucommander.desktop.DefaultDesktopAdapter;
 import com.mucommander.desktop.DesktopInitialisationException;
-import com.mucommander.desktop.TrashProvider;
 
 /**
  * @author Nicolas Rinaudo, Maxence Bernard
@@ -39,7 +38,7 @@ abstract class KdeDesktopAdapter extends DefaultDesktopAdapter {
     private int multiClickInterval;
 
     /** Key to the double-click interval value in the KDE configuration */
-    private String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
+    private final String DOUBLE_CLICK_CONFIG_KEY = "DoubleClickInterval";
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {

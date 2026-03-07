@@ -29,8 +29,8 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
  */
 public class OneDriveConnHandler extends ConnectionHandler implements AutoCloseable {
 
-    private String account;
-    private OneDriveClient client;
+    private final String         account;
+    private       OneDriveClient client;
 
     public OneDriveConnHandler(FileURL serverURL) {
         super(serverURL);

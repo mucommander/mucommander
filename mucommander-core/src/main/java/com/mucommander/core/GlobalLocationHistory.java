@@ -51,7 +51,7 @@ public class GlobalLocationHistory implements LocationListener {
 	private final static GlobalLocationHistory instance = new GlobalLocationHistory();
 	
 	/** Locations that were accessed */
-	private Set<FileURL> history = new LinkedHashSet<FileURL>();
+	private final Set<FileURL> history = new LinkedHashSet<>();
 	
 	/** Maximum number of location that would be saved */
 	private static final int MAX_CAPACITY = 100;
@@ -64,7 +64,7 @@ public class GlobalLocationHistory implements LocationListener {
 
 		// Restore the global history from last run
 		int nbLocations = snapshot.getIntegerVariable(MuSnapshot.getRecentLocationsCountVariable());
-    	for (int i=0; i<nbLocations; ++i) {
+    	for (int i=0; i<nbLocations; i++) {
             String filePath = snapshot.getVariable(MuSnapshot.getRecentLocationVariable(i));
             if (filePath == null) {
                 LOGGER.error("failed to restore recent location with index {}", i);
@@ -84,7 +84,7 @@ public class GlobalLocationHistory implements LocationListener {
 	 * 
 	 * @return Singleton instance of this class
 	 */
-	public static final GlobalLocationHistory Instance() {
+	public static GlobalLocationHistory Instance() {
 		return instance;
 	}
 

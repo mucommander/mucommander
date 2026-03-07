@@ -45,7 +45,7 @@ public class ColorPicker extends JButton implements ActionListener, AWTEventList
     private Robot robot;
     private boolean isActive;
 
-    private WeakHashMap<ColorChangeListener, ?> listeners = new WeakHashMap<ColorChangeListener, Object>();
+    private final WeakHashMap<ColorChangeListener, ?> listeners = new WeakHashMap<>();
 
     /** True if this component is supported (java.awt.Robot can be used) */
     private static boolean isSupported;

@@ -101,7 +101,7 @@ public class MessageProp {
      */
     public int getQOP() {
     
-        return (m_qop);
+        return m_qop;
     }
 
 
@@ -112,7 +112,7 @@ public class MessageProp {
      */
     public boolean getPrivacy() {
     
-        return (m_privacyState);
+        return m_privacyState;
     }
 
 
@@ -144,7 +144,7 @@ public class MessageProp {
      */
     public boolean isDuplicateToken() {
 
-        return (m_dupToken);
+        return m_dupToken;
     }
 
 
@@ -154,7 +154,7 @@ public class MessageProp {
      */
     public boolean isOldToken() {
 
-        return (m_oldToken);
+        return m_oldToken;
     }
 
 
@@ -164,7 +164,7 @@ public class MessageProp {
      */
     public boolean isUnseqToken() {
 
-        return (m_unseqToken);
+        return m_unseqToken;
     }
 
 
@@ -175,7 +175,7 @@ public class MessageProp {
      */
     public boolean isGapToken() {
 
-        return (m_gapToken);
+        return m_gapToken;
     }
 
 

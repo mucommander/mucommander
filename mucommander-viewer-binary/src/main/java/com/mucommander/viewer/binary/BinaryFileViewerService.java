@@ -48,7 +48,7 @@ public class BinaryFileViewerService implements FileViewerService, FileEditorSer
 
     @Override
     public CanOpen canOpenFile(AbstractFile file) {
-        return !file.isDirectory() ? CanOpen.YES : CanOpen.NO;
+        return file.isDirectory() ? CanOpen.NO : CanOpen.YES;
     }
 
     @Nonnull

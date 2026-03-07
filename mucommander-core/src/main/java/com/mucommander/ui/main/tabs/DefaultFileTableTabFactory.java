@@ -30,7 +30,7 @@ import com.mucommander.ui.tabs.TabFactory;
  */
 public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, FileURL> {
 
-	private FolderPanel folderPanel;
+	private final FolderPanel folderPanel;
 	
 	public DefaultFileTableTabFactory(FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
@@ -47,7 +47,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 	    return new DefaultFileTableTab(location, folderPanel, selectedFile);
 	}
 
-	class DefaultFileTableTab extends FileTableTab {
+	static class DefaultFileTableTab extends FileTableTab {
 		
 		/** The location presented in this tab */
 		private FileURL location;
@@ -59,7 +59,7 @@ public class DefaultFileTableTabFactory implements TabFactory<FileTableTab, File
 		private String title;
 		
 		/** History of accessed location within the tab */
-		private LocalLocationHistory locationHistory;
+		private final LocalLocationHistory locationHistory;
 
 		/** The file to select after listing {@link #location} */
 		private AbstractFile selectedFile;

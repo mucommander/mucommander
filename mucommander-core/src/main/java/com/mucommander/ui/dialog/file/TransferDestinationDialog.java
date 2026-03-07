@@ -71,18 +71,18 @@ import static com.mucommander.ui.dialog.file.FileCollisionDialog.FileCollisionAc
 public abstract class TransferDestinationDialog extends JobDialog implements ActionListener, DocumentListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferDestinationDialog.class);
 	
-    protected String errorDialogTitle;
-    private boolean enableTransferOptions;
+    protected     String  errorDialogTitle;
+    private final boolean enableTransferOptions;
 
-    private YBoxPanel mainPanel;
-    private FilePathField pathField;
-    private SpinningDial spinningDial;
+    private final YBoxPanel     mainPanel;
+    private final FilePathField pathField;
+    private final SpinningDial  spinningDial;
 
     private JComboBox<Enum<?>> fileExistsActionComboBox;
     private JCheckBox skipErrorsCheckBox;
-    private JCheckBox verifyIntegrityCheckBox;
-    private JCheckBox runInBackgroundCheckBox;
-    private JButton okButton;
+    private       JCheckBox verifyIntegrityCheckBox;
+    private final JCheckBox runInBackgroundCheckBox;
+    private final JButton   okButton;
 
     /** Background thread that is currently being executed, <code>null</code> if there is none. */
     private Thread thread;
@@ -92,7 +92,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     // Dialog width should not exceed 360, height is not an issue (always the same)
     protected final static Dimension MAXIMUM_DIALOG_DIMENSION = new Dimension(400,10000);
 
-    private final static FileCollisionDialog.FileCollisionAction DEFAULT_ACTIONS[] = {
+    private final static FileCollisionDialog.FileCollisionAction[] DEFAULT_ACTIONS = {
         FileCollisionDialog.FileCollisionAction.CANCEL,
         FileCollisionDialog.FileCollisionAction.SKIP,
         FileCollisionDialog.FileCollisionAction.OVERWRITE,
@@ -253,7 +253,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      * @return <code>true</code> if the given resolved destination is valid
      */
 	protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
-        return (resolvedDest!=null && (files.size()==1 || resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER));
+        return resolvedDest!=null && (files.size()==1 || resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER);
 	}
 
     /**
@@ -297,7 +297,7 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
      */
     private void textUpdated() {
         synchronized(this) {
-            if(thread!=null && thread instanceof InitialPathRetriever) {
+            if(thread instanceof InitialPathRetriever) {
                 // Interrupt InitialPathRetriever
                 interruptOngoingThread();
 

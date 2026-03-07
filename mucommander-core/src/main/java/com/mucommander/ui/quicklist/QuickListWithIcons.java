@@ -43,7 +43,7 @@ import com.mucommander.ui.quicklist.item.QuickListDataListWithIcons;
 
 public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	// This HashMap's keys are items and its objects are the corresponding icon.
-	private final HashMap<T, Icon> itemToIconCacheMap = new HashMap<T, Icon>();
+	private final HashMap<T, Icon> itemToIconCacheMap = new HashMap<>();
 	// This SpinningDial will appear until the icon fetching of an item is over.
 	private static final SpinningDial waitingIcon = new SpinningDial();
 	// If the icon fetching fails for some item, the following icon will appear for it. 
@@ -87,9 +87,9 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	
 	@Override
     protected QuickListDataList<T> getList() {
-		return new QuickListDataListWithIcons<T>(nextFocusableComponent()) {
+		return new QuickListDataListWithIcons<>(nextFocusableComponent()) {
 			@Override
-            public Icon getImageIconOfItem(T item,  final Dimension preferredSize) {
+			public Icon getImageIconOfItem(T item, final Dimension preferredSize) {
 				return getImageIconOfItemImp(item, preferredSize);
 			}
 		};
@@ -110,7 +110,7 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 	 * @return the specified file's icon. null is returned if the file does not exist
 	 */
 	protected Icon getIconOfFile(AbstractFile file) {
-		return (file != null && file.exists()) ?
+		return file != null && file.exists() ?
 			IconManager.getImageIcon(FileIcons.getFileIcon(file)) : null; 
 	}
 	
@@ -124,16 +124,13 @@ public abstract class QuickListWithIcons<T> extends QuickListWithDataList<T> {
 		Icon icon = itemToIconCacheMap.get(item);
 
 		if (icon == waitingIcon)
-			new Thread() {
-				@Override
-                public void run() {
-					Icon icon = itemToIcon(item);
-					// If the item does not exist or is not accessible, show notAvailableIcon for it.
-					itemToIconCacheMap.put(item, icon != null ? icon : notAvailableIcon);
-					waitingIconRemovedFromList();
-					repaint();
-				}
-			}.start();
+			new Thread(() -> {
+				Icon icon1 = itemToIcon(item);
+				// If the item does not exist or is not accessible, show notAvailableIcon for it.
+				itemToIconCacheMap.put(item, icon1 != null ? icon1 : notAvailableIcon);
+				waitingIconRemovedFromList();
+				repaint();
+			}).start();
 		
 		return resizeIcon(icon, preferredSize);
 	}

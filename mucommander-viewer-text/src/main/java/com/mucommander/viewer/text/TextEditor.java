@@ -225,22 +225,12 @@ class TextEditor extends BasicFileEditor implements DocumentListener, EncodingLi
 
     @Override
     protected void saveAs(AbstractFile destFile) throws IOException {
-        OutputStream out = null;
 
-        try {
-            out = destFile.getOutputStream();
-            write(out);
-        } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    // Ignored
-                }
-            }
-        }
+		try (OutputStream out = destFile.getOutputStream()) {
+			write(out);
+		}
 
-        // We get here only if the destination file was updated successfully
+		// We get here only if the destination file was updated successfully
         // so we can set that no further save is needed at this stage 
         setSaveNeeded(false);
 

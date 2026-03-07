@@ -43,7 +43,7 @@ public class IconManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IconManager.class);
 	
     /** Caches for the different icon sets */
-    private final static Map<String, ImageIcon> caches[];
+    private final static Map<String, ImageIcon>[] caches;
 
     /** Designates the file icon set */
     public final static int FILE_ICON_SET        = 0;
@@ -65,7 +65,7 @@ public class IconManager {
     /** Base folder of all images */
     private final static String BASE_IMAGE_FOLDER = "/images";
     /** Icon sets folders within the application's JAR file */
-    private final static String ICON_SET_FOLDERS[] = {
+    private final static String[] ICON_SET_FOLDERS = {
         BASE_IMAGE_FOLDER +"/file/",
         BASE_IMAGE_FOLDER +"/action/",
         BASE_IMAGE_FOLDER +"/status_bar/",
@@ -81,11 +81,11 @@ public class IconManager {
         // Initialize caches for icon sets that need it.
         // Icons which are displayed once in a while like preferences icons don't need to be cached
         caches = new Hashtable[ICON_SET_FOLDERS.length];
-        caches[FILE_ICON_SET]       = new Hashtable<String, ImageIcon>();
-        caches[ACTION_ICON_SET]     = new Hashtable<String, ImageIcon>();
-        caches[STATUS_BAR_ICON_SET] = new Hashtable<String, ImageIcon>();
-        caches[COMMON_ICON_SET]     = new Hashtable<String, ImageIcon>();
-        caches[PROGRESS_ICON_SET]   = new Hashtable<String, ImageIcon>();
+        caches[FILE_ICON_SET]       = new Hashtable<>();
+        caches[ACTION_ICON_SET]     = new Hashtable<>();
+        caches[STATUS_BAR_ICON_SET] = new Hashtable<>();
+        caches[COMMON_ICON_SET]     = new Hashtable<>();
+        caches[PROGRESS_ICON_SET]   = new Hashtable<>();
     }
 
 

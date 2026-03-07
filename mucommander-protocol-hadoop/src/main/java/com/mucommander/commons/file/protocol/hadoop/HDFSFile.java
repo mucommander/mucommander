@@ -43,7 +43,7 @@ public class HDFSFile extends HadoopFile {
     private static String DEFAULT_USERNAME;
 
     /** Default group */
-    private static String DEFAULT_GROUP;
+    private static final String DEFAULT_GROUP;
 
     /** Default file permissions */
     private final static FilePermissions DEFAULT_PERMISSIONS = new SimpleFilePermissions(
@@ -85,7 +85,7 @@ public class HDFSFile extends HadoopFile {
     private static String getUsername(FileURL url) {
         Credentials credentials = url.getCredentials();
         String username;
-        if(credentials==null||(username=credentials.getLogin()).equals(""))
+        if(credentials==null||"".equals(username=credentials.getLogin()))
             username = getDefaultUsername();
 
         return username;

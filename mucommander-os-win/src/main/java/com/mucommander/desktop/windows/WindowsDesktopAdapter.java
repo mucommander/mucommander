@@ -73,7 +73,7 @@ class WindowsDesktopAdapter extends DefaultDesktopAdapter {
         String extension = file.getExtension();
 
         // the isDirectory() test comes last as it is I/O bound
-        return extension!=null && extension.equalsIgnoreCase("exe") && !file.isDirectory();
+        return "exe".equalsIgnoreCase(extension) && !file.isDirectory();
     }
 
     @Override

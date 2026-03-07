@@ -34,7 +34,7 @@ class DebugProcessListener implements ProcessListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Command that this listener is monitoring. */
-    private String command;
+    private final String command;
 
 
 

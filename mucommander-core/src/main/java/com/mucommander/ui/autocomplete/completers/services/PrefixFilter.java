@@ -26,7 +26,7 @@ import java.util.Vector;
  */
 
 public class PrefixFilter {
-    private String prefix;
+    private final String prefix;
 
     private PrefixFilter(String prefix) {
         this.prefix = prefix!=null ? prefix.toLowerCase() : null;
@@ -57,13 +57,10 @@ public class PrefixFilter {
      * @return Vector of strings which start with this filter's prefix.
      */
     public Vector<String> filter(String[] strings) {
-        Vector<String> result = new Vector<String>();
-        int nbString = strings.length;
-        for (int i=0; i<nbString; i++) {
-            String stringI = strings[i];
-            if (accept(stringI))
-                result.add(stringI);
-        }
+        Vector<String> result = new Vector<>();
+		for (String stringI : strings) {
+			if (accept(stringI)) result.add(stringI);
+		}
         return result;
     }
 
@@ -74,7 +71,7 @@ public class PrefixFilter {
      * @return Vector of strings which start with this filter's prefix.
      */
     public Vector<String> filter(Vector<String> strings) {
-        Vector<String> result = new Vector<String>();
+        Vector<String> result = new Vector<>();
 
         for(String s : strings) {
             if (accept(s))

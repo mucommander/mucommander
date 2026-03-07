@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.filter.FileFilter;
 import com.mucommander.commons.file.filter.FilenameFilter;
 import com.mucommander.commons.file.protocol.local.LocalFile;
-import com.mucommander.commons.runtime.JavaVersion;
 
 /**
  * CachedFile is a ProxyFile that caches the return values of most {@link AbstractFile} getter methods. This allows
@@ -53,7 +52,7 @@ public class CachedFile extends ProxyFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(CachedFile.class);
 
     /** If true, AbstractFile instances returned by this class will be wrapped into CachedFile instances */
-    private boolean recurseInstances;
+    private final boolean recurseInstances;
 
     ///////////////////
     // Cached values //
@@ -145,7 +144,7 @@ public class CachedFile extends ProxyFile {
             // Resolve FileSystem class, 'getBooleanAttributes' method and fields
             Class<?> cFile = File.class;
             Class<?> cFileSystem = Class.forName("java.io.FileSystem");
-            mGetBooleanAttributes = cFileSystem.getDeclaredMethod("getBooleanAttributes", new Class [] {cFile});
+            mGetBooleanAttributes = cFileSystem.getDeclaredMethod("getBooleanAttributes", cFile);
             Field fBA_EXISTS = cFileSystem.getDeclaredField("BA_EXISTS");
             Field fBA_DIRECTORY = cFileSystem.getDeclaredField("BA_DIRECTORY");
             Field fBA_HIDDEN = cFileSystem.getDeclaredField("BA_HIDDEN");
@@ -196,7 +195,7 @@ public class CachedFile extends ProxyFile {
     /**
      * Creates a CachedFile instance for each of the AbstractFile instances in the given array.
      */
-    private AbstractFile[] createCachedFiles(AbstractFile files[]) {
+    private AbstractFile[] createCachedFiles(AbstractFile[] files) {
         return Stream.of(files).map(file -> new CachedFile(file, true)).toArray(CachedFile[]::new);
     }
 
@@ -482,7 +481,7 @@ public class CachedFile extends ProxyFile {
     @Override
     public AbstractFile[] ls() throws IOException, UnsupportedFileOperationException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
-        AbstractFile files[] = file.ls();
+        AbstractFile[] files = file.ls();
 
         if(recurseInstances)
             return createCachedFiles(files);
@@ -493,7 +492,7 @@ public class CachedFile extends ProxyFile {
     @Override
     public AbstractFile[] ls(FileFilter filter) throws IOException, UnsupportedFileOperationException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
-        AbstractFile files[] = file.ls(filter);
+        AbstractFile[] files = file.ls(filter);
 
         if(recurseInstances)
             return createCachedFiles(files);
@@ -504,7 +503,7 @@ public class CachedFile extends ProxyFile {
     @Override
     public AbstractFile[] ls(FilenameFilter filter) throws IOException, UnsupportedFileOperationException {
         // Don't cache ls() result but create a CachedFile instance around each of the files if recursion is enabled
-        AbstractFile files[] = file.ls(filter);
+        AbstractFile[] files = file.ls(filter);
 
         if(recurseInstances)
             return createCachedFiles(files);

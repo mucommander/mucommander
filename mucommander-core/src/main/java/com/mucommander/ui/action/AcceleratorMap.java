@@ -23,7 +23,6 @@ import com.mucommander.commons.util.Pair;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class AcceleratorMap {
 	}
     
     // Maps KeyStrokes to MuAction id and accelerator type (PRIMARY_ACCELERATOR/ALTERNATIVE_ACCELERATOR) pair.
-	private static Map<KeyStroke, List<Pair<ActionId, AcceleratorType>>> map = new HashMap<>();
+	private static final Map<KeyStroke, List<Pair<ActionId, AcceleratorType>>> map = new HashMap<>();
 
 	/**
 	 * Register KeyStroke to MuAction as primary accelerator.

@@ -39,7 +39,6 @@ package com.sun.nfs;
 
 import com.sun.xfile.*;
 import java.io.*;
-import java.net.*;
 
 /**
  * The XFileAccessor interface is implemented by filesystems that
@@ -328,11 +327,10 @@ class XFileAccessor implements com.sun.xfile.XFileAccessor {
      * @param foff the offset into the file
      * @exception java.io.IOException If an I/O error has occurred. 
      */ 
-    public int read(byte b[], int off, int len, long foff)
+    public int read(byte[] b, int off, int len, long foff)
         throws IOException {
 
-        int c = nfs.read(b, off, len, foff);
-        return c;
+        return nfs.read(b, off, len, foff);
     }
 
 
@@ -345,7 +343,7 @@ class XFileAccessor implements com.sun.xfile.XFileAccessor {
      * @param foff the offset into the file
      * @exception java.io.IOException If an I/O error has occurred.
      */
-    public void write(byte b[], int off, int len, long foff)
+    public void write(byte[] b, int off, int len, long foff)
         throws IOException {
 
         nfs.write(b, off, len, foff);

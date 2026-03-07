@@ -142,11 +142,11 @@ public final class DesktopManager {
     // - Class fields ----------------------------------------------------
     // -------------------------------------------------------------------
     /** All available desktop operations. */
-    private static Map<String, List<DesktopOperation>>[] operations;
+    private static final Map<String, List<DesktopOperation>>[] operations;
     /** All known desktops. */
-    private static Vector<DesktopAdapter>                desktops;
+    private static final Vector<DesktopAdapter>                desktops;
     /** Current desktop. */
-    private static DesktopAdapter                        desktop;
+    private static       DesktopAdapter                        desktop;
     /** Object used to create instances of {@link AbstractTrash}. */
     private static TrashProvider                         trashProvider;
     /** Default action shortcuts, never null (see {@link DefaultDesktopAdapter#getActionShortcuts()} */
@@ -168,7 +168,7 @@ public final class DesktopManager {
     static {
         // - Adapters initialisation -------------------------------------
         // ---------------------------------------------------------------
-        desktops = new Vector<DesktopAdapter>();
+        desktops = new Vector<>();
 
 
         // The default desktop adapter must be registered first, as we only want to use
@@ -269,14 +269,12 @@ public final class DesktopManager {
     private static void innerRegisterOperation(String type, int priority, DesktopOperation operation) {
         // Makes sure we have a container for operations of the specified priority.
         if(operations[priority] == null)
-            operations[priority] = new Hashtable<String, List<DesktopOperation>>();
+            operations[priority] = new Hashtable<>();
 
-        List<DesktopOperation> container = operations[priority].get(type);
+		List<DesktopOperation> container = operations[priority].computeIfAbsent(type, k -> new Vector<DesktopOperation>());
         // Makes sure we have a container for operations of the specified type.
-        if (container == null)
-            operations[priority].put(type, container = new Vector<DesktopOperation>());
 
-        // Creates the requested entry.
+		// Creates the requested entry.
         container.add(operation);
     }
 
@@ -301,7 +299,7 @@ public final class DesktopManager {
         List<DesktopOperation> container = getOperations(type, priority);
 
         // If the operation vector is null, no need to look further.
-        if((container ) != null)
+        if(container != null)
             for(int i = container.size() - 1; i >= 0; i--) {
                 DesktopOperation operation = container.get(i); 
                 if (operation.isAvailable())

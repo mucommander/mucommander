@@ -75,7 +75,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
     private final static Map<NotificationType, TrayIcon.MessageType> MESSAGE_TYPES;
 
     static {
-        MESSAGE_TYPES = new Hashtable<NotificationType, TrayIcon.MessageType>();
+        MESSAGE_TYPES = new Hashtable<>();
 
         MESSAGE_TYPES.put(NotificationType.JOB_COMPLETED, TrayIcon.MessageType.INFO);
         MESSAGE_TYPES.put(NotificationType.JOB_ERROR, TrayIcon.MessageType.ERROR);
@@ -115,7 +115,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
 
             // If System Tray has already been initialized
             if(trayIcon!=null) {
-                return (isEnabled = true);
+                return isEnabled = true;
             }
 
             SystemTray systemTray = SystemTray.getSystemTray();
@@ -152,12 +152,12 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
                 // Tray icon was added OK, listen to action events
                 trayIcon.addActionListener(this);
 
-                return (isEnabled = true);
+                return isEnabled = true;
             }
             catch(java.awt.AWTException e) {
                 trayIcon = null;
 
-                return (isEnabled = false);
+                return isEnabled = false;
             }
         }
         else {
@@ -169,7 +169,7 @@ public class SystemTrayNotifier extends AbstractNotifier implements ActionListen
                 trayIcon = null;
             }
 
-            return (isEnabled = false);
+            return isEnabled = false;
         }
     }
 

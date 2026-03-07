@@ -30,7 +30,7 @@ import com.mucommander.commons.file.filter.FileFilter;
  */
 
 public class FilteredFilesService extends FilesService {
-    private FileFilter fileFilter;
+    private final FileFilter fileFilter;
 
     public FilteredFilesService(FileFilter fileFilter) {
         this.fileFilter = fileFilter;

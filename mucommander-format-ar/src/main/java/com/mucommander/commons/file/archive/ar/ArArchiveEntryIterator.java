@@ -35,13 +35,13 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArArchiveEntryIterator.class);
 
     /** InputStream to the the archive file */
-    private InputStream in;
+    private final InputStream in;
 
     /** The current entry, where the stream is currently positionned */
     private ArchiveEntry currentEntry;
 
     /** GNU variant: extended filenames contained in the special // entry's data */
-    private byte gnuExtendedNames[];
+    private byte[] gnuExtendedNames;
 
 
     /**
@@ -66,7 +66,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
      * @throws IOException if an error occurred
      */
     ArchiveEntry getNextEntry() throws IOException {
-        byte fileHeader[] = new byte[60];
+        byte[] fileHeader = new byte[60];
 
         try {
             // Fully read the 60 file header bytes. If it cannot be read, it most likely means we've reached
@@ -85,7 +85,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             // and parse date as a long.
             // If the entry is the special // GNU one (see below), date is null and thus should not be parsed
             // (would throw a NumberFormatException)
-            long date = name.equals("//")?0:Long.parseLong(new String(fileHeader, 16, 12).trim()) * 1000;
+            long date = "//".equals(name)?0:Long.parseLong(new String(fileHeader, 16, 12).trim()) * 1000;
 
             // No use for file's Owner ID, Group ID and mode at the moment, skip them
 
@@ -97,7 +97,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             // in the file name field, and appending the real filename to the file header.
             if(name.startsWith("#1/")) {
                 // Read extended name
-                int extendedNameLength = Integer.parseInt(name.substring(3, name.length()));
+                int extendedNameLength = Integer.parseInt(name.substring(3));
                 name = new String(StreamUtils.readFully(in, new byte[extendedNameLength])).trim();
                 // Decrease remaining file size
                 size -= extendedNameLength;
@@ -106,7 +106,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             // this record is referred to by future headers. A header references an extended filename by storing a "/"
             // followed by a decimal offset to the start of the filename in the extended filename data section.
             // This entry appears first in the archive, i.e. before any other entries.
-            else if(name.equals("//")) {
+            else if("//".equals(name)) {
                 this.gnuExtendedNames = StreamUtils.readFully(in, new byte[(int)size]);
 
                 // Skip one padding byte if size is odd
@@ -118,7 +118,7 @@ class ArArchiveEntryIterator implements ArchiveEntryIterator {
             }
             // GNU variant: entry with an extended name, look up extended name in // entry
             else if(this.gnuExtendedNames!=null && name.startsWith("/")) {
-                int off = Integer.parseInt(name.substring(1, name.length()));
+                int off = Integer.parseInt(name.substring(1));
                 name = "";
                 byte b;
                 while((b=this.gnuExtendedNames[off++])!='/')

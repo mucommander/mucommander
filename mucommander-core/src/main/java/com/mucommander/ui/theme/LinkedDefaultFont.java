@@ -32,7 +32,7 @@ public class LinkedDefaultFont extends DefaultFont implements ThemeListener {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Identifier of the current theme font to default to. */
-    private int id;
+    private final int id;
 
 
 

@@ -54,6 +54,7 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
 
+@SuppressWarnings("UnnecessaryUnboxing")
 public class GoogleDriveFile extends ProtocolFile implements ConnectionHandlerFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveFile.class);
 

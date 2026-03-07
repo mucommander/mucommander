@@ -37,8 +37,6 @@
 
 package com.sun.rpc;
 
-import java.io.*;
-
 /**
  *  This is the "NONE" credential, i.e. no credential
  *  It's the default credential for RPC unless set

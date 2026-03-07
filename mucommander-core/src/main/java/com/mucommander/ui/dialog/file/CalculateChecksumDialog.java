@@ -52,7 +52,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.CalculateChecksumJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.CalculateChecksumAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
@@ -64,13 +63,13 @@ import com.mucommander.ui.text.FilePathField;
  */
 public class CalculateChecksumDialog extends JobDialog implements ActionListener, ItemListener {
 
-    private JComboBox<String> algorithmComboBox;
-    private JRadioButton specificLocationRadioButton;
-    private JTextField specificLocationTextField;
-    private JButton okButton;
+    private final JComboBox<String> algorithmComboBox;
+    private final JRadioButton      specificLocationRadioButton;
+    private final JTextField        specificLocationTextField;
+    private final JButton      okButton;
 
     /** An instance of all MessageDigest implementations */
-    private MessageDigest[] messageDigests;
+    private final MessageDigest[] messageDigests;
 
     /** Default checksum algorithm (most commonly used) */
     private final static String DEFAULT_ALGORITHM = "MD5";
@@ -96,11 +95,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         // Retrieve all MessageDigest instances and sort them by alphabetical order of their algorithm
 
         // Create a TreeSet with a custom Comparator
-        SortedSet<MessageDigest> algorithmSortedSet = new TreeSet<MessageDigest>(new Comparator<MessageDigest>() {
-                    public int compare(MessageDigest md1, MessageDigest md2) {
-                        return md1.getAlgorithm().compareTo(md2.getAlgorithm());
-                    }
-                });
+        SortedSet<MessageDigest> algorithmSortedSet = new TreeSet<>((md1, md2) -> md1.getAlgorithm().compareTo(md2.getAlgorithm()));
 
         // Add all MessageDigest to the TreeSet
         for(String algo : Security.getAlgorithms("MessageDigest")) {
@@ -167,7 +162,7 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
         JButton cancelButton = new JButton(Translator.get("cancel"));
 
         mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
-                DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
+            DialogToolkit.createOKCancelPanel(okButton, cancelButton, getRootPane(), this)));
 
         mainPanel.addSpace(3);
 
@@ -215,10 +210,10 @@ public class CalculateChecksumDialog extends JobDialog implements ActionListener
 
         algorithm = algorithm.toUpperCase();
 
-        if(algorithm.equals("SHA"))
+        if("SHA".equals(algorithm))
             return "SHA1SUMS";
 
-        if(algorithm.equals("CRC32"))
+        if("CRC32".equals(algorithm))
             return (files.size()==1?files.elementAt(0):files.getBaseFolder()).getName()+".sfv";
 
         return algorithm.replace("-", "")+"SUMS";

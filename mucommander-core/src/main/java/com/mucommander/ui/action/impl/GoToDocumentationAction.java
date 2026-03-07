@@ -78,7 +78,7 @@ public class GoToDocumentationAction extends OpenURLInBrowserAction implements P
 
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
-        if(propertyChangeEvent.getPropertyName().equals(TOPIC_PROPERTY_KEY)) {
+        if(TOPIC_PROPERTY_KEY.equals(propertyChangeEvent.getPropertyName())) {
             updateURL();
         }
     }

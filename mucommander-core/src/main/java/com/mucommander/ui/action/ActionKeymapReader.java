@@ -51,7 +51,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     private Map<ActionId, KeyStroke> alternateActionsReadKeymap;
 
     /** Parsed file */
-    private AbstractFile file;
+    private final AbstractFile file;
     
     /**
      * Loads the action file: loads the one contained in the JAR file first, and then the user's one.
@@ -156,8 +156,8 @@ class ActionKeymapReader extends ActionKeymapIO {
     public void startDocument() {
     	LOGGER.trace(file.getAbsolutePath()+" parsing started");
     	
-    	primaryActionsReadKeymap = new HashMap<ActionId, KeyStroke>();
-    	alternateActionsReadKeymap = new HashMap<ActionId, KeyStroke>();
+    	primaryActionsReadKeymap = new HashMap<>();
+    	alternateActionsReadKeymap = new HashMap<>();
     }
     
     @Override
@@ -167,7 +167,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-    	if(qName.equals(ACTION_ELEMENT)) {
+    	if(ACTION_ELEMENT.equals(qName)) {
     		// Retrieve the action id
     		ActionId actionId = ActionId.asGenericAction(attributes.getValue(ID_ATTRIBUTE));
     		// if id attribute not exits, read class attribute
@@ -190,7 +190,7 @@ class ActionKeymapReader extends ActionKeymapIO {
     		// Load the action's accelerators (if any)
     		processKeystrokeAttribute(actionId, attributes);
     	}
-    	else if (qName.equals(ROOT_ELEMENT)) {
+    	else if (ROOT_ELEMENT.equals(qName)) {
     		// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
             String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
     		

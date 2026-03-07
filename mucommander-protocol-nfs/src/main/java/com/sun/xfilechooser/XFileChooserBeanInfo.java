@@ -51,7 +51,7 @@ import java.util.ResourceBundle;
 public class XFileChooserBeanInfo extends SimpleBeanInfo {
 
     /* For I18N */
-    private static ResourceBundle rb =
+    private static final ResourceBundle rb =
 	ResourceBundle.getBundle("com.sun.xfilechooser.EditorResource"/*NOI18N*/); 
     PropertyDescriptor[] beanProps;
 
@@ -59,7 +59,7 @@ public class XFileChooserBeanInfo extends SimpleBeanInfo {
      * Properties that are modifiable via a bean editor during
      * customization
      */
-    private static Object xfBeanPropInits[][] = {
+    private static final Object[][] xfBeanPropInits = {
 	{rb.getString("Dialog Type"), "getDialogType", "setDialogType", DialogEditor.class},
 	{rb.getString("Dialog Title"), "getDialogTitle", "setDialogTitle", XFileChooser.class},
 	{rb.getString("File Selection Mode"), "getFileSelectionMode", "setFileSelectionMode", FileModeEditor.class},
@@ -96,13 +96,11 @@ public class XFileChooserBeanInfo extends SimpleBeanInfo {
     
     public java.awt.Image getIcon(int iconKind) {
 	if (iconKind == BeanInfo.ICON_COLOR_16x16) {
-	    java.awt.Image img = loadImage("images/422LOGO5_16x16.gif");
-	    return img;
+	    return loadImage("images/422LOGO5_16x16.gif");
 	}
 
 	if (iconKind == BeanInfo.ICON_MONO_32x32) {
-	    java.awt.Image img = loadImage("images/422LOGO5_32x32.gif");
-	    return img;
+	    return loadImage("images/422LOGO5_32x32.gif");
 	}
 	return null;
     }

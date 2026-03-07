@@ -29,7 +29,7 @@ import javax.swing.JComponent;
 public class TabWithoutHeaderViewer<T extends Tab> extends TabsViewer<T> {
 
 	/** The component to be displayed in the tab */
-	private JComponent component;
+	private final JComponent component;
 
 	public TabWithoutHeaderViewer(TabsCollection<T> tabs, JComponent component) {
 		super(component, tabs);

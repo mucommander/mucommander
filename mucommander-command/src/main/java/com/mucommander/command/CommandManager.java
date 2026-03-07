@@ -42,7 +42,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -101,7 +100,7 @@ public class CommandManager implements CommandBuilder {
     // - Commands definition ---------------------------------------------------
     // -------------------------------------------------------------------------
     /** All known commands. */
-    private static       Map<String, Command> commands;
+    private static final Map<String, Command> commands;
     /** Path to the custom commands XML file, <code>null</code> if the default one should be used. */
     private static       AbstractFile         commandsFile;
     /** Whether the custom commands have been modified since the last time they were saved. */
@@ -113,8 +112,7 @@ public class CommandManager implements CommandBuilder {
     /** Default command used when no other command is found for a specific file type. */
     private static       Command              defaultCommand;
 
-    private enum FORMAT { XML, YAML };
-
+    private enum FORMAT { XML, YAML }
 
     // - Initialization --------------------------------------------------------
     // -------------------------------------------------------------------------
@@ -189,7 +187,7 @@ public class CommandManager implements CommandBuilder {
         // Copy the registered commands to a new list
         List<Command> list = new Vector<>(commands.values());
         // Sorts the list.
-        Collections.sort(list);
+        list.sort(null);
         
         return list;
     }
@@ -204,7 +202,7 @@ public class CommandManager implements CommandBuilder {
     }
 
     private static void setDefaultCommand(Command command) {
-        if (defaultCommand == null && command.getAlias().equals(FILE_OPENER_ALIAS)) {
+        if (defaultCommand == null && FILE_OPENER_ALIAS.equals(command.getAlias())) {
             LOGGER.debug("Registering '" + command.getCommand() + "' as default command.");
             defaultCommand = command;
         }

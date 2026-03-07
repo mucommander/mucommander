@@ -27,13 +27,13 @@ import com.mucommander.commons.file.FileURL;
 public class BonjourService {
 
     /** the unqualified name of the service, e.g. 'foobar' */
-    private String name;
+    private final String name;
 
     /** the url pointing to the service's location */
-    private FileURL url;
+    private final FileURL url;
 
     /** the fully qualified name of the service, e.g. 'foobar._http._tcp.local' */
-    private String fullyQualifiedName;
+    private final String fullyQualifiedName;
 
 
     /**

@@ -82,7 +82,7 @@ public abstract class Fattr {
     boolean valid() {
         long timenow = System.currentTimeMillis();
 
-        return (timenow <= validtime + cachetime);
+        return timenow <= validtime + cachetime;
     }
         
     abstract void putFattr(Xdr x);

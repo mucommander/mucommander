@@ -84,10 +84,10 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     private static final Logger LOGGER = LoggerFactory.getLogger(DrivePopupButton.class);
 
     /** FolderPanel instance that contains this button */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     /** Current volumes */
-    private static AbstractFile volumes[];
+    private static AbstractFile[] volumes;
 
     /** static FileSystemView instance, has a (non-null) value only under Windows */
     private static FileSystemView fileSystemView;
@@ -96,7 +96,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     private static Map<AbstractFile, String> extendedNameCache;
 
     /** Caches drive icons */
-    private static Map<AbstractFile, Icon> iconCache = new Hashtable<AbstractFile, Icon>();
+    private static final Map<AbstractFile, Icon> iconCache = new Hashtable<>();
 
     /**
      * Filters out volumes from the list based on the exclude regexp defined in the configuration, null if the regexp is
@@ -105,12 +105,12 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
     private static PathFilter volumeFilter;
 
     /** ProtocolPanelProviders that we should make shortcuts for */
-    private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
+    private static final Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
 
     static {
         if (OsFamily.WINDOWS.isCurrent()) {
             fileSystemView = FileSystemView.getFileSystemView();
-            extendedNameCache = new Hashtable<AbstractFile, String>();
+            extendedNameCache = new Hashtable<>();
         }
 
         try {
@@ -268,7 +268,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         // Note: fileSystemView.getSystemDisplayName(java.io.File) is unfortunately very very slow
         String name = fileSystemView.getSystemDisplayName((java.io.File) localFile.getUnderlyingFileObject());
 
-        if (name == null || name.equals("")) // This happens for CD/DVD drives when they don't contain any disc
+        if (name == null || name.isEmpty()) // This happens for CD/DVD drives when they don't contain any disc
             return localFile.getName();
 
         return name;
@@ -314,7 +314,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         String volumeName;
 
         boolean useExtendedDriveNames = fileSystemView != null;
-        ArrayList<JMenuItem> itemsV = new ArrayList<JMenuItem>();
+        ArrayList<JMenuItem> itemsV = new ArrayList<>();
 
         for (int i = 0; i < nbVolumes; i++) {
             action = new OpenLocationAction(mainFrame, Collections.emptyMap(), volumes[i]) {
@@ -460,10 +460,10 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      * the main even thread. The popup menu gets first displayed with the short drive names, and then refreshed with the
      * extended names as they are retrieved.
      */
-    private class RefreshDriveNamesAndIcons extends Thread {
+    private static class RefreshDriveNamesAndIcons extends Thread {
 
-        private JPopupMenu popupMenu;
-        private ArrayList<JMenuItem> items;
+        private final JPopupMenu           popupMenu;
+        private final ArrayList<JMenuItem> items;
 
         public RefreshDriveNamesAndIcons(JPopupMenu popupMenu, ArrayList<JMenuItem> items) {
             super("RefreshDriveNamesAndIcons");
@@ -545,7 +545,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         String var = event.getVariable();
 
         // Update the button's icon if the system file icons policy has changed
-        if (var.equals(MuPreferences.USE_SYSTEM_FILE_ICONS))
+        if (MuPreferences.USE_SYSTEM_FILE_ICONS.equals(var))
             updateButton();
     }
 
@@ -572,7 +572,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      * This action pops up {@link com.mucommander.ui.dialog.server.ServerConnectDialog} for a specified protocol.
      */
     private class ServerConnectAction extends AbstractAction {
-        private Class<? extends ServerPanel> serverPanelClass;
+        private final Class<? extends ServerPanel> serverPanelClass;
 
         private ServerConnectAction(String label, Class<? extends ServerPanel> serverPanelClass) {
             super(label);

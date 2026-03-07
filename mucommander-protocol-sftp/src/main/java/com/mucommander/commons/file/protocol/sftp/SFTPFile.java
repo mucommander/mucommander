@@ -84,10 +84,10 @@ public class SFTPFile extends ProtocolFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(SFTPFile.class);
 
     /** The absolute path to the file on the remote server, not the full URL */
-    private String absPath;
+    private final String absPath;
 
     /** Contains the file attribute values */
-    private SFTPFileAttributes fileAttributes;
+    private final SFTPFileAttributes fileAttributes;
 
     /** Cached parent file instance, null if not created yet or if this file has no parent */
     private AbstractFile parent;
@@ -305,7 +305,7 @@ public class SFTPFile extends ProtocolFile {
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException {
-        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), (permission.toInt() << (access.toInt()*3)), enabled));
+        changePermissions(ByteUtils.setBit(getPermissions().getIntValue(), permission.toInt() << (access.toInt()*3), enabled));
     }
 
     @Override
@@ -381,7 +381,7 @@ public class SFTPFile extends ProtocolFile {
     @SuppressWarnings("unchecked")
     @Override
     public AbstractFile[] ls() throws IOException {
-        List<LsEntry> files = new ArrayList<LsEntry>();
+        List<LsEntry> files = new ArrayList<>();
         try (SFTPConnectionHandler connHandler = (SFTPConnectionHandler)ConnectionPool.getConnectionHandler(connHandlerFactory, fileURL, true)) {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
@@ -397,7 +397,7 @@ public class SFTPFile extends ProtocolFile {
         if(nbFiles==0)
             return new AbstractFile[] {};
 
-        AbstractFile children[] = new AbstractFile[nbFiles];
+        AbstractFile[] children = new AbstractFile[nbFiles];
         FileURL childURL;
         String filename;
         int fileCount = 0;
@@ -409,7 +409,7 @@ public class SFTPFile extends ProtocolFile {
         for (LsEntry file : files) {
             filename = file.getFilename();
             // Discard '.' and '..' files, dunno why these are returned
-            if (filename.equals(".") || filename.equals(".."))
+            if (".".equals(filename) || "..".equals(filename))
                 continue;
 
             childURL = (FileURL) fileURL.clone();
@@ -420,7 +420,7 @@ public class SFTPFile extends ProtocolFile {
 
         // Create new array of the exact file count
         if(fileCount<nbFiles) {
-            AbstractFile newChildren[] = new AbstractFile[fileCount];
+            AbstractFile[] newChildren = new AbstractFile[fileCount];
             System.arraycopy(children, 0, newChildren, 0, fileCount);
             return newChildren;
         }
@@ -634,7 +634,7 @@ public class SFTPFile extends ProtocolFile {
     static class SFTPFileAttributes extends SyncedFileAttributes {
 
         /** The URL pointing to the file whose attributes are cached by this class */
-        private FileURL url;
+        private final FileURL url;
 
         /** True if the file is a symlink */
         private boolean isSymlink;
@@ -770,7 +770,7 @@ public class SFTPFile extends ProtocolFile {
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             int nbRead = in.read(b, off, len);
 
             if(nbRead!=-1)

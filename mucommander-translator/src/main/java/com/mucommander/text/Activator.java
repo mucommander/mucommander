@@ -32,11 +32,11 @@ import com.mucommander.conf.MuPreference;
 public class Activator implements BundleActivator {
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
-    private static List<String> languageTags = Arrays.asList(
+    private static final List<String> languageTags = Arrays.asList(
             "ar","be","ca","cs","da","de","en","en-GB","es","fr", "it", "hu","ja","ko","nb","nl","pl","pt-BR","ro","ru","sk","sl","sv","tr","uk","zh-CN","zh-TW");
 
-    private static Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
-    private ServiceRegistration<TranslationService> serviceRegistration;
+    private static final Utf8ResourceBundleControl               utf8ResourceBundleControl = new Utf8ResourceBundleControl();
+    private              ServiceRegistration<TranslationService> serviceRegistration;
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -187,7 +187,7 @@ public class Activator implements BundleActivator {
          * @return A {@code Map} containing all the values that have been resolved
          */
         private static Map<String, String> resolve(final ResourceBundle resourceBundle) {
-            final Map<String, String> result = new HashMap<String, String>();
+            final Map<String, String> result = new HashMap<>();
             for (final Enumeration<String> enumeration = resourceBundle.getKeys(); enumeration.hasMoreElements(); ) {
                 final String key = enumeration.nextElement();
                 ResolveVariableResourceBundle.resolve(key, resourceBundle, result);

@@ -11,7 +11,7 @@ import com.dropbox.core.DbxWebAuth;
 import com.dropbox.core.TokenAccessType;
 
 public class PkceAuthorize {
-	private DbxPKCEWebAuth pkceWebAuth;
+	private final DbxPKCEWebAuth pkceWebAuth;
 
 	public PkceAuthorize(DbxAppInfo appInfo) {
 		DbxRequestConfig requestConfig = new DbxRequestConfig("examples-authorize");

@@ -52,12 +52,12 @@ public class XRandomAccessFile implements DataOutput, DataInput {
 
     private long fp;	/* File Pointer */
 
-    private boolean readOnly;
+    private final boolean readOnly;
 
     /*
      * File Accessor that implements the underlying filesystem
      */
-    private XFileAccessor xfa;
+    private final XFileAccessor xfa;
 
 
     /**
@@ -79,9 +79,9 @@ public class XRandomAccessFile implements DataOutput, DataInput {
     public XRandomAccessFile(XFile xf, String mode) throws IOException {
 
 
-        if (! (mode.equals("r") || mode.equals("rw")))
+        if (! ("r".equals(mode) || "rw".equals(mode)))
             throw new IllegalArgumentException("mode must be r or rw");
-        readOnly = mode.equals("r");
+        readOnly = "r".equals(mode);
         xfa = xf.newAccessor();
         xfa.open(xf, false, readOnly);
 
@@ -121,7 +121,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
 
     // 'Read' primitives
     
-    private int XFAread(byte b[], int off, int len) throws IOException {
+    private int XFAread(byte[] b, int off, int len) throws IOException {
 
         if (b == null)
             throw new NullPointerException();
@@ -152,7 +152,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
         byte[] b = new byte[1];
 
         if (XFAread(b, 0, 1) != 1)
-            return (-1);
+            return -1;
 
         return b[0] & 0xff;
     }
@@ -170,7 +170,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      *             the end of the file has been reached.
      * @exception  java.io.IOException  if an I/O error occurs.
      */
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
 	return XFAread(b, off, len);
     }
 
@@ -185,7 +185,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      *             the end of this file has been reached.
      * @exception  java.io.IOException  if an I/O error occurs.
      */
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
 	return XFAread(b, 0, b.length);
     }
 
@@ -199,7 +199,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      *             the end before reading all the bytes.
      * @exception  java.io.IOException if an I/O error occurs.
      */
-    public final void readFully(byte b[]) throws IOException {
+    public final void readFully(byte[] b) throws IOException {
 	readFully(b, 0, b.length);
     }
 
@@ -215,7 +215,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      *             end before reading all the bytes.
      * @exception  java.io.IOException   if an I/O error occurs.
      */
-    public final void readFully(byte b[], int off, int len)
+    public final void readFully(byte[] b, int off, int len)
         throws IOException {
 
         if (XFAread(b, off, len) < len)
@@ -247,7 +247,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
 
     // 'Write' primitives
 
-    private void XFAwrite(byte b[], int off, int len)
+    private void XFAwrite(byte[] b, int off, int len)
         throws IOException {
 
         if (b == null)
@@ -283,7 +283,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      * @param len the number of bytes that are written
      * @exception java.io.IOException If an I/O error has occurred.
      */
-    private void writeBytes(byte b[], int off, int len)
+    private void writeBytes(byte[] b, int off, int len)
         throws IOException {
 
         XFAwrite(b, off, len);
@@ -297,7 +297,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      * @param      b   the data.
      * @exception  java.io.IOException  if an I/O error occurs.
      */
-    public void write(byte b[]) throws IOException {
+    public void write(byte[] b) throws IOException {
 	writeBytes(b, 0, b.length); 
     }
 
@@ -311,7 +311,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      * @param      len   the number of bytes to write.
      * @exception  java.io.IOException  if an I/O error occurs.
      */
-    public void write(byte b[], int off, int len) throws IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
 	writeBytes(b, off, len);
     }
 
@@ -405,7 +405,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
 	int ch = this.read();
 	if (ch < 0)
 	    throw new EOFException();
-	return (ch != 0);
+	return ch != 0;
     }
 
 
@@ -563,7 +563,7 @@ public class XRandomAccessFile implements DataOutput, DataInput {
 	int ch4 = this.read();
 	if ((ch1 | ch2 | ch3 | ch4) < 0)
 	     throw new EOFException();
-	return ((ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0));
+	return (ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4 << 0);
     }
 
 
@@ -664,8 +664,8 @@ public class XRandomAccessFile implements DataOutput, DataInput {
      * @exception  java.io.IOException  if an I/O error occurs.
      */
     public final String readLine() throws IOException {
-	StringBuffer input = new StringBuffer();
-	int c;
+	StringBuilder input = new StringBuilder();
+	int           c;
 
 	while (((c = read()) != -1) && (c != '\n')) {
 	    input.append((char)c);

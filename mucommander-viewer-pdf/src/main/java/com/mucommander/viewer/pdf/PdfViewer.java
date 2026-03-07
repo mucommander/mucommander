@@ -36,8 +36,8 @@ import javax.swing.JMenuBar;
  */
 public class PdfViewer implements FileViewer {
 
-    private SwingController controller;
-    private SwingViewBuilder factory;
+    private final SwingController  controller;
+    private final SwingViewBuilder factory;
     
     private ViewerPresenter presenter;
 

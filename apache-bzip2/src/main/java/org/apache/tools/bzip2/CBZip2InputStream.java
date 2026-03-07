@@ -45,6 +45,8 @@ import java.io.InputStream;
  */
 public class CBZip2InputStream extends InputStream implements BZip2Constants {
 
+    private static final String UNEXPECTED_END_OF_STREAM = "unexpected end of stream";
+
     /**
      * Index of the last char in the block, so the block size == last + 1.
      */
@@ -203,7 +205,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
             dest[destOffs++] = (byte) b;
         }
 
-        return (destOffs == offs) ? -1 : (destOffs - offs);
+        return destOffs == offs ? -1 : (destOffs - offs);
     }
 
     private void makeMaps() {
@@ -421,7 +423,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                 int thech = inShadow.read();
 
                 if (thech < 0) {
-                    throw new IOException("unexpected end of stream");
+                    throw new IOException(UNEXPECTED_END_OF_STREAM);
                 }
 
                 bsBuffShadow = (bsBuffShadow << 8) | thech;
@@ -443,7 +445,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
             int thech = this.in.read();
 
             if (thech < 0) {
-                throw new IOException("unexpected end of stream");
+                throw new IOException(UNEXPECTED_END_OF_STREAM);
             }
 
             bsBuffShadow = (bsBuffShadow << 8) | thech;
@@ -695,7 +697,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                             bsBuffShadow = (bsBuffShadow << 8) | thech;
                             bsLiveShadow += 8;
                         } else {
-                            throw new IOException("unexpected end of stream");
+                            throw new IOException(UNEXPECTED_END_OF_STREAM);
                         }
                     }
                     int zvec = (bsBuffShadow >> (bsLiveShadow - zn)) & ((1 << zn) - 1);
@@ -709,7 +711,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                                 bsBuffShadow = (bsBuffShadow << 8) | thech;
                                 bsLiveShadow += 8;
                             } else {
-                                throw new IOException("unexpected end of stream");
+                                throw new IOException(UNEXPECTED_END_OF_STREAM);
                             }
                         }
                         bsLiveShadow--;
@@ -773,7 +775,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                         bsBuffShadow = (bsBuffShadow << 8) | thech;
                         bsLiveShadow += 8;
                     } else {
-                        throw new IOException("unexpected end of stream");
+                        throw new IOException(UNEXPECTED_END_OF_STREAM);
                     }
                 }
                 int zvec = (bsBuffShadow >> (bsLiveShadow - zn)) & ((1 << zn) - 1);
@@ -787,7 +789,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                             bsBuffShadow = (bsBuffShadow << 8) | thech;
                             bsLiveShadow += 8;
                         } else {
-                            throw new IOException("unexpected end of stream");
+                            throw new IOException(UNEXPECTED_END_OF_STREAM);
                         }
                     }
                     bsLiveShadow--;
@@ -822,7 +824,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
                     bsBuffShadow = (bsBuffShadow << 8) | thech;
                     bsLiveShadow += 8;
                 } else {
-                    throw new IOException("unexpected end of stream");
+                    throw new IOException(UNEXPECTED_END_OF_STREAM);
                 }
             }
             bsLiveShadow--;
@@ -886,7 +888,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
             } else {
                 this.su_rNToGo--;
             }
-            this.su_ch2 = su_ch2Shadow ^= (this.su_rNToGo == 1) ? 1 : 0;
+            this.su_ch2 = su_ch2Shadow ^= this.su_rNToGo == 1 ? 1 : 0;
             this.su_i2++;
             this.currentChar = su_ch2Shadow;
             this.currentState = RAND_PART_B_STATE;
@@ -1032,7 +1034,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
          * avoid unnecessary memory allocation when compressing small
          * files.
          */
-        final int[] initTT(int length) {
+		int[] initTT(int length) {
             int[] ttShadow = this.tt;
 
             // tt.length should always be >= length, but theoretically

@@ -152,7 +152,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider implements
 
         List<KeyStroke> keys = Stream.of(accelerator, alternateAccelerator).filter(Objects::nonNull).collect(Collectors.toList());
 
-        return !keys.isEmpty() ? new TerminalActionPresentation(Translator.get(name), keys) : null;
+        return keys.isEmpty() ? null : new TerminalActionPresentation(Translator.get(name), keys);
     }
 
     private TerminalActionPresentation overrideName(TerminalActionPresentation action, String key) {

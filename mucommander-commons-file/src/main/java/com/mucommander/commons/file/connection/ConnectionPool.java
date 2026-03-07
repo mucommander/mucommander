@@ -37,10 +37,10 @@ public class ConnectionPool implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionPool.class);
 
     /** Singleton instance */
-    private static ConnectionPool instance = new ConnectionPool();
+    private static final ConnectionPool instance = new ConnectionPool();
 
     /** List of registered ConnectionHandler */
-    private final static List<ConnectionHandler> connectionHandlers = new ArrayList<ConnectionHandler>();
+    private final static List<ConnectionHandler> connectionHandlers = new ArrayList<>();
 
     /** The thread that monitors connections, null if there currently is no registered ConnectionHandler */
     private static Thread monitorThread;
@@ -134,7 +134,7 @@ public class ConnectionPool implements Runnable {
      */
     public static List<ConnectionHandler> getConnectionHandlersSnapshot() {
     	synchronized (connectionHandlers) {
-    		return new ArrayList<ConnectionHandler>(connectionHandlers);
+    		return new ArrayList<>(connectionHandlers);
     	}
     }
     
@@ -235,7 +235,7 @@ public class ConnectionPool implements Runnable {
      */
     private static class CloseConnectionThread extends Thread {
 
-        private ConnectionHandler connHandler;
+        private final ConnectionHandler connHandler;
 
         private CloseConnectionThread(ConnectionHandler connHandler) {
             this.connHandler = connHandler;

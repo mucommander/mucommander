@@ -28,10 +28,10 @@ import java.net.MalformedURLException;
  */
 public class TestFile extends DummyFile {
     
-    private boolean directory;
-    private long size;
-    private long date;
-    private AbstractFile parent;
+    private final boolean directory;
+    private final long    size;
+    private final long    date;
+    private final AbstractFile parent;
 
     public TestFile(String name, boolean directory, long size, long date, AbstractFile parent) throws MalformedURLException {
         super(FileURL.getFileURL(name));

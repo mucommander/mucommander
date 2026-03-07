@@ -48,7 +48,7 @@ import com.mucommander.conf.PlatformManager;
  * @author Arik Hadas
  */
 public class OneDriveClient implements Closeable {
-    private static Logger LOGGER = LoggerFactory.getLogger(OneDriveClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OneDriveClient.class);
 
     private static final String CLIENT_ID = "";
     private static final String TENANT_ID = "";
@@ -56,9 +56,9 @@ public class OneDriveClient implements Closeable {
     private static final String AUTHORITY_HOST = "https://login.microsoftonline.com/common/oauth2/v2.0";
     private static final Set<String> SCOPE = new HashSet<>(Arrays.asList("User.Read", "Files.ReadWrite"));
 
-    private GraphServiceClient<?> graphClient;
-    private String account;
-    private String token;
+    private       GraphServiceClient<?> graphClient;
+    private final String                account;
+    private       String                token;
 
     public OneDriveClient(String account) {
         this.account = account;

@@ -26,7 +26,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import javax.swing.JFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
@@ -63,7 +62,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
     // The following constants are used to compute the proper position of a new MainFrame.
 
     /** MainFrame (main muCommander window) instances */
-    private List<MainFrame> mainFrames;
+    private final List<MainFrame> mainFrames;
     
     /** MainFrame currently being used (that has focus),
      * or last frame to have been used if muCommander doesn't have focus */	
@@ -103,7 +102,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
      * Creates a new instance of WindowManager.
      */
     private WindowManager() {
-        mainFrames = new Vector<MainFrame>();
+        mainFrames = new Vector<>();
 
         // Notifies Swing that look&feels must be loaded as extensions.
         // This is necessary to ensure that look and feels placed in the extensions folder
@@ -297,9 +296,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             currentThread.setContextClassLoader(oldLoader);
 
             mainFrames.forEach(MainFrame::updateFileTablesHeaderRenderer);
-            mainFrames.forEach(e -> {
-                SwingUtilities.updateComponentTreeUI(e.getJFrame());
-            });
+            mainFrames.forEach(e ->
+                SwingUtilities.updateComponentTreeUI(e.getJFrame()));
         }
         catch(Throwable e) {
             LOGGER.debug("Exception caught", e);
@@ -369,20 +367,18 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             if(nbFrames==1) {
                 mainFrames.get(0).updateWindowTitle();
             }
-            else {
-                if(frameIndex!=-1) {
-                    for(int i=frameIndex; i<nbFrames; i++)
-                        mainFrames.get(i).updateWindowTitle();
-                }
+            else if(frameIndex!=-1) {
+                for(int i=frameIndex; i<nbFrames; i++)
+                    mainFrames.get(i).updateWindowTitle();
             }
         }
 
         // Test if there is at least one MainFrame still showing
-        if(mainFrames.size()>0)
+        if(!mainFrames.isEmpty())
             return;
 
         // Test if there is at least one window (viewer, editor...) still showing
-        Frame frames[] = Frame.getFrames();
+        Frame[] frames = Frame.getFrames();
         int nbFrames = frames.length;
         Frame frame;
         for(int i=0; i<nbFrames; i++) {
@@ -419,7 +415,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
 
     	// /!\ font.size is set after font.family in AppearancePrefPanel
     	// that's why we only listen to this one in order not to change Font twice
-    	if (var.equals(MuPreferences.LOOK_AND_FEEL)) {
+    	if (MuPreferences.LOOK_AND_FEEL.equals(var)) {
     		String lnfName = event.getValue();
 
     		if(!UIManager.getLookAndFeel().getClass().getName().equals(lnfName))

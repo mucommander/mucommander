@@ -112,7 +112,7 @@ public class TransferableFileSet implements Transferable {
     public TransferableFileSet(FileSet fileSet) {
         this.fileSet = fileSet;
         var baseFolder = fileSet.getBaseFolder();
-        if (baseFolder != null && baseFolder.getURL().getScheme().equals(LocalFile.SCHEMA)) {
+        if (baseFolder != null && LocalFile.SCHEMA.equals(baseFolder.getURL().getScheme())) {
             javaFileListFlavorSupported = true;
         } else {
             fileSetFlavorSupported = true;
@@ -384,7 +384,7 @@ public class TransferableFileSet implements Transferable {
             AbstractFile file;
             for(int i=0; i<nbFiles; i++) {
                 file = fileSet.elementAt(i);
-                String url = file.getURL().getScheme().equals(LocalFile.SCHEMA)
+                String url = LocalFile.SCHEMA.equals(file.getURL().getScheme())
                     // Use java.io.File.toURI() for local files (e.g. file:/mnt/music), this is the format expected by
                     // Gnome/Nautilus.
                     ?new File(file.getAbsolutePath()).toURI().toString()

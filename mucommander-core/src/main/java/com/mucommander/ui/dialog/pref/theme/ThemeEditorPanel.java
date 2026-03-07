@@ -53,13 +53,13 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Edited theme data. */
-    protected ThemeData                      themeData;
+    protected     ThemeData                      themeData;
     /** Holds references to listeners to prevent them from being garbage collected. */
-    private   java.util.List<ChangeListener> listenerReferences = new Vector<ChangeListener>();
+    private final java.util.List<ChangeListener> listenerReferences = new Vector<>();
     /** Font used to display caption labels. */
-    private   Font                           captionLabelFont;
+    private       Font                           captionLabelFont;
     /** Color used to display caption labels. */
-    private   Color                           captionTextColor = new Color(48, 48, 48);
+    private final Color captionTextColor = new Color(48, 48, 48);
 
 
 
@@ -263,11 +263,11 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Theme data in which to update the font when it changes. */
-        private ThemeData data;
+        private final ThemeData data;
         /** Identifier of the font we're listening on. */
-        private int       fontId;
+        private final int       fontId;
         /** Parent dialog of this panel **/
-        private PreferencesDialog dialog;
+        private final PreferencesDialog dialog;
 
 
         // - Initialisation --------------------------------------------------------------
@@ -305,7 +305,7 @@ abstract class ThemeEditorPanel extends PreferencesPanel {
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Component to update when the font has changed. */
-        private JComponent preview;
+        private final JComponent preview;
 
 
 

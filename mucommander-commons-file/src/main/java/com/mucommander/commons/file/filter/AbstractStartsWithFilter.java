@@ -27,7 +27,7 @@ import com.mucommander.commons.util.StringUtils;
 public class AbstractStartsWithFilter extends AbstractStringCriterionFilter {
 
     /** The string to match against criterion values */
-    private String s;
+    private final String s;
 
     /**
      * Creates a new <code>AbstractStartsWithFilter</code> using the specified generator and string, and operating in the

@@ -257,7 +257,7 @@ public abstract class ConnectionHandler {
      * @see Credentials#equals(Object, boolean)
      */
     public boolean equals(Object o) {
-        if(o==null || !(o instanceof ConnectionHandler))
+        if(!(o instanceof ConnectionHandler))
             return false;
 
         ConnectionHandler connHandler = (ConnectionHandler)o;

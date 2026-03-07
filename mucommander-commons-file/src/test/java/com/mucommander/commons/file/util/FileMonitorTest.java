@@ -73,18 +73,13 @@ public class FileMonitorTest implements FileMonitorConstants {
     public void testSizeAttribute() throws IOException {
         setUp(SIZE_ATTRIBUTE);
 
-        RandomAccessOutputStream raos = file.getRandomAccessOutputStream();
-        try {
-            raos.setLength(10);
+		try (RandomAccessOutputStream raos = file.getRandomAccessOutputStream()) {
+			raos.setLength(10);
 
-            assert hasAttributeChanged(SIZE_ATTRIBUTE);
+			assert hasAttributeChanged(SIZE_ATTRIBUTE);
 
-            raos.setLength(0);
-        }
-        finally {
-            if(raos!=null)
-                raos.close();
-        }
+			raos.setLength(0);
+		}
     }
 
     /**

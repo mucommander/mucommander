@@ -74,7 +74,7 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         // This will typically be the case if an iterator is being used to read all the archive's entries
         // (unpack operation). In that case, we save the cost of looking for the entry in the archive, which is all
         // the more expensive if the TAR archive is GZipped.
-        if(entryIterator!=null && (entryIterator instanceof TarEntryIterator)) {
+        if((entryIterator instanceof TarEntryIterator)) {
             ArchiveEntry currentEntry = ((TarEntryIterator)entryIterator).getCurrentEntry();
             if(currentEntry.equals(entry)) {
                 // The entry/tar stream is wrapped in a FilterInputStream where #close is implemented as a no-op:
@@ -94,10 +94,10 @@ public class TarArchiveFile extends AbstractROArchiveFile {
         TarArchiveEntry tarEntry;
         String targetPath = entry.getPath();
         // Iterate through the archive until we've found the entry
-         while ((tarEntry = tin.getNextTarEntry()) != null) {
-             if (tarEntry.getName().equals(targetPath)) {
-                 // That's the one, return it
-                 return tin;
+        while ((tarEntry = tin.getNextTarEntry()) != null) {
+            if (tarEntry.getName().equals(targetPath)) {
+                // That's the one, return it
+                return tin;
             }
         }
 

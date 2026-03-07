@@ -54,11 +54,11 @@ public abstract class AnimatedIcon implements Icon {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** All tracked components. */
-    private HashSet<TrackedComponent> components = new HashSet<TrackedComponent>();
+    private final HashSet<TrackedComponent> components = new HashSet<>();
     /** Timer used to take the animation from one frame to the next. */
-    private Timer   timer;
+    private final Timer                     timer;
     /** Index of the current frame. */
-    private int     currentFrame;
+    private       int                       currentFrame;
     /** Total number of frames in the animation. */
     private int     frameCount;
     /** Whether or not the animation should be running. */
@@ -280,17 +280,17 @@ public abstract class AnimatedIcon implements Icon {
      */
     private static class TrackedComponent {
         /** Component in which the icon must be painted. */
-        private Component component;
+        private final Component component;
         /** Horizontal coordinate at which the icon should be painted. */
-        private int       x;
+        private final int       x;
         /** Vertical coordinate at which the icon should be painted. */
-        private int       y;
+        private final int       y;
         /** Width of the icon (used for clipping). */
-        private int       width;
+        private final int width;
         /** Height of the icon (used for clipping). */
-        private int       height;
+        private final int height;
         /** Component's hashcode. */
-        private int       hashCode;
+        private final int hashCode;
 
         /**
          * Creates a new tracked component.
@@ -351,13 +351,13 @@ public abstract class AnimatedIcon implements Icon {
      */
     private static class AnimationUpdater implements ActionListener {
         /** Weak reference to the animation. */
-        private WeakReference<AnimatedIcon> icon;
+        private final WeakReference<AnimatedIcon> icon;
 
         /**
          * Creates a new animation updater on the specified icon.
          * @param icon animation to update.
          */
-        public AnimationUpdater(AnimatedIcon icon) {this.icon = new WeakReference<AnimatedIcon>(icon);}
+        public AnimationUpdater(AnimatedIcon icon) {this.icon = new WeakReference<>(icon);}
 
         /**
          * Notifies the icon that it should update.

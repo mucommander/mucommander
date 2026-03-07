@@ -40,10 +40,10 @@ import com.mucommander.ui.autocomplete.completers.services.CompletionService;
  */
 
 public abstract class Completer {
-    private Set<CompletionService> services;
+    private final Set<CompletionService> services;
 
     public Completer() {
-        services = new LinkedHashSet<CompletionService>();
+        services = new LinkedHashSet<>();
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class Completer {
      * 			which were retured from the registered services.
      */
     protected Vector<String> getPossibleCompletionsFromServices(String path) {
-        Vector<String> result = new Vector<String>();
+        Vector<String> result = new Vector<>();
         for (CompletionService service : services)
             result.addAll(service.getPossibleCompletions(path));
         return result;
@@ -128,7 +128,7 @@ public abstract class Completer {
     protected String tryToCompleteFromServices(String selectedString) {
         String location = null;
         for (CompletionService service : services)
-            if ((location = (service).complete(selectedString)) != null)
+            if ((location = service.complete(selectedString)) != null)
                 break;
         return location;
     }

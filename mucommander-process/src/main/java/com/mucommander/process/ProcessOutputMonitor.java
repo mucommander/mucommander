@@ -41,12 +41,12 @@ class ProcessOutputMonitor implements Runnable {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Stream to read from. */
-    private InputStream     in;
-    private String          encoding;
+    private       InputStream     in;
+    private final String          encoding;
     /** Listener to notify of updates. */
-    private ProcessListener listener;
+    private final ProcessListener listener;
     /** Process to wait on once the stream is closed. */
-    private AbstractProcess process;
+    private       AbstractProcess process;
     /** Whether the process is still being monitored. */
     private boolean         monitor;
 
@@ -116,8 +116,8 @@ class ProcessOutputMonitor implements Runnable {
 
         // Closes the stream.
         try {
-	    if(in != null)
-		in.close();
+	        if(in != null)
+		        in.close();
 	}
         catch(IOException e) {
             LOGGER.debug("IOException thrown while closing process stream", e);

@@ -55,7 +55,7 @@ class GSSClient {
 	 * This application in compatible with the MIT sample
 	 * applications (gss-server, gss-client).
 	 */
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 
 		String serverHost, serverName, message;
 		int port = 4444;
@@ -78,13 +78,13 @@ class GSSClient {
 			//parse the command line options
 			for (int i = 0; i < (args.length - 3); i++) {
 
-				if (args[i].equals("-port")) {
+				if ("-port".equals(args[i])) {
 					if (i >= (args.length - 4)) {
 						usage();
 						exit(-1);
 					}
 					port = Integer.parseInt(args[++i]);
-				} else if (args[i].equals("-mech")) {
+				} else if ("-mech".equals(args[i])) {
 					if (i >= (args.length-4)) {
 						usage();
 						exit(-1);
@@ -176,7 +176,7 @@ class GSSClient {
 			dis.readFully(inTok, 0, inTok.length);
 		} while (true);
 			
-		return (aCtxt);
+		return aCtxt;
 	}
 
 	

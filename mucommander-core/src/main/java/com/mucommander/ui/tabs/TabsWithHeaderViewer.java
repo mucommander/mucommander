@@ -31,8 +31,8 @@ import javax.swing.event.ChangeListener;
 */
 public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 
-	private TabsCollection<T> tabsCollection;
-	private TabbedPane<T> tabbedpane;
+	private final TabsCollection<T> tabsCollection;
+	private final TabbedPane<T>     tabbedpane;
 
 	public TabsWithHeaderViewer(TabsCollection<T> tabs, TabbedPane<T> tabbedpane) {
 		super(tabbedpane, tabs);
@@ -104,9 +104,9 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 	@Override
 	public void removeDuplicateTabs() {
 		// a Set that will contain the tabs we've seen
-		Set<T> visitedTabs = new HashSet<T>();
+		Set<T> visitedTabs = new HashSet<>();
 		// a Set that will contain the tabs which are duplicated
-		Set<T> duplicatedTabs = new HashSet<T>(); 
+		Set<T> duplicatedTabs = new HashSet<>();
 		// The index of the selected tab
 		int selectedTabIndex = getSelectedTabIndex();
 
@@ -124,7 +124,7 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 		if (duplicatedTabs.remove(selectedTab)) {
 			int removedTabsCount = 0;
 			int tabsCount = tabsCollection.count();
-			for (int i=0; i<tabsCount; ++i) {
+			for (int i=0; i<tabsCount; i++) {
 				if (i == selectedTabIndex) // do not remove the selected tab
 					continue;
 				if (selectedTab.equals(tabsCollection.get(i-removedTabsCount)))
@@ -133,10 +133,10 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 		}
 
 		// remove all other duplicated tabs
-		for (int i = 0; i < tabsCollection.count(); ++i) {
+		for (int i = 0; i < tabsCollection.count(); i++) {
 			T currentTab = tabsCollection.get(i);
 			if (duplicatedTabs.remove(currentTab)) {
-				for (int j = i + 1; j < tabsCollection.count(); ++j)
+				for (int j = i + 1; j < tabsCollection.count(); j++)
 					if (currentTab.equals(tabsCollection.get(j)))
 						tabsCollection.remove(j--);
 			}
@@ -147,10 +147,10 @@ public class TabsWithHeaderViewer<T extends Tab> extends TabsViewer<T> {
 	public void removeOtherTabs() {
 		int selectedTabIndex = getSelectedTabIndex();
 
-		for (int i=0; i<selectedTabIndex; ++i)
+		for (int i=0; i<selectedTabIndex; i++)
 			tabsCollection.remove(0);
 
-		for(int i=tabsCollection.count()-1; i>0; --i)
+		for(int i=tabsCollection.count()-1; i>0; i--)
 			tabsCollection.remove(1);		
 	}
 

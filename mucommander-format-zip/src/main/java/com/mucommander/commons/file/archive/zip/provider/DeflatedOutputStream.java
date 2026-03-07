@@ -50,7 +50,7 @@ public class DeflatedOutputStream extends ZipEntryOutputStream {
      * @param deflater the Deflater that compresses data, reset before first use
      * @param buf the buffer used to deflate data
      */
-    public DeflatedOutputStream(OutputStream out, Deflater deflater, byte buf[]) {
+    public DeflatedOutputStream(OutputStream out, Deflater deflater, byte[] buf) {
         super(out, ZipConstants.DEFLATED);
 
         this.deflater = deflater;

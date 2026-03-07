@@ -67,7 +67,7 @@ public class XmlResourceTest {
      * @throws ParserConfigurationException if 'a serious configuration error' occurred in the XML parser
      */
     private void testXMLFiles(AbstractFile folder) throws SAXException, IOException, ParserConfigurationException {
-        AbstractFile children[] = folder.ls();
+        AbstractFile[] children = folder.ls();
         for (AbstractFile bhild : children) {
             if (bhild.isBrowsable())
                 testXMLFiles(bhild);

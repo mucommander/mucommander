@@ -35,7 +35,7 @@ import com.mucommander.ui.main.table.FileTableModel;
  * @author Maxence Bernard
  */
 public class MarkAllAction extends MuAction {
-    private boolean mark;
+    private final boolean mark;
 
     protected MarkAllAction(MainFrame mainFrame, Map<String, Object> properties, boolean mark) {
         super(mainFrame, properties);

@@ -48,19 +48,19 @@ public class ArchiveJob extends TransferFileJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ArchiveJob.class);
 	
     /** Destination archive file */
-    private AbstractFile destFile;
+    private final AbstractFile destFile;
 
     /** Base destination folder's path */
-    private String baseFolderPath;
+    private final String baseFolderPath;
 
     /** Archiver instance that does the actual archiving */
     private Archiver archiver;
 
     /** Archive format */
-    private int archiveFormat;
+    private final int archiveFormat;
 	
     /** Optional archive comment */
-    private String archiveComment;
+    private final String archiveComment;
 	
     /** Lock to avoid Archiver.close() to be called while data is being written */
     private final Object ioLock = new Object();
@@ -87,7 +87,7 @@ public class ArchiveJob extends TransferFileJob {
             return false;
 
         String filePath = file.getAbsolutePath(false);
-        String entryRelativePath = filePath.substring(baseFolderPath.length()+1, filePath.length());
+        String entryRelativePath = filePath.substring(baseFolderPath.length()+1);
 
         // Process current file
         do {		// Loop for retry
@@ -97,7 +97,7 @@ public class ArchiveJob extends TransferFileJob {
                     archiver.createEntry(entryRelativePath, file);
 
                     // Recurse on files
-                    AbstractFile subFiles[] = file.ls();
+                    AbstractFile[] subFiles = file.ls();
                     boolean folderComplete = true;
                     for(int i=0; i<subFiles.length && getState() != FileJobState.INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)

@@ -36,14 +36,14 @@ import javax.swing.JButton;
 public class MnemonicHelper {
 
     /** Current list of previously assigned mnemonics */
-    private List<Character> takenMnemonics;
+    private final List<Character> takenMnemonics;
 
 
     /**
      * Creates a new blank MnemonicHelper.
      */
     public MnemonicHelper() {
-        takenMnemonics = new Vector<Character>();
+        takenMnemonics = new Vector<>();
     }
 
 
@@ -101,7 +101,7 @@ public class MnemonicHelper {
      * @return whether or not the character is already used in the mnemonics array.
      */
     public boolean isMnemonicUsed(char ch) {
-        return takenMnemonics.indexOf(new Character(ch))!=-1;
+        return takenMnemonics.indexOf(ch)!=-1;
     }
 
 

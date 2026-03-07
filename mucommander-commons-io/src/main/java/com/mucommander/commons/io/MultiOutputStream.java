@@ -33,7 +33,7 @@ import java.util.Vector;
 public class MultiOutputStream extends OutputStream {
 
     /** Registered OutputStreams */
-    protected Vector<OutputStream> streams = new Vector<OutputStream>();
+    protected Vector<OutputStream> streams = new Vector<>();
 
     /**
      * Creates a new MultiOutputStream that initially contains no OutputStream. * Until one or more OutputStream is
@@ -109,7 +109,7 @@ public class MultiOutputStream extends OutputStream {
      * </p>
      */
     @Override
-    public synchronized void write(byte b[], int off, int len) throws IOException {
+    public synchronized void write(byte[] b, int off, int len) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())
             elements.nextElement().write(b, off, len);
@@ -123,7 +123,7 @@ public class MultiOutputStream extends OutputStream {
      * </p>
      */
     @Override
-    public synchronized void write(byte b[]) throws IOException {
+    public synchronized void write(byte[] b) throws IOException {
         Enumeration<OutputStream> elements = streams.elements();
         while(elements.hasMoreElements())
             elements.nextElement().write(b);

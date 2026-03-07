@@ -76,16 +76,16 @@ public class SystemDefaultColor extends DefaultColor implements PropertyChangeLi
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** {@link UIManager} property to look for. */
-    private String          property;
+    private final String property;
     /**
      * Type of the default color (can be one of {@link #FOREGROUND}, {@link #BACKGROUND}, {@link #SELECTION_FOREGROUND}
      * or {@link #SELECTION_BACKGROUND}). 
      */
-    private int             type;
+    private final int    type;
     /** Current default color value. */
-    private Color           color;
+    private       Color  color;
      /** Used to create instance of the component whose color will be retrieved (in case {@link #property} isn't set). */
-    private ComponentMapper mapper;
+    private final ComponentMapper mapper;
 
 
 
@@ -181,7 +181,7 @@ public class SystemDefaultColor extends DefaultColor implements PropertyChangeLi
 
         name = evt.getPropertyName().toLowerCase();
 
-        if(name.equals("lookandfeel") || name.equalsIgnoreCase(property)) {
+        if("lookandfeel".equals(name) || name.equalsIgnoreCase(property)) {
             Color oldColor;
 
             color    = null;

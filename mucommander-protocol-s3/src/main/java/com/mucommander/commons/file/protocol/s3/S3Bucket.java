@@ -48,8 +48,8 @@ import com.mucommander.commons.io.RandomAccessInputStream;
 public class S3Bucket extends S3File {
     private static final Logger LOGGER = LoggerFactory.getLogger(S3File.class);
 
-    private String bucketName;
-    private S3BucketFileAttributes atts;
+    private final String                 bucketName;
+    private final S3BucketFileAttributes atts;
 
     // TODO: add support for ACL ? (would cost an extra request per bucket)
     /** Default permissions for S3 buckets */

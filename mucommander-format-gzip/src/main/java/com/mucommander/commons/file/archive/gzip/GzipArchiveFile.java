@@ -66,7 +66,7 @@ public class GzipArchiveFile extends AbstractROArchiveFile {
             if (extensionIndex > -1)
                 name = name.substring(0, extensionIndex);
 
-            if (extension.equals("tgz") || extension.equals("tar.gz"))
+            if ("tgz".equals(extension) || "tar.gz".equals(extension))
                 name += ".tar";
         }
 

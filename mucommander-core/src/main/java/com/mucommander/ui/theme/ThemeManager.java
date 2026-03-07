@@ -58,6 +58,7 @@ import com.mucommander.ui.theme.Theme.ThemeType;
  * @author Nicolas Rinaudo
  */
 public class ThemeManager {
+    private static final String ILLEGAL_THEME_TYPE = "Illegal theme type: ";
     private static final Logger LOGGER = LoggerFactory.getLogger(ThemeManager.class);
 
     // - Class variables -----------------------------------------------------------------
@@ -70,7 +71,7 @@ public class ThemeManager {
     /** Path to the custom themes repository. */
     private static final String       CUSTOM_THEME_FOLDER              = "themes";
     /** List of all registered theme change listeners. */
-    private static final WeakHashMap<ThemeListener, Object>  listeners = new WeakHashMap<ThemeListener, Object>();
+    private static final WeakHashMap<ThemeListener, Object>  listeners = new WeakHashMap<>();
     /** List of all predefined theme names. */
     private static final String[]     PREDEFINED_THEME_NAMES = {
         "ClassicCommander",
@@ -87,9 +88,9 @@ public class ThemeManager {
     /** Whether or not the user theme was modified. */
     private static boolean       wasUserThemeModified;
     /** Theme that is currently applied to muCommander. */
-    private static Theme         currentTheme;
+    private static       Theme         currentTheme;
     /** Used to listen on the current theme's modifications. */
-    private static ThemeListener listener = new CurrentThemeListener();
+    private static final ThemeListener listener = new CurrentThemeListener();
 
 
 
@@ -187,12 +188,12 @@ public class ThemeManager {
 
         try {
             files = themeFolder.ls(new ExtensionFilenameFilter(".xml"));
-            names = new Vector<String>();
+            names = new Vector<>();
             for (AbstractFile file : files)
                 names.add(getThemeName(file));
             return names.iterator();
         }
-        catch(Exception e) {return new Vector<String>().iterator();}
+        catch(Exception e) {return Collections.emptyIterator();}
     }
 
     public static Vector<Theme> getAvailableThemes() {
@@ -200,7 +201,7 @@ public class ThemeManager {
         Iterator<String> iterator;
         String          name;
 
-        themes = new Vector<Theme>();
+        themes = new Vector<>();
 
         // Tries to load the user theme. If it's corrupt, uses an empty user theme.
         try {themes.add(readTheme(ThemeType.USER_THEME, null));}
@@ -232,9 +233,7 @@ public class ThemeManager {
         }
 
         // Sorts the themes by name.
-        Collections.sort(themes, new Comparator<Theme>() {
-                public int compare(Theme t1, Theme t2) {return (t1.getName()).compareTo(t2.getName());}
-            });
+        themes.sort((t1, t2) -> t1.getName().compareTo(t2.getName()));
 
         return themes;
     }
@@ -243,7 +242,7 @@ public class ThemeManager {
         Vector<String>   themes;
         Iterator<String> iterator;
 
-        themes = new Vector<String>();
+        themes = new Vector<>();
 
         // Adds the user theme name.
         themes.add(Translator.get("theme.custom_theme"));
@@ -264,7 +263,7 @@ public class ThemeManager {
         }
 
         // Sorts the theme names.
-        Collections.sort(themes);
+        themes.sort(null);
 
         return themes;
     }
@@ -449,7 +448,7 @@ public class ThemeManager {
         }
 
         // Unknown theme.
-        throw new IllegalArgumentException("Illegal theme type: " + type);
+        throw new IllegalArgumentException(ILLEGAL_THEME_TYPE + type);
     }
 
     /**
@@ -760,7 +759,7 @@ public class ThemeManager {
         }
 
         // Error handling.
-        throw new IllegalArgumentException("Illegal theme type: " + type);
+        throw new IllegalArgumentException(ILLEGAL_THEME_TYPE + type);
     }
 
     /**
@@ -852,7 +851,7 @@ public class ThemeManager {
 
             // Error.
         default:
-            throw new IllegalStateException("Illegal theme type: " + type);
+            throw new IllegalStateException(ILLEGAL_THEME_TYPE + type);
         }
     }
 
@@ -1076,11 +1075,11 @@ public class ThemeManager {
      * @return a valid theme type identifier.
      */
     private static ThemeType getThemeTypeFromLabel(String label) {
-        if(label.equals(MuPreferences.THEME_USER))
+        if(MuPreferences.THEME_USER.equals(label))
             return ThemeType.USER_THEME;
-        else if(label.equals(MuPreferences.THEME_PREDEFINED))
+        else if(MuPreferences.THEME_PREDEFINED.equals(label))
             return ThemeType.PREDEFINED_THEME;
-        else if(label.equals(MuPreferences.THEME_CUSTOM))
+        else if(MuPreferences.THEME_CUSTOM.equals(label))
             return ThemeType.CUSTOM_THEME;
         throw new IllegalStateException("Unknown theme type: " + label);
     }

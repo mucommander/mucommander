@@ -253,7 +253,7 @@ public class BinarySearchServiceImpl implements BinarySearchService {
         SearchCondition replaceCondition = replaceParameters.getCondition();
         SearchMatch currentMatch = searchAssessor.getCurrentMatch();
         if (currentMatch != null) {
-            EditableBinaryData editableData = ((EditableBinaryData) codeArea.getContentData());
+            EditableBinaryData editableData = (EditableBinaryData) codeArea.getContentData();
             editableData.remove(currentMatch.getPosition(), currentMatch.getLength());
             if (replaceCondition.getSearchMode() == SearchCondition.SearchMode.BINARY) {
                 editableData.insert(currentMatch.getPosition(), replaceCondition.getBinaryData());

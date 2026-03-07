@@ -57,7 +57,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
 	private JPanel quickListPreviewPanel;
 	
 	/** The header of the sample quick list */
-    private QuickListHeaderItem header = new QuickListHeaderItem(Translator.get("sample_text"));
+    private final QuickListHeaderItem header = new QuickListHeaderItem(Translator.get("sample_text"));
 
     /** The items of the sample quick list */
     private final static String[] sampleData;
@@ -73,21 +73,21 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
     }
 
     /** The list of items of the sample quick list */
-    private QuickListDataList<String> list = new QuickListDataListWithIcons<String>(sampleData) {
-    	
-    	{
-    		for (KeyListener listener : getKeyListeners())
-    			removeKeyListener(listener);
-    	}
-    	
+    private final QuickListDataList<String> list = new QuickListDataListWithIcons<>(sampleData) {
+
+		{
+			for (KeyListener listener : getKeyListeners())
+				removeKeyListener(listener);
+		}
+
 		@Override
-        public Icon getImageIconOfItem(String item,  final Dimension preferredSize) {
+		public Icon getImageIconOfItem(String item, final Dimension preferredSize) {
 			return sampleIcon;
 		}
-		
+
 		@Override
-        protected void addMouseListenerToList() { }
-    };
+		protected void addMouseListenerToList() {}
+	};
     
     /**
      * Creates the quick list preview panel.
@@ -267,7 +267,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
      */
     public void propertyChange(PropertyChangeEvent event) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME)) {
+        if(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME.equals(event.getPropertyName())) {
             header.setBackgroundColors(themeData.getColor(ThemeData.QUICK_LIST_HEADER_BACKGROUND_COLOR),
             		themeData.getColor(ThemeData.QUICK_LIST_HEADER_SECONDARY_BACKGROUND_COLOR));
             list.setBackgroundColors(themeData.getColor(ThemeData.QUICK_LIST_ITEM_BACKGROUND_COLOR),
@@ -275,7 +275,7 @@ public class QuickListPanel extends ThemeEditorPanel implements PropertyChangeLi
         }
 
         // Foreground color changed.
-        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
+        else if(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME.equals(event.getPropertyName())) {
             header.setForegroundColor(themeData.getColor(ThemeData.QUICK_LIST_HEADER_FOREGROUND_COLOR));            
             list.setForegroundColors(themeData.getColor(ThemeData.QUICK_LIST_ITEM_FOREGROUND_COLOR),
             						 themeData.getColor(ThemeData.QUICK_LIST_SELECTED_ITEM_FOREGROUND_COLOR));

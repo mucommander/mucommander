@@ -32,7 +32,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -112,26 +111,24 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     /**
      * Comparator of actions according to their labels
      */
-    private static final Comparator<ActionId> ACTIONS_COMPARATOR = new Comparator<>() {
-        public int compare(ActionId id1, ActionId id2) {
-            String label1 = ActionProperties.getActionLabel(id1);
-            if (label1 == null) {
-                return 1;
-            }
+    private static final Comparator<ActionId> ACTIONS_COMPARATOR = (id1, id2) -> {
+		String label1 = ActionProperties.getActionLabel(id1);
+		if (label1 == null) {
+			return 1;
+		}
 
-            String label2 = ActionProperties.getActionLabel(id2);
-            if (label2 == null) {
-                return -1;
-            }
+		String label2 = ActionProperties.getActionLabel(id2);
+		if (label2 == null) {
+			return -1;
+		}
 
-            return label1.compareTo(label2);
-        }
-    };
+		return label1.compareTo(label2);
+	};
 
     /**
      * A class to represent Description cell in table data (the first column).
      */
-    class DescriptionData {
+	static class DescriptionData {
         private final ActionId actionId;
         private final String label;
         private final String toolTip;
@@ -442,7 +439,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         }
     }
 
-    private class CancelEditingStateThread extends Thread {
+    private static class CancelEditingStateThread extends Thread {
         private boolean stopped = false;
         private final TableCellEditor cellEditor;
 
@@ -531,8 +528,8 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         // The last KeyStroke that was entered to the field.
         // Before any keystroke is entered, it contains the keystroke appearing in the cell before entering the editing
         // state.
-        private KeyStroke lastKeyStroke;
-        private DescriptionData descriptionData;
+        private       KeyStroke       lastKeyStroke;
+        private final DescriptionData descriptionData;
 
         public RecordingKeyStrokeField(KeyStroke currentKeyStroke, DescriptionData descriptionData) {
             super(Translator.get("shortcuts_table.type_in_a_shortcut"));
@@ -634,7 +631,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
         UNKNOWN(-1),
         ;
 
-        private int columnIndex;
+        private final int columnIndex;
 
         TableDataColumnEnum(int columnIndex) {
             this.columnIndex = columnIndex;
@@ -672,7 +669,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
 
         public ShortcutsTableData() {
             List<ActionId> allActionIds = ActionManager.getActionIds();
-            Collections.sort(allActionIds, ACTIONS_COMPARATOR);
+            allActionIds.sort(ACTIONS_COMPARATOR);
 
             final int nbActions = allActionIds.size();
             originalActionMap = new LinkedHashMap<>(nbActions);
@@ -691,12 +688,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
                 }
 
                 /* icon & name, tooltip, action id */
-                actionProperties.put(TableDataColumnEnum.DESCRIPTION,
-                        new DescriptionData(
-                                actionId,
-                                actionDescriptor.getLabel(),
-                                actionDescriptor.getDescription(),
-                                IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4))));
+                actionProperties.put(TableDataColumnEnum.DESCRIPTION, new DescriptionData(actionId, actionDescriptor.getLabel(), actionDescriptor.getDescription(), IconManager.getPaddedIcon(actionIcon, new Insets(0, 4, 0, 4))));
                 /* action's accelerator */
                 actionProperties.put(TableDataColumnEnum.ACCELERATOR, ActionKeymap.getAccelerator(actionId));
                 /* action's alternate accelerator */
@@ -989,7 +981,7 @@ public class ShortcutsTable extends PrefTable implements KeyListener, ListSelect
     /**
      * CellLabel with a dotted outline.
      */
-    private class DotBorderedCellLabel extends CellLabel {
+    private static class DotBorderedCellLabel extends CellLabel {
 
         @Override
         protected void paintOutline(Graphics g) {

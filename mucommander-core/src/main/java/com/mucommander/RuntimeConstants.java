@@ -17,7 +17,6 @@
 
 package com.mucommander;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;

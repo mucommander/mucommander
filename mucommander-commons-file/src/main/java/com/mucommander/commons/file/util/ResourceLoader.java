@@ -153,7 +153,7 @@ public class ResourceLoader {
 
         String separator = rootPackageFile.getSeparator();
         String nativePath;
-        if(separator.equals("/"))
+        if("/".equals(separator))
             nativePath = path;
         else
             nativePath = path.replace("/", separator);
@@ -172,10 +172,8 @@ public class ResourceLoader {
                     if(getJarFilePath(resourceURL).equals(rootPackagePath))
                         return resourceURL;
                 }
-                else {
-                    if(normalizeUrlPath(getDecodedURLPath(resourceURL)).equals(resourcePath))
-                        return resourceURL;
-                }
+                else if(normalizeUrlPath(getDecodedURLPath(resourceURL)).equals(resourcePath))
+                    return resourceURL;
             }
         }
         catch(IOException e) {
@@ -464,7 +462,7 @@ public class ResourceLoader {
 
         // Remove the leading "file:" (if any)
         if(path.startsWith("file:"))
-            path = path.substring(5, path.length());
+            path = path.substring(5);
 
         // Under platforms that use root drives (Windows and OS/2), strip out the leading '/'
         if(LocalFile.hasRootDrives() && path.startsWith("/"))

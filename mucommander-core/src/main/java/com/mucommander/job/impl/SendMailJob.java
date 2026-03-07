@@ -46,6 +46,8 @@ import java.util.Vector;
  */
 public class SendMailJob extends TransferFileJob {
 
+    private static final String UTF_8 = "UTF-8";
+
     /**
      * True after connection to mail server has been established
      */
@@ -54,7 +56,7 @@ public class SendMailJob extends TransferFileJob {
     /**
      * Error dialog title
      */
-    private String errorDialogTitle;
+    private final String errorDialogTitle;
 
 
     /////////////////////
@@ -64,33 +66,33 @@ public class SendMailJob extends TransferFileJob {
     /**
      * Email recipient(s)
      */
-    private String recipientString;
+    private       String recipientString;
     /**
      * Email subject
      */
-    private String mailSubject;
+    private final String mailSubject;
     /**
      * Email body
      */
-    private String mailBody;
+    private final String mailBody;
 
     /**
      * SMTP server
      */
-    private String mailServer;
+    private final String mailServer;
     /**
      * From name
      */
-    private String fromName;
+    private final String fromName;
     /**
      * From address
      */
-    private String fromAddress;
+    private final String fromAddress;
 
     /**
      * Email boundary string, delimits the end of the body and attachments
      */
-    private String boundary;
+    private final String boundary;
 
     /**
      * Connection variable
@@ -154,7 +156,7 @@ public class SendMailJob extends TransferFileJob {
      * Shows an error dialog with a single action : close, and stops the job.
      */
     private void showErrorDialog(String message) {
-        showErrorDialog(errorDialogTitle, message, Arrays.asList(SendMailDialogAction.CLOSE));
+        showErrorDialog(errorDialogTitle, message, List.of(SendMailDialogAction.CLOSE));
         interrupt();
     }
 
@@ -165,7 +167,7 @@ public class SendMailJob extends TransferFileJob {
 
     private void openConnection() throws IOException {
         this.socket = new Socket(mailServer, MuConfigurations.getPreferences().getVariable(MuPreference.SMTP_PORT, MuPreferences.DEFAULT_SMTP_PORT));
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), UTF_8));
         this.out = socket.getOutputStream();
         this.out64 = new Base64OutputStream(out, true);
 
@@ -179,11 +181,10 @@ public class SendMailJob extends TransferFileJob {
         // address is provided
         readWriteLine("MAIL FROM: " + fromAddress);
 
-        List<String> recipients = new Vector<String>();
+        List<String> recipients = new Vector<>();
         recipientString = splitRecipientString(recipientString, recipients);
-        int nbRecipients = recipients.size();
-        for (int i = 0; i < nbRecipients; i++)
-            readWriteLine("RCPT TO: <" + recipients.get(i) + ">");
+		for (String recipient : recipients)
+            readWriteLine("RCPT TO: <" + recipient + ">");
         readWriteLine("DATA");
         writeLine("MIME-Version: 1.0");
         writeLine("Subject: " + this.mailSubject);
@@ -275,12 +276,12 @@ public class SendMailJob extends TransferFileJob {
     }
 
     private void readWriteLine(String s) throws IOException {
-        out.write((s + "\r\n").getBytes("UTF-8"));
+        out.write((s + "\r\n").getBytes(UTF_8));
         in.readLine();
     }
 
     private void writeLine(String s) throws IOException {
-        out.write((s + "\r\n").getBytes("UTF-8"));
+        out.write((s + "\r\n").getBytes(UTF_8));
     }
 
 

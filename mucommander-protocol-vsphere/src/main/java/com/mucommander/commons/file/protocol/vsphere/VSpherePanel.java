@@ -41,16 +41,16 @@ public class VSpherePanel extends ServerPanel {
 
 	private static final long serialVersionUID = -3850165192515539062L;
 	
-	private JTextField vsphereField;
-	private JTextField usernameField;
-	private JPasswordField passwordField;
+	private final JTextField vsphereField;
+	private final JTextField usernameField;
+	private final JPasswordField passwordField;
 
-	private JTextField guestField;
-	private JTextField guestUsernameField;
-	private JPasswordField guestPasswordField;
+	private final JTextField guestField;
+	private final JTextField guestUsernameField;
+	private final JPasswordField guestPasswordField;
 
-	private JTextField dirField;
-	private static String lastVsphere = "";
+	private final  JTextField dirField;
+	private static String     lastVsphere = "";
 	private static String lastGuest = "";
 	private static String lastDir = "";
 	private static String lastUsername = "";

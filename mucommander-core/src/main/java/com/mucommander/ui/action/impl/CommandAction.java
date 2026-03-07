@@ -45,7 +45,7 @@ public class CommandAction extends MuAction {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Command to run. */
-    private Command command;
+    private final Command command;
 
 
 
@@ -75,11 +75,11 @@ public class CommandAction extends MuAction {
         selectedFiles = mainFrame.getActiveTable().getSelectedFiles();
 
         // If no files are either selected or marked, aborts.
-        if(command.hasSelectedFileKeyword() && selectedFiles.size() == 0)
+        if(command.hasSelectedFileKeyword() && selectedFiles.isEmpty())
             return;
 
         // If we're working with local files, go ahead and runs the command.
-        if(selectedFiles.getBaseFolder().getURL().getScheme().equals(LocalFile.SCHEMA) && (selectedFiles.getBaseFolder().hasAncestor(LocalFile.class))) {
+        if(LocalFile.SCHEMA.equals(selectedFiles.getBaseFolder().getURL().getScheme()) && (selectedFiles.getBaseFolder().hasAncestor(LocalFile.class))) {
             try {
                 InformationDialog.showErrorDialogIfNeeded(getMainFrame().getJFrame(), ProcessRunner.executeAsync(command.getTokens(selectedFiles), selectedFiles.getBaseFolder()));
             } catch(Exception e) {
@@ -101,8 +101,8 @@ public class CommandAction extends MuAction {
 
     public static class Descriptor extends AbstractActionDescriptor {
         private static final String ACTION_ID_PREFIX = "OpenWith_";
-        private String ACTION_ID;
-        private String label;
+        private final        String ACTION_ID;
+        private final        String label;
 
         public Descriptor(Command command) {
             ACTION_ID = ACTION_ID_PREFIX + command.getAlias();

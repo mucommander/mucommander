@@ -41,7 +41,7 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
  */
 public class OvirtStorageDomain extends OvirtFile {
 
-    private static Logger log = LoggerFactory.getLogger(OvirtStorageDomain.class);
+    private static final Logger log = LoggerFactory.getLogger(OvirtStorageDomain.class);
 
     private StorageDomain sd;
 

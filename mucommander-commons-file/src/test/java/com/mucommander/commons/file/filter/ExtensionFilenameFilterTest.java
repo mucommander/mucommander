@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
  */
 public class ExtensionFilenameFilterTest {
     /** Filter uses for all tests. */
-    private static ExtensionFilenameFilter filter = new ExtensionFilenameFilter(new String[] {".zip", ".jar", ".war", ".wal", ".wmz",
+    private static final ExtensionFilenameFilter filter = new ExtensionFilenameFilter(new String[] {".zip", ".jar", ".war", ".wal", ".wmz",
                                                                                               ".xpi", ".ear", ".sar", ".odt", ".ods",
                                                                                               ".odp", ".odg", ".odf"});
 

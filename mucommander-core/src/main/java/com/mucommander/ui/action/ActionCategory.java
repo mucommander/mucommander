@@ -43,7 +43,7 @@ public enum ActionCategory {
 	;
 
 	/** The category's label key in the dictionary file */
-	private String descriptionKey;
+	private final String descriptionKey;
 	 
 	ActionCategory(String descriptionKey) {
 		this.descriptionKey = descriptionKey;

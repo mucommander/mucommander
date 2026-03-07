@@ -39,7 +39,7 @@ import java.util.Map;
 public class FastLRUCache<K, V> extends LRUCache<K,V> {
 
     /** Cache key->value/expirationDate map */
-    private LinkedHashMap<K, Object[]> cacheMap;
+    private final LinkedHashMap<K, Object[]> cacheMap;
 
     /** Timestamp of last expired items purge */
     private long lastExpiredPurge;
@@ -49,13 +49,13 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
 
     public FastLRUCache(int capacity) {
         super(capacity);
-        this.cacheMap = new LinkedHashMap<K, Object[]>(16, 0.75f, true) {
-            // Override this method to automatically remove eldest entry before insertion when cache is full
-            @Override
-            protected final boolean removeEldestEntry(Map.Entry<K, Object[]> eldest) {
-                return cacheMap.size() > FastLRUCache.this.capacity;
-            }
-        };
+        this.cacheMap = new LinkedHashMap<>(16, 0.75f, true) {
+			// Override this method to automatically remove eldest entry before insertion when cache is full
+			@Override
+			protected boolean removeEldestEntry(Map.Entry<K, Object[]> eldest) {
+				return cacheMap.size() > FastLRUCache.this.capacity;
+			}
+		};
     }
 
 
@@ -66,7 +66,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
         String s = super.toString()+" size="+cacheMap.size()+" capacity="+capacity+" eldestExpirationDate="+eldestExpirationDate+"\n";
 
         Object key;
-        Object value[];
+        Object[] value;
         int i=0;
         for(Map.Entry<K, Object[]> mapEntry : cacheMap.entrySet()) {
             key = mapEntry.getKey();
@@ -206,7 +206,7 @@ public class FastLRUCache<K, V> extends LRUCache<K,V> {
      */
     @Override
     protected void testCorruption() throws RuntimeException {
-        Object value[];
+        Object[] value;
         long expirationDate;
         Long expirationDateL;
 

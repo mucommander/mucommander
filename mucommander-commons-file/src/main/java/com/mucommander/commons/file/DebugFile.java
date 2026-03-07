@@ -38,7 +38,7 @@ public class DebugFile extends ProxyFile {
     private int maxLatency;
 
     /** Used to randomize the latency for each calls to slowed-down methods */
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     
     /**

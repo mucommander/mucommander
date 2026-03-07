@@ -49,10 +49,10 @@ public class BookmarkManager implements VectorChangeListener {
     private static final String DEFAULT_BOOKMARKS_FILE_NAME = "bookmarks.xml";
 
     /** Bookmark instances */
-    private static AlteredVector<Bookmark> bookmarks = new AlteredVector<Bookmark>();
+    private static final AlteredVector<Bookmark> bookmarks = new AlteredVector<>();
 
     /** Contains all registered bookmark listeners, stored as weak references */
-    private static WeakHashMap<BookmarkListener, ?> listeners = new WeakHashMap<BookmarkListener, Object>();
+    private static final WeakHashMap<BookmarkListener, ?> listeners = new WeakHashMap<>();
 
     /** Specifies whether bookmark events should be fired when a change to the bookmarks is detected */
     private static boolean fireEvents = true;
@@ -68,7 +68,7 @@ public class BookmarkManager implements VectorChangeListener {
 
     /** Create a singleton instance, needs to be referenced so that it's not garbage collected (AlteredVector
      * stores VectorChangeListener as weak references) */
-    private static BookmarkManager singleton = new BookmarkManager();
+    private static final BookmarkManager singleton = new BookmarkManager();
 
 
 
@@ -362,12 +362,10 @@ public class BookmarkManager implements VectorChangeListener {
                 fireBookmarksChanged();
             }
         }
-        else {
-            // Remember pause start time
-            if(fireEvents) {
-                fireEvents = false;
-                lastEventPauseTime = System.currentTimeMillis();
-            }
+        else // Remember pause start time
+        if(fireEvents) {
+            fireEvents = false;
+            lastEventPauseTime = System.currentTimeMillis();
         }
     }
 

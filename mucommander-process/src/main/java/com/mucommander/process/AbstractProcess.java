@@ -61,24 +61,21 @@ public abstract class AbstractProcess {
         // under macOS.
         // Using a separate thread allows muCommander to continue working properly even
         // when that occurs.
-        new Thread() {
-            @Override
-            public void run() {
-                // Closes the process' streams.
-            	LOGGER.debug("Destroying process...");
-                stdoutMonitor.stopMonitoring();
-                if(stderrMonitor != null)
-                    stderrMonitor.stopMonitoring();
+        new Thread(() -> {
+			// Closes the process' streams.
+			LOGGER.debug("Destroying process...");
+			stdoutMonitor.stopMonitoring();
+			if(stderrMonitor != null)
+				stderrMonitor.stopMonitoring();
 
-                // Destroys the process.
-                try {
-                    destroyProcess();
-                }
-                catch(IOException e) {
-                	LOGGER.debug("IOException caught", e);
-                }
-            }
-        }.start();
+			// Destroys the process.
+			try {
+				destroyProcess();
+			}
+			catch(IOException e) {
+				LOGGER.debug("IOException caught", e);
+			}
+		}).start();
     }
 
     /**

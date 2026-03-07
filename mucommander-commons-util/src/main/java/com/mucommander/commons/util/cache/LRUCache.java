@@ -168,7 +168,7 @@ public abstract class LRUCache<K, V> {
     /**
      * Test method : simple test case + stress/sanity test
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         LRUCache<Integer, Integer> cache;
         /*
         // Simple test case
@@ -202,7 +202,7 @@ public abstract class LRUCache<K, V> {
 
         // Stress test to see if everything looks OK after a few thousand iterations
         int capacity = 1000;
-        cache = new FastLRUCache<Integer, Integer>(capacity);
+        cache = new FastLRUCache<>(capacity);
         java.util.Random random = new java.util.Random();
         for(int i=0; i<100000; i++) {
             // 50% chance to add a new element with a random value and expiration date (50% chance for no expiration date)

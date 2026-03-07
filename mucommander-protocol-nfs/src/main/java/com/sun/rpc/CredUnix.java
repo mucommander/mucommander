@@ -81,7 +81,7 @@ public class CredUnix extends Cred {
     static final int AUTH_RES_FAKE = 1;
     static final int AUTH_RES_FAIL = 2;
 
-    private Xdr cr = new Xdr(64);
+    private final Xdr cr = new Xdr(64);
 
     /**
      * Constructor creates an instance of
@@ -171,12 +171,12 @@ public class CredUnix extends Cred {
 
         try {
             try {
-               return (callV2(server, username, passwd));
+               return callV2(server, username, passwd);
             } catch (MsgAcceptedException e) {
                 if (e.error != e.PROG_MISMATCH)
                     return false;
     
-                    return (callV1(server, username, passwd));
+                    return callV1(server, username, passwd);
             }
         } catch (IOException e) {
             return false;
@@ -211,7 +211,7 @@ public class CredUnix extends Cred {
         for (int i = 0; i < b.length; i++)
             b[i] = (byte)((b[i] & 0x7f) ^ 0x5b);
 
-        return (new String(b));
+        return new String(b);
     }
 
     /**

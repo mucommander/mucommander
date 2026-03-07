@@ -20,7 +20,6 @@ package com.mucommander.ui.action.impl;
 import java.awt.Component;
 import java.util.Map;
 
-import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 

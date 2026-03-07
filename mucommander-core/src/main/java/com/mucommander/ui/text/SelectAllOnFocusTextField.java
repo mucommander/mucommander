@@ -38,7 +38,7 @@ public class SelectAllOnFocusTextField extends JTextField {
     }
 
     private static class SelectAllOnFocusListener extends FocusAdapter {
-        private JTextField textField;
+        private final JTextField textField;
 
         SelectAllOnFocusListener(JTextField textField) {
             this.textField = textField;

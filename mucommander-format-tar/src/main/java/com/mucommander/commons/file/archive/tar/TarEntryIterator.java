@@ -34,7 +34,7 @@ import java.io.IOException;
 class TarEntryIterator implements ArchiveEntryIterator {
 
     /** InputStream to the archive file */
-    private TarArchiveInputStream tin;
+    private final TarArchiveInputStream tin;
 
     /** The current entry, where the TarArchiveInputStream is currently positioned */
     private ArchiveEntry currentEntry;

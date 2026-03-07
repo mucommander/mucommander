@@ -26,8 +26,8 @@ import com.mucommander.text.Translator;
  *
  */
 public class JobProgress {
-	private FileJob job;
-	private TransferFileJob transferFileJob;
+	private final FileJob         job;
+	private       TransferFileJob transferFileJob;
 
 	private long effectiveJobTime;
 	private long lastTime;
@@ -104,7 +104,7 @@ public class JobProgress {
 		if (transferFileJob != null) {
 			bytesTotal = transferFileJob.getTotalByteCount() - transferFileJob.getTotalSkippedByteCount();
 			totalBps = (long) (bytesTotal * 1000d / effectiveJobTime);
-			if (now - lastTime > 0) { // To avoid divisions by zero 
+			if (now > lastTime) { // To avoid divisions by zero 
 				currentBps = (long) ((bytesTotal - lastBytesTotal) * 1000d / (now - lastTime));
 			} else {
 				currentBps = 0;

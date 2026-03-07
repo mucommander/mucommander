@@ -64,23 +64,23 @@ import com.mucommander.ui.icon.IconManager;
 class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListener, DocumentListener {
 
     // Language
-    private PrefComboBox<Locale> languageComboBox;
+    private final PrefComboBox<Locale> languageComboBox;
 
     // Date/time format
-    private PrefRadioButton time12RadioButton;
-    private PrefComboBox<String> dateFormatComboBox;
-    private PrefTextField dateSeparatorField;
-    private PrefCheckBox showSecondsCheckBox;
-    private PrefCheckBox showCenturyCheckBox;
-    private JLabel previewLabel;
-    private Date exampleDate;
+    private final PrefRadioButton      time12RadioButton;
+    private final PrefComboBox<String> dateFormatComboBox;
+    private final PrefTextField        dateSeparatorField;
+    private final PrefCheckBox         showSecondsCheckBox;
+    private final PrefCheckBox  showCenturyCheckBox;
+    private final JLabel       previewLabel;
+    private final Date         exampleDate;
 
     private final static String DAY = Translator.get("prefs_dialog.day");
     private final static String MONTH = Translator.get("prefs_dialog.month");
     private final static String YEAR = Translator.get("prefs_dialog.year");
 
 
-    private final static String DATE_FORMAT_LABELS[] = {
+    private final static String[] DATE_FORMAT_LABELS = {
         MONTH+"/"+DAY+"/"+YEAR,
         DAY+"/"+MONTH+"/"+YEAR,
         YEAR+"/"+MONTH+"/"+DAY,
@@ -89,7 +89,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         YEAR+"/"+DAY+"/"+MONTH
     };
 
-    private final static String DATE_FORMATS[] = {
+    private final static String[] DATE_FORMATS = {
         "MM/dd/yy",
         "dd/MM/yy",
         "yy/MM/dd",
@@ -98,7 +98,7 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         "yy/dd/MM"
     };
 
-    private final static String DATE_FORMATS_WITH_CENTURY[] = {
+    private final static String[] DATE_FORMATS_WITH_CENTURY = {
         "MM/dd/yyyy",
         "dd/MM/yyyy",
         "yyyy/MM/dd",
@@ -224,7 +224,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         tempPanel.add(Box.createHorizontalGlue());
         dateFormatPanel.add(tempPanel);
 
-        showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century"), () -> MuConfigurations.getPreferences().getVariable(MuPreference.DATE_FORMAT).indexOf("yyyy")!=-1);
+        showCenturyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_century"), () -> MuConfigurations.getPreferences()
+																												  .getVariable(MuPreference.DATE_FORMAT)
+																												  .contains("yyyy"));
         showCenturyCheckBox.addItemListener(this);
         showCenturyCheckBox.addDialogListener(parent);
         dateFormatPanel.add(showCenturyCheckBox);
@@ -238,20 +240,20 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         time12RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_12_hour")) {
 			public boolean hasChanged() {
 				String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT);
-		        return isSelected() != (timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS)); 
+		        return isSelected() != (HOUR_12_TIME_FORMAT.equals(timeFormat) || HOUR_12_TIME_FORMAT_WITH_SECONDS.equals(timeFormat)); 
 			}
         };
         time12RadioButton.addActionListener(this);
         PrefRadioButton time24RadioButton = new PrefRadioButton(Translator.get("prefs_dialog.time_24_hour")) {
 			public boolean hasChanged() {
 				String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT);
-		        return isSelected() != (timeFormat.equals(HOUR_24_TIME_FORMAT) || timeFormat.equals(HOUR_24_TIME_FORMAT_WITH_SECONDS));
+		        return isSelected() != (HOUR_24_TIME_FORMAT.equals(timeFormat) || HOUR_24_TIME_FORMAT_WITH_SECONDS.equals(timeFormat));
 			}
         };
         time24RadioButton.addActionListener(this);
         
         String timeFormat = MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT);
-        if(timeFormat.equals(HOUR_12_TIME_FORMAT) || timeFormat.equals(HOUR_12_TIME_FORMAT_WITH_SECONDS))
+        if(HOUR_12_TIME_FORMAT.equals(timeFormat) || HOUR_12_TIME_FORMAT_WITH_SECONDS.equals(timeFormat))
             time12RadioButton.setSelected(true);
         else
             time24RadioButton.setSelected(true);
@@ -264,7 +266,9 @@ class GeneralPanel extends PreferencesPanel implements ItemListener, ActionListe
         timeFormatPanel.add(time24RadioButton);
         timeFormatPanel.addSpace(10);
 
-        showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds"), () -> MuConfigurations.getPreferences().getVariable(MuPreference.TIME_FORMAT).indexOf(":ss")!=-1);
+        showSecondsCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.show_seconds"), () -> MuConfigurations.getPreferences()
+																												  .getVariable(MuPreference.TIME_FORMAT)
+																												  .contains(":ss"));
         showSecondsCheckBox.addItemListener(this);
         showSecondsCheckBox.addDialogListener(parent);
         timeFormatPanel.add(showSecondsCheckBox);

@@ -31,7 +31,7 @@ import javax.swing.event.ChangeListener;
 public abstract class TabsViewer<T extends Tab> extends JComponent {
 	
 	/** Collection of the displayed tabs */
-	private TabsCollection<T> tabs;
+	private final TabsCollection<T> tabs;
 	
 	public TabsViewer(JComponent component, TabsCollection<T> tabs) {
 		this.tabs = tabs;

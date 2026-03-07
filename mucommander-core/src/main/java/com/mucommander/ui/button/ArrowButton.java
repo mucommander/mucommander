@@ -35,7 +35,7 @@ public class ArrowButton extends JButton {
     public final static int LEFT_DIRECTION = 2;
     public final static int RIGHT_DIRECTION = 3;
 
-    private final static String ICONS[] = {
+    private final static String[] ICONS = {
             "arrow_up.png",
             "arrow_down.png",
             "arrow_left.png",

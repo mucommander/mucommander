@@ -95,7 +95,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     static {
-        FACTORY = () -> new XmlConfigurationReader();
+        FACTORY = XmlConfigurationReader::new;
     }
 
     /**

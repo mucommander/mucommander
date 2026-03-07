@@ -37,11 +37,11 @@ import com.mucommander.text.Translator;
  */
 public class HDFSPanel extends ServerPanel {
 
-    private JTextField serverField;
-    private JTextField usernameField;
+    private final JTextField serverField;
+    private final JTextField usernameField;
 //    private JTextField groupField;
-    private JTextField initialDirField;
-    private JSpinner portSpinner;
+    private final JTextField initialDirField;
+    private final JSpinner   portSpinner;
 
     private static String lastServer = "";
     private static String lastUsername = HDFSFile.getDefaultUsername();

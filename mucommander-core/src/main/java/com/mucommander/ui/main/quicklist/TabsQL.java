@@ -44,9 +44,9 @@ import com.mucommander.ui.tabs.TabFactory;
 public class TabsQL extends QuickListWithIcons<FileTableTab> {
 
 	/** The FolderPanel that contains the tabs */
-	private FolderPanel folderPanel;
+	private final FolderPanel folderPanel;
 	
-	private TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
+	private final TabFactory<FileTableTab, FileTableTab> tabsFactory = new PrintableFileTableTabFactory();
 	
 	Icon lockedTabIcon = IconManager.getIcon(IconManager.COMMON_ICON_SET, FileTableTabHeader.LOCKED_ICON_NAME);
 	Icon unlockedTabIcon = new EmptyIcon(8, 9);
@@ -69,7 +69,7 @@ public class TabsQL extends QuickListWithIcons<FileTableTab> {
 
 	@Override
 	protected FileTableTab[] getData() {
-		List<FileTableTab> tabsList = new ArrayList<FileTableTab>();
+		List<FileTableTab> tabsList = new ArrayList<>();
 		Iterator<FileTableTab> tabsIterator = folderPanel.getTabs().iterator();
 		
 		while(tabsIterator.hasNext())

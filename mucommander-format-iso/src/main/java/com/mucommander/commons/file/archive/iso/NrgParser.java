@@ -41,10 +41,10 @@ class NrgParser extends IsoParser {
 
         int len = rais.available();
 
-        int tracksMode[] = new int[255];
-        long tracksOffset[] = new long[255];
-        long tracksStart[] = new long[255];
-        long tracksEnd[] = new long[255];
+        int[] tracksMode = new int[255];
+        long[] tracksOffset = new long[255];
+        long[] tracksStart = new long[255];
+        long[] tracksEnd = new long[255];
 
         int tracks = 0;
 
@@ -53,7 +53,7 @@ class NrgParser extends IsoParser {
 
             rais.seek(len - i);
 
-            if (rais.read(buffer, 0, (i == 7) ? 4 : 12) == -1)
+            if (rais.read(buffer, 0, i == 7 ? 4 : 12) == -1)
                 throw new IOException("unable to read tail of nrg file");
 
             if (buffer[0] == 'N' && buffer[1] == 'E' && buffer[2] == 'R' && buffer[3] == '5') // v2 footer
@@ -167,18 +167,18 @@ class NrgParser extends IsoParser {
 
             // fun : handle audio disc :)
             if (audioOnly) {
-                Vector<IsoArchiveEntry> entries = new Vector<IsoArchiveEntry>();
+                Vector<IsoArchiveEntry> entries = new Vector<>();
                 for (int k = 0; k < tracks; k++) {
                     entries.add(
-                            new IsoArchiveEntry(
-                                    file.getName() + ".TRACK" + (k + 1) + ".wav",
-                                    false,
-                                    file.getDate(),
-                                    tracksEnd[k] - tracksOffset[k] + IsoUtil.WAV_header, // adding wav header
-                                    0,
-                                    sectSize,
-                                    tracksOffset[k],
-                                    true)
+                        new IsoArchiveEntry(
+                            file.getName() + ".TRACK" + (k + 1) + ".wav",
+                            false,
+                            file.getDate(),
+                            tracksEnd[k] - tracksOffset[k] + IsoUtil.WAV_header, // adding wav header
+                            0,
+                            sectSize,
+                            tracksOffset[k],
+                            true)
                     );
                 }
                 return entries;

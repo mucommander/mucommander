@@ -82,7 +82,7 @@ public class AsiExtraField implements ZipExtraField, UnixStat, Cloneable {
     /**
      * Instance used to calculate checksums.
      */
-    private CRC32 crc = new CRC32();
+    private final CRC32 crc = new CRC32();
 
     /** Constructor for AsiExtraField. */
     public AsiExtraField() {

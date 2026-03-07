@@ -99,7 +99,7 @@ class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
             // Disconnect if something went wrong
             if(session!=null && session.isConnected())
-            	session.disconnect();;
+            	session.disconnect();
 
             session = null;
             channelSftp = null;

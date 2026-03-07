@@ -18,13 +18,11 @@
 package com.mucommander.desktop.linux;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.mucommander.desktop.DesktopAdapter;
 import com.mucommander.desktop.linux.gnome.ConfiguredGnomeDesktopAdapter;
 import com.mucommander.desktop.linux.gnome.GuessedGnomeDesktopAdapter;
 import com.mucommander.desktop.linux.kde.ConfiguredKde3DesktopAdapter;
@@ -43,25 +41,21 @@ public class Activator implements BundleActivator  {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        OperatingSystemService service = new OperatingSystemService() {
-            @Override
-            public List<DesktopAdapter> getDesktopAdapters() {
-                // Unix desktops:
-                // - check for Gnome before KDE, as it seems to be more popular.
-                // - check for 'configured' before 'guessed', as guesses are less reliable and more expensive.
-                return Arrays.asList(
-                        new GuessedXfceDesktopAdapter(),
-                        new GuessedKde3DesktopAdapter(),
-                        new GuessedKde4DesktopAdapter(),
-                        new GuessedKde5DesktopAdapter(),
-                        new GuessedGnomeDesktopAdapter(),
-                        new ConfiguredXfceDesktopAdapter(),
-                        new ConfiguredKde3DesktopAdapter(),
-                        new ConfiguredKde4DesktopAdapter(),
-                        new ConfiguredKde5DesktopAdapter(),
-                        new ConfiguredGnomeDesktopAdapter());
-            }
-        };
+        OperatingSystemService service = () ->
+            // Unix desktops:
+            // - check for Gnome before KDE, as it seems to be more popular.
+            // - check for 'configured' before 'guessed', as guesses are less reliable and more expensive.
+            Arrays.asList(
+                new GuessedXfceDesktopAdapter(),
+                new GuessedKde3DesktopAdapter(),
+                new GuessedKde4DesktopAdapter(),
+                new GuessedKde5DesktopAdapter(),
+                new GuessedGnomeDesktopAdapter(),
+                new ConfiguredXfceDesktopAdapter(),
+                new ConfiguredKde3DesktopAdapter(),
+                new ConfiguredKde4DesktopAdapter(),
+                new ConfiguredKde5DesktopAdapter(),
+                new ConfiguredGnomeDesktopAdapter());
         osRegistration = context.registerService(OperatingSystemService.class, service, null);
     }
 

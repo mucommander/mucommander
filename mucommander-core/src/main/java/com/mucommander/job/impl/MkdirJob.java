@@ -49,10 +49,10 @@ import com.mucommander.ui.main.MainFrame;
 public class MkdirJob extends FileJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(MkdirJob.class);
 
-    private AbstractFile destFolder;
+    private final AbstractFile destFolder;
 
-    private boolean mkfileMode;
-    private long allocateSpace;
+    private final boolean mkfileMode;
+    private       long    allocateSpace;
 
 
     /**
@@ -140,7 +140,7 @@ public class MkdirJob extends FileJob {
                                 mkfileOut = file.getOutputStream();
 
                                 // Use BufferPool to avoid excessive memory allocation and garbage collection
-                                byte buffer[] = BufferPool.getByteArray();
+                                byte[] buffer = BufferPool.getByteArray();
                                 int bufferSize = buffer.length;
 
                                 try {
@@ -186,9 +186,9 @@ public class MkdirJob extends FileJob {
                 LOGGER.debug("IOException caught", e);
 
                 DialogAction action = showErrorDialog(
-                        Translator.get("error"),
-                        Translator.get(mkfileMode ? "cannot_write_file" : "cannot_create_folder", file.getAbsolutePath()),
-                        Arrays.asList(FileJobAction.RETRY, FileJobAction.CANCEL)
+                    Translator.get("error"),
+                    Translator.get(mkfileMode ? "cannot_write_file" : "cannot_create_folder", file.getAbsolutePath()),
+                    Arrays.asList(FileJobAction.RETRY, FileJobAction.CANCEL)
                 );
                 // Retry (loop)
                 if (action == FileJobAction.RETRY)

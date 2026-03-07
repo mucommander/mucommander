@@ -42,7 +42,7 @@ public class BookmarkProtocolProvider implements ProtocolProvider {
         // If the URL contains a path but no host, it's illegal.
         // If it contains neither host nor path, we're browsing bookmark://
         if (url.getHost() == null) {
-            if(url.getPath().equals("/"))
+            if("/".equals(url.getPath()))
                 return new BookmarkRoot(url);
             throw new IOException("illegal bookmark: " + url);
         }
@@ -53,14 +53,14 @@ public class BookmarkProtocolProvider implements ProtocolProvider {
         // If the bookmark doesn't exist, but a path is specified, throws an exception.
         // Otherwise, returns the requested bookmark.
         if (bookmark == null) {
-            if (!url.getPath().equals("/"))
+            if (!"/".equals(url.getPath()))
                 throw new IOException("illegal bookmark: " + url);
             return new BookmarkFile(new Bookmark(url.getHost(), url.getPath()));
         }
 
         // If the bookmark exists, and a path is specified, creates a new path
         // from the bookmark's location and the specified path.
-        if (!url.getPath().equals("/"))
+        if (!"/".equals(url.getPath()))
             return FileFactory.getFile(bookmark.getLocation() + url.getPath());
 
         // Otherwise, creates a new bookmark file.

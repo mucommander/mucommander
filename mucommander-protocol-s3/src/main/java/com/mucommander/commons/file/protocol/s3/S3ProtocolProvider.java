@@ -43,7 +43,7 @@ import com.mucommander.commons.file.protocol.ProtocolProvider;
 public class S3ProtocolProvider implements ProtocolProvider {
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {
         Credentials credentials = url.getCredentials();
-        if(credentials==null || credentials.getLogin().equals("") || credentials.getPassword().equals(""))
+        if(credentials==null || "".equals(credentials.getLogin()) || "".equals(credentials.getPassword()))
             throw new AuthException(url);
 
         S3Service service;
@@ -67,7 +67,7 @@ public class S3ProtocolProvider implements ProtocolProvider {
         String path = url.getPath();
 
         // Root resource
-        if(("/").equals(path))
+        if("/".equals(path))
             return new S3Root(url, service);
 
         // Fetch the bucket name from the URL

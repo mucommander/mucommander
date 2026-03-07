@@ -46,7 +46,7 @@ public class OpenLocationAction extends ActiveTabAction {
      * (with credentials stripped out) as label.
      */
     public OpenLocationAction(MainFrame mainFrame, Map<String,Object> properties, FileURL url) {
-        this(mainFrame, properties, url, url.getScheme().equals(LocalFile.SCHEMA)?url.getPath():url.toString(false));
+        this(mainFrame, properties, url, LocalFile.SCHEMA.equals(url.getScheme())?url.getPath():url.toString(false));
     }
 
     /**
@@ -57,7 +57,7 @@ public class OpenLocationAction extends ActiveTabAction {
 
         this.url = url;
         setLabel(label);
-        setToolTipText(url.getScheme().equals(LocalFile.SCHEMA)?url.getPath():url.toString(false));
+        setToolTipText(LocalFile.SCHEMA.equals(url.getScheme())?url.getPath():url.toString(false));
     }
 
 

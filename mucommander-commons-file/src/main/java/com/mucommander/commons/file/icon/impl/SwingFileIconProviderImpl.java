@@ -90,7 +90,7 @@ class SwingFileIconProviderImpl extends LocalFileIconProvider implements Cacheab
             return;
 
         if(OsFamily.MAC_OS.isCurrent())
-            fileChooser = CompletableFuture.supplyAsync(() -> new JFileChooser());  // new JFileChooser takes looong to init
+            fileChooser = CompletableFuture.supplyAsync(JFileChooser::new);  // new JFileChooser takes looong to init
         else
             fileSystemView = FileSystemView.getFileSystemView();
 

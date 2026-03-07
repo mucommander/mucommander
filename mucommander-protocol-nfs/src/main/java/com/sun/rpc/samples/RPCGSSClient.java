@@ -78,7 +78,7 @@ class RPCGSSClient {
     /**
      * Main method for the RPCGSSClient sample application.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
 	Rpc rpc = null;
 	CredGss cred = null;
@@ -96,11 +96,11 @@ class RPCGSSClient {
 
 	// parse -m option; use dummy mech if -m is not specified
 	if (args.length > 2) {
-	    if (args[2].equals("-m")) {
-		if (args[3].equals("1")) {
+	    if ("-m".equals(args[2])) {
+		if ("1".equals(args[3])) {
 			mech = mech1;
 			print("Kerberos mechanism " + mech);
-		} else if (args[3].equals("2")) {
+		} else if ("2".equals(args[3])) {
 			mech = mech2;
 			print("Dummy mechanism " + mech);
 		} else {
@@ -137,11 +137,11 @@ class RPCGSSClient {
 			break;
 
 		case SVC_SET:
-			if (svcString.equals("none")) {
+			if ("none".equals(svcString)) {
 				serviceType = CredGss.SVC_NONE;
-			} else if (svcString.equals("integrity")) {
+			} else if ("integrity".equals(svcString)) {
 				serviceType = CredGss.SVC_INTEGRITY;
-			} else if (svcString.equals("privacy")) {
+			} else if ("privacy".equals(svcString)) {
 				serviceType = CredGss.SVC_PRIVACY;
 			}
 			if (cred != null) {
@@ -249,7 +249,7 @@ class RPCGSSClient {
 		offset = 0; n = 0; i = 0;
 
 		while (i < (len - 1)) {
-		    while (Character.isSpace((char) argbuf[i])) {
+		    while (Character.isWhitespace((char) argbuf[i])) {
 			i++;
 		    }
 		    offset = i;
@@ -270,7 +270,7 @@ class RPCGSSClient {
 	if (args[0] == null)
 		parseargs();
 
-	if (args[0].equals("set")) {
+	if ("set".equals(args[0])) {
 		op = ADDR_SET;
 		name = args[1];
 		addr = args[2];
@@ -279,7 +279,7 @@ class RPCGSSClient {
 			parseargs();
 		}
 
-	} else if (args[0].equals("get")) {
+	} else if ("get".equals(args[0])) {
 		op = ADDR_GET;
 		name = args[1];
 		if (name == null) {
@@ -287,7 +287,7 @@ class RPCGSSClient {
 			parseargs();
 		}
 
-	} else if (args[0].equals("del")) {
+	} else if ("del".equals(args[0])) {
 		op = ADDR_DEL;
 		if (args[1] == null) {
 			print("syntax error");
@@ -295,7 +295,7 @@ class RPCGSSClient {
 		}
 		name = args[1];
 
-	} else if (args[0].equals("service")) {
+	} else if ("service".equals(args[0])) {
 		op = SVC_SET;
 		if (args[1] == null) {
 			print("syntax error");
@@ -303,13 +303,13 @@ class RPCGSSClient {
 		}
 		svcString = args[1];
 
-	} else if (args[0].equals("create-context")) {
+	} else if ("create-context".equals(args[0])) {
 		op = CREATE;
 
-	} else if (args[0].equals("destroy-context")) {
+	} else if ("destroy-context".equals(args[0])) {
 		op = DESTROY;
 
-	} else if (args[0].equals("loop")) {
+	} else if ("loop".equals(args[0])) {
 		op = LOOP;
 		if (args[1] != null) {
 			loop_times = Integer.parseInt(args[1]);
@@ -317,7 +317,7 @@ class RPCGSSClient {
 			loop_times = 5;
 		}
 
-	} else if (args[0].equals("quit") || args[0].equals("exit")) {
+	} else if ("quit".equals(args[0]) || "exit".equals(args[0])) {
 		op = QUIT;
 
 	} else {

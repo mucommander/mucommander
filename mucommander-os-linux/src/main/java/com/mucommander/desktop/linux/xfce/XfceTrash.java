@@ -151,65 +151,61 @@ public class XfceTrash extends QueuedTrash {
      */
     @Override
     protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
-        int nbFiles = queuedFiles.size();
-        String fileInfoContent;
+		String fileInfoContent;
         String trashFileName;
         boolean retVal = true;     // overall return value (if everything went OK or at least one file wasn't moved properly
-        
-        for(int i=0; i<nbFiles; i++) {
-            AbstractFile fileToDelete = queuedFiles.get(i);
-            // generate content of info file and new filename
-            try {
-                fileInfoContent = getFileInfoContent(fileToDelete);
-                trashFileName = getUniqueFilename(fileToDelete);
-            } catch (IOException ex) {
-                LOGGER.debug("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
-                
-                // continue with other file (do not move file, because info file cannot be properly created
-                continue;
-            }
 
-            AbstractFile infoFile = null;
-            OutputStreamWriter infoWriter = null;
-            try {
-                // create info file
-                infoFile = TRASH_INFO_SUBFOLDER.getChild(trashFileName + ".trashinfo");
-                infoWriter = new OutputStreamWriter(infoFile.getOutputStream());
-                infoWriter.write(fileInfoContent);
-            } catch (IOException ex) {
-                retVal = false;
-                LOGGER.debug("Failed to create trash info file: " + trashFileName, ex);
+		for (AbstractFile fileToDelete : queuedFiles) {
+			// generate content of info file and new filename
+			try {
+				fileInfoContent = getFileInfoContent(fileToDelete);
+				trashFileName = getUniqueFilename(fileToDelete);
+			} catch (IOException ex) {
+				LOGGER.debug("Failed to create filename for new trash item: " + fileToDelete.getName(), ex);
 
-                // continue with other file (do not move file, because info file wasn't properly created)
-                continue;
-            }
-            finally {
-                if(infoWriter!=null) {
-                    try {
-                        infoWriter.close();
-                    }
-                    catch(IOException e) {
-                        // Not much else to do
-                    }
-                }
-            }
-            
-            try {
-                // rename original file
-                fileToDelete.renameTo(TRASH_FILES_SUBFOLDER.getChild(trashFileName));
-            } catch (IOException ex) {
-                try {
-                    // remove info file
-                    infoFile.delete();
+				// continue with other file (do not move file, because info file cannot be properly created
+				continue;
+			}
 
-                } catch (IOException ex1) {
-                    // simply ignore
-                }
-                
-                retVal = false;
-                LOGGER.debug("Failed to move file to trash: " + trashFileName, ex);
-            }
-        }
+			AbstractFile       infoFile   = null;
+			OutputStreamWriter infoWriter = null;
+			try {
+				// create info file
+				infoFile = TRASH_INFO_SUBFOLDER.getChild(trashFileName + ".trashinfo");
+				infoWriter = new OutputStreamWriter(infoFile.getOutputStream());
+				infoWriter.write(fileInfoContent);
+			} catch (IOException ex) {
+				retVal = false;
+				LOGGER.debug("Failed to create trash info file: " + trashFileName, ex);
+
+				// continue with other file (do not move file, because info file wasn't properly created)
+				continue;
+			} finally {
+				if (infoWriter != null) {
+					try {
+						infoWriter.close();
+					} catch (IOException e) {
+						// Not much else to do
+					}
+				}
+			}
+
+			try {
+				// rename original file
+				fileToDelete.renameTo(TRASH_FILES_SUBFOLDER.getChild(trashFileName));
+			} catch (IOException ex) {
+				try {
+					// remove info file
+					infoFile.delete();
+
+				} catch (IOException ex1) {
+					// simply ignore
+				}
+
+				retVal = false;
+				LOGGER.debug("Failed to move file to trash: " + trashFileName, ex);
+			}
+		}
 
         return retVal;
     }
@@ -262,7 +258,7 @@ public class XfceTrash extends QueuedTrash {
             return false;
         }
 
-        if (filesToDelete.size() > 0) {
+        if (!filesToDelete.isEmpty()) {
             // Starts deleting files
             MainFrame mainFrame = WindowManager.getCurrentMainFrame();
             ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("delete_dialog.deleting"));

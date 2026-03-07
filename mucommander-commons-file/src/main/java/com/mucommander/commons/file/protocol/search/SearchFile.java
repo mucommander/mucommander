@@ -90,9 +90,9 @@ public class SearchFile extends ProtocolFile implements SearchListener {
         if (!search.isFinished())
             results.toArray(EMPTY_RESULTS);
         return results.stream()
-                .map(file -> file instanceof ProxyFile ? ((ProxyFile) file).getProxiedFile() : file)
-                .filter(AbstractFile::exists)
-                .toArray(AbstractFile[]::new);
+            .map(file -> file instanceof ProxyFile ? ((ProxyFile) file).getProxiedFile() : file)
+            .filter(AbstractFile::exists)
+            .toArray(AbstractFile[]::new);
     }
 
     @Override

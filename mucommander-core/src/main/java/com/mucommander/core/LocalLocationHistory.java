@@ -44,13 +44,13 @@ public class LocalLocationHistory {
 	private final static int HISTORY_CAPACITY = 100;
 
 	/** List of visited locations, ordered by last visit date */
-	private List<FileURL> history = new Vector<FileURL>(HISTORY_CAPACITY+1);
+	private final List<FileURL> history = new Vector<>(HISTORY_CAPACITY + 1);
 
 	/** Index of current folder in history */
 	private int historyIndex = -1;
 
 	/** FolderPanel which is being monitored */
-	private FolderPanel folderPanel; 
+	private final FolderPanel folderPanel;
 
 	/** Last folder which can be recalled on next startup */
 	private String lastRecallableFolder;
@@ -78,7 +78,7 @@ public class LocalLocationHistory {
 		//  - it doesn't look like a removable media drive (cd/dvd/floppy), especially in order to prevent
 		// Java from triggering that dreaded 'Drive not ready' popup.
 		LOGGER.trace("folder="+folderURL);
-		if(folderURL.getScheme().equals(LocalFile.SCHEMA)) {
+		if(LocalFile.SCHEMA.equals(folderURL.getScheme())) {
 			AbstractFile folder = FileFactory.getFile(folderURL);
 			if (folder.isDirectory() && (folder instanceof LocalFile) && !((LocalFile)folder.getRoot()).guessRemovableDrive()) {
 				this.lastRecallableFolder = folder.getAbsolutePath();
@@ -154,7 +154,7 @@ public class LocalLocationHistory {
 			return new FileURL[0];
 
 		int backLen = historyIndex;
-		FileURL urls[] = new FileURL[backLen];
+		FileURL[] urls = new FileURL[backLen];
 
 		int cur = 0;
 		for(int i=historyIndex-1; i>=0; i--)
@@ -173,7 +173,7 @@ public class LocalLocationHistory {
 			return new FileURL[0];
 
 		int historySize = history.size();
-		FileURL urls[] = new FileURL[historySize-historyIndex-1];
+		FileURL[] urls = new FileURL[historySize-historyIndex-1];
 
 		int cur = 0;
 		for(int i=historyIndex+1; i<historySize; i++)

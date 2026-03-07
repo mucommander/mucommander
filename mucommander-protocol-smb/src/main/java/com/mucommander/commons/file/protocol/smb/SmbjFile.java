@@ -180,14 +180,13 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
                         // New directory being created
                         return false;
                     }
+                }
+                // Actual file
+                else if (isDirectory()) {
+                    return true;
                 } else {
-                    // Actual file
-                    if (isDirectory()) {
+                    try (File f = openFileForRead(c)) {
                         return true;
-                    } else {
-                        try (File f = openFileForRead(c)) {
-                            return true;
-                        }
                     }
                 }
             } catch (Exception e) {
@@ -292,8 +291,8 @@ public class SmbjFile extends ProtocolFile implements ConnectionHandlerFactory {
 
             List<FileIdBothDirectoryInformation> list = c.getDiskShare().list(path);
             return list.stream()
-                    .filter(f -> !f.getFileName().equals("."))
-                    .filter(f -> !f.getFileName().equals(".."))
+                    .filter(f -> !".".equals(f.getFileName()))
+                    .filter(f -> !"..".equals(f.getFileName()))
                     .map(f -> {
                         FileURL childURL = (FileURL)fileURL.clone();
                         childURL.setHost(fileURL.getHost());

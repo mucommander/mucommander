@@ -29,8 +29,8 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
  */
 public class RegistryConnHandler extends ConnectionHandler {
 
-	private FileURL location;
-	private RegistryClient client;
+	private final FileURL        location;
+	private       RegistryClient client;
 
 	public RegistryClient getClient() {
 		return client;

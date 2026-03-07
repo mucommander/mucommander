@@ -20,9 +20,9 @@ package com.mucommander.ui.theme;
 import java.awt.Color;
 
 public class ColorChangedEvent {
-    private Theme source;
-    private int   colorId;
-    private Color  color;
+    private final Theme source;
+    private final int   colorId;
+    private final Color color;
 
     ColorChangedEvent(Theme source, int colorId, Color color) {
         this.source = source;

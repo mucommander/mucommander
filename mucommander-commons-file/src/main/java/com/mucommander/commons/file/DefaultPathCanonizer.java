@@ -26,10 +26,10 @@ import java.util.Vector;
 public class DefaultPathCanonizer implements PathCanonizer {
 
     /** Path separator */
-    private String separator;
+    private final String separator;
 
     /** The string replacement for '~' path fragments, null for no tilde replacement */
-    private String tildeReplacement;
+    private final String tildeReplacement;
 
 
     /**
@@ -68,13 +68,13 @@ public class DefaultPathCanonizer implements PathCanonizer {
     public String canonize(String path) {
         // Todo: use PathTokenizer?
 
-        if(!path.equals("/")) {
+        if(!"/".equals(path)) {
             int pos;	    // position of current path separator
             int pos2 = 0;	// position of next path separator
             int separatorLen = separator.length();
             String dir;		// Current directory
             String dirWS;	// Current directory without trailing separator
-            Vector<String> pathV = new Vector<String>();	// Will contain directory hierachy
+            Vector<String> pathV = new Vector<>();	// Will contain directory hierachy
             while((pos=pos2)!=-1) {
                 // Get the index of the next path separator occurrence
                 pos2 = path.indexOf(separator, pos);
@@ -90,17 +90,17 @@ public class DefaultPathCanonizer implements PathCanonizer {
                 }
 
                 // Discard '.' and empty directories
-                if((dirWS.equals("") && pathV.size()>0) || dirWS.equals(".")) {
+                if((dirWS.isEmpty() && !pathV.isEmpty()) || ".".equals(dirWS)) {
                     continue;
                 }
                 // Remove last directory
-                else if(dirWS.equals("..")) {
-                    if(pathV.size()>0)
+                else if("..".equals(dirWS)) {
+                    if(!pathV.isEmpty())
                         pathV.removeElementAt(pathV.size()-1);
                     continue;
                 }
                 // Replace '~' by the provided replacement string, only if one was specified
-                else if(tildeReplacement!=null && dirWS.equals("~")) {
+                else if(tildeReplacement!=null && "~".equals(dirWS)) {
                     path = path.substring(0, pos) + tildeReplacement + path.substring(pos+1);
                     // Will perform another pass at the same position
                     pos2 = pos;

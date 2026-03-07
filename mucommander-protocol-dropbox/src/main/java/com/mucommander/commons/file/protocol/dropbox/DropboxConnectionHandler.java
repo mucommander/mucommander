@@ -17,8 +17,8 @@ import com.mucommander.conf.PlatformManager;
 public class DropboxConnectionHandler extends ConnectionHandler implements AutoCloseable {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DropboxConnectionHandler.class);
 
-	private DbxClientV2 dbxClient;
-	private FileURL fileURL;
+	private       DbxClientV2 dbxClient;
+	private final FileURL     fileURL;
 
 	public DbxClientV2 getDbxClient() {
 		return dbxClient;

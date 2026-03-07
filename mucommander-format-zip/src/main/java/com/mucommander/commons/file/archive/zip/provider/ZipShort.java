@@ -32,7 +32,7 @@ package com.mucommander.commons.file.archive.zip.provider;
  */
 public final class ZipShort implements Cloneable {
 
-    private int value;
+    private final int value;
 
     /**
      * Create instance from a number.
@@ -120,7 +120,7 @@ public final class ZipShort implements Cloneable {
      */
     public static int getValue(byte[] bytes, int offset) {
         int value = (bytes[offset + 1] << 8) & 0xFF00;
-        value += (bytes[offset] & 0xFF);
+        value += bytes[offset] & 0xFF;
         return value;
     }
 
@@ -139,7 +139,7 @@ public final class ZipShort implements Cloneable {
      * @return true if the objects are equal
      */
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof ZipShort)) {
+        if (!(o instanceof ZipShort)) {
             return false;
         }
         return value == ((ZipShort) o).getValue();

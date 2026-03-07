@@ -38,7 +38,7 @@ import com.mucommander.ui.main.MainFrame;
 public class ChangeFileAttributesJob extends FileJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChangeFileAttributesJob.class);
 	
-    private boolean recurseOnDirectories;
+    private final boolean recurseOnDirectories;
 
     private int permissions = -1;
     private long date = -1;
@@ -73,7 +73,7 @@ public class ChangeFileAttributesJob extends FileJob {
         if(recurseOnDirectories && file.isDirectory()) {
             do {		// Loop for retries
                 try {
-                    AbstractFile children[] = file.ls();
+                    AbstractFile[] children = file.ls();
                     int nbChildren = children.length;
 
                     for(int i=0; i<nbChildren && getState() != FileJobState.INTERRUPTED; i++) {

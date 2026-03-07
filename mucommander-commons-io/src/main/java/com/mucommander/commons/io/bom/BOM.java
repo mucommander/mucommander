@@ -29,13 +29,13 @@ import java.nio.charset.Charset;
 public class BOM {
 
     /** the byte sequence that identifies this BOM */
-    private byte[] sig;
+    private final byte[] sig;
 
     /** the character encoding denoted by this BOM */
-    private String encoding;
+    private final String encoding;
 
     /** character encoding aliases that map onto this BOM */
-    private String aliases[];
+    private final String[] aliases;
 
     /**
      * Creates a new <code>BOM</code> instance identified by the given signature and denoting the specified
@@ -45,7 +45,7 @@ public class BOM {
      * @param encoding the character encoding denoted by this BOM
      * @param aliases character encoding aliases
      */
-    BOM(byte signature[], String encoding, String[] aliases) {
+    BOM(byte[] signature, String encoding, String[] aliases) {
         this.sig = signature;
         this.encoding = encoding;
         this.aliases = aliases;
@@ -84,7 +84,7 @@ public class BOM {
      * @param bytes the byte sequence to compare against this BOM's signature
      * @return true if this BOM's signature starts with the given byte sequence
      */
-    public boolean sigStartsWith(byte bytes[]) {
+    public boolean sigStartsWith(byte[] bytes) {
         int bytesLen = bytes.length;
         if(bytesLen>sig.length)
             return false;
@@ -103,7 +103,7 @@ public class BOM {
      * @param bytes the byte sequence to compare against this BOM's signature
      * @return true if this BOM's signature matches the given byte sequence
      */
-    public boolean sigEquals(byte bytes[]) {
+    public boolean sigEquals(byte[] bytes) {
         return bytes.length==sig.length && sigStartsWith(bytes);
     }
 
@@ -179,7 +179,7 @@ public class BOM {
         out.append(", signature=");
         for(int i=0; i < sig.length; i++) {
             out.append(0xFF&sig[i]);
-            out.append((i==sig.length-1?"}":", "));
+            out.append(i==sig.length-1?"}":", ");
         }
         out.append(", encoding=");
         out.append(encoding);

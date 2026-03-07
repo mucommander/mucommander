@@ -110,7 +110,7 @@ public class CounterInputStream extends InputStream {
 
 
     @Override
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
         int nbRead = in.read(b);
         if(nbRead>0)
             counter.add(nbRead);
@@ -119,7 +119,7 @@ public class CounterInputStream extends InputStream {
     }
 
     @Override
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         int nbRead = in.read(b, off, len);
         if(nbRead>0)
             counter.add(nbRead);

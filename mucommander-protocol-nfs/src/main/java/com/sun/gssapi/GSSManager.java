@@ -37,8 +37,6 @@
  
 package com.sun.gssapi;
 
-import java.io.*;
-import java.security.NoSuchProviderException;
 import java.security.Provider;
 import java.security.Security;
 import java.util.Hashtable;
@@ -80,7 +78,7 @@ public class GSSManager {
 		    break;
 		} else {
 		    Class cl = Class.forName(name);
-		    Object instance = cl.newInstance();
+		    Object instance = cl.getDeclaredConstructor().newInstance();
 		    if (instance instanceof Provider) {
 			Security.addProvider((Provider)instance);
 		    } else {
@@ -110,26 +108,25 @@ public class GSSManager {
          */
         Provider [] p = java.security.Security.getProviders();
         Vector aV = new Vector(5, 3);
-        
-        for (int i = 0; i < p.length; i++) {
-            String []mechs = MechInfo.getMechsForProvider(p[i]);
-            
-            if (mechs == null)
-                continue;
-                
-            for (int j=0; j < mechs.length; j++) {
-                try {
-                    addUniqueOid(aV, new Oid(mechs[j]));
-                } catch (GSSException e) {}
-            }
-        }
+
+		for (Provider provider : p) {
+			String[] mechs = MechInfo.getMechsForProvider(provider);
+
+			if (mechs == null) continue;
+
+			for (String mech : mechs) {
+				try {
+					addUniqueOid(aV, new Oid(mech));
+				} catch (GSSException e) {}
+			}
+		}
 
         if (aV.size() == 0)
-            return (null);
+            return null;
             
         Oid []mechs = new Oid[aV.size()];
         aV.copyInto(mechs);
-        return (mechs);
+        return mechs;
     }
          
     
@@ -151,7 +148,7 @@ public class GSSManager {
     
         MechInfo aMech = getMechInfo(mech, false);
         
-        return (aMech.getNames());        
+        return aMech.getNames();        
     }
     
 
@@ -170,26 +167,24 @@ public class GSSManager {
     
         Provider []p = java.security.Security.getProviders();
         Vector v = new Vector(5,3);
-        
-        for (int i = 0; i < p.length; i++) {
-            MechInfo [] mechs = MechInfo.getInfoForAllMechs(p[i]);
-            
-            if (mechs == null)
-                continue;
-                
-            for (int j = 0; j < mechs.length; j++) {
-            
-                if (mechs[j].supportsName(nameType))
-                    addUniqueOid(v, mechs[j].getOid());
-            }
-        }
+
+		for (Provider provider : p) {
+			MechInfo[] mechs = MechInfo.getInfoForAllMechs(provider);
+
+			if (mechs == null) continue;
+
+			for (MechInfo mech : mechs) {
+
+				if (mech.supportsName(nameType)) addUniqueOid(v, mech.getOid());
+			}
+		}
         
         if (v.size() == 0)
-            return (null);
+            return null;
             
         Oid [] oids = new Oid[v.size()];
         v.copyInto(oids);
-        return (oids);
+        return oids;
     }
     
     
@@ -206,20 +201,19 @@ public class GSSManager {
     public static Oid getDefaultMech() throws GSSException {
 
         if (m_defaultMech != null)
-            return (m_defaultMech.getOid());
+            return m_defaultMech.getOid();
             
         Provider []p = java.security.Security.getProviders();
         
         //check each provider
-        for (int i = 0; i < p.length; i++) {
-            String []mechs = MechInfo.getMechsForProvider(p[i]);
-            
-            if (mechs == null)
-                continue;
-                
-            m_defaultMech = new MechInfo(p[i], mechs[0]);
-            return (m_defaultMech.getOid());
-        }
+		for (Provider provider : p) {
+			String[] mechs = MechInfo.getMechsForProvider(provider);
+
+			if (mechs == null) continue;
+
+			m_defaultMech = new MechInfo(provider, mechs[0]);
+			return m_defaultMech.getOid();
+		}
         
         throw new GSSException(GSSException.BAD_MECH);
     }
@@ -248,7 +242,7 @@ public class GSSManager {
     
         //get mech out of the mech table, and if need be load it
         MechInfo aMech = getMechInfo(mech, true);
-        return (aMech.getCredInstance());
+        return aMech.getCredInstance();
     }
 
 
@@ -260,7 +254,7 @@ public class GSSManager {
     
         //get mech out of the mech table, and if need be load it
         MechInfo aMech = getMechInfo(mech, true);
-        return (aMech.getNameInstance());
+        return aMech.getNameInstance();
     }
 
 
@@ -272,7 +266,7 @@ public class GSSManager {
     
         //get mech out of the mech table, and if need be load it
         MechInfo aMech = getMechInfo(mech, true);
-        return (aMech._M4092FBA ());
+        return aMech._M4092FBA ();
     }
         
 
@@ -290,32 +284,31 @@ public class GSSManager {
         if (aMech != null) {
             if (installMech)
                 MechTable.putMechInfo(aMech);
-            return (aMech);
+            return aMech;
         }
         
         //need to search all providers
         Provider [] p = java.security.Security.getProviders();
         String mechString = oid.toString();
-        
-        for (int i=0; i < p.length; i++) {
-        
-            if (MechInfo.implementsMech(p[i], mechString)) {
 
-                try {
-                    aMech = new MechInfo(p[i], mechString);
-                    
-                    if (installMech)
-                        MechTable.putMechInfo(aMech);
-                        
-                    return (aMech);
-                } catch (GSSException e) {
-                
-                    //skip over this provider, there might be
-                    //other good ones
-                    continue;
-                }
-            }
-        }
+		for (Provider provider : p) {
+
+			if (MechInfo.implementsMech(provider, mechString)) {
+
+				try {
+					aMech = new MechInfo(provider, mechString);
+
+					if (installMech) MechTable.putMechInfo(aMech);
+
+					return aMech;
+				} catch (GSSException e) {
+
+					//skip over this provider, there might be
+					//other good ones
+					continue;
+				}
+			}
+		}
         
         //this mechanism is not installed on the system
         throw new GSSException(GSSException.BAD_MECH);
@@ -330,14 +323,13 @@ public class GSSManager {
         Provider [] p = java.security.Security.getProviders();
         MechInfo [] mechs;
         boolean foundGSSProv = false;
-        
-        for (int i = 0; i < p.length; i++ ) {
-            mechs = MechInfo.getInfoForAllMechs(p[i]);
-            if (mechs == null)
-                continue;
-                
-            foundGSSProv = true;
-        }
+
+		for (Provider provider : p) {
+			mechs = MechInfo.getInfoForAllMechs(provider);
+			if (mechs == null) continue;
+
+			foundGSSProv = true;
+		}
     }
 
     //private class variable - default mechanism oid
@@ -400,12 +392,11 @@ class MechInfo {
      * @return true if name type is supported, false otherwise
      */
     boolean supportsName(Oid nameOid) {
-    
-        for (int i = 0; i < m_names.length; i++) {
-            if (m_names[i].equals(nameOid))
-                return (true);
-        }
-        return (false);
+
+		for (Oid mName : m_names) {
+			if (mName.equals(nameOid)) return true;
+		}
+        return false;
     }
     
     
@@ -414,7 +405,7 @@ class MechInfo {
      */
     Oid[] getNames() {
         
-        return (m_names);
+        return m_names;
     }
     
 
@@ -423,7 +414,7 @@ class MechInfo {
      */
     Oid getOid() {
     
-        return (m_oid);
+        return m_oid;
     }
 
 
@@ -440,7 +431,7 @@ class MechInfo {
                 _V29ED8BF = Class.forName(_V901D6C2);
             }
         
-            return ((GSSCredSpi)_V29ED8BF.newInstance());
+            return (GSSCredSpi)_V29ED8BF.getDeclaredConstructor().newInstance();
             
         } catch (Exception e) {
             throw new GSSException(GSSException.UNAVAILABLE);
@@ -461,7 +452,7 @@ class MechInfo {
                 _V30FDA16 = Class.forName(_V108CA91);
             }
         
-            return ((C018FE95)_V30FDA16.newInstance());
+            return (C018FE95)_V30FDA16.getDeclaredConstructor().newInstance();
             
         } catch (Exception e) {
             throw new GSSException(GSSException.UNAVAILABLE);
@@ -482,7 +473,7 @@ class MechInfo {
                 _V29ED8BF = Class.forName(_V2395ABD);
             }
         
-            return ((GSSNameSpi)_V29ED8BF.newInstance());
+            return (GSSNameSpi)_V29ED8BF.getDeclaredConstructor().newInstance();
             
         } catch (Exception e) {
             throw new GSSException(GSSException.UNAVAILABLE);
@@ -497,7 +488,7 @@ class MechInfo {
      */
     Provider getProvider() {
     
-        return (_V510CA83);
+        return _V510CA83;
     }
     
             
@@ -516,13 +507,13 @@ class MechInfo {
 
         if ((aStr = p.getProperty("JGSS.Mech." + _V0095DCA + "." + key))
                 != null) {
-            return (aStr);
+            return aStr;
         }
 
         if ((aStr = oidStrToAlias(_V0095DCA)) == null)
             return null;
 
-        return (p.getProperty("JGSS.Mech." + aStr + "." + key));
+        return p.getProperty("JGSS.Mech." + aStr + "." + key);
     }
     
     
@@ -576,14 +567,13 @@ class MechInfo {
         String [] mechs = getMechsForProvider(p);
         
         if (mechs == null)
-            return (false);
-            
-        for (int i = 0; i < mechs.length; i++) {
-            if (mechs[i].equals(oid))
-                return (true);
-        }
+            return false;
+
+		for (String mech : mechs) {
+			if (mech.equals(oid)) return true;
+		}
         
-        return (false);
+        return false;
     }
     
     
@@ -597,7 +587,7 @@ class MechInfo {
         
         //does this provider even support JGSS ?
         if (mechsStr == null)
-            return (null);
+            return null;
             
         StringTokenizer st = new StringTokenizer(mechsStr, ":");
         MechInfo[] mInfo = new MechInfo[st.countTokens()];
@@ -608,7 +598,7 @@ class MechInfo {
             }
         }
             
-        return (mInfo);
+        return mInfo;
     }
     
     
@@ -626,9 +616,9 @@ class MechInfo {
             String[] res = new String[st.countTokens()];
             for (int i = 0; i < res.length; i++)
                 res[i] = st.nextToken();
-            return (res);
+            return res;
         }
-        return (null);
+        return null;
     }
     
     
@@ -637,7 +627,7 @@ class MechInfo {
      */
     public String toString() {
 
-        StringBuffer aBuf = new StringBuffer(100);
+        StringBuilder aBuf = new StringBuilder(100);
         
         aBuf.append("Mechanism oid:\t").append(m_oid);
         aBuf.append("\nMechanism alias:\t").append(
@@ -648,15 +638,14 @@ class MechInfo {
         else
             aBuf.append(_V510CA83.getInfo());
         aBuf.append("\nSupported Names:\t");
-        
-        for(int i = 0; i < m_names.length; i++)
-            aBuf.append(m_names[i].toString()).append(" ");
+
+		for (Oid mName : m_names) aBuf.append(mName.toString()).append(" ");
         
         aBuf.append("\nName Class:\t").append(_V2395ABD);
         aBuf.append("\nCred Class:\t").append(_V901D6C2);
         aBuf.append("\nCtxt Class:\t").append(_V108CA91);
 
-        return (aBuf.toString());
+        return aBuf.toString();
     }
     
     //instance variables
@@ -671,7 +660,7 @@ class MechInfo {
     private Class _V30FDA16;    //class implementing ctxt
     
     //class variables
-    private static Properties M_oidAlias;    //oid <-> alias mapping
+    private static final Properties M_oidAlias;    //oid <-> alias mapping
     
     static {
         M_oidAlias = new Properties();
@@ -696,7 +685,7 @@ class MechTable {
      */
     static MechInfo getMechInfo(Oid oid) {
     
-        return ((MechInfo)M_table.get(oid));
+        return (MechInfo)M_table.get(oid);
     }
     
 
@@ -709,15 +698,15 @@ class MechTable {
     static boolean putMechInfo(MechInfo aMech) {
     
         if (M_table.containsKey(aMech.getOid()))
-            return (false);
+            return false;
             
         M_table.put(aMech.getOid(), aMech);
-        return (true);
+        return true;
     }
     
 
     //private table storing the mapping
-    private static Hashtable M_table;
+    private static final Hashtable M_table;
     
     static {
         M_table = new Hashtable(13);

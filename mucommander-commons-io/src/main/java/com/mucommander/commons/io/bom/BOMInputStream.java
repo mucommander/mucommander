@@ -52,18 +52,18 @@ import java.io.InputStream;
 public class BOMInputStream extends InputStream implements BOMConstants {
 
     /** The underlying InputStream that feeds bytes to this stream */
-    private InputStream in;
+    private final InputStream in;
 
     /** Contains the BOM that was detected in the stream, null if none was found */
     private BOM bom;
 
     /** Bytes that were swallowed by this stream when searching for a BOM, null if a BOM was found */
-    private byte leadingBytes[];
+    private byte[] leadingBytes;
 
     /** Current offset within the {@link #leadingBytes} array */
     private int leadingBytesOff;
 
-    private byte oneByteBuf[];
+    private byte[] oneByteBuf;
 
     /** Contains the max signature length of supported BOMs */
     private final static int MAX_BOM_LENGTH;
@@ -92,14 +92,14 @@ public class BOMInputStream extends InputStream implements BOMConstants {
         this.in = in;
 
         // Read up to MAX_BOM_LENGTH bytes
-        byte bytes[] = new byte[MAX_BOM_LENGTH];
+        byte[] bytes = new byte[MAX_BOM_LENGTH];
         int nbRead;
         int totalRead = 0;
         while((nbRead=in.read(bytes, totalRead, MAX_BOM_LENGTH-totalRead))!=-1 && (totalRead+=nbRead)<MAX_BOM_LENGTH);
 
         // Truncate the byte array if the stream ended before MAX_BOM_LENGTH
         if(totalRead<MAX_BOM_LENGTH) {
-            byte tempBytes[] = new byte[totalRead];
+            byte[] tempBytes = new byte[totalRead];
             System.arraycopy(bytes, 0, tempBytes, 0, totalRead);
             bytes = tempBytes;
         }
@@ -140,7 +140,7 @@ public class BOMInputStream extends InputStream implements BOMConstants {
      * @param b2 second byte array to test
      * @return true if the first byte sequence starts with the second byte sequence.
      */
-    private static boolean startsWith(byte b1[], byte b2[]) {
+    private static boolean startsWith(byte[] b1, byte[] b2) {
         int b1Len = b1.length;
         int b2Len = b2.length;
         if(b1Len<b2Len)
@@ -180,12 +180,12 @@ public class BOMInputStream extends InputStream implements BOMConstants {
     }
 
     @Override
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
     @Override
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         if(leadingBytes==null || leadingBytesOff>=leadingBytes.length)
             return in.read(b, off, len);
 

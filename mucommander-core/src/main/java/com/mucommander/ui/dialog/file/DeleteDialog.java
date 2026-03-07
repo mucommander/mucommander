@@ -61,10 +61,10 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
     private JCheckBox moveToTrashCheckBox;
 
     /** Informs the user about the consequences of deleting files, based on the current 'Move to trash' choice */
-    private InformationPane informationPane;
+    private final InformationPane informationPane;
 
     /** The button that confirms deletion */
-    private JButton deleteButton;
+    private final JButton deleteButton;
 
     /** Dialog size constraints */
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);
@@ -84,7 +84,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         // - the base folder can be moved to the trash (the eligibility conditions should be the same as the files to-be-deleted)
         AbstractTrash trash = DesktopManager.getTrash();
         AbstractFile baseFolder = files.getBaseFolder();
-        if (baseFolder.getURL().getScheme().equals(SearchFile.SCHEMA))
+        if (SearchFile.SCHEMA.equals(baseFolder.getURL().getScheme()))
             baseFolder = ((SearchFile) baseFolder.getUnderlyingFileObject()).getSearchPlace();
         if(trash!=null && !baseFolder.isArchive() && !trash.isTrashFile(baseFolder) && trash.canMoveToTrash(baseFolder)) {
             moveToTrash = !deletePermanently;
@@ -104,7 +104,7 @@ public class DeleteDialog extends JobDialog implements ItemListener, ActionListe
         JButton cancelButton = new JButton(Translator.get("cancel"));
 
         mainPanel.add(createButtonsPanel(createFileDetailsButton(fileDetailsPanel),
-                DialogToolkit.createOKCancelPanel(deleteButton, cancelButton, getRootPane(), this)));
+            DialogToolkit.createOKCancelPanel(deleteButton, cancelButton, getRootPane(), this)));
 
         mainPanel.add(fileDetailsPanel);
 

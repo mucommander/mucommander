@@ -48,10 +48,10 @@ public abstract class PrefTable extends JTable implements PrefComponent {
 		double total = 0;
 		int nbColumns = getColumnModel().getColumnCount();
 		
-		for (int i = 0; i < nbColumns; ++i)
+		for (int i = 0; i < nbColumns; i++)
 			total += percentages[i];
 		
-		for (int i = 0; i < nbColumns; ++i) {
+		for (int i = 0; i < nbColumns; i++) {
 			TableColumn column = getColumnModel().getColumn(i);
 			column.setPreferredWidth((int) (tableDim.width * (percentages[i] / total)));
 		}

@@ -67,7 +67,7 @@ public class LookAndFeelFilter implements ClassFilter {
             return false;
 
         // Makes sure the class has a public, no-arg constructor.
-        try {constructor = c.getDeclaredConstructor(new Class[0]);}
+        try {constructor = c.getDeclaredConstructor();}
         catch(Exception e) {return false;}
         if(!Modifier.isPublic(constructor.getModifiers()))
             return false;
@@ -78,7 +78,7 @@ public class LookAndFeelFilter implements ClassFilter {
         while(buffer != null) {
             // c is a LookAndFeel, makes sure it's supported.
             if(buffer.equals(LookAndFeel.class)) {
-                try {return ((LookAndFeel)c.newInstance()).isSupportedLookAndFeel();}
+                try {return ((LookAndFeel)c.getDeclaredConstructor().newInstance()).isSupportedLookAndFeel();}
                 catch(Throwable e) {
                     LOGGER.debug("Caught exception", e);
                     return false;

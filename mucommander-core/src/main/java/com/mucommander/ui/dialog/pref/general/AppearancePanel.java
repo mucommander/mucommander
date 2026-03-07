@@ -80,6 +80,7 @@ import com.mucommander.ui.theme.ThemeManager;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 class AppearancePanel extends PreferencesPanel implements ActionListener, Runnable {
+    private static final String PREFS_DIALOG_IMPORT = "prefs_dialog.import";
     private static final Logger LOGGER = LoggerFactory.getLogger(AppearancePanel.class);
 
     public enum AppearanceAction implements DialogAction {
@@ -110,7 +111,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     /**
      * All available look&feels.
      */
-    private UIManager.LookAndFeelInfo lookAndFeels[];
+    private UIManager.LookAndFeelInfo[] lookAndFeels;
     /**
      * Triggers look and feel importing.
      */
@@ -146,11 +147,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     /**
      * All icon sizes label.
      */
-    private final static String ICON_SIZES[] = {"100%", "125%", "150%", "175%", "200%", "300%"};
+    private final static String[] ICON_SIZES = {"100%", "125%", "150%", "175%", "200%", "300%"};
     /**
      * All icon sizes scale factors.
      */
-    private final static float ICON_SCALE_FACTORS[] = {1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 3.0f};
+    private final static float[] ICON_SCALE_FACTORS = {1.0f, 1.25f, 1.5f, 1.75f, 2.0f, 3.0f};
 
 
     // - Icons ---------------------------------------------------------------------------
@@ -344,7 +345,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         populateLookAndFeels();
 
         // Initialises buttons and event listening.
-        importLookAndFeelButton = new JButton(Translator.get("prefs_dialog.import") + "...");
+        importLookAndFeelButton = new JButton(Translator.get(PREFS_DIALOG_IMPORT) + "...");
         deleteLookAndFeelButton = new JButton(Translator.get("delete"));
         importLookAndFeelButton.addActionListener(this);
         deleteLookAndFeelButton.addActionListener(this);
@@ -396,7 +397,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         // Creates the various panel's buttons.
         editThemeButton = new JButton(Translator.get("edit") + "...");
-        importThemeButton = new JButton(Translator.get("prefs_dialog.import") + "...");
+        importThemeButton = new JButton(Translator.get(PREFS_DIALOG_IMPORT) + "...");
         exportThemeButton = new JButton(Translator.get("prefs_dialog.export") + "...");
         renameThemeButton = new JButton(Translator.get("rename"));
         deleteThemeButton = new JButton(Translator.get("delete"));
@@ -487,26 +488,26 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
      */
     private JPanel createSystemIconsPanel() {
         /* 'Use system file icons' combo box */
-        this.useSystemFileIconsComboBox = new PrefComboBox<String>() {
-            public boolean hasChanged() {
-                SystemIconsPolicy systemIconsPolicy;
-                // TODO use objects instead of index.....
-                switch (useSystemFileIconsComboBox.getSelectedIndex()) {
-                    case 0:
-                        systemIconsPolicy = SystemIconsPolicy.NEVER;
-                        break;
-                    case 1:
-                        systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
-                        break;
-                    case 2:
-                        systemIconsPolicy = SystemIconsPolicy.FOLDERS_ONLY;
-                        break;
-                    default:
-                        systemIconsPolicy = SystemIconsPolicy.ALWAYS;
-                }
-                return !systemIconsPolicy.toString().equals(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SYSTEM_FILE_ICONS, systemIconsPolicy.toString()));
-            }
-        };
+        this.useSystemFileIconsComboBox = new PrefComboBox<>() {
+			public boolean hasChanged() {
+				SystemIconsPolicy systemIconsPolicy;
+				// TODO use objects instead of index.....
+				switch (useSystemFileIconsComboBox.getSelectedIndex()) {
+					case 0:
+						systemIconsPolicy = SystemIconsPolicy.NEVER;
+						break;
+					case 1:
+						systemIconsPolicy = SystemIconsPolicy.APPLICATIONS_ONLY;
+						break;
+					case 2:
+						systemIconsPolicy = SystemIconsPolicy.FOLDERS_ONLY;
+						break;
+					default:
+						systemIconsPolicy = SystemIconsPolicy.ALWAYS;
+				}
+				return !systemIconsPolicy.toString().equals(MuConfigurations.getPreferences().getVariable(MuPreference.USE_SYSTEM_FILE_ICONS, systemIconsPolicy.toString()));
+			}
+		};
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.never"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.applications"));
         useSystemFileIconsComboBox.addItem(Translator.get("prefs_dialog.use_system_file_icons.folders"));
@@ -592,9 +593,9 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         MuConfigurations.getPreferences().setVariable(MuPreference.TABLE_ICON_SCALE, scaleFactor);
 
         // Sets the current theme.
-        if (!ThemeManager.isCurrentTheme((Theme) themeComboBox.getSelectedItem())) {
-            ThemeManager.setCurrentTheme((Theme) themeComboBox.getSelectedItem());
-            resetThemeButtons((Theme) themeComboBox.getSelectedItem());
+        if (!ThemeManager.isCurrentTheme(themeComboBox.getSelectedItem())) {
+            ThemeManager.setCurrentTheme(themeComboBox.getSelectedItem());
+            resetThemeButtons(themeComboBox.getSelectedItem());
             themeComboBox.repaint();
         }
 
@@ -642,15 +643,15 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         lookAndFeels = UIManager.getInstalledLookAndFeels();
 
         // Sorts them.
-        Arrays.sort(lookAndFeels, new Comparator<UIManager.LookAndFeelInfo>() {
-            public int compare(UIManager.LookAndFeelInfo a, UIManager.LookAndFeelInfo b) {
-                return a.getName().compareTo(b.getName());
-            }
+        Arrays.sort(lookAndFeels, new Comparator<>() {
+			public int compare(UIManager.LookAndFeelInfo a, UIManager.LookAndFeelInfo b) {
+				return a.getName().compareTo(b.getName());
+			}
 
-            public boolean equals(Object a) {
-                return false;
-            }
-        });
+			public boolean equals(Object a) {
+				return false;
+			}
+		});
     }
 
     /**
@@ -840,19 +841,19 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
                 String currentName;
 
                 if (customLookAndFeels == null)
-                    customLookAndFeels = new Vector<String>();
+                    customLookAndFeels = new Vector<>();
 
                 // Adds all new instances to the list of custom look&feels.
-                for (int i = 0; i < newLookAndFeels.size(); i++) {
-                    currentName = newLookAndFeels.get(i).getName();
-                    if (!customLookAndFeels.contains(currentName)) {
-                        customLookAndFeels.add(currentName);
-                        try {
-                            WindowManager.installLookAndFeel(currentName);
-                        } catch (Throwable e) {
-                        }
-                    }
-                }
+				for (Class<?> newLookAndFeel : newLookAndFeels) {
+					currentName = newLookAndFeel.getName();
+					if (!customLookAndFeels.contains(currentName)) {
+						customLookAndFeels.add(currentName);
+						try {
+							WindowManager.installLookAndFeel(currentName);
+						} catch (Throwable e) {
+						}
+					}
+				}
 
                 if (customLookAndFeels.isEmpty())
                     customLookAndFeels = null;
@@ -880,7 +881,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         chooser.setDialogTitle(Translator.get("prefs_dialog.import_look_and_feel"));
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-        if (chooser.showDialog(parent, Translator.get("prefs_dialog.import")) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showDialog(parent, Translator.get(PREFS_DIALOG_IMPORT)) == JFileChooser.APPROVE_OPTION) {
             file = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
             lastSelectedFolder = file.getParent();
 
@@ -998,7 +999,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
 
         count = themeComboBox.getItemCount();
         for (i = 0; i < count; i++) {
-            if (((Theme) themeComboBox.getItemAt(i)).getName().compareTo(theme.getName()) >= 0) {
+            if (themeComboBox.getItemAt(i).getName().compareTo(theme.getName()) >= 0) {
                 themeComboBox.insertItemAt(theme, i);
                 break;
             }
@@ -1022,7 +1023,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         chooser.setDialogTitle(Translator.get("prefs_dialog.import_theme"));
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-        if (chooser.showDialog(parent, Translator.get("prefs_dialog.import")) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showDialog(parent, Translator.get(PREFS_DIALOG_IMPORT)) == JFileChooser.APPROVE_OPTION) {
             // Makes sure the file actually exists - JFileChooser apparently doesn't enforce that properly in all look&feels.
             file = FileFactory.getFile(chooser.getSelectedFile().getAbsolutePath());
             lastSelectedFolder = file.getParent();
@@ -1117,7 +1118,7 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
     public void actionPerformed(ActionEvent e) {
         Theme theme;
 
-        theme = (Theme) themeComboBox.getSelectedItem();
+        theme = themeComboBox.getSelectedItem();
 
         // Theme combobox selection changed.
         if (e.getSource() == themeComboBox)
@@ -1173,11 +1174,11 @@ class AppearancePanel extends PreferencesPanel implements ActionListener, Runnab
         /**
          * Extension to match.
          */
-        private String extension;
+        private final String extension;
         /**
          * Filter's description.
          */
-        private String description;
+        private final String description;
 
         /**
          * Creates a new extension file filter that will match files with the specified extension.

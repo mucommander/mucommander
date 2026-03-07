@@ -153,7 +153,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
         services.add(service);
         JRadioButtonMenuItem viewerMenuItem = new JRadioButtonMenuItem(service.getName());
         final int serviceIndex = viewersCount;
-        viewerMenuItem.addActionListener((e) -> {
+        viewerMenuItem.addActionListener(e -> {
             try {
                 viewersButtonGroup.getSelection().setSelected(true);
                 if (switchFileViewer(serviceIndex, false)) {
@@ -204,7 +204,7 @@ public class FileViewerPresenter extends FilePresenter implements ViewerPresente
                     Translator.get("file_viewer.fullscreen"),
                     menuItemMnemonicHelper,
                     KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK),
-                    (e) -> {
+                    e -> {
                         boolean fullScreen = getFrame().isFullScreen();
                         switchFullScreenMode(!fullScreen);
                     });

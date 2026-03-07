@@ -86,7 +86,7 @@ public class muCommander {
      */
     public static final String CONFIG_DIRECTORY = "conf";
 
-    private static Framework m_fwk = null;
+    private static Framework m_fwk;
 
     /**
      * <p>
@@ -283,8 +283,8 @@ public class muCommander {
         configProps.putIfAbsent(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERTY, "install, start");
         configProps.putIfAbsent("felix.log.level", "1");
 
-        configProps.computeIfAbsent("org.osgi.framework.system.packages.extra",
-                key -> "sun.net.www," +
+        configProps.putIfAbsent("org.osgi.framework.system.packages.extra",
+                        "sun.net.www," +
                         "sun.misc," +
                         "sun.plugin.protocol," + //optional
                         "com.sun.java.browser.net," + //optional
@@ -364,17 +364,17 @@ public class muCommander {
         System.setProperty("MUCOMMANDER_USER_PREFERENCES", configuration.preferences);
 
         // Copy configuration provided by command line arguments
-        configProps.putAll(new AbstractMap<String, String>() {
-            @Override
-            public java.util.Set<Map.Entry<String, String>> entrySet() {
-                return configuration.entrySet();
-            }
-        });
+        configProps.putAll(new AbstractMap<>() {
+			@Override
+			public java.util.Set<Map.Entry<String, String>> entrySet() {
+				return configuration.entrySet();
+			}
+		});
 
         // If enabled, register a shutdown hook to make sure the framework is
         // cleanly shutdown when the VM exits.
         String enableHook = configProps.get(SHUTDOWN_HOOK_PROP);
-        if ((enableHook == null) || !enableHook.equalsIgnoreCase("false")) {
+        if (!"false".equalsIgnoreCase(enableHook)) {
             Runtime.getRuntime().addShutdownHook(new Thread("Felix Shutdown Hook") {
                 public void run() {
                     try {
@@ -436,19 +436,15 @@ public class muCommander {
         URL url = muCommander.class.getClassLoader().getResource(
                 "META-INF/services/org.osgi.framework.launch.FrameworkFactory");
         if (url != null) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            try {
-                for (String s = br.readLine(); s != null; s = br.readLine()) {
-                    s = s.trim();
-                    // Try to load first non-empty, non-commented line.
-                    if ((s.length() > 0) && (s.charAt(0) != '#')) {
-                        return (FrameworkFactory) Class.forName(s).getDeclaredConstructor().newInstance();
-                    }
-                }
-            } finally {
-                if (br != null)
-                    br.close();
-            }
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
+				for (String s = br.readLine(); s != null; s = br.readLine()) {
+					s = s.trim();
+					// Try to load first non-empty, non-commented line.
+					if ((s.length() > 0) && (s.charAt(0) != '#')) {
+						return (FrameworkFactory) Class.forName(s).getDeclaredConstructor().newInstance();
+					}
+				}
+			}
         }
 
         throw new Exception("Could not find framework factory.");
@@ -618,7 +614,7 @@ public class muCommander {
 
         // Perform variable substitution for system properties and
         // convert to dictionary.
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         for (Enumeration<String> e = (Enumeration<String>) props.propertyNames(); e.hasMoreElements(); ) {
             String name = e.nextElement();
             map.put(name,

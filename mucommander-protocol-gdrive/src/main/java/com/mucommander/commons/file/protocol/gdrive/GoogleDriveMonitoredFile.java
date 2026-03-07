@@ -39,7 +39,7 @@ import com.mucommander.commons.file.MonitoredFile;
 public class GoogleDriveMonitoredFile extends ModificationDateBasedMonitoredFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleDriveMonitoredFile.class);
 
-    private GoogleDriveFile file;
+    private final GoogleDriveFile file;
 
     public GoogleDriveMonitoredFile(GoogleDriveFile file) {
         super(file);

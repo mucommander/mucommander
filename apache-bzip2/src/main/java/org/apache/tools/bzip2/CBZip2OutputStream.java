@@ -143,14 +143,14 @@ public class CBZip2OutputStream extends OutputStream
      * purposes. If you don't know what it means then you don't need
      * it.
      */
-    protected static final int SETMASK = (1 << 21);
+    protected static final int SETMASK = 1 << 21;
 
     /**
      * This constant is accessible by subclasses for historical
      * purposes. If you don't know what it means then you don't need
      * it.
      */
-    protected static final int CLEARMASK = (~SETMASK);
+    protected static final int CLEARMASK = ~SETMASK;
 
     /**
      * This constant is accessible by subclasses for historical
@@ -322,14 +322,11 @@ public class CBZip2OutputStream extends OutputStream
 
                 final int weight_n1 = weight[n1];
                 final int weight_n2 = weight[n2];
-                weight[nNodes] = (((weight_n1 & 0xffffff00)
+                weight[nNodes] = ((weight_n1 & 0xffffff00)
                                    + (weight_n2 & 0xffffff00))
                                   |
-                                  (1 + (((weight_n1 & 0x000000ff)
-                                         > (weight_n2 & 0x000000ff))
-                                        ? (weight_n1 & 0x000000ff)
-                                        : (weight_n2 & 0x000000ff))
-                                   ));
+                                  (1 + (Math.max((weight_n1 & 0x000000ff), (weight_n2 & 0x000000ff)))
+                                   );
 
                 parent[nNodes] = -1;
                 nHeap++;
@@ -479,10 +476,7 @@ public class CBZip2OutputStream extends OutputStream
                 final int weight_n2 = weight[n2];
                 weight[nNodes] = ((weight_n1 & 0xffffff00)
                                   + (weight_n2 & 0xffffff00))
-                    | (1 + (((weight_n1 & 0x000000ff)
-                             > (weight_n2 & 0x000000ff))
-                            ? (weight_n1 & 0x000000ff)
-                            : (weight_n2 & 0x000000ff)));
+                    | (1 + (Math.max((weight_n1 & 0x000000ff), (weight_n2 & 0x000000ff))));
 
                 parent[nNodes] = -1;
                 nHeap++;
@@ -571,7 +565,7 @@ public class CBZip2OutputStream extends OutputStream
      *         always.
      */
     public static int chooseBlockSize(long inputLength) {
-        return (inputLength > 0) ? (int) Math
+        return inputLength > 0 ? (int) Math
             .min((inputLength / 132000) + 1, 9) : MAX_BLOCKSIZE;
     }
 
@@ -966,8 +960,8 @@ public class CBZip2OutputStream extends OutputStream
 
         /* Decide how many coding tables to use */
         // assert (this.nMTF > 0) : this.nMTF;
-        final int nGroups = (this.nMTF < 200) ? 2 : (this.nMTF < 600) ? 3
-            : (this.nMTF < 1200) ? 4 : (this.nMTF < 2400) ? 5 : 6;
+        final int nGroups = this.nMTF < 200 ? 2 : this.nMTF < 600 ? 3
+            : this.nMTF < 1200 ? 4 : this.nMTF < 2400 ? 5 : 6;
 
         /* Generate an initial set of coding tables */
         sendMTFValues0(nGroups, alphaSize);

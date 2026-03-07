@@ -58,8 +58,8 @@ public class SevenZipJBindingROArchiveFile extends AbstractROArchiveFile {
 
     private static final String MULTI_PART_7Z_EXT = ".7z.001";
 
-    protected IInArchive inArchive;
-    private ArchiveFormat sevenZipJBindingFormat;
+    protected     IInArchive    inArchive;
+    private final ArchiveFormat sevenZipJBindingFormat;
 
     private final byte[] formatSignature;
 

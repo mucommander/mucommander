@@ -40,7 +40,7 @@ public class AbstractFileClassLoader extends ClassLoader {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** All abstract files in which to look for classes and resources. */
-    private Set<AbstractFile> files;
+    private final Set<AbstractFile> files;
 
 
 
@@ -153,7 +153,7 @@ public class AbstractFileClassLoader extends ClassLoader {
     protected URL findResource(String name) {
         // Tries to find the resource.
         AbstractFile file = findResourceAsFile(name);
-        if((file) == null)
+        if(file == null)
             return null;
 
         // Tries to retrieve an URL on the resource.
@@ -169,7 +169,7 @@ public class AbstractFileClassLoader extends ClassLoader {
     @Override
     protected Enumeration<URL> findResources(String name) {
         Iterator<AbstractFile> iterator  = files.iterator(); // Iterator on all available JAR files.
-        List<URL> resources = new ArrayList<URL>();
+        List<URL> resources = new ArrayList<>();
 
         // Goes through all files in the classpath to find the resource.
         while(iterator.hasNext()) {

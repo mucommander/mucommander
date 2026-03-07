@@ -34,13 +34,13 @@ import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
 
     /** InputStream to the archive file */
-    private ZipInputStream zin;
+    private final ZipInputStream zin;
 
     /** The current entry, where the ZipInputStream is currently positionned */
     private ArchiveEntry currentEntry;
 
     /** A function that enables creating {@link com.mucommander.commons.file.archive.zip.provider.ZipEntry} */
-    private Function<com.mucommander.commons.file.archive.zip.provider.ZipEntry, ArchiveEntry> createArchiveEntryFunc;
+    private final Function<com.mucommander.commons.file.archive.zip.provider.ZipEntry, ArchiveEntry> createArchiveEntryFunc;
 
     /**
      * Creates a new TarEntryIterator that iterates through the entries of the given {@link ZipInputStream}.

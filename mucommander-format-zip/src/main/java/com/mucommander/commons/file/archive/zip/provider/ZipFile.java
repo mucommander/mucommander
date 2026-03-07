@@ -73,7 +73,7 @@ public class ZipFile implements ZipConstants {
     private static final Logger LOGGER = LoggerFactory.getLogger(ZipFile.class);
 
     /** The underlying archive file */
-    private AbstractFile file;
+    private final AbstractFile file;
 
     /** The currently opened RandomAccessInputStream to the zip file (may be null) */
     private RandomAccessInputStream rais;
@@ -82,10 +82,10 @@ public class ZipFile implements ZipConstants {
     private RandomAccessOutputStream raos;
 
     /** Contains ZipEntry instances corresponding to the archive's entries, in the order they were found in the archive. */
-    private Vector<ZipEntry> entries = new Vector<ZipEntry>();
+    private final Vector<ZipEntry> entries = new Vector<>();
 
     /** Maps entry paths to corresponding ZipEntry instances */
-    private Hashtable<String, ZipEntry> nameMap = new Hashtable<String, ZipEntry>();
+    private final Hashtable<String, ZipEntry> nameMap = new Hashtable<>();
 
     /** Global zip file comment */
     private String comment;
@@ -94,10 +94,10 @@ public class ZipFile implements ZipConstants {
      * The default encoding to use for parsing filenames and comments. This value is only used for Zip entries that do
      * not have the UTF-8 flag set. If not specified (null), then automatic encoding detection is used (default).
      */
-    private String defaultEncoding = null;
+    private String defaultEncoding;
 
     /** Holds byte buffer instance used to convert short and longs, avoids creating lots of small arrays */
-    private ZipBuffer zipBuffer = new ZipBuffer();
+    private final ZipBuffer zipBuffer = new ZipBuffer();
 
     
     /**
@@ -284,8 +284,7 @@ public class ZipFile implements ZipConstants {
                 bis.addDummy();
                 return new InflaterInputStream(bis, new Inflater(true));
             default:
-                throw new ZipException("Found unsupported compression method "
-                                       + ze.getMethod());
+                throw new ZipException("Found unsupported compression method " + ze.getMethod());
         }
     }
 
@@ -864,7 +863,7 @@ public class ZipFile implements ZipConstants {
             // data offset will be filled later
 
             // Read and set extra bytes
-            byte extra[] = new byte[extraLen];
+            byte[] extra = new byte[extraLen];
             rais.readFully(extra);
             ze.setExtra(extra);
 
@@ -951,7 +950,7 @@ public class ZipFile implements ZipConstants {
      * @param bytes the bytes to feed to the encoding accumulator
      * @throws IOException if an I/O occurs (should never happen)
      */
-    private static void feedEncodingAccumulator(ByteArrayOutputStream encodingAccumulator, byte bytes[]) throws IOException {
+    private static void feedEncodingAccumulator(ByteArrayOutputStream encodingAccumulator, byte[] bytes) throws IOException {
         if(encodingAccumulator.size() < EncodingDetector.MAX_RECOMMENDED_BYTE_SIZE)
             encodingAccumulator.write(bytes);
         // Else accumulator has enough bytes, ignore the given bytes
@@ -1061,7 +1060,7 @@ public class ZipFile implements ZipConstants {
             off += 2;
 
             // Fetch the global zip file comment
-            byte commentBytes[] = new byte[ZipShort.getValue(commentLen)];
+            byte[] commentBytes = new byte[ZipShort.getValue(commentLen)];
             System.arraycopy(buf, off, commentBytes, 0, commentBytes.length);
 
             // If no default encoding has been specified, try to guess the comment's encoding.
@@ -1117,7 +1116,7 @@ public class ZipFile implements ZipConstants {
 
         private long remaining;
         private long loc;
-        private boolean addDummyByte = false;
+        private boolean addDummyByte;
 
         BoundedInputStream(RandomAccessInputStream rais, long start, long remaining) {
             this.rais = rais;

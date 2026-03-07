@@ -31,7 +31,7 @@ import com.mucommander.ui.action.ActionId;
 public class ToolBarAttributes {
 
     /** Command bar actions: Class instances or null to signify a separator */
-    private static ActionId actionIds[];
+    private static ActionId[] actionIds;
     
     private static boolean useDefaultActions = true;
     
@@ -98,7 +98,7 @@ public class ToolBarAttributes {
             end--;
 
         int newLen = end-start;
-        ActionId newActions[] = new ActionId[newLen];
+        ActionId[] newActions = new ActionId[newLen];
         System.arraycopy(actions, start, newActions, 0, newLen);
 
         return newActions;
@@ -130,7 +130,7 @@ public class ToolBarAttributes {
         if (nbActions != DEFAULT_TOOLBAR_ACTIONS.length)
             return false;
 
-        for (int i=0; i<nbActions; ++i)
+        for (int i=0; i<nbActions; i++)
             if (!equals(actionIds[i], DEFAULT_TOOLBAR_ACTIONS[i]))
                 return false;
 

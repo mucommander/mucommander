@@ -48,11 +48,11 @@ public class ClassFinder {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** ClassLoader used to load classes from explored files. */
-    private ClassLoader  loader;
+    private       ClassLoader  loader;
     /** Used to filter out files that are neither classes nor directories. */
-    private OrFileFilter filter;
+    private final OrFileFilter filter;
     /** Used to filter out unwanted classes. */
-    private ClassFilter  classFilter;
+    private       ClassFilter  classFilter;
 
 
     // - Initialization ------------------------------------------------------------------
@@ -81,7 +81,7 @@ public class ClassFinder {
     private List<Class<?>> find(String currentPackage, AbstractFile currentFile) throws IOException {
         AbstractFile[]   files;        // All subfolders or child class files of currentFile.
         Class<?>         currentClass; // Buffer for the current class.
-        List<Class<?>>   result = new Vector<Class<?>>();
+        List<Class<?>>   result = new Vector<>();
         
         // Analyses all subdirectories and class files.
         files = currentFile.ls(filter);
@@ -90,8 +90,8 @@ public class ClassFinder {
             if (file.isDirectory())
                 result.addAll(find(currentPackage + file.getName() + '.', file));
 
-                // Passes each class through the class filter.
-                // Errors are treated as 'this class is not wanted'.
+            // Passes each class through the class filter.
+            // Errors are treated as 'this class is not wanted'.
             else {
                 try {
                     if (classFilter.accept(currentClass = Class.forName(currentPackage + file.getNameWithoutExtension(), false, loader)))
@@ -124,7 +124,7 @@ public class ClassFinder {
     public List<Class<?>> find(AbstractFile browsable, ClassFilter classFilter, ClassLoader classLoader) throws IOException {
         // Ignore non-browsable files.
         if(!browsable.isBrowsable())
-            return new Vector<Class<?>>();
+            return new Vector<>();
 
         // Initializes exploring.
         loader           = classLoader;

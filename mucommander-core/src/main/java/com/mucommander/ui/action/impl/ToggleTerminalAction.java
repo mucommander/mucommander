@@ -72,6 +72,6 @@ public class ToggleTerminalAction extends ActiveTabAction {
     @Override
     protected void toggleEnabledState() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        setEnabled(currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA));
+        setEnabled(LocalFile.SCHEMA.equals(currentFolder.getURL().getScheme()));
     }
 }

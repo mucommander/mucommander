@@ -175,9 +175,9 @@ public class GSSCredential {
      */
     public GSSCredential(GSSName aName, int lifetime, Oid [] mechs,
 	int usage) throws GSSException {
-        
-        for (int i = 0; i < mechs.length; i++)
-            add(aName, lifetime, lifetime, mechs[i], usage);
+
+		for (Oid mech : mechs)
+            add(aName, lifetime, lifetime, mech, usage);
     }
 
  
@@ -235,7 +235,7 @@ public class GSSCredential {
             aName.addMechName(((GSSCredSpi)e.nextElement()).getName());
         }
         
-        return (aName);    
+        return aName;    
     }
 
     /**
@@ -256,7 +256,7 @@ public class GSSCredential {
 
         GSSName aName = new GSSName();
         aName.addMechName(getMechCred(mechOID, true).getName());
-        return (aName);
+        return aName;
     }
     
     
@@ -287,7 +287,7 @@ public class GSSCredential {
             if (aCred.getLifetime() < lifetime)
                 lifetime = aCred.getLifetime();
         }
-        return (lifetime);
+        return lifetime;
     }
 
     /**
@@ -306,7 +306,7 @@ public class GSSCredential {
     public int getRemainingInitLifetime(Oid mech) throws GSSException {
     
         GSSCredSpi aCred = getMechCred(mech, true);
-        return (aCred.getInitLifetime());
+        return aCred.getInitLifetime();
     }
 
   
@@ -326,7 +326,7 @@ public class GSSCredential {
     public int getRemainingAcceptLifetime(Oid mech) throws GSSException {
     
         GSSCredSpi aCred = getMechCred(mech, true);
-        return (aCred.getAcceptLifetime());
+        return aCred.getAcceptLifetime();
     }
 
     
@@ -353,7 +353,7 @@ public class GSSCredential {
         
             aCred = (GSSCredSpi)e.nextElement();
             if (aCred.getUsage() == GSSCredential.INITIATE_AND_ACCEPT)
-                return (GSSCredential.INITIATE_AND_ACCEPT);
+                return GSSCredential.INITIATE_AND_ACCEPT;
             else if (aCred.getUsage() == GSSCredential.INITIATE_ONLY)
                 init = true;
             else if (aCred.getUsage() == GSSCredential.ACCEPT_ONLY)
@@ -361,14 +361,14 @@ public class GSSCredential {
                 
             //if both are set, then we are done....
             if (init && accept)
-                return (GSSCredential.INITIATE_AND_ACCEPT);
+                return GSSCredential.INITIATE_AND_ACCEPT;
         }
         
         //can only be a single use credential
         if (init)
-            return (GSSCredential.INITIATE_ONLY);
+            return GSSCredential.INITIATE_ONLY;
             
-        return (GSSCredential.ACCEPT_ONLY);
+        return GSSCredential.ACCEPT_ONLY;
     }
 
 
@@ -388,7 +388,7 @@ public class GSSCredential {
     public int getUsage(Oid mechOID) throws GSSException {
     
         GSSCredSpi aCred = getMechCred(mechOID, true);
-        return (aCred.getUsage());
+        return aCred.getUsage();
     }
 
 
@@ -413,7 +413,7 @@ public class GSSCredential {
         for (Enumeration e = m_mechCreds.elements(); e.hasMoreElements();)
             oids[i++] = ((GSSCredSpi)e.nextElement()).getMechanism();
             
-        return (oids);
+        return oids;
     }
   
 
@@ -474,12 +474,12 @@ public class GSSCredential {
     public boolean equals(Object another) {
     
         if ( !(another instanceof GSSCredential))
-	    return (false);
+	    return false;
             
         GSSCredential aCred = (GSSCredential)another;
         
         if (aCred.m_mechCreds.size() != m_mechCreds.size())
-            return (false);
+            return false;
 
         GSSCredSpi intCred, anotherIntCred;
 
@@ -491,19 +491,19 @@ public class GSSCredential {
                 anotherIntCred = aCred.getMechCred(
                     intCred.getMechanism(), false);
                 if (anotherIntCred == null)
-                    return (false);
+                    return false;
                 
                 //ask internal creds to compare themselves
                 if (intCred.equals(anotherIntCred) == false)
-                    return (false);
+                    return false;
             
             }
         } catch (GSSException e) {
-            return (false);
+            return false;
         }
         
         //all internal creds are equal, so we are equal too...
-        return (true);
+        return true;
     }
     
 
@@ -513,14 +513,13 @@ public class GSSCredential {
      */
     public String toString() {
         
-        StringBuffer sb = new StringBuffer(150);
+        StringBuilder sb = new StringBuilder(150);
         
         sb.append(super.toString());
         sb.append("\nOver mechs:\t");
         try {
             Oid [] mechs = getMechs();
-            for (int i = 0; i < mechs.length; i++)
-                sb.append(mechs[i].toString() + " ");
+			for (Oid mech : mechs) sb.append(mech.toString() + " ");
             
             sb.append("\nFor principal:\t" + getGSSName().toString());
             sb.append("\nUsage:\t" + getUsage());
@@ -537,7 +536,7 @@ public class GSSCredential {
             sb.append("\n***ERROR getting info:\t" + e.toString());
         }
         
-        return (sb.toString());
+        return sb.toString();
     }
     
     
@@ -558,14 +557,14 @@ public class GSSCredential {
         
             GSSCredSpi aCred = (GSSCredSpi)e.nextElement();
             if (aCred.getMechanism().equals(mechOid))
-                return (aCred);
+                return aCred;
         }
         
         /* not found */
         if (throwExcep == true)
             throw new GSSException(GSSException.BAD_MECH);
         else
-            return (null);
+            return null;
     }
         
 

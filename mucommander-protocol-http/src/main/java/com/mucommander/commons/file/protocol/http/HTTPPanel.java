@@ -40,9 +40,9 @@ import com.mucommander.text.Translator;
  */
 public class HTTPPanel extends ServerPanel {
 
-    private JTextField urlField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private final JTextField urlField;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
 
     private static String lastURL = "http://";
     private static String lastUsername = "";

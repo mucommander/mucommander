@@ -44,7 +44,7 @@ public abstract class FileURLTestCase {
     protected String getSchemePath(String path) {
         String separator = getPathSeparator();
 
-        if(!separator.equals("/"))
+        if(!"/".equals(separator))
             path = "/" + path.replace("/", separator);
 
         return path;
@@ -63,8 +63,8 @@ public abstract class FileURLTestCase {
      * @throws MalformedURLException if the URL cannot be parsed
      */
     protected FileURL getURL(String login, String password, String host, int port, String path, String query) throws MalformedURLException {
-        String scheme = getScheme();
-        StringBuffer sb = new StringBuffer(scheme+"://");
+        String        scheme = getScheme();
+        StringBuilder sb     = new StringBuilder(scheme+"://");
 
         if(host!=null) {
             if(login!=null) {
@@ -319,8 +319,8 @@ public abstract class FileURLTestCase {
         FileURL url = getRootURL();
         AuthenticationType expectedAuthenticationType = getAuthenticationType();
 
-        assert expectedAuthenticationType.equals(url.getAuthenticationType());
-        assert expectedAuthenticationType.equals(url.getHandler().getAuthenticationType());
+        assert expectedAuthenticationType == url.getAuthenticationType();
+        assert expectedAuthenticationType == url.getHandler().getAuthenticationType();
 
         assert expectedAuthenticationType==AuthenticationType.NO_AUTHENTICATION
                 || expectedAuthenticationType==AuthenticationType.AUTHENTICATION_REQUIRED

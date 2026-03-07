@@ -85,7 +85,7 @@ public class TablePopupMenu extends MuActionsPopupMenu {
 
         boolean copyOrPasteActionAdded = false;
         // 'Copy name(s)' and 'Copy path(s)' are displayed only if a single file was clicked or files are marked
-        if (clickedFile != null || markedFiles.size() > 0) {
+        if (clickedFile != null || !markedFiles.isEmpty()) {
             addAction(ActionType.CopyFilesToClipboard);
             addAction(ActionType.CopyFileNames);
             addAction(ActionType.CopyFileBaseNames);

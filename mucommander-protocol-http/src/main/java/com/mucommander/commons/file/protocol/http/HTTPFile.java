@@ -82,14 +82,14 @@ public class HTTPFile extends ProtocolFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(HTTPFile.class);
 
     /** java.net.URL corresponding to this */
-    private URL url;
+    private final URL url;
 
     /** Contains the attributes of the remote HTTP resource. Contains default values until the file has been resolved */
-    private SimpleFileAttributes attributes;
+    private final SimpleFileAttributes attributes;
 
     /** True if the file should be resolved on the remote HTTP server to fetch attribute values, false if these are
      * guessed. */
-    private boolean resolve;
+    private final boolean resolve;
 
     /** True if file has been resolved on the remote HTTP server, either successfully or unsuccessfully */
     private boolean fileResolved;
@@ -107,7 +107,7 @@ public class HTTPFile extends ProtocolFile {
                                             System.getProperty("os.version") + " " + System.getProperty("os.arch") + ")";
 
     /** Matches HTML and XHTML attribute key/value pairs, where the value is surrounded by Single Quotes */
-    private final static Pattern linkAttributePatternSQ = Pattern.compile("(src|href|SRC|HREF)=\\\'.*?\\\'");
+    private final static Pattern linkAttributePatternSQ = Pattern.compile("(src|href|SRC|HREF)=\\'.*?\\'");
 
     /** Matches HTML and XHTML attribute key/value pairs, where the value is surrounded by Double Quotes */
     private final static Pattern linkAttributePatternDQ = Pattern.compile("(src|href|SRC|HREF)=\\\".*?\\\"");
@@ -123,7 +123,7 @@ public class HTTPFile extends ProtocolFile {
         super(fileURL);
 
         String scheme = fileURL.getScheme().toLowerCase();
-        if((!scheme.equals(FileProtocols.HTTP) && !scheme.equals(FileProtocols.HTTPS)) || fileURL.getHost()==null)
+        if((!FileProtocols.HTTP.equals(scheme) && !FileProtocols.HTTPS.equals(scheme)) || fileURL.getHost()==null)
             throw new IOException();
 
         this.url = url;
@@ -137,7 +137,7 @@ public class HTTPFile extends ProtocolFile {
         //  - URL's path has no filename (e.g. http://www.mucommander.com/) or path ends with '/' (e.g. http://www.mucommander.com/download/)
         //  - URL has a query part (works most of the time, must not always)
         //  - URL has an extension that registered with an HTML/XHTML mime type
-        if((filename==null || fileURL.getPath().endsWith("/") || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))!=null && isParsableMimeType(mimeType)))) {
+        if(filename==null || fileURL.getPath().endsWith("/") || fileURL.getQuery()!=null || ((mimeType=MimeTypes.getMimeType(this))!=null && isParsableMimeType(mimeType))) {
             attributes.setDirectory(true);
             resolve = false;
         }
@@ -573,7 +573,7 @@ public class HTTPFile extends ProtocolFile {
             String enc = null;
             // Extract content type information (if any)
             if((pos=contentType.indexOf("charset"))!=-1 || (pos=contentType.indexOf("Charset"))!=-1) {
-                StringTokenizer st = new StringTokenizer(contentType.substring(pos, contentType.length()));
+                StringTokenizer st = new StringTokenizer(contentType.substring(pos));
                 enc = st.nextToken();
             }
 			
@@ -593,9 +593,9 @@ public class HTTPFile extends ProtocolFile {
 
             br = new BufferedReader(ir);
 
-            Vector<AbstractFile> children = new Vector<AbstractFile>();
+            Vector<AbstractFile> children = new Vector<>();
             // List that contains children URL, a TreeSet for fast (log(n)) search operations
-            TreeSet<String> childrenURL = new TreeSet<String>();
+            TreeSet<String> childrenURL = new TreeSet<>();
             URL childURL;
             FileURL childFileURL;
             Credentials credentials = fileURL.getCredentials();
@@ -653,7 +653,7 @@ public class HTTPFile extends ProtocolFile {
                 }
             }
 
-            AbstractFile childrenArray[] = new AbstractFile[children.size()];
+            AbstractFile[] childrenArray = new AbstractFile[children.size()];
             children.toArray(childrenArray);
             return childrenArray;
         }
@@ -728,7 +728,7 @@ public class HTTPFile extends ProtocolFile {
         private final static int CHUNK_SIZE = 1024;
 
         /** Length of the HTTP resource */
-        private long length;
+        private final long length;
 
 
         private HTTPRandomAccessInputStream() throws IOException {
@@ -748,7 +748,7 @@ public class HTTPFile extends ProtocolFile {
         ///////////////////////////////////////////
 
         @Override
-        protected int readBlock(long fileOffset, byte block[], int blockLen) throws IOException {
+        protected int readBlock(long fileOffset, byte[] block, int blockLen) throws IOException {
             HttpURLConnection conn = getHttpURLConnection(url);
 
             // Note: 'Range' may not be supported by the HTTP server, in that case an IOException will be thrown
@@ -758,23 +758,18 @@ public class HTTPFile extends ProtocolFile {
             checkHTTPResponse(conn);
 
             // Read up to blockLen bytes
-            InputStream in = conn.getInputStream();
-            try {
-                int totalRead = 0;
-                int read;
-                while(totalRead<blockLen) {
-                    read = in.read(block, totalRead, blockLen-totalRead);
-                    if(read==-1)
-                        break;
+			try (InputStream in = conn.getInputStream()) {
+				int totalRead = 0;
+				int read;
+				while (totalRead < blockLen) {
+					read = in.read(block, totalRead, blockLen - totalRead);
+					if (read == -1) break;
 
-                    totalRead += read;
-                }
+					totalRead += read;
+				}
 
-                return totalRead;
-            }
-            finally {
-                in.close();
-            }
+				return totalRead;
+			}
         }
 
         public long getLength() throws IOException {

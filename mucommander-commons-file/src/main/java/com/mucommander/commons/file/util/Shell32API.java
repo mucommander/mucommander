@@ -126,7 +126,7 @@ public interface Shell32API extends W32API {
          * @return the encoded path
          */
         public String encodePaths(String[] paths) {
-            StringBuffer encodedPaths = new StringBuffer();
+            StringBuilder encodedPaths = new StringBuilder();
             for (String path : paths) {
                 encodedPaths.append(path);
                 encodedPaths.append('\0');

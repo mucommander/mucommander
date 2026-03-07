@@ -50,11 +50,11 @@ public class BinaryStatusPanel extends javax.swing.JPanel implements BinaryStatu
     public static int DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE = 4;
     private StatusControlHandler statusControlHandler;
 
-    private StatusCursorPositionFormat cursorPositionFormat = new StatusCursorPositionFormat();
-    private StatusDocumentSizeFormat documentSizeFormat = new StatusDocumentSizeFormat();
-    private int octalSpaceGroupSize = DEFAULT_OCTAL_SPACE_GROUP_SIZE;
-    private int decimalSpaceGroupSize = DEFAULT_DECIMAL_SPACE_GROUP_SIZE;
-    private int hexadecimalSpaceGroupSize = DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE;
+    private final StatusCursorPositionFormat cursorPositionFormat = new StatusCursorPositionFormat();
+    private final StatusDocumentSizeFormat   documentSizeFormat   = new StatusDocumentSizeFormat();
+    private final int                        octalSpaceGroupSize  = DEFAULT_OCTAL_SPACE_GROUP_SIZE;
+    private final int                      decimalSpaceGroupSize = DEFAULT_DECIMAL_SPACE_GROUP_SIZE;
+    private final int hexadecimalSpaceGroupSize = DEFAULT_HEXADECIMAL_SPACE_GROUP_SIZE;
 
     private EditOperation editOperation;
     private CodeAreaCaretPosition caretPosition;

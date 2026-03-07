@@ -15,9 +15,9 @@ import com.mucommander.ui.main.frame.MainFrameBuilder;
 
 public class ConfFileTableTab extends FileTableTab {
 
-	private boolean lock;
-	private FileURL location;
-	private String title;
+	private       boolean lock;
+	private final FileURL location;
+	private       String  title;
 	private AbstractFile fileToSelect;
 
 	public ConfFileTableTab(String location) {

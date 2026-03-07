@@ -37,7 +37,7 @@ public class ConfigurationSectionTest {
     public Iterator<Object[]> removeVariableCases() {
         List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"value"});
         data.add(new Object[] {""});
@@ -74,7 +74,7 @@ public class ConfigurationSectionTest {
     public Iterator<Object[]> setVariableCases() {
         List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"value", "other", true});
         data.add(new Object[] {"value", "value", false});
@@ -146,7 +146,7 @@ public class ConfigurationSectionTest {
             assert !section.isEmpty();
 
             // Populates a set will all the expected variable names.
-            expectedNames = new HashSet<String>(count);
+            expectedNames = new HashSet<>(count);
             for(int i = 0; i < count; i++)
                 expectedNames.add("var" + i);
 
@@ -200,7 +200,7 @@ public class ConfigurationSectionTest {
 
         list = new ValueList("1,2,3,4", ",");
         assert ConfigurationSection.getListValue("1,2,3,4", ",").equals(list);
-        assert ConfigurationSection.getValue(list, ",").equals("1,2,3,4");
+        assert "1,2,3,4".equals(ConfigurationSection.getValue(list, ","));
     }
 
     /**
@@ -236,7 +236,7 @@ public class ConfigurationSectionTest {
     public void testDoubles() {
         for(int i = 0; i < 10; i++) {
             assert ConfigurationSection.getDoubleValue(i + ".5") == (i + 0.5d);
-            assert ConfigurationSection.getValue((i + 0.5d)).equals(i + ".5");
+            assert ConfigurationSection.getValue(i + 0.5d).equals(i + ".5");
         }
 
         assert ConfigurationSection.getDoubleValue(null) == 0f;
@@ -249,7 +249,7 @@ public class ConfigurationSectionTest {
     public void testFloats() {
         for(int i = 0; i < 10; i++) {
             assert ConfigurationSection.getFloatValue(i + ".5") == (i + 0.5f);
-            assert ConfigurationSection.getValue((i + 0.5f)).equals(i + ".5");
+            assert ConfigurationSection.getValue(i + 0.5f).equals(i + ".5");
         }
 
         assert ConfigurationSection.getFloatValue(null) == 0f;
@@ -261,12 +261,12 @@ public class ConfigurationSectionTest {
     @Test
     public void testBooleans() {
         assert ConfigurationSection.getBooleanValue("true");
-        assert ConfigurationSection.getValue(true).equals("true");
+        assert "true".equals(ConfigurationSection.getValue(true));
 
         assert !ConfigurationSection.getBooleanValue("false");
         assert !ConfigurationSection.getBooleanValue("!@#");
         assert !ConfigurationSection.getBooleanValue("");
-        assert ConfigurationSection.getValue(false).equals("false");
+        assert "false".equals(ConfigurationSection.getValue(false));
 
         assert !ConfigurationSection.getBooleanValue(null);
     }
@@ -330,7 +330,7 @@ public class ConfigurationSectionTest {
             assert !section.isEmpty();
 
             // Populates a set will all the expected variable names.
-            expectedNames = new HashSet<String>(count);
+            expectedNames = new HashSet<>(count);
             for(int i = 0; i < count; i++)
                 expectedNames.add("sect" + i);
 

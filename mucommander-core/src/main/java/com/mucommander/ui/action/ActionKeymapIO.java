@@ -56,7 +56,7 @@ public abstract class ActionKeymapIO extends DefaultHandler {
     /** Whether the actions have been modified since the last time they were saved */
     protected static boolean wereActionsModified;
 
-    private static ActionKeymapWriter writer = new ActionKeymapWriter();
+    private static final ActionKeymapWriter writer = new ActionKeymapWriter();
 
     /**
      * Sets the path to the user actions file to be loaded when calling {@link #loadActionKeymap()}. By default, this

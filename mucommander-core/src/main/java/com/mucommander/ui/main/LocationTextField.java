@@ -60,7 +60,7 @@ import com.mucommander.ui.theme.ThemeManager;
 
 public class LocationTextField extends ProgressTextField implements LocationListener, FocusListener, ThemeListener {
     /** FolderPanel this text field is displayed in */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     /** True while a folder is being changed after a path was entered in the location field and validated by the user */
     private boolean folderChangeInitiatedByLocationField;
@@ -173,7 +173,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
             FileURL folderURL = e.getFolderURL();
 
             String locationText;
-            if(folderURL.getScheme().equals(LocalFile.SCHEMA)) {
+            if(LocalFile.SCHEMA.equals(folderURL.getScheme())) {
                 // Do not display the URL's scheme & host for local files
                 if (FileURL.LOCALHOST.equals(folderURL.getHost())) {
                     locationText = folderURL.getPath();
@@ -260,7 +260,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         }
 
         // Look for a volume whose name is the entered string (case insensitive)
-        AbstractFile volumes[] = LocalFile.getVolumes();
+        AbstractFile[] volumes = LocalFile.getVolumes();
         for(int i=0; tryToInterpretEnteredString && i<volumes.length; i++) {
             if(volumes[i].getName().equalsIgnoreCase(location)) {
                 // Change the current folder to the volume folder
@@ -305,7 +305,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
             SwingUtilities.invokeLater(() -> setCaretPosition(text.length()));
         else
             // (upon focus) have text selected, so as to save the user the need to manually do so
-            SwingUtilities.invokeLater(() -> selectAll());
+            SwingUtilities.invokeLater(this::selectAll);
     }
 
     @Override

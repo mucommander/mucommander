@@ -107,7 +107,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
         services.add(service);
         JRadioButtonMenuItem editorMenuItem = new JRadioButtonMenuItem(service.getName());
         final int serviceIndex = editorsCount;
-        editorMenuItem.addActionListener((e) -> {
+        editorMenuItem.addActionListener(e -> {
             try {
                 switchFileEditor(serviceIndex, false);
             } catch (IOException ex) {
@@ -152,7 +152,7 @@ public class FileEditorPresenter extends FilePresenter implements EditorPresente
                     Translator.get("file_editor.fullscreen"),
                     menuItemMnemonicHelper,
                     KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK),
-                    (e) -> {
+                    e -> {
                         boolean fullScreen = getFrame().isFullScreen();
                         switchFullScreenMode(!fullScreen);
                     });

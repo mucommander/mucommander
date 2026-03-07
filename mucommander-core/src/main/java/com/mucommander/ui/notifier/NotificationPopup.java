@@ -61,7 +61,7 @@ final class NotificationPopup {
     private final JPanel panel;
     private final JLabel labelText;
 
-    private CustomPopupMenuListener popupListener;
+    private final CustomPopupMenuListener popupListener;
 
     /**
      * Used to re-center notification when we know panel width.
@@ -94,9 +94,9 @@ final class NotificationPopup {
         @Override
         public void popupMenuCanceled(PopupMenuEvent e) {
         }
-    };
+    }
 
-    private class CustomPopupMenu extends JPopupMenu {
+    private static class CustomPopupMenu extends JPopupMenu {
         @Override
         public Insets getInsets() {
             return new Insets(0, 0, 0, 0);
@@ -199,7 +199,7 @@ final class NotificationPopup {
         closingTask = task;
         if (oldTask != null) {
             oldTask.cancel();
-        };
+        }
         closingTimer.schedule(task, timeout);
     }
 

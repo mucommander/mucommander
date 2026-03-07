@@ -40,7 +40,7 @@ public class C {
 
     static {
         try {
-            INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
+            INSTANCE = Native.loadLibrary("c", CLibrary.class);
         }
         catch(Throwable e) {
             LOGGER.info("Unable to load C library", e);

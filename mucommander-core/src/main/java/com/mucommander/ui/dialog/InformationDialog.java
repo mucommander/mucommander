@@ -23,8 +23,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Optional;
@@ -227,11 +225,8 @@ public class InformationDialog {
         mainPanel.addSpace(10);
 
         JButton okButton = new JButton(Translator.get("ok"));
-        JPanel okPanel = DialogToolkit.createOKPanel(okButton, dialog.getRootPane(), new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-            }
-        });
+        JPanel okPanel = DialogToolkit.createOKPanel(okButton, dialog.getRootPane(), e ->
+            dialog.dispose());
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));

@@ -55,8 +55,8 @@ import com.mucommander.commons.io.StreamUtils;
 public class S3Object extends S3File {
     private static final Logger LOGGER = LoggerFactory.getLogger(S3Object.class);
 
-    private String bucketName;
-    private S3ObjectFileAttributes atts;
+    private final String                 bucketName;
+    private final S3ObjectFileAttributes atts;
 
     /** Maximum size of an S3 object (5GB) */
     private final static long MAX_OBJECT_SIZE = 5368709120l;
@@ -83,7 +83,7 @@ public class S3Object extends S3File {
     private String getObjectKey() {
         String urlPath = fileURL.getPath();
         // Strip out the bucket name from the path
-        return urlPath.substring(bucketName.length()+2, urlPath.length());
+        return urlPath.substring(bucketName.length()+2);
     }
 
     private String getObjectKey(boolean wantTrailingSeparator) {
@@ -406,7 +406,7 @@ public class S3Object extends S3File {
     private class S3ObjectRandomAccessInputStream extends RandomAccessInputStream {
 
         /** Length of the S3 object */
-        private long length;
+        private final long length;
 
         /** Current offset in the object stream */
         private long offset;

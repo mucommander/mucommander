@@ -27,7 +27,7 @@ public class OpenCommandPromptAction extends ParentFolderAction {
     @Override
     protected void toggleEnabledState() {
         AbstractFile currentFolder = mainFrame.getActivePanel().getCurrentFolder();
-        setEnabled(currentFolder.getURL().getScheme().equals(FileProtocols.FILE)
+        setEnabled(FileProtocols.FILE.equals(currentFolder.getURL().getScheme())
                 && !currentFolder.isArchive()
                 && !currentFolder.hasAncestor(AbstractArchiveEntryFile.class));
     }

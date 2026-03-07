@@ -18,14 +18,6 @@
 package com.mucommander.ui.main.tabs;
 
 import com.mucommander.desktop.ActionType;
-import com.mucommander.ui.action.impl.CloneTabToOtherPanelAction;
-import com.mucommander.ui.action.impl.CloseDuplicateTabsAction;
-import com.mucommander.ui.action.impl.CloseOtherTabsAction;
-import com.mucommander.ui.action.impl.CloseTabAction;
-import com.mucommander.ui.action.impl.DuplicateTabAction;
-import com.mucommander.ui.action.impl.MoveTabToOtherPanelAction;
-import com.mucommander.ui.action.impl.SetTabTitleAction;
-import com.mucommander.ui.action.impl.ToggleLockTabAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
 

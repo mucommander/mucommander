@@ -154,9 +154,9 @@ public class OneDriveFile extends ProtocolFile implements ConnectionHandlerFacto
             List<DriveItem> files = items.getCurrentPage();
             // TODO: support more than one page (https://docs.microsoft.com/en-us/graph/sdks/paging?view=graph-rest-beta&tabs=java)
             return files.stream()
-                    .filter(file -> file.file != null || file.folder != null)
-                    .map(this::toFile)
-                    .toArray(OneDriveFile[]::new);
+                .filter(file -> file.file != null || file.folder != null)
+                .map(this::toFile)
+                .toArray(OneDriveFile[]::new);
         }
     }
 

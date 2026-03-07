@@ -724,7 +724,7 @@ public class ThemeData {
     // - Listeners -----------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Listeners on the default font and colors. */
-    private static WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<ThemeListener, Object>();
+    private static final WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<>();
 
 
 
@@ -816,10 +816,10 @@ public class ThemeData {
     static {
         ComponentMapper mapper;
 
-        COLORS         = new Hashtable<Integer, DefaultColor>();
-        DEFAULT_COLORS = new Hashtable<String, DefaultColor>();
-        FONTS          = new Hashtable<Integer, DefaultFont>();
-        DEFAULT_FONTS  = new Hashtable<String, DefaultFont>();
+        COLORS         = new Hashtable<>();
+        DEFAULT_COLORS = new Hashtable<>();
+        FONTS          = new Hashtable<>();
+        DEFAULT_FONTS  = new Hashtable<>();
 
 
 
@@ -1178,7 +1178,7 @@ public class ThemeData {
      */
     public synchronized Color getColor(int id) {
         checkColorIdentifier(id);
-        return (colors[id] == null) ? getDefaultColor(id, this) : colors[id];
+        return colors[id] == null ? getDefaultColor(id, this) : colors[id];
     }
 
     /**
@@ -1194,7 +1194,7 @@ public class ThemeData {
     public synchronized Font getFont(int id) {
         checkFontIdentifier(id);
 
-        return (fonts[id] == null) ? getDefaultFont(id, this) : fonts[id];
+        return fonts[id] == null ? getDefaultFont(id, this) : fonts[id];
     }
 
 
@@ -1230,7 +1230,7 @@ public class ThemeData {
         // Makes sure id is a legal color identifier.
         checkColorIdentifier(id);
 
-        DefaultColor defaultColor = COLORS.get(Integer.valueOf(id));
+        DefaultColor defaultColor = COLORS.get(id);
         if (defaultColor == null) {
             // see the first comment for this class
             LOGGER.debug("Default color for id {} not found, using a generic default", id);
@@ -1253,7 +1253,7 @@ public class ThemeData {
      */
     private static Font getDefaultFont(int id, ThemeData data) {
         checkFontIdentifier(id);
-        DefaultFont defaultFont = FONTS.get(Integer.valueOf(id));
+        DefaultFont defaultFont = FONTS.get(id);
         if (defaultFont == null) {
             // see the first comment for this class
             LOGGER.debug("Default font for id {} not found, using a generic default", id);

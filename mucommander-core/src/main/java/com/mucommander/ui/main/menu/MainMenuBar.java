@@ -77,47 +77,47 @@ import com.mucommander.ui.viewer.FileFrame;
  */
 public class MainMenuBar extends JMenuBar implements ActionListener, MenuListener {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     // View menu
-    private JMenu viewMenu;
-    private JMenu themesMenu;
-    private JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[Column.values().length];
-    private JMenu columnsMenu;
-    private JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Column.values().length];
-    private JCheckBoxMenuItem toggleToggleAutoSizeItem;
-    private JCheckBoxMenuItem toggleShowFoldersFirstItem;
-    private JCheckBoxMenuItem toggleShowHiddenFilesItem;
-    private JCheckBoxMenuItem toggleShowParentFolderItem;
-    private JCheckBoxMenuItem toggleTreeItem;
-    private JCheckBoxMenuItem toggleUseSinglePanel;
+    private final JMenu viewMenu;
+    private final JMenu themesMenu;
+    private final JCheckBoxMenuItem[] sortByItems = new JCheckBoxMenuItem[Column.values().length];
+    private final JMenu               columnsMenu;
+    private final JCheckBoxMenuItem[] toggleColumnItems = new JCheckBoxMenuItem[Column.values().length];
+    private final JCheckBoxMenuItem   toggleToggleAutoSizeItem;
+    private final JCheckBoxMenuItem   toggleShowFoldersFirstItem;
+    private final JCheckBoxMenuItem toggleShowHiddenFilesItem;
+    private final JCheckBoxMenuItem toggleShowParentFolderItem;
+    private final JCheckBoxMenuItem toggleTreeItem;
+    private final JCheckBoxMenuItem toggleUseSinglePanel;
 
     /* TODO branch private JCheckBoxMenuItem toggleBranchView; */
 
     // File menu
-    private JMenu fileMenu;
+    private final JMenu fileMenu;
 
     // Go menu
-    private JMenu goMenu;
-    private int volumeOffset;
+    private final JMenu goMenu;
+    private final int   volumeOffset;
 
     // Bookmark menu
-    private JMenu bookmarksMenu;
-    private int bookmarksOffset;  // Index of the first bookmark menu item
+    private final JMenu bookmarksMenu;
+    private final int   bookmarksOffset;  // Index of the first bookmark menu item
 
     // Window menu
-    private JMenu windowMenu;
-    private int windowOffset; // Index of the first window menu item
-    private JCheckBoxMenuItem splitHorizontallyItem;
-    private JCheckBoxMenuItem splitVerticallyItem;
+    private final JMenu windowMenu;
+    private final int   windowOffset; // Index of the first window menu item
+    private final JCheckBoxMenuItem splitHorizontallyItem;
+    private final JCheckBoxMenuItem splitVerticallyItem;
 
     /** Maps window menu items onto weakly-referenced frames */
     private WeakHashMap<JMenuItem, Frame> windowMenuFrames;
 
     /** A handler for Open With menu */
-    private OpenWithMenu openWithMenu;
+    private final OpenWithMenu openWithMenu;
 
-    private final static ActionId RECALL_WINDOW_ACTION_IDS[] = {
+    private final static ActionId[] RECALL_WINDOW_ACTION_IDS = {
             ActionId.asGenericAction(ActionType.RecallWindow1.getId()),
             ActionId.asGenericAction(ActionType.RecallWindow2.getId()),
             ActionId.asGenericAction(ActionType.RecallWindow3.getId()),
@@ -447,12 +447,11 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
                 goMenu.remove(volumeOffset);
             }
 
-            AbstractFile volumes[] = LocalFile.getVolumes();
-            int nbFolders = volumes.length;
+            AbstractFile[] volumes = LocalFile.getVolumes();
 
-            for (int i = 0; i < nbFolders; i++) {
-                goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), volumes[i]));
-            }
+			for (AbstractFile volume : volumes) {
+				goMenu.add(new OpenLocationAction(mainFrame, new Hashtable<>(), volume));
+			}
         } else if (source == bookmarksMenu) {
             // Remove any previous bookmarks menu items from menu
             // as bookmarks might have changed since menu was last selected
@@ -527,7 +526,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
             }
 
             // Add 'other' (non-MainFrame) windows : viewer and editor frames, no associated accelerator
-            Frame frames[] = Frame.getFrames();
+            Frame[] frames = Frame.getFrames();
             nbFrames = frames.length;
             Frame frame;
             JMenuItem menuItem;
@@ -582,7 +581,7 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
      */
     private class ChangeCurrentThemeAction extends AbstractAction {
 
-        private Theme theme;
+        private final Theme theme;
 
         public ChangeCurrentThemeAction(Theme theme) {
             super(theme.getName());

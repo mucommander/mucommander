@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 public class DefaultPathCanonizerTest {
 
     private String getNormalizedPath(String path, String separator) {
-        if(!separator.equals("/"))
+        if(!"/".equals(separator))
             path = path.replace("/", separator);
 
         return path;

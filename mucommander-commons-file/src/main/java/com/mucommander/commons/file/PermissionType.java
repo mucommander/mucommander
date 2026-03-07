@@ -40,7 +40,7 @@ public enum PermissionType {
     /** Designates the 'read' permission. */
     READ(4);
 
-    private int intValue;
+    private final int intValue;
 
     private PermissionType(int val) {
 		this.intValue = val;

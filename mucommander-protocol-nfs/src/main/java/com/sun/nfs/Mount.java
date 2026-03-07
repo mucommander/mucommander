@@ -140,14 +140,14 @@ class Mount {
             // ignore
         }
 
-	return (fh);
+	return fh;
     }
 
     /*
      *  get the sec_flavor after a successful getMountInfo()
      */
     String getSec() {
-        return (sec_flavor);
+        return sec_flavor;
     }
 
     /*

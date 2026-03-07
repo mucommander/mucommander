@@ -96,7 +96,7 @@ public class CustomFileIconProvider implements FileIconProvider {
      *  <li><a href="http://www.fileinfo.net">http://www.fileinfo.net</a></li>
      * </ul>
      */
-    final static String ICON_EXTENSIONS[][] = {
+    final static String[][] ICON_EXTENSIONS = {
         {"archive_unsupported.png", "7z", "ace", "arj", "bin", "bz", "cab", "dmg", "hqx", "ipk", "lha", "lzh", "lzx", "msi", "mpkg", "pak", "pkg", "pq6", "rar", "rk", "rz", "sea", "sit", "sitx", "sqx", "z", "zoo"},	// Unsupported archive formats (no native support), see http://en.wikipedia.org/wiki/Archive_formats
         {"audio.png", "aac", "aif", "aiff", "aifc", "amr", "ape", "au", "cda", "mp3", "mpa", "mp2", "mpc", "m3u", "m4a", "m4b", "m4p", "nap", "ogg", "pls", "ra", "ram", "wav", "wave", "flac", "wma", "mid", "midi", "smf", "mod", "mtm", "xm", "s3m", "mka"},	// Audio formats, see http://en.wikipedia.org/wiki/Audio_file_format
         {"cd_image.png", "iso", "nrg"},	// CD/DVD image
@@ -142,14 +142,13 @@ public class CustomFileIconProvider implements FileIconProvider {
      */
     private static void init() {
         // Map known file extensions to icon names
-        extensionMap = new Hashtable<String, String>();
-        int nbIcons = ICON_EXTENSIONS.length;
-        for(int i=0; i<nbIcons; i++) {
-            int nbExtensions = ICON_EXTENSIONS[i].length;
-            String iconName = ICON_EXTENSIONS[i][0];
-            for(int j=1; j<nbExtensions; j++)
-                 extensionMap.put(ICON_EXTENSIONS[i][j], iconName);
-        }
+        extensionMap = new Hashtable<>();
+		for (String[] iconExtension : ICON_EXTENSIONS) {
+			int    nbExtensions = iconExtension.length;
+			String iconName     = iconExtension[0];
+			for (int j = 1; j < nbExtensions; j++)
+				extensionMap.put(iconExtension[j], iconName);
+		}
 
         initialized = true;
     }
@@ -207,7 +206,7 @@ public class CustomFileIconProvider implements FileIconProvider {
         // If file is a directory, use folder icon. One exception is made for 'app' extension under MAC OS
         else if(file.isDirectory()) {
             // Mac OS X application are directories with the .app extension and have a dedicated icon
-            if(fileExtension!=null && fileExtension.equals("app"))
+            if("app".equals(fileExtension))
                 icon = IconManager.getIcon(IconManager.FILE_ICON_SET, MAC_OS_APP_ICON_NAME);
             // Default folder icon
             else
@@ -218,23 +217,21 @@ public class CustomFileIconProvider implements FileIconProvider {
             icon = IconManager.getIcon(IconManager.FILE_ICON_SET, ARCHIVE_ICON_NAME);
         }
         // Regular file icon
+        else // Determine if the file's extension has an associated icon
+        if(fileExtension==null)
+            // File has no extension, use default file icon
+            icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
         else {
-            // Determine if the file's extension has an associated icon
-            if(fileExtension==null)
-                // File has no extension, use default file icon
+            // Compare extension against lower-cased extensions
+            String iconName = extensionMap.get(fileExtension.toLowerCase());
+            if(iconName==null)	// No icon associated to extension, use default file icon
                 icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
             else {
-                // Compare extension against lower-cased extensions
-                String iconName = extensionMap.get(fileExtension.toLowerCase());
-                if(iconName==null)	// No icon associated to extension, use default file icon
-                    icon = IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
-                else {
-                    // Retrieves the cached (or freshly loaded if not in cache already) ImageIcon instance corresponding to the icon's name
-                    icon = IconManager.getIcon(IconManager.FILE_ICON_SET, iconName);
-                    // Returned IconImage should never be null, but if it is (icon file missing), return default file icon
-                    if(icon==null)
-                        return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
-                }
+                // Retrieves the cached (or freshly loaded if not in cache already) ImageIcon instance corresponding to the icon's name
+                icon = IconManager.getIcon(IconManager.FILE_ICON_SET, iconName);
+                // Returned IconImage should never be null, but if it is (icon file missing), return default file icon
+                if(icon==null)
+                    return IconManager.getIcon(IconManager.FILE_ICON_SET, FILE_ICON_NAME);
             }
         }
 

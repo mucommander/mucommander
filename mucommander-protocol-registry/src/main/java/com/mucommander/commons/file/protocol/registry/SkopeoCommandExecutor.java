@@ -135,8 +135,8 @@ public class SkopeoCommandExecutor {
      */
     private static class CommandOutputListener implements ProcessListener {
 
-        private StringBuilder outputBuffer;
-        private String outputEncoding;
+        private final StringBuilder outputBuffer;
+        private final String        outputEncoding;
 
         private CommandOutputListener(StringBuilder outputBuffer, String outputEncoding) {
             this.outputBuffer = outputBuffer;

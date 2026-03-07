@@ -27,10 +27,10 @@ import com.mucommander.commons.file.archive.ArchiveEntry;
  */
 class IsoArchiveEntry extends ArchiveEntry {
 
-    private long index;
-    private int sectSize;
-    private long shiftOffset;
-    private boolean audio;
+    private final long index;
+    private final int  sectSize;
+    private final long shiftOffset;
+    private final boolean audio;
 
     IsoArchiveEntry(String path, boolean directory, long date, long size, long index, int sectSize, long shiftOffset, boolean audio) {
         super(path, directory, date, size, true);

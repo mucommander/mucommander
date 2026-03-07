@@ -55,7 +55,7 @@ public class CombineFilesAction extends SelectedFilesAction {
         FileFilter filter = new AttributeFileFilter(FileAttribute.FILE);
         filter.filter(files);
 
-        if (files.size() == 0)
+        if (files.isEmpty())
             return;
 
         AbstractFile destFolder = mainFrame.getInactivePanel().getCurrentFolder();

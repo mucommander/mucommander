@@ -108,10 +108,10 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
-        if(qName.equals(ELEMENT_ROOT)) {
+        if(ELEMENT_ROOT.equals(qName)) {
             version = attributes.getValue(ATTRIBUTE_VERSION);
         }
-        else if(qName.equals(ELEMENT_BOOKMARK)) {
+        else if(ELEMENT_BOOKMARK.equals(qName)) {
             // Reset parsing variables
             bookmarkName = null;
             bookmarkLocation = null;
@@ -123,7 +123,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
      */
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(qName.equals(ELEMENT_BOOKMARK)) {
+        if(ELEMENT_BOOKMARK.equals(qName)) {
             if(bookmarkName == null || bookmarkLocation == null) {
                 LOGGER.info("Missing value, bookmark ignored: name=" + bookmarkName + " location=" + bookmarkLocation);
                 return;
@@ -132,14 +132,14 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
             try {builder.addBookmark(bookmarkName, bookmarkLocation);}
             catch(BookmarkException e) {throw new SAXException(e);}
         }
-        else if(qName.equals(ELEMENT_NAME)) {
+        else if(ELEMENT_NAME.equals(qName)) {
             bookmarkName = characters.toString().trim();
         }
-        else if(qName.equals(ELEMENT_LOCATION)) {
+        else if(ELEMENT_LOCATION.equals(qName)) {
             bookmarkLocation = characters.toString().trim();
         }
         // Note: url element has been deprecated in 0.8 beta3 but is still checked against for upward compatibility.
-        else if(qName.equals(ELEMENT_URL)) {
+        else if(ELEMENT_URL.equals(qName)) {
             // Until early 0.8 beta3 nightly builds, credentials were stored directly in the bookmark's url.
             // Now bookmark locations are free of credentials, these are stored in a dedicated credentials file where
             // the password is encrypted.

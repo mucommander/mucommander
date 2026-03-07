@@ -47,21 +47,21 @@ class IsoUtil {
         return sectSize;
     }
 
-    public static int toDwordBE(byte p[], int offset) {
-        return ((p[offset] & 0xff)
+    public static int toDwordBE(byte[] p, int offset) {
+        return (p[offset] & 0xff)
                 | ((p[1 + offset] & 0xff) << 8)
                 | ((p[2 + offset] & 0xff) << 16)
-                | ((p[3 + offset] & 0xff) << 24));
+                | ((p[3 + offset] & 0xff) << 24);
     }
 
-    public static int toDword(byte p[], int offset) {
-        return ((p[3 + offset] & 0xff)
+    public static int toDword(byte[] p, int offset) {
+        return (p[3 + offset] & 0xff)
                 | ((p[2 + offset] & 0xff) << 8)
                 | ((p[1 + offset] & 0xff) << 16)
-                | ((p[offset] & 0xff) << 24));
+                | ((p[offset] & 0xff) << 24);
     }
 
-    public static void toArray(int value, byte b[], int offset) {
+    public static void toArray(int value, byte[] b, int offset) {
         b[offset] = (byte) (value & 0xff);
         b[offset + 1] = (byte) ((value & 0xff00) >> 8);
         b[offset + 2] = (byte) ((value & 0xff0000) >> 16);

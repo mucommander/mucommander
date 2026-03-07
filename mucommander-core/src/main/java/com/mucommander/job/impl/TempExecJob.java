@@ -44,7 +44,7 @@ public class TempExecJob extends TempCopyJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TempExecJob.class);
 	
     /** Files to execute */
-    private FileSet filesToExecute;
+    private final FileSet filesToExecute;
 
     /**
      * Creates a new <code>TempExecJob</code> that operates on a single file.

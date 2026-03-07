@@ -81,7 +81,7 @@ public abstract class Base64Encoder {
             out64.write(b, off, len);
             out64.writePadding();
 
-            return new String(bout.toByteArray());
+            return bout.toString();
         }
         catch(IOException e) {
             // Should never happen

@@ -21,9 +21,7 @@ import java.awt.Dimension;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.mucommander.conf.MuConfigurations;
 import com.mucommander.text.Translator;
-import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.pref.PreferencesDialog;
 import com.mucommander.ui.dialog.pref.component.PrefComponent;
 import com.mucommander.ui.main.WindowManager;
@@ -39,7 +37,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     private static GeneralPreferencesDialog singleton;
     /** Stores the components in the dialog that were changed and their current value is different 
      *  then their saved value at MuConfiguration **/
-    private Set<PrefComponent> modifiedComponents;
+    private final  Set<PrefComponent>       modifiedComponents;
 
 
     // - Dimensions -------------------------------------------------------------
@@ -99,7 +97,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
      */
     private GeneralPreferencesDialog() {
         super(WindowManager.getCurrentMainFrame().getJFrame(), Translator.get("prefs_dialog.title"));
-        modifiedComponents = new LinkedHashSet<PrefComponent>();
+        modifiedComponents = new LinkedHashSet<>();
 
         // Adds the preference tabs.
         addPreferencesPanel(new GeneralPanel(this),    GENERAL_ICON);
@@ -171,7 +169,7 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
 		else
 			modifiedComponents.remove(component);
 		
-		setCommitButtonsEnabled(modifiedComponents.size() != 0);
+		setCommitButtonsEnabled(!modifiedComponents.isEmpty());
 	}
     
     @Override

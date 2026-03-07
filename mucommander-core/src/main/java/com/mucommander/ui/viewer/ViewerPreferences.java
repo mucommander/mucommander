@@ -28,8 +28,8 @@ public enum ViewerPreferences {
     WINDOW_HEIGHT("window_height", "")
     ;
 
-    private String prefKey;
-    private String value;
+    private final String prefKey;
+    private       String value;
 
     ViewerPreferences(String prefKey, String defaultValue) {
         this.prefKey =  prefKey;

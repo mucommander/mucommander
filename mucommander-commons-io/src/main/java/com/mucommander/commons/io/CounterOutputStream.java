@@ -81,13 +81,13 @@ public class CounterOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte b[]) throws IOException {
+    public void write(byte[] b) throws IOException {
         out.write(b);
         counter.add(b.length);
     }
     
     @Override
-    public void write(byte b[], int off, int len) throws IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
         out.write(b, off, len);
         counter.add(len);
     }

@@ -29,8 +29,8 @@ import com.mucommander.ui.quicklist.item.QuickListDataList;
  */
 
 public abstract class QuickListWithDataList<T> extends QuickList {	
-	protected QuickListDataList dataList;	
-	private QuickListWithEmptyMsg emptyPopup;
+	protected     QuickListDataList     dataList;
+	private final QuickListWithEmptyMsg emptyPopup;
 	
 	public QuickListWithDataList(QuickListContainer container, String header, String emptyPopupHeader) {
 		super(container, header);

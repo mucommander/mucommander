@@ -239,10 +239,10 @@ public class GSSContext {
          * version.
          */
         try {
-            int length = (interProcessToken[0] & 0xff);
+            int length = interProcessToken[0] & 0xff;
             for (int i = 1; i < 4; i++) {
                 length <<= 8;
-                length += (interProcessToken[i] & 0xff);
+                length += interProcessToken[i] & 0xff;
             }
             
             ByteArrayInputStream is = 
@@ -306,9 +306,9 @@ public class GSSContext {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         init(is, os);
         if (os.size() == 0)
-            return (null);
+            return null;
             
-        return (os.toByteArray());
+        return os.toByteArray();
     }
 
 
@@ -383,7 +383,7 @@ public class GSSContext {
         if (retStatus == COMPLETE)
             m_curState = READY;
             
-        return (retStatus);
+        return retStatus;
     }
 
 
@@ -437,9 +437,9 @@ public class GSSContext {
 
         //check if token is available for the peer
         if (os.size() == 0)
-            return (null);
+            return null;
             
-        return (os.toByteArray());
+        return os.toByteArray();
     }
 
 
@@ -510,7 +510,7 @@ public class GSSContext {
         if (retStatus == COMPLETE)
             m_curState = READY;
             
-        return (retStatus);
+        return retStatus;
     }
 
 
@@ -524,7 +524,7 @@ public class GSSContext {
      */
     public boolean isEstablished() {
     
-        return (m_curState == READY);
+        return m_curState == READY;
     }
     
 
@@ -566,7 +566,7 @@ public class GSSContext {
                     throws GSSException {
         
         checkState(READY);
-        return (m_mechCtxt._S808028B (qop, confReq, maxTokenSize));
+        return m_mechCtxt._S808028B (qop, confReq, maxTokenSize);
     }
 
 
@@ -820,7 +820,7 @@ public class GSSContext {
         getMIC(is, os, msgProp);
 
         //return output token
-        return (os.toByteArray());
+        return os.toByteArray();
      }
 
 
@@ -967,7 +967,7 @@ public class GSSContext {
         byte [] outTok = m_mechCtxt._S725B2DA ();
         dispose();
 
-        return (outTok);
+        return outTok;
     }
 
 
@@ -1195,9 +1195,9 @@ public class GSSContext {
     public boolean getDelegCredState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & CRED_DELEG) == CRED_DELEG);
+            return (m_reqFlags & CRED_DELEG) == CRED_DELEG;
             
-        return ((m_mechCtxt._S00027C3 () & CRED_DELEG) == CRED_DELEG);
+        return (m_mechCtxt._S00027C3 () & CRED_DELEG) == CRED_DELEG;
     }
 
   
@@ -1219,9 +1219,9 @@ public class GSSContext {
     public boolean getMutualAuthState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & MUTUAL_AUTH) == MUTUAL_AUTH);
+            return (m_reqFlags & MUTUAL_AUTH) == MUTUAL_AUTH;
             
-        return ((m_mechCtxt._S00027C3 () & MUTUAL_AUTH) == MUTUAL_AUTH);
+        return (m_mechCtxt._S00027C3 () & MUTUAL_AUTH) == MUTUAL_AUTH;
     }
 
 
@@ -1243,9 +1243,9 @@ public class GSSContext {
     public boolean getReplayDetState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & REPLAY_DET) == REPLAY_DET);
+            return (m_reqFlags & REPLAY_DET) == REPLAY_DET;
             
-        return ((m_mechCtxt._S00027C3 () & REPLAY_DET) == REPLAY_DET);
+        return (m_mechCtxt._S00027C3 () & REPLAY_DET) == REPLAY_DET;
     }
 
 
@@ -1267,9 +1267,9 @@ public class GSSContext {
     public boolean getSequenceDetState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & SEQUENCE_DET) == SEQUENCE_DET);
+            return (m_reqFlags & SEQUENCE_DET) == SEQUENCE_DET;
             
-        return ((m_mechCtxt._S00027C3 () & SEQUENCE_DET) == SEQUENCE_DET);
+        return (m_mechCtxt._S00027C3 () & SEQUENCE_DET) == SEQUENCE_DET;
     }
 
 
@@ -1291,9 +1291,9 @@ public class GSSContext {
     public boolean getAnonymityState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & ANON) == ANON);
+            return (m_reqFlags & ANON) == ANON;
             
-        return ((m_mechCtxt._S00027C3 () & ANON) == ANON);
+        return (m_mechCtxt._S00027C3 () & ANON) == ANON;
     }
 
 
@@ -1313,7 +1313,7 @@ public class GSSContext {
     public boolean isTransferable() throws GSSException {
         
         checkState(READY);
-        return ((m_mechCtxt._S00027C3 () & TRANS) == TRANS);
+        return (m_mechCtxt._S00027C3 () & TRANS) == TRANS;
     }
     
 
@@ -1335,7 +1335,7 @@ public class GSSContext {
         if (m_mechCtxt == null)
             return false;
             
-        return (m_mechCtxt._S1116FAA ());
+        return m_mechCtxt._S1116FAA ();
     }
 
 
@@ -1357,9 +1357,9 @@ public class GSSContext {
     public boolean getConfState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & CONF) == CONF);
+            return (m_reqFlags & CONF) == CONF;
             
-        return ((m_mechCtxt._S00027C3 () & CONF) == CONF);
+        return (m_mechCtxt._S00027C3 () & CONF) == CONF;
     }
 
 
@@ -1381,9 +1381,9 @@ public class GSSContext {
     public boolean getIntegState() {
     
         if (m_curState < READY)
-            return ((m_reqFlags & INTG) == INTG);
+            return (m_reqFlags & INTG) == INTG;
             
-        return ((m_mechCtxt._S00027C3 () & INTG) == INTG);
+        return (m_mechCtxt._S00027C3 () & INTG) == INTG;
     }
 
 
@@ -1405,9 +1405,9 @@ public class GSSContext {
     public int getLifetime() {
     
         if (m_curState < READY)
-            return (m_reqLifetime);
+            return m_reqLifetime;
             
-        return (m_mechCtxt._S4080EED ());
+        return m_mechCtxt._S4080EED ();
     }
     
     
@@ -1427,7 +1427,7 @@ public class GSSContext {
     public GSSName getSrcName() throws GSSException {
     
         checkState(IN_PROGRESS);
-        return (new GSSName(m_mechCtxt._S000EEFF ()));
+        return new GSSName(m_mechCtxt._S000EEFF ());
     }
     
     
@@ -1447,7 +1447,7 @@ public class GSSContext {
     public GSSName getTargName() throws GSSException {
     
         checkState(IN_PROGRESS);
-        return (new GSSName(m_mechCtxt._S011CEF9 ()));
+        return new GSSName(m_mechCtxt._S011CEF9 ());
     }
     
     
@@ -1465,7 +1465,7 @@ public class GSSContext {
     public Oid getMech() throws GSSException {
 
         checkState(IN_PROGRESS);
-        return (m_mechCtxt._S0200735 ());
+        return m_mechCtxt._S0200735 ();
     }
     
     
@@ -1486,7 +1486,7 @@ public class GSSContext {
     public GSSCredential getDelegCred() throws GSSException {
     
         checkState(IN_PROGRESS);        
-        return (new GSSCredential(m_mechCtxt._S0293FFA ()));
+        return new GSSCredential(m_mechCtxt._S0293FFA ());
     }
     
     
@@ -1505,7 +1505,7 @@ public class GSSContext {
     public boolean isInitiator() throws GSSException {
 
         checkState(IN_PROGRESS);
-        return (m_mechCtxt._S123049E ());
+        return m_mechCtxt._S123049E ();
     }
 
 
@@ -1564,7 +1564,7 @@ public class GSSContext {
             Oid res = new Oid(is);
             is.reset();
             
-            return (res);
+            return res;
         } catch (IOException e) {
             throw new GSSException(GSSException.DEFECTIVE_TOKEN);
         }

@@ -78,7 +78,6 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 			FolderMetadata folder = (FolderMetadata) metadata;
 			dir = true;
 			id = folder.getId();
-			return;
 		}
 	}
 
@@ -215,13 +214,7 @@ public class DropboxFile extends ProtocolFile implements ConnectionHandlerFactor
 	private DropboxConnectionHandler getConnHandler() throws IOException {
 		DropboxConnectionHandler connHandler = (DropboxConnectionHandler) ConnectionPool
 				.getConnectionHandler(this, fileURL, true);
-		try {
-			connHandler.checkConnection();
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (IOException e) {
-			throw e;
-		}
+        connHandler.checkConnection();
 		return connHandler;
 	}
 

@@ -19,7 +19,6 @@ package com.mucommander.commons.file.protocol.gcs;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;
@@ -77,7 +76,7 @@ public class GoogleCloudStorageConnectionHandler extends ConnectionHandler imple
         }
 
         // Return path to the child with project id name
-        return Paths.get(credentialsFolder.getChild(projectId).getPath());
+        return Path.of(credentialsFolder.getChild(projectId).getPath());
     }
 
     @Override

@@ -227,9 +227,9 @@ public class MainFrame implements LocationListener {
         // Note: the vertical/horizontal terminology used in muCommander is just the opposite of the one used
         // in JSplitPane which is anti-natural / confusing.
         foldersSplitPane = new ProportionalSplitPane(getJFrame(),
-                MuSnapshot.getSnapshot().getVariable(
+                MuSnapshot.VERTICAL_SPLIT_ORIENTATION.equals(MuSnapshot.getSnapshot().getVariable(
                         MuSnapshot.getSplitOrientation(0),
-                        MuSnapshot.DEFAULT_SPLIT_ORIENTATION).equals(MuSnapshot.VERTICAL_SPLIT_ORIENTATION) ?
+                        MuSnapshot.DEFAULT_SPLIT_ORIENTATION)) ?
                         JSplitPane.HORIZONTAL_SPLIT : JSplitPane.VERTICAL_SPLIT,
                         false,
                         MainFrame.this.leftFolderPanel.getPanel(),
@@ -337,7 +337,7 @@ public class MainFrame implements LocationListener {
         for (boolean isLeft = true; ; isLeft=false) {
             FileTable fileTable = isLeft ? leftTable : rightTable;
             fileTable.sortBy(Column.valueOf(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortByVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_BY).toUpperCase()),
-                    !MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER).equals(MuSnapshot.SORT_ORDER_DESCENDING));
+                    !MuSnapshot.SORT_ORDER_DESCENDING.equals(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getFileTableSortOrderVariable(0, isLeft), MuSnapshot.DEFAULT_SORT_ORDER)));
 
             FolderPanel folderPanel = isLeft ? leftFolderPanel : rightFolderPanel;
             folderPanel.setTreeWidth(MuSnapshot.getSnapshot().getVariable(MuSnapshot.getTreeWidthVariable(0, isLeft), 150));
@@ -646,7 +646,7 @@ public class MainFrame implements LocationListener {
         leftTable.setColumnModel(rightTable.getColumnModel());
         rightTable.setColumnModel(model);
 
-        SortInfo sortInfo = (SortInfo)leftTable.getSortInfo().clone();
+        SortInfo sortInfo = leftTable.getSortInfo().clone();
 
         leftTable.sortBy(rightTable.getSortInfo());
         leftTable.updateColumnsVisibility();
@@ -711,14 +711,13 @@ public class MainFrame implements LocationListener {
             return true;
         }
 
-        Window ownedWindows[] = getJFrame().getOwnedWindows();
+        Window[] ownedWindows = getJFrame().getOwnedWindows();
 
-        int nbWindows = ownedWindows.length;
-        for (int i = 0; i < nbWindows; i++) {
-            if (ownedWindows[i].isActive()) {
-                return true;
-            }
-        }
+		for (Window ownedWindow : ownedWindows) {
+			if (ownedWindow.isActive()) {
+				return true;
+			}
+		}
 
         return false;
     }
@@ -746,7 +745,7 @@ public class MainFrame implements LocationListener {
             // Displays the document icon in the window title bar, works only for local files
             AbstractFile currentFolder = activeTable.getFolderPanel().getCurrentFolder();
             Object javaIoFile;
-            if (currentFolder.getURL().getScheme().equals(LocalFile.SCHEMA)) {
+            if (LocalFile.SCHEMA.equals(currentFolder.getURL().getScheme())) {
                 // If the current folder is an archive entry, display the archive file, this is the closest we can get
                 // with a java.io.File
                 if (currentFolder.hasAncestor(AbstractArchiveEntryFile.class)) {

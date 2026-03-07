@@ -29,7 +29,7 @@ public class Enumerator<T> implements Iterator<T> {
     // - Instance variables ----------------------------------------------------
     // -------------------------------------------------------------------------
     /** Enumeration wrapped by this <code>Enumerator</code>. */
-    private Enumeration<T> enumeration;
+    private final Enumeration<T> enumeration;
 
 
 

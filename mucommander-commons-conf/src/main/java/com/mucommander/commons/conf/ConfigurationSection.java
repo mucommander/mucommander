@@ -42,8 +42,8 @@ class ConfigurationSection {
      * Creates a new configuration section.
      */
     public ConfigurationSection() {
-        variables = new HashMap<String, String>();
-        sections  = new HashMap<String, ConfigurationSection>();
+        variables = new HashMap<>();
+        sections  = new HashMap<>();
     }
 
 
@@ -81,7 +81,7 @@ class ConfigurationSection {
      */
     public boolean setVariable(String name, String value) {
         // If the specified value is empty, deletes the variable.
-        if(value == null || value.trim().equals("")) {
+        if(value == null || value.trim().isEmpty()) {
             // If the variable wasn't set, we haven't changed its value.
             if(getVariable(name) == null)
                 return false;

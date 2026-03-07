@@ -54,7 +54,7 @@ import com.mucommander.ui.theme.ThemeManager;
 public class FileTableWrapperForDisplay extends JScrollPane implements FocusListener, ThemeListener {
 
 	/** The FileTable being wrapped for display */
-	private FileTable fileTable;
+	private final FileTable fileTable;
 	
 	/** Colors relevant for the FileTable or its ScrollPane wrapper */
 	private Color borderColor;
@@ -64,9 +64,9 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
     private Color unmatchedBackgroundColor;
     
     /** Frame containing this file table. */
-    private MainFrame mainFrame;
+    private final MainFrame   mainFrame;
     /** Panel containing this file table */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
     
 	public FileTableWrapperForDisplay(final FileTable fileTable, final FolderPanel folderPanel, final MainFrame mainFrame) {
 		super(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

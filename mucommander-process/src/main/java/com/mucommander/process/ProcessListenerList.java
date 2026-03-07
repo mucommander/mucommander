@@ -28,7 +28,7 @@ public class ProcessListenerList implements ProcessListener {
     // - Instance fields -----------------------------------------------------
     // -----------------------------------------------------------------------
     /** All registered listeners. */
-    private List<ProcessListener> listeners;
+    private final List<ProcessListener> listeners;
 
 
 
@@ -38,7 +38,7 @@ public class ProcessListenerList implements ProcessListener {
      * Creates a new process listener list.
      */
     public ProcessListenerList() {
-        listeners = new Vector<ProcessListener>();
+        listeners = new Vector<>();
     }
 
 

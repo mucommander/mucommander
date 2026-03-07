@@ -51,20 +51,17 @@ public class ToolBarWriter extends ToolBarIO {
 	
 	void write() throws IOException {
 		ActionId[] actionIds = ToolBarAttributes.getActions();
-		
-		BackupOutputStream bos = new BackupOutputStream(getDescriptionFile());
-		try {
+
+		try (BackupOutputStream bos = new BackupOutputStream(getDescriptionFile())) {
 			new Writer(bos).write(actionIds);
 			wasToolBarModified = false;
 		} catch (Exception e) {
 			LOGGER.debug("Caught exception", e);
-		} finally {
-			bos.close();
 		}
 	}
 	
 	private static class Writer {
-		private XmlWriter writer = null;
+		private final XmlWriter writer;
 		
 		private Writer(OutputStream stream) throws IOException {
     		this.writer = new XmlWriter(stream);
@@ -77,11 +74,10 @@ public class ToolBarWriter extends ToolBarIO {
 				XmlAttributes rootElementAttributes = new XmlAttributes();
 				rootElementAttributes.add(VERSION_ATTRIBUTE, RuntimeConstants.VERSION);
 
-    			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);    			
-    			
-    			int nbToolBarActions = actionIds.length;
-    			for (int i=0; i<nbToolBarActions; ++i)
-    				write(actionIds[i]);
+    			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);
+
+				for (ActionId actionId : actionIds)
+					write(actionId);
 
     		} finally {
     			writer.endElement(ROOT_ELEMENT);

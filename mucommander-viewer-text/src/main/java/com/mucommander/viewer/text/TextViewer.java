@@ -73,9 +73,9 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
     private static final Logger LOGGER = LoggerFactory.getLogger(TextViewer.class);
 
     private JScrollPane ui;
-    private ViewerPresenter presenter;
-    private TextEditorImpl textEditorImpl;
-    private AbstractFile currentFile;
+    private       ViewerPresenter presenter;
+    private final TextEditorImpl  textEditorImpl;
+    private       AbstractFile    currentFile;
 
     /** Menu items */
     // Menus //

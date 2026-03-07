@@ -27,8 +27,8 @@ package com.mucommander.commons.file;
  */
 public final class Credentials {
 
-    private String login;
-    private String password;
+    private final String login;
+    private final String password;
 	
     /**
      * Creates a new instance with the supplied login and password.

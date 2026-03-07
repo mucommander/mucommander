@@ -43,7 +43,7 @@ class BufferedConfigurationExplorer extends ConfigurationExplorer {
      */
     public BufferedConfigurationExplorer(ConfigurationSection root) {
         super(root);
-        sections = new Stack<ConfigurationSection>();
+        sections = new Stack<>();
     }
 
 

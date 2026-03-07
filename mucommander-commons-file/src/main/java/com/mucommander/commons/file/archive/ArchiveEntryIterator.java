@@ -47,5 +47,5 @@ public interface ArchiveEntryIterator extends AutoCloseable {
     ArchiveEntry nextEntry() throws IOException;
 
     @Override
-    default void close() throws IOException {};
+    default void close() throws IOException {}
 }

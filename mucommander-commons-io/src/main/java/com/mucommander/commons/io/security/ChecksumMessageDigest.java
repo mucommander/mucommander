@@ -29,7 +29,7 @@ import java.util.zip.Checksum;
 public class ChecksumMessageDigest extends MessageDigest {
 
     /** The Checksum instance that performs all of the checksumming work */
-    private Checksum checksum;
+    private final Checksum checksum;
 
     /**
      * Creates a new <code>ChecksumMessageDigest</code> that delegates all the checksumming work to the given

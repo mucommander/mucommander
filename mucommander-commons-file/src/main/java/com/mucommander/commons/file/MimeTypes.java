@@ -90,7 +90,7 @@ public class MimeTypes extends Hashtable<String, String> {
         if(pos==-1)
             return null;
 
-        return mimeTypes.get(name.substring(pos+1, name.length()).toLowerCase());
+        return mimeTypes.get(name.substring(pos+1).toLowerCase());
     }
     
 }

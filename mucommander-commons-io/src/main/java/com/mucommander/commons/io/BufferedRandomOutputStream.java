@@ -31,10 +31,10 @@ import java.io.IOException;
 public class BufferedRandomOutputStream extends RandomAccessOutputStream {
 
     /** The underlying random access output stream */
-    private RandomAccessOutputStream raos;
+    private final RandomAccessOutputStream raos;
 
     /** The buffer where written bytes are accumulated before being sent to the underlying output stream */
-    private byte buffer[];
+    private byte[] buffer;
 
     /** The current number of bytes waiting to be flushed to the underlying output stream */
     private int count;
@@ -103,7 +103,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public synchronized void write(byte b[]) throws IOException {
+    public synchronized void write(byte[] b) throws IOException {
         write(b, 0, b.length);
     }
 
@@ -124,7 +124,7 @@ public class BufferedRandomOutputStream extends RandomAccessOutputStream {
      * @throws IOException if an I/O error occurs.
      */
     @Override
-    public synchronized void write(byte b[], int off, int len) throws IOException {
+    public synchronized void write(byte[] b, int off, int len) throws IOException {
         if (len >= buffer.length) {
             /* If the request length exceeds the size of the output buffer,
             flush the output buffer and then write the data directly.

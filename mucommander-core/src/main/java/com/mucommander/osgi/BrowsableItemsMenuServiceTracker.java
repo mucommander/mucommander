@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
  */
 public class BrowsableItemsMenuServiceTracker extends ServiceTracker<BrowsableItemsMenuService, BrowsableItemsMenuService> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BrowsableItemsMenuService.class);
-    private static List<BrowsableItemsMenuService> SERVICES = new ArrayList<>();
+    private static final Logger                          LOGGER   = LoggerFactory.getLogger(BrowsableItemsMenuService.class);
+    private static final List<BrowsableItemsMenuService> SERVICES = new ArrayList<>();
 
     public BrowsableItemsMenuServiceTracker(BundleContext context) {
         super(context, BrowsableItemsMenuService.class, null);

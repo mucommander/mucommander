@@ -25,11 +25,11 @@ public class FileTableConfiguration {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Each column's enabled state. */
-    private boolean[] enabled;
+    private final boolean[] enabled;
     /** Initial width of each column. */
-    private int[]     width;
+    private final int[]     width;
     /** Columns initial order. */
-    private int[]     order;
+    private final int[]     order;
 
 
 

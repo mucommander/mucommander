@@ -89,8 +89,8 @@ import jcifs.smb.SmbRandomAccessFile;
  public class SMBFile extends ProtocolFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(SMBFile.class);
 
-    private SmbFile file;
-    private FilePermissions permissions;
+    private       SmbFile         file;
+    private final FilePermissions permissions;
 
     private AbstractFile parent;
     private boolean parentValSet;
@@ -172,7 +172,7 @@ import jcifs.smb.SmbRandomAccessFile;
         int domainStart = login.indexOf(";");
         if(domainStart!=-1) {
             domain = login.substring(0, domainStart);
-            login = login.substring(domainStart+1, login.length());
+            login = login.substring(domainStart+1);
         }
         else {
             domain = null;
@@ -183,7 +183,7 @@ import jcifs.smb.SmbRandomAccessFile;
         // for the URL parsing which is unable to properly parse urls where the password contains a '@' character,
         // such as smb://user:p@ssword@host/path . 
         CIFSContext context = SingletonContext.getInstance().withCredentials(new NtlmPasswordAuthenticator(
-                domain, login, credentials.getPassword()));
+            domain, login, credentials.getPassword()));
         return new SmbFile(url.toString(false), context);
     }
 
@@ -207,11 +207,9 @@ import jcifs.smb.SmbRandomAccessFile;
                     file = createSmbFile(fileURL);
                 }
             }
-            else {
-                if(endsWithSeparator) {
-                    fileURL.setPath(removeTrailingSeparator(path));
-                    file = createSmbFile(fileURL);
-                }
+            else if(endsWithSeparator) {
+                fileURL.setPath(removeTrailingSeparator(path));
+                file = createSmbFile(fileURL);
             }
         }
         catch(MalformedURLException e) {
@@ -497,40 +495,40 @@ import jcifs.smb.SmbRandomAccessFile;
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
         try {
-            SmbFile smbFiles[] = file.listFiles(filenameFilter==null?null:new SMBFilenameFilter(filenameFilter));
+            SmbFile[] smbFiles = file.listFiles(filenameFilter==null?null:new SMBFilenameFilter(filenameFilter));
 
             if(smbFiles==null)
                 throw new IOException("failed to list " + file);
 
             return Stream.of(smbFiles)
-                    .filter(file -> {
-                        int smbFileType;
-                        try {
-                            smbFileType = file.getType();
-                        } catch (SmbException e) {
-                            LOGGER.error("failed to get type of {}, skipping", file);
-                            LOGGER.debug("failed to get smb type", e);
-                            // this typically means that the user has no access to the file
-                            return false;
-                        }
-                        // excluded files are those that are not file share / not browsable
-                        // (Printers, named pipes, comm ports)
-                        return smbFileType != SmbFile.TYPE_PRINTER && smbFileType != SmbFile.TYPE_NAMED_PIPE && smbFileType != SmbFile.TYPE_COMM;
-                    })
-                    .map(file -> {
-                        // Note: properties and credentials are cloned for every children's url
-                        FileURL childURL = (FileURL)fileURL.clone();
-                        childURL.setHost(file.getServer());
-                        childURL.setPath(file.getURL().getPath());
-                        try {
-                            return FileFactory.getFile(childURL, this, Collections.singletonMap("parentSmbFile", file));
-                        } catch (IOException e) {
-                            LOGGER.debug("failed to get file {}", childURL);
-                            return null;
-                        }
-                    })
-                    .filter(Objects::nonNull)
-                    .toArray(AbstractFile[]::new);
+                .filter(file -> {
+                    int smbFileType;
+                    try {
+                        smbFileType = file.getType();
+                    } catch (SmbException e) {
+                        LOGGER.error("failed to get type of {}, skipping", file);
+                        LOGGER.debug("failed to get smb type", e);
+                        // this typically means that the user has no access to the file
+                        return false;
+                    }
+                    // excluded files are those that are not file share / not browsable
+                    // (Printers, named pipes, comm ports)
+                    return smbFileType != SmbFile.TYPE_PRINTER && smbFileType != SmbFile.TYPE_NAMED_PIPE && smbFileType != SmbFile.TYPE_COMM;
+                })
+                .map(file -> {
+                    // Note: properties and credentials are cloned for every children's url
+                    FileURL childURL = (FileURL)fileURL.clone();
+                    childURL.setHost(file.getServer());
+                    childURL.setPath(file.getURL().getPath());
+                    try {
+                        return FileFactory.getFile(childURL, this, Collections.singletonMap("parentSmbFile", file));
+                    } catch (IOException e) {
+                        LOGGER.debug("failed to get file {}", childURL);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toArray(AbstractFile[]::new);
         }
         catch(SmbAuthException e) {
             throw new AuthException(fileURL, e.getMessage());
@@ -568,7 +566,7 @@ import jcifs.smb.SmbRandomAccessFile;
      */
     public static class SMBRandomAccessInputStream extends RandomAccessInputStream {
 
-        private SmbRandomAccessFile raf;
+        private final SmbRandomAccessFile raf;
 
         public SMBRandomAccessInputStream(SmbRandomAccessFile raf) {
             this.raf = raf;
@@ -580,7 +578,7 @@ import jcifs.smb.SmbRandomAccessFile;
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             return raf.read(b, off, len);
         }
 
@@ -607,7 +605,7 @@ import jcifs.smb.SmbRandomAccessFile;
      */
     public static class SMBRandomAccessOutputStream extends RandomAccessOutputStream {
 
-        private SmbRandomAccessFile raf;
+        private final SmbRandomAccessFile raf;
 
         public SMBRandomAccessOutputStream(SmbRandomAccessFile raf) {
             this.raf = raf;
@@ -619,12 +617,12 @@ import jcifs.smb.SmbRandomAccessFile;
         }
 
         @Override
-        public void write(byte b[]) throws IOException {
+        public void write(byte[] b) throws IOException {
             raf.write(b);
         }
 
         @Override
-        public void write(byte b[], int off, int len) throws IOException {
+        public void write(byte[] b, int off, int len) throws IOException {
             raf.write(b, off, len);
         }
 
@@ -662,7 +660,7 @@ import jcifs.smb.SmbRandomAccessFile;
      */
     private static class SMBFilePermissions extends IndividualPermissionBits implements FilePermissions {
 
-        private SmbFile file;
+        private final SmbFile file;
 
         private final static PermissionBits MASK = new GroupedPermissionBits(384);  // rw------- (300 octal)
 
@@ -676,12 +674,12 @@ import jcifs.smb.SmbRandomAccessFile;
 
             try {
             	switch(type) {
-            	case READ:
-            		return file.canRead();
-            	case WRITE:
-            		return file.canWrite();
-            	default:
-            		return false;
+            	    case READ:
+            		    return file.canRead();
+            	    case WRITE:
+            		    return file.canWrite();
+            	    default:
+            		    return false;
             	}
             }
             // Unlike java.io.File, SmbFile#canRead() and SmbFile#canWrite() can throw an SmbException
@@ -701,7 +699,7 @@ import jcifs.smb.SmbRandomAccessFile;
      */
     private static class SMBFilenameFilter implements jcifs.smb.SmbFilenameFilter {
 
-        private FilenameFilter filter;
+        private final FilenameFilter filter;
 
         private SMBFilenameFilter(FilenameFilter filter) {
             this.filter = filter;

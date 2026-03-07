@@ -65,7 +65,7 @@ public class Chmod {
      * @see com.mucommander.commons.file.FilePermissions
      * @return true if the <code>chmod</code> command reported a success
      */
-    public static boolean chmod(AbstractFile files[], int permissions) {
+    public static boolean chmod(AbstractFile[] files, int permissions) {
         return chmod(files, Integer.toOctalString(permissions));
     }
 
@@ -77,7 +77,7 @@ public class Chmod {
      * @param permissions the new permissions, in any form accepted by the chmod command
      * @return true if the <code>chmod</code> command reported a success
      */
-    public static boolean chmod(AbstractFile files[], String permissions) {
+    public static boolean chmod(AbstractFile[] files, String permissions) {
         // Create the command token array
         String[] tokens = new String[files.length+2];
         tokens[0] = "chmod";

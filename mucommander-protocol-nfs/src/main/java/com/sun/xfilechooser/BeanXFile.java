@@ -51,7 +51,7 @@ import java.io.IOException;
  */
 public class BeanXFile extends File {
 
-    private XFile beanXF;
+    private final XFile beanXF;
     
     /*
      * BeanXFile constructors which mirror the File I/O constructors.
@@ -75,7 +75,7 @@ public class BeanXFile extends File {
 	String path = beanXF.getPath();
 
 	// For nfs URLs, if the url is nfs://<server_name>, path is ""
-	if (path == "")
+	if ("".equals(path))
 	    path = beanXF.getAbsolutePath();
 
 	return path;
@@ -87,11 +87,9 @@ public class BeanXFile extends File {
 
     public String getCanonicalPath() {
 	try {
-	    String path = beanXF.getCanonicalPath();
-	    return path;
+	    return beanXF.getCanonicalPath();
 	} catch (IOException e) {
-	    String path = beanXF.getAbsolutePath();
-	    return path;
+	    return beanXF.getAbsolutePath();
 	}
 
     }
@@ -99,14 +97,14 @@ public class BeanXFile extends File {
     public String getName() {
 	String fname = beanXF.getName();
 	if (fname == null)
-	    return(beanXF.getAbsolutePath());
+	    return beanXF.getAbsolutePath();
 	else
-	    return(fname);
+	    return fname;
     }
 
     public boolean renameTo(File dest) {
 	XFile tmpFile = new XFile(dest.getAbsolutePath());
-	return (beanXF.renameTo(tmpFile));
+	return beanXF.renameTo(tmpFile);
     }
 
     public String getParent() {

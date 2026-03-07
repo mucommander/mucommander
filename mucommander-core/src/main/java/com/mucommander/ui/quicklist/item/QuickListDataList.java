@@ -53,9 +53,9 @@ public class QuickListDataList<T> extends JList {
 	
 	private final static int VISIBLE_ROWS_COUNT = 10;
 
-	private QuickSearch<T> quickSearch = new QuickListQuickSearch();
+	private final QuickSearch<T> quickSearch = new QuickListQuickSearch();
 	
-	private Component nextFocusableComponent;
+	private final Component nextFocusableComponent;
 
 	public QuickListDataList(Component nextFocusableComponent){
 		this.nextFocusableComponent = nextFocusableComponent;

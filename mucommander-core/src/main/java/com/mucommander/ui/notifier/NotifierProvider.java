@@ -46,7 +46,7 @@ public class NotifierProvider {
 
     private static AbstractNotifier defaultNotifier;
 
-    private static AtomicBoolean jobsRegistered = new AtomicBoolean();
+    private static final AtomicBoolean jobsRegistered = new AtomicBoolean();
 
     static {
         // Finds and creates a suitable AbstractNotifier instance for the platform, if there is one

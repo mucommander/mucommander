@@ -48,7 +48,7 @@ public class XFileExtensionAccessor
     public XFileExtensionAccessor(XFile xf) {
 
         super(xf);
-        if (! xf.getFileSystemName().equals("nfs"))
+        if (! "nfs".equals(xf.getFileSystemName()))
             throw new IllegalArgumentException("Invalid argument");
 
         this.xf = xf;

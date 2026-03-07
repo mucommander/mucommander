@@ -50,7 +50,7 @@ public class BackupInputStream extends FilterInputStream implements BackupConsta
      * @param     path        path to the file to open for reading.
      * @exception IOException thrown if any IO related error occurs.
      */
-    public BackupInputStream(String path) throws IOException {super(getInputStream(FileFactory.getFile((new File(path)).getAbsolutePath())));}
+    public BackupInputStream(String path) throws IOException {super(getInputStream(FileFactory.getFile(new File(path).getAbsolutePath())));}
 
     /**
      * Opens a backup input stream on the specified file.

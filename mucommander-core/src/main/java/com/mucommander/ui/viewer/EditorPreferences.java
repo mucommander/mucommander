@@ -28,8 +28,8 @@ public enum EditorPreferences {
     WINDOW_HEIGHT("window_height", "")
     ;
 
-    private String prefKey;
-    private String value;
+    private final String prefKey;
+    private       String value;
 
     EditorPreferences(String prefKey, String defaultValue) {
         this.prefKey =  prefKey;

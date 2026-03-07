@@ -48,7 +48,7 @@ import com.mucommander.ui.main.tabs.ConfFileTableTab;
 public class DefaultMainFramesBuilder extends MainFrameBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
 
-    private Configuration snapshot = MuSnapshot.getSnapshot();
+    private final Configuration snapshot = MuSnapshot.getSnapshot();
 
     public DefaultMainFramesBuilder() { }
 
@@ -95,31 +95,31 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
     private MainFrame createMainFrame(int index) {
         int nbTabsInLeftPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, true));
         ConfFileTableTab[] leftTabs = new ConfFileTableTab[nbTabsInLeftPanel];
-        for (int i=0; i<nbTabsInLeftPanel; ++i)
+        for (int i=0; i<nbTabsInLeftPanel; i++)
             leftTabs[i] = new ConfFileTableTab(
-                    snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
-                    restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))),
-                    snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, true, i)));
+                snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, true, i)),
+                restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, true, i))),
+                snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, true, i)));
 
         int nbTabsInRightPanel = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(index, false));
         ConfFileTableTab[] rightTabs = new ConfFileTableTab[nbTabsInRightPanel];
-        for (int i=0; i<nbTabsInRightPanel; ++i)
+        for (int i=0; i<nbTabsInRightPanel; i++)
             rightTabs[i] = new ConfFileTableTab(
-                    snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
-                    restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
-                    snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
+                snapshot.getBooleanVariable(MuSnapshot.getTabLockedVariable(index, false, i)),
+                restoreFileURL(snapshot.getVariable(MuSnapshot.getTabLocationVariable(index, false, i))),
+                snapshot.getVariable(MuSnapshot.getTabTitleVariable(index, false, i)));
 
 
         var leftConf = getFileTableConfiguration(FolderPanelType.LEFT, index);
         var rightConf = getFileTableConfiguration(FolderPanelType.RIGHT, index);
 
         MainFrame mainFrame = new MainFrame(
-                leftTabs,
-                getInitialSelectedTab(FolderPanelType.LEFT, index),
-                leftConf,
-                rightTabs,
-                getInitialSelectedTab(FolderPanelType.RIGHT, index),
-                rightConf);
+            leftTabs,
+            getInitialSelectedTab(FolderPanelType.LEFT, index),
+            leftConf,
+            rightTabs,
+            getInitialSelectedTab(FolderPanelType.RIGHT, index),
+            rightConf);
 
         // Retrieve last saved window bounds
         Dimension screenSize   = Toolkit.getDefaultToolkit().getScreenSize();
@@ -135,8 +135,8 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         // If no previous location was saved, or if the resolution has changed,
         // reset the window's dimensions to their default values.
         if(x == -1 || y == -1 || width == -1 || height == -1 ||
-                screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
-                || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
+            screenSize.width != lastScreenWidth ||  screenSize.height != lastScreenHeight
+            || width + x > screenSize.width + 5 || height + y > screenSize.height + 5) {
 
             // Full screen bounds are not reliable enough, in particular under Linux+Gnome
             // so we simply make the initial window 4/5 of screen's size, and center it.

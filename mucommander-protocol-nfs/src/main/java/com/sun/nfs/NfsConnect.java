@@ -53,9 +53,9 @@ import java.util.Hashtable;
  */
 public class NfsConnect {
 
-    private static byte[] pubfh2 = new byte[32];  // v2 public filehandle
-    private static byte[] pubfh3 = new byte[0];   // v3 public filehandle
-    private static Hashtable cacheNfsConnect = new Hashtable();
+    private static final byte[] pubfh2 = new byte[32];  // v2 public filehandle
+    private static final byte[] pubfh3 = new byte[0];   // v3 public filehandle
+    private static final Hashtable cacheNfsConnect = new Hashtable();
 
     static final int NFS_PORT = 2049;
     static final int NFS_PROG = 100003;
@@ -110,9 +110,9 @@ public class NfsConnect {
             n = NfsConnect.cache_get(server);
 
         if (n == null)
-            return (connect(server, path, port, version, proto, pub));
+            return connect(server, path, port, version, proto, pub);
         else
-            return (connect(server, path, n.port, n.version, n.proto, n.pub));
+            return connect(server, path, n.port, n.version, n.proto, n.pub);
     }
 
     /**
@@ -130,9 +130,9 @@ public class NfsConnect {
 
         NfsConnect n = NfsConnect.cache_get(server);
         if (n == null)
-            return (connect(server, path, port, 0, null, true));
+            return connect(server, path, port, 0, null, true);
         else
-            return (connect(server, path, n.port, n.version, n.proto, n.pub));
+            return connect(server, path, n.port, n.version, n.proto, n.pub);
     }
     
     /**
@@ -169,7 +169,7 @@ public class NfsConnect {
 	    if (nfs.isSymlink())
 		return followLink(nfs);
 
-            return (nfs);
+            return nfs;
         }
 
         /*
@@ -203,14 +203,14 @@ public class NfsConnect {
                     proto = "udp";
                 }
             }
-        } else if (proto.equals("tcp")) {
+        } else if ("tcp".equals(proto)) {
             conn = Connection.getCache(server, port, "tcp");
             if (conn == null) {
                 conn = new ConnectSocket(server, port, MAXBUF);
                 Connection.putCache(conn);
             }
 
-        } else if (proto.equals("udp")) {
+        } else if ("udp".equals(proto)) {
             conn = Connection.getCache(server, port, "udp");
             if (conn == null) {
                 conn = new ConnectDatagram(server, port, MAXBUF);
@@ -268,7 +268,7 @@ public class NfsConnect {
     
             if (nfs != null) {	// public fh worked
                 NfsConnect.cache_put(new NfsConnect(server, port, vers, proto, true));
-                return (nfs);
+                return nfs;
             }
         }
 	
@@ -276,7 +276,7 @@ public class NfsConnect {
          * Server doesn't accept public filehandles
          * Resort to using the MOUNT protocol
          */
-        if (path.equals("."))
+        if (".".equals(path))
             path = "/";
 
 	Mount m = new Mount();
@@ -285,7 +285,7 @@ public class NfsConnect {
 
         NfsConnect.cache_put(new NfsConnect(server, port, vers, proto, false));
 
-        return (tryNfs(conn, fh, path, vers, true));
+        return tryNfs(conn, fh, path, vers, true);
     }
 
     private static Nfs tryNfs(Connection conn, byte[] pubfh, String path,
@@ -299,7 +299,7 @@ public class NfsConnect {
          * Use the default security flavor.
          */
         String defaultSec = NfsSecurity.getDefault();
-        if (defaultSec.equals("1")){
+        if ("1".equals(defaultSec)){
 	    // AUTH_SYS
             rpc.setCred(cred);
         } else {
@@ -321,7 +321,7 @@ public class NfsConnect {
         else
             pubnfs = new Nfs3(rpc, pubfh, path, null);
 
-        if (path.equals("/."))  // special path for testing
+        if ("/.".equals(path))  // special path for testing
             return pubnfs;
 
         if (mount) {
@@ -335,12 +335,12 @@ public class NfsConnect {
             pubnfs.getattr();
             Nfs.cache_put(pubnfs);
 
-            return (pubnfs);
+            return pubnfs;
         }
 	/* The path passed to lookup will be null since it
 	 * has been filled in when object has been created.
 	 */
-        return (pubnfs.lookup(null));
+        return pubnfs.lookup(null);
     }
 
 
@@ -401,11 +401,11 @@ public class NfsConnect {
         }
 
         try {
-            return (NfsConnect.connect(server, port, newpath));
+            return NfsConnect.connect(server, port, newpath);
         } catch (IOException e) {
             System.err.println(e + ": symbolic link: " +
                 base + " -> " + text);
-            return (link);
+            return link;
         }
     }
 
@@ -425,7 +425,7 @@ public class NfsConnect {
      * @returns		The object - or null if not cached
      */
     private static NfsConnect cache_get(String server) {
-        return ((NfsConnect)cacheNfsConnect.get(server));
+        return (NfsConnect)cacheNfsConnect.get(server);
     }
 
     /**
@@ -434,7 +434,7 @@ public class NfsConnect {
      * @returns		The credential stored for Nfs operations
      */
     public static CredUnix getCred() {
-	return (cred);
+	return cred;
     }
 
     /**

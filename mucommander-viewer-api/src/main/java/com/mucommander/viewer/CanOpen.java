@@ -20,5 +20,5 @@ package com.mucommander.viewer;
  * Enum used to tell if Viewer or Editor is able to open a given file.
  */
 public enum CanOpen {
-    YES, YES_USER_CONSENT, NO;
+    YES, YES_USER_CONSENT, NO
 }

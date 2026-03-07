@@ -48,27 +48,27 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
     // --------------------------------------------------------------------------
 
     /** ThemeData from which to retrieve the color chooser's values. */
-    private ThemeData         themeData;
+    private final ThemeData themeData;
 
     /** Identifier of the color that's being edited. */
-    private int               colorId;
+    private final int colorId;
 
     /** Dialog on which the color chooser should be centered and modal to. */
-    private PreferencesDialog parent;
+    private final PreferencesDialog parent;
 
     /** The preview component that is repainted when the current color changes (can be null) */
-    private JComponent previewComponent;
+    private final JComponent previewComponent;
 
     /** Name of the preview component's property that gets updated with the current color of this button (can be null) */
-    private String previewColorPropertyName;
+    private final String previewColorPropertyName;
 
     private java.util.List<JComponent> updatedPreviewComponents;
 
     /** Button's border. */
-    private Border border = BorderFactory.createEtchedBorder();
+    private final Border border = BorderFactory.createEtchedBorder();
 
     /** The color button */
-    private JButton button;
+    private final JButton button;
 
     /** Current color displayed in the button */
     private Color currentColor;
@@ -98,22 +98,22 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
             addUpdatedPreviewComponent(previewComponent);
  
         button = new JButton() {
-                @Override
-                public Dimension getPreferredSize() {return new Dimension(70, 30);}
+            @Override
+            public Dimension getPreferredSize() {return new Dimension(70, 30);}
 
-                @Override
-                public void paint(Graphics g) {
-                    int width  = getWidth();
-                    int height = getHeight();
+            @Override
+            public void paint(Graphics g) {
+                int width  = getWidth();
+                int height = getHeight();
 
-                    // Fill the button with the specified color
-                    g.setColor((ColorButton.this).currentColor);
-                    g.fillRect(0, 0, width, height);
+                // Fill the button with the specified color
+                g.setColor((ColorButton.this).currentColor);
+                g.fillRect(0, 0, width, height);
 
-                    // Paint custom border
-                    border.paintBorder(this, g, 0, 0, width, height);
-                }
-            };
+                // Paint custom border
+                border.paintBorder(this, g, 0, 0, width, height);
+            }
+        };
 
         button.addActionListener(this);
         button.setBorderPainted(true);
@@ -136,7 +136,7 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
             return;
 
         if(updatedPreviewComponents == null)
-            updatedPreviewComponents = new Vector<JComponent>();
+            updatedPreviewComponents = new Vector<>();
 
         updatedPreviewComponents.add(previewComponent);
 
@@ -150,9 +150,8 @@ class ColorButton extends JPanel implements ActionListener, ColorChangeListener 
         button.repaint();
 
         if(updatedPreviewComponents != null && previewColorPropertyName != null) {
-            int nbPreviewComponents = updatedPreviewComponents.size();
-            for(int i = 0; i < nbPreviewComponents; i++)
-                updatedPreviewComponents.get(i).putClientProperty(previewColorPropertyName, color);
+			for (JComponent updatedPreviewComponent : updatedPreviewComponents)
+				updatedPreviewComponent.putClientProperty(previewColorPropertyName, color);
         }
         
         if (initiatedByUser)

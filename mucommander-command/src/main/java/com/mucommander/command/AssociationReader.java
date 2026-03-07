@@ -45,8 +45,8 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Where to send building messages. */
-    private AssociationBuilder builder;
-    private boolean            isInAssociation;
+    private final AssociationBuilder builder;
+    private       boolean            isInAssociation;
 
 
 
@@ -102,7 +102,7 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
 
         try {
             if(!isInAssociation) {
-                if(qName.equals(ELEMENT_ASSOCIATION)) {
+                if(ELEMENT_ASSOCIATION.equals(qName)) {
                     // Makes sure the required attributes are present.
                     if((buffer = attributes.getValue(ATTRIBUTE_COMMAND)) == null)
                         return;
@@ -111,42 +111,40 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
                     builder.startAssociation(buffer);
                 }
             }
-            else {
-                if(qName.equals(ELEMENT_MASK)) {
-                    String caseSensitive;
+            else if(ELEMENT_MASK.equals(qName)) {
+                String caseSensitive;
 
-                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
-                        return;
-                    if((caseSensitive = attributes.getValue(ATTRIBUTE_CASE_SENSITIVE)) != null)
-                        builder.setMask(buffer, caseSensitive.equals(VALUE_TRUE));
-                    else
-                        builder.setMask(buffer, true);
-                }
-                else if(qName.equals(ELEMENT_IS_HIDDEN)) {
-                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
-                        return;
-                    builder.setIsHidden(buffer.equals(VALUE_TRUE));
-                }
-                else if(qName.equals(ELEMENT_IS_SYMLINK)) {
-                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
-                        return;
-                    builder.setIsSymlink(buffer.equals(VALUE_TRUE));
-                }
-                else if(qName.equals(ELEMENT_IS_READABLE)) {
-                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
-                        return;
-                    builder.setIsReadable(buffer.equals(VALUE_TRUE));
-                }
-                else if(qName.equals(ELEMENT_IS_WRITABLE)) {
-                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
-                        return;
-                    builder.setIsWritable(buffer.equals(VALUE_TRUE));
-                }
-                else if(qName.equals(ELEMENT_IS_EXECUTABLE)) {
-                    if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
-                        return;
-                    builder.setIsExecutable(buffer.equals(VALUE_TRUE));
-                }
+                if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                    return;
+                if((caseSensitive = attributes.getValue(ATTRIBUTE_CASE_SENSITIVE)) != null)
+                    builder.setMask(buffer, VALUE_TRUE.equals(caseSensitive));
+                else
+                    builder.setMask(buffer, true);
+            }
+            else if(ELEMENT_IS_HIDDEN.equals(qName)) {
+                if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                    return;
+                builder.setIsHidden(VALUE_TRUE.equals(buffer));
+            }
+            else if(ELEMENT_IS_SYMLINK.equals(qName)) {
+                if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                    return;
+                builder.setIsSymlink(VALUE_TRUE.equals(buffer));
+            }
+            else if(ELEMENT_IS_READABLE.equals(qName)) {
+                if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                    return;
+                builder.setIsReadable(VALUE_TRUE.equals(buffer));
+            }
+            else if(ELEMENT_IS_WRITABLE.equals(qName)) {
+                if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                    return;
+                builder.setIsWritable(VALUE_TRUE.equals(buffer));
+            }
+            else if(ELEMENT_IS_EXECUTABLE.equals(qName)) {
+                if((buffer = attributes.getValue(ATTRIBUTE_VALUE)) == null)
+                    return;
+                builder.setIsExecutable(VALUE_TRUE.equals(buffer));
             }
         }
         catch(CommandException e) {throw new SAXException(e);}
@@ -157,7 +155,7 @@ public class AssociationReader extends DefaultHandler implements AssociationsXml
      */
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(qName.equals(ELEMENT_ASSOCIATION) && isInAssociation) {
+        if(ELEMENT_ASSOCIATION.equals(qName) && isInAssociation) {
             try {builder.endAssociation();}
             catch(CommandException e) {throw new SAXException(e);}
             isInAssociation = false;

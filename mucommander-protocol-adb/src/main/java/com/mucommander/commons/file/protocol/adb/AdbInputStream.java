@@ -37,7 +37,7 @@ import se.vidstige.jadb.RemoteFile;
 public class AdbInputStream extends InputStream {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdbInputStream.class);
 
-    private InputStream inputStream;
+    private final InputStream inputStream;
 
     AdbInputStream(AdbFile file) throws IOException {
         JadbDevice device = file.getDevice(file.getURL());

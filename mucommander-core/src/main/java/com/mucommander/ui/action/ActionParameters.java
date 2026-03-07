@@ -19,8 +19,6 @@ package com.mucommander.ui.action;
 
 import java.util.Map;
 
-import com.mucommander.desktop.ActionType;
-
 /**
  * A descriptor class for {@link MuAction} instances. An ActionParameters is the combination of a MuAction
  * class (a class extending MuAction and following its conventions) and a set of properties used for instantiation.
@@ -46,10 +44,10 @@ import com.mucommander.desktop.ActionType;
 public class ActionParameters {
 
     /** Action ID */
-    private ActionId actionId;
+    private final ActionId actionId;
 
     /** Initialization properties, null if there are no initialization properties */
-    private Map<String,Object> properties;
+    private final Map<String,Object> properties;
 
 
     /**

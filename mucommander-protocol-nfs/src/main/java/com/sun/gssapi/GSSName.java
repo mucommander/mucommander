@@ -295,10 +295,10 @@ public class GSSName {
     public boolean equals(Object another) {
     
         if ( !(another instanceof GSSName))
-            return (false);
+            return false;
         
         try {
-            return (equals((GSSName)another));
+            return equals((GSSName)another);
             
         } catch (GSSException e) { return false; }
     }
@@ -320,7 +320,7 @@ public class GSSName {
     
         //check if anonymous name
         if (isAnonymousName() || another.isAnonymousName())
-            return (false);
+            return false;
             
         if (m_mechNames.size() != another.m_mechNames.size())
             return false;
@@ -332,10 +332,10 @@ public class GSSName {
                 return false;
                 
             if (m_nameStr != null && another.m_nameStr != null)
-                return (m_nameStr.equals(another.m_nameStr));
+                return m_nameStr.equals(another.m_nameStr);
                 
             if (m_nameBytes != null && another.m_nameBytes != null)
-                return (m_nameBytes.equals(another.m_nameBytes));
+                return m_nameBytes.equals(another.m_nameBytes);
                 
             return false;
         }
@@ -355,7 +355,7 @@ public class GSSName {
         }
         
         //went through all the names and they equal, so must be same name
-        return (true);
+        return true;
     }
 
     
@@ -375,18 +375,18 @@ public class GSSName {
         GSSNameSpi mechName = getMechName(mechOid);
         if (mechName != null) {
             if (isMechName())
-                return (this);
+                return this;
 
             //need to create new name only for this mechanism
-            return (new GSSName((GSSNameSpi)mechName.clone()));
+            return new GSSName((GSSNameSpi)mechName.clone());
         }
         
 
         //we don't already have it, so create it
         if (m_nameStr != null)
-            return (new GSSName(m_nameStr, m_nameType, mechOid));
+            return new GSSName(m_nameStr, m_nameType, mechOid);
         else
-            return (new GSSName(m_nameBytes, m_nameType, mechOid));
+            return new GSSName(m_nameBytes, m_nameType, mechOid);
     }
 
   
@@ -409,7 +409,7 @@ public class GSSName {
         if (!isMechName())
             throw new GSSException(GSSException.NAME_NOT_MN);
             
-        return (getMechName(null).export());
+        return getMechName(null).export();
     }
 
   
@@ -423,16 +423,16 @@ public class GSSName {
     public String toString() {
     
         if (isMechName())
-            return (getMechName(null).toString());
+            return getMechName(null).toString();
             
         if (m_nameStr != null)
-            return (m_nameStr);
+            return m_nameStr;
             
         if (m_mechNames.size() > 0)
-            return (getMechName(null).toString());
+            return getMechName(null).toString();
         
         //name must in byte format
-        return ("Unknown name");
+        return "Unknown name";
     }
 
         
@@ -447,13 +447,13 @@ public class GSSName {
     public Oid getStringNameType() throws GSSException {
 
         if (isMechName())
-            return (getMechName(null).getStringNameType());
+            return getMechName(null).getStringNameType();
             
         if (m_nameStr != null)
-            return (m_nameType);
+            return m_nameType;
             
         if (m_mechNames.size() > 0)
-            return (getMechName(null).getStringNameType());
+            return getMechName(null).getStringNameType();
         
         throw new GSSException(GSSException.BAD_NAME);
     }
@@ -487,7 +487,7 @@ public class GSSName {
             throw new CloneNotSupportedException();
         }
         
-        return (newName);
+        return newName;
     }
 
 
@@ -498,10 +498,10 @@ public class GSSName {
     public boolean isAnonymousName() {
     
         if (m_nameType.equals(NT_ANONYMOUS))
-            return (true);
+            return true;
             
         if (m_mechNames.size() > 0)
-            return (getMechName(null).isAnonymousName());
+            return getMechName(null).isAnonymousName();
         
         return false;
     }
@@ -526,7 +526,7 @@ public class GSSName {
      */
     private boolean isMechName() {
     
-        return (m_mechNames.size() == 1);
+        return m_mechNames.size() == 1;
     }
     
     
@@ -542,9 +542,9 @@ public class GSSName {
         
         if (mechOid == null) {
             if (m_mechNames.size() < 1)
-                return (null);
+                return null;
                 
-            return ((GSSNameSpi)m_mechNames.firstElement());
+            return (GSSNameSpi)m_mechNames.firstElement();
         }
         
         for (Enumeration e = m_mechNames.elements(); e.hasMoreElements(); ) {
@@ -552,10 +552,10 @@ public class GSSName {
             GSSNameSpi mechName = (GSSNameSpi)e.nextElement();
             
             if (mechName.getMech().equals(mechOid))
-                return (mechName);
+                return mechName;
                 
         }
-        return (null);
+        return null;
     }
             
             
@@ -573,7 +573,7 @@ public class GSSName {
         //check if we already contain the mechanism name
         GSSNameSpi mechName = getMechName(mechOid);
         if (mechName != null)
-            return (mechName);
+            return mechName;
             
         //we don't already have it, so create it
         mechName = GSSManager.getNameInstance(mechOid);
@@ -584,7 +584,7 @@ public class GSSName {
             mechName.init(m_nameBytes, m_nameType);
             
         addMechName(mechName);
-        return (mechName);
+        return mechName;
     }
             
         

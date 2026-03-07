@@ -39,7 +39,7 @@ import com.mucommander.commons.file.UnsupportedFileOperationException;
  */
 public class OvirtDataCenter extends OvirtFile {
 
-    private static Logger log = LoggerFactory.getLogger(OvirtDataCenter.class);
+    private static final Logger log = LoggerFactory.getLogger(OvirtDataCenter.class);
 
     protected OvirtDataCenter(FileURL url, OvirtSystem parent) {
         super(url, parent);

@@ -40,15 +40,15 @@ public class IntegerChooser extends JPanel implements ChangeListener {
     // - Instance variables --------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** List of all registered state change listeners. */
-    private WeakHashMap<ChangeListener, ?> listeners;
+    private final WeakHashMap<ChangeListener, ?> listeners;
 
 
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Integer slider. */
-    private JSlider  slider;
+    private final JSlider  slider;
     /** Integer spinner. */
-    private JSpinner spinner;
+    private final JSpinner spinner;
 
 
 
@@ -64,7 +64,7 @@ public class IntegerChooser extends JPanel implements ChangeListener {
         super();
 
         // Initialises the listeners.
-        listeners = new WeakHashMap<ChangeListener, Object>();
+        listeners = new WeakHashMap<>();
 
         // Creates the components.
         slider  = new JSlider(JSlider.HORIZONTAL, min, max, initialValue);

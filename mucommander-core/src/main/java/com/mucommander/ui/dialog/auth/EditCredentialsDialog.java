@@ -45,7 +45,6 @@ import com.mucommander.commons.util.ui.layout.YBoxPanel;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.EditCredentialsAction;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.list.SortableListPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -61,17 +60,17 @@ import com.mucommander.ui.main.MainFrame;
 public class EditCredentialsDialog extends FocusDialog implements ActionListener, ListSelectionListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EditCredentialsDialog.class);
 	
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
-    private JButton removeButton;
-    private JButton goToButton;
-    private JButton closeButton;
+    private final JButton removeButton;
+    private final JButton goToButton;
+    private final JButton closeButton;
 
-    private JTextField loginField;
-    private JPasswordField passwordField;
+    private final JTextField     loginField;
+    private final JPasswordField passwordField;
 
-    private AlteredVector<CredentialsMapping> credentials;
-    private DynamicList<CredentialsMapping> credentialsList;
+    private final AlteredVector<CredentialsMapping> credentials;
+    private final DynamicList<CredentialsMapping>   credentialsList;
 
     private CredentialsMapping lastSelectedItem;
 
@@ -94,7 +93,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
         this.credentials = CredentialsManager.getPersistentCredentialMappings();
 
         // Create the sortable credentials list panel
-        SortableListPanel<CredentialsMapping> listPanel = new SortableListPanel<CredentialsMapping>(credentials);
+        SortableListPanel<CredentialsMapping> listPanel = new SortableListPanel<>(credentials);
         this.credentialsList = listPanel.getDynamicList();
         this.lastSelectedItem = (CredentialsMapping) credentialsList.getSelectedValue();
 
@@ -175,7 +174,7 @@ public class EditCredentialsDialog extends FocusDialog implements ActionListener
 
         boolean componentsEnabled = false;
 
-        if(!credentialsList.isSelectionEmpty() && credentials.size()>0) {
+        if(!credentialsList.isSelectionEmpty() && !credentials.isEmpty()) {
             componentsEnabled = true;
 
             CredentialsMapping credentialsMapping = (CredentialsMapping) credentialsList.getSelectedValue();

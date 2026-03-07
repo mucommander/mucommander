@@ -42,7 +42,7 @@ public class RecallWindowAction extends MuAction {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecallWindowAction.class);
 	
     /** Window number this action operates on */
-    private int windowNumber;
+    private final int windowNumber;
 
     /** Key of the property that holds the window number */
     public final static String WINDOW_NUMBER_PROPERTY_KEY = "window_number";
@@ -52,7 +52,7 @@ public class RecallWindowAction extends MuAction {
         super(mainFrame, properties);
 
         Object windowNumberValue = getValue(WINDOW_NUMBER_PROPERTY_KEY);
-        if(windowNumberValue==null || !(windowNumberValue instanceof String))
+        if(!(windowNumberValue instanceof String))
             throw new IllegalArgumentException(WINDOW_NUMBER_PROPERTY_KEY+" ("+windowNumberValue+")");
 
         windowNumber = Integer.parseInt((String)windowNumberValue);
@@ -91,7 +91,7 @@ public class RecallWindowAction extends MuAction {
     public static class Descriptor extends AbstractActionDescriptor {
     	public static final String ACTION_ID = "RecallWindow";
 
-        private int windowNumber;
+        private final int windowNumber;
 
         public Descriptor() {
             this(-1);

@@ -46,10 +46,10 @@ public enum SearchProperty {
 
     ;
 
-    private String key;
-    private String i18nKey;
-    private String defaultValue;
-    private String value;
+    private final String key;
+    private final String i18nKey;
+    private final String defaultValue;
+    private       String value;
 
     SearchProperty(String key, String i18nKey, String defaultValue) {
         this.key = key;

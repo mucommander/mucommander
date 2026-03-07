@@ -17,8 +17,6 @@
 
 package com.mucommander.desktop.linux.xfce;
 
-import com.mucommander.process.ProcessRunner;
-
 /**
  * 'Configured' desktop adapter for Xfce. This check content of
  * <code>XDG_CURRENT_DESKTOP</code> system variable.

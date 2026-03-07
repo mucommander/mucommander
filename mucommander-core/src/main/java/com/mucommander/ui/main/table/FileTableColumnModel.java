@@ -19,7 +19,6 @@ package com.mucommander.ui.main.table;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -52,17 +51,17 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** All registered listeners. */
-    private WeakHashMap<TableColumnModelListener, ?> listeners  = new WeakHashMap<TableColumnModelListener, Object>();
+    private final WeakHashMap<TableColumnModelListener, ?> listeners  = new WeakHashMap<>();
     /** Cache for the table's total width. */
-    private int                                      widthCache = CACHE_OUT_OF_DATE;
+    private       int                                      widthCache = CACHE_OUT_OF_DATE;
     /** All available columns. */
-    private List<TableColumn>                        columns    = new Vector<TableColumn>(Column.values().length);
+    private final List<TableColumn> columns    = new Vector<>(Column.values().length);
     /** Enabled state of each column. */
-    private boolean[]     enabled = new boolean[Column.values().length];
+    private final boolean[]         enabled    = new boolean[Column.values().length];
     /** Visibility state of each column. */
-    private boolean[]     visibility = new boolean[Column.values().length];
+    private final boolean[]         visibility = new boolean[Column.values().length];
     /** Cache for the number of available columns. */
-    private int           countCache;
+    private       int       countCache;
     /** Whether the column sizes were set already. */
     private boolean       columnSizesSet;
 
@@ -100,10 +99,8 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
             if(c == Column.NAME) {
                 enabled[columnIndex] = true;
             }
-            else {
-                if((enabled[columnIndex] = conf.isEnabled(c)))
-                    countCache++;
-            }
+            else if(enabled[columnIndex] = conf.isEnabled(c))
+                countCache++;
             column.setMinWidth(c.getMinimumColumnWidth());
 
             // Init visibility state to enabled state, FileTable will adjust the values for conditional columns later
@@ -111,7 +108,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         }
 
         // Sorts the columns.
-        Collections.sort(columns, new ColumnSorter(conf));
+        columns.sort(new ColumnSorter(conf));
     }
 
 
@@ -300,9 +297,9 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
 
         count = getColumnCount();
         for(int i = 0; i < count; i++) {
-            x = x - getColumn(i).getWidth();
+            x -= getColumn(i).getWidth();
             if(x < 0)
-            return i;
+                return i;
             }
         return -1;
     }
@@ -336,7 +333,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         String name;
 
         name = event.getPropertyName();
-        if(name.equals("width")) {
+        if("width".equals(name)) {
                 columnSizesSet = true;
             widthCache = CACHE_OUT_OF_DATE;
                 // Notifies the table that columns width have changed and that it should repaint itself.
@@ -561,7 +558,7 @@ public class FileTableColumnModel implements TableColumnModel, PropertyChangeLis
         // - Instance fields -------------------------------------------------------------
         // -------------------------------------------------------------------------------
         /** Defines the columns order. */
-        private FileTableConfiguration conf;
+        private final FileTableConfiguration conf;
 
 
 

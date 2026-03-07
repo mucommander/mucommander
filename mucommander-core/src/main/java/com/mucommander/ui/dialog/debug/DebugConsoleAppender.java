@@ -48,13 +48,13 @@ import ch.qos.logback.core.LayoutBase;
 public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
 
     /** Maximum number of log records to keep in memory */
-    private int bufferSize;
+    private final int bufferSize;
 
     /** Contains the last LogRecord instances. */
-    private List<LogbackLoggingEvent> loggingEventsList;
+    private final List<LogbackLoggingEvent> loggingEventsList;
     
     /** The layout of the logging event representation */
-    private Layout<ILoggingEvent> loggingEventLayout;
+    private final Layout<ILoggingEvent> loggingEventLayout;
 
     /**
      * Creates a new <code>DebugConsoleHandler</code>. This constructor is automatically by
@@ -102,7 +102,7 @@ public class DebugConsoleAppender extends AppenderBase<ILoggingEvent> {
     public class LogbackLoggingEvent implements LoggingEvent {
 
         /** The logging event */
-        private ILoggingEvent loggingEvent;
+        private final ILoggingEvent loggingEvent;
 
         /** The log level of the event in mucommander's terms */
         private LogLevel logLevel;

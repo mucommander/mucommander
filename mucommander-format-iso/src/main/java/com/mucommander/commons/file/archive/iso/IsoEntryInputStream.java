@@ -31,11 +31,11 @@ import java.io.InputStream;
  */
 class IsoEntryInputStream extends InputStream {
 
-    private RandomAccessInputStream rais;
-    private int pos;
-    private long size;
-    private int sectSize;
-    private boolean audio;
+    private final RandomAccessInputStream rais;
+    private       int                     pos;
+    private final long size;
+    private final int  sectSize;
+    private final boolean audio;
 
     IsoEntryInputStream(RandomAccessInputStream rais, IsoArchiveEntry entry) throws IOException {
         this.rais = rais;
@@ -62,12 +62,12 @@ class IsoEntryInputStream extends InputStream {
     ////////////////////////
 
     @Override
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
     @Override
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         int available = available();
         int toRead = len;
 
@@ -147,7 +147,7 @@ class IsoEntryInputStream extends InputStream {
     @Override
     public int available() throws IOException {
         int available = (int) (size - pos);
-        return (available < 0) ? 0 : available;
+        return Math.max(available, 0);
     }
 
     @Override

@@ -62,16 +62,16 @@ public abstract class TransferFileJob extends FileJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferFileJob.class);
 	
     /** Contains the number of bytes processed in the current file so far, see {@link #getCurrentFileByteCounter()} ()} */
-    private ByteCounter currentFileByteCounter;
+    private final ByteCounter currentFileByteCounter;
 
     /** Contains the number of bytes skipped in the current file so far, see {@link #getCurrentFileSkippedByteCounter()} ()} */
-    private ByteCounter currentFileSkippedByteCounter;
+    private final ByteCounter currentFileSkippedByteCounter;
 
     /** Contains the number of bytes processed so far, see {@link #getTotalByteCounter()} */
-    private ByteCounter totalByteCounter;
+    private final ByteCounter totalByteCounter;
 
     /** Contains the number of bytes skipped so far (resumed files), see {@link #getTotalSkippedByteCounter()} */
-    private ByteCounter totalSkippedByteCounter;
+    private final ByteCounter totalSkippedByteCounter;
 
     /** InputStream currently being processed, may be null */
     private ThroughputLimitInputStream tlin;
@@ -204,7 +204,7 @@ public abstract class TransferFileJob extends FileJob {
             // Indicate that integrity is being checked, the value is reset when the next file starts
             isCheckingIntegrity = true;
 
-            if(in!=null && (in instanceof ChecksumInputStream)) {
+            if((in instanceof ChecksumInputStream)) {
                 // The file was copied with a ChecksumInputStream, the checksum is already calculated, simply
                 // retrieve it
                 sourceChecksum = ((ChecksumInputStream)in).getChecksumString();
@@ -346,11 +346,11 @@ public abstract class TransferFileJob extends FileJob {
                         break;
                     default:
                         choice = showErrorDialog(errorDialogTitle,
-                                                 Translator.get("error_while_transferring", sourceFile.getName()),
-                                                 Arrays.asList(FileJobAction.SKIP, FileJobAction.SKIP_ALL,
-                                                         FileJobAction.APPEND, FileJobAction.RETRY,
-                                                         FileJobAction.CANCEL));
-                    break;
+                            Translator.get("error_while_transferring", sourceFile.getName()),
+                            Arrays.asList(FileJobAction.SKIP, FileJobAction.SKIP_ALL,
+                                FileJobAction.APPEND, FileJobAction.RETRY,
+                                FileJobAction.CANCEL));
+                        break;
                 }
 
                 // Retry action (append or retry)

@@ -116,7 +116,7 @@ public class LocalFileTest extends AbstractFileTest {
         // The following test simply assert that the method doesn't produce an uncaught exception.
         LocalFile.hasRootDrives();
 
-        LocalFile localFile = (LocalFile)tempFile.getAncestor(LocalFile.class);
+        LocalFile localFile = tempFile.getAncestor(LocalFile.class);
         localFile.guessRemovableDrive();
     }
 

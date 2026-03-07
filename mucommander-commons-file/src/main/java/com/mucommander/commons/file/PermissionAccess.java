@@ -42,7 +42,7 @@ public enum PermissionAccess {
     /** Designates the 'user' permission access. */
     USER(2);
 
-    private int intVal;
+    private final int intVal;
 
     private PermissionAccess(int intVal) {
     	this.intVal = intVal;

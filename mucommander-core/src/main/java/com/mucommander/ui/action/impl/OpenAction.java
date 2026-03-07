@@ -124,16 +124,14 @@ public class OpenAction extends MuAction {
                     tabs.add(bookmarkURL);
                 else
                     destination.tryChangeCurrentFolder(bookmarkURL);
-            } else {
-                if (tabs.getCurrentTab().isLocked())
-                    tabs.add(resolvedFile);
-                else
-                    destination.tryChangeCurrentFolder(resolvedFile);
-            }
+            } else if (tabs.getCurrentTab().isLocked())
+                tabs.add(resolvedFile);
+            else
+                destination.tryChangeCurrentFolder(resolvedFile);
         }
 
         // Opens local files using their native associations.
-        else if (resolvedFile.getURL().getScheme().equals(LocalFile.SCHEMA)
+        else if (LocalFile.SCHEMA.equals(resolvedFile.getURL().getScheme())
                 && (resolvedFile.hasAncestor(LocalFile.class))) {
             try {
                 OpenAction.openFile(getMainFrame(), resolvedFile);
@@ -152,7 +150,7 @@ public class OpenAction extends MuAction {
     }
 
     protected AbstractFile resolveSymlink(AbstractFile symlink) {
-        return resolveSymlink(symlink, new HashSet<AbstractFile>());
+        return resolveSymlink(symlink, new HashSet<>());
     }
 
     private AbstractFile resolveSymlink(AbstractFile file, Set<AbstractFile> visitedFiles) {

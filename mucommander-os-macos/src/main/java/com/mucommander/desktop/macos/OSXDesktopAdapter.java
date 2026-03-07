@@ -103,11 +103,11 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     // cached values
     private String dutiCmdPath;
 
-    private Map<String, String> utiForExt = createSizeLimitedMap(200);
+    private final Map<String, String> utiForExt = createSizeLimitedMap(200);
 
-    private Map<String, List<String>> bundleIdsForUti = createSizeLimitedMap(100);
+    private final Map<String, List<String>> bundleIdsForUti = createSizeLimitedMap(100);
 
-    private Map<String, Pair<String, String>> appPathsForBundleId = createSizeLimitedMap(100);
+    private final Map<String, Pair<String, String>> appPathsForBundleId = createSizeLimitedMap(100);
     // /cached values
 
     /** The key of the comment attribute in file metadata */
@@ -120,7 +120,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
     }
 
     @Override
-    public boolean isAvailable() {return OsFamily.getCurrent().equals(OsFamily.MAC_OS);}
+    public boolean isAvailable() {return OsFamily.getCurrent() == OsFamily.MAC_OS;}
 
     @Override
     public void init(boolean install) throws DesktopInitialisationException {
@@ -164,7 +164,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
         String extension = file.getExtension();
 
         // the isDirectory() test comes last as it is I/O bound
-        return extension!=null && extension.equalsIgnoreCase("app") && file.isDirectory();
+        return "app".equalsIgnoreCase(extension) && file.isDirectory();
     }
 
     @Override
@@ -222,7 +222,7 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
             // Swallow the exception and do not interrupt the transfer
             LOGGER.debug("Error while parsing macOS file comment of source", e);
         }
-        if (comment != null && !"".equals(comment = comment.trim()) && !setFileComment(destPath, comment))
+        if (comment != null && !(comment = comment.trim()).isEmpty() && !setFileComment(destPath, comment))
             LOGGER.error("Error while copying macOS file comment to %s", destPath);
     }
 
@@ -576,12 +576,12 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
      * @param <V> value type
      */
     private static <K, V> Map<K, V> createSizeLimitedMap(int maxSize) {
-        return new LinkedHashMap<K, V>(maxSize * 10 / 7, 0.7f, false) {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-                return size() > maxSize;
-            }
-        };
+        return new LinkedHashMap<>(maxSize * 10 / 7, 0.7f, false) {
+			@Override
+			protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+				return size() > maxSize;
+			}
+		};
     }
 
 
