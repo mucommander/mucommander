@@ -18,7 +18,9 @@
 package com.mucommander.ui.main;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -29,6 +31,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
@@ -70,8 +73,7 @@ public class LocationBar extends JPanel {
         add(locationTextField, CARD_TEXT_FIELD);
         add(breadcrumbBar, CARD_BREADCRUMB);
 
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            if (e.getKeyCode() != KeyEvent.VK_CONTROL)
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {            if (e.getKeyCode() != KeyEvent.VK_CONTROL)
                 return false;
 
             if (e.getID() == KeyEvent.KEY_PRESSED && !locationTextField.hasFocus()) {
@@ -84,6 +86,20 @@ public class LocationBar extends JPanel {
             }
             return false; // never consume — other Ctrl shortcuts must keep working
         });
+    }
+
+    /**
+     * Always report the text field's preferred size so that switching cards does
+     * not cause the location bar row to grow or shrink.
+     */
+    @Override
+    public Dimension getPreferredSize() {
+        return locationTextField.getPreferredSize();
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return locationTextField.getMinimumSize();
     }
 
     // -------------------------------------------------------------------------
@@ -102,6 +118,9 @@ public class LocationBar extends JPanel {
             setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
             setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
             setOpaque(true);
+            // Use a fresh border from UIManager — sharing the instance from locationTextField
+            // would corrupt both components on L&Fs that tie border state to the owner.
+            setBorder(UIManager.getBorder("TextField.border"));
         }
 
         /** Rebuilds the breadcrumb buttons for the given path string. */
@@ -160,6 +179,7 @@ public class LocationBar extends JPanel {
             btn.setBorderPainted(false);
             btn.setContentAreaFilled(false);
             btn.setOpaque(false);
+            btn.setMargin(new Insets(0, 0, 0, 0));
             btn.setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
             btn.setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
             btn.addActionListener(e -> folderPanel.tryChangeCurrentFolder(targetPath));
