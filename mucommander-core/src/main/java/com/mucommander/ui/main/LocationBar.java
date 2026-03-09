@@ -26,7 +26,6 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -35,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.theme.Theme;
 import com.mucommander.ui.theme.ThemeManager;
 
@@ -82,7 +82,7 @@ public class LocationBar extends JPanel {
 
             if (e.getID() == KeyEvent.KEY_PRESSED && !locationTextField.hasFocus()) {
                 SwingUtilities.invokeLater(() -> {
-                    breadcrumbBar.setPath(locationTextField.getText());
+                    breadcrumbBar.setFile(folderPanel.getCurrentFolder());
                     cardLayout.show(LocationBar.this, CARD_BREADCRUMB);
                 });
             } else if (e.getID() == KeyEvent.KEY_RELEASED) {
@@ -109,18 +109,12 @@ public class LocationBar extends JPanel {
     // -------------------------------------------------------------------------
 
     /**
-     * Renders the current path as a horizontal row of hyperlink-style labels
+     * Renders the current directory as a horizontal row of hyperlink-style labels
      * separated by {@code ›} glyphs.  Clicking a label navigates the owning
      * {@link FolderPanel} to the corresponding ancestor directory.
      *
-     * <p>Handles:
-     * <ul>
-     *   <li>Unix absolute paths: {@code /home/user/docs}</li>
-     *   <li>Windows absolute paths: {@code C:\Users\name\docs}</li>
-     *   <li>UNC paths: {@code \\server\share\folder}</li>
-     *   <li>URL-scheme paths (sftp, ftp, …): displayed as a single
-     *       non-navigable label to avoid mangling the URL.</li>
-     * </ul>
+     * <p>Uses {@link AbstractFile#getParent()} to walk the hierarchy, so it works
+     * uniformly for local paths (Windows, Unix) and remote file systems (SFTP, FTP…).
      */
     private class BreadcrumbBar extends JPanel {
 
@@ -138,21 +132,35 @@ public class LocationBar extends JPanel {
             setBorder(UIManager.getBorder("TextField.border"));
         }
 
-        /** Rebuilds the breadcrumb labels for the given path string. */
-        void setPath(String path) {
+        /**
+         * Rebuilds the breadcrumb labels for the given {@link AbstractFile}.
+         * Walks up via {@link AbstractFile#getParent()} to collect all ancestors,
+         * then renders them root-first.
+         */
+        void setFile(AbstractFile file) {
             removeAll();
 
-            if (path == null || path.isEmpty()) {
+            if (file == null) {
                 revalidate();
                 repaint();
                 return;
             }
 
-            if (path.contains("://")) {
-                // URL scheme (sftp://, ftp://, …) — show as non-navigable label
-                add(makePlainLabel(path));
-            } else {
-                buildLocalBreadcrumbs(path);
+            // Collect ancestors from current directory up to the root
+            Deque<AbstractFile> stack = new ArrayDeque<>();
+            AbstractFile f = file;
+            while (f != null) {
+                stack.push(f);          // push → top of deque is the root after the loop
+                f = f.getParent();
+            }
+
+            boolean first = true;
+            for (AbstractFile ancestor : stack) {
+                if (!first)
+                    add(makeSeparatorLabel());
+                first = false;
+
+                add(makeLinkLabel(displayName(ancestor), ancestor.getAbsolutePath()));
             }
 
             revalidate();
@@ -160,36 +168,22 @@ public class LocationBar extends JPanel {
         }
 
         /**
-         * Walks up the file hierarchy from the given local path to the root,
-         * then renders each ancestor as a clickable link separated by {@code ›}.
+         * Returns a human-readable label for a breadcrumb segment.
+         * For most files this is simply {@link AbstractFile#getName()}.
+         * For root directories (where {@code getName()} returns an empty string)
+         * the absolute path is used instead, with any trailing separator stripped.
          */
-        private void buildLocalBreadcrumbs(String path) {
-            // Collect ancestors from root to the current directory
-            Deque<File> stack = new ArrayDeque<>();
-            File f = new File(path);
-            while (f != null) {
-                stack.push(f);          // push so the top of deque is the root
-                f = f.getParentFile();
-            }
+        private String displayName(AbstractFile file) {
+            String name = file.getName();
+            if (!name.isEmpty())
+                return name;
 
-            boolean first = true;
-            for (File ancestor : stack) {
-                if (!first)
-                    add(makeSeparatorLabel());
-                first = false;
-
-                String name = ancestor.getName();
-                if (name.isEmpty()) {
-                    // Root: getName() returns "" for "C:\" or "/"
-                    String abs = ancestor.getAbsolutePath();
-                    // Strip trailing separator so we show "C:" not "C:\" or "" not "/"
-                    if (abs.endsWith(File.separator) && abs.length() > File.separator.length())
-                        abs = abs.substring(0, abs.length() - File.separator.length());
-                    name = abs.isEmpty() ? File.separator : abs;
-                }
-
-                add(makeLinkLabel(name, ancestor.getAbsolutePath()));
-            }
+            // Root directory: derive a clean label from the absolute path
+            String abs = file.getAbsolutePath();
+            String sep = file.getURL().getPathSeparator();
+            if (abs.endsWith(sep) && abs.length() > sep.length())
+                abs = abs.substring(0, abs.length() - sep.length());
+            return abs.isEmpty() ? sep : abs;
         }
 
         /** A label that looks and behaves like a hyperlink. */
@@ -221,14 +215,6 @@ public class LocationBar extends JPanel {
             sep.setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
             sep.setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
             return sep;
-        }
-
-        /** A non-interactive label for paths that cannot be segmented (e.g. URLs). */
-        private JLabel makePlainLabel(String text) {
-            JLabel lbl = new JLabel(text);
-            lbl.setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
-            lbl.setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
-            return lbl;
         }
 
         /** Escapes the minimal HTML special characters that can appear in file names. */
