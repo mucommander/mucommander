@@ -49,7 +49,7 @@ public class BinaryDetector {
      * @param b the data to analyze
      * @return true if BinaryDetector thinks that the specified data is binary
      */
-    public static boolean guessBinary(byte b[]) {
+    public static boolean guessBinary(byte[] b) {
         return guessBinary(b, 0, b.length);
     }
 
@@ -63,7 +63,7 @@ public class BinaryDetector {
      * @param len specifies where to stop reading the array
      * @return true if BinaryDetector thinks that the specified data is binary
      */
-    public static boolean guessBinary(byte b[], int off, int len) {
+    public static boolean guessBinary(byte[] b, int off, int len) {
             // Returns true if any of the bytes are the NUL character. The NUL character is usually not found in a text
             // file, except for UTF-16 and UTF-32 streams.
             // So first, we try and look for a BOM (byte-order mark) to see if the stream is UTF-16 or UTF-32 encoded.

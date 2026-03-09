@@ -36,8 +36,8 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  * @author Arik Hadas
  */
 public class BookmarksQL extends QuickListWithIcons<Bookmark> implements BookmarkListener {
-	private Bookmark[] cachedBookmarks;
-	private FolderPanel folderPanel;
+	private       Bookmark[]  cachedBookmarks;
+	private final FolderPanel folderPanel;
 
 	public BookmarksQL(FolderPanel folderPanel) {
 		super(folderPanel, ActionProperties.getActionLabel(ActionType.ShowBookmarksQL), Translator.get("bookmarks_menu.no_bookmark"));

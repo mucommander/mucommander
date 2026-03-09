@@ -55,7 +55,7 @@ public class BufferPool {
     private static final Logger LOGGER = LoggerFactory.getLogger(BufferPool.class);
 
     /** List of BufferContainer instances that wraps available buffers */
-    private static Vector<BufferContainer> bufferContainers = new Vector<BufferContainer>();
+    private static final Vector<BufferContainer> bufferContainers = new Vector<>();
 
     /** The initial default buffer size */
     public final static int INITIAL_DEFAULT_BUFFER_SIZE = 65536;
@@ -248,7 +248,7 @@ public class BufferPool {
      * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized boolean releaseByteArray(byte buffer[]) {
+    public static synchronized boolean releaseByteArray(byte[] buffer) {
         return releaseBuffer(buffer, new ByteArrayFactory());
     }
 
@@ -264,7 +264,7 @@ public class BufferPool {
      * @return <code>true</code> if the buffer was added to the pool, <code>false</code> if the buffer was already in the pool
      * @throws IllegalArgumentException if specified buffer is null
      */
-    public static synchronized boolean releaseCharArray(char buffer[]) {
+    public static synchronized boolean releaseCharArray(char[] buffer) {
         return releaseBuffer(buffer, new CharArrayFactory());
     }
 

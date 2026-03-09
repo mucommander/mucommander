@@ -58,7 +58,7 @@ public class IsoArchiveFile extends AbstractROArchiveFile {
 
         RandomAccessInputStream rais;
         // If a IsoEntryIterator is specified, reuse the iterator's stream
-        if (entryIterator != null && entryIterator instanceof IsoEntryIterator) {
+        if (entryIterator instanceof IsoEntryIterator) {
             // Override close() as a no-op so that the stream is re-used from one entry to another -- the stream will
             // be closed when the iterator is closed.
             rais = new FilterRandomAccessInputStream(((IsoEntryIterator) entryIterator).getRandomAccessInputStream()) {

@@ -90,8 +90,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     private static final int COL_CHANGED_NAME = 1;
     private static final int COL_CHANGE_BLOCK = 2;    
 
-    private MainFrame mainFrame;
-    private JTextField edtFileNameMask;
+    private final MainFrame  mainFrame;
+    private       JTextField edtFileNameMask;
     private JTable tblNames;
     private JButton btnRename;
     private JButton btnClose;
@@ -112,19 +112,19 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
 
     
     /** files to rename */
-    private FileSet files;
+    private final FileSet files;
 
     /** a map of old file names used to check for name conflicts */
-    private HashMap<String, AbstractFile> oldNames = new HashMap<String, AbstractFile>();
+    private final HashMap<String, AbstractFile> oldNames = new HashMap<>();
 
     /** a list of generated names */
-    private List<String> newNames = new ArrayList<String>();
+    private final List<String> newNames = new ArrayList<>();
 
     /** a list of flags to block file rename */
-    private List<Boolean> blockNames = new ArrayList<Boolean>();
+    private final List<Boolean> blockNames = new ArrayList<>();
     
     /** a list of parsed tokens */
-    private List<AbstractToken> tokens = new ArrayList<AbstractToken>();
+    private final List<AbstractToken> tokens = new ArrayList<>();
 
 
 
@@ -247,7 +247,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         edtReplaceWith.getDocument().addDocumentListener(this);
 
         // upper/lower case
-        Vector<String> ulcase = new Vector<String>();
+        Vector<String> ulcase = new Vector<>();
         ulcase.add(Translator.get("batch_rename_dialog.no_change"));
         ulcase.add(Translator.get("batch_rename_dialog.lower_case"));
         ulcase.add(Translator.get("batch_rename_dialog.upper_case"));
@@ -265,7 +265,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         edtCounterStep.getDocument().addDocumentListener(this);
         edtCounterStep.setColumns(2);
 
-        Vector<String> digits = new Vector<String>();
+        Vector<String> digits = new Vector<>();
         String zeros = "0000";
         for (int i = 1; i <= 5; i++) {
             digits.add(zeros.substring(0, i - 1) + "1");
@@ -361,7 +361,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
             blockNames.remove(sel[i]);
             tableModel.fireTableRowsDeleted(sel[i], sel[i]);
         }
-        if (files.size() == 0) {
+        if (files.isEmpty()) {
             dispose();
         }
     }
@@ -372,7 +372,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     private void checkForDuplicates() {
         boolean duplicates = false;
         boolean oldNamesConflict = false;
-        Set<String> names = new HashSet<String>();
+        Set<String> names = new HashSet<>();
         for (int i=0; i<newNames.size(); i++) {
             String newName = newNames.get(i);
             AbstractFile file = files.get(i);
@@ -423,9 +423,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
         }
 
         // uppercase/lowercase
-        newName = changeCase(newName, cbCase.getSelectedIndex());
-
-        return newName;
+        return changeCase(newName, cbCase.getSelectedIndex());
     }
     
     /**
@@ -544,14 +542,12 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                 if (oldName.charAt(i) == ' ') {
                     newNameCase.append(' ');
                     afterSpace = true;
+                } else if (afterSpace) {
+                    newNameCase.append(Character.toUpperCase(oldName
+                            .charAt(i)));
+                    afterSpace = false;
                 } else {
-                    if (afterSpace) {
-                        newNameCase.append(Character.toUpperCase(oldName
-                                .charAt(i)));
-                        afterSpace = false;
-                    } else {
-                        newNameCase.append(oldName.charAt(i));
-                    }
+                    newNameCase.append(oldName.charAt(i));
                 }
             }
             newName = newNameCase.toString();
@@ -603,7 +599,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
     private void doRename() {
         removeUnchangedFiles(false);
         // start rename job
-        if (files.size() > 0) {
+        if (!files.isEmpty()) {
             ProgressDialog progressDialog = new ProgressDialog(mainFrame,
                     Translator.get("progress_dialog.processing_files"));
             BatchRenameJob job = new BatchRenameJob(progressDialog, mainFrame,
@@ -954,7 +950,7 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
                         && currentStartIndex - 1 < targetLen) {
                     try {
                         name = name.substring(currentStartIndex - 1, Math.min(
-                                currentEndIndex, targetLen));
+                            currentEndIndex, targetLen));
                     } catch (Exception e) {
                     	LOGGER.info("currentStartIndex="+currentStartIndex+", currentEndIndex="+currentEndIndex, e);
                     }
@@ -1085,8 +1081,8 @@ public class BatchRenameDialog extends FocusDialog implements ActionListener, Do
      *
      */
     static class DateToken extends AbstractToken {
-        private NumberFormat year;
-        private NumberFormat digits2;
+        private final NumberFormat year;
+        private final NumberFormat digits2;
 
         public DateToken(String token) {
             super(token);

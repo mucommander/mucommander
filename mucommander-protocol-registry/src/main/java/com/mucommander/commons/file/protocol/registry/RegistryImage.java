@@ -15,7 +15,7 @@ import com.mucommander.commons.file.FileURL;
 
 public class RegistryImage extends AbstractRegistryImage {
 
-	private static Logger log = LoggerFactory.getLogger(RegistryImage.class);
+	private static final Logger log = LoggerFactory.getLogger(RegistryImage.class);
 
 	private RegistryConnHandler connHandler;
 	private List<String> layers;

@@ -37,7 +37,7 @@ class IsoEntryIterator extends WrapperArchiveEntryIterator {
     /**
      * The ISO file's InputStream
      */
-    private RandomAccessInputStream rais;
+    private final RandomAccessInputStream rais;
 
     public IsoEntryIterator(Iterator<? extends ArchiveEntry> iterator, RandomAccessInputStream rais) {
         super(iterator);

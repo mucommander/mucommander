@@ -38,11 +38,11 @@ import com.mucommander.text.Translator;
  */
 public class OvirtPanel extends ServerPanel {
 
-	private JTextField serverField;
-	private JSpinner portSpinner;
-	private JTextField usernameField;
-	private JPasswordField passwordField;
-	private JCheckBox proxyCheckBox;
+	private final JTextField serverField;
+	private final JSpinner   portSpinner;
+	private final JTextField usernameField;
+	private final JPasswordField passwordField;
+	private final JCheckBox      proxyCheckBox;
 
 	private static boolean useProxy;
 	private static int lastPort = OvirtConnHandler.STANDARD_PORT;

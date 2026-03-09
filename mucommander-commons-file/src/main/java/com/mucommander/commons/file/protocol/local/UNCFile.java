@@ -36,7 +36,6 @@ import com.mucommander.commons.file.util.Kernel32API;
 import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.commons.io.RandomAccessInputStream;
 import com.mucommander.commons.io.RandomAccessOutputStream;
-import com.mucommander.commons.runtime.OsVersion;
 
 /**
  * TODO: update this documentation and LocalFile documentation
@@ -46,8 +45,8 @@ import com.mucommander.commons.runtime.OsVersion;
 public class UNCFile extends ProtocolFile {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UNCFile.class);
 
-    protected File file;
-    private FilePermissions permissions;
+    protected     File            file;
+    private final FilePermissions permissions;
     
     /** Absolute file path, free of trailing separator */
     protected String absPath;
@@ -194,14 +193,14 @@ public class UNCFile extends ProtocolFile {
 
         boolean success = false;
         switch(permission) {
-        case READ:
-        	success = file.setReadable(enabled);
-        	break;
-        case WRITE:
-        	success = file.setWritable(enabled);
-        	break;
-        case EXECUTE:
-        	success = file.setExecutable(enabled);
+            case READ:
+        	    success = file.setReadable(enabled);
+        	    break;
+            case WRITE:
+        	    success = file.setWritable(enabled);
+        	    break;
+            case EXECUTE:
+        	    success = file.setExecutable(enabled);
         }
 
         if(!success)
@@ -356,7 +355,7 @@ public class UNCFile extends ProtocolFile {
         	// Note: MoveFileEx is always used, even if the destination file does not exist, to avoid having to
         	// call #exists() on the destination file which has a cost.
         	if(!Kernel32.getInstance().MoveFileEx(absPath, destFile.getAbsolutePath(),
-        			Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH)) {
+       Kernel32API.MOVEFILE_REPLACE_EXISTING|Kernel32API.MOVEFILE_WRITE_THROUGH)) {
         		String errorMessage = Integer.toString(Kernel32.getInstance().GetLastError());
         		// TODO: use Kernel32.FormatMessage
         		throw new IOException("Rename using Kernel32 API failed: " + errorMessage);
@@ -453,13 +452,13 @@ public class UNCFile extends ProtocolFile {
 
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
-        File files[] = file.listFiles(filenameFilter==null?null:new UNCFilenameFilter(filenameFilter));
+        File[] files = file.listFiles(filenameFilter==null?null:new UNCFilenameFilter(filenameFilter));
 
         if(files==null)
             throw new IOException();
 
         int nbFiles = files.length;
-        AbstractFile children[] = new AbstractFile[nbFiles];
+        AbstractFile[] children = new AbstractFile[nbFiles];
 
         for(int i=0; i<nbFiles; i++) {
             File file = files[i];
@@ -553,7 +552,7 @@ public class UNCFile extends ProtocolFile {
      */
     private static class UNCFilePermissions extends IndividualPermissionBits implements FilePermissions {
         
-        private java.io.File file;
+        private final java.io.File file;
 
         // Permissions are limited to the user access type. Executable permission flag is only available under Java 1.6
         // and up.
@@ -572,14 +571,14 @@ public class UNCFile extends ProtocolFile {
                 return false;
 
             switch(type) {
-            case READ:
-            	return file.canRead();
-            case WRITE:
-            	return file.canWrite();
-            case EXECUTE:
-                return file.canExecute();
-            default:
-            	return false;
+                case READ:
+            	    return file.canRead();
+                case WRITE:
+            	    return file.canWrite();
+                case EXECUTE:
+                    return file.canExecute();
+                default:
+            	    return false;
             }
         }
 
@@ -612,7 +611,7 @@ public class UNCFile extends ProtocolFile {
      */
     private static class UNCFilenameFilter implements java.io.FilenameFilter {
 
-        private FilenameFilter filter;
+        private final FilenameFilter filter;
 
         private UNCFilenameFilter(FilenameFilter filter) {
             this.filter = filter;

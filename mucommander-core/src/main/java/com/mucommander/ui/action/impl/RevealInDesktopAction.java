@@ -60,7 +60,7 @@ public class RevealInDesktopAction extends ActiveTabAction {
             break;
         case SearchFile.SCHEMA:
             AbstractFile selectedFile = mainFrame.getActiveTable().getSelectedFile();
-            setEnabled(selectedFile != null && selectedFile.getURL().getScheme().equals(LocalFile.SCHEMA));
+            setEnabled(selectedFile != null && LocalFile.SCHEMA.equals(selectedFile.getURL().getScheme()));
             break;
         }
     }

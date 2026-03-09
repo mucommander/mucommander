@@ -98,21 +98,21 @@ public class Configuration {
      * Can be replaced with java.util.KeyValueHolder once we upgrade to Java 9
      */
     private Entry<String, String> toEntry(String key, String value) {
-        return new Entry<String, String>() {
-            @Override
-            public String getValue() {
-                return value;
-            }
+        return new Entry<>() {
+			@Override
+			public String getValue() {
+				return value;
+			}
 
-            @Override
-            public String getKey() {
-                return key;
-            }
+			@Override
+			public String getKey() {
+				return key;
+			}
 
-            @Override
-            public String setValue(String value) {
-                throw new UnsupportedOperationException();
-            }
-        };
+			@Override
+			public String setValue(String value) {
+				throw new UnsupportedOperationException();
+			}
+		};
     }
 }

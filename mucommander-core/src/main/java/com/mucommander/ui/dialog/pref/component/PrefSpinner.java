@@ -30,7 +30,7 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
  */
 public class PrefSpinner extends JSpinner implements PrefComponent {
 
-    private Supplier<Integer> conf;
+    private final Supplier<Integer> conf;
 
     public PrefSpinner(Comparable<?> minimum, Comparable<?> maximum, Number stepSize, Supplier<Integer> conf) {
         super(new SpinnerNumberModel(conf.get(), minimum, maximum, stepSize));

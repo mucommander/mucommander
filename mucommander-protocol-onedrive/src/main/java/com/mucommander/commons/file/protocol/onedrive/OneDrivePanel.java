@@ -55,15 +55,16 @@ public class OneDrivePanel extends ServerPanel implements ActionListener {
     // TODO: find a better way to load icons from plugins
     private static final String MICROSOFT_ACCOUNT_ICON_PATH = "/images/file/microsoft.png";
 
-    private JTextField accountAlias;
-    private JButton signingIn;
-    private JLabel displayName;
-    private JLabel emailAddress;
-    private JLabel signingInInstructions;
-    private LoginPhase loginPhase;
-    private ImageIcon microsoftIcon;
-    private JLabel accountLabel, accountAliasLabel;
-    private OneDriveClient client;
+    private final JTextField accountAlias;
+    private final JButton    signingIn;
+    private final JLabel     displayName;
+    private final JLabel  emailAddress;
+    private final JLabel signingInInstructions;
+    private       LoginPhase loginPhase;
+    private final ImageIcon  microsoftIcon;
+    private final JLabel     accountLabel;
+	private final JLabel    accountAliasLabel;
+    private       OneDriveClient client;
 
     private String token;
 
@@ -86,7 +87,7 @@ public class OneDrivePanel extends ServerPanel implements ActionListener {
 
         emailAddress = new JLabel(" ");
         displayName = new JLabel(" ");
-        accountLabel = new JLabel(Translator.get(("server_connect_dialog.account")));
+        accountLabel = new JLabel(Translator.get("server_connect_dialog.account"));
         addRow(accountLabel, displayName, 5);
         addRow("", emailAddress, 15);
 
@@ -143,19 +144,18 @@ public class OneDrivePanel extends ServerPanel implements ActionListener {
         switch (loginPhase) {
         case SIGN_IN:
             setLoginPhase(LoginPhase.CANCEL_SIGN_IN, false);
-            SwingUtilities.invokeLater(() -> {
+            SwingUtilities.invokeLater(() ->
                 new Thread(() -> {
                     User user = login();
                     if (user != null) {
                         displayName.setText(user.displayName);
                         emailAddress.setText(user.userPrincipalName);
-                        accountAlias.setText(user.displayName.replaceAll(" ", "-"));
+                        accountAlias.setText(user.displayName.replace(" ", "-"));
                         setLoginPhase(LoginPhase.SIGN_IN, true);
                         accountAlias.requestFocus();
                         accountAlias.selectAll();
                     }
-                }).start();
-            });
+                }).start());
             break;
         case CANCEL_SIGN_IN:
             setLoginPhase(LoginPhase.SIGN_IN, false);

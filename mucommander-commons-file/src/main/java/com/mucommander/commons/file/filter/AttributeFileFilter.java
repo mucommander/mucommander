@@ -55,7 +55,7 @@ public class AttributeFileFilter extends AbstractFileFilter {
 		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isRoot() root folder}. */
 		ROOT,
 		/** Tests if the file is a {@link com.mucommander.commons.file.AbstractFile#isSystem() system file}. */
-		SYSTEM;
+		SYSTEM
 	}
 
     /** The attribute to test files against */

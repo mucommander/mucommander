@@ -64,7 +64,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
     /** Icon that is used to indicate in the status bar that quick search has found a match */
     protected final static String QUICK_SEARCH_OK_ICON = "quick_search_ok.png";
     
-    private JComponent component;
+    private final JComponent component;
     
     protected QuickSearch(JComponent component) {
     	this.component = component;
@@ -127,7 +127,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
      * @return true if the current quick search string matches the given string
      */
     public boolean matches(String string) {
-        return isActive() && string.toLowerCase().indexOf(searchString.toLowerCase())!=-1;
+        return isActive() && string.toLowerCase().contains(searchString.toLowerCase());
     }
 
 
@@ -272,7 +272,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
             if(containsCaseMatch!=-1)
                 continue;
 
-            if(item.indexOf(searchString)!=-1) {
+            if(item.contains(searchString)) {
                 // We've got a match, let's see if we can find a better match on the next string
                 containsCaseMatch = i;
                 continue;
@@ -282,7 +282,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
             if(containsNoCaseMatch!=-1)
                 continue;
 
-            if(itemLC.indexOf(searchStringLC)!=-1) {
+            if(itemLC.contains(searchStringLC)) {
                 // We've got a match, let's see if we can find a better match on the next string
                 containsNoCaseMatch = i;
                 continue;
@@ -383,7 +383,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
         // This check is done on key release, so that if backspace key is maintained pressed
         // to remove all the search string, it does not trigger the JComponent's back action 
     	// which is mapped on backspace too
-        if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && searchString.equals("")) {
+        if(isActive() && e.getKeyCode()==KeyEvent.VK_BACK_SPACE && "".equals(searchString)) {
             e.consume();
             stop();
         }
@@ -392,7 +392,7 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
     @Override
     public void configurationChanged(ConfigurationEvent event) {
         String var = event.getVariable();
-        if (var.equals(MuPreferences.QUICK_SEARCH_TIMEOUT)) {
+        if (MuPreferences.QUICK_SEARCH_TIMEOUT.equals(var)) {
             quickSearchTimeout = event.getIntegerValue() * 1000;
         }
     }

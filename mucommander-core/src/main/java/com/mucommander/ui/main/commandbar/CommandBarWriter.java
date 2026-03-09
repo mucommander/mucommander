@@ -57,20 +57,16 @@ class CommandBarWriter extends CommandBarIO {
 		ActionId[] commandBarAlterativeActionIds = CommandBarAttributes.getAlternateActions();
 		KeyStroke commandBarModifier = CommandBarAttributes.getModifier();
 
-		BackupOutputStream bos = new BackupOutputStream(getDescriptionFile());
-
-		try {
+		try (BackupOutputStream bos = new BackupOutputStream(getDescriptionFile())) {
 			new Writer(bos).write(commandBarActionIds, commandBarAlterativeActionIds, commandBarModifier);
 			wasCommandBarModified = false;
 		} catch (Exception e) {
 			LOGGER.debug("Caught exception", e);
-		} finally {
-			bos.close();
 		}
 	}
 	
 	private static class Writer {
-		private XmlWriter writer = null;
+		private final XmlWriter writer;
 		
 		private Writer(OutputStream stream) throws IOException {
     		this.writer = new XmlWriter(stream);
@@ -87,7 +83,7 @@ class CommandBarWriter extends CommandBarIO {
     			writer.startElement(ROOT_ELEMENT, rootElementAttributes, true);    			
     			
     			int nbCommandBarActions = actionIds.length;
-    			for (int i=0; i<nbCommandBarActions; ++i)
+    			for (int i=0; i<nbCommandBarActions; i++)
     				write(actionIds[i], alternativeActionIds[i]);
 
     		} finally {

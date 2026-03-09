@@ -55,11 +55,11 @@ import java.io.OutputStream;
 public class NFSFile extends ProtocolFile {
 
     /** Underlying file instance */
-    private XFile file;
+    private final XFile file;
 
     private String absPath;
 
-    private FilePermissions permissions;
+    private final FilePermissions permissions;
 
     /** Caches the parent folder, initially null until getParent() gets called */
     private AbstractFile parent;
@@ -391,7 +391,7 @@ public class NFSFile extends ProtocolFile {
 
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
-        String names[] = file.list();
+        String[] names = file.list();
 
         if(names==null)
             throw new IOException();
@@ -399,7 +399,7 @@ public class NFSFile extends ProtocolFile {
         if(filenameFilter!=null)
             names = filenameFilter.filter(names);
 
-        AbstractFile children[] = new AbstractFile[names.length];
+        AbstractFile[] children = new AbstractFile[names.length];
         FileURL childURL;
         String baseURLPath = fileURL.getPath();
         if(!baseURLPath.endsWith("/"))
@@ -427,7 +427,7 @@ public class NFSFile extends ProtocolFile {
      */
     public static class NFSRandomAccessInputStream extends RandomAccessInputStream {
 
-        private XRandomAccessFile raf;
+        private final XRandomAccessFile raf;
 
         public NFSRandomAccessInputStream(XRandomAccessFile raf) {
             this.raf = raf;
@@ -439,7 +439,7 @@ public class NFSFile extends ProtocolFile {
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             return raf.read(b, off, len);
         }
 
@@ -469,7 +469,7 @@ public class NFSFile extends ProtocolFile {
      */
     public static class NFSRandomAccessOutputStream extends RandomAccessOutputStream {
 
-        private XRandomAccessFile raf;
+        private final XRandomAccessFile raf;
 
         public NFSRandomAccessOutputStream(XRandomAccessFile raf) {
             this.raf = raf;
@@ -481,12 +481,12 @@ public class NFSFile extends ProtocolFile {
         }
 
         @Override
-        public void write(byte b[]) throws IOException {
+        public void write(byte[] b) throws IOException {
             raf.write(b);
         }
 
         @Override
-        public void write(byte b[], int off, int len) throws IOException {
+        public void write(byte[] b, int off, int len) throws IOException {
             raf.write(b, off, len);
         }
 
@@ -537,7 +537,7 @@ public class NFSFile extends ProtocolFile {
      */
     private static class NFSFilePermissions extends IndividualPermissionBits implements FilePermissions {
 
-        private XFile file;
+        private final XFile file;
 
         private final static PermissionBits MASK = new GroupedPermissionBits(384);  // rw------- (300 octal)
 

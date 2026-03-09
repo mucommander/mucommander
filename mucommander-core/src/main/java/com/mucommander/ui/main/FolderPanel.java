@@ -86,26 +86,26 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
 	/** The following constants are used to identify the left and right folder panels */
 	public enum FolderPanelType { LEFT, RIGHT }
 
-    private MainFrame  mainFrame;
+    private final MainFrame mainFrame;
 
     private final JPanel panel;
 
-    private LocationManager locationManager = new LocationManager(this);
+    private final LocationManager locationManager = new LocationManager(this);
 
     /*  We're NOT using JComboBox anymore because of its strange behavior:
         it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
         so there is no way to tell if it's the final selection (ENTER) or not.
     */
     private DrivePopupButton driveButton;
-    private LocationTextField locationTextField;
-    private FileTable fileTable;
-    private FileTableTabs tabs;
-    private FoldersTreePanel foldersTreePanel;
-    private JSplitPane treeSplitPane;
+    private       LocationTextField locationTextField;
+    private final FileTable         fileTable;
+    private final FileTableTabs     tabs;
+    private final FoldersTreePanel foldersTreePanel;
+    private final JSplitPane       treeSplitPane;
 
-    private FileDragSourceListener fileDragSourceListener;
+    private final FileDragSourceListener fileDragSourceListener;
 
-    private LocationChanger locationChanger;
+    private final LocationChanger locationChanger;
 
     /** Is directory tree visible */
     private boolean treeVisible = false;
@@ -114,7 +114,7 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
     private int oldTreeWidth = 150;
 
     /** Array of all the existing pop ups for this panel's FileTable **/
-    private Future<QuickList[]> fileTablePopups;
+    private final Future<QuickList[]> fileTablePopups;
 
     /* TODO branch private boolean branchView; */
 
@@ -172,15 +172,13 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
         }).start();
 
         // Initialize quick lists in background
-        fileTablePopups =  CompletableFuture.supplyAsync(() -> {
-            return new QuickList[] {
-                            new ParentFoldersQL(this),
-                            new RecentLocationsQL(this),
-                            new RecentExecutedFilesQL(this),
-                            new BookmarksQL(this),
-                            new RootFoldersQL(this),
-                            new TabsQL(this)
-            };
+        fileTablePopups =  CompletableFuture.supplyAsync(() -> new QuickList[] {
+            new ParentFoldersQL(this),
+            new RecentLocationsQL(this),
+            new RecentExecutedFilesQL(this),
+            new BookmarksQL(this),
+            new RootFoldersQL(this),
+            new TabsQL(this)
         });
 
         // Create the FileTable
@@ -240,12 +238,12 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
      */
     private void disableCtrlFocusTraversalKeys(Component component) {
         // Remove Ctrl+Tab from forward focus traversal keys
-        HashSet<AWTKeyStroke> keyStrokeSet = new HashSet<AWTKeyStroke>();
+        HashSet<AWTKeyStroke> keyStrokeSet = new HashSet<>();
         keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
         component.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keyStrokeSet);
 
         // Remove Shift+Ctrl+Tab from backward focus traversal keys
-        keyStrokeSet = new HashSet<AWTKeyStroke>();
+        keyStrokeSet = new HashSet<>();
         keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
         component.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, keyStrokeSet);
     }
@@ -412,7 +410,7 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
      * @param changeLockedTab - flag that indicates whether to change the presented folder in 
      * the currently selected tab although it's locked (used when switching tabs)
      */
-    public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
+    public void setCurrentFolder(AbstractFile folder, AbstractFile[] children, AbstractFile fileToSelect, boolean changeLockedTab) {
         fileTable.setCurrentFolder(folder, children, fileToSelect);
     }
 

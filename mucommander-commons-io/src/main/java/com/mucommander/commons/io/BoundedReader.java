@@ -31,9 +31,9 @@ import java.io.Reader;
  */
 public class BoundedReader extends FilterReader {
 
-    private long totalRead;
-    private long allowedCharacters;
-    private IOException outOfBoundException;
+    private       long        totalRead;
+    private final long        allowedCharacters;
+    private final IOException outOfBoundException;
 
     /**
      * Equivalent to {@link #BoundedReader(java.io.Reader, long, java.io.IOException)} called with a

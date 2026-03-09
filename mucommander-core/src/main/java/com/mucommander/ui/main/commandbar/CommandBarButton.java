@@ -43,7 +43,7 @@ import com.mucommander.ui.main.MainFrame;
 public class CommandBarButton extends NonFocusableButton implements ConfigurationListener {
 
 	/** ID of the button's action */
-	private ActionId actionId;
+	private final ActionId actionId;
 	
 	/** Current icon scale factor */
     // The math.max(1.0f, ...) part is to workaround a bug which cause(d) this value to be set to 0.0 in the configuration file.
@@ -116,7 +116,7 @@ public class CommandBarButton extends NonFocusableButton implements Configuratio
         String var = event.getVariable();
 
         // Reload butons icon if the icon scale factor has changed
-        if (var.equals(MuPreferences.COMMAND_BAR_ICON_SCALE)) {
+        if (MuPreferences.COMMAND_BAR_ICON_SCALE.equals(var)) {
             scaleFactor = event.getFloatValue();
 
             // Change the button's icon but NOT the action's icon which has to remain in its original non-scaled size

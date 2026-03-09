@@ -48,19 +48,19 @@ import com.mucommander.ui.main.MainFrame;
 public class CommandBar extends JPanel {
 
     /** Parent MainFrame instance */
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     /** True when modifier key is pressed */
     private boolean modifierDown;
 
     /** Command bar buttons */
-    private CommandBarButton buttons[];
+    private CommandBarButton[] buttons;
     
     /** Command bar actions */
-    private static ActionId actionIds[];
+    private static ActionId[] actionIds;
     
     /** Command bar alternate actions */
-    private static ActionId alternateActionIds[];
+    private static ActionId[] alternateActionIds;
     
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;

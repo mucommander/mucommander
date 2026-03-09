@@ -33,12 +33,12 @@ public class Theme extends ThemeData {
         /** Describes predefined muCommander themes. */
         PREDEFINED_THEME,
         /** Describes custom muCommander themes. */
-        CUSTOM_THEME;
+        CUSTOM_THEME
     }
 
     // - Theme listeners -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
-    private static WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<ThemeListener, Object>();
+    private static final WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<>();
 
 
     

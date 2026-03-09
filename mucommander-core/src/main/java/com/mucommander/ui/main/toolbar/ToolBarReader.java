@@ -75,7 +75,7 @@ public class ToolBarReader extends ToolBarIO {
 
     @Override
     public void startDocument() {
-        actionIdsV = new Vector<ActionId>();
+        actionIdsV = new Vector<>();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ToolBarReader extends ToolBarIO {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if(qName.equals(BUTTON_ELEMENT)) {
+        if(BUTTON_ELEMENT.equals(qName)) {
         	// Resolve action id
         	String actionIdAttribute = attributes.getValue(ACTION_ID_ATTRIBUTE);
         	if (actionIdAttribute != null) {
@@ -103,10 +103,10 @@ public class ToolBarReader extends ToolBarIO {
         			LOGGER.warn("Error in "+DEFAULT_TOOLBAR_FILE_NAME+": action id for class " + actionClassAttribute + " was not found");
         	}
         }
-        else if(qName.equals(SEPARATOR_ELEMENT)) {
+        else if(SEPARATOR_ELEMENT.equals(qName)) {
             actionIdsV.add(null);
         }
-        else if (qName.equals(ROOT_ELEMENT)) {
+        else if (ROOT_ELEMENT.equals(qName)) {
         	// Note: early 0.8 beta3 nightly builds did not have version attribute, so the attribute may be null
             String fileVersion = attributes.getValue(VERSION_ATTRIBUTE);
 

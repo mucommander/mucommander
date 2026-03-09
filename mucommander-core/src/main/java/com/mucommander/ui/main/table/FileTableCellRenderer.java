@@ -63,11 +63,11 @@ import com.mucommander.ui.theme.ThemeListener;
 public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileTableCellRenderer.class);
 	
-    private FileTable table;
-    private FileTableModel tableModel;
+    private final FileTable      table;
+    private final FileTableModel tableModel;
 
     /** Custom JLabel that render specific column cells */
-    private CellLabel[] cellLabels = new CellLabel[Column.values().length];
+    private final CellLabel[] cellLabels = new CellLabel[Column.values().length];
 
 
     public FileTableCellRenderer(FileTable table) {
@@ -177,16 +177,14 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         boolean matches;
         if(!table.hasFocus())
             matches = true;
-        else {
-            if(search.isActive())
-                matches = search.matches(this.table.getFileNameAtRow(rowIndex));
-            else
-                matches = true;
-        }
+        else if(search.isActive())
+            matches = search.matches(this.table.getFileNameAtRow(rowIndex));
+        else
+            matches = true;
 
         // Retrieves the various indexes of the colors to apply.
         // Selection only applies when the table is the active one
-        int selectedIndex =  (isSelected && ((FileTable)table).isActiveTable()) ? ThemeCache.SELECTED : ThemeCache.NORMAL;
+        int selectedIndex =  isSelected && ((FileTable)table).isActiveTable() ? ThemeCache.SELECTED : ThemeCache.NORMAL;
         int focusedIndex  = table.hasFocus() ? ThemeCache.ACTIVE : ThemeCache.INACTIVE;
         int colorIndex    = getColorIndex(rowIndex, file, tableModel);
 
@@ -197,8 +195,8 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
         if(column == Column.EXTENSION) {
             // Set file icon (parent folder icon if '..' file)
             label.setIcon(rowIndex ==0 && tableModel.hasParentFolder()
-                    ?IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.PARENT_FOLDER_ICON_NAME, FileIcons.getScaleFactor())
-                    :FileIcons.getFileIcon(file));
+                ?IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.PARENT_FOLDER_ICON_NAME, FileIcons.getScaleFactor())
+                :FileIcons.getFileIcon(file));
         }
         // Any other column (name, date or size)
         else {
@@ -217,15 +215,15 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             // - set a tooltip text that will display the whole text when mouse is over the label
             if (table.getColumnModel().getColumn(columnIndex).getWidth() < label.getPreferredSize().getWidth()) {
                 String leftText = text.substring(0, text.length()/2);
-                String rightText = text.substring(text.length()/2, text.length());
+                String rightText = text.substring(text.length()/2);
 
                 while(table.getColumnModel().getColumn(columnIndex).getWidth() < label.getPreferredSize().getWidth()
-                   && leftText.length()>0 && rightText.length()>0) {    // Prevents against going out of bounds
+                    && leftText.length()>0 && rightText.length()>0) {    // Prevents against going out of bounds
 
                     if(leftText.length()>rightText.length())
                         leftText = leftText.substring(0, leftText.length()-1);
                     else
-                        rightText = rightText.substring(1, rightText.length());
+                        rightText = rightText.substring(1);
 
                     label.setText(leftText+"..."+rightText);
                 }
@@ -246,7 +244,7 @@ public class FileTableCellRenderer implements TableCellRenderer, ThemeListener {
             if(table.hasFocus() && search.isActive())
                 label.setBackground(ThemeCache.backgroundColors[focusedIndex][ThemeCache.NORMAL]);
             else
-                label.setBackground(ThemeCache.backgroundColors[focusedIndex][(rowIndex % 2 == 0) ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
+                label.setBackground(ThemeCache.backgroundColors[focusedIndex][rowIndex % 2 == 0 ? ThemeCache.NORMAL : ThemeCache.ALTERNATE]);
         }
         else
             label.setBackground(ThemeCache.unmatchedBackground);

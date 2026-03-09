@@ -30,7 +30,7 @@ import com.mucommander.commons.util.StringUtils;
 public class AbstractExtensionFilter extends AbstractStringCriterionFilter {
 
     /** File extensions to match against criterion values */
-    private char[][] extensions;
+    private final char[][] extensions;
 
     /**
      * Creates a new <code>AbstractExtensionFilter</code> using the specified generator and string, and operating in the
@@ -59,18 +59,16 @@ public class AbstractExtensionFilter extends AbstractStringCriterionFilter {
 
         // If case isn't important, a simple String.endsWith is enough.
         if (isCaseSensitive()) {
-            for (int i = 0; i < extensions.length; i++)
-                if(StringUtils.matches(value, extensions[i], len))
-                    return true;
+			for (char[] extension : extensions)
+				if (StringUtils.matches(value, extension, len)) return true;
         }
 
         // If case is important, we have to be a bit more creative and
         // use String.regionMatches.
         else {
             // Matches the value to each extension.
-            for (int i = 0; i < extensions.length; i++)
-                if(StringUtils.matchesIgnoreCase(value, extensions[i], len))
-                    return true;
+			for (char[] extension : extensions)
+				if (StringUtils.matchesIgnoreCase(value, extension, len)) return true;
         }
         return false;
     }

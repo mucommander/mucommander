@@ -39,7 +39,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> endsWithTestCases() {
       List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"abc", "c",   true});
         data.add(new Object[] {"abc", "bc",  true});
@@ -76,7 +76,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> matchesIgnoreCaseTestCases() {
       List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"abc", "C", 3, true});
         data.add(new Object[] {"abc", "B", 2, true});
@@ -120,7 +120,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> matchesTestCases() {
       List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"abc", "c", 3, true});
         data.add(new Object[] {"abc", "b", 2, true});
@@ -166,7 +166,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> parseIntDefTestCases() {
       List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         for(int i = 0; i < 10; i++) {
             data.add(new Object[] {Integer.toString(i), 0, i});
@@ -198,7 +198,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> endsWithIgnoreCaseTestCases() {
         List<Object[]> data;
         
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
         
         data.add(new Object[] {"this is a test", "a test", true});
         data.add(new Object[] {"this is a test", "a TeSt", true});
@@ -275,7 +275,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> startsWithIgnoreCaseTestCases() {
         List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"this is a test", "this is", true});
         data.add(new Object[] {"this is a test", "ThIs Is", true});
@@ -343,7 +343,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> caseInsensitiveEqualsTestCases() {
         List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"a",  "a",  true});
         data.add(new Object[] {"A",  "A",  true});
@@ -365,7 +365,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> caseSensitiveEqualsTestCases() {
         List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"a",  "a",  true});
         data.add(new Object[] {"A",  "A",  true});
@@ -413,7 +413,7 @@ public class StringUtilsTest {
     public Iterator<String[]> capitalizeTestCases() {
         List<String[]> data;
 
-        data = new ArrayList<String[]>();
+        data = new ArrayList<>();
 
         data.add(new String[] {"bob",         "Bob"});
         data.add(new String[] {"BOB",         "Bob"});
@@ -451,7 +451,7 @@ public class StringUtilsTest {
     public Iterator<Object[]> flattenTestCases() {
         List<Object[]> data;
 
-        data = new ArrayList<Object[]>();
+        data = new ArrayList<>();
 
         data.add(new Object[] {"a b c", new String[] {"a", "b", "c"}, " "});
         data.add(new Object[] {"a*b*c", new String[] {"a", "b", "c"}, "*"});
@@ -472,7 +472,7 @@ public class StringUtilsTest {
     @Test(dataProvider = "flatten")
     public void testFlatten(String expected, String[] data, String separator) {
         assert expected.equals(StringUtils.flatten(data, separator));
-        if(separator.equals(" "))
+        if(" ".equals(separator))
             assert expected.equals(StringUtils.flatten(data));
     }
 

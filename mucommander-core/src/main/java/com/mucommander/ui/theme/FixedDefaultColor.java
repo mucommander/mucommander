@@ -27,7 +27,7 @@ public class FixedDefaultColor extends DefaultColor {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Color to default to. */
-    private Color color;
+    private final Color color;
 
 
 

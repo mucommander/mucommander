@@ -143,7 +143,7 @@ class TextEditorImpl implements ThemeListener {
                     }
                 }
             });
-            textArea.addHyperlinkListener((event) -> {
+            textArea.addHyperlinkListener(event -> {
                 URL url = event.getURL();
                 if (url != null && event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
                     SwingUtilities.invokeLater(() -> {
@@ -486,7 +486,7 @@ class TextEditorImpl implements ThemeListener {
         // According to the documentation in DefaultEditorKit, the line separator is set to be as the system property
         // if no other line separator exists in the file, but in practice it is not, so this is a workaround for it
         if (!lineSeparatorExists) {
-            document.putProperty(DefaultEditorKit.EndOfLineStringProperty, System.getProperty("line.separator"));
+            document.putProperty(DefaultEditorKit.EndOfLineStringProperty, System.lineSeparator());
         }
         try {
             textArea.getUI().getEditorKit(textArea).write(new BufferedWriter(writer), document, 0, document.getLength());

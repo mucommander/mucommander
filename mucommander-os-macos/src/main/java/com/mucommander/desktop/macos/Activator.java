@@ -18,13 +18,11 @@
 package com.mucommander.desktop.macos;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.mucommander.desktop.DesktopAdapter;
 import com.mucommander.osgi.OperatingSystemService;
 
 public class Activator implements BundleActivator  {
@@ -37,12 +35,7 @@ public class Activator implements BundleActivator  {
         coreServiceTracker = new CoreServiceTracker(context);
         coreServiceTracker.open();
 
-        OperatingSystemService service = new OperatingSystemService() {
-            @Override
-            public List<DesktopAdapter> getDesktopAdapters() {
-                return Collections.singletonList(new OSXDesktopAdapter());
-            }
-        };
+        OperatingSystemService service = () -> Collections.singletonList(new OSXDesktopAdapter());
         osRegistration = context.registerService(OperatingSystemService.class, service, null);
     }
 

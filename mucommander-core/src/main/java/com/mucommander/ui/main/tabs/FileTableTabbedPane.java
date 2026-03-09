@@ -48,11 +48,11 @@ import java.awt.event.MouseEvent;
 public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements FocusListener {
 
 	/** The FileTable instance presented in each tab */
-	private JComponent fileTableComponent;
+	private final JComponent fileTableComponent;
 	
-	private MainFrame mainFrame;
-	private FolderPanel folderPanel;
-	private FileTableTabHeaderFactory headersFactory;
+	private final MainFrame   mainFrame;
+	private final FolderPanel folderPanel;
+	private final FileTableTabHeaderFactory headersFactory;
 
 	/**
 	 * cache the index of the last selected tab since apparently in some cases we look for this value (in order to

@@ -41,10 +41,10 @@ import com.mucommander.ui.main.tree.FoldersTreePanel;
  */
 public class ConfigurableFolderFilter extends AndFileFilter implements ConfigurationListener {
     
-    private FileFilter hiddenFileFilter = new AttributeFileFilter(FileAttribute.HIDDEN, true);
-    private FileFilter dsFileFilter = new DSStoreFileFilter();
+    private final FileFilter hiddenFileFilter = new AttributeFileFilter(FileAttribute.HIDDEN, true);
+    private final FileFilter dsFileFilter     = new DSStoreFileFilter();
     /** Filter used to filter out system files and folders that should not be displayed to inexperienced users. */
-    private FileFilter systemFileFilter = new AttributeFileFilter(FileAttribute.SYSTEM, true);
+    private final FileFilter systemFileFilter = new AttributeFileFilter(FileAttribute.SYSTEM, true);
     
 
     public ConfigurableFolderFilter() {

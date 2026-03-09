@@ -29,8 +29,8 @@ import com.mucommander.commons.file.ModificationDateBasedMonitoredFile;
 public class OneDriveMonitoredFile extends ModificationDateBasedMonitoredFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(OneDriveMonitoredFile.class);
 
-    private OneDriveFile file;
-    private Integer numOfChildren;
+    private final OneDriveFile file;
+    private       Integer      numOfChildren;
 
     public OneDriveMonitoredFile(OneDriveFile file) {
         super(file);

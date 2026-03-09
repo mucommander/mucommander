@@ -58,7 +58,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
                 break;
             }
 
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
+            String subPath = d==entryDepth?entryPath:entryPath.substring(0, slashPos=entryPath.indexOf('/', slashPos)+1);
 
             int nbChildren = node.getChildCount();
             DefaultMutableTreeNode childNode = null;
@@ -83,18 +83,16 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
                     node = childNode;
                 }
             }
+            else if(d==entryDepth) {
+                // Create a leaf node for the entry
+                entry.setExists(true);      // the entry has to exist
+                node.add(new DefaultMutableTreeNode(entry, true));
+            }
             else {
-                if(d==entryDepth) {
-                    // Create a leaf node for the entry
-                    entry.setExists(true);      // the entry has to exist
-                    node.add(new DefaultMutableTreeNode(entry, true));
-                }
-                else {
-                    LOGGER.trace("Creating node for "+subPath);
-                    childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0, true), true);
-                    node.add(childNode);
-                    node = childNode;
-                }
+                LOGGER.trace("Creating node for "+subPath);
+                childNode = new DefaultMutableTreeNode(new ArchiveEntry(subPath, true, entry.getDate(), 0, true), true);
+                node.add(childNode);
+                node = childNode;
             }
         }
     }
@@ -116,7 +114,7 @@ public class ArchiveEntryTree extends DefaultMutableTreeNode {
         int slashPos = 0;
         DefaultMutableTreeNode currentNode = this;
         for(int d=1; d<=entryDepth; d++) {
-            String subPath = d==entryDepth?entryPath:entryPath.substring(0, (slashPos=entryPath.indexOf('/', slashPos)+1));
+            String subPath = d==entryDepth?entryPath:entryPath.substring(0, slashPos=entryPath.indexOf('/', slashPos)+1);
 
             int nbChildren = currentNode.getChildCount();
             DefaultMutableTreeNode matchNode = null;

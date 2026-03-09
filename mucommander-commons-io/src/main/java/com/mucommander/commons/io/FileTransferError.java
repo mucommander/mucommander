@@ -28,5 +28,5 @@ public enum FileTransferError {
     /** An error occurred while reading the destination file */
     READING_DESTINATION,
     /** The checksum of the source and destination files don't match */
-    CHECKSUM_MISMATCH;
+    CHECKSUM_MISMATCH
 }

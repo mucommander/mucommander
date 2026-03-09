@@ -34,7 +34,7 @@ class CommandOpen extends LocalFileOperation {
     // - Instance fields -------------------------------------------------
     // -------------------------------------------------------------------
     /** Whether or not the 'run as executable' command can be used if no better alternative is found. */
-    private boolean allowDefault;
+    private final boolean allowDefault;
 
 
 

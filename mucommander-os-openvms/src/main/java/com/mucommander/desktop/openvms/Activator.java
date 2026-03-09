@@ -18,13 +18,11 @@
 package com.mucommander.desktop.openvms;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.mucommander.desktop.DesktopAdapter;
 import com.mucommander.osgi.OperatingSystemService;
 
 public class Activator implements BundleActivator  {
@@ -33,12 +31,7 @@ public class Activator implements BundleActivator  {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        OperatingSystemService service = new OperatingSystemService() {
-            @Override
-            public List<DesktopAdapter> getDesktopAdapters() {
-                return Collections.singletonList(new OpenVMSDesktopAdapter());
-            }
-        };
+        OperatingSystemService service = () -> Collections.singletonList(new OpenVMSDesktopAdapter());
         osRegistration = context.registerService(OperatingSystemService.class, service, null);
     }
 

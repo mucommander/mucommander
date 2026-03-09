@@ -92,10 +92,8 @@ public abstract class Connection extends Thread {
      * @returns null	If there is no cached connection
      */
     public static Connection getCache(String server, int port, String proto) {
-        Connection conn = (Connection) connections.get(
+        return (Connection) connections.get(
                 server + ":" + port + ":" + proto);
-
-        return conn;
     }
 
     /**
@@ -123,7 +121,7 @@ public abstract class Connection extends Thread {
      * @returns server, port number and protocol info.
      */
     public String toString() {
-        return (server + ":" + port + ":" + proto);
+        return server + ":" + port + ":" + proto;
     }
 
     private boolean running;
@@ -150,7 +148,7 @@ public abstract class Connection extends Thread {
         resumeListener();
         sendOne(call);
 
-        waiters.put(new Integer(call.xid), new Integer(timeout));
+        waiters.put(call.xid, timeout);
 
         /*
          * Now sleep until the listener thread posts
@@ -169,9 +167,9 @@ public abstract class Connection extends Thread {
 	    if (err != null)
 		throw err;
 
-            timeout -= (System.currentTimeMillis() - t);
+            timeout -= System.currentTimeMillis() - t;
             if (timeout <= 0) {
-                waiters.remove(new Integer(call.xid));
+                waiters.remove(call.xid);
                 throw new InterruptedIOException(); // timed out
             }
         }
@@ -180,7 +178,7 @@ public abstract class Connection extends Thread {
          * My reply has come in.
          */
         xid = 0;
-        waiters.remove(new Integer(call.xid));
+        waiters.remove(call.xid);
         notifyAll(); // wake the listener
 
         return reply;
@@ -238,7 +236,7 @@ public abstract class Connection extends Thread {
                  */
                 synchronized (this) {
                     xid = reply.xdr_int();
-                    if (waiters.containsKey(new Integer(xid)))
+                    if (waiters.containsKey(xid))
                         notifyAll();
                     else
                         xid = 0;   // ignore it

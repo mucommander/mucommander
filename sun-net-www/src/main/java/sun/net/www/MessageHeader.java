@@ -30,7 +30,6 @@
 package sun.net.www;
 
 import java.io.*;
-import java.util.Collections;
 import java.util.*;
 
 /** An RFC 844 or MIME message header.  Includes methods
@@ -42,8 +41,8 @@ import java.util.*;
     but lines like this are everywhere). */
 public
 class MessageHeader {
-    private String keys[];
-    private String values[];
+    private String[] keys;
+    private String[] values;
     private int nkeys;
 
     public MessageHeader () {
@@ -153,7 +152,7 @@ class MessageHeader {
         for (int i=0; i<nkeys; i++) {
             if (k.equalsIgnoreCase(keys[i])
                     && values[i] != null && values[i].length() > 5
-                    && values[i].substring(0, 5).equalsIgnoreCase("NTLM ")) {
+                    && "NTLM ".equalsIgnoreCase(values[i].substring(0, 5))) {
                 found = true;
                 break;
             }
@@ -258,12 +257,8 @@ class MessageHeader {
                 }
             }
             if (!skipIt) {
-                List<String> l = m.get(keys[i]);
-                if (l == null) {
-                    l = new ArrayList<>();
-                    m.put(keys[i], l);
-                }
-                l.add(values[i]);
+				List<String> l = m.computeIfAbsent(keys[i], k -> new ArrayList<>());
+				l.add(values[i]);
             } else {
                 // reset the flag
                 skipIt = false;
@@ -272,18 +267,12 @@ class MessageHeader {
 
         if (include != null) {
                 for (Map.Entry<String,List<String>> entry: include.entrySet()) {
-                List<String> l = m.get(entry.getKey());
-                if (l == null) {
-                    l = new ArrayList<>();
-                    m.put(entry.getKey(), l);
-                }
-                l.addAll(entry.getValue());
+					List<String> l = m.computeIfAbsent(entry.getKey(), k -> new ArrayList<>());
+					l.addAll(entry.getValue());
             }
         }
 
-        for (String key : m.keySet()) {
-            m.put(key, Collections.unmodifiableList(m.get(key)));
-        }
+		m.replaceAll((k, v) -> Collections.unmodifiableList(m.get(k)));
 
         return Collections.unmodifiableMap(m);
     }
@@ -308,7 +297,7 @@ class MessageHeader {
         if (c2 != '.') return false;
         if (c3 < '0' || c3 > '9') return false;
 
-        return (k.substring(i+1, len-3).equalsIgnoreCase("HTTP/"));
+        return "HTTP/".equalsIgnoreCase(k.substring(i+1, len-3));
     }
 
     /** Prints the key-value pairs represented by this
@@ -332,7 +321,7 @@ class MessageHeader {
             if (keys[i] != null) {
                 StringBuilder sb = new StringBuilder(keys[i]);
                 if (values[i] != null) {
-                    sb.append(": " + values[i]);
+                    sb.append(": ").append(values[i]);
                 } else if (i != 0 || !isRequestline(keys[i])) {
                     sb.append(":");
                 }
@@ -486,7 +475,7 @@ class MessageHeader {
     public void mergeHeader(InputStream is) throws java.io.IOException {
         if (is == null)
             return;
-        char s[] = new char[10];
+        char[] s = new char[10];
         int firstc = is.read();
         while (firstc != '\n' && firstc != '\r' && firstc >= 0) {
             int len = 0;
@@ -523,7 +512,7 @@ class MessageHeader {
                         break;
                     }
                     if (len >= s.length) {
-                        char ns[] = new char[s.length * 2];
+                        char[] ns = new char[s.length * 2];
                         System.arraycopy(s, 0, ns, 0, len);
                         s = ns;
                     }
@@ -546,7 +535,7 @@ class MessageHeader {
             }
             String v;
             if (keyend >= len)
-                v = new String();
+                v = "";
             else
                 v = String.copyValueOf(s, keyend, len - keyend);
             add(k, v);

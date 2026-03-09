@@ -133,15 +133,15 @@ class LocationBarPanel extends ThemeEditorPanel implements PropertyChangeListene
 
     public void propertyChange(PropertyChangeEvent event) {
         // Background color changed.
-        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME))
+        if(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME.equals(event.getPropertyName()))
             setBackgroundColors();
 
         // Foreground color changed.
-        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME))
+        else if(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME.equals(event.getPropertyName()))
             setForegroundColors();
 
         // Overlay color changed.
-        else if(event.getPropertyName().equals(PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME))
+        else if(PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME.equals(event.getPropertyName()))
             setProgressColors();
     }
 

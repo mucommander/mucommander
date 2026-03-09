@@ -64,7 +64,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private static final Object INIT_LOCK_OBJ = new Object();
 
     /** Folder panel we are monitoring */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     /** True when the current folder is currently being changed */
     private boolean folderChanging;
@@ -90,15 +90,15 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
     private static volatile Thread monitorThread;
 
     /** FolderChangeMonitor instances */
-    private static List<FolderChangeMonitor> instances;
+    private static final List<FolderChangeMonitor> instances;
 
-    private static OrFileFilter disableAutoRefreshFilter = new OrFileFilter();
+    private static final OrFileFilter disableAutoRefreshFilter = new OrFileFilter();
 		
     /** Milliseconds period between checks to current folder's date */
-    private static long checkPeriod;
+    private static final long checkPeriod;
 	
     /** Delay in milliseconds before folder date check after a folder has been refreshed */
-    private static long waitAfterRefresh;
+    private static final long waitAfterRefresh;
 	
     /** If folder change check took an average of N milliseconds, thread will wait at least N*WAIT_MULTIPLIER before next check */
     private final static int WAIT_MULTIPLIER = 50;
@@ -120,7 +120,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
 
         disableAutoRefreshFilter.addFileFilter(new AbstractFileFilter() {
             public boolean accept(AbstractFile file) {
-                return file.getURL().getScheme().equals(FileProtocols.S3);
+                return FileProtocols.S3.equals(file.getURL().getScheme());
             }
         });
     }
@@ -153,7 +153,7 @@ public class FolderChangeMonitor implements Runnable, WindowListener, LocationLi
         // Listen to window focus changes to know when a MainFrame gains focus and make sure
         // that only one instance of FolderChangeMonitor is registered per MainFrame (no need for both panels)
         WindowFocusListener[] listeners = folderPanel.getMainFrame().getJFrame().getWindowFocusListeners();
-        if (!Arrays.stream(listeners).anyMatch(l -> l instanceof FolderChangeMonitor))
+        if (Arrays.stream(listeners).noneMatch(FolderChangeMonitor.class::isInstance))
             folderPanel.getMainFrame().getJFrame().addWindowFocusListener(this);
 
         instances.add(this);

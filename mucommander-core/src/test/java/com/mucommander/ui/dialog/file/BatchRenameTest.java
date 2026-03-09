@@ -42,8 +42,8 @@ public class BatchRenameTest {
     private TestFile abcdef_ghi_jkl;
 
     private static class TestFile extends DummyFile {
-        private static long         date;
-        private        AbstractFile parent;
+        private static final long         date;
+        private final        AbstractFile parent;
 
         static {
             Calendar c = Calendar.getInstance();

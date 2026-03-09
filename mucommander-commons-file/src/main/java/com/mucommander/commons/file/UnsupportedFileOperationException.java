@@ -42,7 +42,7 @@ import java.io.IOException;
 public class UnsupportedFileOperationException extends IOException {
 
     /** The {@link FileOperation} this exception refers to */
-    private FileOperation op;
+    private final FileOperation op;
 
     /**
      * Creates a new <code>UnsupportedFileOperationException</code> corresponding to the specified {@link FileOperation}.

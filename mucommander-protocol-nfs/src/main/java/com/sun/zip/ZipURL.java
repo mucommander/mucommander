@@ -44,17 +44,17 @@ import java.net.MalformedURLException;
 
 public class ZipURL {
 
-    private String url;
-    private String protocol;
-    private String location;
+    private final String url;
+    private final String protocol;
+    private       String location;
     private String path;
 
     /*
      * Undocumented testing options
      */
     private int version;
-    private String proto;
-    private boolean pub = true;
+    private       String  proto;
+    private final boolean pub = true;
 
     public ZipURL(String url) throws MalformedURLException {
         int p, q, r;
@@ -78,7 +78,7 @@ public class ZipURL {
             if (p < r)
                 location = url.substring(p, r);
         } else {
-             q = p;
+            q = p;
         }
 
         if (q < end)
@@ -87,15 +87,15 @@ public class ZipURL {
     }
 
     public String getProtocol() {
-        return (protocol);
+        return protocol;
     }
 
     public String getLocation() {
-        return (location);
+        return location;
     }
 
     public String getPath() {
-        return (path);
+        return path;
     }
 
     public String toString() {
@@ -107,6 +107,6 @@ public class ZipURL {
         if (path != null)
             s += "/" + path;
 
-        return (s);
+        return s;
     }
 }

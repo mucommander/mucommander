@@ -52,7 +52,7 @@ public class CopyJob extends AbstractCopyJob {
     protected AbstractFile currentDestFile;
 
     /** Operating mode : COPY_MODE or DOWNLOAD_MODE */
-    private TransferMode mode;
+    private final TransferMode mode;
 
     public enum TransferMode {
         COPY,

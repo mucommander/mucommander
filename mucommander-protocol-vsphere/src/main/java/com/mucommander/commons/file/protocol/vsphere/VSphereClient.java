@@ -28,7 +28,6 @@ import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.xml.ws.BindingProvider;
 
 import org.slf4j.Logger;
@@ -58,8 +57,10 @@ import com.vmware.vim25.VimService;
  */
 public class VSphereClient implements Closeable {
 
-	public static final String TYPE_SERVICE_INSTANCE = "ServiceInstance";
-	private static Logger log = LoggerFactory.getLogger(VSphereClient.class);
+    private static final String SSL_INIT_PROBLEMS = "SSL init problems";
+
+	public static final  String TYPE_SERVICE_INSTANCE = "ServiceInstance";
+	private static final Logger log                   = LoggerFactory.getLogger(VSphereClient.class);
 
 	private final String server;
 	private final String user;
@@ -87,7 +88,7 @@ public class VSphereClient implements Closeable {
 	}
 
 	protected String getVSphereServiceUrl() {
-		if (StringUtils.isNullOrEmpty((server))) {
+		if (StringUtils.isNullOrEmpty(server)) {
 			log.warn("Can't construct vim service url, vSphere host name is empty");
 			throw new IllegalArgumentException();
 		}
@@ -169,19 +170,12 @@ public class VSphereClient implements Closeable {
 	}
 
 	private void doTrust() {
-		HostnameVerifier hv = new HostnameVerifier() {
-			@Override
-			public boolean verify(String urlHostName, SSLSession session) {
-				return true;
-			}
-		};
+		HostnameVerifier hv = (urlHostName, session) -> true;
 		try {
 			trustAllHttpsCertificates();
-		} catch (KeyManagementException e) {
+		} catch (KeyManagementException | NoSuchAlgorithmException e) {
 
-			throw new IllegalStateException("SSL init problems", e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new IllegalStateException("SSL init problems", e);
+			throw new IllegalStateException(SSL_INIT_PROBLEMS, e);
 		}
 		HttpsURLConnection.setDefaultHostnameVerifier(hv);
 	}
@@ -242,14 +236,13 @@ public class VSphereClient implements Closeable {
 		// PropertyFilterSpec is used to hold the ObjectSpec and
 		// PropertySpec for the call
 		PropertyFilterSpec pfSpec = new PropertyFilterSpec();
-		pfSpec.getPropSet().addAll(Arrays.asList(new PropertySpec[] { pSpec }));
-		pfSpec.getObjectSet().addAll(Arrays.asList(new ObjectSpec[] { oSpec }));
+		pfSpec.getPropSet().addAll(List.of(pSpec));
+		pfSpec.getObjectSet().addAll(List.of(oSpec));
 
 		// retrieveProperties() returns the properties
 		// selected from the PropertyFilterSpec
 		List<ObjectContent> ocs = vimPort.retrieveProperties(
-				serviceContent.getPropertyCollector(),
-				Arrays.asList(new PropertyFilterSpec[] { pfSpec }));
+				serviceContent.getPropertyCollector(), List.of(pfSpec));
 
 		// Return value, one object for each property specified
 		Object[] ret = new Object[properties.length];
@@ -261,7 +254,7 @@ public class VSphereClient implements Closeable {
 				if (dps != null) {
 					for (DynamicProperty dp : dps) {
 						// find property path index
-						for (int p = 0; p < ret.length; ++p) {
+						for (int p = 0; p < ret.length; p++) {
 							if (properties[p].equals(dp.getName())) {
 								ret[p] = dp.getVal();
 							}
@@ -295,15 +288,13 @@ public class VSphereClient implements Closeable {
 			sslsc.setSessionTimeout(0);
 			sc.init(null, trustAllCerts, null);
 			return sc;
-		} catch (KeyManagementException e) {
+		} catch (KeyManagementException | NoSuchAlgorithmException e) {
 
-			throw new IllegalStateException("SSL init problems", e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new IllegalStateException("SSL init problems", e);
+			throw new IllegalStateException(SSL_INIT_PROBLEMS, e);
 		}
 	}
 
-	private class TrustAllTrustManager implements javax.net.ssl.TrustManager,
+	private static class TrustAllTrustManager implements javax.net.ssl.TrustManager,
 			javax.net.ssl.X509TrustManager {
 
 		@Override

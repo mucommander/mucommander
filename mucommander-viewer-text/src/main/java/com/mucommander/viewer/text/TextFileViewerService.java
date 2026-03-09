@@ -59,22 +59,13 @@ public class TextFileViewerService implements FileViewerService, FileEditorServi
         }
 
         // Warn the user if the file looks like a binary file
-        InputStream in = null;
-        try {
-            in = file.getInputStream();
-            if (BinaryDetector.guessBinary(in)) {
-                return CanOpen.NO;
-            }
-        } catch (IOException e) {
-            // Not much to do
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e2) {
-                }
-            }
-        }
+		try (InputStream in = file.getInputStream()) {
+			if (BinaryDetector.guessBinary(in)) {
+				return CanOpen.NO;
+			}
+		} catch (IOException e) {
+			// Not much to do
+		}
 
         // Requires user confirmation that the file is larger than a certain size,
         // and as the whole file is loaded into memory (into JTextArea) it may be very slow or OOM

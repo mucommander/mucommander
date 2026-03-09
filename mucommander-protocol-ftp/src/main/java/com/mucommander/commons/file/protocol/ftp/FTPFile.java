@@ -84,11 +84,11 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     private org.apache.commons.net.ftp.FTPFile file;
 
-    private String absPath;
+    private final String absPath;
 
     private AbstractFile parent;
-    private boolean parentValSet;
-    private FilePermissions permissions;
+    private       boolean         parentValSet;
+    private final FilePermissions permissions;
 
     private boolean fileExists;
 
@@ -167,7 +167,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         }
         else {
             FTPConnectionHandler connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
-            org.apache.commons.net.ftp.FTPFile files[];
+            org.apache.commons.net.ftp.FTPFile[] files;
             try {
                 // Makes sure the connection is started, if not starts it
                 connHandler.checkConnection();
@@ -186,12 +186,10 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                 return null;
 
             // Find the file in the parent folder's contents
-            int nbFiles = files.length;
-            String wantedName = fileURL.getFilename();
-            for(int i=0; i<nbFiles; i++) {
-                if(files[i].getName().equalsIgnoreCase(wantedName))
-                    return files[i];
-            }
+			String wantedName = fileURL.getFilename();
+			for (org.apache.commons.net.ftp.FTPFile ftpFile : files) {
+				if (ftpFile.getName().equalsIgnoreCase(wantedName)) return ftpFile;
+			}
 
             // File doesn't exists
             return null;
@@ -222,7 +220,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
      * @throws AuthException if the user is not allowed to access this directory
      */
     private static org.apache.commons.net.ftp.FTPFile[] listFiles(FTPConnectionHandler connHandler, String absPath) throws IOException, AuthException {
-        org.apache.commons.net.ftp.FTPFile files[];
+        org.apache.commons.net.ftp.FTPFile[] files;
         try {
             // Important: the folder is listed by changing the current working directory using the CWD command and then
             // issuing a LIST to list the current directory, instead of issuing a LIST with the path as an argument.
@@ -337,8 +335,8 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                 // If server reported that the command is not supported, mark it in the ConnectionHandler so that
                 // we don't try it anymore
                 if(replyCode==FTPReply.UNRECOGNIZED_COMMAND
-                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED 
-                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
+                    || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED 
+                    || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
 
                     LOGGER.info("marking UTIME command as unsupported");
                     connHandler.utimeCommandSupported = false;
@@ -412,7 +410,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 
     @Override
     public void changePermission(PermissionAccess access, PermissionType permission, boolean enabled) throws IOException, UnsupportedFileOperationException {
-        changePermissions(ByteUtils.setBit(permissions.getIntValue(), (permission.toInt() << (access.toInt()*3)), enabled));
+        changePermissions(ByteUtils.setBit(permissions.getIntValue(), permission.toInt() << (access.toInt()*3), enabled));
     }
 
     /**
@@ -552,7 +550,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
     public AbstractFile[] ls() throws IOException {
         // Retrieve a ConnectionHandler and lock it
         FTPConnectionHandler connHandler = (FTPConnectionHandler)ConnectionPool.getConnectionHandler(this, fileURL, true);
-        org.apache.commons.net.ftp.FTPFile files[];
+        org.apache.commons.net.ftp.FTPFile[] files;
         try {
             // Makes sure the connection is started, if not starts it
             connHandler.checkConnection();
@@ -567,7 +565,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         if(files==null || files.length==0)
             return new AbstractFile[] {};
 
-        AbstractFile children[] = new AbstractFile[files.length];
+        AbstractFile[] children = new AbstractFile[files.length];
         AbstractFile child;
         FileURL childURL;
         String childName;
@@ -577,29 +575,26 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         if(!parentPath.endsWith(SEPARATOR))
             parentPath += SEPARATOR;
 
-        for(int i=0; i<nbFiles; i++) {
-            if(files[i]==null)
-                continue;
+		for (org.apache.commons.net.ftp.FTPFile ftpFile : files) {
+			if (ftpFile == null) continue;
 
-            childName = files[i].getName();
-            if(childName.equals(".") || childName.equals(".."))
-                continue;
+			childName = ftpFile.getName();
+			if (".".equals(childName) || "..".equals(childName)) continue;
 
-            // Note: properties and credentials are cloned for every children's url
-            childURL = (FileURL)fileURL.clone();
-            childURL.setPath(parentPath+childName);
+			// Note: properties and credentials are cloned for every children's url
+			childURL = (FileURL) fileURL.clone();
+			childURL.setPath(parentPath + childName);
 
-            // Discard '.' and '..' files
-            if(childName.equals(".") || childName.equals(".."))
-                continue;
+			// Discard '.' and '..' files
+			if (".".equals(childName) || "..".equals(childName)) continue;
 
-            child = FileFactory.getFile(childURL, this, Collections.singletonMap("parentFtpFile", files[i]));
-            children[fileCount++] = child;
-        }
+			child = FileFactory.getFile(childURL, this, Collections.singletonMap("parentFtpFile", ftpFile));
+			children[fileCount++] = child;
+		}
 
         // Create new array of the exact file count
         if(fileCount<nbFiles) {
-            AbstractFile newChildren[] = new AbstractFile[fileCount];
+            AbstractFile[] newChildren = new AbstractFile[fileCount];
             System.arraycopy(children, 0, newChildren, 0, fileCount);
             return newChildren;
         }
@@ -704,8 +699,8 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                 // If server reported that the command is not supported, mark it in the ConnectionHandler so that
                 // we don't try it anymore
                 if(replyCode==FTPReply.UNRECOGNIZED_COMMAND
-                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED
-                        || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
+                    || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED
+                    || replyCode==FTPReply.COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER) {
 
                     LOGGER.info("marking CHMOD command as unsupported");
                     connHandler.chmodCommandSupported = false;
@@ -1011,7 +1006,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             int nbRead = in.read(b, off, len);
 
             if(nbRead!=-1)
@@ -1122,7 +1117,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 //        private CustomFTPClient ftpClient;
 
         /** Controls whether passive mode should be used for data transfers (default is true) */
-        private boolean passiveMode;
+        private final boolean passiveMode;
 
         /** Encoding used by the FTP control connection */
         private String encoding;
@@ -1159,11 +1154,11 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
             // Use the passive mode property if it is set
             String passiveModeProperty = location.getProperty(PASSIVE_MODE_PROPERTY_NAME);
             // Passive mode is enabled by default if property isn't specified
-            this.passiveMode = passiveModeProperty==null || !passiveModeProperty.equals("false");
+            this.passiveMode = !"false".equals(passiveModeProperty);
 
             // Use the encoding property if it is set
             this.encoding = location.getProperty(ENCODING_PROPERTY_NAME);
-            if(encoding==null || encoding.equals(""))
+            if(encoding==null || encoding.isEmpty())
                 encoding = DEFAULT_ENCODING;
 
             // Use the property that controls the number of connection retries after a recoverable connection failure,
@@ -1308,7 +1303,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
 	                // configuration setting of the FTP server.
 	                ftpClient.setListHiddenFiles(FTPProtocolProvider.getForceHiddenFilesListing());
 	
-	                if(encoding.equalsIgnoreCase("UTF-8")) {
+	                if("UTF-8".equalsIgnoreCase(encoding)) {
 	                    // This command enables UTF8 on the remote server... but only a few FTP servers currently support this command
 	                    ftpClient.sendCommand("OPTS UTF8 ON");
 	                }
@@ -1322,7 +1317,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
                     // condition is temporary and the action may be requested again."
 	                int replyCode = ftpClient.getReplyCode();
                     if(!ftpClient.isConnected() || FTPReply.isNegativeTransient(replyCode)) {
-                        LOGGER.info((!ftpClient.isConnected()?"Connection error":"Temporary server error ("+replyCode+")")+", retries left="+retriesLeft, e);
+                        LOGGER.info((ftpClient.isConnected()?"Temporary server error ("+replyCode+")":"Connection error")+", retries left="+retriesLeft, e);
 
                         // Retry to connect, if we have at least an attempt left
                         if(retriesLeft>0) {
@@ -1410,7 +1405,7 @@ public class FTPFile extends ProtocolFile implements ConnectionHandlerFactory {
      */
     private static class FTPFilePermissions extends IndividualPermissionBits implements FilePermissions {
 
-        private org.apache.commons.net.ftp.FTPFile file;
+        private final org.apache.commons.net.ftp.FTPFile file;
 
         public FTPFilePermissions(org.apache.commons.net.ftp.FTPFile file) {
             this.file = file;

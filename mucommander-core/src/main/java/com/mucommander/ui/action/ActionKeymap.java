@@ -38,11 +38,11 @@ import com.mucommander.ui.main.MainFrame;
 public class ActionKeymap {
 
     /** Maps action id instances onto Keystroke instances */
-    private static Map<ActionId, KeyStroke> customPrimaryActionKeymap = new HashMap<>();
+    private static final Map<ActionId, KeyStroke> customPrimaryActionKeymap   = new HashMap<>();
     /** Maps action id instances onto alt Keystroke instances */
-    private static Map<ActionId, KeyStroke> customAlternateActionKeymap = new HashMap<>();
+    private static final Map<ActionId, KeyStroke> customAlternateActionKeymap = new HashMap<>();
     /** Maps Keystroke instances onto action id */
-    private static AcceleratorMap acceleratorMap = new AcceleratorMap();
+    private static final AcceleratorMap           acceleratorMap              = new AcceleratorMap();
 
     /******************
      * Public Methods *

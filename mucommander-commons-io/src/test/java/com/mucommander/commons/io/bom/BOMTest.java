@@ -148,7 +148,7 @@ public class BOMTest implements BOMConstants {
     // Helper methods //
     ////////////////////
 
-    private BOMInputStream getBOMInputStream(byte b[]) throws IOException {
+    private BOMInputStream getBOMInputStream(byte[] b) throws IOException {
         return new BOMInputStream(new ByteArrayInputStream(b));
     }
 
@@ -158,7 +158,7 @@ public class BOMTest implements BOMConstants {
         assert -1 == in.read();
     }
 
-    private void assertStreamEquals(byte bytes[], InputStream in) throws IOException {
+    private void assertStreamEquals(byte[] bytes, InputStream in) throws IOException {
         for (byte b : bytes)
             assert b == (byte) (in.read() & 0xFF);
 

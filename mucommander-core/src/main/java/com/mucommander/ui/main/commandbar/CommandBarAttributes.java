@@ -35,14 +35,14 @@ import com.mucommander.ui.action.ActionId;
 public class CommandBarAttributes {
 
     /** Command bar actions */
-    private static ActionId actionIds[];
+    private static ActionId[] actionIds;
     /** Command bar alternate actions */
-    private static ActionId alternateActionIds[];
+    private static ActionId[] alternateActionIds;
     /** Modifier key that triggers the display of alternate actions when pressed */
     private static KeyStroke modifier;
 
     /** Command bar default actions */
-    private static final ActionId DEFAULT_ACTION_IDS[] =
+    private static final ActionId[] DEFAULT_ACTION_IDS =
             {
                     ActionId.asCommandBarAction(ActionType.View.getId()),
                     ActionId.asCommandBarAction(ActionType.Edit.getId()),
@@ -54,7 +54,7 @@ public class CommandBarAttributes {
                     ActionId.asCommandBarAction(ActionType.CloseWindow.getId())
             };
     /** Command bar default alternate actions */
-    private static final ActionId DEFAULT_ALTERNATE_ACTION_IDS[] =
+    private static final ActionId[] DEFAULT_ALTERNATE_ACTION_IDS =
             {
                     null,
                     null,
@@ -66,10 +66,10 @@ public class CommandBarAttributes {
                     null
             };
     /** Default modifier key that triggers the display of alternate actions when pressed */
-    private static KeyStroke DEFAULT_MODIFIER = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
+    private static final KeyStroke  DEFAULT_MODIFIER             = KeyStroke.getKeyStroke(KeyEvent.VK_SHIFT, 0);
 
     /** Contains all registered command-bar attributes listeners, stored as weak references */
-    private static List<CommandBarAttributesListener> listeners = new ArrayList<>();
+    private static final List<CommandBarAttributesListener> listeners = new ArrayList<>();
 
     /**
      * This method restore the default command-bar attributes.
@@ -89,7 +89,7 @@ public class CommandBarAttributes {
             if (nbActions != DEFAULT_ACTION_IDS.length)
                 return false;
 
-            for (int i=0; i<nbActions; ++i)
+            for (int i=0; i<nbActions; i++)
                 if (!equals(actionIds[i], DEFAULT_ACTION_IDS[i]))
                     return false;
         }
@@ -100,7 +100,7 @@ public class CommandBarAttributes {
             if (nbAlternateActions != DEFAULT_ALTERNATE_ACTION_IDS.length)
                 return false;
 
-            for (int i=0; i<nbAlternateActions; ++i)
+            for (int i=0; i<nbAlternateActions; i++)
                 if (!equals(alternateActionIds[i], DEFAULT_ALTERNATE_ACTION_IDS[i]))
                     return false;
         }

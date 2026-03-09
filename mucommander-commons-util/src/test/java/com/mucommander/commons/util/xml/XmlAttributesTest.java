@@ -124,9 +124,9 @@ public class XmlAttributesTest {
      * Makes sure the specified attribute name has the right value.
      */
     private void checkAttribute(String name) {
-        if(name.equals(TEST_ATTRIBUTE_1))
+        if(TEST_ATTRIBUTE_1.equals(name))
             assert TEST_VALUE_1.equals(attributes.getValue(TEST_ATTRIBUTE_1));
-        else if(name.equals(TEST_ATTRIBUTE_2))
+        else if(TEST_ATTRIBUTE_2.equals(name))
             assert TEST_VALUE_2.equals(attributes.getValue(TEST_ATTRIBUTE_2));
         else
             throw new AssertionError();

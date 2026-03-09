@@ -289,7 +289,7 @@ public interface XFileAccessor {
      * @return number of bytes read - zero if none.
      * @exception java.io.IOException If an I/O error has occurred. 
      */ 
-    int read(byte b[], int off, int len, long foff) throws IOException;
+    int read(byte[] b, int off, int len, long foff) throws IOException;
 
 
     /**
@@ -301,7 +301,7 @@ public interface XFileAccessor {
      * @param foff the offset into the file
      * @exception java.io.IOException If an I/O error has occurred.
      */
-    void write(byte b[], int off, int len, long foff) throws IOException;
+    void write(byte[] b, int off, int len, long foff) throws IOException;
 
 
     /**

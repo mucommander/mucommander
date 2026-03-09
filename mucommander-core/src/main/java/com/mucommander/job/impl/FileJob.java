@@ -93,7 +93,7 @@ public abstract class FileJob implements com.mucommander.job.FileJob {
     private ProgressDialog progressDialog;
 
     /** Main frame on which the job is to be performed */ 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
     
     /** Base source folder */
     private AbstractFile baseSourceFolder;
@@ -123,10 +123,10 @@ public abstract class FileJob implements com.mucommander.job.FileJob {
     private FileJobState jobState = FileJobState.NOT_STARTED;
 
     /** List of registered FileJobListener stored as weak references */
-    private WeakHashMap<FileJobListener, ?> listeners = new WeakHashMap<FileJobListener, Object>();
+    private final WeakHashMap<FileJobListener, ?> listeners = new WeakHashMap<>();
     
     /** Information about this job progress */
-    private JobProgress jobProgress;
+    private final JobProgress jobProgress;
 
     /** True if the user asked to automatically skip errors */
     private boolean autoSkipErrors;

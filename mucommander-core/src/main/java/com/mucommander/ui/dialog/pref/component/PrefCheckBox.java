@@ -28,7 +28,7 @@ import com.mucommander.ui.dialog.pref.PreferencesDialog;
  */
 public class PrefCheckBox extends JCheckBox implements PrefComponent {
 
-    private Supplier<Boolean> conf;
+    private final Supplier<Boolean> conf;
 
     public PrefCheckBox(String description, Supplier<Boolean> conf) {
         super(description);

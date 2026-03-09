@@ -92,22 +92,23 @@ import com.mucommander.commons.runtime.OsFamily;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class FileFactory {
+    private static final String CAUGHT_AN_EXCEPTION = "Caught an exception";
     private static final Logger LOGGER = LoggerFactory.getLogger(FileFactory.class);
 
     /** All registered protocol providers. */
-    private static Hashtable<String, ProtocolProvider> protocolProviders = new Hashtable<String, ProtocolProvider>();
+    private static final Hashtable<String, ProtocolProvider> protocolProviders = new Hashtable<>();
 
     /** Local file provider to avoid hashtable lookups (faster). */
     private static ProtocolProvider localFileProvider;
 
     /** Vector of registered ArchiveFormatMapping instances */
-    private static Vector<ArchiveFormatProvider> archiveFormatProvidersV = new Vector<ArchiveFormatProvider>();
+    private static final Vector<ArchiveFormatProvider> archiveFormatProvidersV = new Vector<>();
 
     /** Array of registered FileProtocolMapping instances, for quicker access */
     private static ArchiveFormatProvider[] archiveFormatProviders = new ArchiveFormatProvider[0];
 
     /** Contains a FilePool instance for each registered scheme */
-    private static final HashMap<String, FilePool> FILE_POOL_MAP = new HashMap<String, FilePool>();
+    private static final HashMap<String, FilePool> FILE_POOL_MAP = new HashMap<>();
 
     /** System temp directory */
     private static final AbstractFile TEMP_DIRECTORY;
@@ -174,7 +175,7 @@ public class FileFactory {
 
         // Special case for local file provider.
         // Note that the local file provider is also added to the provider hashtable.
-        if(protocol.equals(LocalFile.SCHEMA))
+        if(LocalFile.SCHEMA.equals(protocol))
             localFileProvider = provider;
 
         return protocolProviders.put(protocol, provider);
@@ -193,7 +194,7 @@ public class FileFactory {
         FILE_POOL_MAP.remove(protocol);
 
         // Special case for local file provider
-        if(protocol.equals(LocalFile.SCHEMA))
+        if(LocalFile.SCHEMA.equals(protocol))
             localFileProvider = null;
 
         return protocolProviders.remove(protocol);
@@ -313,7 +314,7 @@ public class FileFactory {
     public static AbstractFile getFile(String absPath) {
         try {return getFile(absPath, null);}
         catch(IOException e) {
-            LOGGER.info("Caught an exception", e);
+            LOGGER.info(CAUGHT_AN_EXCEPTION, e);
             return null;
         }
     }
@@ -333,7 +334,7 @@ public class FileFactory {
     public static AbstractFile getFile(String absPath, boolean throwException) throws AuthException, IOException {
         try {return getFile(absPath, null);}
         catch(IOException e) {
-            LOGGER.info("Caught an exception", e);
+            LOGGER.info(CAUGHT_AN_EXCEPTION, e);
 
             if(throwException)
                 throw e;
@@ -365,7 +366,7 @@ public class FileFactory {
     public static AbstractFile getFile(FileURL fileURL) {
         try {return getFile(fileURL, null);}
         catch(IOException e) {
-            LOGGER.info("Caught an exception", e);
+            LOGGER.info(CAUGHT_AN_EXCEPTION, e);
             return null;
         }
     }
@@ -381,7 +382,7 @@ public class FileFactory {
     public static AbstractFile getFile(FileURL fileURL, boolean throwException) throws IOException {
         try {return getFile(fileURL, null);}
         catch(IOException e) {
-            LOGGER.info("Caught an exception", e);
+            LOGGER.info(CAUGHT_AN_EXCEPTION, e);
 
             if(throwException)
                 throw e;
@@ -458,8 +459,8 @@ public class FileFactory {
         String pathSeparator = fileURL.getPathSeparator();
 
         PathTokenizer pt = new PathTokenizer(filePath,
-                pathSeparator,
-                false);
+            pathSeparator,
+            false);
 
         AbstractFile currentFile = null;
         boolean lastFileResolved = false;
@@ -498,7 +499,7 @@ public class FileFactory {
                 }
                 else {          // currentFile is an AbstractArchiveFile
                     // Note: wrapArchive() is already called by AbstractArchiveFile#createArchiveEntryFile()
-                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
+                    AbstractFile tempEntryFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length()), pathSeparator));
                     if (tempEntryFile.isArchive()) {
                         currentFile = tempEntryFile;
                         lastFileResolved = true;
@@ -530,7 +531,7 @@ public class FileFactory {
                 filePool.put(currentFile.getURL(), currentFile);
             }
             else {          // currentFile is an AbstractArchiveFile
-                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length(), currentPath.length()), pathSeparator));
+                currentFile = ((AbstractArchiveFile)currentFile).getArchiveEntryFile(PathUtils.removeLeadingSeparator(currentPath.substring(currentFile.getURL().getPath().length()), pathSeparator));
                 // Note: don't cache the entry file
             }
         }
@@ -547,7 +548,7 @@ public class FileFactory {
 
         // Special case for local files to avoid provider hashtable lookup and other unnecessary checks
         // (for performance reasons)
-        if(scheme.equals(LocalFile.SCHEMA)) {
+        if(LocalFile.SCHEMA.equals(scheme)) {
             if(localFileProvider == null)
                 throw new IOException("Unknown file protocol: " + scheme);
 
@@ -609,7 +610,7 @@ public class FileFactory {
      * normal circumstances.
      */
     public static AbstractFile getTemporaryFile(String desiredFilename, boolean deleteOnExit) throws IOException {
-        if(desiredFilename==null || desiredFilename.equals(""))
+        if(desiredFilename==null || desiredFilename.isEmpty())
             desiredFilename = "temp";
         
         // Attempt to use the desired name

@@ -44,7 +44,7 @@ public class Shell32 {
     static {
         if(OsFamily.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
             try {
-                INSTANCE = (Shell32API)Native.loadLibrary("shell32", Shell32API.class, Shell32API.DEFAULT_OPTIONS);
+                INSTANCE = Native.loadLibrary("shell32", Shell32API.class, Shell32API.DEFAULT_OPTIONS);
             }
             catch(Throwable e) {
                 // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.

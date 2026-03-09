@@ -60,6 +60,7 @@ import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
  * @author Maxence Bernard
  */
 public class BrowseLocationThread extends ChangeFolderThread {
+    private static final String THIS_THREAD_HAS_BEEN_KILLED_RETURNING = "this thread has been killed, returning";
     private static final Logger LOGGER = LoggerFactory.getLogger(BrowseLocationThread.class);
 
     public enum BrowseLocationThreadAction implements DialogAction {
@@ -87,11 +88,11 @@ public class BrowseLocationThread extends ChangeFolderThread {
     private AbstractFile fileToSelect;
     private CredentialsMapping credentialsMapping;
 
-    private MainFrame mainFrame;
-    private FolderPanel folderPanel;
-    private LocationChanger locationChanger;
+    private final MainFrame   mainFrame;
+    private final FolderPanel folderPanel;
+    private final LocationChanger locationChanger;
 
-    private GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
+    private final GlobalLocationHistory globalHistory = GlobalLocationHistory.Instance();
 
     private boolean disposed;
 
@@ -99,7 +100,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
             MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager, LocationChanger locationChanger) {
         this(folder.getURL(), mainFrame, folderPanel, locationManager, locationChanger);
         // Ensure that we work on a raw file instance and not a cached one
-        this.folder = (folder instanceof CachedFile)?((CachedFile)folder).getProxiedFile():folder;
+        this.folder = folder instanceof CachedFile?((CachedFile)folder).getProxiedFile():folder;
         this.findWorkableFolder = findWorkableFolder;
         this.changeLockedTab = changeLockedTab;
     }
@@ -146,7 +147,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
      */
     private boolean followCanonicalPath(AbstractFile file) {
         return (MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS)
-                || file.getURL().getScheme().equals(FileProtocols.HTTP))
+                || FileProtocols.HTTP.equals(file.getURL().getScheme()))
                 && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false));
     }
 
@@ -213,7 +214,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
 
                         synchronized(KILL_LOCK) {
                             if(killed) {
-                                LOGGER.debug("this thread has been killed, returning");
+                                LOGGER.debug(THIS_THREAD_HAS_BEEN_KILLED_RETURNING);
                                 break;
                             }
                         }
@@ -347,7 +348,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
 
                     synchronized(KILL_LOCK) {
                         if(killed) {
-                            LOGGER.debug("this thread has been killed, returning");
+                            LOGGER.debug(THIS_THREAD_HAS_BEEN_KILLED_RETURNING);
                             break;
                         }
                     }
@@ -367,7 +368,7 @@ public class BrowseLocationThread extends ChangeFolderThread {
 
                     synchronized(KILL_LOCK) {
                         if(killed) {
-                            LOGGER.debug("this thread has been killed, returning");
+                            LOGGER.debug(THIS_THREAD_HAS_BEEN_KILLED_RETURNING);
                             break;
                         }
                         // From now on, thread cannot be killed (would comprise table integrity)
@@ -554,14 +555,14 @@ public class BrowseLocationThread extends ChangeFolderThread {
     private boolean isSftpWithPrivateKey() {
         boolean sftpWithPrivateKey = false;
         CredentialsMapping[] matchingCredentials = CredentialsManager.getMatchingCredentials(this.folderURL);
-        for (int i = 0; i < matchingCredentials.length; i++) {
-            boolean isSftp = matchingCredentials[i].getRealm().getScheme().equals(FileProtocols.SFTP);
-            boolean hasPrivateKey = matchingCredentials[i].getRealm().getProperty("privateKeyPath") != null;
-            sftpWithPrivateKey = isSftp && hasPrivateKey;
-            if (sftpWithPrivateKey) {
-                break;
-            }
-        }
+		for (CredentialsMapping matchingCredential : matchingCredentials) {
+			boolean isSftp        = FileProtocols.SFTP.equals(matchingCredential.getRealm().getScheme());
+			boolean hasPrivateKey = matchingCredential.getRealm().getProperty("privateKeyPath") != null;
+			sftpWithPrivateKey = isSftp && hasPrivateKey;
+			if (sftpWithPrivateKey) {
+				break;
+			}
+		}
         return sftpWithPrivateKey;
     }
 }

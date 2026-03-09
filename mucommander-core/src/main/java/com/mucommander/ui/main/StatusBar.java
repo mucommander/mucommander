@@ -42,7 +42,6 @@ import javax.swing.SwingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.conf.ConfigurationEvent;
 import com.mucommander.commons.conf.ConfigurationListener;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.border.MutableLineBorder;
@@ -89,16 +88,16 @@ import com.mucommander.ui.theme.ThemeManager;
 public class StatusBar extends JPanel {
 	private static final Logger LOGGER = LoggerFactory.getLogger(StatusBar.class);
 	
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     /** Label that displays info about current selected file(s) */
-    private JLabel selectedFilesLabel;
+    private final JLabel selectedFilesLabel;
 
     /** Icon used while loading is in progress. */
-    private SpinningDial dial;
+    private final SpinningDial dial;
 	
     /** Label that displays info about current volume (free/total space) */
-    private VolumeSpaceLabel volumeSpaceLabel;
+    private final VolumeSpaceLabel volumeSpaceLabel;
 
     /** Thread which auto updates volume info */
     private Thread autoUpdateThread;
@@ -128,10 +127,10 @@ public class StatusBar extends JPanel {
     private String volumePath;
 
     /** hold references to listeners that are stored with weak references to prevent them from being collected by the garbage collector */
-    private LocationListener locationListener;
-    private TableSelectionListener tableSelectionListener;
-    private ActivePanelListener activePanelListener;
-    private ThemeListener themeListener;
+    private final LocationListener       locationListener;
+    private final TableSelectionListener tableSelectionListener;
+    private final ActivePanelListener    activePanelListener;
+    private final ThemeListener          themeListener;
 
     static {
         // Initialize the size column format based on the configuration
@@ -140,13 +139,11 @@ public class StatusBar extends JPanel {
 
         // Listens to configuration changes and updates static fields accordingly.
         // Note: a reference to the listener must be kept to prevent it from being garbage-collected.
-        CONFIGURATION_ADAPTER = new ConfigurationListener() {
-            public synchronized void configurationChanged(ConfigurationEvent event) {
-                String var = event.getVariable();
+        CONFIGURATION_ADAPTER = event -> {
+            String var = event.getVariable();
 
-                if (var.equals(MuPreferences.DISPLAY_COMPACT_FILE_SIZE))
-                    setSelectedFileSizeFormat(event.getBooleanValue());
-            }
+            if (MuPreferences.DISPLAY_COMPACT_FILE_SIZE.equals(var))
+                setSelectedFileSizeFormat(event.getBooleanValue());
         };
         MuConfigurations.addPreferencesListener(CONFIGURATION_ADAPTER);
     }
@@ -293,7 +290,7 @@ public class StatusBar extends JPanel {
                     popupMenu.show(StatusBar.this, e.getX(), e.getY());
                     popupMenu.setVisible(true);
                 }
-            };
+            }
         };
         selectedFilesLabel.addMouseListener(mouseAdapter);
         volumeSpaceLabel.addMouseListener(mouseAdapter);
@@ -307,7 +304,7 @@ public class StatusBar extends JPanel {
                 // Invoked when the component has been made visible (apparently not called when just created)
                 // Status bar needs to be updated since it is not updated when not visible
                 updateStatusInfo();
-            };
+            }
         });
 
         // Initialises theme.
@@ -611,7 +608,7 @@ public class StatusBar extends JPanel {
             if(freeSpace==-1 || totalSpace==-1)
                 setToolTipText(null);       // Removes any previous tooltip
             else
-                setToolTipText(""+(int)(100*freeSpace/(float)totalSpace)+"%");
+                setToolTipText((int)(100*freeSpace/(float)totalSpace)+"%");
 
             repaint();
         }

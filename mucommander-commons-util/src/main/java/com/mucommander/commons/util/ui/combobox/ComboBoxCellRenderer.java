@@ -33,8 +33,8 @@ public class ComboBoxCellRenderer implements ListCellRenderer {
     private Color backgroundColor;
     private Color selectedTextColor;
     private Color selectedBackgroundColor;
-    private Font  font;
-    private JLabel label;
+    private       Font   font;
+    private final JLabel label;
 
     public ComboBoxCellRenderer() {
         label = new JLabel();

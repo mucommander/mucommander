@@ -104,7 +104,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         characters.setLength(0);
 
-        if(qName.equals(ELEMENT_CREDENTIALS)) {
+        if(ELEMENT_CREDENTIALS.equals(qName)) {
             // Reset parsing variables
             url = null;
             urlProperties = null;
@@ -112,13 +112,13 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             password = null;
         }
         // Property element (properties will be set when credentials element ends
-        else if(qName.equals(ELEMENT_PROPERTY)) {
+        else if(ELEMENT_PROPERTY.equals(qName)) {
             if(urlProperties==null)
-                urlProperties = new Hashtable<String, String>();
+                urlProperties = new Hashtable<>();
             urlProperties.put(attributes.getValue(ATTRIBUTE_NAME), attributes.getValue(ATTRIBUTE_VALUE));
         }
         // Root element, the 'encryption' attribute specifies which encoding was used to encrypt passwords
-        else if(qName.equals(ELEMENT_ROOT)) {
+        else if(ELEMENT_ROOT.equals(qName)) {
             encryptionMethod = attributes.getValue("encryption");
             version = attributes.getValue(ATTRIBUTE_VERSION);
         }
@@ -126,7 +126,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(qName.equals(ELEMENT_CREDENTIALS)) {
+        if(ELEMENT_CREDENTIALS.equals(qName)) {
             if(url ==null || login ==null || password ==null) {
                 LOGGER.info("Missing value, credentials ignored: url="+ url +" login="+ login);
                 return;
@@ -148,15 +148,15 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
             // Add credentials to persistent credentials list
             CredentialsManager.getPersistentCredentialMappings().add(new CredentialsMapping(new Credentials(login, password), url, true));
         }
-        else if(qName.equals(ELEMENT_URL)) {
+        else if(ELEMENT_URL.equals(qName)) {
             try {url = FileURL.getFileURL(characters.toString().trim());}
             catch(MalformedURLException e) {
                 LOGGER.info("Malformed URL: "+characters+", location will be ignored");
             }
         }
-        else if(qName.equals(ELEMENT_LOGIN))
+        else if(ELEMENT_LOGIN.equals(qName))
             login = characters.toString().trim();
-        else if(qName.equals(ELEMENT_PASSWORD))
+        else if(ELEMENT_PASSWORD.equals(qName))
             password = characters.toString().trim();
     }
 

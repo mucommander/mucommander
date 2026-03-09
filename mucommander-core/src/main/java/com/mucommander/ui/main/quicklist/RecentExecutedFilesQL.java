@@ -29,7 +29,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.TempExecJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowRecentExecutedFilesQLAction;
 import com.mucommander.ui.dialog.file.ProgressDialog;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
@@ -43,9 +42,9 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  */
 
 public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
-	private static LinkedList<AbstractFile> list = new LinkedList<AbstractFile>();
-	private static final int MAX_NUM_OF_ELEMENTS = 10;
-	private FolderPanel folderPanel;
+	private static final LinkedList<AbstractFile> list                = new LinkedList<>();
+	private static final int                      MAX_NUM_OF_ELEMENTS = 10;
+	private final        FolderPanel folderPanel;
 	
 	public RecentExecutedFilesQL(FolderPanel folderPanel) {
 		super(folderPanel, ActionProperties.getActionLabel(ActionType.ShowRecentExecutedFilesQL), Translator.get("recent_executed_files_quick_list.empty_message"));
@@ -57,7 +56,7 @@ public class RecentExecutedFilesQL extends QuickListWithIcons<AbstractFile> {
     protected void acceptListItem(AbstractFile item) {
 		MainFrame mainFrame = WindowManager.getCurrentMainFrame();
 
-		if(item.getURL().getScheme().equals(LocalFile.SCHEMA) && (item.hasAncestor(LocalFile.class))) {
+		if(LocalFile.SCHEMA.equals(item.getURL().getScheme()) && (item.hasAncestor(LocalFile.class))) {
             try { DesktopManager.open(item); }
             catch(IOException e) {}
         }

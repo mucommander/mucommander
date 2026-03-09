@@ -144,17 +144,15 @@ class XFurl {
                     p2 = len;
                 String component = rpath.substring(p1, p2);
 
-                if (component.equals(".") || component.equals("")) {
+                if (".".equals(component) || component.isEmpty()) {
                     // ignore
-                } else if (component.equals("..")) {
+                } else if ("..".equals(component)) {
                     int q = bpath.lastIndexOf("/");
                     bpath = q < 0 ? "" : bpath.substring(0, q);
-                } else {
-                    if (bpath.equals(""))
-                        bpath = component;
-                    else
-                        bpath += "/" + component;
-                }
+                } else if ("".equals(bpath))
+                    bpath = component;
+                else
+                    bpath += "/" + component;
                 p1 = p2 + 1;
             }
             path = bpath;
@@ -162,20 +160,20 @@ class XFurl {
     }
 
     String getProtocol() {
-        return (protocol);
+        return protocol;
     }
 
     String getLocation() {
-        return (location);
+        return location;
     }
 
     String getPath() {
-        return (path);
+        return path;
     }
 
     String getParent() {
 
-        if (path.equals(""))
+        if ("".equals(path))
             return null;	// no parent
 
         String s = protocol + ":";
@@ -204,6 +202,6 @@ class XFurl {
         if (path != null)
             s += "/" + path;
 
-        return (s);
+        return s;
     }
 }

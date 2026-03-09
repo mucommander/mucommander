@@ -65,7 +65,7 @@ public class GrowlNotifier extends AbstractNotifier {
             "end tell";
 
     static {
-        NOTIFICATION_KEYS = new Hashtable<NotificationType, String>();
+        NOTIFICATION_KEYS = new Hashtable<>();
         NOTIFICATION_KEYS.put(NotificationType.JOB_COMPLETED, "progress_dialog.job_finished");
         NOTIFICATION_KEYS.put(NotificationType.JOB_ERROR, "progress_dialog.job_error");
     }
@@ -110,7 +110,7 @@ public class GrowlNotifier extends AbstractNotifier {
 
             // Nothing else to do if the application has already been registered
             if(isRegistered)
-                return (isEnabled = true);
+                return isEnabled = true;
 
             // Test if Growl is currently running and abort if it is not
             if(!isGrowlRunning()) {
@@ -126,14 +126,14 @@ public class GrowlNotifier extends AbstractNotifier {
                 "{"+
                     "\""+Translator.get(NOTIFICATION_KEYS.get(NotificationType.JOB_COMPLETED))+"\","+
                     "\""+Translator.get(NOTIFICATION_KEYS.get(NotificationType.JOB_ERROR))+"\""+
-                "}";
+                    "}";
 
             // Register muCommander with Growl, declare the notifications types and enable all of them by default
             isRegistered = tellGrowl(
                 "register as application \""+APP_NAME+"\""+
-                " all notifications "+notificationTypes+
-                " default notifications "+notificationTypes+
-                " icon of application \""+APP_NAME+"\"");
+                    " all notifications "+notificationTypes+
+                    " default notifications "+notificationTypes+
+                    " icon of application \""+APP_NAME+"\"");
 
             LOGGER.info(isRegistered?
                 "Successfully registered "+APP_NAME+" with Growl":
@@ -142,13 +142,13 @@ public class GrowlNotifier extends AbstractNotifier {
             return isEnabled = isRegistered;
         }
         else {
-            return (isEnabled = false);
+            return isEnabled = false;
         }
     }
 
     public static boolean isGrowlRunning() {
         StringBuilder outputBuffer = new StringBuilder();
-        return AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && outputBuffer.toString().trim().equals("true");
+        return AppleScript.execute(IS_GROWL_RUNNING_APPLESCRIPT, outputBuffer) && "true".equals(outputBuffer.toString().trim());
     }
 
     @Override

@@ -72,7 +72,7 @@ public abstract class Archiver {
     public final static int TAR_XZ_FORMAT = 7;
 
     /** Boolean array describing for each format if it can store more than one entry */
-    private final static boolean SUPPORTS_MANY_ENTRIES[] = {
+    private final static boolean[] SUPPORTS_MANY_ENTRIES = {
         true,
         false,
         false,
@@ -84,7 +84,7 @@ public abstract class Archiver {
     };
 	
     /** Array of single entry formats: many entries formats are considered to be single entry formats as well */
-    private final static int SINGLE_ENTRY_FORMATS[] = {
+    private final static int[] SINGLE_ENTRY_FORMATS = {
         ZIP_FORMAT,
         GZ_FORMAT,
         BZ2_FORMAT,
@@ -96,7 +96,7 @@ public abstract class Archiver {
     };
 
     /** Array of many entries formats */
-    private final static int MANY_ENTRIES_FORMATS[] = {
+    private final static int[] MANY_ENTRIES_FORMATS = {
         ZIP_FORMAT,
         TAR_FORMAT,
         TAR_GZ_FORMAT,
@@ -105,7 +105,7 @@ public abstract class Archiver {
     };
 	
     /** Array of format names */
-    private final static String FORMAT_NAMES[] = {
+    private final static String[] FORMAT_NAMES = {
         "Zip",
         "Gzip",
         "Bzip2",
@@ -117,7 +117,7 @@ public abstract class Archiver {
     };
 
     /** Array of format extensions */
-    private final static String FORMAT_EXTENSIONS[] = {
+    private final static String[] FORMAT_EXTENSIONS = {
         "zip",
         "gz",
         "bz2",

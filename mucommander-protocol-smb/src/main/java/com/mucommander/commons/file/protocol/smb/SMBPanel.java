@@ -39,12 +39,12 @@ import java.net.MalformedURLException;
  */
 public class SMBPanel extends ServerPanel {
 
-    private JTextField domainField;
-    private JTextField serverField;
-    private JTextField shareField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JCheckBox useLegacyCheckbox;
+    private final JTextField domainField;
+    private final JTextField serverField;
+    private final JTextField shareField;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final JCheckBox      useLegacyCheckbox;
 
     private static String lastDomain = "";
     private static String lastServer = "";
@@ -114,7 +114,7 @@ public class SMBPanel extends ServerPanel {
 
         // Insert the domain (if any) before the username, separated by a semicolon
         String userInfo = lastUsername;
-        if(!lastDomain.equals(""))
+        if(!"".equals(lastDomain))
             userInfo = lastDomain+";"+userInfo;
 
         url.setCredentials(new Credentials(userInfo, lastPassword));

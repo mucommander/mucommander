@@ -37,7 +37,7 @@ public class ClipboardNotifier implements FlavorListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClipboardNotifier.class);
 	
     /** The action to dynamically enable/disable */
-    private Action action;
+    private final Action action;
 
     /**
      * Starts monitoring the clipboard for files and dynamically enable/disable the specified action accordingly.

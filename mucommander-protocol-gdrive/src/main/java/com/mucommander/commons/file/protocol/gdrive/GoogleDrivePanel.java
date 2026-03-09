@@ -63,16 +63,17 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
     // TODO: find a better way to load icons from plugins
     private static final String GOOGLE_ACCOUNT_ICON_PATH = "/images/file/google.png";
 
-    private JTextField accountAlias;
-    private JButton signingIn;
-    private JLabel displayName;
-    private JLabel emailAddress;
-    private JLabel signingInInstructions;
-    private LocalServerReceiver receiver;
+    private final JTextField accountAlias;
+    private final JButton    signingIn;
+    private final JLabel     displayName;
+    private final JLabel  emailAddress;
+    private final JLabel signingInInstructions;
+    private       LocalServerReceiver receiver;
     private LoginPhase loginPhase;
-    private Credential credential;
-    private ImageIcon googleIcon;
-    private JLabel accountLabel, accountAliasLabel;
+    private       Credential credential;
+    private final ImageIcon  googleIcon;
+    private final JLabel     accountLabel;
+	private final JLabel    accountAliasLabel;
 
     enum LoginPhase {
         SIGN_IN,
@@ -93,7 +94,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
 
         emailAddress = new JLabel(" ");
         displayName = new JLabel(" ");
-        accountLabel = new JLabel(Translator.get(("server_connect_dialog.account")));
+        accountLabel = new JLabel(Translator.get("server_connect_dialog.account"));
         addRow(accountLabel, displayName, 5);
         addRow("", emailAddress, 15);
 
@@ -146,7 +147,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
         switch(loginPhase) {
         case SIGN_IN:
             setLoginPhase(LoginPhase.CANCEL_SIGN_IN, false);
-            SwingUtilities.invokeLater(() -> {
+            SwingUtilities.invokeLater(() ->
                 new Thread(() ->  {
                     receiver = new LocalServerReceiver();
                     About about;
@@ -155,7 +156,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
                         try (GoogleDriveClient client = new GoogleDriveClient(credential)) {
                             client.connect();
                             about = client.getConnection().about().get().setFields("user").execute();
-                        };
+                        }
                     } catch (IOException | GeneralSecurityException e) {
                         LOGGER.warn("failed to sign in to Google account", e);
                         return;
@@ -170,8 +171,7 @@ public class GoogleDrivePanel extends ServerPanel implements ActionListener {
                     setLoginPhase(LoginPhase.SIGN_IN, true);
                     accountAlias.requestFocus();
                     accountAlias.selectAll();
-                }).start();
-            });
+                }).start());
             break;
         case CANCEL_SIGN_IN:
             setLoginPhase(LoginPhase.SIGN_IN, false);

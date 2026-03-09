@@ -50,7 +50,7 @@ class QuickListWithEmptyMsg extends QuickList {
 	
 	@Override
 	public void getFocus(){
-		SwingUtilities.invokeLater(() -> requestFocus());
+		SwingUtilities.invokeLater(this::requestFocus);
 	}
 	
 	private void addKeyListenerToList() {		

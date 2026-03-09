@@ -56,7 +56,7 @@ public class HelpButton extends JButton {
      * @param helpTopic the help topic this button will open when clicked, <code>null</code> to open the base documentation URL
      */
     public HelpButton(MainFrame mainFrame, String helpTopic) {
-        Map<String, Object> properties = new Hashtable<String, Object>();
+        Map<String, Object> properties = new Hashtable<>();
 
         GoToDocumentationAction action = new GoToDocumentationAction(mainFrame, properties);
         setAction(action);

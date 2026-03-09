@@ -48,7 +48,7 @@ import java.util.Vector;
 class IsoParser {
     private static final Logger LOGGER = LoggerFactory.getLogger(IsoParser.class);
     public static Vector<IsoArchiveEntry> getEntries(byte[] buffer, RandomAccessInputStream rais, int sectSize, long sector_offset, long shiftOffset) throws Exception {
-        Vector<IsoArchiveEntry> entries = new Vector<IsoArchiveEntry>();
+        Vector<IsoArchiveEntry> entries = new Vector<>();
 
         Calendar calendar = Calendar.getInstance();
         int start = 16;
@@ -142,8 +142,8 @@ class IsoParser {
     }
 
 
-    private static void newString(byte b[], int len, int level, StringBuffer name) throws Exception {
-        name.append((level == 0) ? new String(b, 0, len) : new String(b, 0, len, "UnicodeBigUnmarked"));
+    private static void newString(byte[] b, int len, int level, StringBuffer name) throws Exception {
+        name.append(level == 0 ? new String(b, 0, len) : new String(b, 0, len, "UnicodeBigUnmarked"));
     }
 
     public static todo parse_dir(todo todo_idr, String rootname, int extent, int len, RandomAccessInputStream rais, byte[] buffer, Vector<IsoArchiveEntry> entries, int sectSize, int level, long shiftOffset, long sector_offset, Calendar calendar) throws Exception {
@@ -205,7 +205,7 @@ class IsoParser {
                 boolean dir = false;
                 String n = name_buf.toString();
                 if (!(".".equals(n) || "..".equals(n))) {
-                    StringBuffer name = new StringBuffer(rootname);
+                    StringBuilder name = new StringBuilder(rootname);
                     name.append(n);
 
                     if (S_ISDIR(fstat_buf.st_mode)) {
@@ -220,19 +220,19 @@ class IsoParser {
                     // positive for time zones east of Greenwich, and negative for time zones
                     calendar.setTimeZone(new java.util.SimpleTimeZone(15 * 60 * 1000 * idr.date[6], ""));
                     entries.add(
-                            new IsoArchiveEntry(
-                                    name.toString(),
-                                    dir,
-                                    calendar.getTimeInMillis(),
-                                    fstat_buf.st_size,
-                                    isonum_733(idr.extent) - sector_offset,
-                                    sectSize,
-                                    shiftOffset,
-                                    false)
+                        new IsoArchiveEntry(
+                            name.toString(),
+                            dir,
+                            calendar.getTimeInMillis(),
+                            fstat_buf.st_size,
+                            isonum_733(idr.extent) - sector_offset,
+                            sectSize,
+                            shiftOffset,
+                            false)
                     );
                 }
 
-                i += (buffer[i] & 0xff);
+                i += buffer[i] & 0xff;
                 if (i > IsoUtil.MODE1_2048 - idr.s_length) break;
             }
         }
@@ -242,24 +242,24 @@ class IsoParser {
 
     // ======================================
     private static int ISODCL(int start, int end) {
-        return (end - start + 1);
+        return end - start + 1;
     }
 
-    private static int isonum_731(byte p[]) {
+    private static int isonum_731(byte[] p) {
         return IsoUtil.toDwordBE(p, 0);
     }
 
-    public static int isonum_733(byte p[]) {
-        return (isonum_731(p));
+    public static int isonum_733(byte[] p) {
+        return isonum_731(p);
     }
 
     private static boolean S_ISDIR(int m) {
-        return ((m & S_IFDIR) == S_IFDIR);
+        return (m & S_IFDIR) == S_IFDIR;
     }
 
     // ======================================
-    private static int S_IFREG = 0100000;
-    private static int S_IFDIR = 0040000;
+    private static final int S_IFREG = 0100000;
+    private static final int S_IFDIR = 0040000;
 
     private static class stat {
         int st_size;
@@ -288,11 +288,11 @@ class IsoParser {
 
         public int s_length = 34;
 
-        public byte dataDr[][] = {length, ext_attr_length, extent, size,
+        public byte[][] dataDr = {length, ext_attr_length, extent, size,
                 date, flags, file_unit_size, interleave,
                 volume_sequence_number, name_len, name};
 
-        public isoDr(byte src[], int pos) {
+        public isoDr(byte[] src, int pos) {
             for (int i = 0, max = dataDr.length; i < max; i++) {
                 int l = dataDr[i].length;
                 if ((src.length - pos) < dataDr[i].length && i == 10)
@@ -338,7 +338,7 @@ class IsoParser {
         public byte[] application_data = new byte[ISODCL(884, 1395)];
         public byte[] unused5 = new byte[ISODCL(1396, IsoUtil.MODE1_2048)];
 
-        byte dataPvr[][] = {type, id, version, unused1,
+        byte[][] dataPvr = {type, id, version, unused1,
                 system_id, volume_id, unused2, volume_space_size,
                 unused3, volume_set_size, volume_sequence_number, logical_block_size,
                 path_table_size, type_l_path_table, opt_type_l_path_table, type_m_path_table,
@@ -355,7 +355,7 @@ class IsoParser {
             load(pvd);
         }
 
-        void load(byte src[]) {
+        void load(byte[] src) {
             for (int i = 0, pos = 0, max = dataPvr.length; i < max; i++) {
                 System.arraycopy(src, pos, dataPvr[i], 0, dataPvr[i].length);
                 pos += dataPvr[i].length;

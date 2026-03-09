@@ -111,7 +111,7 @@ class BinaryViewer extends BinaryBase implements FileViewer {
 
     @Override
     public void close() {
-        Objects.requireNonNull(((FileBinaryData) binaryComponent.getCodeArea().getContentData())).close();
+        Objects.requireNonNull((FileBinaryData) binaryComponent.getCodeArea().getContentData()).close();
     }
 
     @Nonnull

@@ -38,7 +38,7 @@ import com.mucommander.ui.main.MainFrame;
  * @author Arik Hadas
  */
 public class OpenAsMenu extends JMenu {
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     /**
      * Creates a new Open As menu.

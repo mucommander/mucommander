@@ -33,16 +33,15 @@ import javax.swing.event.DocumentListener;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.commons.util.ui.text.MultiLineLabel;
 import com.mucommander.job.ui.DialogResult;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.main.MainFrame;
 
 public class ArchivePasswordDialog extends FocusDialog implements ActionListener, DialogResult {
 
-    private JTextField passwordField;
+    private final JTextField passwordField;
 
-    private JButton okButton;
+    private final JButton okButton;
 
     private String password;
 

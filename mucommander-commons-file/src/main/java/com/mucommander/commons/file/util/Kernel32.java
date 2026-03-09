@@ -39,7 +39,7 @@ public class Kernel32 {
     static {
         if(OsFamily.WINDOWS.isCurrent()) {        // Don't even bother if we're not running Windows
             try {
-                INSTANCE = (Kernel32API)Native.loadLibrary("Kernel32", Kernel32API.class, Kernel32API.DEFAULT_OPTIONS);
+                INSTANCE = Native.loadLibrary("Kernel32", Kernel32API.class, Kernel32API.DEFAULT_OPTIONS);
             }
             catch(Throwable e) {
                 // java.lang.UnsatisfiedLinkError is thrown if the CPU architecture is not supported by JNA.

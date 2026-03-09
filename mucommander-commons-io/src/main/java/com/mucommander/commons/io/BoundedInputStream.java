@@ -38,9 +38,9 @@ import java.io.InputStream;
  */
 public class BoundedInputStream extends FilterInputStream implements Bounded {
 
-    private long totalRead;
-    private long allowedBytes;
-    private boolean throwStreamOutOfBoundException;
+    private       long    totalRead;
+    private final long    allowedBytes;
+    private final boolean throwStreamOutOfBoundException;
 
     /**
      * Creates a new <code>BoundedInputStream</code> over the specified stream, allowing a maximum of
@@ -112,12 +112,12 @@ public class BoundedInputStream extends FilterInputStream implements Bounded {
     }
 
     @Override
-    public int read(byte b[]) throws IOException {
+    public int read(byte[] b) throws IOException {
         return read(b, 0, b.length);
     }
 
     @Override
-    public synchronized int read(byte b[], int off, int len) throws IOException {
+    public synchronized int read(byte[] b, int off, int len) throws IOException {
         int canRead = (int)Math.min(getRemainingBytes(), len);
         if(canRead==0)
             return handleStreamOutOfBound();

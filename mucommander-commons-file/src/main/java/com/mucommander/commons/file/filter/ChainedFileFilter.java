@@ -35,7 +35,7 @@ import java.util.Vector;
 public abstract class ChainedFileFilter extends AbstractFileFilter {
 
     /** List of registered FileFilter */
-    protected Vector<FileFilter> filters = new Vector<FileFilter>();
+    protected Vector<FileFilter> filters = new Vector<>();
 
     /**
      * Creates a new <code>ChainedFileFilter</code> operating in non-inverted mode and containing the specified filters,

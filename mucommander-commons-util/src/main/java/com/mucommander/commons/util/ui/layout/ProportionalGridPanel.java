@@ -29,8 +29,8 @@ import javax.swing.JPanel;
  */
 public class ProportionalGridPanel extends JPanel {
 
-    private int nbColumns;
-    private GridBagConstraints gbc;
+    private final int                nbColumns;
+    private final GridBagConstraints gbc;
 
     public ProportionalGridPanel(int nbColumns) {
         this(nbColumns, getDefaultGridBagConstraints());

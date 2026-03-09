@@ -306,7 +306,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
      * @return number of bytes read; -1 if EOF
      * @exception IOException If an I/O error has occurred. 
      */ 
-    public int read(byte b[], int off, int len, long foff)
+    public int read(byte[] b, int off, int len, long foff)
         throws IOException {
 
         if (raf == null)
@@ -321,7 +321,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
         if (c > 0)
             fp += c;
 
-        return (c);
+        return c;
     }
 
 
@@ -334,7 +334,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
      * @param foff the offset into the file
      * @exception IOException If an I/O error has occurred.
      */
-    public void write(byte b[], int off, int len, long foff)
+    public void write(byte[] b, int off, int len, long foff)
         throws IOException {
 
         if (raf == null)

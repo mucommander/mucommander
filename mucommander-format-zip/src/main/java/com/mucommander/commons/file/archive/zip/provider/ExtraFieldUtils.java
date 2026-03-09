@@ -38,7 +38,7 @@ public class ExtraFieldUtils {
     /**
      * Static registry of known extra fields.
      */
-    private static Hashtable<ZipShort, Class<? extends ZipExtraField>> implementations;
+    private static final Hashtable<ZipShort, Class<? extends ZipExtraField>> implementations;
 
     static {
         implementations = new Hashtable<>();
@@ -59,11 +59,11 @@ public class ExtraFieldUtils {
             ZipExtraField ze = c.newInstance();
             implementations.put(ze.getHeaderId(), c);
         } catch (ClassCastException cc) {
-            throw new RuntimeException(c + " doesn\'t implement ZipExtraField");
+            throw new RuntimeException(c + " doesn't implement ZipExtraField");
         } catch (InstantiationException ie) {
             throw new RuntimeException(c + " is not a concrete class");
         } catch (IllegalAccessException ie) {
-            throw new RuntimeException(c + "\'s no-arg constructor is not public");
+            throw new RuntimeException(c + "'s no-arg constructor is not public");
         }
     }
 
@@ -98,7 +98,7 @@ public class ExtraFieldUtils {
         int start = 0;
         while (start <= data.length - 4) {
             ZipShort headerId = new ZipShort(data, start);
-            int length = (new ZipShort(data, start + 2)).getValue();
+            int length = new ZipShort(data, start + 2).getValue();
             if (start + 4 + length > data.length) {
                 throw new ZipException("data starting at " + start
                     + " is in unknown format");
@@ -107,12 +107,10 @@ public class ExtraFieldUtils {
                 ZipExtraField ze = createExtraField(headerId);
                 ze.parseFromLocalFileData(data, start + 4, length);
                 v.addElement(ze);
-            } catch (InstantiationException ie) {
+            } catch (InstantiationException | IllegalAccessException ie) {
                 throw new ZipException(ie.getMessage());
-            } catch (IllegalAccessException iae) {
-                throw new ZipException(iae.getMessage());
             }
-            start += (length + 4);
+			start += length + 4;
         }
         if (start != data.length) { // array not exhausted
             throw new ZipException("data starting at " + start
@@ -143,7 +141,7 @@ public class ExtraFieldUtils {
                     0, result, start + 2, 2);
             byte[] local = d.getLocalFileDataData();
             System.arraycopy(local, 0, result, start + 4, local.length);
-            start += (local.length + 4);
+            start += local.length + 4;
         }
         return result;
     }
@@ -167,7 +165,7 @@ public class ExtraFieldUtils {
                     0, result, start + 2, 2);
             byte[] local = d.getCentralDirectoryData();
             System.arraycopy(local, 0, result, start + 4, local.length);
-            start += (local.length + 4);
+            start += local.length + 4;
         }
         return result;
     }

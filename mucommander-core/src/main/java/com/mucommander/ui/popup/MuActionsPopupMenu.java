@@ -35,7 +35,7 @@ import com.mucommander.ui.main.MainFrame;
 public abstract class MuActionsPopupMenu extends JPopupMenu {
 
 	/** Parent MainFrame instance */
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
     
     public MuActionsPopupMenu(MainFrame mainFrame) {
     	this.mainFrame = mainFrame;

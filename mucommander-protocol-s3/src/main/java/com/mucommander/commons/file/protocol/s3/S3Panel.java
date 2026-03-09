@@ -43,15 +43,15 @@ import com.mucommander.text.Translator;
  */
 public class S3Panel extends ServerPanel {
 
-    private JTextField serverField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JTextField initialDirField;
-    private JSpinner portSpinner;
-    private JComboBox<String> storageType;
-    private JTextField locationField;
-    private JCheckBox dnsBuckets;
-    private JCheckBox secureHttp;
+    private final JTextField serverField;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final JTextField     initialDirField;
+    private final JSpinner       portSpinner;
+    private final JComboBox<String> storageType;
+    private final JTextField        locationField;
+    private final JCheckBox         dnsBuckets;
+    private final JCheckBox  secureHttp;
 
     private static String lastServer = "s3.amazonaws.com";
     private static String lastUsername = "";

@@ -121,7 +121,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
     protected void createEntriesTree() throws IOException, UnsupportedFileOperationException {
         // TODO: this method is not thread-safe and needs to be synchronized
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
-        archiveEntryFiles = new WeakHashMap<ArchiveEntry, AbstractArchiveEntryFile>();
+        archiveEntryFiles = new WeakHashMap<>();
 
         long start = System.currentTimeMillis();
         try (ArchiveEntryIterator entries = getEntryIterator()) {
@@ -229,7 +229,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * underlying file protocol.
      */
     private AbstractFile[] ls(DefaultMutableTreeNode treeNode, AbstractFile parentFile, FilenameFilter filenameFilter, FileFilter fileFilter) throws IOException, UnsupportedFileOperationException {
-        AbstractFile files[];
+        AbstractFile[] files;
         int nbChildren = treeNode.getChildCount();
 
         // No FilenameFilter, create entry files and store them directly into an array
@@ -242,7 +242,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         }
         // Use provided FilenameFilter and temporarily store created entry files that match the filter in a Vector
         else {
-            Vector<AbstractFile> filesV = new Vector<AbstractFile>();
+            Vector<AbstractFile> filesV = new Vector<>();
             for(int c=0; c<nbChildren; c++) {
                 ArchiveEntry entry = (ArchiveEntry)(((DefaultMutableTreeNode)treeNode.getChildAt(c)).getUserObject());
                 if(!filenameFilter.accept(entry.getName()))
@@ -272,7 +272,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
         // If the parent file's separator is not '/' (the default entry separator), replace '/' occurrences by
         // the parent file's separator. For local files Under Windows, this allows entries' path to have '\' separators.
         String fileSeparator = getSeparator();
-        if(!fileSeparator.equals("/"))
+        if(!"/".equals(fileSeparator))
             entryPath = entryPath.replace("/", fileSeparator);
 
         // Cache AbstractArchiveEntryFile instances so that there is only one AbstractArchiveEntryFile corresponding to 

@@ -166,7 +166,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 // - '/' and OS doesn't use root drives (Unix-style path)
                 // - a drive letter and OS uses root drives (Windows-style) [support both C:\ and C:/ style]
                 // - a ~ character (refers to the user home folder)
-                if ((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || url.startsWith("~/") || url.equals("~")) {
+                if ((!LocalFile.USES_ROOT_DRIVES && url.startsWith("/")) || url.startsWith("~/") || "~".equals(url)) {
                     handleLocalFilePath(url, fileURL);
 
                     // All done, return
@@ -251,7 +251,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 else
                     password = null;
 
-                if(!"".equals(login) || !(password==null || "".equals(password)))
+                if(!"".equals(login) || !(password==null || password.isEmpty()))
                     fileURL.setCredentials(new Credentials(login, password));
 
                 // Advance string index
@@ -265,7 +265,7 @@ public class DefaultSchemeParser implements SchemeParser {
             if(colonPos!=-1) {
                 host = authority.substring(pos, colonPos);
                 String portString = authority.substring(colonPos+1);
-                if(!portString.equals("")) {        // Tolerate an empty port part (e.g. http://mucommander.com:/)
+                if(!portString.isEmpty()) {        // Tolerate an empty port part (e.g. http://mucommander.com:/)
                     try {
                         fileURL.setPort(Integer.parseInt(portString));
                     }
@@ -278,7 +278,7 @@ public class DefaultSchemeParser implements SchemeParser {
                 host = authority.substring(pos);
             }
 
-            if(host.equals(""))
+            if(host.isEmpty())
                 host = null;
 
             fileURL.setHost(host);
@@ -288,7 +288,7 @@ public class DefaultSchemeParser implements SchemeParser {
             String path = url.substring(pos, questionMarkPos==-1?urlLen:questionMarkPos);
 
             // Empty path means '/'
-            if (path.equals("")) {
+            if (path.isEmpty()) {
                 LOGGER.info("Warning: path should not be empty, url={}", url);
                 path = "/";
             }

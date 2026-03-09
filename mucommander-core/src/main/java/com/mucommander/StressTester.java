@@ -72,7 +72,7 @@ public class StressTester implements Runnable, ActionListener {
 
             try {
                 AbstractFile parentFolder = currentFolder.getParent();
-                AbstractFile children[] = currentFolder.ls();
+                AbstractFile[] children = currentFolder.ls();
                 // 1 in 3 chance to go up if folder has children
                 if(children.length==0 || (random.nextInt(3)==0 && parentFolder!=null)) {
                     fileTable.selectRow(0);
@@ -113,7 +113,7 @@ public class StressTester implements Runnable, ActionListener {
      * @param args command line arguments.
      * @throws IOException if an unrecoverable error occurred during startup
      */
-    public static void main(String args[]) throws IOException {
+    public static void main(String[] args) throws IOException {
 //        muCommander.main(args);
 
         StressTester instance = new StressTester();

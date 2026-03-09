@@ -140,7 +140,7 @@ public class FileURL implements Cloneable {
     private final static SchemeHandler DEFAULT_HANDLER = new DefaultSchemeHandler();
 
     /** Maps schemes (String) onto SchemeHandler instances */
-    private final static Hashtable<String, SchemeHandler> handlers = new Hashtable<String, SchemeHandler>();
+    private final static Hashtable<String, SchemeHandler> handlers = new Hashtable<>();
 
     /** String designating the localhost */
     public final static String LOCALHOST = "localhost";
@@ -328,13 +328,13 @@ public class FileURL implements Cloneable {
      * @return the filename extracted from the given path, <code>null</code> if the path doesn't contain any
      */
     public static String getFilenameFromPath(String path, String separator) {
-        if(path.equals("") || path.equals("/"))
+        if("".equals(path) || "/".equals(path))
             return null;
 
         // Remove any trailing separator
         path = PathUtils.removeTrailingSeparator(path, separator);
 
-        if(!separator.equals("/"))
+        if(!"/".equals(separator))
             path = PathUtils.removeLeadingSeparator(path, "/");
 
         // Extract filename
@@ -556,7 +556,7 @@ public class FileURL implements Cloneable {
      * @see #getPath()
      */
     public void setPath(String path) {
-        if(path==null || path.equals(""))
+        if(path==null || path.isEmpty())
             path = "/";
 
         if(!path.startsWith("/"))
@@ -595,7 +595,7 @@ public class FileURL implements Cloneable {
      */
     public FileURL getParent() {
         // If path equals '/', url has no parent
-        if(!(path.equals("/") || path.equals(""))) {
+        if(!("/".equals(path) || "".equals(path))) {
             String separator = getPathSeparator();
 
             // Remove any trailing separator
@@ -618,7 +618,7 @@ public class FileURL implements Cloneable {
 
                 // Copy properties to parent (if any)
                 if(properties!=null)
-                    parentURL.properties = new Hashtable<String, String>(properties);
+                    parentURL.properties = new Hashtable<>(properties);
 
                 return parentURL;
             }
@@ -705,7 +705,7 @@ public class FileURL implements Cloneable {
     public void setProperty(String name, String value) {
         // Create the property hashtable only when a property is set for the first time
         if(properties==null)
-            properties = new Hashtable<String, String>();
+            properties = new Hashtable<>();
 
         if(value==null)
             properties.remove(name);
@@ -755,7 +755,7 @@ public class FileURL implements Cloneable {
      * @return a string representation of this <code>FileURL</code>
      */
     public String toString(boolean includeCredentials, boolean maskPassword) {
-        StringBuffer sb = new StringBuffer(scheme);
+        StringBuilder sb = new StringBuilder(scheme);
         sb.append("://");
 
         if(includeCredentials && credentials!=null) {
@@ -792,7 +792,7 @@ public class FileURL implements Cloneable {
             sb.append(port);
         }
 
-        if(host!=null || !path.equals("/"))	{ // Test to avoid URLs like 'smb:///'
+        if(host!=null || !"/".equals(path))	{ // Test to avoid URLs like 'smb:///'
             if(path.startsWith("/")) {
                 sb.append(path);
             }
@@ -882,7 +882,7 @@ public class FileURL implements Cloneable {
         int standardPort = getStandardPort();
 
         return port1==port2 ||
-            (standardPort==url.getStandardPort() && ((port1==-1 && port2==standardPort || (port2==-1 && port1==standardPort))));
+            (standardPort==url.getStandardPort() && (port1==-1 && port2==standardPort || (port2==-1 && port1==standardPort)));
     }
 
     /**
@@ -900,7 +900,7 @@ public class FileURL implements Cloneable {
      * @return <code>true</code> if the path of this URL and the given URL are equal
      */
     public boolean pathEquals(FileURL url) {
-    	boolean isCaseSensitiveOS = !(OsFamily.getCurrent().equals(OsFamily.WINDOWS) || OsFamily.getCurrent().equals(OsFamily.OS_2));
+    	boolean isCaseSensitiveOS = !(OsFamily.getCurrent() == OsFamily.WINDOWS || OsFamily.getCurrent() == OsFamily.OS_2);
     	
         String path1 = isCaseSensitiveOS ? this.getPath() : this.getPath().toLowerCase();
         String path2 = isCaseSensitiveOS ? url.getPath() : url.getPath().toLowerCase();
@@ -999,7 +999,7 @@ public class FileURL implements Cloneable {
 
         // Mutable fields
         if(properties!=null)    // Copy properties (if any)
-            clonedURL.properties = new Hashtable<String, String>(properties);
+            clonedURL.properties = new Hashtable<>(properties);
 
         // Caches
         clonedURL.hashCode = hashCode;
@@ -1049,7 +1049,7 @@ public class FileURL implements Cloneable {
      * @return true if both FileURL instances are equal
      */
     public boolean equals(Object o, boolean compareCredentials, boolean compareProperties) {
-        if(o==null || !(o instanceof FileURL))
+        if(!(o instanceof FileURL))
             return false;
 
         FileURL url = (FileURL)o;

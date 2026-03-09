@@ -25,7 +25,6 @@ import com.mucommander.commons.file.FileURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Objects;
 
@@ -46,14 +45,14 @@ public class PathUtils {
     public static class ResolvedDestination {
 
         /** The destination AbstractFile, may be a regular file or a folder */
-        private AbstractFile file;
+        private final AbstractFile file;
 
         /** The destination's folder, the file itself for {@link #EXISTING_FOLDER}, the destination file's parent for
          * other types */
-        private AbstractFile folder;
+        private final AbstractFile folder;
 
         /** The destination type, see {@link DestinationType} */
-        private DestinationType type;
+        private final DestinationType type;
 
         /**
          * Creates a new <code>ResolvedDestination</code> with the specified destination file and type.
@@ -209,7 +208,7 @@ public class PathUtils {
             FileURL baseFolderURL = baseFolder.getURL();
             destURL  = (FileURL)baseFolderURL.clone();
             String basePath = destURL.getPath();
-            if(!destPath.equals(""))
+            if(!destPath.isEmpty())
                 destURL.setPath(basePath + (basePath.endsWith(separator)?"":separator) + destPath);
 
             // At this point we have the proper URL, except that the path may contain '.', '..' or '~' tokens.
@@ -430,7 +429,7 @@ public class PathUtils {
      * @return the depth of the given path
      */
     public static int getDepth(String path, String separator) {
-        if(path.equals("") || path.equals(separator))
+        if("".equals(path) || path.equals(separator))
             return 0;
 
         int depth = 1;

@@ -30,7 +30,7 @@ import java.util.List;
  * @author Mariusz Jakubowski
  */
 public class BatchRenameJob extends MoveJob {
-    private List<String> newNames;
+    private final List<String> newNames;
 
     public BatchRenameJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, List<String> newNames) {
         super(progressDialog, mainFrame, files, files.getBaseFolder(), null, FileCollisionDialog.FileCollisionAction.ASK, true);

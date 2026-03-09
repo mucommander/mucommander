@@ -87,28 +87,25 @@ public class TerminalIntegration {
         this.mainFrame = mainFrame;
         this.verticalSplitPane = verticalSplitPane;
         prepareVerticalSplitPaneForTerminal();
-        shellConfigurationListener = new ConfigurationListener() {
-            @Override
-            public void configurationChanged(ConfigurationEvent event) {
-                switch (event.getVariable()) {
-                case MuPreferences.CUSTOM_SHELL:
-                    if (!MuConfigurations.getPreferences().getVariable(
-                            MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL)) {
-                        return;
-                    }
-                case MuPreferences.USE_CUSTOM_SHELL:
-                    if (terminal != null) {
-                        terminal.close();
-                        // if the terminal is not visible, it will be set with the selected shell when we show it.
-                        // otherwise, we need to refresh it. however, it seems we can't discover whether the terminal
-                        // had the focus before updating the configuration so in this case we show the terminal anyway.
-                        if (terminal.isVisible()) {
-                            SwingUtilities.invokeLater(TerminalIntegration.this::showTerminal);
-                        }
-                    }
-                }
-            }
-        };
+        shellConfigurationListener = event -> {
+			switch (event.getVariable()) {
+			case MuPreferences.CUSTOM_SHELL:
+				if (!MuConfigurations.getPreferences().getVariable(
+						MuPreference.USE_CUSTOM_SHELL, MuPreferences.DEFAULT_USE_CUSTOM_SHELL)) {
+					return;
+				}
+			case MuPreferences.USE_CUSTOM_SHELL:
+				if (terminal != null) {
+					terminal.close();
+					// if the terminal is not visible, it will be set with the selected shell when we show it.
+					// otherwise, we need to refresh it. however, it seems we can't discover whether the terminal
+					// had the focus before updating the configuration so in this case we show the terminal anyway.
+					if (terminal.isVisible()) {
+						SwingUtilities.invokeLater(TerminalIntegration.this::showTerminal);
+					}
+				}
+			}
+		};
         MuConfigurations.addPreferencesListener(shellConfigurationListener);
     }
 
@@ -254,7 +251,7 @@ public class TerminalIntegration {
 
         try {
             // https://stackoverflow.com/a/27432464/1715521
-            BasicSplitPaneUI splitUI = ((BasicSplitPaneUI) splitPane.getUI());
+            BasicSplitPaneUI splitUI = (BasicSplitPaneUI) splitPane.getUI();
             splitPane.setToolTipText(tooltip);
 
             splitUI.getDivider().addMouseListener(new MouseAdapter() {

@@ -27,6 +27,7 @@ package sun.net.www;
 
 import java.io.*;
 import java.net.FileNameMap;
+import java.security.PrivilegedAction;
 import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -35,12 +36,12 @@ import java.util.StringTokenizer;
 @SuppressWarnings("removal")
 public class MimeTable implements FileNameMap {
     /** Keyed by content type, returns MimeEntries */
-    private Hashtable<String, MimeEntry> entries
-        = new Hashtable<String, MimeEntry>();
+    private final Hashtable<String, MimeEntry> entries
+        = new Hashtable<>();
 
     /** Keyed by file extension (with the .), returns MimeEntries */
-    private Hashtable<String, MimeEntry> extensionMap
-        = new Hashtable<String, MimeEntry>();
+    private final Hashtable<String, MimeEntry> extensionMap
+        = new Hashtable<>();
 
     // Will be reset if in the platform-specific data file
     private static String tempFileTemplate;
@@ -77,14 +78,11 @@ public class MimeTable implements FileNameMap {
         static final MimeTable defaultInstance = getDefaultInstance();
 
         static MimeTable getDefaultInstance() {
-            return java.security.AccessController.doPrivileged(
-                new java.security.PrivilegedAction<MimeTable>() {
-                public MimeTable run() {
-                    MimeTable instance = new MimeTable();
-                    URLConnection.setFileNameMap(instance);
-                    return instance;
-                }
-            });
+            return java.security.AccessController.doPrivileged((PrivilegedAction<MimeTable>) () -> {
+				MimeTable instance = new MimeTable();
+				URLConnection.setFileNameMap(instance);
+				return instance;
+			});
         }
     }
 
@@ -120,7 +118,7 @@ public class MimeTable implements FileNameMap {
     public synchronized void add(MimeEntry m) {
         entries.put(m.getType(), m);
 
-        String exts[] = m.getExtensions();
+        String[] exts = m.getExtensions();
         if (exts == null) {
             return;
         }

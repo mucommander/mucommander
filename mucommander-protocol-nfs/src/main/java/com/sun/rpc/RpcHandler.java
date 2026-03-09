@@ -37,8 +37,6 @@
 
 package com.sun.rpc;
 
-import java.io.*;
-
 /**
  *  This handler is implemented by the RPC application
  *  if it wishes to be notifed of retransmissions.

@@ -29,8 +29,8 @@ class CommandAssociation {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Command associated to this file name filter. */
-    private Command    command;
-    private FileFilter fileFilter;
+    private final Command    command;
+    private final FileFilter fileFilter;
 
 
 

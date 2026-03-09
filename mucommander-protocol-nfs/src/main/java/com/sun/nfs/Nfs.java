@@ -40,7 +40,6 @@ package com.sun.nfs;
 import java.io.*;
 import com.sun.rpc.*;
 import java.util.Hashtable;
-import java.util.Vector;
 
 /**
  *
@@ -70,8 +69,8 @@ public abstract class Nfs {
     Buffer[] bufferList;
     long cacheTime;		// Time when object was cached
     int rsize, wsize;
-    private Object wbLock = new Object(); // write-behind semaphore lock
-    static Hashtable cacheNfs = new Hashtable();
+    private final Object    wbLock   = new Object(); // write-behind semaphore lock
+    static        Hashtable cacheNfs = new Hashtable();
 
     // Some of the filetypes we're dealing with.
 
@@ -164,7 +163,7 @@ public abstract class Nfs {
      * Get FileHandle for Nfs Object
      */
     byte[] getFH() {
-	return (fh);
+	return fh;
     }
 
     /*
@@ -184,7 +183,7 @@ public abstract class Nfs {
      * @returns		The object - or null if not cached
      */
     static Nfs cache_get(String server, String name) {
-        return ((Nfs)cacheNfs.get(server + ":" + name));
+        return (Nfs)cacheNfs.get(server + ":" + name);
     }
 
     /*
@@ -193,7 +192,7 @@ public abstract class Nfs {
      * @param n	the object to be removed from cache
      */
     static void cache_remove(Nfs n, String name) {
-	if (n.name.equals(".")) 
+	if (".".equals(n.name)) 
        	    cacheNfs.remove(n.rpc.conn.server + ":" + name);
 	else
             cacheNfs.remove(n.rpc.conn.server + ":" + n.name + "/" + name);
@@ -357,7 +356,7 @@ public abstract class Nfs {
 	    bytesRead += cc;
         }
 
-        return (bytesRead);
+        return bytesRead;
     }
 
     /*
@@ -396,7 +395,7 @@ public abstract class Nfs {
      * @param foffset	File offset to begin writing at
      * @exception	java.io.IOException
      */
-    synchronized void write(byte buf[], int boff, int length, long foffset)
+    synchronized void write(byte[] buf, int boff, int length, long foffset)
 	throws IOException {
 
         /*
@@ -632,22 +631,20 @@ public abstract class Nfs {
 
                         bufferList[i] = null;		// release buffer
                         b.exit();
+                    }
+					/*
+					 * Have to rewrite.
+					 *
+					 * If flushing then do sync-writes because
+					 * we can't return until the data are safe.
+					 * Otherwise, we just fire off another async
+					 * write and have it committed later.
+					 */
+					else if (flushing) {
+                        b.startUnload(SYNC);
+                        b.waitUnloaded();
                     } else {
-
-			/*
-			 * Have to rewrite.
-			 *
-			 * If flushing then do sync-writes because
-			 * we can't return until the data are safe.
-			 * Otherwise, we just fire off another async
-			 * write and have it committed later.
-			 */
-                        if (flushing) {
-                            b.startUnload(SYNC);
-                            b.waitUnloaded();
-                        } else {
-                            b.startUnload(ASYNC);
-                        }
+                        b.startUnload(ASYNC);
                     }
                 }
             } // end for

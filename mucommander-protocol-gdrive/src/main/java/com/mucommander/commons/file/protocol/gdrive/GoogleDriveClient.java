@@ -50,12 +50,12 @@ import java.util.List;
  */
 public class GoogleDriveClient implements Closeable {
 
-    private static Logger log = LoggerFactory.getLogger(GoogleDriveClient.class);
+    private static final Logger log = LoggerFactory.getLogger(GoogleDriveClient.class);
 
     private static final String APPLICATION_NAME = "muCommander";
 
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private static final List<String> SCOPES = Arrays.asList(DriveScopes.DRIVE_FILE);
+    private static final List<String> SCOPES = List.of(DriveScopes.DRIVE_FILE);
 //            DriveScopes.DRIVE, DriveScopes.DRIVE_FILE, DriveScopes.DRIVE_METADATA);
 
     private static final String CLIENT_ID = "";

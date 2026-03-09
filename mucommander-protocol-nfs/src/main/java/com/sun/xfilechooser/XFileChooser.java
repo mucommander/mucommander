@@ -117,7 +117,7 @@ public class XFileChooser extends JFileChooser implements PropertyChangeListener
      *                   or directory
      */
     public XFileChooser(XFile currentDirectory) {
-	this((currentDirectory == null) ? ((String) null) : currentDirectory.getAbsolutePath());
+	this(currentDirectory == null ? ((String) null) : currentDirectory.getAbsolutePath());
 	addPropertyChangeListener(this);
     }
 
@@ -132,7 +132,7 @@ public class XFileChooser extends JFileChooser implements PropertyChangeListener
     public void propertyChange(PropertyChangeEvent e) {
         String prop = e.getPropertyName();
 	Object obj = e.getNewValue();
-	if ((obj == null) || (! (obj instanceof BeanXFile)))
+	if ((!(obj instanceof BeanXFile)))
             return;
 
 	BeanXFile bf = (BeanXFile) obj;
@@ -167,7 +167,7 @@ public class XFileChooser extends JFileChooser implements PropertyChangeListener
      * @return the XFile object of the current directory
      * @see #setCurrentXDirectory    */
     public XFile getCurrentXDirectory() {
-	return(currentXDirectory);
+	return currentXDirectory;
     }
 
     /**
@@ -208,7 +208,7 @@ public class XFileChooser extends JFileChooser implements PropertyChangeListener
      * @return the XFile object of the selected file
      */
     public XFile getSelectedXFile() {
-	return (selectedXFile);
+	return selectedXFile;
     }
 
     /**
@@ -287,7 +287,7 @@ public class XFileChooser extends JFileChooser implements PropertyChangeListener
 	} catch (Exception e) {
 	    selectedXFileInputStream = null;
 	}
-	return(selectedXFileInputStream);
+	return selectedXFileInputStream;
     }
     
     /**
@@ -325,7 +325,7 @@ public class XFileChooser extends JFileChooser implements PropertyChangeListener
     /**
      *  Used only for testing of bean
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 	XFileChooser xfb = new XFileChooser();
 	xfb.showDialog(new JFrame(), "ajacob");
 

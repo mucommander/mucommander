@@ -47,8 +47,8 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class BonjourMenu extends JMenu implements MenuListener {
 
-    private MainFrame mainFrame;
-    private FolderPanel folderPanel;
+    private final MainFrame   mainFrame;
+    private final FolderPanel folderPanel;
 
     /**
      * Creates a new instance of <code>BonjourMenu</code>.
@@ -93,21 +93,20 @@ public class BonjourMenu extends JMenu implements MenuListener {
         removeAll();
 
         if(BonjourDirectory.isActive()) {
-            BonjourService services[] = BonjourDirectory.getServices();
-            int nbServices = services.length;
+            BonjourService[] services = BonjourDirectory.getServices();
 
-            if(nbServices>0) {
+			if(services.length >0) {
                 // Add a menu item for each Bonjour service.
                 // When clicked, the corresponding URL will opened in the active table.
                 JMenuItem menuItem;
                 MnemonicHelper mnemonicHelper = new MnemonicHelper();
 
-                for(int i=0; i<nbServices; i++) {
-                    menuItem = new JMenuItem(getMenuItemAction(services[i]));
-                    menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
+				for (BonjourService service : services) {
+					menuItem = new JMenuItem(getMenuItemAction(service));
+					menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
 
-                    add(menuItem);
-                }
+					add(menuItem);
+				}
             }
             else {
                 // Inform that no service have been discovered

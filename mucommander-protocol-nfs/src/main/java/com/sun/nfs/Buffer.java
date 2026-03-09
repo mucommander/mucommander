@@ -38,7 +38,6 @@
 package com.sun.nfs;
 
 import java.io.*;
-import com.sun.rpc.*;
 
 /**
  * Here we do all the NFS read and write buffering.
@@ -393,7 +392,7 @@ public class Buffer extends Thread {
     }
 
     public String toString() {
-        return (nfs.name + " @ " + foffset + " for " + buflen);
+        return nfs.name + " @ " + foffset + " for " + buflen;
     }
 
 //    protected void finalize() throws Throwable {

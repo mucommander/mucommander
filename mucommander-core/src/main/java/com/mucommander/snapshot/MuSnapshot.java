@@ -546,7 +546,7 @@ public class MuSnapshot {
     MuSnapshot() {
         configuration = new Configuration(
                 MuSnapshotFile.getSnapshotFile(),
-                () -> new XmlConfigurationReader(),
+                XmlConfigurationReader::new,
                 out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
 		
 		try {
@@ -606,7 +606,7 @@ public class MuSnapshot {
     	configuration.setVariable(WINDOWS_SELECTION, indexOfSelectedWindow);
     	
     	// Save attributes for each window
-    	for (int i=0; i<nbMainFrames; ++i)
+    	for (int i=0; i<nbMainFrames; i++)
     		setFrameAttributes(mainFrames.get(i), i);
     	
     	if (screenSize != null) {
@@ -651,7 +651,7 @@ public class MuSnapshot {
     	configuration.setVariable(getRecentLocationsCountVariable(), locations.size());
     	
     	Iterator<FileURL> iterator = locations.iterator();
-    	for (int i=0; iterator.hasNext(); ++i)
+    	for (int i=0; iterator.hasNext(); i++)
     		configuration.setVariable(getRecentLocationVariable(i), iterator.next().toString());
     }
 

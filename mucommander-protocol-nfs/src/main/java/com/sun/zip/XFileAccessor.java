@@ -78,7 +78,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
             zipList = zf.entries();
             path = zu.getPath();
 
-            if (path != null && !path.equals("")) {
+            if (path != null && !path.isEmpty()) {
                 ze = zf.getEntry(path);
                 if (ze == null) {
                     path += "/";
@@ -328,7 +328,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
      * @return number of bytes read; -1 if EOF
      * @exception IOException If an I/O error has occurred. 
      */ 
-    public int read(byte b[], int off, int len, long foff)
+    public int read(byte[] b, int off, int len, long foff)
         throws IOException {
 
         if (iStream == null)
@@ -343,7 +343,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
         if (c > 0)
             fp += c;
 
-        return (c);
+        return c;
     }
 
 
@@ -356,7 +356,7 @@ public class XFileAccessor implements com.sun.xfile.XFileAccessor {
      * @param foff the offset into the file
      * @exception IOException If an I/O error has occurred.
      */
-    public void write(byte b[], int off, int len, long foff)
+    public void write(byte[] b, int off, int len, long foff)
         throws IOException {
 
         throw new IOException("write not supported");

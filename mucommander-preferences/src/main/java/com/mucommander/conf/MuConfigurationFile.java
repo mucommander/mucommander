@@ -24,13 +24,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.charset.Charset;
 
 import com.mucommander.commons.conf.ConfigurationSource;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.io.backup.BackupInputStream;
 import com.mucommander.io.backup.BackupOutputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * This abstract package-protected class represents configuration file of muCommander as configuration source 
@@ -118,7 +119,7 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      * @return an input stream on the configuration file.
      */
     public synchronized Reader getReader() throws IOException {
-        return new InputStreamReader(new BackupInputStream(getConfigurationFile()), Charset.forName("utf-8"));
+        return new InputStreamReader(new BackupInputStream(getConfigurationFile()), UTF_8);
     }
 
     /**
@@ -126,7 +127,7 @@ abstract class MuConfigurationFile implements ConfigurationSource {
      * @return an output stream on the configuration file.
      */
     public synchronized Writer getWriter() throws IOException {
-        return new OutputStreamWriter(new BackupOutputStream(getConfigurationFile()), Charset.forName("utf-8"));
+        return new OutputStreamWriter(new BackupOutputStream(getConfigurationFile()), UTF_8);
     }
     
 	public boolean isExists() throws IOException {

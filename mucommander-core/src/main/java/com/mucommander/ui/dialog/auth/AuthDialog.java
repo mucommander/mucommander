@@ -68,26 +68,26 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
     // Identical to SMBProtocolProvider.PROPERTY_SMB_USE_LEGACY
     public static final String PROPERTY_SMB_USE_LEGACY = "useLegacy";
 
-    private JButton okButton;
-    private JButton cancelButton;
+    private final JButton okButton;
+    private final JButton cancelButton;
 
     private JRadioButton guestRadioButton;
     private JRadioButton userRadioButton;
 
-    private JTextField loginField;
-    private EditableComboBox loginComboBox;
+    private final JTextField       loginField;
+    private       EditableComboBox loginComboBox;
 
-    private JPasswordField passwordField;
+    private final JPasswordField passwordField;
 
-    private JCheckBox saveCredentialsCheckBox;
-    private JCheckBox useLegacyCheckbox;
+    private final JCheckBox saveCredentialsCheckBox;
+    private       JCheckBox useLegacyCheckbox;
 
     private CredentialsMapping selectedCredentialsMapping;
     private boolean guestCredentialsSelected;
 
-    private FileURL fileURL;
+    private final FileURL fileURL;
 
-    private CredentialsMapping[] credentialsMappings;
+    private final CredentialsMapping[] credentialsMappings;
 
     // Dialog size constraints
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);
@@ -202,7 +202,7 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
         yPanel.add(compPanel);
 
-        if (fileURL.getScheme().equals(FileProtocols.SMB)) {
+        if (FileProtocols.SMB.equals(fileURL.getScheme())) {
             if (useLegacy == null) {
                 String useLegacyStr = fileURL.getProperty(PROPERTY_SMB_USE_LEGACY);
                 useLegacy = useLegacyStr == null || Boolean.parseBoolean(useLegacyStr);
@@ -304,25 +304,24 @@ public class AuthDialog extends FocusDialog implements ActionListener, EditableC
 
             // Look for an existing matching CredentialsMapping instance to re-use the realm which may contain
             // connection properties.
-            int nbCredentials = credentialsMappings.length;
-            CredentialsMapping cm;
-            for(int i=0; i<nbCredentials; i++) {
-                cm = credentialsMappings[i];
-                if(cm.getCredentials().equals(enteredCredentials, true)) {  // Comparison must be password-sensitive
-                    // Create a new CredentialsMapping instance in case the 'isPersistent' flag has changed.
-                    // (original credentials may have originally been added as 'volatile' and then made persistent by
-                    // ticking the checkbox, or vice-versa)
+			CredentialsMapping cm;
+			for (CredentialsMapping credentialsMapping : credentialsMappings) {
+				cm = credentialsMapping;
+				if (cm.getCredentials().equals(enteredCredentials, true)) {  // Comparison must be password-sensitive
+					// Create a new CredentialsMapping instance in case the 'isPersistent' flag has changed.
+					// (original credentials may have originally been added as 'volatile' and then made persistent by
+					// ticking the checkbox, or vice-versa)
 
-                    // Copy the useLegacy property to make sure it persists
-                   var smbUseLegacyProperty = fileURL.getProperty(PROPERTY_SMB_USE_LEGACY);
-                    if (smbUseLegacyProperty != null) {
-                        cm.getRealm().setProperty(PROPERTY_SMB_USE_LEGACY, smbUseLegacyProperty);
-                    }
+					// Copy the useLegacy property to make sure it persists
+					var smbUseLegacyProperty = fileURL.getProperty(PROPERTY_SMB_USE_LEGACY);
+					if (smbUseLegacyProperty != null) {
+						cm.getRealm().setProperty(PROPERTY_SMB_USE_LEGACY, smbUseLegacyProperty);
+					}
 
-                    selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
-                    break;
-                }
-            }
+					selectedCredentialsMapping = new CredentialsMapping(cm.getCredentials(), cm.getRealm(), isPersistent);
+					break;
+				}
+			}
         }
     }
 

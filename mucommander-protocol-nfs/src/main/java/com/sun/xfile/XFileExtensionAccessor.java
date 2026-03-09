@@ -79,7 +79,7 @@ package com.sun.xfile;
  */
 public abstract class XFileExtensionAccessor {
 	
-    private XFile xf;
+    private final XFile xf;
 
     /*
      * Constructor for the XFileExtensionAccessor.

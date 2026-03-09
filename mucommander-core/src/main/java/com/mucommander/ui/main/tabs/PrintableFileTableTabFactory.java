@@ -37,9 +37,9 @@ public class PrintableFileTableTabFactory implements TabFactory<FileTableTab, Fi
 	 * is presented (by overriding its toString method) and the way it's compared to 
 	 * FileTableTabFactory.DefaultFileTableTab instances (by overriding its equals method)
 	 */
-	private class PrintableFileTableTab extends FileTableTab {
+	private static class PrintableFileTableTab extends FileTableTab {
 
-		private FileTableTab tab;
+		private final FileTableTab tab;
 		
 		private PrintableFileTableTab(FileTableTab tab) {
 			this.tab = tab;

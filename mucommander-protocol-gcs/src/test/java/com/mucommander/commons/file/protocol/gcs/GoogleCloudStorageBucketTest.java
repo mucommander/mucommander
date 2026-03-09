@@ -47,11 +47,11 @@ public class GoogleCloudStorageBucketTest {
         var file5 = BlobInfo.newBuilder("bucket-name", "/").build();
         var file6 = BlobInfo.newBuilder("bucket-name", "").build();
 
-        assertEquals(GoogleCloudStorageBucket.getBlobName(file1), "file.txt");
-        assertEquals(GoogleCloudStorageBucket.getBlobName(file2), "file2.txt");
-        assertEquals(GoogleCloudStorageBucket.getBlobName(file3), "folder2");
-        assertEquals(GoogleCloudStorageBucket.getBlobName(file4), "folder3");
-        assertEquals(GoogleCloudStorageBucket.getBlobName(file5), "");
-        assertEquals(GoogleCloudStorageBucket.getBlobName(file6), "");
+        assertEquals("file.txt", GoogleCloudStorageBucket.getBlobName(file1));
+        assertEquals("file2.txt", GoogleCloudStorageBucket.getBlobName(file2));
+        assertEquals("folder2", GoogleCloudStorageBucket.getBlobName(file3));
+        assertEquals("folder3", GoogleCloudStorageBucket.getBlobName(file4));
+        assertEquals("", GoogleCloudStorageBucket.getBlobName(file5));
+        assertEquals("", GoogleCloudStorageBucket.getBlobName(file6));
     }
 }

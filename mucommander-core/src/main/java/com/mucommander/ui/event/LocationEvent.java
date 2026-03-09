@@ -30,7 +30,7 @@ import com.mucommander.commons.file.FileURL;
 public class LocationEvent {
 
     /** URL of the folder that has or is being changed */
-    private FileURL folderURL;
+    private final FileURL folderURL;
 
     /**
      * Creates a new LocationEvent.

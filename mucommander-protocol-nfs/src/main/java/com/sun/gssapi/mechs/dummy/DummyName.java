@@ -36,8 +36,6 @@
  */
 package com.sun.gssapi.mechs.dummy;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -55,7 +53,7 @@ public class DummyName implements GSSNameSpi {
 	 */
 	static DummyName getDefault() {
 
-		StringBuffer res = new StringBuffer(System.getProperty("user.name", "unknown"));
+		StringBuilder res = new StringBuilder(System.getProperty("user.name", "unknown"));
 		res.append("@");
 		try {
 			res.append(InetAddress.getLocalHost().getHostName());
@@ -63,7 +61,7 @@ public class DummyName implements GSSNameSpi {
 			res.append("unknown");
 		}
 		
-		return (new DummyName(res.toString()));
+		return new DummyName(res.toString());
 	}
 
 
@@ -128,10 +126,10 @@ public class DummyName implements GSSNameSpi {
 	public boolean equals(GSSNameSpi name) throws GSSException {
 
 		if (!(name instanceof DummyName)) {
-			return (false);
+			return false;
 		}
 
-		return (m_name.equals(((DummyName)name).m_name));
+		return m_name.equals(((DummyName)name).m_name);
 	}
   
 
@@ -157,7 +155,7 @@ public class DummyName implements GSSNameSpi {
 	 */
 	public Oid getMech() {
 
-		return (Dummy.getMyOid());
+		return Dummy.getMyOid();
 	}
 
 
@@ -171,7 +169,7 @@ public class DummyName implements GSSNameSpi {
 	 */
 	public String toString() {
 
-		return (m_name);
+		return m_name;
 	}
 	
 
@@ -180,7 +178,7 @@ public class DummyName implements GSSNameSpi {
 	 */
 	public Oid getNameType() {
 
-		return (m_type);
+		return m_type;
 	}
 
 
@@ -191,7 +189,7 @@ public class DummyName implements GSSNameSpi {
 	 */
 	public Oid getStringNameType() {
 
-		return (m_type);
+		return m_type;
 	}
   
   
@@ -210,9 +208,9 @@ public class DummyName implements GSSNameSpi {
 	public boolean isAnonymousName() {
 
 		if (m_type.equals(GSSName.NT_ANONYMOUS))
-			return (true);
+			return true;
 		
-		return (false);
+		return false;
 	}
 
 

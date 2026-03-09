@@ -37,7 +37,6 @@
 
 package com.sun.nfs;
 
-import java.io.*;
 import java.util.*;
 import com.sun.rpc.*;
 
@@ -92,11 +91,11 @@ public final class NfsSecurity {
 	}
 
 	String serviceString = parser.nextToken();
-	if (serviceString.equals("none"))
+	if ("none".equals(serviceString))
 		service = Cred.SVC_NONE;
-	else if (serviceString.equals("integrity"))
+	else if ("integrity".equals(serviceString))
 		service = Cred.SVC_INTEGRITY;
-	else if (serviceString.equals("privacy"))
+	else if ("privacy".equals(serviceString))
 		service = Cred.SVC_PRIVACY;
 	else
 		service = Cred.SVC_PRIVACY;	// just use privacy service

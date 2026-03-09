@@ -78,7 +78,7 @@ public class BaseSwitchableSpinnerPanel extends javax.swing.JPanel {
             @Override
             public void focusGained(FocusEvent e) {
                 if (e.getSource() instanceof JTextComponent) {
-                    final JTextComponent textComponent = ((JTextComponent) e.getSource());
+                    final JTextComponent textComponent = (JTextComponent) e.getSource();
                     SwingUtilities.invokeLater(textComponent::selectAll);
                 }
             }

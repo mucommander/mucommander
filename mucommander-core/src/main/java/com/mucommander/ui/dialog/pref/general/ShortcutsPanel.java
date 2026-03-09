@@ -149,7 +149,7 @@ public class ShortcutsPanel extends PreferencesPanel {
         return panel;
     }
 
-    class DeferredDocumentListener implements DocumentListener {
+    static class DeferredDocumentListener implements DocumentListener {
 
         private final Timer timer;
 
@@ -197,26 +197,23 @@ public class ShortcutsPanel extends PreferencesPanel {
                 .sorted(Comparator.comparing(ActionCategory::toString))
                 .forEach(combo::addItem);
 
-        final ActionListener filterActionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final ActionCategory selectedActionCategory = (ActionCategory) combo.getSelectedItem();
+        final ActionListener filterActionListener = e -> {
+            final ActionCategory selectedActionCategory = (ActionCategory)combo.getSelectedItem();
 
-                String filter = filterField.getText().toLowerCase().trim();
-                String[] filterWords = filter.split("\\s+");
+            String filter = filterField.getText().toLowerCase().trim();
+            String[] filterWords = filter.split("\\s+");
 
-                shortcutsTable.updateModel((actionId, rowAsText) -> {
-                    if (selectedActionCategory != null && !selectedActionCategory.contains(actionId)) {
-                        return false;
-                    }
-                    return Arrays.stream(filterWords).allMatch(rowAsText::contains);
-                });
-
-                tooltipBar.showDefaultMessage();
-
-                if (e.getSource() == filterField) {
-                    filterField.requestFocus();
+            shortcutsTable.updateModel((actionId, rowAsText) -> {
+                if (selectedActionCategory != null && !selectedActionCategory.contains(actionId)) {
+                    return false;
                 }
+                return Arrays.stream(filterWords).allMatch(rowAsText::contains);
+            });
+
+            tooltipBar.showDefaultMessage();
+
+            if (e.getSource() == filterField) {
+                filterField.requestFocus();
             }
         };
 
@@ -259,10 +256,10 @@ public class ShortcutsPanel extends PreferencesPanel {
         ToolBarAttributes.fireActionsChanged();
     }
 
-    class TooltipBar extends JLabel {
-        private String lastActionTooltipShown;
-        private String DEFAULT_MESSAGE;
-        private static final int MESSAGE_SHOWING_TIME = 3000;
+    static class TooltipBar extends JLabel {
+        private              String lastActionTooltipShown;
+        private final        String DEFAULT_MESSAGE;
+        private static final int    MESSAGE_SHOWING_TIME = 3000;
         private MessageRemoverThread currentRemoverThread;
 
         public TooltipBar() {

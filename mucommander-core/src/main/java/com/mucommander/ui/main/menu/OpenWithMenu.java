@@ -164,16 +164,14 @@ public class OpenWithMenu extends JMenu {
                     }
                     super.getPopupMenu().pack();
                 }, "OpenWithAppThread").start();
-            } else {
-                if (DesktopManager.canEnableOpenWithApps()) {
-                    if (getItemCount() > 0) {
-                        add(new JSeparator());
-                    }
-                    var howToEnable = super.add(
-                            Translator.get("file_menu.open_with_apps_tip"));
-                    howToEnable.addActionListener(e ->
-                            DesktopManager.howToEnableOpenWithApps(mainFrame.getJFrame()));
+            } else if (DesktopManager.canEnableOpenWithApps()) {
+                if (getItemCount() > 0) {
+                    add(new JSeparator());
                 }
+                var howToEnable = super.add(
+                        Translator.get("file_menu.open_with_apps_tip"));
+                howToEnable.addActionListener(e ->
+                        DesktopManager.howToEnableOpenWithApps(mainFrame.getJFrame()));
             }
         }
     }

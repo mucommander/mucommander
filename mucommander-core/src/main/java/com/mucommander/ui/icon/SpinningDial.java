@@ -28,6 +28,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 /**
  * Animated icon of a spinning dial used to notify users that an application is performing a task.
@@ -68,13 +69,13 @@ public class SpinningDial extends AnimatedIcon {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Icon's width. */
-    private int     width;
+    private final int width;
     /** Icon's height. */
-    private int     height;
+    private final int height;
     /** All images that compose the spinning dial. */
-    private Image[] frames;
+    private final Image[] frames;
     /** Color used to paint the dial. */
-    private Color   color;
+    private       Color   color;
     /** Width of each stroke. */
     private float   strokeWidth;
 
@@ -294,8 +295,7 @@ public class SpinningDial extends AnimatedIcon {
 
             // Resets stored images to make sure they get repainted
             // with the right color.
-            for(int i = 0; i < frames.length; i++)
-                frames[i] = null;
+			Arrays.fill(frames, null);
         }
     }
 

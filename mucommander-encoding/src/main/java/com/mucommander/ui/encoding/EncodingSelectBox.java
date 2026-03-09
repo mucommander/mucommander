@@ -48,7 +48,7 @@ public class EncodingSelectBox extends JPanel {
     protected JButton customizeButton;
 
     /** Contains all registered encoding listeners, stored as weak references */
-    protected final WeakHashMap<EncodingListener, ?> listeners = new WeakHashMap<EncodingListener, Object>();
+    protected final WeakHashMap<EncodingListener, ?> listeners = new WeakHashMap<>();
 
     /** The encoding that is currently selected, may be null */
     protected String currentEncoding;
@@ -78,17 +78,15 @@ public class EncodingSelectBox extends JPanel {
         comboBox = new SaneComboBox();
         populateComboBox(selectedEncoding);
 
-        comboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String oldEncoding = currentEncoding;
-                currentEncoding = (String)comboBox.getSelectedItem();
+        comboBox.addActionListener(e -> {
+			String oldEncoding = currentEncoding;
+			currentEncoding = (String)comboBox.getSelectedItem();
 
-                if(currentEncoding==null || !currentEncoding.equals(oldEncoding)) {
-                    // Notify listeners of the new encoding
-                    fireEncodingListener(oldEncoding, EncodingSelectBox.this.currentEncoding);
-                }
-            }
-        });
+			if(currentEncoding==null || !currentEncoding.equals(oldEncoding)) {
+				// Notify listeners of the new encoding
+				fireEncodingListener(oldEncoding, EncodingSelectBox.this.currentEncoding);
+			}
+		});
 
         add(comboBox, BorderLayout.CENTER);
 
@@ -98,20 +96,18 @@ public class EncodingSelectBox extends JPanel {
         if(OsFamily.MAC_OS.isCurrent())
             customizeButton.putClientProperty("JComponent.sizeVariant", "small");
 
-        customizeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String selectedEncoding = getSelectedEncoding();
+        customizeButton.addActionListener(e -> {
+			String selectedEncoding1 = getSelectedEncoding();
 
-                Window owner = dialogOwner.getOwner();
-                if(owner instanceof Frame)
-                    new PreferredEncodingsDialog((Frame)owner).showDialog();
-                else
-                    new PreferredEncodingsDialog((Dialog)owner).showDialog();
+			Window owner = dialogOwner.getOwner();
+			if(owner instanceof Frame)
+				new PreferredEncodingsDialog((Frame)owner).showDialog();
+			else
+				new PreferredEncodingsDialog((Dialog)owner).showDialog();
 
-                comboBox.removeAllItems();
-                populateComboBox(selectedEncoding);
-            }
-        });
+			comboBox.removeAllItems();
+			populateComboBox(selectedEncoding1);
+		});
 
         add(customizeButton, BorderLayout.EAST);
     }

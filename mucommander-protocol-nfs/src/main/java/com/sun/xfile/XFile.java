@@ -354,7 +354,7 @@ public class XFile {
 
         ht.put(proto, cl);
 
-        return (cl);
+        return cl;
     }
     
 
@@ -469,7 +469,7 @@ public class XFile {
              */
             String suffix;
 
-            if (url.getProtocol().equals("nfs"))
+            if ("nfs".equals(url.getProtocol()))
                 suffix = "nfsXFileExtensionAccessor";
             else
                 suffix = "XFileExtensionAccessor";
@@ -477,7 +477,7 @@ public class XFile {
             Class cl = loadClass(url.getProtocol(), suffix,
                         cachedExtensionAccessors);
     
-            Constructor con = cl.getConstructor(new Class[]{this.getClass()});
+            Constructor con = cl.getConstructor(this.getClass());
             return (XFileExtensionAccessor)con.newInstance(new Object[]{this});
     
         } catch (Exception e) {
@@ -902,7 +902,7 @@ public class XFile {
         if (!bind())
             return null;;
 
-	String names[] = list();
+	String[] names = list();
 
 	if (names == null) {
 	    return null;
@@ -917,7 +917,7 @@ public class XFile {
 	}
 
 	// Create the array
-	String files[] = new String[v.size()];
+	String[] files = new String[v.size()];
 	v.copyInto(files);
 
 	return files;
@@ -966,7 +966,7 @@ public class XFile {
      *          <code>false</code> otherwise.
      */
     public boolean equals(Object obj) {
-	if ((obj == null) || (! (obj instanceof XFile)))
+	if ((!(obj instanceof XFile)))
             return false;
 
 	return url.toString().equals(((XFile)obj).getURL().toString());
@@ -980,7 +980,7 @@ public class XFile {
      */
     public String toString() {
         if (nativeFile != null)
-            return (nativeFile.toString());
+            return nativeFile.toString();
 
 	return urlStr;
     }

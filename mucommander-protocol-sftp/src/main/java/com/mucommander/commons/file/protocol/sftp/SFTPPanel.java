@@ -49,12 +49,12 @@ public class SFTPPanel extends ServerPanel {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.SFTP).getStandardPort();
 
-    private JTextField serverField;
-    private JTextField privateKeyPathField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JTextField initialDirField;
-    private JSpinner portSpinner;
+    private final JTextField serverField;
+    private final JTextField privateKeyPathField;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final JTextField     initialDirField;
+    private final JSpinner       portSpinner;
 
     private static String lastServer = "";
     private static String lastKeyPath = "";
@@ -99,14 +99,14 @@ public class SFTPPanel extends ServerPanel {
             chooseFileButton.putClientProperty("JComponent.sizeVariant", "small");
 
         chooseFileButton.addActionListener(new ActionListener() {
-                JFileChooser fc = new JFileChooser(System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh");
-                public void actionPerformed(ActionEvent e) {
-                    int returnVal = fc.showOpenDialog(mainFrame);
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        privateKeyPathField.setText(fc.getSelectedFile().getAbsolutePath());
-                    }
+											   final JFileChooser fc = new JFileChooser(System.getProperty("user.home") + System.getProperty("file.separator") + ".ssh");
+            public void actionPerformed(ActionEvent e) {
+                int returnVal = fc.showOpenDialog(mainFrame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    privateKeyPathField.setText(fc.getSelectedFile().getAbsolutePath());
                 }
             }
+        }
         );
         privateKeyChooser.add(chooseFileButton, BorderLayout.EAST);
 
@@ -148,7 +148,7 @@ public class SFTPPanel extends ServerPanel {
 
         // Set credentials
         url.setCredentials(new Credentials(lastUsername, lastPassword));
-        if(!"".equals(lastKeyPath.trim()))
+        if(!lastKeyPath.trim().isEmpty())
             url.setProperty(SFTPFile.PRIVATE_KEY_PATH_PROPERTY_NAME, lastKeyPath);
 
         // Set port

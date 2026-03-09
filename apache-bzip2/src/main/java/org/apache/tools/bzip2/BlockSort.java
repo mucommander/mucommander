@@ -118,9 +118,7 @@ class BlockSort {
     private static final int FALLBACK_QSORT_STACK_SIZE = 100;
 
     @SuppressWarnings("unused")
-    private static final int STACK_SIZE =
-        QSORT_STACK_SIZE < FALLBACK_QSORT_STACK_SIZE
-        ? FALLBACK_QSORT_STACK_SIZE : QSORT_STACK_SIZE;
+    private static final int STACK_SIZE = Math.max(QSORT_STACK_SIZE, FALLBACK_QSORT_STACK_SIZE);
 
     /*
      * Used when sorting. If too many long comparisons happen, we stop sorting,
@@ -320,7 +318,7 @@ class BlockSort {
     }
 
     private int fmin(int a, int b) {
-        return a < b ? a : b;
+        return Math.min(a, b);
     }
 
     private void fpush(int sp, int lz, int hz) {
@@ -557,7 +555,7 @@ class BlockSort {
 
                 /*-- LBZ2: now [l, r] bracket current bucket --*/
                 if (r > l) {
-                    nNotDone += (r - l + 1);
+                    nNotDone += r - l + 1;
                     fallbackQSort3(fmap, eclass, l, r);
 
                     /*-- LBZ2: scan bucket and generate header bits-- */
@@ -686,7 +684,7 @@ class BlockSort {
                                                                                         i2 -= lastPlus1;
                                                                                     }
                                                                                     workDoneShadow++;
-                                                                                } else if ((quadrant[i1 + 3] > quadrant[i2 + 3])) {
+                                                                                } else if (quadrant[i1 + 3] > quadrant[i2 + 3]) {
                                                                                     continue HAMMER;
                                                                                 } else {
                                                                                     break HAMMER;
@@ -696,7 +694,7 @@ class BlockSort {
                                                                             } else {
                                                                                 break HAMMER;
                                                                             }
-                                                                        } else if ((quadrant[i1 + 2] > quadrant[i2 + 2])) {
+                                                                        } else if (quadrant[i1 + 2] > quadrant[i2 + 2]) {
                                                                             continue HAMMER;
                                                                         } else {
                                                                             break HAMMER;
@@ -706,7 +704,7 @@ class BlockSort {
                                                                     } else {
                                                                         break HAMMER;
                                                                     }
-                                                                } else if ((quadrant[i1 + 1] > quadrant[i2 + 1])) {
+                                                                } else if (quadrant[i1 + 1] > quadrant[i2 + 1]) {
                                                                     continue HAMMER;
                                                                 } else {
                                                                     break HAMMER;
@@ -716,7 +714,7 @@ class BlockSort {
                                                             } else {
                                                                 break HAMMER;
                                                             }
-                                                        } else if ((quadrant[i1] > quadrant[i2])) {
+                                                        } else if (quadrant[i1] > quadrant[i2]) {
                                                             continue HAMMER;
                                                         } else {
                                                             break HAMMER;
@@ -784,7 +782,7 @@ class BlockSort {
     }
 
     private static byte med3(byte a, byte b, byte c) {
-        return (a < b) ? (b < c ? b : a < c ? c : a) : (b > c ? b : a > c ? c
+        return a < b ? (b < c ? b : a < c ? c : a) : (b > c ? b : a > c ? c
                                                         : a);
     }
 
@@ -871,11 +869,9 @@ class BlockSort {
                     stack_dd[sp] = d1;
                     sp++;
                 } else {
-                    int n = ((ltLo - lo) < (unLo - ltLo)) ? (ltLo - lo)
-                        : (unLo - ltLo);
+                    int n = Math.min((ltLo - lo), (unLo - ltLo));
                     vswap(fmap, lo, unLo - n, n);
-                    int m = ((hi - gtHi) < (gtHi - unHi)) ? (hi - gtHi)
-                        : (gtHi - unHi);
+                    int m = Math.min((hi - gtHi), (gtHi - unHi));
                     vswap(fmap, unLo, hi - m + 1, m);
 
                     n = lo + unLo - ltLo - 1;
@@ -900,8 +896,8 @@ class BlockSort {
         }
     }
 
-    private static final int SETMASK = (1 << 21);
-    private static final int CLEARMASK = (~SETMASK);
+    private static final int SETMASK = 1 << 21;
+    private static final int CLEARMASK = ~SETMASK;
 
     final void mainSort(final CBZip2OutputStream.Data dataShadow,
                         final int lastShadow) {
@@ -1024,11 +1020,11 @@ class BlockSort {
                 copy[j] = ftab[(j << 8) + ss] & CLEARMASK;
             }
 
-            for (int j = ftab[ss << 8] & CLEARMASK, hj = (ftab[(ss + 1) << 8] & CLEARMASK); j < hj; j++) {
+            for (int j = ftab[ss << 8] & CLEARMASK, hj = ftab[(ss + 1) << 8] & CLEARMASK; j < hj; j++) {
                 final int fmap_j = fmap[j];
                 c1 = block[fmap_j] & 0xff;
                 if (!bigDone[c1]) {
-                    fmap[copy[c1]] = (fmap_j == 0) ? lastShadow : (fmap_j - 1);
+                    fmap[copy[c1]] = fmap_j == 0 ? lastShadow : (fmap_j - 1);
                     copy[c1]++;
                 }
             }

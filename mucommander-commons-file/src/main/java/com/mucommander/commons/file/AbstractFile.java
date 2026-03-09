@@ -286,7 +286,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @return <code>true</code> if this file is a root folder
      */
     public boolean isRoot() {
-        return getURL().getPath().equals("/");
+        return "/".equals(getURL().getPath());
     }
 
     /**
@@ -856,7 +856,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @throws IOException in any of the cases listed above
      */
     public final AbstractFile getDirectChild(String filename, AbstractFile template) throws IOException {
-        if(filename.indexOf(getSeparator())!=-1)
+        if(filename.contains(getSeparator()))
             throw new IOException();
 
         AbstractFile childFile = getChild(filename, template);
@@ -1116,14 +1116,10 @@ public abstract class AbstractFile implements FileAttributes {
      * or not implemented by the underlying filesystem.
      */
     public final String calculateChecksum(MessageDigest messageDigest) throws IOException, UnsupportedFileOperationException {
-        InputStream in = getInputStream();
 
-        try {
-            return calculateChecksum(in, messageDigest);
-        }
-        finally {
-            in.close();
-        }
+		try (InputStream in = getInputStream()) {
+			return calculateChecksum(in, messageDigest);
+		}
     }
 
 
@@ -1153,7 +1149,7 @@ public abstract class AbstractFile implements FileAttributes {
         // (Reminder: C: is C's current folder, while C:\ is C's root)
         String separator = getSeparator();
         if(path.endsWith(separator)
-           && !((separator.equals("/") && path.length()==1) || (separator.equals("\\") && path.charAt(path.length()-2)==':')))
+            && !(("/".equals(separator) && path.length()==1) || ("\\".equals(separator) && path.charAt(path.length()-2)==':')))
             path = path.substring(0, path.length()-1);
         return path;
     }
@@ -1223,8 +1219,8 @@ public abstract class AbstractFile implements FileAttributes {
      */
     protected final void checkCopyRemotelyPrerequisites(AbstractFile destFile, boolean allowCaseVariations, boolean allowDifferentHosts) throws IOException, FileTransferException {
         if(!fileURL.schemeEquals(fileURL)
-        || !destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())
-        || (!allowDifferentHosts && !destFile.getURL().hostEquals(fileURL)))
+            || !destFile.getTopAncestor().getClass().equals(getTopAncestor().getClass())
+            || (!allowDifferentHosts && !destFile.getURL().hostEquals(fileURL)))
             throw new IOException();
 
         checkCopyPrerequisites(destFile, allowCaseVariations);
@@ -1274,7 +1270,7 @@ public abstract class AbstractFile implements FileAttributes {
                 throw new FileTransferException(FileTransferError.WRITING_DESTINATION);
             }
 
-            AbstractFile children[];
+            AbstractFile[] children;
             try {
                 children = sourceFile.ls();
             }
@@ -1330,7 +1326,7 @@ public abstract class AbstractFile implements FileAttributes {
      */
     protected final void deleteRecursively(AbstractFile file) throws IOException, UnsupportedFileOperationException {
         if(file.isDirectory() && !file.isSymlink()) {
-            AbstractFile children[] = file.ls();
+            AbstractFile[] children = file.ls();
             for (AbstractFile child : children)
                 deleteRecursively(child);
         }
@@ -1448,10 +1444,10 @@ public abstract class AbstractFile implements FileAttributes {
     	String fileName = getName(); 
     	int lastDotPos = fileName.lastIndexOf('.');
     	 
-         if(lastDotPos<=0 || lastDotPos==fileName.length()-1)
-             return fileName;
+        if(lastDotPos<=0 || lastDotPos==fileName.length()-1)
+            return fileName;
          
-         return fileName.substring(0, lastDotPos);
+        return fileName.substring(0, lastDotPos);
     }
     
     /**
@@ -1499,7 +1495,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @see #equalsCanonical(Object)
      */
     public boolean equals(Object o) {
-        if(o==null || !(o instanceof AbstractFile))
+        if(!(o instanceof AbstractFile))
             return false;
 
         return getURL().equals(((AbstractFile)o).getURL(), true, true);
@@ -1525,7 +1521,7 @@ public abstract class AbstractFile implements FileAttributes {
      * @see #equals(Object)
      */
     public boolean equalsCanonical(Object o) {
-        if(o==null || !(o instanceof AbstractFile))
+        if(!(o instanceof AbstractFile))
             return false;
 
         // TODO: resolve hostnames ?

@@ -92,7 +92,7 @@ abstract class AbstractViewerAction extends SelectedFileAction {
             } else {
                 // If we're not using a custom editor, this action behaves exactly like its parent.
 
-                boolean fromSearchWithContent = mainFrame.getActivePanel().getCurrentFolder().getURL().getScheme().equals(SearchFile.SCHEMA) &&
+                boolean fromSearchWithContent = SearchFile.SCHEMA.equals(mainFrame.getActivePanel().getCurrentFolder().getURL().getScheme()) &&
                         !StringUtils.isNullOrEmpty(SearchProperty.SEARCH_TEXT.getValue());
                 performInternalAction(file, fromSearchWithContent);
             }

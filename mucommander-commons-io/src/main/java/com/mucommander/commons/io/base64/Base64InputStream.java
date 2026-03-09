@@ -31,7 +31,7 @@ import java.io.InputStream;
 public class Base64InputStream extends InputStream {
 
     /** Underlying stream data is read from */
-    private InputStream in;
+    private final InputStream in;
 
     /** The Base64 decoding table */
     private final int[] decodingTable;
@@ -40,7 +40,7 @@ public class Base64InputStream extends InputStream {
     private final byte paddingChar;
 
     /** Decoded bytes available for reading */
-    private int readBuffer[] = new int[3];
+    private final int[] readBuffer = new int[3];
 
     /** Index of the next byte available for reading in the buffer */
     private int readOffset;
@@ -49,7 +49,7 @@ public class Base64InputStream extends InputStream {
     private int bytesLeft;
 
     /** Buffer used temporarily for decoding */
-    private int decodeBuffer[] = new int[4];
+    private final int[] decodeBuffer = new int[4];
 
 
     /**
@@ -114,7 +114,7 @@ public class Base64InputStream extends InputStream {
             }
 
             // Decode byte 0
-            readBuffer[bytesLeft++] = ((decodeBuffer[0]<<2)&0xFC | ((decodeBuffer[1]>>4)&0x03));
+            readBuffer[bytesLeft++] = (decodeBuffer[0]<<2)&0xFC | ((decodeBuffer[1]>>4)&0x03);
 
             // Test if the character is not a padding character
             if(decodeBuffer[2]!=-1) {

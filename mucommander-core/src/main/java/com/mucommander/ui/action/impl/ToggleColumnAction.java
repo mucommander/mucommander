@@ -60,7 +60,7 @@ public abstract class ToggleColumnAction extends MuAction {
 
     public static abstract class Descriptor extends AbstractActionDescriptor {
 
-        private Column column;
+        private final Column column;
 
         protected Descriptor(Column column) { this.column = column; }
 

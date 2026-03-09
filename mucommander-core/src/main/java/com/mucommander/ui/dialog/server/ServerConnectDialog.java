@@ -59,10 +59,8 @@ import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ConnectToServerAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.main.FolderPanel;
-import com.mucommander.ui.main.MainFrame;
 
 
 /**
@@ -73,24 +71,24 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ServerConnectDialog extends FocusDialog implements ServerPanelListener, ChangeListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ServerConnectDialog.class);
-    private FolderPanel folderPanel;
+	private static final Logger      LOGGER = LoggerFactory.getLogger(ServerConnectDialog.class);
+    private final        FolderPanel folderPanel;
 	
-    private JButton cancelButton;
-    private ServerPanel currentServerPanel;
+    private final JButton     cancelButton;
+    private       ServerPanel currentServerPanel;
 
-    private JTabbedPane tabbedPane;
-    private java.util.List<ServerPanel> serverPanels = new Vector<ServerPanel>();
+    private final JTabbedPane                 tabbedPane;
+    private final java.util.List<ServerPanel> serverPanels = new Vector<>();
 
-    private JLabel urlLabel;
-    private JCheckBox saveCredentialsCheckBox;
+    private final JLabel    urlLabel;
+    private final JCheckBox saveCredentialsCheckBox;
 
     // Dialog's width has to be at least 480
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(480,0);	
 	
     private static Class<? extends ServerPanel> lastPanelClass;
 
-    private static Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
+    private static final Map<String, ProtocolPanelProvider> schemaToPanelProvider = new HashMap<>();
 
     public static void register(ProtocolPanelProvider panelProvider) {
         schemaToPanelProvider.put(panelProvider.getSchema(), panelProvider);

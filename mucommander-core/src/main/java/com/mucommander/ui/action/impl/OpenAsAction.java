@@ -38,7 +38,7 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class OpenAsAction extends OpenAction {
 
-    private String extension;
+    private final String extension;
 
     public OpenAsAction(MainFrame mainFrame, Map<String, Object> properties) {
         super(mainFrame, properties);

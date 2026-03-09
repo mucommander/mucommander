@@ -69,25 +69,25 @@ import com.mucommander.utils.MuLogging.LogLevel;
 public class DebugConsoleDialog extends FocusDialog implements ItemListener {
 
     /** Displays log events, and allows to copy their values to the clipboard */
-    private JTree loggingEventsTree;
+    private final JTree loggingEventsTree;
 
     /** Root node of above tree (not visible) */
-    private DefaultMutableTreeNode rootNode;
+    private final DefaultMutableTreeNode rootNode;
 
     /** Allows the log level to be changed */
     private JComboBox<LogLevel> levelComboBox;
 
     /** Closes the debug console when pressed */
-    private JButton closeButton;
+    private final JButton closeButton;
 
     /** Refreshes the tree with the latest log records when pressed */
     private JButton refreshButton;
 
     /** To control periodic auto-refresh */
-    private JCheckBox autoRefreshCheckBox;
+    private final JCheckBox autoRefreshCheckBox;
 
-    private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture periodicUpdater;
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private       ScheduledFuture          periodicUpdater;
 
     /** Used to avoid refreshing logs if they haven't changed */
     private int lastRecordsHash = -1;
@@ -266,7 +266,7 @@ public class DebugConsoleDialog extends FocusDialog implements ItemListener {
     /**
      * Custom {@link ListCellRenderer} that renders {@link LoggingEvent} instances.
      */
-    private class DebugTreeCellRenderer extends DefaultTreeCellRenderer {
+    private static class DebugTreeCellRenderer extends DefaultTreeCellRenderer {
 
         @Override
         public Component getTreeCellRendererComponent(JTree list, Object value,

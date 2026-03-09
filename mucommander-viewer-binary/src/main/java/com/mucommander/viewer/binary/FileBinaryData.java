@@ -185,7 +185,7 @@ public class FileBinaryData implements BinaryData {
     private InputStream getInputStream(long position) throws IOException {
         if (cacheInputStream != null && position == cachePosition) {
             return cacheInputStream;
-        } else if (cacheInputStream != null && cacheInputStream instanceof RandomAccess) {
+        } else if (cacheInputStream instanceof RandomAccess) {
             ((RandomAccess) cacheInputStream).seek(position);
             cachePosition = position;
         } else if (cacheInputStream != null && position > cachePosition) {

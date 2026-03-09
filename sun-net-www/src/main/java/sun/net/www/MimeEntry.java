@@ -36,7 +36,7 @@ public class MimeEntry implements Cloneable {
     private String command;
     private String description;
     private String imageFileName;
-    private String fileExtensions[];
+    private String[] fileExtensions;
 
     boolean starred;
 
@@ -92,7 +92,7 @@ public class MimeEntry implements Cloneable {
 
     // This is the one called by the public constructor.
     MimeEntry(String typeName, int action, String command,
-              String imageFileName, String fileExtensions[]) {
+              String imageFileName, String[] fileExtensions) {
 
         this.typeName = typeName.toLowerCase();
         this.action = action;
@@ -134,7 +134,7 @@ public class MimeEntry implements Cloneable {
     }
 
     public synchronized String getDescription() {
-        return (description != null ? description : typeName);
+        return description != null ? description : typeName;
     }
 
     public synchronized void setDescription(String description) {
@@ -189,7 +189,7 @@ public class MimeEntry implements Cloneable {
     public synchronized void setExtensions(String extensionString) {
         StringTokenizer extTokens = new StringTokenizer(extensionString, ",");
         int numExts = extTokens.countTokens();
-        String extensionStrings[] = new String[numExts];
+        String[] extensionStrings = new String[numExts];
 
         for (int i = 0; i < numExts; i++) {
             String ext = (String)extTokens.nextElement();

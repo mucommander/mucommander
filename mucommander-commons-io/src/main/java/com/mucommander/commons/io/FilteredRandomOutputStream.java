@@ -54,12 +54,12 @@ public class FilteredRandomOutputStream extends RandomAccessOutputStream {
     }
 
     @Override
-    public void write(byte b[]) throws IOException {
+    public void write(byte[] b) throws IOException {
         raos.write(b);
     }
 
     @Override
-    public void write(byte b[], int off, int len) throws IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
         raos.write(b, off, len);
     }
 

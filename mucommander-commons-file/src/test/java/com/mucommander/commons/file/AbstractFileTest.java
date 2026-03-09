@@ -97,7 +97,7 @@ public abstract class AbstractFileTest {
      */
     @BeforeMethod
     public void setUp() throws IOException {
-        filesToDelete = new Vector<AbstractFile>();
+        filesToDelete = new Vector<>();
 
         tempFile = getTemporaryFile();
         deleteWhenFinished(tempFile);   // this file will be automatically deleted when the test is over
@@ -165,7 +165,7 @@ public abstract class AbstractFileTest {
      */
     protected void writeRandomData(OutputStream out, long length, int maxChunkSize) throws IOException, NoSuchAlgorithmException {
         long remaining = length;
-        byte bytes[];
+        byte[] bytes;
         int chunkSize;
 
         // Ensure that integer is not maxed out as we'll be adding 1 to it 
@@ -247,7 +247,7 @@ public abstract class AbstractFileTest {
      * @param b2 the second byte array to test
      * @return true if both byte arrays are equal
      */
-    protected boolean byteArraysEqual(byte b1[], byte b2[]) {
+    protected boolean byteArraysEqual(byte[] b1, byte[] b2) {
         if(b1.length!=b2.length)
             return false;
 
@@ -294,14 +294,10 @@ public abstract class AbstractFileTest {
      * @throws NoSuchAlgorithmException should not happen
      */
     protected String calculateMd5(AbstractFile file) throws IOException, NoSuchAlgorithmException {
-        InputStream in = file.getInputStream();
 
-        try {
-            return calculateMd5(in);
-        }
-        finally {
-            in.close();
-        }
+		try (InputStream in = file.getInputStream()) {
+			return calculateMd5(in);
+		}
     }
 
     /**
@@ -355,7 +351,7 @@ public abstract class AbstractFileTest {
      */
     protected void assertUnsupportedFileOperationException(UnsupportedFileOperationException e, FileOperation expectedFileOperation) {
         assert e != null;
-        assert expectedFileOperation.equals(e.getFileOperation());
+        assert expectedFileOperation == e.getFileOperation();
     }
 
     /**
@@ -399,7 +395,7 @@ public abstract class AbstractFileTest {
         assert unicodeFile.exists();
         assert unicodeFile.isDirectory() == directory;
 
-        AbstractFile children[] = unicodeFile.getParent().ls();
+        AbstractFile[] children = unicodeFile.getParent().ls();
         assert 1 == children.length;
         assert children[0].exists();
         assert unicodeFile.isDirectory() == children[0].isDirectory();
@@ -613,7 +609,7 @@ public abstract class AbstractFileTest {
         long date;
 
         // Assert that changeDate succeeds (does not throw an exception)
-        tempFile.changeDate(date=(tempFile.getDate()-1000));
+        tempFile.changeDate(date=tempFile.getDate()-1000);
 
         // Assert that the getDate returns the date that was set
         assert date == tempFile.getDate();
@@ -686,7 +682,7 @@ public abstract class AbstractFileTest {
 
         // Assert that read methods return -1 when EOF has been reached
         assert -1 == in.read();
-        byte b[] = new byte[1];
+        byte[] b = new byte[1];
         assert -1 == in.read(b);
         assert -1 == in.read(b, 0, 1);
 
@@ -756,7 +752,7 @@ public abstract class AbstractFileTest {
 
         // Assert that read methods return -1 when EOF has been reached
         assert -1 == rais.read();
-        byte b[] = new byte[1];
+        byte[] b = new byte[1];
         assert -1 == rais.read(b);
         assert -1 == rais.read(b, 0, 1);
 
@@ -1143,7 +1139,7 @@ public abstract class AbstractFileTest {
         tempFile.delete();
         tempFile.mkdir();
 
-        AbstractFile children[] = tempFile.ls();
+        AbstractFile[] children = tempFile.ls();
         assert children != null;
         assert 0 == children.length;
 
@@ -1815,7 +1811,7 @@ public abstract class AbstractFileTest {
     public void testMkdirs() throws IOException {
         // Require the 'create directory' operation to be supported
         if(!tempFile.isFileOperationSupported(FileOperation.CREATE_DIRECTORY))
-        return;
+            return;
 
         // Assert that a directory can be created when the file doesn't already exist (without throwing an IOException)
         AbstractFile dir1 = tempFile.getDirectChild("dir1");

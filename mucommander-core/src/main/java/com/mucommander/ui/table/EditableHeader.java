@@ -109,10 +109,10 @@ public class EditableHeader extends JTableHeader implements CellEditorListener {
 
 		// firePropertyChange
 
-		if (oldEditor != null && oldEditor instanceof TableCellEditor) {
+		if (oldEditor instanceof TableCellEditor) {
 			oldEditor.removeCellEditorListener(this);
 		}
-		if (newEditor != null && newEditor instanceof TableCellEditor) {
+		if (newEditor instanceof TableCellEditor) {
 			newEditor.addCellEditorListener(this);
 		}
 	}

@@ -40,16 +40,16 @@ public class LocationManager {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LocationManager.class);
 
     /** Contains all registered location listeners, stored as weak references */
-    private WeakHashMap<LocationListener, ?> locationListeners = new WeakHashMap<LocationListener, Object>();
+    private final WeakHashMap<LocationListener, ?> locationListeners = new WeakHashMap<>();
 
     /** The FolderPanel instance this LocationManager manages location events for */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     /** Current location presented in the FolderPanel */
     private MonitoredFile currentFolder;
 
     /** Filters out unwanted files when listing folder contents */
-	private ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
+	private final ConfigurableFolderFilter configurableFolderFilter = new ConfigurableFolderFilter();
 
 	private FolderChangeMonitor folderChangeMonitor;
 

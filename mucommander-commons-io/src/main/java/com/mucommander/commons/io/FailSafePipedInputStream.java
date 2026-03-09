@@ -102,7 +102,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
     }
 
     @Override
-    public synchronized int read(byte b[], int off, int len) throws IOException {
+    public synchronized int read(byte[] b, int off, int len) throws IOException {
         int ret = super.read(b, off, len);
 
         checkExternalFailure();
@@ -111,7 +111,7 @@ public class FailSafePipedInputStream extends PipedInputStream {
     }
 
     @Override
-    public synchronized int read(byte b[]) throws IOException {
+    public synchronized int read(byte[] b) throws IOException {
         int ret = super.read(b);
 
         checkExternalFailure();

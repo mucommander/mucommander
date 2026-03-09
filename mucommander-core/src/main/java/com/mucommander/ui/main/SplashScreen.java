@@ -45,13 +45,13 @@ import java.awt.MediaTracker;
 public class SplashScreen extends JWindow {
 
     /** muCommander version displayed on this splash screen */
-    private String version;
+    private final String version;
 
     /** Current loading message displayed on this splash screen */
     private String loadingMessage;
 
     /** Font used to display version and loading message on this splash screen */
-    private Font customFont;
+    private final Font customFont;
 
     /** Path to the splash screen logo image within the JAR file */
     private final static String SPLASH_IMAGE_PATH =

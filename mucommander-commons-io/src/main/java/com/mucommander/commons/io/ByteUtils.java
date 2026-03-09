@@ -49,17 +49,15 @@ public class ByteUtils {
      * @param bytes the array of bytes for which to get an hexadecimal string representation
      * @return an hexadecimal string representation of the given byte array
      */
-    public static String toHexString(byte bytes[]) {
-        StringBuffer sb = new StringBuffer();
+    public static String toHexString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
 
-        int bytesLen = bytes.length;
-        String hexByte;
-        for(int i=0; i<bytesLen; i++) {
-            hexByte = Integer.toHexString(bytes[i] & 0xFF);
-            if(hexByte.length()==1)
-                sb.append('0');
-            sb.append(hexByte);
-        }
+		String hexByte;
+		for (byte aByte : bytes) {
+			hexByte = Integer.toHexString(aByte & 0xFF);
+			if (hexByte.length() == 1) sb.append('0');
+			sb.append(hexByte);
+		}
 
         return sb.toString();
     }

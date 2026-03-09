@@ -44,13 +44,13 @@ public class TempOpenWithJob extends TempCopyJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TempOpenWithJob.class);
 	
     /** The command to execute, appended with the temporary file path(s) */
-    private Command command;
+    private final Command command;
 
     /** Files to execute */
-    private FileSet filesToOpen;
+    private final FileSet filesToOpen;
 
     /** This list is populated with temporary files, as they are created by processFile() */
-    private FileSet tempFiles;
+    private final FileSet tempFiles;
 
 
     /**

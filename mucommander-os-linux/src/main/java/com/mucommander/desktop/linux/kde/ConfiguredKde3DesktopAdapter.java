@@ -39,7 +39,7 @@ public class ConfiguredKde3DesktopAdapter extends Kde3DesktopAdapter {
     @Override
     public boolean isAvailable() {
         String var = getConfiguredEnvVariable(KDE_FULL_SESSION_VAR);
-        return var != null && !var.trim().equals("");
+        return var != null && !var.trim().isEmpty();
     }
 
 

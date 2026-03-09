@@ -33,16 +33,12 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.util.DestinationType;
 import com.mucommander.commons.file.util.FileSet;
 import com.mucommander.commons.file.util.PathUtils;
-import com.mucommander.commons.util.ui.combobox.ComboBoxListener;
 import com.mucommander.commons.util.ui.combobox.EditableComboBox;
-import com.mucommander.commons.util.ui.combobox.SaneComboBox;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.layout.XAlignedComponentPanel;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
@@ -51,7 +47,6 @@ import com.mucommander.job.impl.SplitFileJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.SplitFileAction;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.text.FilePathField;
 
@@ -84,10 +79,10 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
     	DECIMAL_FORMAT.setGroupingUsed(false);
     }
     
-    private String MSG_AUTO = Translator.get("split_file_dialog.auto");
+    private final String MSG_AUTO = Translator.get("split_file_dialog.auto");
 
-    private AbstractFile file;
-	private AbstractFile destFolder;
+    private final AbstractFile file;
+	private final AbstractFile destFolder;
 
     private JButton btnSplit;
     private JButton btnClose;
@@ -147,31 +142,26 @@ public class SplitFileDialog extends JobDialog implements ActionListener {
 				updatePartsNumber();
 			}
 		});
-		cbSize.addComboBoxListener(new ComboBoxListener() {			
-			public void comboBoxSelectionChanged(SaneComboBox source) {
-				updatePartsNumber();				
-			}
-		});
+		cbSize.addComboBoxListener(source ->
+            updatePartsNumber());
 		pnlSize.add(cbSize);
 		pnlSize.addSpace(10);
 		pnlSize.add(new JLabel(Translator.get("split_file_dialog.parts") + ":"));
 		pnlSize.addSpace(5);
 		spnParts = new JSpinner(new SpinnerNumberModel(1, 1,
                 file.getSize(), 1));
-		spnParts.addChangeListener(new ChangeListener() {			
-			public void stateChanged(ChangeEvent e) {
-				if (!edtChange) {
-					long parts = ((Number)spnParts.getValue()).longValue();
-					long newsize = file.getSize() / parts;
-					if (file.getSize() % parts != 0) {
-						newsize++;
-					}
-					if (getBytes() != newsize) {
-						edtSize.setText(Long.toString(newsize));
-					}
-				}
-			}
-		});   
+		spnParts.addChangeListener(e -> {
+            if (!edtChange) {
+                long parts = ((Number)spnParts.getValue()).longValue();
+                long newsize = file.getSize() / parts;
+                if (file.getSize() % parts != 0) {
+                    newsize++;
+                }
+                if (getBytes() != newsize) {
+                    edtSize.setText(Long.toString(newsize));
+                }
+            }
+        });   
 		pnlSize.add(spnParts);
         pnlMain.addRow(Translator.get("split_file_dialog.part_size") + ":", pnlSize, 0);
         

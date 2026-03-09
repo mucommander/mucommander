@@ -81,7 +81,7 @@ public class XmlWriterTest {
 
         // Makes sure the entities were properly escaped in the XML attribute.
         assert element.hasAttribute(ENTITIES_ATTRIBUTE);
-        assert element.getAttribute(ENTITIES_ATTRIBUTE).equals(ENTITIES_STRING);
+        assert ENTITIES_STRING.equals(element.getAttribute(ENTITIES_ATTRIBUTE));
 
         // Looks for the CDATA.
         node = element.getFirstChild();
@@ -90,6 +90,6 @@ public class XmlWriterTest {
 
         // Makes sure we found the CDATA and that it is equal to ENTITIES_STRING.
         assert node != null;
-        assert node.getNodeValue().equals(ENTITIES_STRING);
+        assert ENTITIES_STRING.equals(node.getNodeValue());
     }
 }

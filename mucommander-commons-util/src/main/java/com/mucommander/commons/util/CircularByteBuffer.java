@@ -41,6 +41,8 @@ import java.io.*;
  */
 public class CircularByteBuffer {
 
+    private static final String BLOCKING_READ_OPERATION_INTERRUPTED = "Blocking read operation interrupted.";
+
 	/**
 	 * The default size for a circular byte buffer.
 	 *
@@ -284,10 +286,10 @@ public class CircularByteBuffer {
 			// any space between the first write and
 			// the mark except one byte is available.
 			// In this case it is all in one piece.
-			return (markPosition - writePosition - 1);
+			return markPosition - writePosition - 1;
 		}
 		// space at the beginning and end.
-		return ((buffer.length - 1) - (writePosition - markPosition));
+		return (buffer.length - 1) - (writePosition - markPosition);
 	}
 
 	/**
@@ -300,10 +302,10 @@ public class CircularByteBuffer {
 			// any space between the first read and
 			// the first write is available.  In this case i
 			// is all in one piece.
-			return (writePosition - readPosition);
+			return writePosition - readPosition;
 		}
 		// space at the beginning and end.
-		return (buffer.length - (readPosition - writePosition));
+		return buffer.length - (readPosition - writePosition);
 	}
 
 	/**
@@ -316,10 +318,10 @@ public class CircularByteBuffer {
 			// any space between the markPosition and
 			// the first write is marked.  In this case i
 			// is all in one piece.
-			return (readPosition - markPosition);
+			return readPosition - markPosition;
 		}
 		// space at the beginning and end.
-		return (buffer.length - (markPosition - readPosition));
+		return buffer.length - (markPosition - readPosition);
 	}
 
 	/**
@@ -431,7 +433,7 @@ public class CircularByteBuffer {
 		@Override public int available() throws IOException {
 			synchronized (CircularByteBuffer.this){
 				if (inputStreamClosed) throw new IOException("InputStream has been closed, it is not ready.");
-				return (CircularByteBuffer.this.available());
+				return CircularByteBuffer.this.available();
 			}
 		}
 
@@ -515,7 +517,7 @@ public class CircularByteBuffer {
 				try {
 					Thread.sleep(100);
 				} catch(Exception x){
-					throw new IOException("Blocking read operation interrupted.");
+					throw new IOException(BLOCKING_READ_OPERATION_INTERRUPTED);
 				}
 			}
 		}
@@ -578,7 +580,7 @@ public class CircularByteBuffer {
 				try {
 					Thread.sleep(100);
 				} catch(Exception x){
-					throw new IOException("Blocking read operation interrupted.");
+					throw new IOException(BLOCKING_READ_OPERATION_INTERRUPTED);
 				}
 			}
 		}
@@ -638,7 +640,7 @@ public class CircularByteBuffer {
 				try {
 					Thread.sleep(100);
 				} catch(Exception x){
-					throw new IOException("Blocking read operation interrupted.");
+					throw new IOException(BLOCKING_READ_OPERATION_INTERRUPTED);
 				}
 			}
 		}

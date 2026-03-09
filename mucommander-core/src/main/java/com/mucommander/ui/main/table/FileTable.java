@@ -112,22 +112,22 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     // - Containers ----------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** Frame containing this file table. */
-    private MainFrame   mainFrame;
+    private final MainFrame   mainFrame;
     /** Folder panel containing this frame. */
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
 
     // - UI components -------------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** TableModel instance used by this JTable to get cells' values */
-    private FileTableModel        tableModel;
+    private final FileTableModel        tableModel;
     /** TableCellRender instance used by this JTable to render cells */
-    private FileTableCellRenderer cellRenderer;
+    private final FileTableCellRenderer cellRenderer;
     /** CellEditor used to edit filenames when clicked */
-    private FilenameEditor        filenameEditor;
+    private final FilenameEditor        filenameEditor;
 
     /** Contains sort-related variables */
-    private SortInfo sortInfo = new SortInfo();
+    private final SortInfo sortInfo = new SortInfo();
 
     /** Row currently selected */
     private int currentRow;
@@ -154,10 +154,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private boolean autoSizeColumnsEnabled;
 
     /** Instance of the inner class that handles quick search */
-    private QuickSearch<AbstractFile> quickSearch = new FileTableQuickSearch();
+    private final QuickSearch<AbstractFile> quickSearch = new FileTableQuickSearch();
 
     /** TableSelectionListener instances registered to receive selection change events */
-    private WeakHashMap<TableSelectionListener, ?> tableSelectionListeners = new WeakHashMap<TableSelectionListener, Object>();
+    private final WeakHashMap<TableSelectionListener, ?> tableSelectionListeners = new WeakHashMap<>();
 
     /** True when this table is the current or last active table in the MainFrame */
     private boolean isActiveTable;
@@ -176,13 +176,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private int doubleClickCounter = 1;
 
     /** Interval to wait for the double-click */
-    private static int DOUBLE_CLICK_INTERVAL = DesktopManager.getMultiClickInterval();
+    private static final int DOUBLE_CLICK_INTERVAL = DesktopManager.getMultiClickInterval();
 
     /** Wrapper of presentation adjustments for the file-table */
-    private FileTableWrapperForDisplay scrollpaneWrapper;
+    private final FileTableWrapperForDisplay scrollpaneWrapper;
 
     /** Table that shows the user to refresh if the location doesn't exist */
-    private DefaultOverlayable overlayTable;
+    private final DefaultOverlayable overlayTable;
 
     /** Whether or not to proceed with renaming the next file after renaming the selected file */
     private boolean consecutiveRename;
@@ -272,7 +272,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     public String getFileNameAtRow(int index) {
-    	return (index==0 && tableModel.hasParentFolder()) ? ".." : tableModel.getFileAtRow(index).getName();
+    	return index==0 && tableModel.hasParentFolder() ? ".." : tableModel.getFileAtRow(index).getName();
     }
 
     /**
@@ -300,13 +300,13 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 
         // Highlights the selected column
         tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
-                ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
-                        : null);
+            ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
+            : null);
 
         // Displays an ascending/descending arrow
         tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
-                ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
-                    : null);
+            ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
+            : null);
 
         // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
         // However, clearing the properties does not yield the desired behavior as it does not restore the table
@@ -459,7 +459,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     public FileSet getSelectedFiles() {
         FileSet selectedFiles = tableModel.getMarkedFiles();
         // if no row is marked, then add selected row if there is one, and if it is not parent folder
-        if(selectedFiles.size()==0)	{
+        if(selectedFiles.isEmpty())	{
             AbstractFile selectedFile = getSelectedFile();
             if(selectedFile!=null)
                 selectedFiles.add(selectedFile);
@@ -513,7 +513,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @param children children of the specified folder
      * @param fileToSelect the file to select, <code>null</code> for the default selection.
      */
-    public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect) {
+    public void setCurrentFolder(AbstractFile folder, AbstractFile[] children, AbstractFile fileToSelect) {
     	overlayTable.setOverlayVisible(!folder.exists());
         // Stop quick search in case it was being used before folder change
         quickSearch.stop();
@@ -1083,7 +1083,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         final int dirStringWidth = Math.max(dirStringWidth1, dirStringWidth2);
 
         int remainingWidth = getSize().width - RESERVED_NAME_COLUMN_WIDTH;
-        Iterator<TableColumn> columns = respectSize ? new Enumerator<TableColumn>(getColumnModel().getColumns()) : getFileTableColumnModel().getAllColumns();
+        Iterator<TableColumn> columns = respectSize ? new Enumerator<>(getColumnModel().getColumns()) : getFileTableColumnModel().getAllColumns();
         TableColumn nameColumn = null;
 
         while (columns.hasNext()) {
@@ -1123,7 +1123,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     private boolean isDirectorySize(Column c, String val) {
-        return c == Column.SIZE && val.equals(FileTableModel.DIRECTORY_SIZE_STRING);
+        return c == Column.SIZE && FileTableModel.DIRECTORY_SIZE_STRING.equals(val);
     }
 
     private void doStaticLayout() {
@@ -1131,10 +1131,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
         if (width == 0)
             return;
         TableColumn nameColumn = getColumnModel().getColumn(convertColumnIndexToView(Column.NAME.ordinal()));
-        if (nameColumn.getWidth() + width >= RESERVED_NAME_COLUMN_WIDTH)
-            nameColumn.setWidth(nameColumn.getWidth() + width);
-        else
-            nameColumn.setWidth(RESERVED_NAME_COLUMN_WIDTH);
+		nameColumn.setWidth(Math.max(nameColumn.getWidth() + width, RESERVED_NAME_COLUMN_WIDTH));
     }
 
     /**
@@ -1163,7 +1160,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                 // would not work. Instead, SwingUtilities.invokeLater is used to delay the call after all pending
                 // UI events (including JViewport revalidation) have been processed.
                 SwingUtilities.invokeLater(() -> scrollpaneWrapper.getViewport().setViewPosition(
-                        new java.awt.Point(0, Math.max(0, cellRect.y-scrollpaneWrapper.getHeight()/2-getRowHeight()/2))));
+                    new java.awt.Point(0, Math.max(0, cellRect.y-scrollpaneWrapper.getHeight()/2-getRowHeight()/2))));
             }
         }
     }
@@ -1309,31 +1306,28 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
                     // the filename/date/permission editor
                     if (hasFocus() && System.currentTimeMillis() - focusGainedTime > 100) {
                         // Create a new thread and sleep long enough to ensure that this click was not the first of a double click
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                try { sleep(800); }
-                                catch (InterruptedException e) {}
+                        new Thread(() -> {
+							try { Thread.sleep(800); }
+							catch (InterruptedException e1) {}
 
-                                // Do not execute this block (cancel editing) if:
-                                // - a double click was made in the last second
-                                // - current row changed
-                                // - isEditing() is true which could happen if multiple clicks were made
-                                if ((System.currentTimeMillis() - lastDoubleClickTimestamp) > 1000 && row == currentRow) {
-                                    if (column == Column.NAME) {
-                                        if(!isEditing())
-                                            editCurrentFilename();
-                                    }
-                                    else if(column == Column.DATE) {
-                                        ActionManager.performAction(ActionType.ChangeDate, mainFrame);
-                                    }
-                                    else if(column == Column.PERMISSIONS) {
-                                        if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
-                                            ActionManager.performAction(ActionType.ChangePermissions, mainFrame);
-                                    }
-                                }
-                            }
-                        }.start();
+							// Do not execute this block (cancel editing) if:
+							// - a double click was made in the last second
+							// - current row changed
+							// - isEditing() is true which could happen if multiple clicks were made
+							if ((System.currentTimeMillis() - lastDoubleClickTimestamp) > 1000 && row == currentRow) {
+								if (column == Column.NAME) {
+									if(!isEditing())
+										editCurrentFilename();
+								}
+								else if(column == Column.DATE) {
+									ActionManager.performAction(ActionType.ChangeDate, mainFrame);
+								}
+								else if(column == Column.PERMISSIONS) {
+									if(getSelectedFile().getChangeablePermissions().getIntValue()!=0)
+										ActionManager.performAction(ActionType.ChangePermissions, mainFrame);
+								}
+							}
+						}).start();
                     }
                 }
             }
@@ -1544,7 +1538,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      */
     private class FilenameEditor extends DefaultCellEditor {
 
-        private JTextField filenameField;
+        private final JTextField filenameField;
 
         /** Row that is currently being edited */
         private int editingRow;
@@ -1854,10 +1848,10 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      * @author Nicolas Rinaudo, Maxence Bernard
      */
     private class FolderChangeThread implements Runnable {
-        private AbstractFile   folder;
-        private AbstractFile[] children;
-        private FileSet        markedFiles;
-        private AbstractFile   selectedFile;
+        private final AbstractFile   folder;
+        private final AbstractFile[] children;
+        private final FileSet        markedFiles;
+        private final AbstractFile   selectedFile;
 
         private FolderChangeThread(AbstractFile folder, AbstractFile[] children, FileSet markedFiles, AbstractFile selectedFile) {
             this.folder       = folder;

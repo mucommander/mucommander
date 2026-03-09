@@ -29,9 +29,9 @@ public enum ImageViewerPreferences {
     SHOW_STATUS_BAR("show_status_bar", "image_viewer.show_status_bar", Boolean.TRUE.toString())
     ;
 
-    private String prefKey;
-    private String i18nKey;
-    private String value;
+    private final String prefKey;
+    private final String i18nKey;
+    private       String value;
 
     ImageViewerPreferences(String prefKey, String i18nKey, String defaultValue) {
         this.prefKey = prefKey;

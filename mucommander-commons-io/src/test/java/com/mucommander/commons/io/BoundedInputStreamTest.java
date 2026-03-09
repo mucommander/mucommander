@@ -169,6 +169,6 @@ public class BoundedInputStreamTest {
 	            totalRead ++;
 	
 	        assert 8 == totalRead;
-        };
+        }
     }
 }

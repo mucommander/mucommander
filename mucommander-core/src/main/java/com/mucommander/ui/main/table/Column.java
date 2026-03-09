@@ -50,12 +50,12 @@ public enum Column {
     /** Standard minimum column width */
     private final static int STANDARD_MINIMUM_WIDTH = 2 * CellLabel.CELL_BORDER_WIDTH;
 
-    private String label;
-    private int minimumWidth;
-    private boolean showByDefault;
-    private FileComparator.CRITERION fileComparatorCriterion;
-    private ActionType toggleActionId;
-    private ActionType sortByActionId;
+    private final String label;
+    private final int    minimumWidth;
+    private final boolean showByDefault;
+    private final FileComparator.CRITERION fileComparatorCriterion;
+    private final ActionType               toggleActionId;
+    private final ActionType               sortByActionId;
 
     private Column(boolean hasMinimumWidth, boolean showByDefault, FileComparator.CRITERION fileComparatorCriterion, ActionType toggleActionId, ActionType sortByActionId) {
         this.label = Translator.get(toString().toLowerCase());

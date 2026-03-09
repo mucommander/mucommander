@@ -116,7 +116,7 @@ public class MarkExtensionAction extends MuAction {
 
         // Returns the configured value if it's a string, false otherwise.
         if (o instanceof String)
-            return o.equals("true");
+            return "true".equals(o);
         return false;
     }
 

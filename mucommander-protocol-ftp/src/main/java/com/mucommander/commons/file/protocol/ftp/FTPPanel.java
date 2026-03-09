@@ -44,19 +44,19 @@ import com.mucommander.ui.encoding.EncodingSelectBox;
  */
 public class FTPPanel extends ServerPanel implements ActionListener, EncodingListener {
 
-    private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.FTP).getStandardPort();
-    private static Credentials ANONYMOUS_CREDENTIALS = FileURL.getRegisteredHandler(FileProtocols.FTP).getGuestCredentials();
+    private final static int         STANDARD_PORT         = FileURL.getRegisteredHandler(FileProtocols.FTP).getStandardPort();
+    private static final Credentials ANONYMOUS_CREDENTIALS = FileURL.getRegisteredHandler(FileProtocols.FTP).getGuestCredentials();
 
-    private JTextField serverField;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JTextField initialDirField;
-    private JSpinner portSpinner;
-    private JSpinner nbRetriesSpinner;
-    private JSpinner retryDelaySpinner;
-    private EncodingSelectBox encodingSelectBox;
-    private JCheckBox passiveCheckBox;
-    private JCheckBox anonymousCheckBox;
+    private final JTextField serverField;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final JTextField     initialDirField;
+    private final JSpinner       portSpinner;
+    private final JSpinner   nbRetriesSpinner;
+    private final JSpinner retryDelaySpinner;
+    private final EncodingSelectBox encodingSelectBox;
+    private final JCheckBox         passiveCheckBox;
+    private final JCheckBox         anonymousCheckBox;
 	
     private static String lastServer = "";
     private static String lastUsername = "";

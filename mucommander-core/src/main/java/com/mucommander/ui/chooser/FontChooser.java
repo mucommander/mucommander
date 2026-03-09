@@ -43,7 +43,7 @@ public class FontChooser extends YBoxPanel implements ActionListener {
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Legal font sizes. */
-    private final static int FONT_SIZES[] = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28};
+    private final static int[] FONT_SIZES = {8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28};
 
 
 
@@ -60,9 +60,9 @@ public class FontChooser extends YBoxPanel implements ActionListener {
     /** Used to display a preview of the current font. */
     private JLabel      preview;
     /** Currently selected font. */
-    private Font        font;
+    private       Font                           font;
     /** List of all registered state change listeners. */
-    private WeakHashMap<ChangeListener, ?> listeners = new WeakHashMap<ChangeListener, Object>();
+    private final WeakHashMap<ChangeListener, ?> listeners = new WeakHashMap<>();
 
 
     // - Initialisation ---------------------------------------------------------

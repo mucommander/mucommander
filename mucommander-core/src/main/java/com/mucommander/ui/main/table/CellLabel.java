@@ -308,7 +308,7 @@ public class CellLabel extends JLabel {
     @Override
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
         // Strings get interned...
-        if(propertyName.equals("text"))
+        if("text".equals(propertyName))
             super.firePropertyChange(propertyName, oldValue, newValue);
     }
 

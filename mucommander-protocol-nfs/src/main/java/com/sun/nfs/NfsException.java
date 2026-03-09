@@ -91,64 +91,64 @@ public class NfsException extends java.io.IOException {
 
         switch (error) {
 	case NFS_OK:
-            return ("OK");
+            return "OK";
 	case NFSERR_PERM:
-            return ("Not owner");
+            return "Not owner";
 	case NFSERR_NOENT:
-            return ("No such file or directory");
+            return "No such file or directory";
 	case NFSERR_IO:
-            return ("I/O error");
+            return "I/O error";
 	case NFSERR_NXIO:
-            return ("No such device or address");
+            return "No such device or address";
 	case NFSERR_ACCES:
-            return ("Permission denied");
+            return "Permission denied";
 	case NFSERR_EXIST:
-            return ("File exists");
+            return "File exists";
 	case NFSERR_XDEV:
-            return ("Attempted cross-device link");
+            return "Attempted cross-device link";
 	case NFSERR_NODEV:
-            return ("No such device");
+            return "No such device";
 	case NFSERR_NOTDIR:
-            return ("Not a directory");
+            return "Not a directory";
 	case NFSERR_ISDIR:
-            return ("Is a directory");
+            return "Is a directory";
 	case NFSERR_INVAL:
-            return ("Invalid argument");
+            return "Invalid argument";
 	case NFSERR_FBIG:
-            return ("File too large");
+            return "File too large";
 	case NFSERR_NOSPC:
-            return ("No space left on device");
+            return "No space left on device";
 	case NFSERR_ROFS:
-            return ("Read-only file system");
+            return "Read-only file system";
 	case NFSERR_MLINK:
-            return ("Too many links");
+            return "Too many links";
 	case NFSERR_NAMETOOLONG:
-            return ("File name too long");
+            return "File name too long";
 	case NFSERR_NOTEMPTY:
-            return ("Directory not empty");
+            return "Directory not empty";
 	case NFSERR_DQUOT:
-            return ("Disk quota exceeded");
+            return "Disk quota exceeded";
 	case NFSERR_STALE:
-            return ("Stale NFS file handle");
+            return "Stale NFS file handle";
 	case NFSERR_REMOTE:
-            return ("Too many levels of remote in path");
+            return "Too many levels of remote in path";
 	case NFSERR_BADHANDLE:
-            return ("Illegal NFS file handle");
+            return "Illegal NFS file handle";
 	case NFSERR_NOT_SYNC:
-            return ("Update sync mismatch");
+            return "Update sync mismatch";
 	case NFSERR_BAD_COOKIE:
-            return ("Readdir cookie is stale");
+            return "Readdir cookie is stale";
 	case NFSERR_NOTSUPP:
-            return ("Operation not supported");
+            return "Operation not supported";
 	case NFSERR_TOOSMALL:
-            return ("Buffer/request too small");
+            return "Buffer/request too small";
 	case NFSERR_SERVERFAULT:
-            return ("Server fault");
+            return "Server fault";
 	case NFSERR_BADTYPE:
-            return ("Bad type");
+            return "Bad type";
 	case NFSERR_JUKEBOX:
-            return ("Jukebox error: try later");
+            return "Jukebox error: try later";
         }
-        return ("Unknown NFS error: " + error);
+        return "Unknown NFS error: " + error;
     }
 }

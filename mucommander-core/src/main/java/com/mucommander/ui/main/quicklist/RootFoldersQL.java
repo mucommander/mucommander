@@ -35,7 +35,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  */
 public class RootFoldersQL extends QuickListWithIcons<AbstractFile> {
 	
-	private FolderPanel folderPanel;
+	private final FolderPanel folderPanel;
 	
 	public RootFoldersQL(FolderPanel folderPanel) {
 		super(folderPanel, ActionProperties.getActionLabel(ActionType.ShowRootFoldersQL), Translator.get("roots_quick_list.empty_message"));

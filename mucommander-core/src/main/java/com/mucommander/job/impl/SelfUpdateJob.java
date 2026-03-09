@@ -59,16 +59,16 @@ public class SelfUpdateJob extends CopyJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SelfUpdateJob.class);
 	
     /** The JAR file to be updated */
-    private AbstractFile destJar;
+    private final AbstractFile destJar;
 
     /** The temporary file where the remote JAR file is copied, before being moved to its final location */
-    private AbstractFile tempDestJar;
+    private final AbstractFile tempDestJar;
 
     /** The ClassLoader to use for loading all classes from the JAR file */
-    private ClassLoader classLoader;
+    private final ClassLoader classLoader;
 
     /** Filters directories and class files, used for loading classes from the JAR file */
-    private OrFileFilter directoryOrClassFileFilter;
+    private final OrFileFilter directoryOrClassFileFilter;
 
     /** True if classes haven't been loaded yet */ 
     private boolean loadingClasses =  true;
@@ -200,9 +200,9 @@ public class SelfUpdateJob extends CopyJob {
                 parent = destJar.getParent();
 
                 // Look for an .app container that encloses the JAR file
-                if(parent.getName().equals("Java")
-                &&(parent=parent.getParent())!=null && parent.getName().equals("Resources")
-                &&(parent=parent.getParent())!=null && parent.getName().equals("Contents")
+                if("Java".equals(parent.getName())
+                &&(parent=parent.getParent())!=null && "Resources".equals(parent.getName())
+                &&(parent=parent.getParent())!=null && "Contents".equals(parent.getName())
                 &&(parent=parent.getParent())!=null && "app".equals(parent.getExtension())) {
 
                     String appPath = parent.getAbsolutePath();

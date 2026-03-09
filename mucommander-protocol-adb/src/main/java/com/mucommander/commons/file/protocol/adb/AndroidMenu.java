@@ -19,7 +19,6 @@ package com.mucommander.commons.file.protocol.adb;
 
 import java.net.MalformedURLException;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import javax.swing.JMenu;
@@ -52,8 +51,8 @@ import com.mucommander.ui.main.MainFrame;
 public class AndroidMenu extends JMenu implements MenuListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(AndroidMenu.class);
 
-    private MainFrame mainFrame;
-    private FolderPanel folderPanel;
+    private final MainFrame   mainFrame;
+    private final FolderPanel folderPanel;
 
     private boolean searching;
 

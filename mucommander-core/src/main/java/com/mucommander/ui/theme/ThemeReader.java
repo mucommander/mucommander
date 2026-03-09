@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -830,12 +831,11 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
     // -----------------------------------------------------------------------
 
     private static Set<String> getAvailableFontsFromOS() {
-        return new HashSet<>(List.of(
+        return new HashSet<>(Stream.of(
                         // takes long time when run first time in JVM (see muCommander#main - preload)
                         GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames())
-                .stream()
-                .map(String::toLowerCase)
-                .collect(Collectors.toSet()));
+								   .map(String::toLowerCase)
+								   .collect(Collectors.toSet()));
     }
 
     /**
@@ -870,9 +870,9 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
 
         // Computes the font style.
         style = 0;
-        if (((buffer = attributes.getValue(ATTRIBUTE_BOLD)) != null) && buffer.equals(VALUE_TRUE))
+        if (((buffer = attributes.getValue(ATTRIBUTE_BOLD)) != null) && VALUE_TRUE.equals(buffer))
             style |= Font.BOLD;
-        if (((buffer = attributes.getValue(ATTRIBUTE_ITALIC)) != null) && buffer.equals(VALUE_TRUE))
+        if (((buffer = attributes.getValue(ATTRIBUTE_ITALIC)) != null) && VALUE_TRUE.equals(buffer))
             style |= Font.ITALIC;
 
         // Computes the font size.

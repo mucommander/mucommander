@@ -99,7 +99,7 @@ enum TextViewerPreferences {
     enum EditorViewerMode {
         BOTH,
         EDITOR
-    };
+    }
 
     String prefKey;
     String i18nKey;

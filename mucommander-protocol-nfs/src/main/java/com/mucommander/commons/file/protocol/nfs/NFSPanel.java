@@ -39,11 +39,11 @@ public class NFSPanel extends ServerPanel {
 
     private final static int STANDARD_PORT = FileURL.getRegisteredHandler(FileProtocols.NFS).getStandardPort(); 
 
-    private JTextField serverField;
-    private JTextField shareField;
-    private JSpinner portSpinner;
-    private JComboBox<String> nfsVersionComboBox;
-    private JComboBox<String> nfsProtocolComboBox;
+    private final JTextField serverField;
+    private final JTextField shareField;
+    private final JSpinner   portSpinner;
+    private final JComboBox<String> nfsVersionComboBox;
+    private final JComboBox<String> nfsProtocolComboBox;
 
     private static String lastServer = "";
     private static String lastShare = "";

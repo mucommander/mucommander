@@ -29,12 +29,13 @@ import com.mucommander.commons.io.FilteredOutputStream;
 import com.mucommander.commons.io.StreamUtils;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 
 /**
@@ -62,7 +63,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     private long lastZipFileDate;
 
     /** Contents of an empty Zip file, 22 bytes long */
-    private final static byte EMPTY_ZIP_BYTES[] = {
+    private final static byte[] EMPTY_ZIP_BYTES = {
             0x50, 0x4B, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -119,8 +120,8 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         zipEntry.setMethod(ZipConstants.DEFLATED);
         zipEntry.setTime(System.currentTimeMillis());
         zipEntry.setUnixMode(SimpleFilePermissions.padPermissions(entry.getPermissions(), isDirectory
-                ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                        : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
+            ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+            : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
 
         return zipEntry;
     }
@@ -151,7 +152,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             try (InputStream in = zipFile.getInputStream(entry)) {
                 final ByteArrayOutputStream output = new ByteArrayOutputStream();
                 StreamUtils.copyStream(in, output);
-                return new String(output.toByteArray(), Charset.forName("utf-8"));
+                return output.toString(UTF_8);
             } catch(Exception e) {
                 LOGGER.warn("found a symlink entry '{}' but failed to get its target", entry.getName());
                 LOGGER.debug("exception: ", e);
@@ -190,17 +191,14 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
             final Iterator<ZipEntry> iterator = zipFile.getEntries();
 
-            return new ArchiveEntryIterator() {
-                @Override
-                public ArchiveEntry nextEntry() throws IOException {
-                    ZipEntry entry;
+            return () -> {
+				ZipEntry entry;
 
-                    if(!iterator.hasNext() || (entry = iterator.next())==null)
-                        return null;
+				if(!iterator.hasNext() || (entry = iterator.next())==null)
+					return null;
 
-                    return createArchiveEntry(entry);
-                }
-            };
+				return createArchiveEntry(entry);
+			};
         }
         // If the underlying AbstractFile doesn't have random read access, use java.util.zip.ZipInputStream to
         // read the entries. This is much slower than the former method as the file cannot be sought through and needs
@@ -230,7 +228,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             // Optimization: first check if the specified iterator is positionned at the beginning of the entry.
             // This will typically be the case if an iterator is being used to read all the archive's entries
             // (unpack operation). In that case, we save the cost of looking for the entry in the archive.
-            if(entryIterator!=null && (entryIterator instanceof JavaUtilZipEntryIterator)) {
+            if((entryIterator instanceof JavaUtilZipEntryIterator)) {
                 ArchiveEntry currentEntry = ((JavaUtilZipEntryIterator)entryIterator).getCurrentEntry();
                 if(currentEntry.getPath().equals(entry.getPath())) {
                     // The entry/zip stream is wrapped in a FilterInputStream where #close is implemented as a no-op:

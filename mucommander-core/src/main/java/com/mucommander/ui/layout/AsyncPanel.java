@@ -56,7 +56,7 @@ import com.mucommander.ui.icon.SpinningDial;
 public abstract class AsyncPanel extends JPanel {
 
     /** The component displayed while the target component is being loaded */
-    private JComponent waitComponent;
+    private final JComponent waitComponent;
 
     /** This field becomes true when this panel has become visible on screen. */
     private boolean visibleOnScreen;

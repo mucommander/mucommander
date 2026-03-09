@@ -65,7 +65,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @throws java.io.EOFException if this file reaches the end before reading all the bytes.
      * @throws IOException if an I/O error occurs.
      */
-    public void readFully(byte b[]) throws IOException {
+    public void readFully(byte[] b) throws IOException {
         StreamUtils.readFully(this, b, 0, b.length);
     }
 
@@ -80,7 +80,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @throws java.io.EOFException  if this file reaches the end before reading all the bytes.
      * @throws IOException if an I/O error occurs.
      */
-    public void readFully(byte b[], int off, int len) throws IOException {
+    public void readFully(byte[] b, int off, int len) throws IOException {
         StreamUtils.readFully(this, b, off, len);
     }
 
@@ -190,7 +190,7 @@ public abstract class RandomAccessInputStream extends InputStream implements Ran
      * @throws IOException if an I/O error occurs
      */
     @Override
-    public abstract int read(byte b[], int off, int len) throws IOException;
+    public abstract int read(byte[] b, int off, int len) throws IOException;
 
     /**
      * Closes this stream and releases any system resources associated with the stream.

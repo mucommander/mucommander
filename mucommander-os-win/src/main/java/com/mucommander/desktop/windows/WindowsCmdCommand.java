@@ -39,10 +39,10 @@ public class WindowsCmdCommand extends Command {
         String replacement = super.getKeywordReplacement(keyword, file);
         if (OsFamily.WINDOWS.isCurrent() && DesktopManager.isApplication(file))
             switch(keyword) {
-            case Command.KEYWORD_PATH:
-            case Command.KEYWORD_NAME:
-                replacement = replacement.replace("(", "^(").replace(")", "^)");
-            default:
+                case Command.KEYWORD_PATH:
+                case Command.KEYWORD_NAME:
+                    replacement = replacement.replace("(", "^(").replace(")", "^)");
+                default:
             }
         return replacement;
     }

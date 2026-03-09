@@ -34,7 +34,7 @@ import com.mucommander.commons.util.CircularByteBuffer;
 public class RarFile {
 	
     /** Interface to junrar library */
-    private Archive archive;
+    private final Archive archive;
 
     public RarFile(AbstractFile file, String password) throws IOException, UnsupportedFileOperationException, RarException {
         try (InputStream fileIn = file.getInputStream()) {
@@ -67,23 +67,21 @@ public class RarFile {
         final CircularByteBuffer cbb = new CircularByteBuffer(CircularByteBuffer.INFINITE_SIZE);
         
         new Thread(
-    		    new Runnable(){
-    		      public void run(){
-    		    	try {
-						archive.extractFile(header, cbb.getOutputStream());
-					} catch (RarException e) {
-					    e.printStackTrace();
-					}
-    		    	finally {
-    		    		try {
-							cbb.getOutputStream().close();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-    		    	}
-    		      }
-    		    }
-    		  ).start();
+            () -> {
+                try {
+                    archive.extractFile(header, cbb.getOutputStream());
+                } catch (RarException e) {
+                    e.printStackTrace();
+                }
+                finally {
+                    try {
+                        cbb.getOutputStream().close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        ).start();
         
         return cbb.getInputStream();
     }

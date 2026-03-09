@@ -69,18 +69,18 @@ public class CalculateChecksumJob extends TransferFileJob {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CalculateChecksumJob.class);
 	
     /** The checksum file where the checksum of each file is written */
-    private AbstractFile checksumFile;
+    private final AbstractFile checksumFile;
     /** The OutputStream of the checksum file */
-    private OutputStream checksumFileOut;
+    private       OutputStream checksumFileOut;
 
     /** The path to the base source folder, i.e. the folder which contains all the files this job operates on */
-    private String baseSourcePath;
+    private final String baseSourcePath;
 
     /** True if the SFV format is used rather than the default 'SUMS' format */
-    private boolean useSfvFormat;
+    private final boolean useSfvFormat;
 
     /** The MessageDigest that serves to calculate the checksum */
-    private MessageDigest digest;
+    private final MessageDigest digest;
 
 
     public CalculateChecksumJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile checksumFile, MessageDigest digest) {
@@ -88,7 +88,7 @@ public class CalculateChecksumJob extends TransferFileJob {
 
         this.checksumFile = checksumFile;
         this.digest = digest;
-        this.useSfvFormat = digest.getAlgorithm().equalsIgnoreCase("CRC32");
+        this.useSfvFormat = "CRC32".equalsIgnoreCase(digest.getAlgorithm());
 
         this.baseSourcePath = getBaseSourceFolder().getAbsolutePath(true);
     }
@@ -105,7 +105,7 @@ public class CalculateChecksumJob extends TransferFileJob {
             do {		// Loop for retry
                 try {
                     // for each file in folder...
-                    AbstractFile children[] = file.ls();
+                    AbstractFile[] children = file.ls();
                     for(int i=0; i<children.length && getState() != FileJobState.INTERRUPTED; i++) {
                         // Notify job that we're starting to process this file (needed for recursive calls to processFile)
                         nextFile(children[i]);
@@ -140,7 +140,7 @@ public class CalculateChecksumJob extends TransferFileJob {
 
                 // Determine the path relative to the base source folder
                 String relativePath = file.getAbsolutePath();
-                relativePath = relativePath.substring(baseSourcePath.length(), relativePath.length());
+                relativePath = relativePath.substring(baseSourcePath.length());
 
                 // Write a new line in the checksum file, in the appropriate format
                 checksum = AbstractFile.calculateChecksum(in, digest);

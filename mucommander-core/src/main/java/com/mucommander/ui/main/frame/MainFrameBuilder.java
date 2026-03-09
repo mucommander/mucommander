@@ -73,7 +73,7 @@ public abstract class MainFrameBuilder {
         MuPreferencesAPI preferences = MuConfigurations.getPreferences();
 
         // Checks which kind of initial path we're dealing with.
-        isCustom = preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+        isCustom = MuPreferences.STARTUP_FOLDERS_CUSTOM.equals(preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS));
 
         // Handles custom initial paths.
         if (isCustom) {
@@ -85,11 +85,11 @@ public abstract class MainFrameBuilder {
             // Set initial path to each tab
             int nbFolderPaths = snapshot.getIntegerVariable(MuSnapshot.getTabsCountVariable(window, folderPanelType == FolderPanelType.LEFT));
             folderPaths = new String[nbFolderPaths];
-            for (int i=0; i<nbFolderPaths;++i)
+            for (int i=0; i<nbFolderPaths;i++)
                 folderPaths[i] = snapshot.getVariable(MuSnapshot.getTabLocationVariable(window, folderPanelType == FolderPanelType.LEFT, i));
         }
 
-        List<AbstractFile> initialFolders = new LinkedList<AbstractFile>(); // Initial folders 
+        List<AbstractFile> initialFolders = new LinkedList<>(); // Initial folders
         AbstractFile folder;
 
         for (String folderPath : folderPaths) {
@@ -99,15 +99,15 @@ public abstract class MainFrameBuilder {
         }
 
         // If the initial path is not legal or does not exist, defaults to the user's home.
-        AbstractFile[] results = initialFolders.size() == 0 ?
+        AbstractFile[] results = initialFolders.isEmpty() ?
                 new AbstractFile[] {FileFactory.getFile(System.getProperty("user.home"))} :
                     initialFolders.toArray(new AbstractFile[0]);
 
                 LOGGER.debug("initial folders:");
-                for (AbstractFile result:results)
-                    LOGGER.debug("\t"+result);
+        for (AbstractFile result:results)
+            LOGGER.debug("\t"+result);
 
-                return results;
+        return results;
     }
 
     /**
@@ -126,14 +126,14 @@ public abstract class MainFrameBuilder {
         MuPreferencesAPI preferences = MuConfigurations.getPreferences();
 
         // Checks which kind of initial path we're dealing with.
-        boolean isCustom = preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_CUSTOM);
+        boolean isCustom = MuPreferences.STARTUP_FOLDERS_CUSTOM.equals(preferences.getVariable(MuPreference.STARTUP_FOLDERS, MuPreferences.DEFAULT_STARTUP_FOLDERS));
 
         String customPath = null;
         // Handles custom initial paths.
         if (isCustom) {
-            customPath = (folderPanelType == FolderPanelType.LEFT ? 
+            customPath = folderPanelType == FolderPanelType.LEFT ? 
                     preferences.getVariable(MuPreference.LEFT_CUSTOM_FOLDER)
-                    : preferences.getVariable(MuPreference.RIGHT_CUSTOM_FOLDER));
+                    : preferences.getVariable(MuPreference.RIGHT_CUSTOM_FOLDER);
         }
 
         AbstractFile result = null;

@@ -44,10 +44,10 @@ class KdeTrash extends QueuedTrash {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KdeTrash.class);
 	
     /** Command that allows to interact with the trash */
-    private String baseCommand;
+    private final String baseCommand;
 
     /** Command that allows to interact with the trash */
-    private String trashEmptyCommand;
+    private final String trashEmptyCommand;
 
     /**
      * Creates a new <code>KDETrash</code> instance using the specified command for interacting with the trash.
@@ -85,7 +85,7 @@ class KdeTrash extends QueuedTrash {
      * @param command the command tokens
      * @return true if the command was executed without any error
      */
-    private static boolean executeAndWait(String command[]) {
+    private static boolean executeAndWait(String[] command) {
         try {
             ProcessRunner.execute(command).waitFor();
             return true;
@@ -124,7 +124,7 @@ class KdeTrash extends QueuedTrash {
     @Override
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
-            && (file.getAbsolutePath(true).indexOf("/.local/share/Trash/") != -1);
+            && (file.getAbsolutePath(true).contains("/.local/share/Trash/"));
     }
 
     /**
@@ -156,7 +156,7 @@ class KdeTrash extends QueuedTrash {
     @Override
     protected boolean moveToTrash(List<AbstractFile> queuedFiles) {
         int nbFiles = queuedFiles.size();
-        String tokens[] = new String[nbFiles+3];
+        String[] tokens = new String[nbFiles+3];
 
         tokens[0] = baseCommand;
         tokens[1] = "move";

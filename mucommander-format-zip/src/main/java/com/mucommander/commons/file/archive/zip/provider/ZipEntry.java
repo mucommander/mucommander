@@ -40,7 +40,7 @@ import java.util.zip.ZipException;
 public class ZipEntry implements Cloneable {
 
     /** Name/path of this entry */
-    protected String name = null;
+    protected String name;
 
     /** Uncompressed size of the entry data */
     protected long size = -1;
@@ -67,13 +67,13 @@ public class ZipEntry implements Cloneable {
     protected int platform = PLATFORM_FAT;
 
     /** Internal attributes (2 bytes) */
-    protected int internalAttributes = 0;
+    protected int internalAttributes;
 
     /** External attributes (4 bytes) */
-    protected long externalAttributes = 0;
+    protected long externalAttributes;
 
     /** List of extra fields, as ZipEntraField instances */
-    protected Vector<ZipExtraField> extraFields = null;
+    protected Vector<ZipExtraField> extraFields;
 
     /** Contains info about how this entry is stored in the zip file */
     protected ZipEntryInfo entryInfo;
@@ -458,8 +458,8 @@ public class ZipEntry implements Cloneable {
     private Optional<Long> getTimeExtended() {
         return extraFields == null ? Optional.empty()
                 : extraFields.stream()
-                        .filter(f -> f instanceof ExtendedTimestampExtraField)
-                        .map(f -> (ExtendedTimestampExtraField) f)
+                        .filter(ExtendedTimestampExtraField.class::isInstance)
+                        .map(ExtendedTimestampExtraField.class::cast)
                         .map(ExtendedTimestampExtraField::getJavaTime)
                         .filter(Objects::nonNull)
                         .findFirst();

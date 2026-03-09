@@ -23,7 +23,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -64,31 +63,29 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     //////////////////////////
 
     private final static String QUICK_SEARCH_TITLE = "shortcuts_dialog.quick_search";
-    private final static Map<String, String> QUICK_SEARCH_SHORTCUTS = new Hashtable<String, String>() {
-        {
-            put("shortcuts_dialog.quick_search.start_search", "");
-            put("shortcuts_dialog.quick_search.jump_to_previous", "UP");
-            put("shortcuts_dialog.quick_search.jump_to_next", "DOWN");
-            put("shortcuts_dialog.quick_search.remove_last_char", "BACKSPACE");
-            put("shortcuts_dialog.quick_search.mark_jump_next", "INSERT");
-            put("shortcuts_dialog.quick_search.cancel_search", "ESCAPE");
-        }
-    };
+    private final static Map<String, String> QUICK_SEARCH_SHORTCUTS = new Hashtable<>() {
+		{
+			put("shortcuts_dialog.quick_search.start_search", "");
+			put("shortcuts_dialog.quick_search.jump_to_previous", "UP");
+			put("shortcuts_dialog.quick_search.jump_to_next", "DOWN");
+			put("shortcuts_dialog.quick_search.remove_last_char", "BACKSPACE");
+			put("shortcuts_dialog.quick_search.mark_jump_next", "INSERT");
+			put("shortcuts_dialog.quick_search.cancel_search", "ESCAPE");
+		}
+	};
 
     /** Comparator of actions according to their labels */
-    private static final Comparator<ActionId> ACTIONS_COMPARATOR = new Comparator<>() {
-        public int compare(ActionId id1, ActionId id2) {
-            String label1 = ActionProperties.getActionLabel(id1);
-            if (label1 == null)
-                return 1;
+    private static final Comparator<ActionId> ACTIONS_COMPARATOR = (id1, id2) -> {
+		String label1 = ActionProperties.getActionLabel(id1);
+		if (label1 == null)
+			return 1;
 
-            String label2 = ActionProperties.getActionLabel(id2);
-            if (label2 == null)
-                return -1;
+		String label2 = ActionProperties.getActionLabel(id2);
+		if (label2 == null)
+			return -1;
 
-            return label1.compareTo(label2);
-        }
-    };
+		return label1.compareTo(label2);
+	};
 
     public ShortcutsDialog(MainFrame mainFrame) {
         super(mainFrame.getJFrame(), ActionProperties.getActionLabel(ActionType.ShowKeyboardShortcuts), mainFrame.getJFrame());
@@ -103,7 +100,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
         for(ActionCategory category: categoryToItsActionsWithShortcutsIdsMap.keySet()) {
             // Get the list of actions from the above category which have shortcuts assigned to them
             List<ActionId> categoryActionsWithShortcuts = categoryToItsActionsWithShortcutsIdsMap.get(category);
-            Collections.sort(categoryActionsWithShortcuts, ACTIONS_COMPARATOR);
+            categoryActionsWithShortcuts.sort(ACTIONS_COMPARATOR);
 
             // If there is at least one action in the category with shortcuts assigned to it, add tab for the category
             if (!categoryActionsWithShortcuts.isEmpty())
@@ -133,7 +130,7 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
 
         // Initialize empty LinkedList for each category
         for (ActionCategory category : ActionProperties.getNonEmptyActionCategories())
-            categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<ActionId>());
+            categoryToItsActionsWithShortcutsIdsMap.put(category, new LinkedList<>());
 
         // Go over all action ids
         for (ActionId actionId : ActionManager.getActionIds()) {
@@ -209,8 +206,8 @@ public class ShortcutsDialog extends FocusDialog implements ActionListener {
     }
 
     private void addShortcutList(XAlignedComponentPanel compPanel, Map<String, String> actionsToShortcutsMap) {
-        List<String> vec = new Vector<String>(actionsToShortcutsMap.keySet());
-        Collections.sort(vec);
+        List<String> vec = new Vector<>(actionsToShortcutsMap.keySet());
+        vec.sort(null);
 
         for(String action : vec)
             compPanel.addRow(actionsToShortcutsMap.get(action), new JLabel(Translator.get(action)), 5);

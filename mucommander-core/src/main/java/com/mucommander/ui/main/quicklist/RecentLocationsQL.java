@@ -27,7 +27,6 @@ import com.mucommander.core.GlobalLocationHistory;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ShowRecentLocationsQLAction;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.quicklist.QuickListWithIcons;
 
@@ -38,7 +37,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  */
 public class RecentLocationsQL extends QuickListWithIcons<RecentLocationsQL.RecentLocation> {
 
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     public RecentLocationsQL(FolderPanel folderPanel) {
         super(folderPanel,
@@ -68,8 +67,8 @@ public class RecentLocationsQL extends QuickListWithIcons<RecentLocationsQL.Rece
         return getIconOfFile(FileFactory.getFile(item.url));
     }
 
-    class RecentLocation {
-        private FileURL url;
+    static class RecentLocation {
+        private final FileURL url;
 
         RecentLocation(FileURL url) {
             this.url = url;

@@ -32,7 +32,7 @@ package com.mucommander.commons.file.archive.zip.provider;
  */
 public final class ZipLong implements Cloneable {
 
-    private long value;
+    private final long value;
 
     /**
      * Create instance from a number.
@@ -121,7 +121,7 @@ public final class ZipLong implements Cloneable {
         long value = (bytes[offset + 3] << 24) & 0xFF000000L;
         value += (bytes[offset + 2] << 16) & 0xFF0000;
         value += (bytes[offset + 1] << 8) & 0xFF00;
-        value += (bytes[offset] & 0xFF);
+        value += bytes[offset] & 0xFF;
         return value;
     }
 
@@ -140,7 +140,7 @@ public final class ZipLong implements Cloneable {
      * @return true if the objects are equal
      */
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof ZipLong)) {
+        if (!(o instanceof ZipLong)) {
             return false;
         }
         return value == ((ZipLong) o).getValue();

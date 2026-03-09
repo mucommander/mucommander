@@ -49,11 +49,11 @@ import java.awt.event.ActionListener;
  */
 public class AddBookmarkDialog extends FocusDialog implements ActionListener, DocumentListener {
 
-    private JTextField nameField;
-    private JTextField locationField;
+    private final JTextField nameField;
+    private final JTextField locationField;
 
-    private JButton addButton;
-    private JButton cancelButton;
+    private final JButton addButton;
+    private final JButton cancelButton;
 
     // Dialog's width has to be at least 320
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(320,0);	
@@ -109,14 +109,12 @@ public class AddBookmarkDialog extends FocusDialog implements ActionListener, Do
      * accordingly, in order to prevent user from adding a bookmark with an empty name.
      */
     private void checkEmptyName() {
-        if(nameField.getText().trim().equals("")) {
+        if(nameField.getText().trim().isEmpty()) {
             if(addButton.isEnabled())
                 addButton.setEnabled(false);
         }
-        else {
-            if(!addButton.isEnabled())
-                addButton.setEnabled(true);
-        }
+        else if(!addButton.isEnabled())
+            addButton.setEnabled(true);
     }
 	
 	

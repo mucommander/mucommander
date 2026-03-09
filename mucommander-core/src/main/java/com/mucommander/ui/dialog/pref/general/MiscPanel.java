@@ -50,39 +50,39 @@ import com.mucommander.ui.notifier.NotifierProvider;
 class MiscPanel extends PreferencesPanel implements ItemListener {
 
     /** Custom shell command text field */
-    private PrefTextField customShellField;
+    private final PrefTextField customShellField;
 
     /** 'Use custom shell' radio button */
-    private PrefRadioButton useCustomShellRadioButton;
+    private final PrefRadioButton useCustomShellRadioButton;
 
     /** 'Check for updates on startup' checkbox */
-    private PrefCheckBox checkForUpdatesCheckBox;
+    private final PrefCheckBox checkForUpdatesCheckBox;
 
     /** 'Show confirmation dialog on quit' checkbox */
-    private PrefCheckBox quitConfirmationCheckBox;
+    private final PrefCheckBox quitConfirmationCheckBox;
     
     /** 'Show splash screen' checkbox */
-    private PrefCheckBox showSplashScreenCheckBox;
+    private final PrefCheckBox showSplashScreenCheckBox;
 
     /** 'Show keyboard shortcuts hints' checkbox */
-    private PrefCheckBox showKeyboardHintsCheckBox;
+    private final PrefCheckBox showKeyboardHintsCheckBox;
 
     /** 'Enable system notifications' checkbox */
     private PrefCheckBox systemNotificationsCheckBox;
 
     /** 'Enable Bonjour services discovery' checkbox */
-    private PrefCheckBox bonjourDiscoveryCheckBox;
+    private final PrefCheckBox bonjourDiscoveryCheckBox;
 
     /** 'Open the file with the viewer in case of opening error' checkbox */
-    private PrefCheckBox viewOnErrorDiscoveryCheckBox;
+    private final PrefCheckBox viewOnErrorDiscoveryCheckBox;
 
     /** 'Set default file drag and drop action to COPY' checkbox */
-    private PrefCheckBox setDropActionToCopyCheckBox;
+    private final PrefCheckBox setDropActionToCopyCheckBox;
 
     /** 'Use Option as Meta key in Terminal' checkbox */
     private PrefCheckBox useOptionAsMetaKey;
 
-    private PrefCheckBox fileComparatorModeCheckBox;
+    private final PrefCheckBox fileComparatorModeCheckBox;
 
     public MiscPanel(PreferencesDialog parent) {
         super(parent, Translator.get("prefs_dialog.misc_tab"));

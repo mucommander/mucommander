@@ -45,8 +45,8 @@ final class ZipEntryInfo {
     String encoding;
 
     /** The filename's bytes */
-    byte filename[];
+    byte[] filename;
 
     /** The comment's bytes */
-    byte comment[];
+    byte[] comment;
 }

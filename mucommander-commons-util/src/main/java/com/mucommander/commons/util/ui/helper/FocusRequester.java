@@ -40,7 +40,7 @@ public class FocusRequester implements Runnable {
     private Component c;
 
     /** If true, focus will be requested using Component#requestFocusInWindow() instead of Component#requestFocus() */
-    private boolean requestFocusInWindow;
+    private final boolean requestFocusInWindow;
 
     private FocusRequester(Component c, boolean requestFocusInWindow) {
         this.c = c;

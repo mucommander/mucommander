@@ -39,19 +39,19 @@ import com.mucommander.desktop.ActionType;
 public class ActionProperties {
 
     /* Maps action id -> action descriptor */
-    private static Map<ActionId, ActionDescriptor> actionDescriptors = new Hashtable<>();
+    private static final Map<ActionId, ActionDescriptor> actionDescriptors = new Hashtable<>();
 
-    private static ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
+    private static final ActionDescriptor nullActionDescriptor = new NullActionDescriptor();
 
     /* Contains all used action categories (i.e for each category at least one action is registered) */
-    private static TreeSet<ActionCategory> nonEmptyActionCategories = new TreeSet<>();
+    private static final TreeSet<ActionCategory> nonEmptyActionCategories = new TreeSet<>();
 
     /* Maps action id -> primary shortcut */
-    private static Map<ActionId, KeyStroke> defaultPrimaryActionKeymap = new HashMap<>();
+    private static final Map<ActionId, KeyStroke> defaultPrimaryActionKeymap   = new HashMap<>();
     /* Maps action id -> alternative shortcut */
-    private static Map<ActionId, KeyStroke> defaultAlternateActionKeymap = new HashMap<>();
+    private static final Map<ActionId, KeyStroke> defaultAlternateActionKeymap = new HashMap<>();
     /* Maps shortcut -> action id */
-    private static AcceleratorMap defaultAcceleratorMap = new AcceleratorMap();
+    private static final AcceleratorMap           defaultAcceleratorMap        = new AcceleratorMap();
 
     /**
      * Getter for ActionDescriptor.

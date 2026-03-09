@@ -48,7 +48,7 @@ public class ImageFileViewerService implements FileViewerService {
     /**
      * Used to filter out file extensions that the image viewer cannot open.
      */
-    private ExtensionFilenameFilter filter;
+    private final ExtensionFilenameFilter filter;
 
     public ImageFileViewerService() {
         var acceptedExts = getSupportedImageExtensions();

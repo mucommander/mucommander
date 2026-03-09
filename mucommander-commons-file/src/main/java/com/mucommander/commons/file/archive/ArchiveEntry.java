@@ -104,8 +104,8 @@ public class ArchiveEntry extends SimpleFileAttributes {
 
         int lastSlash = path.lastIndexOf('/');
         return lastSlash==-1?
-          path:
-          path.substring(lastSlash+1, len);
+            path:
+            path.substring(lastSlash+1, len);
     }
 
     /**
@@ -189,8 +189,8 @@ public class ArchiveEntry extends SimpleFileAttributes {
 
         // #equals(Object) is trailing separator insensitive, so the hashCode must be trailing separator invariant
         hashCode = path.endsWith("/")
-                ?path.substring(0, path.length()-1).hashCode()
-                :path.hashCode();
+            ?path.substring(0, path.length()-1).hashCode()
+            :path.hashCode();
 
         return hashCode;
     }

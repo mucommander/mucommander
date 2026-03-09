@@ -67,7 +67,7 @@ public class XzArchiveFile extends AbstractROArchiveFile {
             if (extensionIndex > -1)
                 name = name.substring(0, extensionIndex);
 
-            if (extension.equals("txz") || extension.equals("tar.xz"))
+            if ("txz".equals(extension) || "tar.xz".equals(extension))
                 name += ".tar";
         }
 

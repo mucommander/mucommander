@@ -42,23 +42,23 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 	public static final String SCHEMA = "dropbox";
 	private static final String DROPBOX_ICON_PATH = "/images/file/dropbox.png";
 	// Read app info file (contains app key and app secret)
-	private static String appKey = "";
-	private static String appSecret = "";
-	private static DbxAppInfo appInfo;
+	private static final String appKey            = "";
+	private static final String appSecret         = "";
+	private static       DbxAppInfo appInfo;
 
 	private DbxCredential credential;
 
-	private JButton signingIn;
-	private JTextField token;
-	private LoginPhase loginPhase;
-	private ImageIcon dropboxIcon;
-	private JButton loadButton;
-	private JLabel tokenLabel;
-	private JLabel loadLabel;
-	private JLabel nameLabel;
-	private JLabel name;
-	private JLabel accountAliasLabel;
-	private JTextField accountAlias;
+	private final JButton    signingIn;
+	private final JTextField token;
+	private       LoginPhase loginPhase;
+	private final ImageIcon  dropboxIcon;
+	private final JButton    loadButton;
+	private final JLabel    tokenLabel;
+	private final JLabel  loadLabel;
+	private final JLabel nameLabel;
+	private final JLabel name;
+	private final JLabel accountAliasLabel;
+	private final JTextField accountAlias;
 
 	enum LoginPhase {
 		SIGN_IN,
@@ -202,7 +202,7 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 		case SIGN_IN:
 			setLoginPhase(LoginPhase.CANCEL_SIGN_IN);
 			token.setText("");
-			SwingUtilities.invokeLater(() -> {
+			SwingUtilities.invokeLater(() ->
 				new Thread(() ->  {
 				    appInfo = new DbxAppInfo(appKey, appSecret);
 				    PkceAuthorize pkceAuthorize = new PkceAuthorize(appInfo);
@@ -210,8 +210,7 @@ public class DropboxPanel extends ServerPanel implements ActionListener {
 				    listener.browse(authUrl);
 				    setAuthorizationFieldsVisible(pkceAuthorize);
 				    setAccountFieldsVisible(null);
-				}).start();
-			});
+				}).start());
 			break;
 		case CANCEL_SIGN_IN:
 			setLoginPhase(LoginPhase.SIGN_IN);

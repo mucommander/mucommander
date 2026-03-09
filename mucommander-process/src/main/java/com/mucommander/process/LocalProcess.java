@@ -35,7 +35,7 @@ class LocalProcess extends AbstractProcess {
     // - Instance fields -------------------------------------------------------
     // -------------------------------------------------------------------------
     /** Underlying system process. */
-    private Process process;
+    private final Process process;
 
 
 

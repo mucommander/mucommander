@@ -42,8 +42,8 @@ import com.mucommander.commons.util.ui.combobox.EditableComboBox;
  */
 
 public abstract class AutocompleterTextComponent {
-	private JTextComponent textComponent;
-	private EditableComboBox editableComboBox = null;
+	private final JTextComponent   textComponent;
+	private       EditableComboBox editableComboBox;
 	
 	public AutocompleterTextComponent(JTextComponent textComp) {
 		this.textComponent = textComp;	
@@ -72,9 +72,8 @@ public abstract class AutocompleterTextComponent {
 	
 	private void removeAllKeyListeners() {
 		KeyListener[] l = editableComboBox.getTextField().getKeyListeners();
-		int nbKeyListeners = l.length;
-		for (int i=0 ; i<nbKeyListeners; i++)
-			editableComboBox.getTextField().removeKeyListener(l[i]);
+		for (KeyListener keyListener : l)
+			editableComboBox.getTextField().removeKeyListener(keyListener);
 	}
 	
 	// Methods of the text component which are used by the auto-completion mechanism:	
@@ -118,7 +117,7 @@ public abstract class AutocompleterTextComponent {
 	 *  otherwise return Vector which contains the names of the combobox items.
 	 */
 	public Vector<String> getItemNames() {
-		Vector<String> result = new Vector<String>();
+		Vector<String> result = new Vector<>();
 		if (editableComboBox != null) {
 			int nbItems = editableComboBox.getItemCount();
 			for (int i=0; i < nbItems; i++)

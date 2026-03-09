@@ -45,7 +45,7 @@ public class CachedDirectory extends ProxyFile {
     private static final ImageIcon NOT_ACCESSIBLE_ICON = IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NOT_ACCESSIBLE_FILE);
 
     /** an array of cached children */
-    private AbstractFile[] cachedChildren = null;
+    private AbstractFile[] cachedChildren;
     
     /** a flag indicating that a thread is running, caching children */
     private boolean readingChildren = false;
@@ -54,7 +54,7 @@ public class CachedDirectory extends ProxyFile {
     private long lsTimeStamp = -1;
     
     /** a cache in which this object is stored */
-    private DirectoryCache cache;
+    private final DirectoryCache cache;
 
     /** a cached icon */
     private Icon cachedIcon;
@@ -84,11 +84,7 @@ public class CachedDirectory extends ProxyFile {
         if (lsTimeStamp != file.getDate()) {
             setReadingChildren(true);
             // read children in caching thread
-            TreeIOThreadManager.getInstance().addTask(new Runnable() {
-                public void run() {
-                    lsAsync();
-                }
-            });
+            TreeIOThreadManager.getInstance().addTask(this::lsAsync);
             return false;
         }
         return true;
@@ -113,7 +109,7 @@ public class CachedDirectory extends ProxyFile {
         }
 
         Arrays.sort(children, cache.getSort());
-        Icon icons[] = new Icon[children.length];
+        Icon[] icons = new Icon[children.length];
         for (int i = 0; i < children.length; i++) {
             icons[i] = FileIcons.getFileIcon(children[i]);
         }

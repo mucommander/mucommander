@@ -16,9 +16,6 @@
  */
 package com.mucommander.text;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import java.util.Collections;
 import java.util.Locale;
 
@@ -46,11 +43,11 @@ public class TranslatorTest {
      */
     @Test
     public void reusesKey() {
-        assert Translator.get("key1").equals("Hello");
-        assert Translator.get("key2").equals("World");
-        assert Translator.get("key3").equals("Hello");
-        assert Translator.get("key4").equals("\"Hello the World!\"");
-        assert Translator.get("key5").equals("\"Hello the $[key0]!\"");
-        assert Translator.get("key6").equals("-\"Hello the World!\"-\"Hello the $[key0]!\"-$[key7]-");
+        assert "Hello".equals(Translator.get("key1"));
+        assert "World".equals(Translator.get("key2"));
+        assert "Hello".equals(Translator.get("key3"));
+        assert "\"Hello the World!\"".equals(Translator.get("key4"));
+        assert "\"Hello the $[key0]!\"".equals(Translator.get("key5"));
+        assert "-\"Hello the World!\"-\"Hello the $[key0]!\"-$[key7]-".equals(Translator.get("key6"));
     }
 }

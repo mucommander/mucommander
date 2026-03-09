@@ -35,7 +35,7 @@ public class AssociationWriter implements AssociationsXmlConstants, AssociationB
     // - Instance variables --------------------------------------------------
     // -----------------------------------------------------------------------
     /** Where to write the custom command associations to. */
-    private XmlWriter out;
+    private final XmlWriter out;
 
 
 

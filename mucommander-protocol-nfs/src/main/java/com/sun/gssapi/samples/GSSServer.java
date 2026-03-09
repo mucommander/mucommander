@@ -55,7 +55,7 @@ class GSSServer {
 	 * This is the server end of the MIT like sample
 	 * GSS-API applications.
 	 */
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 
 		//default MIT port
 		int port = 4444;
@@ -73,13 +73,13 @@ class GSSServer {
 			//parse the command line options
 			for (int i = 0; i < args.length; i++) {
 
-				if (args[i].equals("-port")) {
+				if ("-port".equals(args[i])) {
 					if (i >= (args.length - 2)) {
 						usage();
 						exit(-1);
 					}
 					port = Integer.parseInt(args[++i]);
-				} else if (args[i].equals("-mech")) {
+				} else if ("-mech".equals(args[i])) {
 					if (i >= (args.length-2)) {
 						usage();
 						exit(-1);
@@ -274,7 +274,7 @@ class GSSServer {
 		MessageProp mInfo = new MessageProp();
 
 		aCtxt.unwrap(dis, bos, mInfo);
-		print("\tMessage from peer:\t" + new String(bos.toByteArray()));
+		print("\tMessage from peer:\t" + bos.toString());
 
 		mInfo.setQOP(0);
 		mInfo.setPrivacy(false);

@@ -86,7 +86,7 @@ public class AppleScript {
         // Use the 'osascript' command to execute the AppleScript. The '-s o' flag tells osascript to print errors to
         // stdout rather than stderr. The AppleScript is piped to the process instead of passing it as an argument
         // ('-e' flag), for better control over the encoding and to remove any limitations on the maximum script size.
-        String tokens[] = new String[] {
+        String[] tokens = new String[] {
             "osascript",
             "-s",
             "o",
@@ -152,8 +152,8 @@ public class AppleScript {
      */
     private static class ScriptOutputListener implements ProcessListener {
 
-        private StringBuilder outputBuffer;
-        private String outputEncoding;
+        private final StringBuilder outputBuffer;
+        private final String        outputEncoding;
 
         private ScriptOutputListener(StringBuilder outputBuffer, String outputEncoding) {
             this.outputBuffer = outputBuffer;

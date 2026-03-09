@@ -71,7 +71,7 @@ public class Bzip2ArchiveFile extends AbstractROArchiveFile {
             if (extensionIndex > -1)
                 name = name.substring(0, extensionIndex);
 
-            if (extension.equals("tbz2") || extension.equals("tar.bz2"))
+            if ("tbz2".equals(extension) || "tar.bz2".equals(extension))
                 name += ".tar";
         }
 

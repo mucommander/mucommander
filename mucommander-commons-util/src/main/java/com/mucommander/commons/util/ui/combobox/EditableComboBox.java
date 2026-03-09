@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Objects;
 import java.util.Vector;
 import java.util.WeakHashMap;
 
@@ -53,7 +54,7 @@ public class EditableComboBox extends SaneComboBox {
     private JTextField textField;
 
     /** Contains all registered EditableComboBoxListener instances, stored as weak references */
-    private WeakHashMap<EditableComboBoxListener, Object> listeners = new WeakHashMap<EditableComboBoxListener, Object>();
+    private final WeakHashMap<EditableComboBoxListener, Object> listeners = new WeakHashMap<>();
 
     /** Specifies whether the text field's contents is updated when an item is selected in the associated combo box */
     private boolean comboSelectionUpdatesTextField;
@@ -146,12 +147,8 @@ public class EditableComboBox extends SaneComboBox {
     private void init(JTextField textField) {
         setRenderer(renderer = new ComboBoxCellRenderer());
         // Create a new JTextField if no text field was specified
-        if(textField==null) {
-            this.textField = new JTextField();
-        }
-        // Use the specified text field
-        else
-            this.textField = textField;
+		// Else, use the specified text field
+		this.textField = Objects.requireNonNullElseGet(textField, JTextField::new);
 
         // Use a custom editor that uses the text field
         setEditor(new BasicComboBoxEditor() {
@@ -190,17 +187,15 @@ public class EditableComboBox extends SaneComboBox {
                     }
                 }
                 // Combo popup menu is not visible, these events really belong to the text field
-                else {
-                    if(keyCode==KeyEvent.VK_ENTER) {
-                        // Notify listeners that the text field has been validated
-                        fireComboFieldValidated();
-                        // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
-                        keyEvent.consume();
-                    }
-                    else if(keyCode==KeyEvent.VK_ESCAPE) {
-                        // Notify listeners that the text field has been cancelled
-                        fireComboFieldCancelled();
-                    }
+                else if(keyCode==KeyEvent.VK_ENTER) {
+                    // Notify listeners that the text field has been validated
+                    fireComboFieldValidated();
+                    // /!\ Consume the event so to prevent JComboBox from firing an ActionEvent (default JComboBox behavior)
+                    keyEvent.consume();
+                }
+                else if(keyCode==KeyEvent.VK_ESCAPE) {
+                    // Notify listeners that the text field has been cancelled
+                    fireComboFieldCancelled();
                 }
             }
         });

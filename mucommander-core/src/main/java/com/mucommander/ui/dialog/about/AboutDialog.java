@@ -61,6 +61,7 @@ import java.util.Locale;
  * @author Maxence Bernard, Nicolas Rinaudo
  */
 public class AboutDialog extends FocusDialog implements ActionListener {
+    private static final String APACHE_LICENSE = "Apache License";
     // - Styles -----------------------------------------------------------------
     // --------------------------------------------------------------------------
     /** Style for normal text. */
@@ -74,7 +75,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
     /** Style for a section title. */
     private static final String STYLE_TITLE = "title";
     /** Line break string. */
-    private static final String LINE_BREAK = System.getProperty("line.separator");
+    private static final String LINE_BREAK = System.lineSeparator();
 
     // - UI components ----------------------------------------------------------
     // --------------------------------------------------------------------------
@@ -173,32 +174,32 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             // External Libraries.
             // TODO - it should be fed dynamically from package/readme.txt
             insertHeader(doc, "Libraries");
-            insertDetailedUrl(doc, "Ant", "Apache License", "http://ant.apache.org");
-            insertDetailedUrl(doc, "Apache Commons", "Apache License", "http://commons.apache.org");
-            insertDetailedUrl(doc, "Apache Hadoop", "Apache License", "http://hadoop.apache.org");
+            insertDetailedUrl(doc, "Ant", APACHE_LICENSE, "http://ant.apache.org");
+            insertDetailedUrl(doc, "Apache Commons", APACHE_LICENSE, "http://commons.apache.org");
+            insertDetailedUrl(doc, "Apache Hadoop", APACHE_LICENSE, "http://hadoop.apache.org");
             insertDetailedUrl(doc, "Furbelow", "LGPL", "http://sourceforge.net/projects/furbelow");
             insertDetailedUrl(doc, "ICU4J", "ICU License", "http://www.icu-project.org");
             insertDetailedUrl(doc, "JSCH", "BSD", "https://github.com/mwiede/jsch");
             insertDetailedUrl(doc, "J7Zip", "LGPL", "http://sourceforge.net/projects/p7zip/");
             insertDetailedUrl(doc, "7-Zip-JBinding", "LGPL", "http://sevenzipjbind.sourceforge.net");
             insertDetailedUrl(doc, "jCIFS", "LGPL", "http://jcifs.samba.org");
-            insertDetailedUrl(doc, "SMBJ", "Apache License", "https://github.com/hierynomus/smbj");
-            insertDetailedUrl(doc, "JetS3t", "Apache License", "http://jets3t.s3.amazonaws.com/index.html");
+            insertDetailedUrl(doc, "SMBJ", APACHE_LICENSE, "https://github.com/hierynomus/smbj");
+            insertDetailedUrl(doc, "JetS3t", APACHE_LICENSE, "http://jets3t.s3.amazonaws.com/index.html");
             insertDetailedUrl(doc, "JediTerm", "LGPL and Apache License", "https://github.com/JetBrains/jediterm");
             insertDetailedUrl(doc, "JmDNS", "LGPL", "http://jmdns.sourceforge.net");
             insertDetailedUrl(doc, "JNA", "LGPL", "http://jna.dev.java.net");
             insertDetailedUrl(doc, "JUnRar", "Freeware", "http://sourceforge.net/projects/java-unrar");
             insertDetailedUrl(doc, "Yanfs", "BSD", "http://yanfs.dev.java.net");
-            insertDetailedUrl(doc, "JCommander", "Apache License", "http://jcommander.org");
-            insertDetailedUrl(doc, "ICEpdf", "Apache License", "https://github.com/pcorless/icepdf");
+            insertDetailedUrl(doc, "JCommander", APACHE_LICENSE, "http://jcommander.org");
+            insertDetailedUrl(doc, "ICEpdf", APACHE_LICENSE, "https://github.com/pcorless/icepdf");
             insertDetailedUrl(doc,
                     "RSyntaxTextArea",
                     "BSD 3-Clause New or Revised License",
                     "https://bobbylight.github.io/RSyntaxTextArea/");
-            insertDetailedUrl(doc, "SnakeYAML", "Apache License", "https://bitbucket.org/snakeyaml");
+            insertDetailedUrl(doc, "SnakeYAML", APACHE_LICENSE, "https://bitbucket.org/snakeyaml");
 
             insertDetailedUrl(doc, "Unix4j", "MIT License", "http://unix4j.org");
-            insertDetailedUrl(doc, "FlatLaf", "Apache License", "https://www.formdev.com/flatlaf");
+            insertDetailedUrl(doc, "FlatLaf", APACHE_LICENSE, "https://www.formdev.com/flatlaf");
             insertDetailedUrl(doc, "VAqua", "GPL", "https://violetlib.org/vaqua/overview.html");
             insertDetailedUrl(doc, "Mark James' icons", "Creative Commons Attribution License", "http://famfamfam.com");
             insertLineBreak(doc);
@@ -469,9 +470,9 @@ public class AboutDialog extends FocusDialog implements ActionListener {
 
         buffer = new StringBuilder(RuntimeConstants.BUILD_DATE.substring(0, 4));
         buffer.append('/');
-        buffer.append(RuntimeConstants.BUILD_DATE.substring(4, 6));
+        buffer.append(RuntimeConstants.BUILD_DATE, 4, 6);
         buffer.append('/');
-        buffer.append(RuntimeConstants.BUILD_DATE.substring(6, 8));
+        buffer.append(RuntimeConstants.BUILD_DATE, 6, 8);
 
         return buffer.toString();
     }

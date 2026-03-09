@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.function.Function;
 
 /**
@@ -48,7 +48,7 @@ class OSCommand {
      */
     static String runCommand(String... command) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder(command);
-        pb.directory(Paths.get(System.getProperty("user.dir")).toFile());
+        pb.directory(Path.of(System.getProperty("user.dir")).toFile());
 
         String commandStr = String.join(" ", command);
         LOGGER.debug("Executing: {}", commandStr);

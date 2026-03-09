@@ -200,7 +200,7 @@ class Nfs3 extends Nfs {
     long length() throws IOException {
         checkAttr();
 
-        return maxLength > attr.size ? maxLength : attr.size;
+        return Math.max(maxLength, attr.size);
     }
 
     /*
@@ -334,12 +334,12 @@ class Nfs3 extends Nfs {
         if (name == null) { 
 		pathname = this.name;
 		name = this.name;
-        } else { /* Single component case  */
-            if (this.name == null)
-                pathname = name;
-            else
-                pathname = this.name + "/" + name;
         }
+        /* Single component case  */
+        else if (this.name == null)
+            pathname = name;
+        else
+            pathname = this.name + "/" + name;
 
         /*
          * First check the cache to see
@@ -382,7 +382,7 @@ class Nfs3 extends Nfs {
                                 NfsSecurity.getService(secKey),
                                 NfsSecurity.getQop(secKey)));
                         continue;
-                    } else if (secKey != null && secKey.equals("1")) {
+                    } else if ("1".equals(secKey)) {
 			rpc.setCred(new CredUnix());
 			continue;
 		    }
@@ -712,7 +712,7 @@ class Nfs3 extends Nfs {
                 if (reply.xdr_bool())		// entry filehandle
                     efh = reply.xdr_bytes();
 
-                if (ename.equals(".") || ename.equals(".."))	// ignore entry
+                if (".".equals(ename) || "..".equals(ename))	// ignore entry
                     continue;
 
                 s[i++] = ename;
@@ -775,7 +775,7 @@ class Nfs3 extends Nfs {
          * cached then return them.
          */
         if (dircache != null && cacheOK(cacheTime))
-            return (dircache);
+            return dircache;
 
         Xdr call = new Xdr(rsize + 512);
 
@@ -805,7 +805,7 @@ class Nfs3 extends Nfs {
                 reply.xdr_hyper();		// skip fileid
                 ename = reply.xdr_string();	// filename
 
-                if (! ename.equals(".") && ! ename.equals(".."))
+                if (! ".".equals(ename) && ! "..".equals(ename))
                     s[i++] = ename;
 
                 if (i >= s.length) {		// last elem in array ?
@@ -821,7 +821,7 @@ class Nfs3 extends Nfs {
         }
 
         if (i == 0)
-            return (null);
+            return null;
         /*
          * Trim array to exact size
          */
@@ -835,7 +835,7 @@ class Nfs3 extends Nfs {
         dircache = s;
         cacheTime = attr.mtime;
 
-        return (s);
+        return s;
     }
 
     /*

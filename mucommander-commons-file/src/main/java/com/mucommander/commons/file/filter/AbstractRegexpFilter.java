@@ -29,7 +29,7 @@ import java.util.regex.PatternSyntaxException;
 public abstract class AbstractRegexpFilter extends AbstractStringCriterionFilter {
 
     /** Pattern against which criteria values will be compared. */
-    private Pattern pattern;
+    private final Pattern pattern;
 
     /**
      * Creates a new <code>AbstractRegexpFilter</code> matching the specified regexp and operating in the specified

@@ -45,12 +45,14 @@ import java.io.*;
  */
 public class XFileOutputStream extends OutputStream {
 
+    private static final String NO_WRITE_PERMISSION = "no write permission";
+
     private long fp;	/* File Pointer */
 
     /*
      * File Accessor that implements the underlying filesystem
      */
-    private XFileAccessor xfa;
+    private final XFileAccessor xfa;
 
 
     /**
@@ -70,11 +72,11 @@ public class XFileOutputStream extends OutputStream {
                 throw new IOException("not a file");
 
             if (!xfa.canWrite())
-                throw new IOException("no write permission");
+                throw new IOException(NO_WRITE_PERMISSION);
         }
 
         if (!xfa.mkfile())
-            throw new IOException("no write permission");
+            throw new IOException(NO_WRITE_PERMISSION);
     }
 
     /**
@@ -104,12 +106,12 @@ public class XFileOutputStream extends OutputStream {
 
         xfa = xfile.newAccessor();
 
-        if ((isExist = xfa.open(xfile, true, false))) { // serial, not readonly
+        if (isExist = xfa.open(xfile, true, false)) { // serial, not readonly
             if (!xfa.isFile())
                 throw new IOException("not a file");
 
             if (!xfa.canWrite())
-                throw new IOException("no write permission");
+                throw new IOException(NO_WRITE_PERMISSION);
         }
 
         /*
@@ -117,7 +119,7 @@ public class XFileOutputStream extends OutputStream {
          */
         if (!isExist || !append) {
             if (!xfa.mkfile())
-                throw new IOException("no write permission");
+                throw new IOException(NO_WRITE_PERMISSION);
         }
 
         if (append)
@@ -143,7 +145,7 @@ public class XFileOutputStream extends OutputStream {
     /*
      * All writes to the Accessor go through here.
      */
-    synchronized private void XFAwrite(byte b[], int off, int len)
+    synchronized private void XFAwrite(byte[] b, int off, int len)
         throws IOException {
 
         if (b == null)
@@ -178,7 +180,7 @@ public class XFileOutputStream extends OutputStream {
      * @param      b   the data.
      * @exception  java.io.IOException  if an I/O error occurs.
      */
-    public void write(byte b[]) throws IOException {
+    public void write(byte[] b) throws IOException {
 	XFAwrite(b, 0, b.length);
     }
 
@@ -192,7 +194,7 @@ public class XFileOutputStream extends OutputStream {
      * @param      len   the number of bytes to write.
      * @exception  java.io.IOException  if an I/O error occurs.
      */
-    public void write(byte b[], int off, int len) throws IOException {
+    public void write(byte[] b, int off, int len) throws IOException {
 	XFAwrite(b, off, len);
     }
 

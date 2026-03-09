@@ -25,8 +25,8 @@ import java.awt.Color;
  */
 public class ColorChangeEvent {
 
-    private JComponent source;
-    private Color color;
+    private final JComponent source;
+    private final Color      color;
 
 
     public ColorChangeEvent(JComponent source, Color color) {

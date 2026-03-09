@@ -30,7 +30,7 @@ import com.mucommander.commons.file.protocol.local.LocalFile;
  */
 
 public class VolumesService implements CompletionService {
-    private Vector<String> lastSuggestedCompletions = new Vector<String>();
+    private Vector<String> lastSuggestedCompletions = new Vector<>();
 
     public VolumesService() {}
 

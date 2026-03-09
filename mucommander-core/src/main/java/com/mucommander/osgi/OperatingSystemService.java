@@ -20,7 +20,6 @@ package com.mucommander.osgi;
 import java.util.List;
 
 import com.mucommander.desktop.DesktopAdapter;
-import com.mucommander.os.notifier.AbstractNotifier;
 
 /**
  * @author Arik Hadas

@@ -47,7 +47,7 @@ public class InitialSetupDialog extends FocusDialog implements ActionListener {
     // - Instance fields -----------------------------------------------------------------
     // -----------------------------------------------------------------------------------
     /** All available look and feels. */
-    private UIManager.LookAndFeelInfo lfInfo[];
+    private UIManager.LookAndFeelInfo[] lfInfo;
     /** Used to select a startup theme. */
     private JComboBox<Theme> themeComboBox;
     /** Used to select a look and feel. */

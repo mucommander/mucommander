@@ -30,7 +30,7 @@ import com.mucommander.ui.tabs.TabsViewerFactory;
 */
 public class FileTableTabsWithoutHeadersViewerFactory implements TabsViewerFactory<FileTableTab> {
 
-	private FolderPanel folderPanel;
+	private final FolderPanel folderPanel;
 	
 	public FileTableTabsWithoutHeadersViewerFactory(FolderPanel folderPanel) {
 		this.folderPanel = folderPanel;
@@ -41,6 +41,6 @@ public class FileTableTabsWithoutHeadersViewerFactory implements TabsViewerFacto
 	 ***********************************/
 
 	public TabsViewer<FileTableTab> create(TabsCollection<FileTableTab> tabs) {
-		return new TabWithoutHeaderViewer<FileTableTab>(tabs, folderPanel.getFileTable().getAsUIComponent());
+		return new TabWithoutHeaderViewer<>(tabs, folderPanel.getFileTable().getAsUIComponent());
 	}
 }

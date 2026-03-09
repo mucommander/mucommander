@@ -39,16 +39,16 @@ import com.mucommander.ui.dialog.pref.component.PrefTextField;
 class MailPanel extends PreferencesPanel {
 
     /** Name of the user */
-    private PrefTextField nameField;
+    private final PrefTextField nameField;
 	
     /** Email address of the user */
-    private PrefTextField emailField;
+    private final PrefTextField emailField;
 	
     /** IP/hostname to the SMTP server */
-    private PrefTextField smtpField;
+    private final PrefTextField smtpField;
 	
     /** TCP port to the SMTP server */
-    private PrefTextField portField;
+    private final PrefTextField portField;
 
 
     public MailPanel(PreferencesDialog parent) {

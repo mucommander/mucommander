@@ -37,7 +37,7 @@ public abstract class DefaultColor {
     // - Instance fields -----------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** List of colors linked to this default value. */
-    private java.util.List<Integer> linkedColors;
+    private final java.util.List<Integer> linkedColors;
 
 
 
@@ -47,7 +47,7 @@ public abstract class DefaultColor {
      * Creates a new instance of {@link DefaultColor}.
      */
     protected DefaultColor() {
-        linkedColors = new Vector<Integer>();
+        linkedColors = new Vector<>();
     }
 
 

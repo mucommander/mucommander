@@ -128,7 +128,7 @@ public class OSXTrash extends QueuedTrash {
     @Override
     public boolean isTrashFile(AbstractFile file) {
         return (file.getTopAncestor() instanceof LocalFile)
-            && (file.getAbsolutePath(true).indexOf("/.Trash/") != -1);
+            && (file.getAbsolutePath(true).contains("/.Trash/"));
     }
 
     /**
@@ -180,18 +180,18 @@ public class OSXTrash extends QueuedTrash {
             return true;
 
         boolean smbfs = queuedFiles.stream()
-                .map(file -> (File) file.getUnderlyingFileObject())
-                .map(File::toPath)
-                .map(path -> {
-                    try {
-                        return Files.getFileStore(path);
-                    } catch (IOException e) {
-                        LOGGER.warn("failed to retrieve FileStore of {}", path, e);
-                        return null;
-                    }
-                })
-                .map(fs -> fs != null ? fs.type() : null)
-                .anyMatch("smbfs"::equals);
+            .map(file -> (File) file.getUnderlyingFileObject())
+            .map(File::toPath)
+            .map(path -> {
+                try {
+                    return Files.getFileStore(path);
+                } catch (IOException e) {
+                    LOGGER.warn("failed to retrieve FileStore of {}", path, e);
+                    return null;
+                }
+            })
+            .map(fs -> fs != null ? fs.type() : null)
+            .anyMatch("smbfs"::equals);
         if (smbfs) {
             // JNA doesn't move files on SMB shares to trash
             LOGGER.error("failed to move SMB files to trash");
@@ -215,7 +215,7 @@ public class OSXTrash extends QueuedTrash {
     private boolean moveToTrashViaAppleScript(List<AbstractFile> queuedFiles) {
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
         // script (AppleScript 2.0 / Mac OS X 10.5 or higher).
-        if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
+        if(AppleScript.UTF8.equals(AppleScript.getScriptEncoding())) {
             String appleScript = queuedFiles.stream()
                     .map(AbstractFile::getAbsolutePath)
                     .map(path -> String.format("posix file \"%s\"", path))

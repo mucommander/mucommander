@@ -95,7 +95,7 @@ public class Base64OutputStream extends OutputStream {
     */
 
     /** Underlying OutputStream encoded data is sent to */
-    private OutputStream out;
+    private final OutputStream out;
 
     /** The Base64 encoding table */
     private final byte[] encodingTable;
@@ -104,13 +104,13 @@ public class Base64OutputStream extends OutputStream {
     private final byte paddingChar;
 
     /** Array used to accumulate the first 2 bytes of a 3-byte group */
-    private byte byteAcc[] = new byte[2];
+    private final byte[] byteAcc = new byte[2];
 	
     /** Number of bytes accumulated to form a 3-byte group */
     private int nbBytesWaiting;
 
     /** Specifies whether line breaks should be inserted after 80 chars */
-    private boolean insertLineBreaks;
+    private final boolean insertLineBreaks;
 
     /** Current line length (to insert line return character after 80 chars)*/
     private int lineLength;

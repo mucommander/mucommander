@@ -40,11 +40,11 @@ import com.mucommander.text.Translator;
  */
 public class RegistryPanel extends ServerPanel {
 
-	private JTextField serverField;
-	private JTextField imageField;
-	private JTextField usernameField;
-	private JPasswordField passwordField;
-	private JComboBox<String> typeComboBox;
+	private final JTextField serverField;
+	private final JTextField imageField;
+	private final JTextField usernameField;
+	private final JPasswordField passwordField;
+	private final JComboBox<String> typeComboBox;
 
 	RegistryPanel(ServerPanelListener listener, JFrame mainFrame, boolean isSkopeoAvailable) {
 		super(listener, mainFrame);

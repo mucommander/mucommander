@@ -151,51 +151,49 @@ public class SizeFormat {
             }
             unitString = unitLong?BYTES:unitShort?B:"";
         }
+        // size < 10KB	-> "9.6 KB"
+        else if(size<KB_10 && !digitsShort) {
+            int nKB = (int)size/KB_1;
+            digitsString = nKB+DECIMAL_SEPARATOR+(int)((size-nKB*KB_1)/(float)KB_1*10);
+            unitString = noUnit?"":KB;
+        }
+        // size < 1MB -> "436 KB"
+        else if(size<MB_1) {
+            digitsString = ""+size/KB_1;
+            unitString = noUnit?"":KB;
+        }
+        // size < 10MB -> "4.3 MB"
+        else if(size<MB_10 && !digitsShort) {
+            int nMB = (int)size/MB_1;
+            digitsString = nMB+DECIMAL_SEPARATOR+(int)((size-nMB*MB_1)/(float)MB_1*10);
+            unitString = noUnit?"":MB;
+        }
+        // size < 1GB -> "548 MB"
+        else if(size<GB_1) {
+            digitsString = ""+size/MB_1;
+            unitString = noUnit?"":MB;
+        }	
+        // size < 10GB -> "4.8 GB"
+        else if(size<GB_10 && !digitsShort) {
+            long nGB = size/GB_1;
+            digitsString = nGB+DECIMAL_SEPARATOR+(int)((size-nGB*GB_1)/(double)GB_1*10);
+            unitString = noUnit?"":GB;
+        }
+        // size < 1TB -> "216 GB"
+        else if(size<TB_1) {
+            digitsString = ""+size/GB_1;
+            unitString = noUnit?"":GB;
+        }
+        // size < 10TB -> "4.8 TB"
+        else if(size<TB_10 && !digitsShort) {
+            long nTB = size/TB_1;
+            digitsString = nTB+DECIMAL_SEPARATOR+(int)((size-nTB*TB_1)/(double)TB_1*10);
+            unitString = noUnit?"":TB;
+        }
         else {
-            // size < 10KB	-> "9.6 KB"
-            if(size<KB_10 && !digitsShort) {
-                int nKB = (int)size/KB_1;
-                digitsString = nKB+DECIMAL_SEPARATOR+(int)((size-nKB*KB_1)/(float)KB_1*10);
-                unitString = noUnit?"":KB;
-            }
-            // size < 1MB -> "436 KB"
-            else if(size<MB_1) {
-                digitsString = ""+size/KB_1;
-                unitString = noUnit?"":KB;
-            }
-            // size < 10MB -> "4.3 MB"
-            else if(size<MB_10 && !digitsShort) {
-                int nMB = (int)size/MB_1;
-                digitsString = nMB+DECIMAL_SEPARATOR+(int)((size-nMB*MB_1)/(float)MB_1*10);
-                unitString = noUnit?"":MB;
-            }
-            // size < 1GB -> "548 MB"
-            else if(size<GB_1) {
-                digitsString = ""+size/MB_1;
-                unitString = noUnit?"":MB;
-            }	
-            // size < 10GB -> "4.8 GB"
-            else if(size<GB_10 && !digitsShort) {
-                long nGB = size/GB_1;
-                digitsString = nGB+DECIMAL_SEPARATOR+(int)((size-nGB*GB_1)/(double)GB_1*10);
-                unitString = noUnit?"":GB;
-            }
-            // size < 1TB -> "216 GB"
-            else if(size<TB_1) {
-                digitsString = ""+size/GB_1;
-                unitString = noUnit?"":GB;
-            }
-            // size < 10TB -> "4.8 TB"
-            else if(size<TB_10 && !digitsShort) {
-                long nTB = size/TB_1;
-                digitsString = nTB+DECIMAL_SEPARATOR+(int)((size-nTB*TB_1)/(double)TB_1*10);
-                unitString = noUnit?"":TB;
-            }
-            else {
-                // Will I live long enough to see files that large ??
-                digitsString = ""+size/TB_1;
-                unitString = noUnit?"":TB;
-            }
+            // Will I live long enough to see files that large ??
+            digitsString = ""+size/TB_1;
+            unitString = noUnit?"":TB;
         }
 
         // Add localized '/s' to unit string if unit is speed

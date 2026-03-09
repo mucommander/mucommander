@@ -40,7 +40,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.SelfUpdateJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.GoToWebsiteAction;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.QuestionDialog;
@@ -60,13 +59,13 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
     /**
      * Parent MainFrame instance
      */
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     /**
      * true if the user manually clicked on the 'Check for updates' menu item,
      * false if the update check was automatically triggered on startup
      */
-    private boolean userInitiated;
+    private final boolean userInitiated;
 
     /**
      * Dialog's width has to be at least 240

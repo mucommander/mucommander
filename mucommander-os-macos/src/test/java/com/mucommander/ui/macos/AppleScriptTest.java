@@ -63,7 +63,7 @@ public class AppleScriptTest {
         String nonAsciiString;
         Locale stringLocale;        // for locale-aware String comparison
 
-        if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {      // Under AppleScript 2.0 and up
+        if(AppleScript.UTF8.equals(AppleScript.getScriptEncoding())) {      // Under AppleScript 2.0 and up
             nonAsciiString = "どうもありがとうミスターロボット";
             stringLocale = Locale.JAPANESE;
         }

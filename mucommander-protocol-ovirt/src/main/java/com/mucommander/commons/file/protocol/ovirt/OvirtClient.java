@@ -36,7 +36,7 @@ import com.mucommander.commons.util.StringUtils;
  */
 public class OvirtClient implements Closeable {
 
-    private static Logger log = LoggerFactory.getLogger(OvirtClient.class);
+    private static final Logger log = LoggerFactory.getLogger(OvirtClient.class);
 
     private final String engine;
     private final String user;

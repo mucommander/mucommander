@@ -31,13 +31,13 @@ import com.mucommander.commons.file.FileURL;
 public final class CredentialsMapping {
 
     /** User credentials */
-    private Credentials credentials;
+    private final Credentials credentials;
 
     /** The location credentials are associated with */
-    private FileURL realm;
+    private final FileURL realm;
 
     /** Should these credentials be saved to disk ? */
-    private boolean isPersistent;
+    private final boolean isPersistent;
 
     
     /**

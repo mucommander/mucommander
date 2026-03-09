@@ -33,11 +33,11 @@ import com.mucommander.commons.file.connection.ConnectionHandler;
  */
 public class GoogleDriveConnHandler extends ConnectionHandler implements AutoCloseable {
 
-    private static Logger log = LoggerFactory.getLogger(GoogleDriveConnHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GoogleDriveConnHandler.class);
 
 
-    private FileURL location;
-    private GoogleDriveClient client;
+    private final FileURL           location;
+    private       GoogleDriveClient client;
 
     public String getCertificate() {
         return location.getProperty("certificate");

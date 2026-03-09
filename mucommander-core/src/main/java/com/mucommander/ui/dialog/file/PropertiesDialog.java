@@ -62,14 +62,14 @@ import com.mucommander.ui.text.FileLabel;
  * @author Maxence Bernard
  */
 public class PropertiesDialog extends FocusDialog implements Runnable, ActionListener {
-    private PropertiesJob job;
-    private Thread repaintThread;
-    private SpinningDial dial;
+    private final PropertiesJob job;
+    private       Thread        repaintThread;
+    private final SpinningDial dial;
 	
-    private JLabel counterLabel;
-    private JLabel sizeLabel;
+    private final JLabel counterLabel;
+    private final JLabel sizeLabel;
 
-    private JButton okCancelButton;
+    private final JButton okCancelButton;
 
     // Dialog width is constrained to 320, height is not an issue (always the same)
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(360,0);

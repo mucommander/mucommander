@@ -42,8 +42,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.List;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
 
 /**
  * This job unpacks a set of archive files to a base destination folder. Archive entries are extracted in their natural
@@ -232,8 +230,8 @@ public class UnpackJob extends AbstractCopyJob {
 
                     // Figure out the destination file's path, relatively to the base destination folder
                     String relDestPath = baseArchiveDepth == 0
-                            ? entry.getPath()
-                                    : PathUtils.removeLeadingFragments(entry.getPath(), "/", baseArchiveDepth);
+                        ? entry.getPath()
+                        : PathUtils.removeLeadingFragments(entry.getPath(), "/", baseArchiveDepth);
 
                     if (newName != null)
                         relDestPath = newName + (PathUtils.getDepth(relDestPath, "/") <= 1 ? "" : "/" + PathUtils.removeLeadingFragments(relDestPath, "/", 1));
@@ -302,8 +300,8 @@ public class UnpackJob extends AbstractCopyJob {
 
                         if (entry.isSymlink()) {
                             Files.createSymbolicLink(
-                                    FileSystems.getDefault().getPath(destFile.getAbsolutePath()),
-                                    FileSystems.getDefault().getPath(entry.getLinkTarget()));
+                                FileSystems.getDefault().getPath(destFile.getAbsolutePath()),
+                                FileSystems.getDefault().getPath(entry.getLinkTarget()));
                             continue;
                         }
 
@@ -385,9 +383,9 @@ public class UnpackJob extends AbstractCopyJob {
 
     private static class ProxiedEntryFile extends ProxyFile {
 
-        private ArchiveEntry entry;
-        private AbstractArchiveFile archiveFile;
-        private ArchiveEntryIterator iterator;
+        private final ArchiveEntry        entry;
+        private final AbstractArchiveFile archiveFile;
+        private final ArchiveEntryIterator iterator;
 
         public ProxiedEntryFile(AbstractFile entryFile, ArchiveEntry entry, AbstractArchiveFile archiveFile, ArchiveEntryIterator iterator) {
             super(entryFile);

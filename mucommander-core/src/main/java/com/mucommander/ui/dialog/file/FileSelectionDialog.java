@@ -70,17 +70,17 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
     private final static int REGEXP      = 4;
 
     /** Add to or remove from selection ? */	 
-    private boolean addToSelection;
+    private final boolean addToSelection;
 
-    private JComboBox<String> comparisonComboBox;
-    private JTextField selectionField;
+    private final JComboBox<String> comparisonComboBox;
+    private final JTextField        selectionField;
 
-    private JCheckBox caseSensitiveCheckBox;
-    private JCheckBox includeFoldersCheckBox;
+    private final JCheckBox caseSensitiveCheckBox;
+    private final JCheckBox includeFoldersCheckBox;
 
-    private JButton okButton;
+    private final JButton okButton;
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 	
     /** 
      * Is selection case sensitive? (initially false)
@@ -184,7 +184,7 @@ public class FileSelectionDialog extends FocusDialog implements ActionListener {
         FileTable activeTable = mainFrame.getActiveTable();
 
         // Action coming from the selection dialog
-        if ((source==okButton || source==selectionField)) {
+        if (source==okButton || source==selectionField) {
             // Save values for next time this dialog is invoked
             caseSensitive = caseSensitiveCheckBox.isSelected();
             includeFolders = includeFoldersCheckBox.isSelected();

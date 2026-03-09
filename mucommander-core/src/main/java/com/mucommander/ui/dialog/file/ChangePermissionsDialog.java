@@ -47,7 +47,6 @@ import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.ChangeFileAttributesJob;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.ChangePermissionsAction;
 import com.mucommander.ui.main.MainFrame;
 
 /**
@@ -60,19 +59,19 @@ import com.mucommander.ui.main.MainFrame;
 public class ChangePermissionsDialog extends JobDialog
         implements ActionListener, ItemListener, DocumentListener {
 
-    private JCheckBox permCheckBoxes[][];
+    private final JCheckBox[][] permCheckBoxes;
 
-    private JTextField octalPermTextField;
+    private final JTextField octalPermTextField;
 
-    private JCheckBox recurseDirCheckBox;
+    private final JCheckBox recurseDirCheckBox;
 
     /** If true, ItemEvent events should be ignored */
     private boolean ignoreItemEvent;
     /** If true, DocumentEvent events should be ignored */
     private boolean ignoreDocumentEvent;
 
-    private JButton okButton;
-    private JButton cancelButton;
+    private final JButton okButton;
+    private final JButton cancelButton;
 
 
     public ChangePermissionsDialog(MainFrame mainFrame, FileSet files) {
@@ -192,7 +191,7 @@ public class ChangePermissionsDialog extends JobDialog
                 permCheckBox = permCheckBoxes[a.toInt()][p.toInt()];
 
                 if(permCheckBox.isSelected())
-                    perms |= (p.toInt()<<a.toInt()*3);
+                    perms |= p.toInt()<<a.toInt()*3;
             }
         }
 
@@ -220,7 +219,7 @@ public class ChangePermissionsDialog extends JobDialog
         JCheckBox permCheckBox;
         String octalStr = octalPermTextField.getText();
 
-        int perms = octalStr.equals("")?0:Integer.parseInt(octalStr, 8);
+        int perms = "".equals(octalStr)?0:Integer.parseInt(octalStr, 8);
 
         for(PermissionAccess a : PermissionAccess.reverseValues()) {
             for(PermissionType p : PermissionType.reverseValues()) {

@@ -33,7 +33,7 @@ public class KdeConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(KdeConfig.class);
 	
     /** Name of the command to invoke for retrieving configuration values */
-    private static String CONFIG_COMMAND = "kreadconfig";
+    private static final String CONFIG_COMMAND = "kreadconfig";
 
     /**
      * Returns the KDE configuration value corresponding to the given key, <code>null</code> if this key has no value.
@@ -53,7 +53,7 @@ public class KdeConfig {
 
             LOGGER.debug(CONFIG_COMMAND+" returned '"+line+"' for "+key);
 
-            if(line==null || (line=line.trim()).equals(""))
+            if(line==null || (line = line.trim()).isEmpty())
                 return null;
 
             return line;

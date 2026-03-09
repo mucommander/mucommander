@@ -59,19 +59,19 @@ import java.awt.event.ActionListener;
  */
 public class EditBookmarksDialog extends FocusDialog implements ActionListener, ListSelectionListener, DocumentListener {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
-    private JButton newButton;
-    private JButton duplicateButton;
-    private JButton removeButton;
-    private JButton goToButton;
-    private JButton closeButton;
+    private final JButton newButton;
+    private final JButton duplicateButton;
+    private final JButton removeButton;
+    private final JButton goToButton;
+    private final JButton closeButton;
 
-    private JTextField nameField;
-    private JTextField locationField;
+    private final JTextField nameField;
+    private final JTextField locationField;
 
-    private AlteredVector<Bookmark> bookmarks;
-    private DynamicList<Bookmark> bookmarkList;
+    private final AlteredVector<Bookmark> bookmarks;
+    private final DynamicList<Bookmark>   bookmarkList;
 
     private int currentListIndex;
     private Bookmark currentBookmarkSave;
@@ -101,7 +101,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         BookmarkManager.setFireEvents(false);
 
         // Create the sortable bookmarks list panel
-        SortableListPanel<Bookmark> listPanel = new SortableListPanel<Bookmark>(bookmarks);
+        SortableListPanel<Bookmark> listPanel = new SortableListPanel<>(bookmarks);
         this.bookmarkList = listPanel.getDynamicList();
 
         contentPane.add(listPanel, BorderLayout.CENTER);
@@ -199,7 +199,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
         boolean componentsEnabled = false;
 
-        if(!bookmarkList.isSelectionEmpty() && bookmarks.size()>0) {
+        if(!bookmarkList.isSelectionEmpty() && !bookmarks.isEmpty()) {
             componentsEnabled = true;
 
             Bookmark b = (Bookmark)bookmarkList.getSelectedValue();
@@ -231,7 +231,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
      * @param sourceDocument the javax.swing.text.Document of the JTextField that was modified
      */
     private void modifyBookmark(Document sourceDocument) {
-        if(ignoreDocumentListenerEvents || bookmarks.size()==0)
+        if(ignoreDocumentListenerEvents || bookmarks.isEmpty())
             return;
 
         int selectedIndex = bookmarkList.getSelectedIndex();
@@ -254,7 +254,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         // Update name
         if(sourceDocument==nameField.getDocument()) {
             String name = nameField.getText();
-            if(name.trim().equals(""))
+            if(name.trim().isEmpty())
                 name = getFreeNameVariation(Translator.get("untitled"));
 
             selectedBookmark.setName(name);
@@ -281,9 +281,9 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
         char c;
         int num = 2;
         if(len>4 && name.charAt(len-1)==')'
-                    && (c=name.charAt(len-2))>='0' && c<='9'
-                    && name.charAt(len-3)=='('
-                    && name.charAt(len-4)==' ')
+            && (c=name.charAt(len-2))>='0' && c<='9'
+            && name.charAt(len-3)=='('
+            && name.charAt(len-4)==' ')
         {
             num = (c-'0')+1;
             name = name.substring(0, len-4);
@@ -291,7 +291,7 @@ public class EditBookmarksDialog extends FocusDialog implements ActionListener, 
 
 
         String newName;
-        while(containsName(newName=(name+" ("+num+++")")));
+        while(containsName(newName=name+" ("+num+++")"));
 
         return newName;
     }

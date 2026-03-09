@@ -46,7 +46,7 @@ import com.mucommander.commons.file.AbstractFile;
 public abstract class QueuedTrash extends AbstractTrash {
 
     /** Contains the files that are waiting to be moved to the trash */
-    private final static List<AbstractFile> queuedFiles = new Vector<AbstractFile>();
+    private final static List<AbstractFile> queuedFiles = new Vector<>();
 
     /** Use to synchronize access to the trash */
     protected final static Object moveToTrashLock = new Object();
@@ -127,7 +127,7 @@ public abstract class QueuedTrash extends AbstractTrash {
      */
     private class MoveToTrashThread extends Thread {
 
-        private Runnable showErrorDialog;
+        private final Runnable showErrorDialog;
 
         private MoveToTrashThread(Runnable showErrorDialog) {
             this.showErrorDialog = showErrorDialog;

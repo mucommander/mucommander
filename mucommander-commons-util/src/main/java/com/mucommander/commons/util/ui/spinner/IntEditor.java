@@ -22,10 +22,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 import javax.swing.JFormattedTextField;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.NumberEditor;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultFormatterFactory;
@@ -76,8 +74,7 @@ public class IntEditor extends JSpinner.DefaultEditor {
                 }
             };
         }
-        DefaultFormatterFactory factory = new DefaultFormatterFactory(
-                                              formatter);
+        var factory = new DefaultFormatterFactory(formatter);
         JFormattedTextField ftf = getTextField();
         ftf.setEditable(true);
         ftf.setFormatterFactory(factory);

@@ -147,8 +147,8 @@ public class VersionChecker extends DefaultHandler {
         // Makes sure we retrieved the information we were looking for.
         // We're not checking the release date as older version of muCommander
         // didn't use it.
-        if(instance.latestVersion == null || instance.latestVersion.equals("") ||
-           instance.downloadURL == null   || instance.downloadURL.equals(""))
+        if(instance.latestVersion == null || instance.latestVersion.isEmpty() ||
+           instance.downloadURL == null   || instance.downloadURL.isEmpty())
             throw new Exception();
 
         return instance;
@@ -171,7 +171,7 @@ public class VersionChecker extends DefaultHandler {
         if (latestVersion.equals(RuntimeConstants.VERSION.trim().toLowerCase())) {
             // This ensures backward compatibility - if the remote version file does not contain
             // release date information, ignore it.
-            if (releaseDate.equals(""))
+            if ("".equals(releaseDate))
                 return true;
 
             // Checks whether the remote release date is later than the current release date.
@@ -249,13 +249,13 @@ public class VersionChecker extends DefaultHandler {
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         // Checks whether we know the tag and updates the current state.
-        if(qName.equals(VERSION_ELEMENT))
+        if(VERSION_ELEMENT.equals(qName))
             state = STATE_VERSION;
-        else if(qName.equals(DOWNLOAD_URL_ELEMENT))
+        else if(DOWNLOAD_URL_ELEMENT.equals(qName))
             state = STATE_DOWNLOAD_URL;
-        else if(qName.equals(JAR_URL_ELEMENT))
+        else if(JAR_URL_ELEMENT.equals(qName))
             state = STATE_JAR_URL;
-        else if(qName.equals(DATE_ELEMENT))
+        else if(DATE_ELEMENT.equals(qName))
             state = STATE_DATE;
         else
             state = STATE_UNKNOWN;
@@ -276,7 +276,7 @@ public class VersionChecker extends DefaultHandler {
         latestVersion = latestVersion.toLowerCase().trim();
         downloadURL   = downloadURL.trim();
         jarURL        = jarURL.trim();
-        if("".equals(jarURL))
+        if(jarURL.isEmpty())
             jarURL = null;
         releaseDate   = releaseDate.trim();
 

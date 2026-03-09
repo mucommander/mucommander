@@ -172,7 +172,7 @@ public abstract class XFileSystemView extends FileSystemView {
             String parentFilename = f.getParent();
 
             if (parentFilename != null)
-                return (new BeanXFile(parentFilename));
+                return new BeanXFile(parentFilename);
 	}
         return null;
     }
@@ -204,7 +204,7 @@ public abstract class XFileSystemView extends FileSystemView {
  */
 class UnixXFileSystemView extends XFileSystemView {
     /* For I18N */
-    private static ResourceBundle rb =
+    private static final ResourceBundle rb =
 	ResourceBundle.getBundle("com.sun.xfilechooser.EditorResource"/*NOI18N*/); 
 
     /**
@@ -267,7 +267,7 @@ class UnixXFileSystemView extends XFileSystemView {
  */
 class WindowsXFileSystemView extends XFileSystemView {
     /* For I18N */
-    private static ResourceBundle rb =
+    private static final ResourceBundle rb =
 	ResourceBundle.getBundle("com.sun.xfilechooser.EditorResource"/*NOI18N*/); 
 
     /**
@@ -320,7 +320,7 @@ class WindowsXFileSystemView extends XFileSystemView {
 	 * for their existance.
 	 */
 	for (char c = 'C'; c <= 'Z'; c++) {
-	    char device[] = {c, ':', '\\'};
+	    char[] device = {c, ':', '\\'};
 	    String deviceName = new String(device);
 	    BeanXFile deviceFile = new BeanXFile(deviceName);
 	    if (deviceFile != null && deviceFile.exists()) {
@@ -340,7 +340,7 @@ class WindowsXFileSystemView extends XFileSystemView {
      * dialog. We therefore assume that A: is the floppy drive,
      * and force it to always return true for isDirectory()
      */
-    class XWindowsFloppy extends BeanXFile {
+	static class XWindowsFloppy extends BeanXFile {
 	public XWindowsFloppy() {
 	    super("A" + ":" + "\\");
 	}
@@ -358,7 +358,7 @@ class WindowsXFileSystemView extends XFileSystemView {
  */
 class GenericXFileSystemView extends XFileSystemView {
     /* For I18N */
-    private static ResourceBundle rb =
+    private static final ResourceBundle rb =
 	ResourceBundle.getBundle("com.sun.xfilechooser.EditorResource"/*NOI18N*/); 
 
     /**

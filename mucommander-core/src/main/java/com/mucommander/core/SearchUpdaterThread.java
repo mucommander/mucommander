@@ -47,11 +47,11 @@ import static com.mucommander.ui.dialog.QuestionDialog.DIALOG_DISPOSED_ACTION;
 public class SearchUpdaterThread extends ChangeFolderThread {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchUpdaterThread.class);
 
-    private SearchFile search;
-    private boolean changeLockedTab;
-    private MainFrame mainFrame;
-    private FolderPanel folderPanel;
-    private LocationChanger locationChanger;
+    private       SearchFile search;
+    private final boolean    changeLockedTab;
+    private final MainFrame  mainFrame;
+    private final FolderPanel folderPanel;
+    private final LocationChanger locationChanger;
 
     private boolean stoppedDueToMaxResults;
 

@@ -75,7 +75,7 @@ public abstract class BaseOpenFileRegistrar {
         // Use new Window decorations introduced in Mac OS X 10.5 (Leopard)
         if (OsFamily.MAC_OS.isCurrent()) {
             // Displays the document icon in the window title bar, works only for local files
-            if (file.getURL().getScheme().equals(LocalFile.SCHEMA)) {
+            if (LocalFile.SCHEMA.equals(file.getURL().getScheme())) {
                 frame.getRootPane().putClientProperty("Window.documentFile", file.getUnderlyingFileObject());
             }
         }

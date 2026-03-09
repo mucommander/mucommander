@@ -20,9 +20,9 @@ package com.mucommander.ui.theme;
 import java.awt.Font;
 
 public class FontChangedEvent {
-    private Theme source;
-    private int   fontId;
-    private Font  font;
+    private final Theme source;
+    private final int   fontId;
+    private final Font  font;
 
     FontChangedEvent(Theme source, int fontId, Font font) {
         this.source = source;

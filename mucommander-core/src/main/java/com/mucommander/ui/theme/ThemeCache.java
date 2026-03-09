@@ -124,7 +124,7 @@ public class ThemeCache implements ThemeListener {
 
    
     /** Listeners. */
-    private static WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<ThemeListener, Object>();
+    private static final WeakHashMap<ThemeListener, ?> listeners = new WeakHashMap<>();
     
 
     private ThemeCache() {

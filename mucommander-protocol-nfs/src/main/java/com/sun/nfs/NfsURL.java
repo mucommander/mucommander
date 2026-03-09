@@ -73,9 +73,9 @@ import java.net.MalformedURLException;
 
 public class NfsURL {
 
-    private String url;
-    private String protocol;
-    private String host;
+    private final String url;
+    private final String protocol;
+    private       String host;
     private String location;
     private int port;
     private String file;
@@ -149,38 +149,38 @@ public class NfsURL {
     }
 
     public String getProtocol() {
-        return (protocol);
+        return protocol;
     }
 
     public String getLocation() {
-        return (location);
+        return location;
     }
 
     public String getHost() {
-        return (host);
+        return host;
     }
 
     public int getPort() {
-        return (port);
+        return port;
     }
 
     public String getFile() {
-        return (file);
+        return file;
     }
 
     /*
      * Undocumented options for testing
      */
     int getVersion() {
-        return (version);
+        return version;
     }
 
     String getProto() {
-        return (proto);
+        return proto;
     }
 
     boolean getPub() {
-        return (pub);
+        return pub;
     }
 
 
@@ -196,6 +196,6 @@ public class NfsURL {
         if (file != null)
             s += "/" + file;
 
-        return (s);
+        return s;
     }
 }

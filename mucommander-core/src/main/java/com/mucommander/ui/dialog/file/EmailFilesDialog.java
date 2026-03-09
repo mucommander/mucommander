@@ -45,7 +45,6 @@ import com.mucommander.job.impl.SendMailJob;
 import com.mucommander.text.SizeFormat;
 import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.EmailAction;
 import com.mucommander.ui.dialog.pref.general.GeneralPreferencesDialog;
 import com.mucommander.ui.main.MainFrame;
 
@@ -66,7 +65,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
     private JTextField subjectField;
     private JTextArea bodyArea;
     private JLabel infoLabel;
-    private JCheckBox fileCheckboxes[];
+    private JCheckBox[] fileCheckboxes;
 
     private static String lastTo = "";
     private static String lastSubject = "";
@@ -217,7 +216,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
      */
     private void recurseOnFolder(AbstractFile file, FileSet flattenedFiles) throws IOException {
         if(file.isDirectory() && !file.isSymlink()) {
-            AbstractFile children[] = file.ls();
+            AbstractFile[] children = file.ls();
             for (AbstractFile child : children)
                 recurseOnFolder(child, flattenedFiles);
         }
@@ -239,7 +238,7 @@ public class EmailFilesDialog extends JobDialog implements ActionListener, ItemL
             String to = toField.getText().trim();
             String subject = subjectField.getText();
             String body = bodyArea.getText();
-            if(!to.equals("")) {
+            if(!to.isEmpty()) {
                 lastTo = to;
                 lastSubject = subject;
                 lastBody = body;

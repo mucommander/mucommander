@@ -36,7 +36,7 @@ import com.mucommander.ui.quicklist.QuickListWithIcons;
  */
 public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> {
 
-    private FolderPanel folderPanel;
+    private final FolderPanel folderPanel;
 
     public ParentFoldersQL(FolderPanel folderPanel) {
         super(folderPanel,
@@ -62,7 +62,7 @@ public class ParentFoldersQL extends QuickListWithIcons<AbstractFile> {
     }
 
     protected List<AbstractFile> populateParentFolders(AbstractFile folder) {
-        List<AbstractFile> parents = new LinkedList<AbstractFile>();
+        List<AbstractFile> parents = new LinkedList<>();
 
         while ((folder = folder.getParent()) != null)
             parents.add(folder);

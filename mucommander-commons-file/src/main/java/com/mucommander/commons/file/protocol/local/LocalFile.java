@@ -114,8 +114,8 @@ import java.util.regex.Pattern;
 public class LocalFile extends ProtocolFile {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalFile.class);
 
-    final protected File file;
-    private FilePermissions permissions;
+    final protected File            file;
+    private final   FilePermissions permissions;
 
     /** Absolute file path, free of trailing separator */
     final protected String absPath;
@@ -148,11 +148,11 @@ public class LocalFile extends ProtocolFile {
     // read-write) and as such can't be changed.
 
     /** Changeable permissions mask on OSes other than Windows */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_NON_WINDOWS = new GroupedPermissionBits(448); // rwx------ (700
+    private static final PermissionBits CHANGEABLE_PERMISSIONS_NON_WINDOWS = new GroupedPermissionBits(448); // rwx------ (700
                                                                                                        // octal)
 
     /** Changeable permissions mask on Windows OS (any version) */
-    private static PermissionBits CHANGEABLE_PERMISSIONS_WINDOWS = new GroupedPermissionBits(128); // -w------- (200
+    private static final PermissionBits CHANGEABLE_PERMISSIONS_WINDOWS = new GroupedPermissionBits(128); // -w------- (200
                                                                                                    // octal)
 
     /** Bit mask that indicates which permissions can be changed */
@@ -205,7 +205,7 @@ public class LocalFile extends ProtocolFile {
 
             // Remove the leading '/' for Windows-like paths
             if (USES_ROOT_DRIVES) {
-                path = path.substring(1, path.length());
+                path = path.substring(1);
             }
 
             // Create the java.io.File instance and throw an exception if the path is not absolute.
@@ -232,7 +232,7 @@ public class LocalFile extends ProtocolFile {
 
             // Remove the leading '/' for Windows-like paths
             if (USES_ROOT_DRIVES) {
-                absPath = absPath.substring(1, absPath.length());
+                absPath = absPath.substring(1);
             }
         }
 
@@ -385,7 +385,7 @@ public class LocalFile extends ProtocolFile {
                 String mountPoint = st.nextToken().replace("\\040", " ");
                 String fsType = st.nextToken();
                 // check whether this is really a known physical FS
-                boolean knownFS = Arrays.stream(KNOWN_UNIX_FS).anyMatch(fs -> fs.equals(fsType));
+                boolean knownFS = Arrays.asList(KNOWN_UNIX_FS).contains(fsType);
                 if (knownFS) {
                     AbstractFile file = FileFactory.getFile(mountPoint);
                     if (file != null)
@@ -438,7 +438,7 @@ public class LocalFile extends ProtocolFile {
 
         // Adds subfolders
         try {
-            AbstractFile volumesFiles[] = volumesFolder.ls();
+            AbstractFile[] volumesFiles = volumesFolder.ls();
             Arrays.stream(volumesFiles).filter(AbstractFile::isDirectory).forEach(volumes::add);
         } catch (IOException e) {
             LOGGER.warn("Can't get /Volumes subfolders", e);
@@ -883,14 +883,14 @@ public class LocalFile extends ProtocolFile {
 
     @Override
     public AbstractFile[] ls(FilenameFilter filenameFilter) throws IOException {
-        File files[] = file.listFiles(filenameFilter == null ? null : new LocalFilenameFilter(filenameFilter));
+        File[] files = file.listFiles(filenameFilter == null ? null : new LocalFilenameFilter(filenameFilter));
 
         if (files == null) {
             throw new IOException();
         }
 
         int nbFiles = files.length;
-        AbstractFile children[] = new AbstractFile[nbFiles];
+        AbstractFile[] children = new AbstractFile[nbFiles];
 
         for (int i = 0; i < nbFiles; i++) {
             // Clone the FileURL of this file and set the child's path, this is more efficient than creating a new
@@ -1025,7 +1025,7 @@ public class LocalFile extends ProtocolFile {
         }
 
         @Override
-        public int read(byte b[], int off, int len) throws IOException {
+        public int read(byte[] b, int off, int len) throws IOException {
             synchronized (bb) {
                 bb.position(0);
                 bb.limit(Math.min(bb.capacity(), len));
@@ -1130,12 +1130,12 @@ public class LocalFile extends ProtocolFile {
         }
 
         @Override
-        public void write(byte b[]) throws IOException {
+        public void write(byte[] b) throws IOException {
             write(b, 0, b.length);
         }
 
         @Override
-        public void write(byte b[], int off, int len) throws IOException {
+        public void write(byte[] b, int off, int len) throws IOException {
             int nbToWrite;
             synchronized (bb) {
                 do {
@@ -1203,7 +1203,7 @@ public class LocalFile extends ProtocolFile {
      */
     private static class LocalFilePermissions extends IndividualPermissionBits implements FilePermissions {
 
-        private java.io.File file;
+        private final java.io.File file;
 
         // Permissions are limited to the user access type. Executable permission flag is only available under Java 1.6
         // and up.
@@ -1266,7 +1266,7 @@ public class LocalFile extends ProtocolFile {
      */
     private static class LocalFilenameFilter implements java.io.FilenameFilter {
 
-        private FilenameFilter filter;
+        private final FilenameFilter filter;
 
         private LocalFilenameFilter(FilenameFilter filter) {
             this.filter = filter;

@@ -38,7 +38,7 @@ import com.mucommander.ui.button.ArrowButton;
  */
 public class SortableListPanel<E> extends JPanel {
 
-    private DynamicList<E> dynamicList;
+    private final DynamicList<E> dynamicList;
 
 
     /**
@@ -49,7 +49,7 @@ public class SortableListPanel<E> extends JPanel {
     public SortableListPanel(AlteredVector<E> items) {
         super(new BorderLayout());
 
-        this.dynamicList = new DynamicList<E>(items);
+        this.dynamicList = new DynamicList<>(items);
 
         // Allow vertical scrolling in bookmarks list
         add(new JScrollPane(dynamicList), BorderLayout.CENTER);

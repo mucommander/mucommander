@@ -21,6 +21,7 @@ import java.awt.EventQueue;
 import java.awt.Taskbar;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +54,8 @@ public class DefaultDesktopAdapter implements DesktopAdapter {
 
     static {
         try {
-            Integer value = ((Integer)Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval"));
-            if(value==null)
-                multiClickInterval = DEFAULT_MULTICLICK_INTERVAL;
-            else
-                multiClickInterval = value;
+            Integer value = (Integer)Toolkit.getDefaultToolkit().getDesktopProperty("awt.multiClickInterval");
+			multiClickInterval = Objects.requireNonNullElse(value, DEFAULT_MULTICLICK_INTERVAL);
         }
         catch(Exception e) {
             LOGGER.debug("Error while retrieving multi-click interval value desktop property", e);

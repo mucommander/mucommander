@@ -44,8 +44,8 @@ import com.mucommander.ui.autocomplete.completers.Completer;
 
 public abstract class CompletionType {
 
-    private Completer completer;
-    protected AutocompleterTextComponent autocompletedtextComp;
+    private final Completer                  completer;
+    protected     AutocompleterTextComponent autocompletedtextComp;
     protected DocumentListener documentListener;
     protected JList list = new JList(); 
     protected JPopupMenu popup = new JPopupMenu();

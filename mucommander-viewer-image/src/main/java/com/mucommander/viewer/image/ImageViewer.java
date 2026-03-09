@@ -90,10 +90,10 @@ class ImageViewer implements FileViewer, ActionListener {
     private static final double MIN_ZOOM = Math.pow(ZOOM_RATE, -8);
     private static final Logger LOGGER = LoggerFactory.getLogger(ImageViewer.class);
 
-    private ViewerPresenter presenter;
-    private JPanel ui = new JPanel(new BorderLayout());
-    private JScrollPane scrollPane = new JScrollPane();
-    private ImageStatusPanel statusPanel = new ImageStatusPanel();
+    private       ViewerPresenter presenter;
+    private final JPanel          ui         = new JPanel(new BorderLayout());
+    private final JScrollPane     scrollPane = new JScrollPane();
+    private final ImageStatusPanel statusPanel = new ImageStatusPanel();
 
     private InitialZoom initialZoom = InitialZoom.FIT_TO_WINDOW;
     private boolean firstZoomPerformed = false;
@@ -117,8 +117,8 @@ class ImageViewer implements FileViewer, ActionListener {
     private AbstractAction viewStatusBarAction;
     private JCheckBoxMenuItem viewStatusBarMenuItem;
 
-    private ImageViewerPanel imageViewerPanel;
-    private ImageFileViewerService imageFileViewerService;
+    private final ImageViewerPanel       imageViewerPanel;
+    private final ImageFileViewerService imageFileViewerService;
 
     public ImageViewer(ImageFileViewerService imageFileViewerService) {
         this.imageFileViewerService = imageFileViewerService;
@@ -421,8 +421,8 @@ class ImageViewer implements FileViewer, ActionListener {
                 targetViewportPos.y = (int) Math.round(focusPoint.y / zoomFactor * factor) - offsetY;
             } else {
                 // Focus center of the viewport instead
-                int offsetX = (view.width / 2);
-                int offsetY = (view.height / 2);
+                int offsetX = view.width / 2;
+                int offsetY = view.height / 2;
                 targetViewportPos.x = (int) Math.round((view.x + offsetX) / zoomFactor * factor) - offsetX;
                 targetViewportPos.y = (int) Math.round((view.y + offsetY) / zoomFactor * factor) - offsetY;
             }
@@ -569,7 +569,7 @@ class ImageViewer implements FileViewer, ActionListener {
         FIT_TO_WINDOW("fit_to_window"),
         RESIZE_WINDOW("resize_window");
 
-        private String key;
+        private final String key;
 
         InitialZoom(@Nonnull String key) {
             this.key = key;

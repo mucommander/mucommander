@@ -5,8 +5,11 @@ buildscript {
   dependencies {
     classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:7.1.0'
     classpath files('libs/mucommander-gradle-macappbundle.jar')
+
+    classpath 'org.openrewrite:plugin:latest.release'
   }
 }
+
 
 plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
@@ -18,6 +21,8 @@ plugins {
 // This is the only syntax that appears to work for a local plugin
 // TODO: replace this with an official release of gradle-macappbundle
 apply plugin: 'edu.sc.seis.macAppBundle'
+
+apply plugin: 'org.openrewrite.rewrite'
 
 allprojects {
     tasks.withType(JavaCompile).configureEach {
@@ -42,6 +47,8 @@ task printVersionName {
 
 repositories.mavenCentral()
 
+
+
 subprojects {
     apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'java-library'
@@ -59,6 +66,84 @@ subprojects {
             implementation 'org.jetbrains.kotlin:kotlin-stdlib-common:2.1.20'
         }
     }
+}
+
+rewrite {
+    activeRecipe("org.openrewrite.staticanalysis.CollectionToArrayShouldHaveProperType") //run
+    activeRecipe("org.openrewrite.staticanalysis.AvoidBoxedBooleanExpressions") //run
+    activeRecipe("org.openrewrite.staticanalysis.BigDecimalRoundingConstantsToEnums") //run
+    activeRecipe("org.openrewrite.staticanalysis.BooleanChecksNotInverted") //run
+    activeRecipe("org.openrewrite.staticanalysis.CaseInsensitiveComparisonsDoNotChangeCase") //run
+    activeRecipe("org.openrewrite.staticanalysis.CatchClauseOnlyRethrows") //run
+    activeRecipe("org.openrewrite.staticanalysis.ChainStringBuilderAppendCalls") //run
+    activeRecipe("org.openrewrite.staticanalysis.NewStringBuilderBufferWithCharArgument") //run
+    activeRecipe("org.openrewrite.staticanalysis.CombineSemanticallyEqualCatchBlocks") //run
+    activeRecipe("org.openrewrite.staticanalysis.ControlFlowIndentation") //run
+    activeRecipe("org.openrewrite.staticanalysis.BufferedWriterCreationRecipes") //run
+    activeRecipe("org.openrewrite.staticanalysis.CompareEnumsWithEqualityOperator") //run
+    activeRecipe("org.openrewrite.staticanalysis.EqualsAvoidsNull") //run
+    // do not run this recipe, it breaks code
+    activeRecipe("org.openrewrite.staticanalysis.FinalizePrivateFields")
+    activeRecipe("org.openrewrite.staticanalysis.FixStringFormatExpressions") //run
+    activeRecipe("org.openrewrite.staticanalysis.InlineVariable") //run
+    activeRecipe("org.openrewrite.staticanalysis.NoRedundantJumpStatements") //run
+    activeRecipe("org.openrewrite.staticanalysis.NestedEnumsAreNotStatic") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseJavaStyleArrayDeclarations") //run
+    activeRecipe("org.openrewrite.staticanalysis.NoPrimitiveWrappersForToStringOrCompareTo") //run
+    activeRecipe("org.openrewrite.staticanalysis.PreferSystemGetPropertyOverGetenv") //run
+    activeRecipe("org.openrewrite.staticanalysis.PreferEqualityComparisonOverDifferenceCheck") //run
+    activeRecipe("org.openrewrite.staticanalysis.PreferIncrementOperator") //run
+    activeRecipe("org.openrewrite.staticanalysis.WhileInsteadOfFor") //run
+    activeRecipe("org.openrewrite.staticanalysis.RedundantFileCreation") //run
+    activeRecipe("org.openrewrite.staticanalysis.RemoveExtraSemicolons") //run
+    // run but be beware of semantic changes when the code calls the Reflection API
+    activeRecipe("org.openrewrite.staticanalysis.RemoveRedundantTypeCast") //run
+    activeRecipe("org.openrewrite.staticanalysis.RemoveRedundantNullChec kBeforeInstanceof") //run
+    activeRecipe("org.openrewrite.staticanalysis.RemoveRedundantNullCheckBeforeLiteralEquals") //run
+    activeRecipe("org.openrewrite.staticanalysis.RemoveToStringCallsFromArrayInstances") //run
+    activeRecipe("org.openrewrite.staticanalysis.UnnecessaryParentheses") //run
+    // do not use this recipe, it does not properly work, it wants to rename something in build.gradle files.
+//    activeRecipe("org.openrewrite.staticanalysis.RenameExceptionInEmptyCatch")
+    activeRecipe("org.openrewrite.staticanalysis.ReplaceOptionalIsPresentWithIfPresent") //run
+    activeRecipe("org.openrewrite.staticanalysis.ReplaceStringBuilderWithString") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyTernaryRecipes") //run
+    activeRecipe("org.openrewrite.staticanalysis.ReplaceDuplicateStringLiterals") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseListSort") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseForEachRemoveInsteadOfSetRemoveAll") //run
+    activeRecipe("org.openrewrite.staticanalysis.ReplaceRedundantFormatWithPrintf") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyArraysAsList") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyBooleanExpression") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyBooleanExpressionWithDeMorgan") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyBooleanReturn") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyConstantIfBranchExecution") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyElseBranch") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyDurationCreationUnits") //run
+    activeRecipe("org.openrewrite.staticanalysis.LambdaBlockToExpression") //run
+    activeRecipe("org.openrewrite.staticanalysis.SortedSetStreamToLinkedHashSet") //run
+    activeRecipe("org.openrewrite.staticanalysis.SimplifyCompoundStatement") //run
+    activeRecipe("org.openrewrite.staticanalysis.StaticMethodNotFinal") //run
+    activeRecipe("org.openrewrite.staticanalysis.NoToStringOnStringType") //run
+    activeRecipe("org.openrewrite.staticanalysis.NoValueOfOnStringType") //run
+    activeRecipe("org.openrewrite.staticanalysis.UnnecessaryExplicitTypeArguments") //run
+    activeRecipe("org.openrewrite.staticanalysis.UnnecessaryReturnAsLastStatement") //run
+    // do not use this recipe, changes the code a lot
+//    activeRecipe("org.openrewrite.staticanalysis.UnnecessaryThrows")
+    // do not use this recipe, changes the symmetry of the code
+//    activeRecipe("org.openrewrite.staticanalysis.UnwrapElseAfterReturn")
+    activeRecipe("org.openrewrite.staticanalysis.IsEmptyCallOnCollections") //run
+    activeRecipe("org.openrewrite.staticanalysis.NoEmptyCollectionWithRawType") //run
+    activeRecipe("org.openrewrite.staticanalysis.ReplaceCollectionToArrayArgWithEmptyArray") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseStandardCharset") //run
+    activeRecipe("org.openrewrite.staticanalysis.StringLiteralEquality") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseStringReplace") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseSystemLineSeparator") //run
+    activeRecipe("org.openrewrite.staticanalysis.UseLambdaForFunctionalInterface") //run
+    activeRecipe("org.openrewrite.staticanalysis.ReplaceLambdaWithMethodReference") //run
+    activeRecipe("org.openrewrite.staticanalysis.PrimitiveWrapperClassConstructorToValueOf") //run
+    activeRecipe("org.openrewrite.staticanalysis.ForLoopIncrementInUpdate") //run
+    activeRecipe("org.openrewrite.staticanalysis.ForLoopControlVariablePostfixOperators") //run
+
+    setExportDatatables(true)
 }
 
 compileJava.options.encoding = 'UTF-8'
@@ -134,6 +219,8 @@ dependencies {
     osgiRuntime project('mucommander-os-linux')
     osgiRuntime project('mucommander-os-win')
     osgiRuntime project('mucommander-os-openvms')
+
+    rewrite("org.openrewrite.recipe:rewrite-static-analysis:2.27.0")
 }
 
 createBundlesDir.doLast {

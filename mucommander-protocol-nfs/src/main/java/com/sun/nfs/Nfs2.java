@@ -159,7 +159,7 @@ public class Nfs2 extends Nfs {
     long length() throws IOException {
         checkAttr();
 
-        return maxLength > attr.size ? maxLength : attr.size;
+        return Math.max(maxLength, attr.size);
     }
 
     /*
@@ -176,7 +176,7 @@ public class Nfs2 extends Nfs {
 	boolean found = false;
 	long uid = NfsConnect.getCred().getUid();
 	long gid = NfsConnect.getCred().getGid();
-	int gids[] = NfsConnect.getCred().getGids();
+	int[] gids = NfsConnect.getCred().getGids();
 
 	/*
 	 * Access check is based on only
@@ -196,7 +196,7 @@ public class Nfs2 extends Nfs {
 		    gidsLength = gids.length;
 
 		for (int i = 0; i < gidsLength; i++)
-		    if (found = ((long)gids[i] == attr.gid))
+		    if (found = (long)gids[i] == attr.gid)
 			break;
 		if (!found) {
 		    // not in group list, check "other" field
@@ -351,7 +351,7 @@ public class Nfs2 extends Nfs {
                                 NfsSecurity.getService(secKey),
                                 NfsSecurity.getQop(secKey)));
                         continue;
-                    } else if (secKey != null && secKey.equals("1")) {
+                    } else if ("1".equals(secKey)) {
 			rpc.setCred(new CredUnix());
 			continue;
 		    }
@@ -603,7 +603,7 @@ public class Nfs2 extends Nfs {
 
                 cookie = reply.xdr_u_int();
 
-                if (ename.equals(".") || ename.equals(".."))	// ignore
+                if (".".equals(ename) || "..".equals(ename))	// ignore
                     continue;
 
                 s[i++] = ename;

@@ -51,7 +51,7 @@ import javax.swing.JFileChooser;
 public class FileModeEditor extends PropertyEditorSupport 
 {
     /* For I18N */
-    private static ResourceBundle rb =
+    private static final ResourceBundle rb =
 	ResourceBundle.getBundle("com.sun.xfilechooser.EditorResource"/*NOI18N*/); 
     /* Valid Selection File modes */
     int[] fileModeValues = {JFileChooser.FILES_ONLY,
@@ -81,7 +81,7 @@ public class FileModeEditor extends PropertyEditorSupport
 	int s = ((Integer)getValue()).intValue();
 	for (int i=0; i<fileModeNames.length; i++) {
 	    if (s == fileModeValues[i]) 
-		return fileModeNames[i];
+		    return fileModeNames[i];
 	}
 	return null;
     }
@@ -93,7 +93,7 @@ public class FileModeEditor extends PropertyEditorSupport
     public void setAsText(String text) throws IllegalArgumentException {
 	for (int i=0; i<fileModeNames.length; i++) {
 	    if (text.equals(fileModeNames[i])) {
-		setValue(new Integer(fileModeValues[i]));
+		setValue(fileModeValues[i]);
 		return;
 	    }
 	}

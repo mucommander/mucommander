@@ -190,7 +190,7 @@ public enum ActionType {
     View("View");
     
 
-    private String id;
+    private final String id;
 
     ActionType(String id) {
         this.id = id;

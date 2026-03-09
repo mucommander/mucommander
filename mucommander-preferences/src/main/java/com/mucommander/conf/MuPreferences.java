@@ -393,7 +393,7 @@ public class MuPreferences implements MuPreferencesAPI {
     MuPreferences() {
         configuration = new Configuration(
                 MuPreferencesFile.getPreferencesFile(),
-                () -> new XmlConfigurationReader(),
+                XmlConfigurationReader::new,
                 out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
     }
 
@@ -425,7 +425,7 @@ public class MuPreferences implements MuPreferencesAPI {
         // Clear the configuration before saving to drop preferences which are unused anymore
         Configuration conf = new Configuration(
                 MuPreferencesFile.getPreferencesFile(),
-                () -> new XmlConfigurationReader(),
+                XmlConfigurationReader::new,
                 out -> new XmlConfigurationWriter(out, ROOT_ELEMENT));
 
         for (MuPreference preference : MuPreference.values())

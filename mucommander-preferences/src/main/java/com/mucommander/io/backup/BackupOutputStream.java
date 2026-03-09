@@ -63,13 +63,13 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
     // - Instance fields --------------------------------------------------------
     // --------------------------------------------------------------------------
     /** The underlying OutputStream */
-    private OutputStream out;
+    private final OutputStream out;
     /** Path of the original file. */
-    private AbstractFile     target;
+    private final AbstractFile target;
     /** Path to the backup file. */
-    private AbstractFile     backup;
+    private final AbstractFile backup;
     /** Whether or not an error occured while writing to the backup file. */
-    private boolean          error;
+    private       boolean      error;
 
 
 
@@ -87,7 +87,7 @@ public class BackupOutputStream extends OutputStream implements BackupConstants 
      * @param     file        file on which to open a backup output stream.
      * @exception IOException thrown if any IO error occurs.
      */
-    public BackupOutputStream(String file) throws IOException {this(FileFactory.getFile((new File(file)).getAbsolutePath()));}
+    public BackupOutputStream(String file) throws IOException {this(FileFactory.getFile(new File(file).getAbsolutePath()));}
 
     /**
      * Opens a backup output stream on the specified file.

@@ -51,14 +51,14 @@ import com.mucommander.ui.main.MainFrame;
  */
 public class ShowServerConnectionsDialog extends FocusDialog implements ActionListener {
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
-    private JList<String> connectionList;
-    private java.util.List<ConnectionHandler> connections;
+    private final JList<String>                     connectionList;
+    private final java.util.List<ConnectionHandler> connections;
 
-    private JButton disconnectButton;
-    private JButton goToButton;
-    private JButton closeButton;
+    private final JButton disconnectButton;
+    private final JButton goToButton;
+    private final JButton closeButton;
 
     // Dialog's size has to be at least 400x300
     private final static Dimension MINIMUM_DIALOG_DIMENSION = new Dimension(400,300);
@@ -78,41 +78,40 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
         connections = ConnectionPool.getConnectionHandlersSnapshot();
 
-        connectionList = new JList<>(new AbstractListModel<String>() {
-            @Override
-            public int getSize() {
-                return connections.size();
-            }
+        connectionList = new JList<>(new AbstractListModel<>() {
+			@Override
+			public int getSize() {
+				return connections.size();
+			}
 
-            @Override
-            public String getElementAt(int i) {
-                ConnectionHandler connHandler = connections.get(i);
+			@Override
+			public String getElementAt(int i) {
+				ConnectionHandler connHandler = connections.get(i);
 
-                // Show login (but not password) in the URL
-                // Note: realm returned by ConnectionHandler does not contain credentials
-                FileURL clonedRealm = (FileURL)connHandler.getRealm().clone();
-                Credentials credentials = connHandler.getCredentials();
-                if (credentials != null) {
-                    Credentials loginCredentials = new Credentials(credentials.getLogin(), "");
-                    clonedRealm.setCredentials(loginCredentials);
-                }
+				// Show login (but not password) in the URL
+				// Note: realm returned by ConnectionHandler does not contain credentials
+				FileURL     clonedRealm = (FileURL) connHandler.getRealm().clone();
+				Credentials credentials = connHandler.getCredentials();
+				if (credentials != null) {
+					Credentials loginCredentials = new Credentials(credentials.getLogin(), "");
+					clonedRealm.setCredentials(loginCredentials);
+				}
 
-                return clonedRealm.toString(true)
-                        +" ("+Translator.get(connHandler.isLocked()?"server_connections_dialog.connection_busy":"server_connections_dialog.connection_idle")+")";
-            }
-        });
+				return clonedRealm.toString(true) + " (" + Translator.get(connHandler.isLocked() ? "server_connections_dialog.connection_busy" : "server_connections_dialog.connection_idle") + ")";
+			}
+		});
 
         // Only one list index can be selected at a time
         connectionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // Select the first connection in the list
-        boolean hasConnections = connections.size()>0;
+        boolean hasConnections = !connections.isEmpty();
         if(hasConnections)
             connectionList.setSelectedIndex(0);
 
         contentPane.add(
-                new JScrollPane(connectionList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
-                BorderLayout.CENTER);
+            new JScrollPane(connectionList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED),
+            BorderLayout.CENTER);
 
         // Add buttons
 
@@ -177,12 +176,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
 
                 // Close connection in a separate thread as I/O can lock.
                 // Todo: Add a confirmation dialog if the connection is active as it will stop whatever the connection is currently doing
-                new Thread(){
-                    @Override
-                    public void run() {
-                        connHandler.closeConnection();
-                    }
-                }.start();
+                new Thread(() -> connHandler.closeConnection()).start();
 
                 // Remove connection from the list
                 connections.remove(selectedIndex);
@@ -190,7 +184,7 @@ public class ShowServerConnectionsDialog extends FocusDialog implements ActionLi
                 connectionList.repaint();
 
                 // Disable contextual butons if there are no more connections
-                if(connections.size()==0) {
+                if(connections.isEmpty()) {
                     disconnectButton.setEnabled(false);
                     goToButton.setEnabled(false);
                 }

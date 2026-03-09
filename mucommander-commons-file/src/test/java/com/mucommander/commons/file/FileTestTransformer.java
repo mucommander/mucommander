@@ -21,7 +21,6 @@ import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +53,7 @@ public class FileTestTransformer implements IMethodInterceptor {
         // Loads the properties.
         in = null;
         try {
-            in = new FileInputStream(new File(path));
+            in = new FileInputStream(path);
             properties = new Properties();
             properties.load(in);
         }
@@ -82,7 +81,7 @@ public class FileTestTransformer implements IMethodInterceptor {
         List<IMethodInstance> out;
         String value;
 
-        out = new ArrayList<IMethodInstance>();
+        out = new ArrayList<>();
         for(IMethodInstance method: methods) {
             Class aClass;
 

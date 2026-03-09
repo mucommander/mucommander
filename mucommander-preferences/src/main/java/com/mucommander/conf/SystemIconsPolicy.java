@@ -12,7 +12,7 @@ public enum SystemIconsPolicy {
     /** Always use system file icons */
     ALWAYS("always");
 
-    private String name;
+    private final String name;
 
     SystemIconsPolicy(String name) {
         this.name = name;

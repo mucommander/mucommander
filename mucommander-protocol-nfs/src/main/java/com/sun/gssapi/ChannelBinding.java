@@ -63,8 +63,8 @@ import java.net.InetAddress;
 
 public class ChannelBinding {
 
-    private InetAddress m_initiator;
-    private InetAddress m_acceptor;
+    private final InetAddress m_initiator;
+    private final InetAddress m_acceptor;
   
     private  byte[] m_appData;
 
@@ -161,11 +161,11 @@ public class ChannelBinding {
 			cb.getApplicationData() != null) ||
 			(getApplicationData() != null &&
 			cb.getApplicationData() == null))
-		return (false);
+		return false;
 
-	return (this.m_initiator.equals(cb.getInitiatorAddress()) &&
+	return this.m_initiator.equals(cb.getInitiatorAddress()) &&
 		this.m_acceptor.equals(cb.getAcceptorAddress()) &&
 		(this.getApplicationData() == null ||
-		this.m_appData.equals(cb.getApplicationData())));
+		this.m_appData.equals(cb.getApplicationData()));
     }
 }

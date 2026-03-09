@@ -56,9 +56,9 @@ public class LocationChanger {
 	/** The lock object used to prevent simultaneous folder change operations */
 	private final Object FOLDER_CHANGE_LOCK = new Object();
 
-	private MainFrame mainFrame;
-	private FolderPanel folderPanel;
-	private LocationManager locationManager;
+	private final MainFrame   mainFrame;
+	private final FolderPanel folderPanel;
+	private final LocationManager locationManager;
 	
 	public LocationChanger(MainFrame mainFrame, FolderPanel folderPanel, LocationManager locationManager) {
 		this.mainFrame = mainFrame;

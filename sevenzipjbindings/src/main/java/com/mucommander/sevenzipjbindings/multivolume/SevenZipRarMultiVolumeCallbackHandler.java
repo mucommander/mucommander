@@ -42,7 +42,7 @@ public class SevenZipRarMultiVolumeCallbackHandler implements
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SevenZipRarMultiVolumeCallbackHandler.class);
 
-    private Map<String, SignatureCheckedRandomAccessFile> fileCache = new HashMap<>();
+    private final Map<String, SignatureCheckedRandomAccessFile> fileCache = new HashMap<>();
 
     private String lastFileName;
 

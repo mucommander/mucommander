@@ -522,9 +522,9 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
 
         private static final int STROKE_WIDTH = 1;
 
-        private java.util.List<Long> samples = new Vector<Long>(NB_SAMPLES_MAX);
+        private final java.util.List<Long> samples = new Vector<>(NB_SAMPLES_MAX);
 
-        private Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
+        private final Stroke lineStroke = new BasicStroke(STROKE_WIDTH);
 
 
         private SpeedGraph() {
@@ -609,7 +609,7 @@ public class ProgressDialog extends FocusDialog implements ActionListener, ItemL
                 sampleOffset = firstSample;
                 for(int l=0; l<nbLines-1; l++) {
                     g.drawLine(x, height-STROKE_WIDTH-(int)((Long) samples.get(sampleOffset) /yRatio),
-                              (x+=LINE_SPACING), height-STROKE_WIDTH-(int)((Long) samples.get(++sampleOffset) /yRatio));
+                              x+=LINE_SPACING, height-STROKE_WIDTH-(int)((Long) samples.get(++sampleOffset) /yRatio));
                 }
 
                 // Draw an horizontal line at the bottom of the graph

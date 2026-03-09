@@ -63,16 +63,16 @@ public class FileTableModel extends AbstractTableModel {
     private AbstractFile parent;
 
     /** Cached file instances */
-    private AbstractFile cachedFiles[];
+    private AbstractFile[] cachedFiles;
 
     /** Index array */
-    private int fileArrayIndex[];
+    private int[] fileArrayIndex;
 
     /** Cell values cache */
-    private Object cellValuesCache[][];
+    private Object[][] cellValuesCache;
 
     /** Marked rows array */
-    private boolean rowMarked[];
+    private boolean[] rowMarked;
 
     /** Combined size of files currently marked */
     private long markedTotalSize;
@@ -231,10 +231,10 @@ public class FileTableModel extends AbstractTableModel {
      * @param folder the current folder
      * @param children the current folder's children
      */
-    synchronized void setCurrentFolder(AbstractFile folder, AbstractFile children[]) {
+    synchronized void setCurrentFolder(AbstractFile folder, AbstractFile[] children) {
         int nbFiles = children.length;
 
-        this.currentFolder = (folder instanceof CachedFile)?folder:new CachedFile(folder, true);
+        this.currentFolder = folder instanceof CachedFile?folder:new CachedFile(folder, true);
 
         this.parent = showParentFolder ? currentFolder.getParent() : null;    // Note: the returned parent is a CachedFile instance
         if(parent!=null) {
@@ -322,7 +322,7 @@ public class FileTableModel extends AbstractTableModel {
                 if (canGetGroup == null || canGetOwner == null) {
                     canGetGroup = file.canGetGroup();
                     canGetOwner = file.canGetOwner();
-		}
+		        }
             }
             int cellIndex = fileArrayIndex[fileIndex] + indexOffset;
             Object sizeValue;
@@ -875,7 +875,7 @@ public class FileTableModel extends AbstractTableModel {
     private void processNextQueuedFile(FileTable table) {
         AbstractFile nextFile;
         synchronized (calculateSizeQueue) {
-            if (calculateSizeQueue.size() > 0) {
+            if (!calculateSizeQueue.isEmpty()) {
                 nextFile = calculateSizeQueue.remove(0);
             } else {
                 nextFile = null;

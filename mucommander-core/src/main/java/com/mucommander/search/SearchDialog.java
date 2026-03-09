@@ -75,36 +75,36 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchDialog.class);
 
-    private JTextField searchFilesField;
-    private JTextField searchInField;
-    private JCheckBox searchInSubfolders;
-    private JCheckBox searchInArchives;
-    private JCheckBox searchInHidden;
-    private JCheckBox searchInSymlinks;
-    private JCheckBox searchForSubfolders;
-    private JCheckBox searchForArchives;
-    private JCheckBox searchForHidden;
-    private JCheckBox searchForSymlinks;
-    private JCheckBox matchCase;
-    private JCheckBox matchRegex;
-    private JSpinner depth;
-    private JSpinner threads;
-    private JLabel wildcards;
-    private JTextField searchTextField;
-    private JCheckBox textCase;
-    private JCheckBox textRegex;
+    private final JTextField searchFilesField;
+    private final JTextField searchInField;
+    private final JCheckBox  searchInSubfolders;
+    private final JCheckBox  searchInArchives;
+    private final JCheckBox searchInHidden;
+    private final JCheckBox searchInSymlinks;
+    private final JCheckBox searchForSubfolders;
+    private final JCheckBox searchForArchives;
+    private final JCheckBox searchForHidden;
+    private final JCheckBox searchForSymlinks;
+    private final JCheckBox matchCase;
+    private final JCheckBox matchRegex;
+    private final JSpinner  depth;
+    private final JSpinner  threads;
+    private final JLabel   wildcards;
+    private final JTextField searchTextField;
+    private final JCheckBox  textCase;
+    private final JCheckBox  textRegex;
 
-    private JComboBox<SizeRelation> firstSizeRel = new JComboBox<>(SizeRelation.values());
-    private JComboBox<String> firstSizeUnit;
-    private JTextField firstSize = new SelectAllOnFocusTextField(8);
-    private JLabel secondSizeRel = new JLabel();
-    private JComboBox<String> secondSizeUnit;
-    private JTextField secondSize = new SelectAllOnFocusTextField(8);
+    private final JComboBox<SizeRelation> firstSizeRel = new JComboBox<>(SizeRelation.values());
+    private       JComboBox<String>       firstSizeUnit;
+    private final JTextField        firstSize     = new SelectAllOnFocusTextField(8);
+    private final JLabel            secondSizeRel = new JLabel();
+    private       JComboBox<String> secondSizeUnit;
+    private final JTextField        secondSize = new SelectAllOnFocusTextField(8);
 
-    private JButton searchButton;
-    private JButton cancelButton;
+    private final JButton searchButton;
+    private final JButton cancelButton;
 
-    private MainFrame mainFrame;
+    private final MainFrame mainFrame;
 
     public static final String UNLIMITED_DEPTH = Translator.get("search_dialog.unlimited_depth");
     public static final String MAX_THREADS = Translator.get("search_dialog.max_threads");
@@ -139,7 +139,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         l.setDisplayedMnemonic('n');
 
         boolean lastMatchRegex = Boolean.parseBoolean(SearchProperty.MATCH_REGEX.getValue());
-        wildcards = new JLabel(!lastMatchRegex ? Translator.get("search_dialog.wildcards") : " ");
+        wildcards = new JLabel(lastMatchRegex ? " " : Translator.get("search_dialog.wildcards"));
         compPanel.addRow("", wildcards, 10);
 
         GridBagConstraints gbc = ProportionalGridPanel.getDefaultGridBagConstraints();
@@ -153,7 +153,7 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
         matchRegex = new JCheckBox(SearchProperty.MATCH_REGEX.getTranslation(), lastMatchRegex);
         matchRegex.addChangeListener(e -> {
             AbstractButton b = (AbstractButton) e.getSource();
-            wildcards.setText(!b.isSelected() ? Translator.get("search_dialog.wildcards") : " ");
+            wildcards.setText(b.isSelected() ? " " : Translator.get("search_dialog.wildcards"));
         });
         groupingPanel.add(matchRegex);
         compPanel.addRow("", groupingPanel, 10);
@@ -367,10 +367,8 @@ public class SearchDialog extends FocusDialog implements ActionListener, Documen
             if (searchButton.isEnabled()) {
                 searchButton.setEnabled(false);
             }
-        } else {
-            if (!searchButton.isEnabled()) {
-                searchButton.setEnabled(true);
-            }
+        } else if (!searchButton.isEnabled()) {
+            searchButton.setEnabled(true);
         }
     }
 

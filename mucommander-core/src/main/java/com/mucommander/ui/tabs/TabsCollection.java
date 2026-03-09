@@ -33,10 +33,10 @@ import java.util.WeakHashMap;
 public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
 	
 	/** List of tabs */
-	private List<T> collection = new ArrayList<T>();
+	private final List<T> collection = new ArrayList<>();
 	
 	/** Listeners that were registered to be notified when tabs are added/removed/updated */
-	private WeakHashMap<TabsEventListener, ?> tabsListeners = new WeakHashMap<TabsEventListener, Object>();
+	private final WeakHashMap<TabsEventListener, ?> tabsListeners = new WeakHashMap<>();
 	
 	/**
 	 * Empty constructor
@@ -167,7 +167,7 @@ public class TabsCollection<T extends Tab> implements java.lang.Iterable<T> {
      * @param index - the index of the added tab
      */
     public synchronized void fireTabAdded(int index) {
-    	Set<TabsEventListener> listeners = new HashSet<TabsEventListener>(tabsListeners.keySet());
+    	Set<TabsEventListener> listeners = new HashSet<>(tabsListeners.keySet());
     	for(TabsEventListener listener : listeners)
             listener.tabAdded(index);
     }

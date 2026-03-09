@@ -19,7 +19,6 @@ package com.mucommander.job;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -47,13 +46,13 @@ public class JobsManager implements FileJobListener {
     private final static int FINISHED_JOB_REMOVE_TIME = 1500;
 
     /** Timer used to monitor jobs progress */
-    private Timer progressTimer;
+    private final Timer progressTimer;
 	
     /** List of listeners */
-	private EventListenerList listenerList = new EventListenerList();
+	private final EventListenerList listenerList = new EventListenerList();
 	
 	/** A list of monitored jobs. */
-	private List<FileJob> jobs;
+	private final List<FileJob> jobs;
 
 	/** An instance of this class */
 	private static final JobsManager instance = new JobsManager();

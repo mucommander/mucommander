@@ -68,8 +68,8 @@ public class Base64Test {
     public void testRandomStringIntegrity() throws IOException {
         Random random = new Random();
 
-        StringBuffer sb;
-        String s;
+        StringBuilder sb;
+        String        s;
         int slen;
         // Repeats the test
         for(int i=0; i<100; i++) {
@@ -78,7 +78,7 @@ public class Base64Test {
             // - random contents, where each byte's value is randomly chosen between 0 and 255
             slen = random.nextInt(1000);
 
-            sb = new StringBuffer();
+            sb = new StringBuilder();
             for(int j=0; j<slen; j++)
                 sb.append((char)random.nextInt(256));
 
@@ -121,7 +121,7 @@ public class Base64Test {
      */
     @Test
     public void testInvalidLength() {
-        String invalidLengthStrings[] = {
+        String[] invalidLengthStrings = {
             "a", "ab", "abc",
             "=", "a=", "a==", "ab=",
             "0000a", "0000ab", "0000abc",

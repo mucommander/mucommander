@@ -26,7 +26,7 @@ import com.vmware.vim25.ManagedObjectReference;
  *
  */
 public class ManagedObjectReferenceWrapper {
-	private ManagedObjectReference mor;
+	private final ManagedObjectReference mor;
 
 	public ManagedObjectReferenceWrapper(ManagedObjectReference mor) {
 		this.mor = mor;
@@ -37,9 +37,9 @@ public class ManagedObjectReferenceWrapper {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((mor.getValue() == null) ? 0 : mor.getValue().hashCode());
+				+ (mor.getValue() == null ? 0 : mor.getValue().hashCode());
 		result = prime * result
-				+ ((mor.getType() == null) ? 0 : mor.getType().hashCode());
+				+ (mor.getType() == null ? 0 : mor.getType().hashCode());
 		return result;
 	}
 

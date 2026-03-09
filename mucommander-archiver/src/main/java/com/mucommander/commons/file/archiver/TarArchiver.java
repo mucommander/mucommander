@@ -42,8 +42,8 @@ import java.nio.file.Path;
  */
 class TarArchiver extends Archiver {
 
-    private TarArchiveOutputStream tos;
-    private boolean firstEntry = true;
+    private final TarArchiveOutputStream tos;
+    private       boolean                firstEntry = true;
 
     protected TarArchiver(OutputStream outputStream) {
         super(outputStream);
@@ -69,8 +69,8 @@ class TarArchiver extends Archiver {
 
         // Create the entry
         TarArchiveEntry entry = symlink ?
-                new TarArchiveEntry(normalizePath(entryPath, isDirectory), TarConstants.LF_SYMLINK)
-                : new TarArchiveEntry(normalizePath(entryPath, isDirectory));
+            new TarArchiveEntry(normalizePath(entryPath, isDirectory), TarConstants.LF_SYMLINK)
+            : new TarArchiveEntry(normalizePath(entryPath, isDirectory));
         // Use provided file's size (required by TarArchiveOutputStream) and date
         long size = file.getSize();
         if(!isDirectory && !symlink && size>=0) // Do not set size if file is directory or file size is unknown!
@@ -79,8 +79,8 @@ class TarArchiver extends Archiver {
         // Set the entry's date and permissions
         entry.setModTime(file.getDate());
         entry.setMode(SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory
-                ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
+            ? FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+            : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue());
         if (symlink) {
             Path source = Path.of(file.getPath());
             Path target = Files.readSymbolicLink(source);

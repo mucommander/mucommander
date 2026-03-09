@@ -38,11 +38,9 @@ import com.mucommander.viewer.EditorPresenter;
 import com.mucommander.viewer.FileEditor;
 import org.exbin.auxiliary.binary_data.BinaryData;
 import org.exbin.auxiliary.binary_data.array.paged.ByteArrayPagedData;
-import org.exbin.bined.operation.BinaryDataCommand;
 import org.exbin.bined.operation.swing.CodeAreaOperationCommandHandler;
 import org.exbin.bined.operation.swing.CodeAreaUndoRedo;
 import org.exbin.bined.operation.undo.BinaryDataUndoRedo;
-import org.exbin.bined.operation.undo.BinaryDataUndoRedoChangeListener;
 import org.exbin.bined.swing.basic.CodeArea;
 
 import javax.annotation.Nonnull;
@@ -196,12 +194,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
 
         undoRedo = new CodeAreaUndoRedo(codeArea);
         codeArea.setCommandHandler(new CodeAreaOperationCommandHandler(codeArea, undoRedo));
-        undoRedo.addChangeListener(new BinaryDataUndoRedoChangeListener() {
-            @Override
-            public void undoChanged() {
-                updateUndoStatus();
-            }
-        });
+        undoRedo.addChangeListener(this::updateUndoStatus);
         updateUndoStatus();
 
         updateClipboardActionsStatus();
@@ -311,7 +304,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
     public void saveAsFile() {
         JFileChooser fileChooser = new JFileChooser();
         // Sets selected file in JFileChooser to current file
-        if (currentFile.getURL().getScheme().equals(LocalFile.SCHEMA)) {
+        if (LocalFile.SCHEMA.equals(currentFile.getURL().getScheme())) {
             fileChooser.setSelectedFile(new java.io.File(currentFile.getAbsolutePath()));
         }
         fileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -378,12 +371,7 @@ class BinaryEditor extends BinaryBase implements FileEditor {
                         Arrays.asList(BinaryEditorAction.YES, BinaryEditorAction.NO, BinaryEditorAction.CANCEL),
                         0);
         DialogAction ret = dialog.getActionValue();
-
-        if (ret == BinaryEditorAction.YES && trySave(currentFile) || ret == BinaryEditorAction.NO) {
-            return true;
-        }
-
-        return false; // User canceled or the file couldn't be properly saved
+        return ret == BinaryEditorAction.YES && trySave(currentFile) || ret == BinaryEditorAction.NO; // User canceled or the file couldn't be properly saved
     }
 
     /**

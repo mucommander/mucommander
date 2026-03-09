@@ -63,10 +63,10 @@ public final class BonjourDirectory implements ServiceListener, ConfigurationLis
     private static boolean starting = false;
 
     /** List of discovered and currently active Bonjour services */
-    private static List<BonjourService> services = new Vector<>();
+    private static final List<BonjourService> services = new Vector<>();
 
     /** Known Bonjour/Zeroconf service types and their corresponding protocol */
-    private final static String KNOWN_SERVICE_TYPES[][] = {
+    private final static String[][] KNOWN_SERVICE_TYPES = {
         {"_http._tcp.local.", FileProtocols.HTTP},
         {"_ftp._tcp.local.", FileProtocols.FTP},
         {"_ssh._tcp.local.", FileProtocols.SFTP},
@@ -143,7 +143,7 @@ public final class BonjourDirectory implements ServiceListener, ConfigurationLis
      * @return all currently available Bonjour services
      */
     public static BonjourService[] getServices() {
-        BonjourService servicesArray[] = new BonjourService[services.size()];
+        BonjourService[] servicesArray = new BonjourService[services.size()];
         services.toArray(servicesArray);
         return servicesArray;
     }
@@ -161,11 +161,11 @@ public final class BonjourDirectory implements ServiceListener, ConfigurationLis
             String type = serviceInfo.getType();
             int nbServices = KNOWN_SERVICE_TYPES.length;
             // Looks for the file protocol corresponding to the service type
-            for (int i = 0; i < nbServices; i++) {
-                if(KNOWN_SERVICE_TYPES[i][0].equals(type)) {
-                    return new BonjourService(serviceInfo.getName(), FileURL.getFileURL(serviceInfo.getURL(KNOWN_SERVICE_TYPES[i][1])), serviceInfo.getQualifiedName());
-                }
-            }
+			for (String[] knownServiceType : KNOWN_SERVICE_TYPES) {
+				if (knownServiceType[0].equals(type)) {
+					return new BonjourService(serviceInfo.getName(), FileURL.getFileURL(serviceInfo.getURL(knownServiceType[1])), serviceInfo.getQualifiedName());
+				}
+			}
         } catch(MalformedURLException e) {
             // Null will be returned
         }
@@ -188,12 +188,7 @@ public final class BonjourDirectory implements ServiceListener, ConfigurationLis
 
         // Resolve service info in a separate thread, serviceResolved() will be called once service info has been resolved.
         // Not spawning a thread often leads to service info loss (serviceResolved() not called).
-        new Thread() {
-            @Override
-            public void run() {
-                jmDNS.requestServiceInfo(serviceEvent.getType(), serviceEvent.getName(), SERVICE_RESOLUTION_TIMEOUT);
-            }
-        }.start();
+        new Thread(() -> jmDNS.requestServiceInfo(serviceEvent.getType(), serviceEvent.getName(), SERVICE_RESOLUTION_TIMEOUT)).start();
     }
 
     public void serviceResolved(ServiceEvent serviceEvent) {
@@ -262,9 +257,9 @@ public final class BonjourDirectory implements ServiceListener, ConfigurationLis
 
             // Listens to service events for known service types
             int nbServices = KNOWN_SERVICE_TYPES.length;
-            for (int i=0; i<nbServices; i++) {
-                jmDNS.addServiceListener(KNOWN_SERVICE_TYPES[i][0], getInstance());
-            }
+			for (String[] knownServiceType : KNOWN_SERVICE_TYPES) {
+				jmDNS.addServiceListener(knownServiceType[0], getInstance());
+			}
         } catch(IOException e) {
             LOGGER.warn("Could not instantiate jmDNS, Bonjour not enabled", e);
         } finally {
@@ -275,7 +270,7 @@ public final class BonjourDirectory implements ServiceListener, ConfigurationLis
 
     @Override
     public void configurationChanged(ConfigurationEvent event) {
-        if (event.getVariable().equals(MuPreferences.ENABLE_BONJOUR_DISCOVERY)) {
+        if (MuPreferences.ENABLE_BONJOUR_DISCOVERY.equals(event.getVariable())) {
             setActive(event.getBooleanValue());
         }
     }

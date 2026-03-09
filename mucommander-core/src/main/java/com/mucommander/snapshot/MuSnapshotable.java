@@ -36,13 +36,13 @@ public abstract class MuSnapshotable<T>{
     final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     /** lists the snapshot properties */
-    private Supplier<T[]> ls;
+    private final Supplier<T[]>       ls;
     /** get the value of a snapshot property */
-    private Function<T, String> get;
+    private final Function<T, String> get;
     /** set the value of a snapshot property */
-    private BiConsumer<T,String> set;
+    private final BiConsumer<T,String> set;
     /** returns the key in the snapshot.xml file of a snapshot property */
-    private Function<T, String> key;
+    private final Function<T, String>  key;
 
     /**
      * @param ls lists the snapshot properties

@@ -66,7 +66,7 @@ public class ExtensionManager {
     // - Class fields -----------------------------------------------------------
     // --------------------------------------------------------------------------
     /** ClassLoader used to load all extensions. */
-    private static AbstractFileClassLoader loader;
+    private static final AbstractFileClassLoader loader;
 
 
 

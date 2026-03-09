@@ -43,7 +43,7 @@ import java.util.Arrays;
 public class QuitDialog extends QuestionDialog {
 
     /** True when quit confirmation button has been pressed by the user */
-    private boolean quitConfirmed;
+    private final boolean quitConfirmed;
 
     private enum QuitDialogAction implements DialogAction {
 
@@ -109,7 +109,7 @@ public class QuitDialog extends QuestionDialog {
      * @return <code>true</code> if quit confirmation hasn't been disabled in the preferences
      */
     public static boolean confirmationRequired() {
-        return  WindowManager.getMainFrames().size() > 0     // May happen after an uncaught exception in the startup sequence
+        return  !WindowManager.getMainFrames().isEmpty()     // May happen after an uncaught exception in the startup sequence
              && MuConfigurations.getPreferences().getVariable(MuPreference.CONFIRM_ON_QUIT, MuPreferences.DEFAULT_CONFIRM_ON_QUIT);
     }
     

@@ -40,7 +40,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
     protected final int blockSize;
 
     /** Contains the current file block. Data may end before the array does. */
-    private final byte block[];
+    private final byte[] block;
 
     /** Current offset within the block array to the next byte to return */
     private int blockOff;
@@ -125,7 +125,7 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
     }
 
     @Override
-    public int read(byte b[], int off, int len) throws IOException {
+    public int read(byte[] b, int off, int len) throws IOException {
         if(len==0)
             return 0;
 
@@ -181,5 +181,5 @@ public abstract class BlockRandomInputStream extends RandomAccessInputStream {
      * @return the number of bytes that were actually read, normally blockLen unless
      * @throws IOException if an I/O error occurred
      */
-    protected abstract int readBlock(long fileOffset, byte block[], int blockLen) throws IOException;
+    protected abstract int readBlock(long fileOffset, byte[] block, int blockLen) throws IOException;
 }

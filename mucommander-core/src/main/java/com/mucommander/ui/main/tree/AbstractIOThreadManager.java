@@ -38,7 +38,7 @@ public class AbstractIOThreadManager extends Thread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIOThreadManager.class);
 	
     /** a queue with tasks to execute */
-    protected final List<Runnable> queue = Collections.synchronizedList(new ArrayList<Runnable>());
+    protected final List<Runnable> queue = Collections.synchronizedList(new ArrayList<>());
 
     /** a thread that executes tasks */
     protected IOThread ioThread;

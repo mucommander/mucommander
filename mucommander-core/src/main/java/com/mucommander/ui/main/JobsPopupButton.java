@@ -40,7 +40,7 @@ import com.mucommander.ui.icon.IconManager;
 class JobsPopupButton extends PopupButton implements JobListener {
 
     /** Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected */
-    private RolloverButtonAdapter rolloverButtonAdapter;
+    private final RolloverButtonAdapter rolloverButtonAdapter;
 
     JobsPopupButton() {
         setContentAreaFilled(false);

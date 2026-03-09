@@ -19,7 +19,6 @@ package com.mucommander.commons.file.protocol.local;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
@@ -45,7 +44,7 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
     private WatchService watchService;
     private WatchKey watchKey;
 
-    private static WatchEvent.Kind<?>[] kinds = new WatchEvent.Kind<?>[] {
+    private static final WatchEvent.Kind<?>[] kinds = new WatchEvent.Kind<?>[] {
         StandardWatchEventKinds.ENTRY_CREATE,
         StandardWatchEventKinds.ENTRY_DELETE,
         StandardWatchEventKinds.ENTRY_MODIFY};
@@ -56,7 +55,7 @@ public class LocalMonitoredFile extends ModificationDateBasedMonitoredFile {
 
     @Override
     public void startWatch() {
-        Path path = Paths.get(getAbsolutePath());
+        Path path = Path.of(getAbsolutePath());
         LOGGER.debug("start watching {}", this);
         if (isDirectory()) {
             try {

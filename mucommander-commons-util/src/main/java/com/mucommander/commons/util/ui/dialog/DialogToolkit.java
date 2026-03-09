@@ -28,6 +28,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -148,7 +149,7 @@ public class DialogToolkit {
      * Creates an OK panel using the given button, and register the given listener for button actions.
      */
     public static JPanel createOKPanel(JButton okButton, JRootPane rootPane, ActionListener actionListener) {
-        return createButtonPanel(Arrays.asList(okButton), rootPane, actionListener);
+        return createButtonPanel(Collections.singletonList(okButton), rootPane, actionListener);
     }
 
     /**
