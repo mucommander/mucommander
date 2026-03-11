@@ -20,14 +20,15 @@ package com.mucommander.ui.main;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.JTextField;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.ui.theme.Theme;
@@ -38,10 +39,17 @@ import com.mucommander.ui.theme.ThemeManager;
  * separated by {@code ›} glyphs.  Clicking a label navigates the owning
  * {@link FolderPanel} to the corresponding ancestor directory.
  *
+ * <p>Extends {@link JTextField} (rather than {@code JPanel}) so that the
+ * look-and-feel paints the correct native border automatically.  On macOS Aqua
+ * the border renderer checks {@code instanceof JTextComponent}; a plain
+ * {@code JPanel} would not receive the beveled round-rect treatment.
+ * {@link #paintComponent} is overridden to suppress text rendering and just
+ * fill the interior with the background colour.
+ *
  * <p>Uses {@link AbstractFile#getParent()} to walk the hierarchy, so it works
  * uniformly for local paths (Windows, Unix) and remote file systems (SFTP, FTP…).
  */
-class BreadcrumbBar extends JPanel {
+class BreadcrumbBar extends JTextField {
 
     /** Normal link colour — visible on light and most medium backgrounds. */
     private static final Color LINK_COLOR       = new Color(0x2874A6);
@@ -52,12 +60,24 @@ class BreadcrumbBar extends JPanel {
 
     BreadcrumbBar(FolderPanel folderPanel) {
         this.folderPanel = folderPanel;
+        setEditable(false);
+        setFocusable(false);
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
-        setOpaque(true);
-        // Fresh border from UIManager — sharing the instance from LocationTextField
-        // would corrupt both components on L&Fs that tie border state to the owner.
-        setBorder(UIManager.getBorder("TextField.border"));
+    }
+
+    /**
+     * Fills the interior (inside the border insets) with the background colour.
+     * The text-field text rendering is intentionally suppressed — the component
+     * displays only its child label components.
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(getBackground());
+        Insets ins = getInsets();
+        g.fillRect(ins.left, ins.top,
+                   getWidth()  - ins.left - ins.right,
+                   getHeight() - ins.top  - ins.bottom);
     }
 
     /**
