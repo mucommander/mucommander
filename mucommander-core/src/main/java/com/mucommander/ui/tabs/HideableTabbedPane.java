@@ -250,7 +250,7 @@ public class HideableTabbedPane<T extends Tab> extends JComponent implements Tab
 		setTabsViewer(tabsWithoutHeadersViewerFactory);
 	}
 
-	private void setTabsViewer(TabsViewerFactory<T> tabsViewerFactory) {
+	protected void setTabsViewer(TabsViewerFactory<T> tabsViewerFactory) {
 		tabsViewer.removeChangeListener(this);
 		tabsViewer = tabsViewerFactory.create(tabsCollection);
 		tabsViewer.addChangeListener(this);
