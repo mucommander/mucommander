@@ -15,7 +15,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Delete existing Release and Tag
         run: |
-          gh release delete nightly --yes --cleanup-tag
+          if gh release view nightly > /dev/null 2>&1; then
+            gh release delete nightly --yes --cleanup-tag
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name : Get version
