@@ -27,6 +27,7 @@ import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.tabs.HideableTabbedPane;
 import com.mucommander.ui.tabs.TabFactory;
+import com.mucommander.ui.tabs.TabsViewerFactory;
 
 /**
 * HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
@@ -57,6 +58,15 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 		// Add the initial folders
 		Arrays.stream(initialTabs).map(clonedTabsFactory::createTab).forEach(this::addTab);
+	}
+
+	@Override
+	protected void setTabsViewer(TabsViewerFactory<FileTableTab> tabsViewerFactory) {
+		// During the transition to the other viewer, the focus might switch to the
+		// previously focused component, which may be in the other panel. Hence we switch
+		// the focus to the location text field so that it remains at the current panel.
+		folderPanel.getLocationTextField().requestFocus();
+		super.setTabsViewer(tabsViewerFactory);
 	}
 
 	@Override

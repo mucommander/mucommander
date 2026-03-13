@@ -44,7 +44,7 @@ Localization:
 - Korean translation updated.
 
 Bug fixes:
--
+- Fixed a bug that caused the application to freeze when a second tab was created or removed.
 
 Known issues:
 - Some translations may not be up-to-date.
