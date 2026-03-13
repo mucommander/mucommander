@@ -44,7 +44,7 @@ Localization:
 - Korean translation updated.
 
 Bug fixes:
-- Fixed a bug that caused the application to freeze when a second tab was created or removed.
+- Fixed application freeze when creating or removing a second tab.
 - Fixed custom commands not being loaded from YAML configuration after migration from XML format.
 
 Known issues:
