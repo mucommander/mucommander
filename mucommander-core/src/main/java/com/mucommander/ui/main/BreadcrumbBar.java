@@ -56,6 +56,13 @@ class BreadcrumbBar extends JTextField {
     /** Darker shade shown on mouse-over. */
     private static final Color LINK_HOVER_COLOR = new Color(0x1A5276);
 
+    /** The {@code ›} glyph rendered between path segments. */
+    private static final String SEPARATOR_GLYPH = " \u203A ";
+
+    private static final String HTML_AMP = "&amp;";
+    private static final String HTML_LT  = "&lt;";
+    private static final String HTML_GT  = "&gt;";
+
     private final FolderPanel folderPanel;
 
     BreadcrumbBar(FolderPanel folderPanel) {
@@ -157,9 +164,8 @@ class BreadcrumbBar extends JTextField {
         return lbl;
     }
 
-    /** The {@code ›} glyph rendered between path segments. */
     private JLabel makeSeparatorLabel() {
-        JLabel sep = new JLabel(" \u203A "); // single right-pointing angle quotation mark
+        JLabel sep = new JLabel(SEPARATOR_GLYPH);
         sep.setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
         sep.setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
         return sep;
@@ -167,8 +173,8 @@ class BreadcrumbBar extends JTextField {
 
     /** Escapes the minimal HTML special characters that can appear in file names. */
     private String escapeHtml(String text) {
-        return text.replace("&", "&amp;")
-                   .replace("<", "&lt;")
-                   .replace(">", "&gt;");
+        return text.replace("&", HTML_AMP)
+                   .replace("<", HTML_LT)
+                   .replace(">", HTML_GT);
     }
 }
