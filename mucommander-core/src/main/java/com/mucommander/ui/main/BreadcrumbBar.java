@@ -17,11 +17,12 @@
 
 package com.mucommander.ui.main;
 
-import java.awt.Color;
+import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeManager;
+
 import java.awt.Cursor;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayDeque;
@@ -29,10 +30,6 @@ import java.util.Deque;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
-import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.ui.theme.Theme;
-import com.mucommander.ui.theme.ThemeManager;
 
 /**
  * Renders the current directory as a horizontal row of hyperlink-style labels
@@ -51,11 +48,6 @@ import com.mucommander.ui.theme.ThemeManager;
  */
 class BreadcrumbBar extends JTextField {
 
-    /** Normal link colour — visible on light and most medium backgrounds. */
-    private static final Color LINK_COLOR       = new Color(0x2874A6);
-    /** Darker shade shown on mouse-over. */
-    private static final Color LINK_HOVER_COLOR = new Color(0x1A5276);
-
     /** The {@code ›} glyph rendered between path segments. */
     private static final String SEPARATOR_GLYPH = " \u203A ";
 
@@ -71,20 +63,6 @@ class BreadcrumbBar extends JTextField {
         setFocusable(false);
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
-    }
-
-    /**
-     * Fills the interior (inside the border insets) with the background colour.
-     * The text-field text rendering is intentionally suppressed — the component
-     * displays only its child label components.
-     */
-    @Override
-    protected void paintComponent(Graphics g) {
-        g.setColor(getBackground());
-        Insets ins = getInsets();
-        g.fillRect(ins.left, ins.top,
-                   getWidth()  - ins.left - ins.right,
-                   getHeight() - ins.top  - ins.bottom);
     }
 
     /**
@@ -111,8 +89,9 @@ class BreadcrumbBar extends JTextField {
 
         boolean first = true;
         for (AbstractFile ancestor : stack) {
-            if (!first)
+            if (!first) {
                 add(makeSeparatorLabel());
+            }
             first = false;
 
             add(makeLinkLabel(displayName(ancestor), ancestor.getAbsolutePath()));
@@ -130,23 +109,30 @@ class BreadcrumbBar extends JTextField {
      */
     private String displayName(AbstractFile file) {
         String name = file.getName();
-        if (!name.isEmpty())
+        if (!name.isEmpty()) {
             return name;
+        }
 
         // Root directory: derive a clean label from the absolute path
         String abs = file.getAbsolutePath();
         String sep = file.getURL().getPathSeparator();
-        if (abs.endsWith(sep) && abs.length() > sep.length())
+        if (abs.endsWith(sep) && abs.length() > sep.length()) {
             abs = abs.substring(0, abs.length() - sep.length());
+        }
         return abs.isEmpty() ? sep : abs;
     }
 
     /** A label that looks and behaves like a hyperlink. */
     private JLabel makeLinkLabel(String text, String targetPath) {
-        JLabel lbl = new JLabel("<html><u>" + escapeHtml(text) + "</u></html>");
-        lbl.setForeground(LINK_COLOR);
+        var escapedText = escapeHtml(text);
+        var normalContent = "<html>" + escapedText + "</html>";
+        var hoverContent = "<html><u>" + escapedText + "</u></html>";
+
+        JLabel lbl = new JLabel(normalContent);
+        lbl.setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
         lbl.setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
         lbl.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        lbl.setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
         lbl.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -154,11 +140,11 @@ class BreadcrumbBar extends JTextField {
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-                lbl.setForeground(LINK_HOVER_COLOR);
+                lbl.setText(hoverContent);
             }
             @Override
             public void mouseExited(MouseEvent e) {
-                lbl.setForeground(LINK_COLOR);
+                lbl.setText(normalContent);
             }
         });
         return lbl;
@@ -168,6 +154,7 @@ class BreadcrumbBar extends JTextField {
         JLabel sep = new JLabel(SEPARATOR_GLYPH);
         sep.setForeground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_FOREGROUND_COLOR));
         sep.setFont(ThemeManager.getCurrentFont(Theme.LOCATION_BAR_FONT));
+        sep.setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
         return sep;
     }
 
