@@ -68,8 +68,14 @@ public class LocationBar extends JPanel {
 
             if (e.getID() == KeyEvent.KEY_PRESSED && !locationTextField.hasFocus()) {
                 SwingUtilities.invokeLater(() -> {
-                    breadcrumbBar.setFile(folderPanel.getCurrentFolder());
-                    cardLayout.show(LocationBar.this, CARD_BREADCRUMB);
+                    // Guard against Windows key-repeat: Ctrl held down fires KEY_PRESSED
+                    // repeatedly, which would call setFile() on every repeat event and
+                    // rebuild all breadcrumb labels from scratch each time → flicker.
+                    // Only (re)build when the text-field card is currently visible.
+                    if (locationTextField.isShowing()) {
+                        breadcrumbBar.setFile(folderPanel.getCurrentFolder());
+                        cardLayout.show(LocationBar.this, CARD_BREADCRUMB);
+                    }
                 });
             } else if (e.getID() == KeyEvent.KEY_RELEASED) {
                 SwingUtilities.invokeLater(() -> cardLayout.show(LocationBar.this, CARD_TEXT_FIELD));
