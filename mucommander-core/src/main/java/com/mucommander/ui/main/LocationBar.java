@@ -46,12 +46,10 @@ public class LocationBar extends JPanel {
     private static final String CARD_BREADCRUMB = "breadcrumb";
 
     private final LocationTextField locationTextField;
-    private final FolderPanel folderPanel;
     private final BreadcrumbBar breadcrumbBar;
     private final CardLayout cardLayout;
 
     public LocationBar(FolderPanel folderPanel, LocationTextField locationTextField) {
-        this.folderPanel = folderPanel;
         this.locationTextField = locationTextField;
 
         cardLayout = new CardLayout();
@@ -64,8 +62,9 @@ public class LocationBar extends JPanel {
         add(breadcrumbBar, CARD_BREADCRUMB);
 
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
-            if (e.getKeyCode() != KeyEvent.VK_CONTROL)
+            if (e.getKeyCode() != KeyEvent.VK_CONTROL) {
                 return false;
+            }
 
             if (e.getID() == KeyEvent.KEY_PRESSED && !locationTextField.hasFocus()) {
                 SwingUtilities.invokeLater(() -> {
