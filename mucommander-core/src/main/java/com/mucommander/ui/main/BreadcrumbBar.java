@@ -18,9 +18,13 @@
 package com.mucommander.ui.main;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
 import com.mucommander.ui.theme.Theme;
+import com.mucommander.ui.theme.ThemeListener;
 import com.mucommander.ui.theme.ThemeManager;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
@@ -46,7 +50,7 @@ import javax.swing.JTextField;
  * <p>Uses {@link AbstractFile#getParent()} to walk the hierarchy, so it works
  * uniformly for local paths (Windows, Unix) and remote file systems (SFTP, FTP…).
  */
-class BreadcrumbBar extends JTextField {
+class BreadcrumbBar extends JTextField implements ThemeListener {
 
     /** The {@code ›} glyph rendered between path segments. */
     private static final String SEPARATOR_GLYPH = " \u203A ";
@@ -63,6 +67,7 @@ class BreadcrumbBar extends JTextField {
         setFocusable(false);
         setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setBackground(ThemeManager.getCurrentColor(Theme.LOCATION_BAR_BACKGROUND_COLOR));
+        ThemeManager.addCurrentThemeListener(this);
     }
 
     /**
@@ -163,5 +168,31 @@ class BreadcrumbBar extends JTextField {
         return text.replace("&", HTML_AMP)
                    .replace("<", HTML_LT)
                    .replace(">", HTML_GT);
+    }
+
+    @Override
+    public void colorChanged(ColorChangedEvent event) {
+        int id = event.getColorId();
+        if (id == Theme.LOCATION_BAR_BACKGROUND_COLOR) {
+            setBackground(event.getColor());
+            for (Component c : getComponents()) {
+                c.setBackground(event.getColor());
+            }
+        } else if (id == Theme.LOCATION_BAR_FOREGROUND_COLOR) {
+            for (Component c : getComponents()) {
+                c.setForeground(event.getColor());
+            }
+        }
+    }
+
+    @Override
+    public void fontChanged(FontChangedEvent event) {
+        if (event.getFontId() == Theme.LOCATION_BAR_FONT) {
+            for (Component c : getComponents()) {
+                c.setFont(event.getFont());
+            }
+            revalidate();
+            repaint();
+        }
     }
 }
