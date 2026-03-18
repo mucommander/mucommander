@@ -18,16 +18,15 @@
 
 package com.mucommander.commons.file.util;
 
-import java.text.Collator;
+import com.ibm.icu.text.Collator;
+import com.mucommander.commons.file.AbstractFile;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.mucommander.commons.file.AbstractFile;
 
 
 /**

@@ -227,5 +227,17 @@ public class FileComparatorTest {
         Assert.assertEquals(files[1], fileB);
         Assert.assertEquals(files[2], fileC);
     }
+
+    @Test
+    public void testHyphenShouldComeBeforeAnyLetter() throws Exception {
+        TestFile fileA = new TestFile(FileFactory.getTemporaryFolder() + "a", true, 500, 1, null);
+        TestFile fileB = new TestFile(FileFactory.getTemporaryFolder() + "-b", true, 500, 1, null);
+
+        AbstractFile[] files = new AbstractFile[]{fileA, fileB};
+        Arrays.sort(files, new FileComparator(CRITERION.NAME, true, true, AbstractFile::getName, Locale.getDefault(), FileComparator.Mode.NATURAL));
+
+        Assert.assertEquals(files[0], fileB);
+        Assert.assertEquals(files[1], fileA);
+    }
     
 }
