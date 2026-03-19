@@ -141,6 +141,10 @@ public class FileTableTabbedPane extends TabbedPane<FileTableTab> implements Foc
 
 	@Override
 	public int getSelectedIndex() {
+		// When there are no tabs, always return -1 to prevent IndexOutOfBoundsException
+		if (getTabCount() == 0) {
+			return -1;
+		}
 		var index = super.getSelectedIndex();
 		return index != -1 ? index : lastSelectedIndex;
 	}

@@ -176,7 +176,8 @@ runOsgi {
             --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
             --add-opens java.sql/java.sql=ALL-UNNAMED \
             --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-            --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED'
+            --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
+            --add-opens mucommander.command/com.mucommander.command=ALL-UNNAMED'
     configSettings = 'felix'
     osgiMain = project(':')
     config += [

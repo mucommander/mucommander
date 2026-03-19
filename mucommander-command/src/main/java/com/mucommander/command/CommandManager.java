@@ -709,7 +709,7 @@ public class CommandManager implements CommandBuilder {
      */
     public void endBuilding() {}
 
-    private static class Commands implements Iterable<Command> {
+    public static class Commands implements Iterable<Command> {
         private List<Command> commands;
 
         public Commands() {}
