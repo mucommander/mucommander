@@ -1,7 +1,7 @@
 repositories.mavenCentral()
 
 dependencies {
-    comprise 'com.ibm.icu:icu4j:59.2'
+    comprise 'com.ibm.icu:icu4j:78.3'
 
     testImplementation 'org.testng:testng:7.11.0'
 }
