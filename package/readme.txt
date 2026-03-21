@@ -39,6 +39,7 @@ New features:
 
 Improvements:
 - Improved file name sorting to use ICU4J collation for more accurate locale-aware ordering (e.g., hyphens now sort before letters).
+- Moving symbolic links to the Trash on macOS no longer requires additional permissions.
 
 Localization:
 - Korean translation updated.
