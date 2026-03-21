@@ -20,7 +20,6 @@ package com.mucommander.desktop.macos;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -176,30 +175,27 @@ public class OSXTrash extends QueuedTrash {
         if (queuedFiles.isEmpty())
             return true;
 
-        if (moveToTrashViaAppleScript(queuedFiles))
-            return true;
+        var partitionedByIsSmb = queuedFiles.stream().collect(Collectors.partitioningBy(this::isSmb));
+        var nonSmbFiles = partitionedByIsSmb.get(false);
+        if (moveToTrashViaJna(nonSmbFiles)) {
+            var smbFiles = partitionedByIsSmb.get(true);
+            return moveToTrashViaAppleScript(smbFiles);
+        } else {
+            LOGGER.error("failed to move files to trash using JNA, fall back to AppleScript");
+            return moveToTrashViaAppleScript(queuedFiles);
+        }
+    }
 
-        boolean smbfs = queuedFiles.stream()
-                .map(file -> (File) file.getUnderlyingFileObject())
-                .map(File::toPath)
-                .map(path -> {
-                    try {
-                        return Files.getFileStore(path);
-                    } catch (IOException e) {
-                        LOGGER.warn("failed to retrieve FileStore of {}", path, e);
-                        return null;
-                    }
-                })
-                .map(fs -> fs != null ? fs.type() : null)
-                .anyMatch("smbfs"::equals);
-        if (smbfs) {
-            // JNA doesn't move files on SMB shares to trash
-            LOGGER.error("failed to move SMB files to trash");
+    private boolean isSmb(AbstractFile file) {
+        try {
+            File underlyingFile = (File) file.getUnderlyingFileObject();
+            java.nio.file.Path path = underlyingFile.toPath();
+            java.nio.file.FileStore fs = java.nio.file.Files.getFileStore(path);
+            return "smbfs".equals(fs.type());
+        } catch (IOException e) {
+            LOGGER.warn("failed to retrieve FileStore of {}", file, e);
             return false;
         }
-
-        LOGGER.info("fall back to removing files using JNA");
-        return moveToTrashViaJna(queuedFiles);
     }
 
     private boolean moveToTrashViaJna(List<AbstractFile> queuedFiles) {
@@ -213,6 +209,9 @@ public class OSXTrash extends QueuedTrash {
     }
 
     private boolean moveToTrashViaAppleScript(List<AbstractFile> queuedFiles) {
+        if (queuedFiles.isEmpty())
+            return true;
+
         // Simple script for AppleScript versions with Unicode support, i.e. that allows Unicode characters in the
         // script (AppleScript 2.0 / Mac OS X 10.5 or higher).
         if(AppleScript.getScriptEncoding().equals(AppleScript.UTF8)) {
