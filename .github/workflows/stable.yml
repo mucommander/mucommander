@@ -48,6 +48,10 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Get short SHA
+        id: git_sha
+        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
+
       - name: Checkout 'release'
         uses: actions/checkout@v4
         with:
@@ -79,9 +83,9 @@ jobs:
       - name: Build dmg
         run: |
           if [ "${{ matrix.arch }}" == 'noarch' ]; then
-            ./gradlew createDmg -Pidentity="${{ secrets.MACOS_IDENTITY }}"
+            ./gradlew createDmg -Pidentity="${{ secrets.MACOS_IDENTITY }}" -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
           else
-            ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}"
+            ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}" -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
           fi
 
       - name: Sign dmg
@@ -121,6 +125,10 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Get short SHA
+        id: git_sha
+        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
+
       - uses: actions/setup-java@v4
         with:
           java-version: '20'
@@ -144,11 +152,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build tgz, deb, and rpm
-        run: ./gradlew tgz deb rpm -Parch=${{ matrix.arch }}
+        run: ./gradlew tgz deb rpm -Parch=${{ matrix.arch }} -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
 
       - name: Build portable
         if: matrix.arch == 'x86_64'
-        run: ./gradlew portable -Parch=${{ matrix.arch }}
+        run: ./gradlew portable -Parch=${{ matrix.arch }} -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
 
       - name: list artifacts
         run: ls ./build/distributions
@@ -214,6 +222,10 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Get short SHA
+        id: git_sha
+        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
+
       - uses: actions/setup-java@v4
         with:
           java-version: '20'
@@ -237,7 +249,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build msi
-        run: ./gradlew -Parch=x86_64 msi
+        run: ./gradlew -Parch=x86_64 -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }} msi
 
       - name: Rename msi
         run: |
