@@ -240,7 +240,7 @@ ext {
     // Open the Git repository in the project's root directory.
     git = grgit.open(dir: project.rootDir)
     // Get commit id of HEAD.
-    revision = git.head().id
+    revision = project.hasProperty('revision') ? revision : git.head().id.substring(0, 7)
     // Whether or not to bundle the JRE in order to create a 'standalone' executable
     bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
     arch = project.hasProperty('arch') ? arch : System.getProperty('os.arch') // defaults to system architecture
@@ -257,7 +257,7 @@ jar {
                    "Specification-Version": project.version,
                    "Implementation-Title": "muCommander",
                    "Implementation-Vendor": "Arik Hadas",
-                   "Implementation-Version": revision.substring(0, 7),
+                   "Implementation-Version": revision,
                    "Build-Date": new Date().format('yyyyMMdd'),
                    "Build-URL": "https://www.mucommander.com/version/nightly.xml")
     }
