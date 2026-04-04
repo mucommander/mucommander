@@ -17,6 +17,23 @@
 
 package com.mucommander.ui.dialog.startup;
 
+import com.mucommander.VersionChecker;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
+import com.mucommander.core.desktop.DesktopManager;
+import com.mucommander.desktop.ActionType;
+import com.mucommander.text.Translator;
+import com.mucommander.ui.action.ActionProperties;
+import com.mucommander.ui.dialog.DialogAction;
+import com.mucommander.ui.dialog.InformationDialog;
+import com.mucommander.ui.dialog.QuestionDialog;
+import com.mucommander.ui.layout.InformationPane;
+import com.mucommander.ui.main.MainFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.JCheckBox;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -24,29 +41,6 @@ import java.awt.Font;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JCheckBox;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.VersionChecker;
-import com.mucommander.commons.file.FileFactory;
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
-import com.mucommander.conf.MuPreferences;
-import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.desktop.ActionType;
-import com.mucommander.job.impl.SelfUpdateJob;
-import com.mucommander.text.Translator;
-import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.GoToWebsiteAction;
-import com.mucommander.ui.dialog.DialogAction;
-import com.mucommander.ui.dialog.InformationDialog;
-import com.mucommander.ui.dialog.QuestionDialog;
-import com.mucommander.ui.dialog.file.ProgressDialog;
-import com.mucommander.ui.layout.InformationPane;
-import com.mucommander.ui.main.MainFrame;
 
 /**
  * This class takes care of retrieving the information about the latest muCommander version from a remote server and
@@ -122,7 +116,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
         VersionChecker version;
         URL downloadURL = null;
         boolean downloadOption = false;
-        String jarURL = null;
 
         try {
             LOGGER.debug("Checking for new version...");
@@ -145,8 +138,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
                 } else {
                     message = Translator.get("version_dialog.new_version_url", downloadURL.toString());
                 }
-
-                jarURL = version.getJarURL();
             }
             // We're already running latest version
             else {
@@ -187,12 +178,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             actions.add(CheckVersionAction.GO_TO_WEBSITE);
         }
 
-//        // 'Install and restart' choice (if available)
-//        if(jarURL!=null) {
-//            actionsV.add(new Integer(INSTALL_AND_RESTART_ACTION));
-//            labelsV.add(Translator.get("version_dialog.install_and_restart"));
-//        }
-
         init(new InformationPane(message, null, Font.PLAIN, InformationPane.INFORMATION_ICON),
                 actions,
                 0);
@@ -213,10 +198,6 @@ public class CheckVersionDialog extends QuestionDialog implements Runnable {
             } catch (Exception e) {
                 InformationDialog.showErrorDialog(this);
             }
-        } else if (action == CheckVersionAction.INSTALL_AND_RESTART) {
-            ProgressDialog progressDialog = new ProgressDialog(mainFrame, Translator.get("Installing new version"));
-            SelfUpdateJob job = new SelfUpdateJob(progressDialog, mainFrame, FileFactory.getFile(jarURL));
-            progressDialog.start(job);
         }
 
         // Remember user preference
