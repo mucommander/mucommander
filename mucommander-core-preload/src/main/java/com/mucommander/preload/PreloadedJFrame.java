@@ -92,6 +92,9 @@ public class PreloadedJFrame extends JFrame {
             result = new JPanel(layout);
         } else {
             result.setLayout(layout);
+            // Re-apply the current L&F defaults. Preloaded panels are created eagerly
+            // in a background thread, potentially before the user's chosen L&F is installed.
+            result.updateUI();
         }
         return result;
     }
