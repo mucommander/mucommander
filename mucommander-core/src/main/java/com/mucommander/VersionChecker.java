@@ -17,17 +17,15 @@
 
 package com.mucommander;
 
-import java.io.InputStream;
-
-import javax.xml.parsers.SAXParserFactory;
-
+import com.mucommander.commons.file.FileFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.mucommander.commons.file.FileFactory;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.InputStream;
 
 /**
  * Retrieves information about the latest release of muCommander.
@@ -191,12 +189,6 @@ public class VersionChecker extends DefaultHandler {
      * @return the URL at which the latest version of muCommander can be downloaded.
      */
     public String getDownloadURL() {return downloadURL;}
-
-    /**
-     * Returns the URL to the latest JAR file, <code>null</code> if not available.
-     * @return the URL to the latest JAR file.
-     */
-    public String getJarURL() {return jarURL;}
 
     /**
      * Returns the date at which the latest version of muCommander has been released.
