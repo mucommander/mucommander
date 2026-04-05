@@ -236,6 +236,13 @@ public class muCommander {
             return;
         }
 
+        // On macOS, follow the system-wide dark/light appearance for the native title bar.
+        // Must be set before the first AWT call — "system" tells macOS to synchronize
+        // the title bar with the OS dark/light mode setting automatically.
+        if (System.getProperty("os.name", "").startsWith("Mac")) {
+            System.setProperty("apple.awt.application.appearance", "system");
+        }
+
         logTimeSinceStart("Main started");
         // Ensure that a graphics environment is available
         if (GraphicsEnvironment.isHeadless()) {
@@ -641,5 +648,6 @@ public class muCommander {
     private static void logTimeSinceStart(String text) {
         System.out.println("[muEpoch+" + (System.currentTimeMillis() - START_EPOCH) + "ms] muCommander: " + text);
     }
+
 
 }

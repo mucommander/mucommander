@@ -41,6 +41,7 @@ Improvements:
 - File name sorting is now more accurate and locale-aware (e.g., hyphens now correctly sort before letters).
 - Moving symbolic links to the Trash on macOS no longer requires additional permissions.
 - The 'Build number' on the About page now references the latest source code commit included in the release.
+- Respect dark mode settings for windows decorations under macOS
 
 Localization:
 - Korean translation updated.
