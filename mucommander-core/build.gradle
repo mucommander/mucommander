@@ -25,7 +25,7 @@ dependencies {
 
 
     compileOnly 'com.formdev:flatlaf:2.2'
-    compileOnly 'org.violetlib:vaqua:10'
+    compileOnly 'org.violetlib:vaqua:13'
 
     // JediTerm deps: if you change any version below, remember to change it also in jetbrains-jediterm
     compileOnly 'org.jetbrains.jediterm:jediterm-core:3.57'

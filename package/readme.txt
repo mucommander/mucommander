@@ -48,6 +48,8 @@ Localization:
 Bug fixes:
 - Fixed application freeze when creating or removing a second tab.
 - Fixed custom commands not being loaded from YAML configuration after migration from XML format.
+- Fixed VAqua L&F failure to load on the newest macOS - updated VAqua the newest version.
+
 
 Known issues:
 - Some translations may not be up-to-date.
