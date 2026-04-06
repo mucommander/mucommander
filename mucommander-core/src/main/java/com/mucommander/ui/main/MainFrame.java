@@ -256,6 +256,28 @@ public class MainFrame implements LocationListener {
             public Insets getInsets() {
                 return new Insets(0, 0, 0, 0);
             }
+
+            private boolean updatingUI = false;
+
+            @Override
+            public void updateUI() {
+                if (updatingUI) {
+                    return;
+                }
+                updatingUI = true;
+                try {
+                    super.updateUI();
+                    // On macOS with the Aqua LaF (com.apple.laf.AquaLookAndFeel) and
+                    // apple.awt.application.appearance=system the native split pane painter renders
+                    // the divider black in dark mode. Replacing it with BasicSplitPaneUI makes the
+                    // divider use pure Java painting instead.
+                    if (getUI().getClass().getName().startsWith("com.apple.laf")) {
+                        setUI(new javax.swing.plaf.basic.BasicSplitPaneUI());
+                    }
+                } finally {
+                    updatingUI = false;
+                }
+            }
         };
         verticalSplitPane.setBorder(null);
         verticalSplitPane.setOneTouchExpandable(true);
@@ -864,7 +886,7 @@ public class MainFrame implements LocationListener {
     }
 
     /**
-     * Update the header renderer of both tables according to {@link FileTable#createHeaderRenderer()}}
+     * Update the header renderer of both file tables.
      */
     public void updateFileTablesHeaderRenderer() {
         leftTable.updateHeaderRenderer();

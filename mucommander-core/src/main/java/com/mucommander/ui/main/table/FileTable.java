@@ -44,7 +44,6 @@ import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -293,24 +292,15 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
      */
     private void setTableHeaderRenderingProperties() {
         JTableHeader tableHeader = getTableHeader();
-        if (tableHeader==null)
+        if (tableHeader == null) {
             return;
+        }
 
-        boolean isActiveTable = isActiveTable();
-
-        // Highlights the selected column
-        tableHeader.putClientProperty("JTableHeader.selectedColumn", isActiveTable
-                ? convertColumnIndexToView(sortInfo.getCriterion().ordinal())
-                        : null);
-
-        // Displays an ascending/descending arrow
-        tableHeader.putClientProperty("JTableHeader.sortDirection", isActiveTable
-                ? sortInfo.getAscendingOrder()?"ascending":"decending"      // 'decending' is misspelled but this is OK
-                    : null);
-
-        // Note: if this table is not currently active, properties are cleared to remove the highlighting effect.
-        // However, clearing the properties does not yield the desired behavior as it does not restore the table
-        // header back to normal. This looks like a bug in Apple's implementation.
+        // Clear Aqua-specific sort-indicator client properties. Our FileTableHeaderRenderer handles
+        // sort indication itself (bold font + arrow icon). Leaving these set causes the Aqua LaF to
+        // paint the selected column with a native dark background that overrides the renderer in dark mode.
+        tableHeader.putClientProperty("JTableHeader.selectedColumn", null);
+        tableHeader.putClientProperty("JTableHeader.sortDirection", null);
     }
 
     /**
@@ -320,10 +310,9 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     private void focusGained() {
         focusGainedTime = System.currentTimeMillis();
 
-        if(isEditing()) {
+        if (isEditing()) {
             filenameEditor.filenameField.requestFocus();
-        }
-        else {
+        }  else {
         	overlayTable.getOverlayComponents()[0].setEnabled(true);
         	// Repaints the table to reflect the new focused state
         	overlayTable.repaint();
@@ -341,20 +330,17 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
     }
 
     /**
-     * Returns a {@link FileTableHeaderRenderer} that is capable of indicating the sort criterion and sort order with
-     * the current Look and Feel.
-     *
-     * The native Look and Feel on macOS (since Mac OS X 10.5) is able to indicate the sort criterion and sort order
-     * by setting client properties, otherwise a {@link FileTableHeaderRenderer custom header renderer} is needed.
+     * Returns a {@link FileTableHeaderRenderer} that explicitly sets foreground/background colors from the live
+     * {@link JTableHeader}, ensuring correct rendering in all Look and Feels including macOS Aqua in dark mode.
      *
      * @return a FileTableHeaderRenderer that can be set on a {@link TableColumn} to indicate sort criterion and sort order.
-     * Might be <code>null</code> if no renderer is needed.
      */
     static FileTableHeaderRenderer createHeaderRenderer() {
-        // The native Look and Feel on macOS (since Mac OS x 10.5) is the only one that consumes client properties
-        // and doesn't require a customer header renderer
-        String className = UIManager.getLookAndFeel().getClass().getName();
-        return className.startsWith("com.apple.laf") ? null : new FileTableHeaderRenderer();
+        // Always use a custom header renderer so that foreground/background colors are explicitly set
+        // from the live JTableHeader. This is necessary on macOS in dark mode with the native Aqua LaF
+        // (com.apple.laf.*): without it the header renders with black background and unreadable text
+        // because the native renderer does not cope well with apple.awt.application.appearance=system.
+        return new FileTableHeaderRenderer();
     }
 
 
