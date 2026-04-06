@@ -47,6 +47,7 @@ Localization:
 Bug fixes:
 - Hide the breadcrumbs component when navigating away from application window while holding down the ctrl/cmd key.
 - Dynamically update the path displayed in the breadcrumbs component in case the current path changes while its displayed.
+- Fixed VAqua L&F failure to load on the newest macOS - updated VAqua the newest version.
 
 Known issues:
 - Some translations may not be up-to-date.

@@ -69,7 +69,7 @@ dependencies {
     comprise 'org.apache.felix:org.apache.felix.main:7.0.5'
     comprise 'com.beust:jcommander:1.82'
     comprise 'com.formdev:flatlaf:2.6'
-    comprise 'org.violetlib:vaqua:10'
+    comprise 'org.violetlib:vaqua:13'
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
