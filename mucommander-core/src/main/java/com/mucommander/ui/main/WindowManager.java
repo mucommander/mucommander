@@ -281,8 +281,8 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             ClassLoader oldLoader = currentThread.getContextClassLoader();
             currentThread.setContextClassLoader(ExtensionManager.getClassLoader());
 
+            var currentLaF = UIManager.getLookAndFeel();
             try {
-                var currentLaF = UIManager.getLookAndFeel();
                 if (currentLaF == null || !lnfName.equals(currentLaF.getClass().getName())) {
                     UIManager.setLookAndFeel(lnfName);
                 }
@@ -290,7 +290,15 @@ public class WindowManager implements WindowListener, ConfigurationListener {
                 LOGGER.info("The chosen Look and Feel (that is non-standard) must be loaded now...");
                 // TODO - load the required LaF and defer the rest?
                 loadAdditionalLookAndFeels(); // we defer that to that point as it takes some time :)
-                UIManager.setLookAndFeel(lnfName);
+                try {
+                    UIManager.setLookAndFeel(lnfName);
+                } catch (UnsupportedLookAndFeelException e2) {
+                    LOGGER.error("Failed to set Look and Feel: {}, error: {}. " +
+                            "Going to revert to the current one.", lnfName, e2.getMessage());
+
+                    // Should be done better - to fall back to solid default LaF instead of current one.
+                    UIManager.setLookAndFeel(currentLaF);
+                }
             }
 
             // Restores the contextual ClassLoader.
@@ -300,8 +308,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
             mainFrames.forEach(e -> {
                 SwingUtilities.updateComponentTreeUI(e.getJFrame());
             });
-        }
-        catch(Throwable e) {
+        } catch(Throwable e) {
             LOGGER.debug("Exception caught", e);
         }
     }
