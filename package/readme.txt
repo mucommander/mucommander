@@ -49,6 +49,7 @@ Bug fixes:
 - Fixed application freeze when creating or removing a second tab.
 - Fixed custom commands not being loaded from YAML configuration after migration from XML format.
 - Fixed UI issues for Dark mode themes.
+- The VAqua look-and-feel is now available only for macOS versions that are older than macOS 13 Ventura.
 
 Known issues:
 - Some translations may not be up-to-date.
