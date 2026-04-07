@@ -17,7 +17,16 @@
 
 package com.mucommander.commons.io;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class provides convenience static methods that operate on streams. All read/write buffers are allocated using
@@ -446,6 +455,66 @@ public class StreamUtils {
             }
         }
         finally {
+            BufferPool.releaseByteArray(buffer);
+        }
+    }
+
+    /**
+     * This method is a shorthand for {@link #readAsString(InputStream, String, int)} called with UTF-8 encoding and a
+     * {@link BufferPool#getDefaultBufferSize() default buffer size}.
+     *
+     * @param in
+     *         the InputStream to read
+     * @return the contents of the stream as a String
+     * @throws IOException
+     *         if an I/O error occurs
+     */
+    public static String readAsString(InputStream in) throws IOException {
+        return readAsString(in, StandardCharsets.UTF_8, BufferPool.getDefaultBufferSize());
+    }
+
+    /**
+     * This method is a shorthand for {@link #readAsString(InputStream, Charset, int)} called with a
+     * {@link BufferPool#getDefaultBufferSize() default buffer size}.
+     *
+     * @param in
+     *         the InputStream to read
+     * @param charset
+     *         the character encoding to use
+     * @return the contents of the stream as a String
+     * @throws IOException
+     *         if an I/O error occurs
+     */
+    public static String readAsString(InputStream in, Charset charset) throws IOException {
+        return readAsString(in, charset, BufferPool.getDefaultBufferSize());
+    }
+
+    /**
+     * Reads the entire contents of an InputStream and returns it as a String using the specified encoding. This method
+     * does <b>not</b> close the stream.
+     *
+     * @param in
+     *         the InputStream to read
+     * @param charset
+     *         the character encoding to use
+     * @param bufferSize
+     *         size of the buffer to use, in bytes
+     * @return the contents of the stream as a String
+     * @throws IOException
+     *         if an I/O error occurs
+     */
+    public static String readAsString(InputStream in, Charset charset, int bufferSize) throws IOException {
+        // Use BufferPool to avoid excessive memory allocation and garbage collection
+        byte buffer[] = BufferPool.getByteArray(bufferSize);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try {
+            int nbRead;
+            while ((nbRead = in.read(buffer, 0, buffer.length)) != -1) {
+                baos.write(buffer, 0, nbRead);
+            }
+            return baos.toString(charset);
+        } finally {
             BufferPool.releaseByteArray(buffer);
         }
     }
