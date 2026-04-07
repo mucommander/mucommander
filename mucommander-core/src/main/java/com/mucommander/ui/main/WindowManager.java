@@ -17,6 +17,26 @@
 
 package com.mucommander.ui.main;
 
+import com.mucommander.Application;
+import com.mucommander.commons.conf.ConfigurationEvent;
+import com.mucommander.commons.conf.ConfigurationListener;
+import com.mucommander.commons.runtime.OsFamily;
+import com.mucommander.commons.runtime.OsVersion;
+import com.mucommander.conf.MuConfigurations;
+import com.mucommander.conf.MuPreference;
+import com.mucommander.conf.MuPreferences;
+import com.mucommander.extension.ExtensionManager;
+import com.mucommander.preload.PreloadedJFrame;
+import com.mucommander.ui.main.commandbar.CommandBar;
+import com.mucommander.ui.main.frame.MainFrameBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.LookAndFeel;
+import javax.swing.MenuSelectionManager;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -25,28 +45,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.LookAndFeel;
-import javax.swing.MenuSelectionManager;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.mucommander.Application;
-import com.mucommander.commons.conf.ConfigurationEvent;
-import com.mucommander.commons.conf.ConfigurationListener;
-import com.mucommander.commons.runtime.OsFamily;
-import com.mucommander.conf.MuConfigurations;
-import com.mucommander.conf.MuPreference;
-import com.mucommander.conf.MuPreferences;
-import com.mucommander.extension.ExtensionManager;
-import com.mucommander.preload.PreloadedJFrame;
-import com.mucommander.ui.main.commandbar.CommandBar;
-import com.mucommander.ui.main.frame.MainFrameBuilder;
 
 /**
  * Window Manager is responsible for creating, disposing, switching,
@@ -137,7 +135,7 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         com.formdev.flatlaf.FlatLightLaf.installLafInfo();
         com.formdev.flatlaf.FlatIntelliJLaf.installLafInfo();
 
-        if (OsFamily.MAC_OS.isCurrent()) {
+        if (OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_13.isCurrentLower()) {
             // don't use import, leave as it is :)
             org.violetlib.aqua.AquaLookAndFeel aquaLookAndFeel = new org.violetlib.aqua.AquaLookAndFeel();
             UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(aquaLookAndFeel.getName(), aquaLookAndFeel.getClass().getName()));
