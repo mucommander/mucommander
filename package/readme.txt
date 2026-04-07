@@ -40,7 +40,7 @@ New features:
 Improvements:
 - File name sorting is now more accurate and locale-aware (e.g., hyphens now correctly sort before letters).
 - Moving symbolic links to the Trash on macOS no longer requires additional permissions.
-- The 'Build number' on the About page now references the latest source code commit included in the release.
+- Added the Git hash of the last source code commit that is included in the release to the About page.
 
 Localization:
 - Korean translation updated.
