@@ -80,7 +80,11 @@ public enum OsVersion implements ComparableRuntimeProperty {
     /** Ventura */
     MAC_OS_13("13"),
     /** Sonoma */
-    MAC_OS_14("14");
+    MAC_OS_14("14"),
+    /** Sequoia */
+    MAC_OS_15("15"),
+    /** Tahoe */
+    MAC_OS_26("26");
 
 
     /** Logger used by this class. */
@@ -162,6 +166,12 @@ public enum OsVersion implements ComparableRuntimeProperty {
         }
         // Mac OS X versions
         if (osFamily==OsFamily.MAC_OS) {
+            if(osVersionProp.startsWith("26"))
+                return MAC_OS_26;
+
+            if(osVersionProp.startsWith("15"))
+                return MAC_OS_15;
+
             if(osVersionProp.startsWith("14"))
                 return MAC_OS_14;
 
@@ -202,7 +212,7 @@ public enum OsVersion implements ComparableRuntimeProperty {
                 return MAC_OS_10_7;
 
             // Newer version we don't know of yet, assume latest supported OS version
-            return MAC_OS_14;
+            return MAC_OS_26;
         }
 
         return OsVersion.UNKNOWN_VERSION;
