@@ -241,6 +241,7 @@ public class FileTable extends JTable implements MouseListener, MouseMotionListe
 		});
     }
 
+
     private DefaultOverlayable createOverlayableTable() {
     	return new DefaultOverlayable(scrollpaneWrapper) {
 			private static final long serialVersionUID = 1L;

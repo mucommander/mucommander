@@ -26,7 +26,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
-import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -56,7 +55,7 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.impl.FocusNextAction;
 import com.mucommander.ui.action.impl.FocusPreviousAction;
 import com.mucommander.ui.dnd.FileDragSourceListener;
-import com.mucommander.ui.dnd.FileDropTargetListener;
+import com.mucommander.ui.dnd.FileDropTransferHandler;
 import com.mucommander.ui.event.LocationManager;
 import com.mucommander.ui.main.quicklist.BookmarksQL;
 import com.mucommander.ui.main.quicklist.ParentFoldersQL;
@@ -164,10 +163,10 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
             disableCtrlFocusTraversalKeys(locationTextField);
             registerCycleThruFolderPanelAction(locationTextField);
 
-            // Allow the location field to change the current directory when a file/folder is dropped on it
-            FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, true);
-            new DropTarget(locationTextField, dropTargetListener);
-            new DropTarget(driveButton, dropTargetListener);
+            // Allow the location field to change the current directory when a file/folder is dropped on it.
+            FileDropTransferHandler dropHandler = new FileDropTransferHandler(this, true);
+            locationTextField.setTransferHandler(dropHandler);
+            driveButton.setTransferHandler(dropHandler);
             locationTextField.addFocusListener(this);
         }).start();
 

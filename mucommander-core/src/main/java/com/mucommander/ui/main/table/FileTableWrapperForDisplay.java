@@ -18,7 +18,6 @@
 package com.mucommander.ui.main.table;
 
 import java.awt.Color;
-import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -32,7 +31,7 @@ import javax.swing.border.Border;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.util.ui.border.MutableLineBorder;
 import com.mucommander.core.desktop.DesktopManager;
-import com.mucommander.ui.dnd.FileDropTargetListener;
+import com.mucommander.ui.dnd.FileDropTransferHandler;
 import com.mucommander.ui.main.FolderPanel;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.menu.TablePopupMenu;
@@ -67,7 +66,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
     private MainFrame mainFrame;
     /** Panel containing this file table */
     private FolderPanel folderPanel;
-    
+
 	public FileTableWrapperForDisplay(final FileTable fileTable, final FolderPanel folderPanel, final MainFrame mainFrame) {
 		super(fileTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
@@ -95,11 +94,13 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
         
         fileTable.addFocusListener(this);
         
-     // Enable drop support to copy/move/change current folder when files are dropped on the FileTable
-        FileDropTargetListener dropTargetListener = new FileDropTargetListener(fileTable.getFolderPanel(), false);
-        new DropTarget(fileTable, dropTargetListener);
-        new DropTarget(this, dropTargetListener);
-        
+        // Enable drop support via TransferHandler.
+        // Setting the same handler on both the JTable and its JScrollPane wrapper ensures drops land
+        // regardless of which component the user releases the mouse over.
+        FileDropTransferHandler dropHandler = new FileDropTransferHandler(fileTable.getFolderPanel(), false);
+        fileTable.setTransferHandler(dropHandler);
+        setTransferHandler(dropHandler);
+
      // Listens to theme events
         ThemeManager.addCurrentThemeListener(this);
         
@@ -134,7 +135,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
 	}
 	
 	/**
-     * Dims the scrollpane's background, called by {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is started.
+     * Dims the scrollpane's background, called by {@link com.mucommander.ui.main.table.FileTable.FileTableQuickSearch} when a quick search is started.
      */
     public void dimBackground() {
         fileTable.setBackground(unmatchedBackgroundColor);
@@ -143,7 +144,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
 
     /**
      * Stops dimming the scrollpane's background (returns to a normal background color), called by
-     * {@link com.mucommander.ui.main.table.FileTable.QuickSearch} when a quick search is over.
+     * {@link com.mucommander.ui.main.table.FileTable.FileTableQuickSearch} when a quick search is over.
      */
     public void undimBackground() {
         // Identifies the new background color.
@@ -227,6 +228,7 @@ public class FileTableWrapperForDisplay extends JScrollPane implements FocusList
             break;
         }
     }
+
 
     /**
      * Not used.

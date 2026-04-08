@@ -24,7 +24,6 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.CustomizeCommandBarAction;
 import com.mucommander.ui.list.DynamicHorizontalWrapList;
 import com.mucommander.ui.list.DynamicList;
 import com.mucommander.ui.main.MainFrame;
@@ -62,7 +61,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.List;
 import java.util.List;
 import java.util.Set;
 
