@@ -140,7 +140,7 @@ public class AboutDialog extends FocusDialog implements ActionListener {
                             Translator.get("portable")));
             insertNormalString(doc, "Build date: " + getFormatedDate());
             insertNormalString(doc, "Build number: " + RuntimeConstants.BUILD_NUMBER);
-            insertNormalString(doc, "Git hash: " + RuntimeConstants.GIT_HASH);
+            insertNormalString(doc, "Build metadata: " + RuntimeConstants.GIT_HASH);
             insertLineBreak(doc);
 
             // VM information.
