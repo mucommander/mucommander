@@ -36,6 +36,7 @@ What's new since v1.6.0 ?
 
 New features:
 - Breadcrumb navigation in the location bar: hold Ctrl (or Cmd on macOS) to reveal clickable path segments, then click any directory in the path to navigate directly to it.
+- We now provide a native .msi package for AArch64 (ARM64) Windows systems.
 
 Improvements:
 - File name sorting is now more accurate and locale-aware (e.g., hyphens now correctly sort before letters).
