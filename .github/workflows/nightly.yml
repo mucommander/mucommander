@@ -224,9 +224,9 @@ jobs:
     strategy:
       matrix:
         include:
-          #- arch: aarch64
-          #  os: windows-11-arm
-          #  java: '23'
+          - arch: aarch64
+            os: windows-11-arm
+            java: '23'
           - arch: x86_64
             os: windows-2025
             java: '24'
@@ -241,6 +241,11 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
+
+      - name: Install WiX
+        if: matrix.arch == 'aarch64'
+        run: |
+          choco install wixtoolset --version 3.14.1
 
       - name: Checkout 'release'
         uses: actions/checkout@v4

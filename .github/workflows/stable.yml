@@ -213,8 +213,16 @@ jobs:
 
 
   upload-windows-artifacts:
-
-    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - arch: aarch64
+            os: windows-11-arm
+            java: '23'
+          - arch: x86_64
+            os: windows-2025
+            java: '24'
+    runs-on: ${{ matrix.os }}
     needs: init
 
     steps:
@@ -228,8 +236,13 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: '20'
+          java-version: ${{ matrix.java }}
           distribution: 'adopt'
+
+      - name: Install WiX
+        if: matrix.arch == 'aarch64'
+        run: |
+          choco install wixtoolset --version 3.14.1
 
       - name: Checkout 'release'
         uses: actions/checkout@v4
@@ -249,16 +262,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build msi
-        run: ./gradlew -Parch=x86_64 -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }} msi
+        run: ./gradlew -Parch=${{ matrix.arch }} -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }} msi
 
       - name: Rename msi
         run: |
-          mv "./build/distributions/mucommander-${{ needs.init.outputs.version }}.msi" "./build/distributions/mucommander-${{ needs.init.outputs.version }}-x86_64.msi"
+          mv "./build/distributions/mucommander-${{ needs.init.outputs.version }}.msi" "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
 
       - name: Upload msi
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.init.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}-x86_64.msi"
+          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
           asset_content_type: application/octet-stream
 
