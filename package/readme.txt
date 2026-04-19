@@ -35,7 +35,7 @@ What's new since v1.6.0 ?
 -----------------------
 
 New features:
-- Breadcrumb navigation in the location bar: hold Ctrl (or Cmd on macOS) to reveal clickable path segments, then click any directory in the path to navigate directly to it.
+- Breadcrumb navigation: Hold Ctrl (or Cmd on macOS) to convert the location bar into clickable path segments.
 - We now provide a native .msi package for AArch64 (ARM64) Windows systems.
 
 Improvements:
@@ -49,7 +49,7 @@ Localization:
 Bug fixes:
 - Fixed application freeze when creating or removing a second tab.
 - Fixed custom commands not being loaded from YAML configuration after migration from XML format.
-- Fixed UI issues for Dark mode themes.
+- Fixed an issue where dark themes failed to apply to certain UI elements during startup.
 - The VAqua look-and-feel is now available only for macOS versions that are older than macOS 13 Ventura.
 
 Known issues:
