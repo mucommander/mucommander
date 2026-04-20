@@ -31,26 +31,20 @@ If you are having problems launching muCommander from these packages, make sure 
 environment variable points to the directory where your Java runtime is installed.
 
 
-What's new since v1.6.0 ?
+What's new since v1.6.1 ?
 -----------------------
 
 New features:
-- Breadcrumb navigation: Hold Ctrl (or Cmd on macOS) to convert the location bar into clickable path segments.
-- We now provide a native .msi package for AArch64 (ARM64) Windows systems.
+-
 
 Improvements:
-- File name sorting is now more accurate and locale-aware (e.g., hyphens now correctly sort before letters).
-- Moving symbolic links to the Trash on macOS no longer requires additional permissions.
-- Added the Git hash of the last source code commit that is included in the release to the About page.
+-
 
 Localization:
-- Korean translation updated.
+-
 
 Bug fixes:
-- Fixed application freeze when creating or removing a second tab.
-- Fixed custom commands not being loaded from YAML configuration after migration from XML format.
-- Fixed an issue where dark themes failed to apply to certain UI elements during startup.
-- The VAqua look-and-feel is now available only for macOS versions that are older than macOS 13 Ventura.
+-
 
 Known issues:
 - Some translations may not be up-to-date.
