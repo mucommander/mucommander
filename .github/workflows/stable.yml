@@ -262,9 +262,8 @@ jobs:
           mv "./build/distributions/mucommander-${{ needs.init.outputs.version }}.msi" "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
 
       - name: Upload msi
-        uses: shogo82148/actions-upload-release-asset@v1
+        uses: actions/upload-artifact@master
         with:
-          upload_url: ${{ needs.init.outputs.upload_url }}
-          asset_path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
-          asset_content_type: application/octet-stream
+          name: "mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
+          path: "./build/distributions/mucommander-${{ needs.init.outputs.version }}-${{ matrix.arch }}.msi"
 
