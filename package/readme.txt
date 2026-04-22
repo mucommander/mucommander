@@ -38,7 +38,7 @@ New features:
 -
 
 Improvements:
--
+- Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
 
 Localization:
 -
