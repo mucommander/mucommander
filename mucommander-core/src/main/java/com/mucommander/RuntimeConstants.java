@@ -17,15 +17,13 @@
 
 package com.mucommander;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
-
+import com.mucommander.commons.file.util.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.file.util.ResourceLoader;
+import java.io.InputStream;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 /**
  * Defines various generic muCommander constants.
@@ -48,8 +46,6 @@ public class RuntimeConstants {
     public static final String HOMEPAGE_URL = "https://www.mucommander.com";
     /** GitHub URL */
     public static final String GITHUB_URL = "https://github.com/mucommander/mucommander";
-    /** URL at which to download the latest version description. */
-    public static final String VERSION_URL;
     /** URL of the muCommander forums. */
     public static final String FORUMS_URL = GITHUB_URL + "/discussions/";
     /** URL at which to make a donation. */
@@ -74,6 +70,8 @@ public class RuntimeConstants {
     public static final String APP_STRING;
     /** String describing the muCommander build number. */
     public static final String BUILD_NUMBER;
+    /** Identifier of the last public commit that is included in the release. */
+    public static final String GIT_HASH;
 
     // - Initialisation ------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
@@ -102,16 +100,16 @@ public class RuntimeConstants {
             // We use a date that we are sure is later than the latest version to trigger the version checker.
             // After all, the JAR appears to be corrupt and should be upgraded.
             BUILD_DATE = DEFAULT_RELEASE_DATE;
-            VERSION_URL = HOMEPAGE_URL + "/version/version.xml";
-            BUILD_NUMBER = "?";
+            BUILD_NUMBER = "snapshot";
+            GIT_HASH = "?";
         }
 
         // A MANIFEST.MF file was found, extract data from it.
         else {
             VERSION = getAttribute(attributes, "Specification-Version");
             BUILD_DATE = getAttribute(attributes, "Build-Date");
-            VERSION_URL = getAttribute(attributes, "Build-URL");
-            BUILD_NUMBER = getAttribute(attributes, "Implementation-Version");
+            BUILD_NUMBER = getAttribute(attributes, "Build-Number");
+            GIT_HASH = getAttribute(attributes, "Implementation-Version");
         }
         APP_STRING = String.format("muCommander v%s", VERSION);
     }

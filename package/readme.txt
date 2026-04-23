@@ -31,25 +31,21 @@ If you are having problems launching muCommander from these packages, make sure 
 environment variable points to the directory where your Java runtime is installed.
 
 
-What's new since v1.6.0 ?
+What's new since v1.6.1 ?
 -----------------------
 
 New features:
 -
 
 Improvements:
-- File name sorting is now more accurate and locale-aware (e.g., hyphens now correctly sort before letters).
-- Moving symbolic links to the Trash on macOS no longer requires additional permissions.
-- The 'Build number' on the About page now references the latest source code commit included in the release.
 - Respect dark mode settings for windows decorations under macOS
+- Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
 
 Localization:
-- Korean translation updated.
+-
 
 Bug fixes:
-- Fixed application freeze when creating or removing a second tab.
-- Fixed custom commands not being loaded from YAML configuration after migration from XML format.
-- Fixed UI issues for Dark mode themes.
+-
 
 Known issues:
 - Some translations may not be up-to-date.

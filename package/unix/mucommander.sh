@@ -42,6 +42,7 @@ cd `dirname "$BASE_FOLDER"`
 
 # Starts mucommander.
 $JAVA --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
+      --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED \
       --add-opens java.base/java.io=ALL-UNNAMED \
       --add-opens java.base/java.net=ALL-UNNAMED \
       --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \

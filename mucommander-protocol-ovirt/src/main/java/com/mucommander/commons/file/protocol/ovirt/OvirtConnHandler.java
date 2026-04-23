@@ -17,12 +17,9 @@
 
 package com.mucommander.commons.file.protocol.ovirt;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.stream.Collectors;
 
 import org.ovirt.engine.sdk4.Connection;
 import org.slf4j.Logger;
@@ -31,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.connection.ConnectionHandler;
+import com.mucommander.commons.io.StreamUtils;
 
 /**
  *
@@ -66,10 +64,8 @@ public class OvirtConnHandler extends ConnectionHandler implements AutoCloseable
             URL url = OvirtClient.getOvirtCrtUrl(location.getHost(), location.getPort());
             log.debug("getting certificate from " + url);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(http.getInputStream()))) {
-                String certificate = br.lines().collect(Collectors.joining(System.lineSeparator()));
-                location.setProperty("certificate", certificate);
-            }
+            String certificate = StreamUtils.readAsString(http.getInputStream());
+            location.setProperty("certificate", certificate);
             client = new OvirtClient(location);
             log.debug("connecting to " + location);
             client.connect();

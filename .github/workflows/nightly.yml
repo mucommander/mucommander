@@ -11,6 +11,7 @@ jobs:
     outputs:
       version: ${{ steps.mucommander_version.outputs.VERSION }}
       full_version: ${{ steps.mucommander_version.outputs.FULL_VERSION }}
+      git_sha: ${{ steps.git_sha.outputs.SHORT_SHA }}
     steps:
       - uses: actions/checkout@v4
       - name: Delete existing Release and Tag
@@ -25,6 +26,9 @@ jobs:
         run: |
           echo "FULL_VERSION=$(${{github.workspace}}/gradlew -q printFullVersionName)" >> $GITHUB_OUTPUT
           echo "VERSION=$(${{github.workspace}}/gradlew -q printVersionName)" >> $GITHUB_OUTPUT
+      - name: Get short SHA
+        id: git_sha
+        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
 
   upload-macos-artifacts:
     strategy:
@@ -42,10 +46,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-
-      - name: Get short SHA
-        id: git_sha
-        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
 
       - name: Checkout 'release'
         uses: actions/checkout@v4
@@ -78,9 +78,9 @@ jobs:
       - name: Build dmg
         run: |
           if [ "${{ matrix.arch }}" == 'noarch' ]; then
-            ./gradlew createDmg -Pidentity="${{ secrets.MACOS_IDENTITY }}" -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
+            ./gradlew createDmg -Pidentity="${{ secrets.MACOS_IDENTITY }}" -Prevision=${{ needs.init.outputs.git_sha }}
           else
-            ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}" -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
+            ./gradlew dmg -Parch=${{ matrix.arch }} -Pidentity="${{ secrets.MACOS_IDENTITY }}" -Prevision=${{ needs.init.outputs.git_sha }}
           fi
 
       - name: Sign dmg
@@ -130,10 +130,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Get short SHA
-        id: git_sha
-        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
-
       - uses: actions/setup-java@v4
         with:
           java-version: '20'
@@ -157,11 +153,11 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build tgz, deb, and rpm
-        run: ./gradlew tgz deb rpm -Parch=${{ matrix.arch }} -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
+        run: ./gradlew tgz deb rpm -Parch=${{ matrix.arch }} -Prevision=${{ needs.init.outputs.git_sha }}
 
       - name: Build portable
         if: matrix.arch == 'x86_64'
-        run: ./gradlew portable -Parch=${{ matrix.arch }} -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }}
+        run: ./gradlew portable -Parch=${{ matrix.arch }} -Prevision=${{ needs.init.outputs.git_sha }}
 
       - name: Import GPG
         run: gpg --passphrase ${{ secrets.PASSPHRASE }} --pinentry-mode loopback --import release/rpm/.gpg
@@ -228,9 +224,9 @@ jobs:
     strategy:
       matrix:
         include:
-          #- arch: aarch64
-          #  os: windows-11-arm
-          #  java: '23'
+          - arch: aarch64
+            os: windows-11-arm
+            java: '23'
           - arch: x86_64
             os: windows-2025
             java: '24'
@@ -241,14 +237,15 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Get short SHA
-        id: git_sha
-        run: echo "SHORT_SHA=$(git rev-parse --short=7 HEAD)" >> $GITHUB_OUTPUT
-
       - uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
+
+      - name: Install WiX
+        if: matrix.arch == 'aarch64'
+        run: |
+          choco install wixtoolset --version 3.14.1
 
       - name: Checkout 'release'
         uses: actions/checkout@v4
@@ -268,7 +265,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build msi
-        run: ./gradlew -Parch=${{ matrix.arch }} -Prevision=${{ steps.git_sha.outputs.SHORT_SHA }} msi
+        run: ./gradlew -Parch=${{ matrix.arch }} -Prevision=${{ needs.init.outputs.git_sha }} msi
 
       - name: Rename msi
         run: |
