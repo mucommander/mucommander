@@ -38,6 +38,7 @@ New features:
 -
 
 Improvements:
+- Respect dark mode settings for windows decorations under macOS
 - Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
 
 Localization:
