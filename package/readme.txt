@@ -44,7 +44,7 @@ Localization:
 -
 
 Bug fixes:
--
+- Fixed a possible NPE during initialization that prevents the application from starting.
 
 Known issues:
 - Some translations may not be up-to-date.
