@@ -2,7 +2,7 @@
 
 A **barebones**, security-first fork of muCommander focused on a small mouse-driven dual-pane file manager with **SFTP/SSH** as the only remote protocol, on **Linux + macOS**.
 
-Source: forked from https://github.com/mucommander/mucommander to https://github.com/e6qu/mucommander-fork on 2026-05-08. Will be renamed and cleaned in-place.
+Source: forked from https://github.com/mucommander/mucommander to https://github.com/e6qu/barebones-commander on 2026-05-08. Renamed in-place via PR #2.
 
 > Companion docs in this repo:
 > - `LIBRARIES.md` — current architecture & full library inventory.
@@ -10,17 +10,40 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 
 ---
 
+## Phase summary (at-a-glance)
+
+| Phase | Status | What | One PR |
+|---|---|---|---|
+| **0** | partly done | Bootstrap: audit docs, rename project, CI cleanup, plan adjustments | ✅ landed in #2; finished by #3 |
+| **6** | done early | Rename to `barebones-commander` | ✅ landed in #2 |
+| **1** | next | Strip every out-of-scope module (protocols, archive formats, viewers, terminal, OS adapters) | one PR |
+| **2** | pending | Drop OSGi runtime — replace Felix + bnd manifests + bundle activators with a plain Java app + fat JAR | one PR |
+| **3** | pending | Java 25 LTS upgrade | one PR |
+| **4** | pending | Dependency upgrades + Dependabot + dependency-review CI; **modernize S3 backend** (replace abandoned `jets3t` with AWS SDK v2) | one PR |
+| **5** | pending | Code-level security fixes (XOR cipher → keychain, XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`) | one PR |
+| **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
+| **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
+| **9** | pending | SAST in CI (SpotBugs + FindSecBugs + OWASP Dependency-Check) | one PR |
+| **10** | pending | Connectivity: Tailscale peer discovery + Taildrop, OS-level mount helper for NFSv4/SMB/SSHFS on Linux & macOS | one PR |
+
+**Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
+
+---
+
 ## 1. Goals
 
 1. Ship a **small** dual-pane file manager built on the well-tested muCommander UI core.
-2. **One** remote protocol family: SSH/SFTP. Local FS + SFTP only.
+2. **Remote-data backends**: SSH/SFTP, S3-compatible object storage (AWS S3, MinIO, etc.), in-process NFSv2/v3 (via the existing Yanfs-based module), and — via Phase 10's mount helper — anything the OS can mount (NFSv4, SMB/CIFS, SSHFS). Local FS is always available.
 3. **Two** OS targets: Linux (x86_64, aarch64) and macOS (Apple Silicon + Intel).
 4. **No** unpatched Critical/High vulnerabilities at v1.0 release.
 5. **Latest LTS Java** (Java 25 LTS) as the runtime target.
 6. **Mouse-driven UX** with drag & drop and full keyboard bindings preserved.
 7. Modern, **non-OSGi** packaging — single fat JAR / native installers, no Felix container.
-8. Clean **rename and rebrand** to remove muCommander trademark concerns.
-9. **PR-only** workflow — every change lands via a reviewed PR on `e6qu/mucommander-fork`.
+8. Clean **rename and rebrand** to remove muCommander trademark concerns. *(Done in #2.)*
+9. **PR-only** workflow on `e6qu/barebones-commander` — every change lands via a reviewed PR. **One PR in flight at a time.** The user decides scope and pacing of the next PR.
+10. **Preserve the VFS extensibility** — the upstream `barebones-commons-file` abstraction (`AbstractFile`) and the `barebones-protocol-api` SPI stay, so future backends (rsync, WebDAV, etc.) can be added without core changes.
+11. **Be Tailscale-aware** — discover tailnet peers, surface them as quick-connect targets for SFTP / NFS / mount-helper, and (optional) integrate Taildrop send/receive. See Phase 10.
+12. **Mount-as-local UX on Linux & macOS** — pick a remote share (NFSv4, SMB, SSHFS), the app shells out to the OS mount command, and the share opens in a panel as if it were local. See Phase 10.
 
 ## 2. Non-goals (explicitly removed scope)
 
@@ -29,30 +52,30 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | Windows / OpenVMS / macOS-Java-8 OS adapters | Out of stated scope. |
 | FTP, HTTP, HTTPS browsing | Out of scope; HTTP bundle also carries the JVM-wide TLS bypass (SECURITY_REVIEW §5.1). |
 | SMB (`jcifs-ng` + `smbj`) | Out of scope. |
-| S3 (`jets3t`) | Out of scope. Drops `mail.osgi-1.4.jar` (legacy JavaMail) along with it. |
-| Dropbox / Google Drive / OneDrive / Google Cloud Storage / Azure | Out of scope. Drops `azure-identity`, `microsoft-graph`, `dropbox-core-sdk`, `google-api-client`, `google-oauth-client-jetty`. |
-| Hadoop / HDFS, NFS, oVirt, vSphere, ADB, Windows Registry | Out of scope. Drops `hadoop-client`, `avro`, `vim25.jar`, `jadb-v1.2.1.jar`. |
+| Dropbox / Google Drive / OneDrive / Google Cloud Storage / Azure | Out of scope. Drops `azure-identity`, `microsoft-graph`, `dropbox-core-sdk`, `google-api-client`, `google-oauth-client-jetty`. (S3-compatible providers are covered by the kept S3 backend in §5.1.) |
+| Hadoop / HDFS, oVirt, vSphere, ADB, Windows Registry | Out of scope. Drops `hadoop-client`, `avro`, `vim25.jar`, `jadb-v1.2.1.jar`. (NFS is kept — see §5.1.) |
 | RAR / 7z / ISO / RPM / cpio / ar / lst archive formats | Out of scope. Drops `junrar` (CVE-2026-28208, CVE-2026-41245) + `sevenzipjbinding` (license-grey via UnRAR). |
 | `libguestfs` format (WIP upstream) | Out of scope. |
-| Image viewer / PDF viewer / binary (hex) viewer | Out of scope; "barebones" GUI. Drops `icepdf-viewer`, all TwelveMonkeys imageio. |
+| Image viewer / PDF viewer / binary (hex) viewer | Out of scope. Drops `icepdf-viewer` and the entire TwelveMonkeys imageio set. |
 | Embedded terminal widget | Out of scope. Drops `jetbrains-jediterm`, `pty4j`, `purejavacomm`. Users can use a real terminal app for SSH command sessions. |
 | Bonjour / mDNS discovery | Out of scope. Drops `jmdns`. |
 | OSGi runtime (Apache Felix) | Replaced by a plain JVM application + `jpackage`. |
+| External contributions (for now) | We are not yet ready to receive code, translation, or — until further notice — security reports from outsiders. No `CONTRIBUTING.md` is published; `SECURITY.md` is published only because the disclosure channel is cheap to set up. The fork is heavily refactoring; outside contributions before v1.0 would create churn we cannot absorb. |
 
 ## 3. Target stack
 
 | Layer | Choice |
 |---|---|
-| Runtime | **Java 25 LTS** (latest LTS as of 2026-05-08) |
-| Build | Gradle 8.x with **Kotlin DSL** (migrate from Groovy DSL gradually, optional) |
-| Module system | Plain JAR + classpath (or JPMS modules if cheap). **No OSGi.** |
+| Runtime | **Java 25 LTS** (latest LTS as of 2026-05-09) |
+| Build | Gradle 8.x with **Kotlin DSL** (Phase 7; optional but pays dividends) |
+| Module system | Plain JAR + classpath (or JPMS if cheap). **No OSGi.** |
 | UI | Swing + FlatLaf 3.x (post-3.0 line) |
-| L&F on macOS | FlatLaf macOS variants (drop VAqua — GPLv3 already, but unmaintained for newer macOS). |
+| L&F on macOS | FlatLaf macOS variants (drop VAqua — GPLv3, but stagnant) |
 | Logging | SLF4J + Logback 1.5.x |
 | SFTP | `com.github.mwiede:jsch` (latest, ≥ 0.2.21 — fixes Terrapin CVE-2023-48795) |
 | Native interop | JNA 5.14+ (single pinned version; macOS quarantine, trash-to-bin, etc.) |
 | YAML config | SnakeYAML 2.4+ |
-| Packaging | `jpackage` for DMG (macOS) and DEB/RPM/AppImage (Linux) |
+| Packaging | `jpackage` for DMG (macOS) and DEB / RPM / AppImage (Linux) |
 | CI | GitHub Actions (`ubuntu-latest`, `macos-15` matrix only) |
 | Tests | JUnit 5 (migrate off TestNG over time) |
 
@@ -61,8 +84,10 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 ### 4.1 Project license
 
 - Upstream is **GPLv3**. We **stay on GPLv3** — there is no relicensing path without re-collecting CLAs from every contributor, and GPLv3 is fine for our purposes.
-- We add **`SECURITY.md`**, **`CONTRIBUTING.md`**, and a **`NOTICE`** file aggregating third-party licenses.
-- Every preserved upstream file keeps its existing GPL header. New files we author also use the GPLv3 header.
+- We add **`NOTICE`** (already in repo) aggregating third-party licenses and crediting upstream.
+- We add **`SECURITY.md`** (this PR) with a vulnerability-disclosure path.
+- We **do not** add `CONTRIBUTING.md` until the fork is feature-complete and ready to accept outside code (the user decides when). Until then, outside PRs will be closed.
+- Every preserved upstream file keeps its existing GPL header. Files we author also use the GPLv3 header.
 
 ### 4.2 Compatibility audit of the libraries we keep
 
@@ -79,6 +104,7 @@ For the pruned dependency set (SFTP-only barebones build):
 | SnakeYAML | Apache 2.0 | ✅ |
 | Bouncy Castle | MIT-style | ✅ |
 | `mwiede:jsch` | BSD-3 | ✅ |
+| `software.amazon.awssdk:s3` (Phase 4) | Apache 2.0 | ✅ |
 | `commons-compress` | Apache 2.0 | ✅ |
 | XZ for Java | Public Domain | ✅ |
 | Apache bzip2 (vendored from Ant) | Apache 2.0 | ✅ |
@@ -87,37 +113,34 @@ For the pruned dependency set (SFTP-only barebones build):
 | `log4j-core`, `log4j-1.2-api` | Apache 2.0 | ✅ |
 | TestNG / JUnit 5 (test-only) | Apache 2.0 / EPL 2.0 | ✅ |
 
-**Removing** the cloud/SMB/RAR/PDF/image deps **also removes the awkward licenses** — e.g. `junrar`'s effective UnRAR-license (no-modification clause for unrar code), `sevenzipjbinding`'s embedded UnRAR DLL bundle, and the abandoned `jets3t` chain.
+**Removing** the cloud / SMB / RAR / PDF / image deps **also removes the awkward licenses** — e.g. `junrar`'s effective UnRAR-license (no-modification clause for unrar code), `sevenzipjbinding`'s embedded UnRAR DLL bundle, and the abandoned `jets3t` chain.
 
-`jsr305` (FindBugs annotations, `compileOnly`) has a non-standard license the FSF flags. Action: replace with `org.jetbrains:annotations` (Apache 2.0) — it's already pulled in transitively.
+`jsr305` (FindBugs annotations, `compileOnly`) has a non-standard license the FSF flags. Action: replace with `org.jetbrains:annotations` (Apache 2.0) — already pulled in transitively.
 
 ### 4.3 Trademark
 
-- "muCommander" is the project's brand. There is no clearly registered USPTO trademark, but **common-law trademark** rights exist from continuous use since 2002 by Maxence Bernard / Arik Hadas. The mucommander.com domain, the icon set, and the logo are owned by the project.
-- Forking a GPLv3 codebase is fine — keeping the **brand** while substantially diverging is **not** fine and creates legal & ethical issues.
-- **Decision: rename the entire project to `barebones-commander`** for both correctness and clarity (per user direction).
-- The fork repo is named `mucommander-fork` to keep upstream-fork lineage visible to GitHub; the **product name** is `barebones-commander`. We can later rename the repo to `barebones-commander` once the rename PR-train completes.
+- "muCommander" is the upstream's brand. There is no clearly registered USPTO trademark, but **common-law trademark** rights exist from continuous use since 2002. The mucommander.com domain, icons, and logo are upstream's.
+- Forking a GPLv3 codebase is fine — keeping the **brand** while substantially diverging is **not** fine.
+- The fork is renamed `barebones-commander` (PR #2). Repo URL: `https://github.com/e6qu/barebones-commander`.
 
-### 4.4 What rename touches
+### 4.4 What rename touched (PR #2, done)
 
-| Surface | Change |
+| Surface | Status |
 |---|---|
-| Display name | `muCommander` → `barebones-commander` (or `Barebones Commander` for title-case UI use) |
-| Java package root | `com.mucommander.*` → `dev.barebones.commander.*` (one mass-rename PR; preserves history via `git mv`) |
-| Gradle root group | `org.mucommander` → `dev.barebones.commander` |
-| Gradle root version | reset to `0.1.0-SNAPSHOT` |
-| JAR / executable name | `mucommander.jar`, `mucommander.exe` → `barebones-commander.jar`, etc. |
-| App bundle id (macOS) | `com.mucommander.muCommander` → `dev.barebones.commander` |
-| Linux desktop entry / `.desktop` | `mucommander` → `barebones-commander` |
-| Icons | Original `mucommander.ico`, `icon.icns`, `icon128_24.png`, etc. **must** be replaced with new artwork (the upstream icons are GPL but are **identifying brand assets** and a trademark concern). Stub with a simple placeholder until designed. |
-| About dialog / splash | Drop the muCommander logo. New text only: "barebones-commander, a fork of muCommander". |
-| URLs | `https://www.mucommander.com` → `https://github.com/e6qu/mucommander-fork` (until a project URL exists) |
-| Code-format spec | `mucommander-code-format.xml` → `barebones-commander-code-format.xml` |
-| `i18n` keys | Change literal strings containing "muCommander" in `dictionary_*.properties` files |
-| `LICENSE` | Keep upstream verbatim (we're still GPLv3) but add a clear `NOTICE` saying this is a fork |
-| `README` | Rewrite from scratch |
-
-We **do not** remove copyright lines from upstream files — those stay (GPL requires preservation of copyright notices). We **add** a "Forked from muCommander, …" line at the top of files we substantially modify.
+| Display name / app name | `muCommander` → `barebones-commander` ✅ |
+| Java package root | `com.mucommander.*` → `dev.barebones.commander.*` ✅ |
+| Gradle root group | `org.mucommander` → `dev.barebones.commander` ✅ |
+| Gradle root version | reset to `0.1.0-SNAPSHOT` ✅ |
+| JAR / executable name | `barebones-commander.jar`, `barebones-commander.exe` ✅ |
+| App bundle id (macOS) | `dev.barebones.commander.app` ✅ |
+| Linux desktop entry | `barebones-commander` ✅ |
+| URLs | upstream URLs in metadata → `https://github.com/e6qu/barebones-commander` ✅ |
+| Code-format spec | `barebones-commander-code-format.xml` ✅ |
+| `i18n` keys with literal "muCommander" | rebranded across 27 dictionaries ✅ |
+| `LICENSE` / source-file copyright headers | preserved verbatim ✅ |
+| `README` | rewritten ✅ |
+| `NOTICE` | added ✅ |
+| Icons | **deferred** — upstream icon assets still in tree as placeholders. Replace as part of Phase 8 release polish (or a dedicated brand PR when the user OKs it). |
 
 ## 5. Module triage — keep / drop
 
@@ -125,200 +148,253 @@ We **do not** remove copyright lines from upstream files — those stay (GPL req
 
 | Module | Notes |
 |---|---|
-| `mucommander-core` | Main Swing UI. Touch points: remove menu items / actions referring to dropped protocols & viewers. |
-| `mucommander-core-preload` | Bootstrap — keep. |
-| `mucommander-commons-file` | File abstraction. Strip protocol-specific subpackages; keep `local`. |
-| `mucommander-commons-io` | Stream / I/O utils. Keep. |
-| `mucommander-commons-collections` | Keep. |
-| `mucommander-commons-conf` | XML config. **Apply XXE hardening (SECURITY_REVIEW §5.5).** |
-| `mucommander-commons-runtime` | Keep. |
-| `mucommander-commons-util` | Keep. |
-| `mucommander-preferences` | Keep. |
-| `mucommander-translator` | Keep. Optional: prune languages we won't maintain — though shipping them is cheap. |
-| `mucommander-encoding` | Keep. |
-| `mucommander-process` | Keep. |
-| `mucommander-command` | Custom-command feature. **Apply XXE hardening.** |
-| `mucommander-protocol-api` | SPI. Keep. |
-| `mucommander-protocol-sftp` | **The only protocol module.** Bump `jsch` to fix Terrapin. |
-| `mucommander-os-api` | Keep. |
-| `mucommander-os-linux` | Keep. **Refactor `KdeConfig` to `ProcessBuilder(List)` (SECURITY_REVIEW §5.4).** |
-| `mucommander-os-macos` | Keep. |
-| `mucommander-archiver` | Keep — needed for "compress to zip/tar" actions. |
-| `mucommander-format-zip` | Keep. |
-| `mucommander-format-tar` | Keep. |
-| `mucommander-format-gzip` | Keep. |
-| `mucommander-format-bzip2` | Keep. |
-| `mucommander-format-xz` | Keep. |
+| `barebones-core` | Main Swing UI. Touch points: remove menu items / actions referring to dropped protocols & viewers (Phase 1 cleanup pass). |
+| `barebones-core-preload` | Bootstrap — keep. |
+| `barebones-commons-file` | File abstraction. Strip protocol-specific subpackages; keep `local`. |
+| `barebones-commons-io` | Stream / I/O utils. Keep. |
+| `barebones-commons-collections` | Keep. |
+| `barebones-commons-conf` | XML config. **Apply XXE hardening (SECURITY_REVIEW §5.5).** |
+| `barebones-commons-runtime` | Keep. |
+| `barebones-commons-util` | Keep. |
+| `barebones-preferences` | Keep. |
+| `barebones-translator` | Keep. Optional: prune languages we won't maintain — though shipping them is cheap. |
+| `barebones-encoding` | Keep. |
+| `barebones-process` | Keep. |
+| `barebones-command` | Custom-command feature. **Apply XXE hardening.** |
+| `barebones-protocol-api` | SPI. Keep — this is the VFS plug-in contract; future backends (rsync, WebDAV) can hook in here. |
+| `barebones-protocol-sftp` | SFTP backend. Bump `jsch` to fix Terrapin (Phase 4). |
+| `barebones-protocol-s3` | S3-compatible object storage backend. **Replace `jets3t` with AWS SDK v2 in Phase 4** (also drops the bundled `mail.osgi-1.4.jar`). |
+| `barebones-protocol-nfs` | In-process NFSv2/v3 backend (Yanfs-based via the vendored `sun-net-www`). NFSv4 is delivered via Phase 10's OS mount helper rather than this module — Yanfs has no v4 support and a Java NFSv4 client is not worth carrying. |
+| `sun-net-www` (vendored) | Keep — required by `barebones-protocol-nfs` (Yanfs / NFS RPC support). |
+| `barebones-os-api` | Keep. |
+| `barebones-os-linux` | Keep. **Refactor `KdeConfig` to `ProcessBuilder(List)` in Phase 5.** |
+| `barebones-os-macos` | Keep. |
+| `barebones-archiver` | Keep — needed for "compress to zip/tar" actions. |
+| `barebones-format-zip` | Keep. |
+| `barebones-format-tar` | Keep. |
+| `barebones-format-gzip` | Keep. |
+| `barebones-format-bzip2` | Keep. |
+| `barebones-format-xz` | Keep. |
 | `apache-bzip2` (vendored) | Keep — needed by bzip2 module. |
-| `mucommander-viewer-api` | Keep. |
-| `mucommander-viewer-text` | Keep — minimal text viewer. |
+| `barebones-viewer-api` | Keep. |
+| `barebones-viewer-text` | Keep — minimal text viewer. |
 
-### 5.2 REMOVE — protocols
+### 5.2 REMOVE in Phase 1
 
-`adb`, `bonjour`, `dropbox`, `ftp`, `gcs`, `gdrive`, `hadoop`, `http`, `nfs`, `onedrive`, `ovirt`, `registry`, `s3`, `smb`, `vsphere`.
+- **Protocols**: `adb`, `bonjour`, `dropbox`, `ftp`, `gcs`, `gdrive`, `hadoop`, `http`, `onedrive`, `ovirt`, `registry`, `smb`, `vsphere`. (13 modules. **`s3` and `nfs` are kept** — the S3 module's `jets3t` internals are rewritten on top of AWS SDK v2 in Phase 4; the NFS module keeps the Yanfs-based implementation via `sun-net-www`.)
+- **Archive formats**: `ar`, `cpio`, `iso`, `libguestfs`, `lst`, `rar`, `rpm`, `sevenzip`. Removes `junrar` (CVEs), `commons-vfs2` (CVE-2025-27553), `sevenzipjbinding` (license-grey). (8 modules.)
+- **Viewers**: `binary` (hex), `image`, `pdf`. Drops `icepdf-viewer` and the entire TwelveMonkeys imageio set. (3 modules.)
+- **OS adapters**: `win`, `openvms`, `macos-java8`. (3 modules.)
+- **Vendored helpers**: `jetbrains-jediterm`, `sevenzipjbindings`, `gson` (re-bundled), `kotlin-reflect`. (4 modules. `sun-net-www` is kept because NFS needs it.)
+- **Embedded terminal**: the `barebones-core/.../ui/terminal/*` package + its `pty4j` / `purejavacomm` dependency lines.
 
-### 5.3 REMOVE — archive formats
+### 5.3 Effective module count
 
-`ar`, `cpio`, `iso`, `libguestfs`, `lst`, `rar`, `rpm`, `sevenzip`. Removes `junrar` (CVEs), `commons-vfs2` (CVE-2025-27553), `sevenzipjbinding` (license-grey).
+- **Before Phase 1**: 56 sub-projects (post-rename).
+- **After Phase 1**: ~25 sub-projects (S3, NFS, and `sun-net-www` retained on top of the original keep list).
+- Source LOC drop estimate: ≥ 30 %.
 
-### 5.4 REMOVE — viewers
+## 6. Phased delivery — one PR per phase
 
-`binary` (hex), `image`, `pdf`. Drops `icepdf-viewer` and the entire TwelveMonkeys imageio set.
+Each phase = **one** branch + **one** PR against `main`. Squash-merge. Tests must remain green at the merge point. The user signals when a PR is "good" and when the next branch starts. The LLM does not open the next PR autonomously.
 
-### 5.5 REMOVE — OS adapters
+### Phase 0 — Bootstrap *(ongoing — last PR closes it)*
 
-`win`, `openvms`, `macos-java8`.
+Already landed in PR #2 (`main`):
+- `LIBRARIES.md`, `SECURITY_REVIEW.md`, `PLAN.md`.
+- Project rename (Phase 6 work, done early).
+- CI cleanup: removed `.travis.yml`, `nightly.yml`, `stable.yml`; kept only `tests.yaml`.
 
-### 5.6 REMOVE — vendored helpers
+This PR (#3) finishes Phase 0:
+- Adds `SECURITY.md` (vulnerability disclosure path only — no contribution scaffold yet).
+- Drops the originally-planned `CONTRIBUTING.md` (deferred until v1.0 per user direction).
+- Fixes the missed `libs/mucommander-gradle-macappbundle.jar` → `libs/barebones-gradle-macappbundle.jar` rename so CI compiles again.
+- Rewrites this `PLAN.md` to lock in the single-PR-at-a-time rule and collapse multi-PR phases to one PR each.
 
-`jetbrains-jediterm`, `sevenzipjbindings`, `gson` (re-bundled), `kotlin-reflect`, `sun-net-www` (HTTP-protocol helper).
+**Exit criteria**: green CI on master, planning docs final.
 
-The module `gson` (the vendored re-bundle at `./gson/`) gets removed; if any kept module still needs Gson it can pull `com.google.code.gson:gson` directly.
+### Phase 1 — Strip everything out-of-scope (one PR)
 
-### 5.7 Effective module count
+Single sweeping PR doing the full §5.2 deletion list:
 
-- **Before**: 70 subprojects
-- **After**: ~26 subprojects (≈ 63% reduction)
-- Source LOC drop estimate: at least 25–35% (will be measured in Phase 1 close-out).
+- Delete the 15 out-of-scope **protocol** modules.
+- Delete the 8 out-of-scope **archive-format** modules.
+- Delete the 3 **viewer** modules (binary, image, pdf).
+- Delete the 3 **OS adapter** modules (win, openvms, macos-java8).
+- Delete the 5 **vendored helper** modules (jediterm, sevenzipjbindings, gson, kotlin-reflect, sun-net-www).
+- Delete the embedded **terminal** package inside `barebones-core` and its dependencies.
+- Update `settings.gradle` (remove `include` lines).
+- Update root `build.gradle` (remove `osgiRuntime project(...)` lines, drop `vaqua`, drop launch4j Windows EXE / `msi` / `winAppImage` tasks, drop `mucommanderBundleJRE` Windows-only branches).
+- Cleanup pass: orphaned UI menu actions / `dictionary_*.properties` keys / action keymap entries / image resources for removed features.
+- **Verify** no cross-module imports reach into deleted packages (CI greps post-merge will catch anything missed).
 
-## 6. Phased delivery
+**Side-effects**:
+- Kills the JVM-wide TLS bypass (SECURITY_REVIEW §5.1) by deleting the HTTP bundle.
+- Removes junrar CVEs (§4.1.1, §4.1.2) by deleting the RAR module.
+- Removes `commons-vfs2` CVE-2025-27553 by deleting the RAR module's transitive dep.
+- Removes `hadoop-client` CVE-2025-27821 by deleting the Hadoop module.
+- The S3 module **stays** but still uses `jets3t` (and pulls `mail.osgi-1.4.jar` as a transitive dep) until Phase 4 modernizes it to AWS SDK v2. This is acceptable for Phase 1's exit because no Critical/High CVEs are filed against `jets3t 0.9.7` directly; the concern is staleness, addressed in Phase 4.
 
-Each phase is **one or more PRs** against `e6qu/mucommander-fork:master`, merged by squash. Tests must remain green throughout. We **do not** rename the project (Phase 6) until Phases 1–5 are done — keeps PR diffs small.
+**Exit criteria**: app builds on Linux + macOS with local + SFTP + S3 + NFS file panels; `./gradlew test` green.
 
-### Phase 0 — Bootstrap (≤ 3 PRs)
+### Phase 2 — Drop OSGi runtime (one PR)
 
-- **PR-0.1** *(this PR)*: `LIBRARIES.md`, `SECURITY_REVIEW.md`, `PLAN.md`. No code change.
-- **PR-0.2**: Add `SECURITY.md` with disclosure email/policy and short-lived placeholder until v1.0; add `CONTRIBUTING.md`.
-- **PR-0.3**: Tighten CI — remove Windows matrix from any workflow we keep, prune nightly DMG signing (we don't have an Apple Developer ID yet), keep `tests.yaml` running on `ubuntu-latest` + `macos-15`. Add `gradle/wrapper-validation-action` already present — leave in.
+OSGi via Apache Felix is upstream's modularity choice; for a one-protocol app it is pure overhead.
 
-**Exit criteria**: green CI, planning docs landed.
-
-### Phase 1 — Strip unwanted modules (5–8 PRs)
-
-Each PR removes one logical group, in this order (small-blast-radius first):
-
-1. **PR-1.1** Remove obscure formats: `ar`, `cpio`, `lst`, `libguestfs`. (No deep coupling.)
-2. **PR-1.2** Remove RAR / 7z / ISO / RPM / sevenzipjbinding & vendored `sevenzipjbindings/`.
-3. **PR-1.3** Remove image / pdf / binary viewers + their TwelveMonkeys / icepdf deps.
-4. **PR-1.4** Remove cloud protocols: `s3`, `dropbox`, `gdrive`, `gcs`, `onedrive`. Drop the corresponding entries from CI's "release" patch checkout.
-5. **PR-1.5** Remove enterprise/network protocols: `hadoop`, `nfs`, `ovirt`, `vsphere`, `registry`, `adb`, `bonjour`, `smb`, `ftp`, `http`. **This is also where the JVM-wide TLS bypass dies (SECURITY_REVIEW §5.1).**
-6. **PR-1.6** Remove embedded terminal: `mucommander-core/.../ui/terminal/*`, `jetbrains-jediterm`, pty4j/purejavacomm dependency lines.
-7. **PR-1.7** Remove OS adapters: `win`, `openvms`, `macos-java8`. Adjust top-level build.gradle (drop the launch4j Windows EXE task; drop msi/winAppImage/winshortcut tasks; drop OS-specific `osgiRuntime` lines).
-8. **PR-1.8** Cleanup pass: remove now-orphaned UI menu actions, image resources, dictionary entries, settings keys, and removed actions' keymap entries.
-
-After each PR, run `./gradlew test` and a manual smoke run.
-
-**Exit criteria**: app builds and runs on Linux + macOS with only local + SFTP file panels; all CI green.
-
-### Phase 2 — Drop OSGi runtime (3 PRs)
-
-OSGi via Apache Felix is the upstream's modularity choice; for a one-protocol app it's pure overhead.
-
-1. **PR-2.1** Stop generating OSGi manifests in `subprojects { ... }` block — remove `biz.aQute.bnd.builder` plugin and `bnd { ... }` blocks per subproject. Modules become plain Java libraries.
-2. **PR-2.2** Replace `Activator` classes (each protocol/format/viewer module has one) with explicit registration calls in a new `dev.barebones.commander.bootstrap.Bootstrap` class invoked from `main`. This keeps the SPI contract (file/format/viewer providers register themselves) without OSGi service tracking.
-3. **PR-2.3** Replace `runOsgi` Gradle task & Felix runtime with `application`-plugin `run` task, single fat JAR via `shadowJar` (or simple `jar { from configurations… }`). Drop the `osgi/`, `bundle/`, `app/`, `conf/` runtime layout. Adjust `jpackage` invocations.
+- Remove `biz.aQute.bnd.builder` plugin and per-subproject `bnd { ... }` blocks.
+- Replace each `Activator` class with explicit registration calls in a new `dev.barebones.commander.bootstrap.Bootstrap` invoked from `main`.
+- Replace `runOsgi` / Felix runtime with the Gradle `application` plugin + a single fat JAR.
+- Drop the `osgi/`, `bundle/`, `app/`, `conf/` runtime layout and adjust `jpackage` invocations.
+- Drop Apache Felix from dependencies.
 
 **Exit criteria**: `./gradlew run` launches the app without Felix; produced JAR runs via `java -jar barebones-commander.jar`.
 
-### Phase 3 — Java 25 LTS upgrade (2 PRs)
+### Phase 3 — Java 25 LTS upgrade (one PR)
 
-1. **PR-3.1** Bump `compileJava.options.compilerArgs += ['--release', '25']` everywhere, set `JavaVersion.VERSION_25` in toolchain via Gradle's `java.toolchain` block. Update CI matrix to `java-version: '25'` (Temurin or Adoptium). Fix any `--add-opens` / `--add-exports` lists for current JDK module names.
-2. **PR-3.2** Modernize: replace deprecated APIs flagged by `--release 25` (e.g. removed `SecurityManager`, finalize-related, `Thread.stop`, etc.). Replace `var` where it improves readability. Adopt switch expressions / pattern matching where it cleans up file-type dispatch code.
+- `compileJava.options.compilerArgs += ['--release', '25']` everywhere.
+- Set `JavaVersion.VERSION_25` via Gradle's `java.toolchain` block.
+- Update `tests.yaml` matrix to `java-version: '25'` (Temurin / Adoptium).
+- Fix `--add-opens` / `--add-exports` lists for current JDK module names; prune any that became unnecessary.
+- Replace deprecated APIs (`SecurityManager`, finalize-related, `Thread.stop`, etc.).
+- Apply `var` / switch expressions / pattern matching where they cleanly improve readability.
 
 **Exit criteria**: app builds & passes tests on Java 25.
 
-### Phase 4 — Dependency upgrades (2 PRs)
+### Phase 4 — Dependency upgrades + S3 backend modernization (one PR)
 
-(After pruning, the surviving upgradable deps are smaller.)
+**Replace abandoned `jets3t` with AWS SDK v2** for the S3 module (the largest single change in this PR):
+- Drop `org.jets3t:jets3t:0.9.7` and the bundled `mail.osgi-1.4.jar`.
+- Add `software.amazon.awssdk:s3` (latest 2.x) as the new backend.
+- Rewrite `S3File`, `S3Panel`, `S3FileURL`, and the OSGi `Activator` against the new SDK. Keep the existing `barebones-protocol-api` SPI shape so the rest of the app sees no behavioural change beyond authentication / endpoint configuration improvements.
+- Verify against AWS S3 + MinIO (S3-compatible) in manual smoke tests before merge.
 
-1. **PR-4.1** Bump:
-   - `mwiede:jsch` 0.2.10 → 0.2.21+ (fixes Terrapin CVE-2023-48795)
-   - Logback 1.2.13 → 1.5.x (now safe — no longer carry the legacy 1.2 chain since we've moved off Java 8)
-   - SLF4J 1.7.36 → 2.0.x
-   - SnakeYAML 2.3 → 2.4
-   - JNA — pin a **single** version (≥ 5.14) project-wide (fixes the 5.5.0/5.12.1 split)
-   - FlatLaf 2.6 / 2.2 → 3.x — pin a **single** version (fixes the 2.6/2.2 split)
-   - ICU4J 78.3 → latest
-   - Gson 2.11.0 → 2.11.x latest
-   - Bouncy Castle 1.79 → latest 1.x
-   - commons-compress 1.28.0 → latest
-   - log4j-core 2.25.3 → latest
-   - jcommander 1.82 → latest
-2. **PR-4.2** Add **Dependabot config** (`.github/dependabot.yml`) for `gradle` ecosystem, weekly cadence; add `dependency-review-action` to CI.
+**Bumps**:
+- `mwiede:jsch` 0.2.10 → ≥ 0.2.21 (fixes Terrapin CVE-2023-48795).
+- Logback 1.2.13 → 1.5.x.
+- SLF4J 1.7.36 → 2.0.x.
+- SnakeYAML 2.3 → 2.4.
+- JNA — pin a **single** version (≥ 5.14) project-wide (fixes the 5.5.0 / 5.12.1 split).
+- FlatLaf 2.6 / 2.2 → 3.x — pin a **single** version (fixes the 2.6 / 2.2 split).
+- ICU4J 78.3 → latest.
+- Gson 2.11.0 → latest.
+- Bouncy Castle 1.79 → latest 1.x.
+- `commons-compress` 1.28.0 → latest.
+- `log4j-core` 2.25.3 → latest.
+- `jcommander` 1.82 → latest.
 
-### Phase 5 — Code-level security fixes (4 PRs)
+**Tooling**:
+- Add **Dependabot config** (`.github/dependabot.yml`) for `gradle` ecosystem, weekly cadence.
+- Add `dependency-review-action` step to `tests.yaml`.
 
-These map 1:1 to `SECURITY_REVIEW.md` §5.
+**Exit criteria**: no Critical / High dependency CVEs in `SECURITY_REVIEW.md` §4.1 still apply; `jets3t` and `mail.osgi-1.4.jar` are gone from the build.
 
-1. **PR-5.1** *Already completed in Phase 1 by deleting the HTTP module:* JVM-wide TLS bypass is gone. Add a CI check (grep gate) that fails the build if `setDefaultSSLSocketFactory` or `setDefaultHostnameVerifier` ever reappear in the tree.
-2. **PR-5.2** Replace `XORCipher` for stored credentials. Two-stage:
-   - **5.2a** Add OS keychain integration: macOS Keychain via JNA (`Security.framework`); Linux libsecret via JNA. Behind a feature flag in preferences.
-   - **5.2b** Default to keychain on first run; for back-compat, decrypt legacy `XORCipher`-protected `credentials.xml` once and re-write into keychain, then delete the XML field. Keep an opt-out env var for users who can't use a keychain.
-3. **PR-5.3** Harden the 9 SAX entry points (theme, bookmarks, action keymap, toolbar, command bar, association, command, credentials, configuration) — set `FEATURE_SECURE_PROCESSING=true` and `disallow-doctype-decl=true`. Add a small test that loading an XML with a DOCTYPE → throws.
-4. **PR-5.4** Refactor `KdeConfig.exec(String + key)` to `ProcessBuilder(List.of(...))`. (Even if unreachable in practice, removes the SAST finding.)
+### Phase 5 — Code-level security fixes (one PR)
 
-**Exit criteria**: a clean run of `spotbugs` + `dependency-check` + `pmd` (added in Phase 9) reports no Critical / High.
+Maps 1:1 to `SECURITY_REVIEW.md` §5:
 
-### Phase 6 — Rename to `barebones-commander` (3 PRs)
+1. Add a CI **grep gate** that fails the build if `setDefaultSSLSocketFactory` or `setDefaultHostnameVerifier` reappear in the tree (the actual call sites died in Phase 1 with the HTTP bundle).
+2. Replace `XORCipher`-based credential storage with **OS keychain** integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Fall back to a passphrase-derived AES-GCM blob when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field.
+3. **XXE-harden** the 9 SAX entry points (theme, bookmarks, action keymap, toolbar, command bar, association, command, credentials, configuration): set `FEATURE_SECURE_PROCESSING=true` and `disallow-doctype-decl=true`. Add a small test asserting `<!DOCTYPE>` → throws.
+4. Refactor `KdeConfig.exec(String + key)` to `ProcessBuilder(List.of(...))`.
 
-1. **PR-6.1** Mass `git mv` of `com.mucommander.*` → `dev.barebones.commander.*`. One commit. Includes touch-ups to imports, gradle `Bundle-Activator`, OSGi `Export-Package` (already deleted in Phase 2 but any leftover refs), `Specification-Title`, `Implementation-Title` strings.
-2. **PR-6.2** Rebrand: remove muCommander icons, replace with placeholder vector icon for `barebones-commander`. Replace About dialog text. Replace product/title strings everywhere. Update `i18n` dictionaries (`s/muCommander/barebones-commander/g` mechanically; review hand-edits per language).
-3. **PR-6.3** Rename outputs: JAR, Linux desktop entry, macOS bundle id, executable name. Update all `jpackage` invocations. Add `NOTICE` aggregating third-party licenses.
+**Exit criteria**: no Critical / High items remain in `SECURITY_REVIEW.md` §5 against the current code.
 
-**Exit criteria**: `./gradlew run` shows the new name, icon, and About; produced installers are named `barebones-commander-*`.
+### Phase 6 — Rename to `barebones-commander`
 
-### Phase 7 — Build system polish (2 PRs)
+✅ **Done in PR #2.** Class-rename (`muCommander.java` → e.g. `BareCommander.java`) and icon replacement deferred — they can be folded into Phase 8 release polish or a small dedicated PR if the user requests.
 
-1. **PR-7.1** Migrate `build.gradle` (root + subprojects) to **Kotlin DSL** `build.gradle.kts`. Optional but pays dividends in IDE help.
-2. **PR-7.2** Introduce **version catalog** (`gradle/libs.versions.toml`) — ends per-module pinning drift permanently.
+### Phase 7 — Build polish (one PR)
 
-### Phase 8 — Release & supply chain (3 PRs)
+- Migrate `build.gradle` (root + subprojects) to **Kotlin DSL** `build.gradle.kts`.
+- Introduce **version catalog** (`gradle/libs.versions.toml`) — ends per-module pinning drift permanently.
 
-1. **PR-8.1** Replace upstream nightly/stable workflows with simpler `release.yml` that produces, on tag push:
-   - Linux x86_64/aarch64 AppImage + DEB + RPM via `jpackage`
-   - macOS aarch64/x86_64 DMG via `jpackage` + `notarytool` (when Apple Developer ID is configured; until then, ad-hoc-signed DMG).
-2. **PR-8.2** Enable **commit signing** in CONTRIBUTING + branch-protection rule on `master` requiring signed commits. (Upstream has `N` for every commit — we won't.)
-3. **PR-8.3** Add **SBOM** generation (`org.cyclonedx.bom` Gradle plugin) and publish `bom.cdx.json` on each release. Add **SLSA-style provenance** via `actions/attest-build-provenance`.
+### Phase 8 — Release pipeline + supply chain (one PR)
 
-### Phase 9 — Static analysis CI (2 PRs)
+- Replace upstream nightly / stable workflows (already deleted) with a fresh `release.yml` triggered on tag push:
+  - Linux x86_64 / aarch64 AppImage + DEB + RPM via `jpackage`.
+  - macOS aarch64 / x86_64 DMG via `jpackage` + `notarytool` (when an Apple Developer ID is configured; until then, ad-hoc-signed DMG).
+- Enable **commit signing** + branch-protection rule on `main` requiring signed commits.
+- Add **SBOM** generation (`org.cyclonedx.bom` Gradle plugin); publish `bom.cdx.json` per release.
+- Add **SLSA-style provenance** via `actions/attest-build-provenance`.
+- Replace upstream icon set with new artwork.
 
-1. **PR-9.1** Add **SpotBugs + FindSecBugs** as Gradle-driven CI step. Treat any High-severity finding as a CI failure.
-2. **PR-9.2** Add **OWASP Dependency-Check** as scheduled weekly CI. Treat CVSS ≥ 7.0 as failure.
+### Phase 9 — SAST in CI (one PR)
+
+- Add **SpotBugs + FindSecBugs** as a Gradle-driven CI step. Fail the build on any High-severity finding.
+- Add **OWASP Dependency-Check** as a scheduled weekly CI run. Fail on CVSS ≥ 7.0.
+
+### Phase 10 — Connectivity: Tailscale + mount helper (one PR)
+
+The first feature-add phase after the cleanup wave. Three sub-features in one PR; all use the same shell-out pattern (no native code, no Go/Rust deps).
+
+**OS-level mount helper** — a small Swing dialog that:
+- Asks for a remote share URL / host / share-path / credentials.
+- Resolves a target mountpoint under `${user.home}/.barebones-commander/mounts/<host>-<share>` (Linux) or `/Volumes/<host>-<share>` (macOS).
+- Invokes the OS mount command via `ProcessBuilder(List.of(...))` (never string-concatenated):
+  - **Linux**: `mount.nfs4` for NFSv4; `mount.nfs` for v2/v3; `mount -t cifs` for SMB; `sshfs` for SSHFS (FUSE).
+  - **macOS**: `mount_nfs` (NFSv2/v3/v4); `mount -t smbfs` for SMB; `sshfs` for SSHFS (macFUSE if installed).
+- On success, opens the mountpoint as a regular folder in the active panel.
+- Tracks active mounts and offers an "Unmount" action. Best-effort cleanup on app exit.
+- Privileged mounts (Linux NFS) require `sudo` or a setuid `mount.*` helper — surface this in the dialog rather than silently failing.
+
+**NFSv4** — delivered by the mount helper above. The in-process `barebones-protocol-nfs` module is unchanged and continues to handle direct NFSv2/v3 sessions for environments where mounting is not desired.
+
+**Tailscale integration**:
+- Detect Tailscale by probing for the `tailscale` binary on `$PATH` and the local API socket (`/var/run/tailscale/tailscaled.sock` on Linux, `~/Library/Containers/io.tailscale.ipn.macsys/Data/IPN/tailscaled.sock` on macOS GUI install).
+- List tailnet peers via `tailscale status --json`. Surface them in a "Tailscale peers" quick-list (similar in spirit to upstream's deleted Bonjour list).
+- Selecting a peer pre-fills the SFTP / NFS / mount dialog with the peer's MagicDNS hostname (`*.ts.net`).
+- (Optional) Taildrop send: a "Send to peer (Taildrop)" action shells out to `tailscale file cp <path> <peer>:`.
+- (Optional) Taildrop receive: a "Tailscale inbox" panel shows files received via Taildrop (`tailscale file get`).
+- All Tailscale invocations go through the OS-mount-style `ProcessBuilder(List<String>)` path — no shell-injection risk.
+
+**Implementation discipline**:
+- All shell-outs use `ProcessBuilder(List<String>)`. No `Runtime.exec(String)`. No string concatenation of user input into command lines. (Same SAST gate from Phase 5.)
+- Failure modes (binary missing, daemon not running, mount denied) bubble up as user-visible dialogs, never silent.
+- No bundled Tailscale client. The user installs Tailscale via their OS; we just detect and integrate.
+- No bundled `sshfs` / `mount.nfs4` / `mount.cifs`. Same posture.
+
+**Exit criteria**: app can mount an NFSv4 share on both Linux and macOS via the mount dialog and browse it; tailnet peer list populates from `tailscale status --json`; Taildrop send works in a manual smoke test.
 
 ## 7. Compatibility with upstream
 
 We may want to **pull bug fixes from upstream muCommander** for at least 1 year. To keep this cheap:
 
-- Keep our package rename (Phase 6) **after** module pruning so upstream rebases of pruned-but-unrenamed modules are trivial 3-way merges.
-- Do not rewrite history of `master`. Use **squash merges** on every PR to keep `master` linear.
-- Track upstream as a remote (`origin` already set). Periodically `git fetch origin` and cherry-pick relevant fixes from `master`/`stable`.
-- Document this dance in `CONTRIBUTING.md` (Phase 0.2).
+- Do not rewrite history of `main`. Use **squash merges** on every PR to keep `main` linear.
+- Track upstream as `git remote upstream` (already configured locally). Periodically `git fetch upstream` and cherry-pick relevant fixes.
+- Resolve path conflicts manually (`com/mucommander/` → `dev/barebones/commander/`).
 
 ## 8. Risks
 
 | Risk | Mitigation |
 |---|---|
-| Removing OSGi (Phase 2) breaks SPI registration in subtle ways | Phase 2 is split into 3 PRs with smoke tests at each step. |
-| Java 25 changes some private-API access we relied on | Phase 3 starts after pruning; the surviving code touches little reflective API. The `--add-opens` / `--add-exports` lists in `build.gradle` already enumerate them; review and prune. |
-| Keychain integration (PR-5.2a) becomes a long thread | Keep a non-keychain fallback (encrypted with PBKDF2 + AES-GCM, master-passphrase-derived) so we don't block the rest of the plan. |
-| Rebrand introduces UI regressions | PR-6.2 only touches strings, icons, and About — keep it isolated. |
-| Trademark complaint from upstream maintainer | Renaming + adding NOTICE preempts this. We never claim to be the upstream. |
-| Maintainer bus factor of 1 (us) | Document everything; SECURITY.md disclosure path; signed releases. |
+| Phase 1 deletes too much in one shot | Phase 1 is mechanical: deletion + `settings.gradle` + `build.gradle` updates. The grep on cross-module imports before merging catches accidental coupling. CI provides a final gate. |
+| Removing OSGi (Phase 2) breaks SPI registration in subtle ways | Phase 2 introduces a single `Bootstrap` class that explicitly registers every provider. Smoke-run on Linux + macOS before merge. |
+| Java 25 changes private-API access we relied on | The surviving code touches little reflective API. The `--add-opens` / `--add-exports` lists in `build.gradle` already enumerate them; review and prune. |
+| Keychain integration becomes a long thread | Ship the AES-GCM fallback first; keychain integration can land as an additive Phase-5 or follow-up PR if it stretches. |
+| Trademark complaint from upstream maintainer | Renaming + `NOTICE` preempts this. We do not claim affiliation with upstream. |
+| Maintainer bus factor of 1 | Documented everything; release signing + SBOM (Phase 8) lets a future maintainer verify supply chain. |
 
 ## 9. Open questions / decisions deferred
 
-1. **Rename packages now or never?** Phase 6 mass-rename. Decision: do it once at v0.5; not optional for trademark hygiene.
-2. **Drop TestNG for JUnit 5?** Most of the codebase is TestNG; not blocking. Defer until Phase 9+ unless a particular module is being heavily refactored.
-3. **App identity for macOS notarization** — needs an Apple Developer ID we don't have yet. Until then, ship ad-hoc-signed DMG and document the `xattr -d` workaround.
-4. **GPLv3 → AGPLv3?** Probably no — we're a desktop app, not a network service. Stay GPLv3.
-5. **Translation maintenance** — We keep the existing `dictionary_*.properties` files. Open question whether we accept new translation PRs from day 1 or freeze translations until v1.0.
-6. **macOS L&F: keep VAqua or rely on FlatLaf macOS variant?** VAqua is GPL but stagnant; FlatLaf works fine on macOS in modern releases. Default to **drop VAqua** in Phase 1.5 (or the cleanup pass) — saves a dependency and a "filter out vaqua for macOS 13+" hack already in upstream (`fix #1458`).
+1. **Class rename of `muCommander.java`** — defer until a clear opportunity (Phase 8 polish or its own micro-PR when the user asks).
+2. **TestNG → JUnit 5 migration** — non-blocking. Defer.
+3. **Apple Developer ID for notarization** — until acquired, ship ad-hoc-signed DMG and document the `xattr -d` workaround.
+4. **GPLv3 → AGPLv3** — no. We are a desktop app, not a network service.
+5. **Translation maintenance** — keep upstream `dictionary_*.properties` files. New translation contributions: blocked by §2 (no contributions) until v1.0.
+6. **macOS L&F: keep VAqua or rely on FlatLaf macOS variant** — drop VAqua in Phase 1 (§5.2 vendored helpers — also covers the upstream `fix #1458` "filter out vaqua for macOS 13+" workaround).
+7. **JRE submodule** (`.gitmodules` still points at `mucommander/JRE`) — replace with a build-time-downloaded JDK or unbundled assumption in Phase 8.
+8. **rsync support** — not present in upstream and not in scope for v1.0. The kept VFS SPI (`barebones-protocol-api`, see §1.10) means a future `barebones-protocol-rsync` plug-in can be added as an additive PR without core changes when there is a use case.
+9. **WebDAV** — same path as rsync: out of scope for v1.0; pluggable later. (SMB is reachable via Phase 10's mount helper; NFS — both v2/v3 in-process and v4 via the mount helper — is in scope per §5.1 / §1.2.)
+10. **S3 endpoint configuration UI** — AWS SDK v2 makes `--endpoint-override` for MinIO / Ceph / R2 trivial in code, but a UX surface for non-AWS S3 endpoints needs design. Treat as a follow-up after Phase 4 lands the SDK swap.
+11. **Tailscale auth fallback** — `tailscale status --json` requires the local user to be the same user running tailscaled (or `sudo`). Decide what we do on macOS sandboxed installs of Tailscale where the socket isn't reachable: degrade to "Tailscale not detected" and let the user type peer hostnames manually (MagicDNS still resolves them).
+12. **Mount-helper privilege escalation** — Linux NFS mounts typically need root. Either prompt for `pkexec` / `sudo` and re-invoke, or document that the user must pre-add their account to `/etc/fstab` with `users` mount option. Phase 10 picks `pkexec` first if available, falls back to documenting fstab.
 
-## 10. Quick reference — commit & PR conventions
+## 10. Quick reference — workflow conventions
 
-- **Branch naming**: `phase-N/short-description` (e.g. `phase-1/remove-rar-7z-iso`).
+- **One branch / one PR in flight.** The user decides when a PR is ready and signals start of the next branch. The LLM does not autonomously open the next PR.
+- **Branch naming**: `phase-N/short-description` (e.g. `phase-1/strip-out-of-scope`).
 - **Commit author** for all our commits: `Adrian Mârza <adi11235 at gmail dot com>` (intentional non-RFC email; configured per-repo, not globally).
-- **Commits unsigned** until Phase 8.2; from then on all commits must be signed.
-- **PRs always squash-merge** to `master`. PR title = future commit title. PR body = brief "what + why + test plan".
-- **No direct pushes to `master`.**
-- **No `--no-verify`** to skip hooks. **No `--amend`** of pushed commits.
+- **Commits unsigned** until Phase 8; from then on all commits must be signed.
+- **PRs always squash-merge** to `main`. PR title = future commit title. PR body = brief "what + why + test plan".
+- **No direct pushes to `main`.** No `--no-verify` for hooks. No `--amend` of pushed commits.
+- **No CONTRIBUTING.md / no outside contributions** until v1.0. The user lifts this when ready.

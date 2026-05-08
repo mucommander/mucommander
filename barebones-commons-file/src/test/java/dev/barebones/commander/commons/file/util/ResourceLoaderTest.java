@@ -144,7 +144,7 @@ public class ResourceLoaderTest {
         assert rootPackageFile.exists();
         assert rootPackageFile.isBrowsable();
 
-        AbstractFile thisClassFile = rootPackageFile.getChild("com/mucommander/commons/file/util/ResourceLoaderTest.class");
+        AbstractFile thisClassFile = rootPackageFile.getChild("dev/barebones/commander/commons/file/util/ResourceLoaderTest.class");
         assertReadable(thisClassFile);
     }
 
@@ -153,7 +153,7 @@ public class ResourceLoaderTest {
      */
     @Test
     public void testRelativeClassPath() {
-        assert "com/mucommander/commons/file/util/ResourceLoaderTest.class".equals(ResourceLoader.getRelativeClassPath(getClass()));
+        assert "dev/barebones/commander/commons/file/util/ResourceLoaderTest.class".equals(ResourceLoader.getRelativeClassPath(getClass()));
     }
 
     /**
@@ -162,7 +162,7 @@ public class ResourceLoaderTest {
     @Test
     public void testRelativePackagePath() {
         // Returned path does not end with a '/'
-        assert "com/mucommander/commons/file/util".equals(ResourceLoader.getRelativePackagePath(getThisPackage()));
+        assert "dev/barebones/commander/commons/file/util".equals(ResourceLoader.getRelativePackagePath(getThisPackage()));
     }
 
 
@@ -206,7 +206,7 @@ public class ResourceLoaderTest {
     }
 
     private String getExistingResourcePath() {
-        return "com/mucommander/commons/file/util/"+getExistingResourceName();
+        return "dev/barebones/commander/commons/file/util/"+getExistingResourceName();
     }
 
     private String getNonExistingResourceName() {
@@ -214,6 +214,6 @@ public class ResourceLoaderTest {
     }
 
     private String getNonExistingResourcePath() {
-        return "com/mucommander/commons/file/util/"+getNonExistingResourceName();
+        return "dev/barebones/commander/commons/file/util/"+getNonExistingResourceName();
     }
 }

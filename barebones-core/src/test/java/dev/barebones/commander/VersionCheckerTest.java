@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander;
+package dev.barebones.commander;
 
 import org.testng.annotations.Test;
 

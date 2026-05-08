@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander;
+package dev.barebones.commander;
 
 import dev.barebones.commander.commons.file.AbstractFile;
 import dev.barebones.commander.commons.file.util.ResourceLoader;

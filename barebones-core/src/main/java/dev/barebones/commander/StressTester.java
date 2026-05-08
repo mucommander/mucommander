@@ -16,7 +16,7 @@
  */
 
 
-package com.mucommander;
+package dev.barebones.commander;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

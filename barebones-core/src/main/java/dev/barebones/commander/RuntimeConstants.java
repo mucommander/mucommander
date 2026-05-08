@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mucommander;
+package dev.barebones.commander;
 
 import dev.barebones.commander.commons.file.util.ResourceLoader;
 import org.slf4j.Logger;
@@ -43,13 +43,13 @@ public class RuntimeConstants {
     // - URLs ----------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------------------------------------------------------------------
     /** Homepage URL. */
-    public static final String HOMEPAGE_URL = "https://www.mucommander.com";
+    public static final String HOMEPAGE_URL = "https://github.com/e6qu/barebones-commander";
     /** GitHub URL */
-    public static final String GITHUB_URL = "https://github.com/mucommander/mucommander";
-    /** URL of the muCommander forums. */
+    public static final String GITHUB_URL = "https://github.com/e6qu/barebones-commander";
+    /** URL of the project's discussion / forums area. */
     public static final String FORUMS_URL = GITHUB_URL + "/discussions/";
     /** URL at which to make a donation. */
-    public static final String DONATION_URL = "https://github.com/sponsors/mucommander";
+    public static final String DONATION_URL = "https://github.com/sponsors/e6qu";
     /** URL at which to file a new bug. */
     public static final String REPORT_BUG_URL = GITHUB_URL + "/issues/new/";
     /** Documentation URL. */
