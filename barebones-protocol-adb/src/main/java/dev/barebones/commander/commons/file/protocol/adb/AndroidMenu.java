@@ -1,0 +1,149 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.commons.file.protocol.adb;
+
+import java.net.MalformedURLException;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.barebones.commander.commons.file.FileURL;
+import dev.barebones.commander.commons.util.ui.helper.MnemonicHelper;
+import dev.barebones.commander.text.Translator;
+import dev.barebones.commander.ui.action.MuAction;
+import dev.barebones.commander.ui.action.impl.OpenLocationAction;
+import dev.barebones.commander.ui.icon.IconManager;
+import dev.barebones.commander.ui.main.FolderPanel;
+import dev.barebones.commander.ui.main.MainFrame;
+
+/**
+ * An abstract JMenu that contains an item for each Android ADB devices available
+ *
+ * <p>Note: the items list is refreshed each time the menu is selected. In other words, a new instance of AdbMenu
+ * does not have to be created in order to see new devices.
+ *
+ * Created on 28/12/15.
+ * @author Oleg Trifonov, Arik Hadas
+ */
+public class AndroidMenu extends JMenu implements MenuListener {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AndroidMenu.class);
+
+    private MainFrame mainFrame;
+    private FolderPanel folderPanel;
+
+    private boolean searching;
+
+    /**
+     * Creates a new instance of <code>AndroidMenu</code>.
+     */
+    public AndroidMenu(MainFrame mainFrame, FolderPanel folderPanel) {
+        super(Translator.get("adb.android_devices"));
+        this.mainFrame = mainFrame;
+        this.folderPanel = folderPanel;
+        setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
+
+        // Menu items will be added when menu gets selected
+        addMenuListener(this);
+    }
+
+    /**
+     * Returns the action to perform for the given item.
+     *
+     * @param deviceSerial the serial number of the device
+     * @return the action to perform for the given Android device
+     */
+    public MuAction getMenuItemAction(String deviceSerial) {
+        return new OpenLocationAction(mainFrame, Collections.emptyMap(), getDeviceURL(deviceSerial)) {
+            @Override
+            protected FolderPanel getFolderPanel() {
+                return folderPanel != null ? folderPanel : mainFrame.getActivePanel();
+            }
+        };
+    }
+
+    private FileURL getDeviceURL(String deviceSerial) {
+        try {
+            return FileURL.getFileURL("adb://" + deviceSerial);
+        } catch (MalformedURLException e) {
+            LOGGER.error("failed to get adb device file", e);
+            return null;
+        }
+    }
+
+    @Override
+    public void menuSelected(MenuEvent e) {
+        // Remove previous menu items (if any)
+        removeAll();
+
+        if (searching) {
+            return;
+        }
+        searching = true;
+
+        JMenuItem searchingItem = add(new JMenuItem(Translator.get("loading")));
+        searchingItem.setEnabled(false);
+        CompletableFuture.runAsync(() -> {
+            var androidDevices = AdbUtils.getDevices();
+
+            SwingUtilities.invokeLater(() -> {
+                if (androidDevices == null) {
+                    searchingItem.setText(Translator.get("adb.android_disabled"));
+                    searching = false;
+                    return;
+                }
+                setEnabled(true);
+                if (androidDevices.isEmpty()) {
+                    searchingItem.setText(Translator.get("adb.no_devices"));
+                    searching = false;
+                    return;
+                }
+                MnemonicHelper mnemonicHelper = new MnemonicHelper();
+                for (String serial : androidDevices) {
+                    JMenuItem menuItem = new JMenuItem(getMenuItemAction(serial));
+                    menuItem.setMnemonic(mnemonicHelper.getMnemonic(menuItem.getText()));
+                    String name = AdbUtils.getDeviceName(serial);
+                    menuItem.setText(name == null ? serial : name);
+                    menuItem.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, "android.png"));
+
+                    add(menuItem);
+                }
+                remove(searchingItem);
+                searching = false;
+            });
+        });
+    }
+
+    @Override
+    public void menuDeselected(MenuEvent e) {
+
+    }
+
+    @Override
+    public void menuCanceled(MenuEvent e) {
+
+    }
+}

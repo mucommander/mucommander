@@ -1,0 +1,561 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.ui.main;
+
+import java.awt.AWTKeyStroke;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.KeyboardFocusManager;
+import java.awt.Point;
+import java.awt.dnd.DropTarget;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.barebones.commander.auth.CredentialsMapping;
+import dev.barebones.commander.commons.file.AbstractFile;
+import dev.barebones.commander.commons.file.FileFactory;
+import dev.barebones.commander.commons.file.FileURL;
+import dev.barebones.commander.commons.file.MonitoredFile;
+import dev.barebones.commander.core.ChangeFolderThread;
+import dev.barebones.commander.core.LocalLocationHistory;
+import dev.barebones.commander.core.LocationChanger;
+import dev.barebones.commander.desktop.ActionType;
+import dev.barebones.commander.preload.PreloadedJFrame;
+import dev.barebones.commander.ui.action.ActionKeymap;
+import dev.barebones.commander.ui.action.ActionManager;
+import dev.barebones.commander.ui.action.impl.FocusNextAction;
+import dev.barebones.commander.ui.action.impl.FocusPreviousAction;
+import dev.barebones.commander.ui.dnd.FileDragSourceListener;
+import dev.barebones.commander.ui.dnd.FileDropTargetListener;
+import dev.barebones.commander.ui.event.LocationManager;
+import dev.barebones.commander.ui.main.quicklist.BookmarksQL;
+import dev.barebones.commander.ui.main.quicklist.ParentFoldersQL;
+import dev.barebones.commander.ui.main.quicklist.RecentExecutedFilesQL;
+import dev.barebones.commander.ui.main.quicklist.RecentLocationsQL;
+import dev.barebones.commander.ui.main.quicklist.RootFoldersQL;
+import dev.barebones.commander.ui.main.quicklist.TabsQL;
+import dev.barebones.commander.ui.main.table.FileTable;
+import dev.barebones.commander.ui.main.table.FileTableConfiguration;
+import dev.barebones.commander.ui.main.tabs.ConfFileTableTab;
+import dev.barebones.commander.ui.main.tabs.FileTableTab;
+import dev.barebones.commander.ui.main.tabs.FileTableTabs;
+import dev.barebones.commander.ui.main.tree.FoldersTreePanel;
+import dev.barebones.commander.ui.quicklist.QuickList;
+import dev.barebones.commander.ui.quicklist.QuickListContainer;
+import dev.barebones.commander.ui.tabs.ActiveTabListener;
+
+/**
+ * Folder pane that contains the table that displays the contents of the current directory and allows navigation, the
+ * drive button, and the location field.
+ *
+ * @author Maxence Bernard, Arik Hadas
+ */
+public class FolderPanel implements FocusListener, QuickListContainer, ActiveTabListener {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FolderPanel.class);
+
+	/** The following constants are used to identify the left and right folder panels */
+	public enum FolderPanelType { LEFT, RIGHT }
+
+    private MainFrame  mainFrame;
+
+    private final JPanel panel;
+
+    private LocationManager locationManager = new LocationManager(this);
+
+    /*  We're NOT using JComboBox anymore because of its strange behavior:
+        it calls actionPerformed() each time an item is highlighted with the arrow (UP/DOWN) keys,
+        so there is no way to tell if it's the final selection (ENTER) or not.
+    */
+    private DrivePopupButton driveButton;
+    private LocationTextField locationTextField;
+    private FileTable fileTable;
+    private FileTableTabs tabs;
+    private FoldersTreePanel foldersTreePanel;
+    private JSplitPane treeSplitPane;
+
+    private FileDragSourceListener fileDragSourceListener;
+
+    private LocationChanger locationChanger;
+
+    /** Is directory tree visible */
+    private boolean treeVisible = false;
+
+    /** Saved width of a directory tree (when it's not visible) */ 
+    private int oldTreeWidth = 150;
+
+    /** Array of all the existing pop ups for this panel's FileTable **/
+    private Future<QuickList[]> fileTablePopups;
+
+    /* TODO branch private boolean branchView; */
+
+    /**
+     * Constructor
+     * 
+     * @param mainFrame - the MainFrame that contains this panel
+     * @param initialTabs - the initial folders displayed at this panel's tabs
+     * @param conf - configuration for this panel's file table
+     */
+    FolderPanel(MainFrame mainFrame, ConfFileTableTab[] initialTabs, int indexOfSelectedTab, FileTableConfiguration conf) {
+        panel = PreloadedJFrame.getJPanel(new BorderLayout());
+
+        LOGGER.trace(" initialTabs:");
+        for (FileTableTab tab:initialTabs)
+        	LOGGER.trace("\t"+(tab.getLocation() != null ?  tab.getLocation().toString() : null));
+        		
+        this.mainFrame = mainFrame;
+        
+        // No decoration for this panel
+        panel.setBorder(null);
+
+        JPanel locationPanel = PreloadedJFrame.getJPanel(new GridBagLayout());
+
+        panel.add(locationPanel, BorderLayout.NORTH);
+
+        new Thread(() -> {
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridy = 0;
+
+            // Create and add drive button
+            this.driveButton = new DrivePopupButton(this);
+            c.weightx = 0;
+            c.gridx = 0;
+            locationPanel.add(driveButton, c);
+
+            // Create location text field and wrap it in a LocationBar that can
+            // alternate between the text field and a breadcrumb view (Ctrl key).
+            this.locationTextField = new LocationTextField(this);
+            LocationBar locationBar = new LocationBar(this, locationTextField);
+
+            // Give location field all the remaining space until the PoupupsButton
+            c.weightx = 1;
+            c.gridx = 1;
+            // Add some space between drive button and location combo box (none by default)
+            c.insets = new Insets(0, 4, 0, 0);
+            locationPanel.add(locationBar, c);
+            disableCtrlFocusTraversalKeys(locationTextField);
+            registerCycleThruFolderPanelAction(locationTextField);
+
+            // Allow the location field to change the current directory when a file/folder is dropped on it
+            FileDropTargetListener dropTargetListener = new FileDropTargetListener(this, true);
+            new DropTarget(locationTextField, dropTargetListener);
+            new DropTarget(driveButton, dropTargetListener);
+            locationTextField.addFocusListener(this);
+        }).start();
+
+        // Initialize quick lists in background
+        fileTablePopups =  CompletableFuture.supplyAsync(() -> {
+            return new QuickList[] {
+                            new ParentFoldersQL(this),
+                            new RecentLocationsQL(this),
+                            new RecentExecutedFilesQL(this),
+                            new BookmarksQL(this),
+                            new RootFoldersQL(this),
+                            new TabsQL(this)
+            };
+        });
+
+        // Create the FileTable
+        fileTable = new FileTable(mainFrame, this, conf);
+
+        locationChanger = new LocationChanger(mainFrame, this, locationManager);
+
+        // Create the Tabs (Must be called after the fileTable was created and current folder was set)
+        tabs = new FileTableTabs(mainFrame, this, initialTabs);
+
+		// Select the tab that was previously selected on last run
+		tabs.selectTab(indexOfSelectedTab);
+		// Select the file-to-select in this tab, if set (note that we already validated
+		// that the file exists in ConfigFileTableTab#getInitialAbstractPaths)
+		AbstractFile fileToSelect = initialTabs[indexOfSelectedTab].getFileToSelect();
+		if (fileToSelect != null)
+		    fileTable.selectFile(fileToSelect);
+
+		tabs.addActiveTabListener(this);
+
+        // create folders tree on a JSplitPane
+        foldersTreePanel = new FoldersTreePanel(this);
+        foldersTreePanel.setVisible(false);
+        treeSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, foldersTreePanel.getPanel(), tabs);
+        treeSplitPane.setDividerSize(0);
+        treeSplitPane.setDividerLocation(0);
+        // Remove default border
+        treeSplitPane.setBorder(null);
+        panel.add(treeSplitPane, BorderLayout.CENTER);
+
+        // Disable Ctrl+Tab and Shift+Ctrl+Tab focus traversal keys
+
+        disableCtrlFocusTraversalKeys(foldersTreePanel.getTree());
+        disableCtrlFocusTraversalKeys(fileTable);
+        disableCtrlFocusTraversalKeys(tabs);
+        registerCycleThruFolderPanelAction(foldersTreePanel.getTree());
+        // No need to register cycle actions for FileTable, they already are
+
+        // Listen to focus event in order to notify MainFrame of changes of the current active panel/table
+        fileTable.addFocusListener(this);
+
+        tabs.addFocusListener(this);
+
+        // Drag and Drop support
+
+        // Enable drag support on the FileTable
+        this.fileDragSourceListener = new FileDragSourceListener(this);
+        fileDragSourceListener.enableDrag(fileTable);
+    }
+
+
+    /**
+     * Removes the Control+Tab and Shift+Control+Tab focus traversal keys from the given component so that those
+     * shortcuts can be used for other purposes.
+     *
+     * @param component the component for which to remove the Control+Tab and Shift+Control+Tab focus traversal keys
+     */
+    private void disableCtrlFocusTraversalKeys(Component component) {
+        // Remove Ctrl+Tab from forward focus traversal keys
+        HashSet<AWTKeyStroke> keyStrokeSet = new HashSet<AWTKeyStroke>();
+        keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, 0));
+        component.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, keyStrokeSet);
+
+        // Remove Shift+Ctrl+Tab from backward focus traversal keys
+        keyStrokeSet = new HashSet<AWTKeyStroke>();
+        keyStrokeSet.add(AWTKeyStroke.getAWTKeyStroke(KeyEvent.VK_TAB, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        component.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, keyStrokeSet);
+    }
+
+    /**
+     * Registers the {@link FocusNextAction} and {@link FocusPreviousAction} actions onto the given component's
+     * input map.
+     *  
+     * @param component the component for which to register the cycle actions
+     */
+    private void registerCycleThruFolderPanelAction(JComponent component) {
+        ActionKeymap.registerActionAccelerators(
+                ActionManager.getActionInstance(ActionType.FocusNext, mainFrame),
+                component,
+                JComponent.WHEN_FOCUSED);
+
+        ActionKeymap.registerActionAccelerators(
+                ActionManager.getActionInstance(ActionType.FocusPrevious, mainFrame),
+                component,
+                JComponent.WHEN_FOCUSED);
+    }
+
+
+    public FileDragSourceListener getFileDragSourceListener() {
+        return this.fileDragSourceListener;
+    }
+
+
+    /**
+     * Returns the MainFrame that contains this panel.
+     *
+     * @return the MainFrame that contains this panel
+     */
+    public MainFrame getMainFrame() {
+        return this.mainFrame;
+    }
+
+    /**
+     * Returns the FileTable contained by this panel.
+     *
+     * @return the FileTable contained by this panel
+     */
+    public FileTable getFileTable() {
+        return this.fileTable;
+    }
+
+    /**
+     * Returns the FileTable tabs contained by this panel.
+     *
+     * @return the FileTable tabs contained by this panel
+     */
+    public FileTableTabs getTabs() {
+        return this.tabs;
+    }
+
+    /**
+     * Returns the LocationTextField contained by this panel.
+     *
+     * @return the LocationTextField contained by this panel
+     */
+    public LocationTextField getLocationTextField() {
+        return locationTextField;
+    }
+
+    /**
+     * Returns the DrivePopupButton contained by this panel.
+     *
+     * @return the DrivePopupButton contained by this panel
+     */
+    public DrivePopupButton getDriveButton() {
+        return driveButton; 
+    }
+
+    /**
+     * Returns the visited folders history, wrapped in a FolderHistory object.
+     *
+     * @return the visited folders history, wrapped in a FolderHistory object
+     */
+    public LocalLocationHistory getFolderHistory() {
+        return getTabs().getCurrentTab().getLocationHistory();
+    }
+
+    /**
+     * Returns the LocationManager instance that notifies registered listeners of location changes
+     * that occur in this FolderPanel.
+     *
+     * @return the LocationManager instance that notifies registered listeners of location changes that occur in
+     * this FolderPanel
+     */
+    public LocationManager getLocationManager() {
+        return locationManager;
+    }
+
+    public void setProgressValue(int value) {
+    	locationTextField.setProgressValue(value);
+    }
+
+    public void tryChangeCurrentFolderInternal(FileTableTab tab, Runnable runnable) {
+        locationChanger.tryChangeCurrentFolderInternal(tab, runnable);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder) {
+    	return locationChanger.tryChangeCurrentFolder(folder, false);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
+    	return locationChanger.tryChangeCurrentFolder(true, FileFactory.getFile(folderURL), selectThisFileAfter, findWorkableFolder, false);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(AbstractFile folder, AbstractFile selectThisFileAfter, boolean findWorkableFolder) {
+    	return locationChanger.tryChangeCurrentFolder(true, folder, selectThisFileAfter, findWorkableFolder, false);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(String folderPath) {
+    	return locationChanger.tryChangeCurrentFolder(folderPath);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL) {
+    	return locationChanger.tryChangeCurrentFolder(folderURL);
+    }
+
+    public ChangeFolderThread tryChangeCurrentFolder(FileURL folderURL, CredentialsMapping credentialsMapping) {
+    	return locationChanger.tryChangeCurrentFolder(folderURL, credentialsMapping, false);
+    }
+
+    public void tryRefreshCurrentFolder() {
+        tryRefreshCurrentFolder(true);
+    }
+
+    public void tryRefreshCurrentFolder(boolean internal) {
+        locationChanger.tryRefreshCurrentFolder(internal);
+    }
+
+    public void tryRefreshCurrentFolder(AbstractFile selectThisFileAfter) {
+        locationChanger.tryRefreshCurrentFolder(selectThisFileAfter, true);
+    }
+
+    public boolean tryKillChangeFolderThread() {
+        return locationChanger.tryKillChangeFolderThread();
+    }
+
+    public long getLastFolderChangeTime() {
+        return locationChanger.getLastFolderChangeTime();
+    }
+
+    /**
+     * Returns a {@link MonitoredFile} for the folder that is currently being displayed by this panel.
+     *
+     * @return a {@link MonitoredFile} for the folder that is currently being displayed by this panel
+     */
+    public MonitoredFile getCurrentFolder() {
+        return locationManager.getCurrentFolder();
+    }
+
+    /**
+     * This method updates the UI with the given folder 
+     * If the currently selected tab is locked and the given flag "changeLockedTab" is off, 
+     * then a new tab is opened with the given folder,
+     * otherwise, the currently presented folder is replaces with the given folder
+     * 
+     * @param folder - the folder to be set
+     * @param children - the children of the given folder
+     * @param fileToSelect - the file that would be selected after changing the folder
+     * @param changeLockedTab - flag that indicates whether to change the presented folder in 
+     * the currently selected tab although it's locked (used when switching tabs)
+     */
+    public void setCurrentFolder(AbstractFile folder, AbstractFile children[], AbstractFile fileToSelect, boolean changeLockedTab) {
+        fileTable.setCurrentFolder(folder, children, fileToSelect);
+    }
+
+    /**
+     * Shows the pop up which is located the given index in fileTablePopups.
+     * 
+     * @param index - index of the FileTablePopup in fileTablePopups.
+     */
+    public void showQuickList(int index) {
+        try {
+            fileTablePopups.get()[index].show();
+        } catch (Exception e) {
+            LOGGER.error("Unable to show QuickList", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
+     * Returns true if a directory tree is visible.
+     */
+    public boolean isTreeVisible() {
+        return treeVisible;
+    }
+    
+    /**
+     * Returns width of a folders tree.
+     * @return a width of a folders tree
+     */
+    public int getTreeWidth() {
+        if (!treeVisible) {
+            return oldTreeWidth;
+        } else {
+        	return treeSplitPane.getDividerLocation();
+        }
+    }
+
+    /**
+     * Sets a width of a folders tree.
+     * @param width new width
+     */
+    public void setTreeWidth(int width) {
+        if (!treeVisible) {
+            oldTreeWidth = width;
+        } else {
+        	treeSplitPane.setDividerLocation(width);
+        	treeSplitPane.doLayout();
+        }
+    }
+
+    /**
+     * Returns a panel with a folders tree.
+     * @return a panel with a folders tree
+     */
+    public FoldersTreePanel getFoldersTreePanel() {
+        return foldersTreePanel;
+    }
+
+    /**
+     * Enables/disables a directory tree visibility. Invoked by {@link dev.barebones.commander.ui.action.impl.ToggleTreeAction}.
+     */
+    public void setTreeVisible(boolean treeVisible) {
+    	if (this.treeVisible != treeVisible) {
+	        this.treeVisible = treeVisible;
+	        if (!treeVisible) {
+                // save width of a tree panel
+                oldTreeWidth = treeSplitPane.getDividerLocation();
+                fileTable.requestFocusInWindow();
+	        }
+	        foldersTreePanel.setVisible(treeVisible);
+	        // hide completely divider if a tree isn't visible
+	        treeSplitPane.setDividerLocation(treeVisible ? oldTreeWidth : 0);
+	        treeSplitPane.setDividerSize(treeVisible ? 5 : 0);
+	        if (treeVisible) {
+	            foldersTreePanel.requestFocus();
+	        }
+    	}
+    }
+
+    
+
+    ////////////////////////
+    // Overridden methods //
+    ////////////////////////
+
+    /**
+     * Overridden for debugging purposes.
+     */
+    @Override
+    public String toString() {
+        return getClass().getName()+"@"+hashCode() +" currentFolder="+getCurrentFolder()+" hasFocus="+panel.hasFocus();
+    }
+
+    ///////////////////////////
+    // FocusListener methods //
+    ///////////////////////////
+    
+    public void focusGained(FocusEvent e) {
+        // Notify MainFrame that we are in control now! (our table/location field is active)
+        mainFrame.setActiveTable(fileTable);
+    }
+
+    public void focusLost(FocusEvent e) {
+        fileTable.getQuickSearch().stop();
+    }
+
+    ////////////////////////////////
+    // QuickListContainer methods //
+    ////////////////////////////////
+    
+    public Point calcQuickListPosition(Dimension dim) {
+    	return new Point(
+    			Math.max((getWidth() - (int)dim.getWidth()) / 2, 0),
+    			getLocationTextField().getHeight() + Math.max((panel.getHeight() - (int)dim.getHeight()) / 3, 0)
+    			);
+	}
+
+	public Component containerComponent() {
+		return panel;
+	}
+
+	public Component nextFocusableComponent() {
+		return fileTable;
+	}
+
+    @Override
+    public int getWidth() {
+        return panel.getWidth();
+    }
+
+    ///////////////////////////////
+	// ActiveTabListener methods //
+	///////////////////////////////
+
+	public void activeTabChanged() {
+		boolean isCurrentTabLocked = tabs.getCurrentTab().isLocked();
+		
+		locationTextField.setEnabled(!isCurrentTabLocked);
+		driveButton.setEnabled(!isCurrentTabLocked);
+	}
+
+    public JPanel getPanel() {
+        return panel;
+    }
+}

@@ -1,0 +1,146 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.commons.file.filter;
+
+import java.util.stream.Stream;
+
+import dev.barebones.commander.commons.file.AbstractFile;
+import dev.barebones.commander.commons.file.util.FileSet;
+
+
+/**
+ * <code>AbstractFileFilter</code> implements the bulk of the {@link FileFilter} interface. The only method left for
+ * subclasses to implement is {@link #accept(AbstractFile)}.
+ *
+ * @see AbstractFilenameFilter
+ * @author Maxence Bernard
+ */
+public abstract class AbstractFileFilter implements FileFilter {
+
+    /** True if this filter should operate in inverted mode and invert matches */
+    protected boolean inverted;
+
+    /**
+     * Creates a new <code>AbstractFileFilter</code> operating in non-inverted mode.
+     */
+    public AbstractFileFilter() {
+        this(false);
+    }
+
+    /**
+     * Creates a new <code>AbstractFileFilter</code> operating in the specified mode.
+     *
+     * @param inverted if true, this filter will operate in inverted mode.
+     */
+    public AbstractFileFilter(boolean inverted) {
+        setInverted(inverted);
+    }
+
+
+    ///////////////////////////////
+    // FileFilter implementation //
+    ///////////////////////////////
+
+    public boolean isInverted() {
+        return inverted;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
+    }
+
+    public boolean match(AbstractFile file) {
+        if(inverted)
+            return reject(file);
+
+        return accept(file);
+    }
+
+    public boolean reject(AbstractFile file) {
+        return !accept(file);
+    }
+
+    public AbstractFile[] filter(AbstractFile files[]) {
+        return Stream.of(files)
+                .filter(this::match)
+                .toArray(AbstractFile[]::new);
+    }
+
+    public void filter(FileSet files) {
+        for(int i=0; i<files.size();) {
+            if(reject(files.elementAt(i)))
+                files.removeElementAt(i);
+            else
+                i++;
+        }
+    }
+
+    public boolean match(AbstractFile files[]) {
+        int nbFiles = files.length;
+        for(int i=0; i<nbFiles; i++)
+            if(!match(files[i]))
+                return false;
+
+        return true;
+    }
+
+    public boolean match(FileSet files) {
+        int nbFiles = files.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!match(files.elementAt(i)))
+                return false;
+
+        return true;
+    }
+
+    public boolean accept(AbstractFile files[]) {
+        int nbFiles = files.length;
+        for(int i=0; i<nbFiles; i++)
+            if(!accept(files[i]))
+                return false;
+
+        return true;
+    }
+
+    public boolean accept(FileSet files) {
+        int nbFiles = files.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!accept(files.elementAt(i)))
+                return false;
+
+        return true;
+    }
+
+    public boolean reject(AbstractFile files[]) {
+        int nbFiles = files.length;
+        for(int i=0; i<nbFiles; i++)
+            if(!reject(files[i]))
+                return false;
+
+        return true;
+    }
+
+    public boolean reject(FileSet files) {
+        int nbFiles = files.size();
+        for(int i=0; i<nbFiles; i++)
+            if(!reject(files.elementAt(i)))
+                return false;
+
+        return true;
+    }
+}

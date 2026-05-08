@@ -9,7 +9,7 @@ dependencies {
     // The following libs are required by JediTerm.
     implementation 'org.checkerframework:checker-qual:3.24.0'
 
-    // JediTerm deps: if you change any version below, remember to change it also in mucommander-core
+    // JediTerm deps: if you change any version below, remember to change it also in barebones-core
     comprise 'org.jetbrains.jediterm:jediterm-core:3.57'
     comprise 'org.jetbrains.jediterm:jediterm-ui:3.57'
     comprise 'org.jetbrains.pty4j:pty4j:0.13.11'
@@ -39,13 +39,13 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     bundle {
         bnd ('Bundle-Name': 'jetbrains-jediterm',
-                'Bundle-Vendor': 'muCommander',
+                'Bundle-Vendor': 'barebones-commander',
                 'Bundle-Description': 'JediTerm and its dependencies',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Specification-Title': "muCommander",
+                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
+                'Specification-Title': "barebones-commander",
                 'Specification-Vendor': "Arik Hadas",
                 'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
+                'Implementation-Title': "barebones-commander",
                 'Implementation-Vendor': "Arik Hadas",
                 'Implementation-Version': revision,
                 'Build-Date': new Date().format('yyyyMMdd'),

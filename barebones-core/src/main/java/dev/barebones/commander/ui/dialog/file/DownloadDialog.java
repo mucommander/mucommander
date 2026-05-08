@@ -1,0 +1,79 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+package dev.barebones.commander.ui.dialog.file;
+
+import dev.barebones.commander.commons.file.AbstractFile;
+import dev.barebones.commander.commons.file.util.DestinationType;
+import dev.barebones.commander.commons.file.util.FileSet;
+import dev.barebones.commander.commons.file.util.PathUtils;
+import dev.barebones.commander.job.impl.CopyJob;
+import dev.barebones.commander.job.impl.CopyJob.TransferMode;
+import dev.barebones.commander.job.impl.TransferFileJob;
+import dev.barebones.commander.text.Translator;
+import dev.barebones.commander.ui.main.MainFrame;
+
+
+/**
+ * Dialog invoked when the user wants to download a file.
+ *
+ * @author Maxence Bernard
+ */
+public class DownloadDialog extends TransferDestinationDialog {
+
+    public DownloadDialog(MainFrame mainFrame, FileSet files) {
+        super(mainFrame, files,
+              Translator.get("download_dialog.download"),
+              Translator.get("download_dialog.description"),
+              Translator.get("download_dialog.download"),
+              Translator.get("download_dialog.error_title"),
+              true);
+    }
+
+    
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    @Override
+    protected PathFieldContent computeInitialPath(FileSet files) {
+        AbstractFile file = files.elementAt(0);
+
+        //		AbstractFile activeFolder = mainFrame.getActiveTable().getCurrentFolder();
+        AbstractFile unactiveFolder = mainFrame.getInactivePanel().getCurrentFolder();
+        // Fill text field with current folder's absolute path and file name
+        return new PathFieldContent(unactiveFolder.getAbsolutePath(true)+file.getName());
+    }
+
+    @Override
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
+        return new CopyJob(
+                progressDialog,
+                mainFrame,
+                files,
+                resolvedDest.getDestinationFolder(),
+                resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName(),
+                TransferMode.DOWNLOAD,
+                defaultFileExistsAction);
+    }
+
+    @Override
+    protected String getProgressDialogTitle() {
+        return Translator.get("download_dialog.downloading");
+    }
+}

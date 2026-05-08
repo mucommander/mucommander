@@ -1,12 +1,12 @@
 repositories {
     repositories.mavenCentral()
     maven {
-        url = uri("https://www.mucommander.com/maven/")
+        url = uri("https://github.com/e6qu/barebones-commander/maven/")
     }
 }
 
 dependencies {
-    api project(':mucommander-commons-file')
+    api project(':barebones-commons-file')
 
     comprise 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
 
@@ -22,16 +22,16 @@ jar {
         exclude 'META-INF/**'
     } }
     bundle {
-        bnd ('Bundle-Name': 'muCommander-sevenzipjbindings',
-                'Bundle-Vendor': 'muCommander',
+        bnd ('Bundle-Name': 'barebones-commander-sevenzipjbindings',
+                'Bundle-Vendor': 'barebones-commander',
                 'Bundle-Description': 'Wrapper for SevenZipJBindings',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.sevenzipjbindings,net.sf.sevenzipjbinding',
+                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
+                'Export-Package': 'dev.barebones.commander.sevenzipjbindings,net.sf.sevenzipjbinding',
                 'Import-Package': '*',
-                'Specification-Title': "muCommander",
+                'Specification-Title': "barebones-commander",
                 'Specification-Vendor': "Arik Hadas",
                 'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
+                'Implementation-Title': "barebones-commander",
                 'Implementation-Vendor': "Arik Hadas",
                 'Implementation-Version': revision,
                 'Build-Date': new Date().format('yyyyMMdd'))

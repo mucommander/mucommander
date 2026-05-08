@@ -1,0 +1,56 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.process;
+
+
+/**
+ * Implementations of this interface can listen to a process' state and streams.
+ * @see dev.barebones.commander.process.AbstractProcess
+ * @author Maxence Bernard, Nicolas Rinaudo
+ */
+public interface ProcessListener {
+	
+    /** 
+     * This method is called when the process dies. No more calls to <code>processOutput</code> and
+     * <code>processError</code> will be made past this call.
+     * @param returnValue the value returned by the process (return code).
+     */
+    default void processDied(int returnValue) {}
+
+    /**
+     * This method is called whenever the process sends data to its output streams (stdout or stderr).
+     * <p>
+     * The output passed to this method is encoded. Listener that need to work with raw bytes should
+     * use {@link #processOutput(byte[],int,int)} instead.
+     * </p>
+     * @param output contains the encoded process output.
+     */
+    default void processOutput(String output) {}
+
+    /**
+     * This method is called whenever the process sends data to its output streams (stdout or stderr).
+     * <p>
+     * The output passed to this method is raw and doesn't take encoding into account. Listeners that
+     * need to work with properly encoded output should use {@link #processOutput(String)} instead.
+     * </p>
+     * @param buffer contains the process' output.
+     * @param offset offset in buffer at which the process' output starts.
+     * @param length length of the process' output in buffer.
+     */
+    default void processOutput(byte[] buffer, int offset, int length) {}
+}

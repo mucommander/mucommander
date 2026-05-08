@@ -1,100 +1,53 @@
-# muCommander
+# barebones-commander
 
-[![Version](http://img.shields.io/badge/version-1.7.0-blue.svg?style=flat)](https://github.com/mucommander/mucommander/releases/tag/nightly)
-[![License](http://img.shields.io/badge/License-GPL-blue.svg)](http://www.gnu.org/copyleft/gpl.html)
-[![Build Status](https://github.com/mucommander/mucommander/actions/workflows/nightly.yml/badge.svg)](https://github.com/mucommander/mucommander/actions/workflows/nightly.yml)
-[![Coverity Scan](https://scan.coverity.com/projects/3642/badge.svg)](https://scan.coverity.com/projects/3642)
-[![GitHub Discussion](https://img.shields.io/github/discussions/mucommander/mucommander.svg)](https://github.com/mucommander/mucommander/discussions)
+[![License](http://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 
-muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
-It runs on any operating system with Java support (macOS, Windows, Linux, *BSD, Solaris...).
+`barebones-commander` is a small, security-first dual-pane file manager focused on
+**SFTP/SSH** as the only remote protocol, on **Linux** and **macOS**.
 
-Official website: https://www.mucommander.com
+It is a **fork of [muCommander](https://github.com/mucommander/mucommander)**, with most
+upstream features removed in favor of a smaller, easier-to-audit codebase.
 
-## Contribution
+## Status
 
+Early — v0.1.0 is in active development. See [`PLAN.md`](PLAN.md) on the
+[`docs/initial-audit-and-fork-plan`](https://github.com/e6qu/barebones-commander/tree/docs/initial-audit-and-fork-plan)
+branch for the phased roadmap.
 
-There are several ways to contribute to muCommander:
+## Scope
 
-- Found a bug or thinking about a useful feature that is missing? [File an issue](https://github.com/mucommander/mucommander/issues)
-- Want to fix a bug or implement a feature? We are using the standard [GitHub flow](https://guides.github.com/introduction/flow/): fork, make the changes, and submit a pull request. Changes are merged to the *master* branch. See the next section for tips for developing muCommander.
-- If you happen to speak a language that muCommander is not available in or able to improve existing translations, you can help translate the interface, see more details [here](https://github.com/mucommander/mucommander/wiki/Translate).
+| Kept | Removed |
+|---|---|
+| Local file system | FTP, HTTP/HTTPS, SMB, S3, Dropbox, Google Drive, OneDrive, GCS, NFS, oVirt, vSphere, Hadoop, ADB, Windows Registry, Bonjour |
+| **SFTP / SSH** | All cloud and enterprise protocols |
+| Linux + macOS OS adapters | Windows, OpenVMS, macOS-Java-8 |
+| Basic archive formats: zip, tar, gzip, bzip2, xz | RAR, 7z, ISO, RPM, ar, cpio, lst, libguestfs |
+| Text viewer | Image viewer, PDF viewer, hex (binary) viewer |
+| Mouse-driven dual-pane GUI, drag & drop, keyboard bindings | Embedded terminal widget (use a real terminal app for SSH command sessions) |
 
-If you want to get involved in muCommander or have any question or issue to discuss, you are more than welcome to join [GitHub Discussions](https://github.com/mucommander/mucommander/discussions).  
+See [`LIBRARIES.md`](LIBRARIES.md) for the upstream architecture and library inventory,
+and [`SECURITY_REVIEW.md`](SECURITY_REVIEW.md) for the audit that motivated this fork.
 
-## Development
+## Build
 
-### Prerequisites
+Requires JDK 25+ (LTS). Once OSGi is removed in Phase 2 of the plan, the application
+will run as a single fat JAR.
 
-  - Java Development Kit (JDK) 11 or later
-  - Git
-
-
-### Forks and pull requests
-
-If you would like to contribute code, it is required to fork the repository and submit a [pull request](https://help.github.com/en/articles/about-pull-requests).
-Within pull requests, it is possible to review, discuss, and improve the changes until they are ready for production. 
-
-### Code Editing
-After cloning the source code repository from GitHub, you would probably want to import the project to an Integrated Development Environment (IDE) such as Eclipse or IntelliJ.
-
-The code repository of muCommander is comprised of a main project that contains its core functionality and several sub-projects. These projects are Gradle projects. Most of the popular IDEs today allow you to import Gradle projects out-of-the-box or via an IDE plugin. By importing the main project that is located at the root directory of the repository you will get all the required code in the IDE.
-
-### How to Run
-The use of the Gradle wrapper significantly simplifies the build from the command line. The following commands can be invoked from the root directory of the repository with no further installation.
-
-You can run the application by typing:
-```
-./gradlew run
+```sh
+./gradlew run        # run from sources (currently still uses upstream OSGi runtime)
+./gradlew tgz        # produce a Linux tarball
+./gradlew dmg        # produce a macOS DMG  (-PskipDmgSign for unsigned)
 ```
 
-It is recommended to run the following command when getting an unclear compilation error, or to be sure running the just modified code:
-```
-./gradlew clean run
-```    
+## License
 
-You can also run directly from within you IDE by executing gradlew `run` task.
+`barebones-commander` is released under the **GNU General Public License v3** (GPLv3),
+preserving the original muCommander license. See [`LICENSE`](LICENSE) and
+[`NOTICE`](NOTICE).
 
+## Trademark
 
-### How to Debug
-In order to debug muCommander, you need to add `-Pdebug=PORT_NUMBER` while running muComander. To control whether you want suspend JVM or not, please use `-Psuspend=n|y` parameter (suspend=y is a default).
-Example of running muCommander in debug mode:
-```
-./gradlew run -Pdebug=5005 -Psuspend=n
-```
-Then, you can run a debugger that connects to this port using your favorite IDE (see [an example for doing this with IntelliJ](https://github.com/mucommander/mucommander/wiki/Debug-from-IntelliJ)).
-
-
-### Packaging
-The creation of a DMG file for macOS (produced in build/distributions):
-```
-./gradlew clean dmg -PskipDmgSign -Parch=[x86_64|aarch64]
-```
-
-Note: as the application is not signed, the following error may appear when trying to start it on macOS: "muCommander damaged and cannot be opened".
-This can be solved by executing: `sudo xattr -r -d com.apple.quarantine /Applications/muCommander.app`
-
-The creation of an EXE file for Windows (produced in build/launch4j):
-```
-./gradlew clean createExe
-```
-
-The creation of TGZ distribution for Linux/Unix (produced in build/distributions):
-```
-./gradlew clean tgz
-```
-
-The creation of RPM distribution for Red Hat Linux flavors:
-```
-./gradlew clean rpm
-```
-
-The creation of DEB distribution for Debian Linux flavors:
-```
-./gradlew clean deb
-```
-
-More packaging options are described in [our wiki](https://github.com/mucommander/mucommander/wiki/Packaging).
-
-### Powered by
-[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
+`muCommander` is the brand of the upstream project (https://www.mucommander.com,
+copyright the original authors). This fork does **not** claim affiliation with the
+upstream muCommander project. The fork has been renamed and re-iconified to avoid
+brand confusion. All upstream copyright headers in source files are preserved.

@@ -1,0 +1,100 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.ui.main;
+
+import java.awt.Insets;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+
+import dev.barebones.commander.commons.util.ui.button.RolloverButtonAdapter;
+import dev.barebones.commander.core.desktop.DesktopManager;
+import dev.barebones.commander.desktop.AbstractTrash;
+import dev.barebones.commander.desktop.ActionType;
+import dev.barebones.commander.ui.action.ActionManager;
+import dev.barebones.commander.ui.button.PopupButton;
+import dev.barebones.commander.ui.icon.IconManager;
+
+/**
+ * TrashPopupButton is a button that allows to interact with the current platform's trash, as returned by
+ * {@link dev.barebones.commander.core.desktop.DesktopManager#getTrash()}.
+ * When the button is clicked, a popup menu is displayed, allowing to perform a choice of actions such as opening
+ * the trash or emptying it.
+ * Note that this button will only be functional if a trash is available on the current platform.
+ *
+ * @author Maxence Bernard
+ */
+class TrashPopupButton extends PopupButton {
+
+    private MainFrame mainFrame;
+
+    /** Holds a reference to the RolloverButtonAdapter instance so that it doesn't get garbage-collected */
+    private RolloverButtonAdapter rolloverButtonAdapter;
+
+    TrashPopupButton(MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
+
+        setContentAreaFilled(false);
+        setIcon(IconManager.getIcon(IconManager.STATUS_BAR_ICON_SET, "trash.png"));
+
+        // Rollover-enable the button and hold a reference to the RolloverButtonAdapter instance so that it doesn't
+        // get garbage-collected
+        rolloverButtonAdapter = new RolloverButtonAdapter();
+        RolloverButtonAdapter.setButtonDecoration(this);
+        addMouseListener(rolloverButtonAdapter);
+    }
+
+    @Override
+    public JPopupMenu getPopupMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+
+        AbstractTrash trash = DesktopManager.getTrash();
+        if(trash!=null) {
+            if(trash.canOpen())
+                popupMenu.add(ActionManager.getActionInstance(ActionType.OpenTrash, mainFrame));
+
+            if(trash.canEmpty()) {
+                JMenuItem emptyTrashItem = new JMenuItem(ActionManager.getActionInstance(ActionType.EmptyTrash, mainFrame));
+
+                // Retrieve the number of items that the trash contains, -1 if this information is not available.
+                int itemCount = trash.getItemCount();
+                if(itemCount==0) {
+                    // Disable the 'empty trash' action if the trash contains no item
+                    emptyTrashItem.setEnabled(false);
+                }
+                else if(itemCount>0) {
+                    // Append the number of items to the menu item's label
+                    emptyTrashItem.setText(emptyTrashItem.getText()+" ("+itemCount+")");
+                }
+                // Note: 'empty trash' is enabled if itemCount==-1
+
+                popupMenu.add(emptyTrashItem);
+            }
+        }
+
+        return popupMenu;
+    }
+
+    /**
+     * Replace the default insets to be exactly (2,2,2,2).
+     */
+    @Override
+    public Insets getInsets() {
+        return new Insets(2, 2, 2, 2);
+    }
+}

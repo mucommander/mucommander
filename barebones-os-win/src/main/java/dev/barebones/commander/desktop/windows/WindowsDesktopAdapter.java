@@ -1,0 +1,88 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.desktop.windows;
+
+import dev.barebones.commander.command.CommandException;
+import dev.barebones.commander.command.CommandManager;
+import dev.barebones.commander.command.CommandType;
+import dev.barebones.commander.commons.file.AbstractFile;
+import dev.barebones.commander.commons.file.filter.RegexpFilenameFilter;
+import dev.barebones.commander.commons.runtime.OsFamily;
+import dev.barebones.commander.desktop.DefaultDesktopAdapter;
+import dev.barebones.commander.desktop.DesktopInitialisationException;
+import dev.barebones.commander.desktop.TrashProvider;
+
+/**
+ * @author Nicolas Rinaudo
+ */
+class WindowsDesktopAdapter extends DefaultDesktopAdapter {
+    protected static final String EXPLORER_NAME = "Explorer";
+    private static final String FILE_OPENER_COMMAND = "cmd /c start \"\" \"$f\"";
+    private static final String EXPLORER_COMMAND = "explorer /select, \"$f\"";
+    private static final String CMD_OPENER_COMMAND = "cmd /k \"cd /d $f\"";
+    private static final String EXE_OPENER_COMMAND  = "cmd /c $f";
+    private static final String EXE_REGEXP          = ".*\\.exe";
+
+    private static final String DEFAULT_WIN_SHELL = "cmd.exe";
+
+    public String toString() {return "Windows Desktop";}
+
+    @Override
+    public void init(boolean install) throws DesktopInitialisationException {
+        try {
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_OPENER_ALIAS,  FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.URL_OPENER_ALIAS,   FILE_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.FILE_MANAGER_ALIAS, EXPLORER_COMMAND, CommandType.SYSTEM_COMMAND, EXPLORER_NAME));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.EXE_OPENER_ALIAS,   EXE_OPENER_COMMAND,  CommandType.SYSTEM_COMMAND, null));
+            CommandManager.registerDefaultCommand(new WindowsCmdCommand(CommandManager.CMD_OPENER_ALIAS, CMD_OPENER_COMMAND, CommandType.SYSTEM_COMMAND, null));
+
+            CommandManager.registerDefaultAssociation(CommandManager.EXE_OPENER_ALIAS, new RegexpFilenameFilter(EXE_REGEXP, false));
+        } catch(CommandException e) {throw new DesktopInitialisationException(e);}
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return OsFamily.WINDOWS.isCurrent();
+    }
+
+    /**
+     * Returns <code>true</code> for regular files (not directories) with an <code>exe</code> extension
+     * (case-insensitive comparison).
+     *
+     * @param file the file to test
+     * @return <code>true</code> for regular files (not directories) with an <code>exe</code> extension
+     * (case-insensitive comparison).
+     */
+    @Override
+    public boolean isApplication(AbstractFile file) {
+        String extension = file.getExtension();
+
+        // the isDirectory() test comes last as it is I/O bound
+        return extension!=null && extension.equalsIgnoreCase("exe") && !file.isDirectory();
+    }
+
+    @Override
+    public TrashProvider getTrash() {
+        // The Windows trash requires access to the Shell32 DLL, register the provider only if the Shell32 DLL
+        // is available on the current runtime environment.
+        return WindowsTrashProvider.isAvailable() ? new WindowsTrashProvider() : null;
+    }
+
+    @Override
+    public String getDefaultShell() { return DEFAULT_WIN_SHELL; }
+}

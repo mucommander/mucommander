@@ -1,0 +1,44 @@
+repositories {
+    maven {
+        url 'https://repository.jboss.org/maven2/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    api project(':barebones-commons-file')
+    api project(':barebones-protocol-api')
+    api project(':barebones-translator')
+
+    implementation ('org.jets3t:jets3t:0.9.7') {
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+        exclude group: 'org.apache.tomcat', module: 'tomcat-servlet-api'
+
+    }
+    implementation 'commons-logging:commons-logging:1.3.2'
+    implementation 'javax.xml:jaxrpc-api:1.1'
+    implementation 'org.glassfish:javax.xml.soap:10.0-b28'
+    implementation files('libs/mail.osgi-1.4.jar')
+
+    testImplementation 'org.testng:testng:7.11.0'
+    testImplementation project(':barebones-commons-file')
+    testImplementation files(project(':barebones-commons-file').sourceSets.test.output)
+}
+
+jar {
+    bundle {
+        bnd ('Bundle-Name': 'barebones-commander-s3',
+                'Bundle-Vendor': 'barebones-commander',
+                'Bundle-Description': 'Library with configuration tools',
+                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
+                'Export-Package': 'dev.barebones.commander.commons.protocol.s3',
+                'Bundle-Activator': 'dev.barebones.commander.commons.file.protocol.s3.Activator',
+                'Specification-Title': "barebones-commander",
+                'Specification-Vendor': "barebones-commander contributors",
+                'Specification-Version': project.version,
+                'Implementation-Title': "barebones-commander",
+                'Implementation-Vendor': "barebones-commander contributors",
+                'Implementation-Version': revision,
+                'Build-Date': new Date().format('yyyyMMdd'))
+    }
+}

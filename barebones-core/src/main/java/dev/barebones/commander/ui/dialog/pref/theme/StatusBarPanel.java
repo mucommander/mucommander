@@ -1,0 +1,306 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.ui.dialog.pref.theme;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+
+import dev.barebones.commander.commons.util.ui.border.MutableLineBorder;
+import dev.barebones.commander.commons.util.ui.layout.ProportionalGridPanel;
+import dev.barebones.commander.commons.util.ui.layout.YBoxPanel;
+import dev.barebones.commander.text.SizeFormat;
+import dev.barebones.commander.text.Translator;
+import dev.barebones.commander.ui.chooser.FontChooser;
+import dev.barebones.commander.ui.chooser.PreviewLabel;
+import dev.barebones.commander.ui.dialog.pref.PreferencesDialog;
+import dev.barebones.commander.ui.main.StatusBar;
+import dev.barebones.commander.ui.theme.ThemeData;
+
+/**
+ * @author Nicolas Rinaudo, Maxence Bernard
+ */
+class StatusBarPanel extends ThemeEditorPanel implements PropertyChangeListener {
+    private static final int OK       = 0;
+    private static final int WARNING  = 1;
+    private static final int CRITICAL = 2;
+
+    private final static int WARNING_LEVEL_COLOR_IDS[] = {
+        ThemeData.STATUS_BAR_OK_COLOR,
+        ThemeData.STATUS_BAR_WARNING_COLOR,
+        ThemeData.STATUS_BAR_CRITICAL_COLOR
+    };
+
+    private final static String WARNING_LEVEL_LABELS[] = {
+        Translator.get("theme_editor.free_space.ok"),
+        Translator.get("theme_editor.free_space.warning"),
+        Translator.get("theme_editor.free_space.critical")
+    };
+
+    private final static long TOTAL_SIZE                = 85899345920l;
+    private final static long NORMAL_SIZE               = TOTAL_SIZE / 2;
+    private final static long WARNING_SIZE              = TOTAL_SIZE / 10;
+    private final static long CRITICAL_SIZE             = TOTAL_SIZE / 100;
+
+    private final static int WARNING_DRAW_PERCENTAGE[] = {50, 10, 1};
+
+    private final static String WARNING_LEVEL_TEXT[] = {
+        Translator.get("status_bar.volume_free", SizeFormat.format(NORMAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT)),
+        Translator.get("status_bar.volume_free", SizeFormat.format(WARNING_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT)),
+        Translator.get("status_bar.volume_free", SizeFormat.format(CRITICAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT) + " / " + SizeFormat.format(TOTAL_SIZE, StatusBar.VOLUME_INFO_SIZE_FORMAT))
+    };
+
+    private JLabel  normalPreview;
+    private Preview okPreview;
+    private Preview warningPreview;
+    private Preview criticalPreview;
+    
+
+    // - Initialisation ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Creates a new file table editor.
+     * @param parent   dialog containing the panel.
+     * @param themeData themeData being edited.
+     */
+    public StatusBarPanel(PreferencesDialog parent, ThemeData themeData) {
+        super(parent, Translator.get("theme_editor.statusbar_tab"), themeData);
+        initUI();
+    }
+
+    private JPanel createGeneralPanel(FontChooser chooser, ColorButton foreground) {
+        // Initialises the color panel.
+        JPanel colorPanel = new ProportionalGridPanel(2);
+        colorPanel.add(createCaptionLabel("theme_editor.text"));
+        colorPanel.add(foreground);
+
+        // Wraps the color panel in a flow layout.
+        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        flowPanel.add(colorPanel);
+        flowPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("theme_editor.colors")));
+
+        // Creates the general panel.
+        YBoxPanel mainPanel = new YBoxPanel();
+        mainPanel.add(chooser);
+        mainPanel.addSpace(10);
+        mainPanel.add(flowPanel);
+
+        return mainPanel;
+    }
+
+    private JPanel createFreeSpacePanel(FontChooser chooser, ColorButton foreground, ColorButton background, ColorButton border) {
+        JPanel colorPanel = new ProportionalGridPanel(2);
+        colorPanel.add(new JLabel());
+        colorPanel.add(createCaptionLabel("theme_editor.color"));
+        colorPanel.add(createCaptionLabel("theme_editor.background"));
+        colorPanel.add(background);
+        colorPanel.add(createCaptionLabel("theme_editor.border"));
+        colorPanel.add(border);
+
+        for(int i=0; i<3; i++) {
+            PreviewLabel previewLabel = new PreviewLabel();
+            previewLabel.setOverlayUnderText(true);
+            previewLabel.setTextPainted(true);
+            foreground.addUpdatedPreviewComponent(previewLabel);
+            background.addUpdatedPreviewComponent(previewLabel);
+            border.addUpdatedPreviewComponent(previewLabel);
+            addFontChooserListener(chooser, previewLabel);
+
+            colorPanel.add(createCaptionLabel(WARNING_LEVEL_LABELS[i]));
+            colorPanel.add(new ColorButton(parent, themeData, WARNING_LEVEL_COLOR_IDS[i], PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME, previewLabel));
+            previewLabel.addPropertyChangeListener(this);
+        }
+
+        JPanel flowPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        flowPanel.add(colorPanel);
+
+        return flowPanel;
+    }
+
+    private void addPreviewLabel(YBoxPanel panel, JLabel preview, String label, FontChooser chooser) {
+        panel.add(createCaptionLabel(label));
+
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.add(preview, BorderLayout.NORTH);
+        panel.add(wrapper);
+
+        addFontChooserListener(chooser, preview);
+    }
+
+    private JPanel createPreviewPanel(FontChooser fontChooser) {
+        YBoxPanel previewPanel = new YBoxPanel();
+
+        addPreviewLabel(previewPanel, normalPreview = new JLabel(Translator.get("status_bar.selected_files", "3", "14")), "theme_editor.normal", fontChooser);
+        normalPreview.setForeground(themeData.getColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR));
+
+        addPreviewLabel(previewPanel, okPreview       = new Preview(OK),       "theme_editor.free_space.ok", fontChooser);
+        addPreviewLabel(previewPanel, warningPreview  = new Preview(WARNING),  "theme_editor.free_space.warning", fontChooser);
+        addPreviewLabel(previewPanel, criticalPreview = new Preview(CRITICAL), "theme_editor.free_space.critical", fontChooser);
+
+        previewPanel.setBorder(BorderFactory.createTitledBorder(Translator.get("preview")));
+
+        Insets insets = previewPanel.getInsets();
+        previewPanel.setInsets(new Insets(insets.top, insets.left + 8, insets.bottom, insets.right + 6));
+
+        return previewPanel;
+    }
+
+    /**
+     * Initialises the panel's UI.
+     */
+    private void initUI() {
+        PreviewLabel previewLabel;
+        PreviewLabel borderPreviewLabel;
+
+        FontChooser fontChooser = createFontChooser(ThemeData.STATUS_BAR_FONT);
+
+        // Initialises the foreground color button.
+        ColorButton foreground = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_FOREGROUND_COLOR, PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
+        previewLabel.setTextPainted(true);
+        addFontChooserListener(fontChooser, previewLabel);
+        previewLabel.addPropertyChangeListener(this);
+
+        // Initialises the background and border color buttons.
+        ColorButton background = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BACKGROUND_COLOR, PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME, previewLabel = new PreviewLabel());
+        ColorButton border = new ColorButton(parent, themeData, ThemeData.STATUS_BAR_BORDER_COLOR, PreviewLabel.BORDER_COLOR_PROPERTY_NAME, borderPreviewLabel = new PreviewLabel());
+
+        // Initialises the background color preview.
+        previewLabel.setTextPainted(true);
+        foreground.addUpdatedPreviewComponent(previewLabel);
+        border.addUpdatedPreviewComponent(previewLabel);
+        addFontChooserListener(fontChooser, previewLabel);
+        previewLabel.addPropertyChangeListener(this);
+
+        // Initialises the border color preview.
+        borderPreviewLabel.setTextPainted(true);
+        foreground.addUpdatedPreviewComponent(borderPreviewLabel);
+        background.addUpdatedPreviewComponent(borderPreviewLabel);
+        addFontChooserListener(fontChooser, borderPreviewLabel);
+        borderPreviewLabel.addPropertyChangeListener(this);
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.add(Translator.get("theme_editor.general"), createGeneralPanel(fontChooser, foreground));
+        tabbedPane.add(Translator.get("theme_editor.free_space"), createFreeSpacePanel(fontChooser, foreground, background, border));
+
+
+        // Main layout.
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        mainPanel.add(createPreviewPanel(fontChooser), BorderLayout.EAST);
+
+        // Aligns everything north.
+        setLayout(new BorderLayout());
+        add(mainPanel, BorderLayout.NORTH);
+    }
+
+
+    // - Modification management ---------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Ignored.
+     */
+    @Override
+    public void commit() {}
+
+
+
+    // - Property listening --------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    /**
+     * Refreshes the UI depending on the property event.
+     */
+    public void propertyChange(PropertyChangeEvent event) {
+        // Repaints previews when the overlay or background color have been changed.
+        if(event.getPropertyName().equals(PreviewLabel.BACKGROUND_COLOR_PROPERTY_NAME) || event.getPropertyName().equals(PreviewLabel.OVERLAY_COLOR_PROPERTY_NAME)) {
+            okPreview.repaint();
+            warningPreview.repaint();
+            criticalPreview.repaint();
+        }
+
+        // Resets the preview labels' foreground color.
+        else if(event.getPropertyName().equals(PreviewLabel.FOREGROUND_COLOR_PROPERTY_NAME)) {
+            Color color;
+
+            color = themeData.getColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR);
+
+            okPreview.setForeground(color);
+            warningPreview.setForeground(color);
+            criticalPreview.setForeground(color);
+            normalPreview.setForeground(color);
+        }
+
+        // Resets the preview labels' borders.
+        else if(event.getPropertyName().equals(PreviewLabel.BORDER_COLOR_PROPERTY_NAME)) {
+            okPreview.refreshBorder();
+            warningPreview.refreshBorder();
+            criticalPreview.refreshBorder();
+        }
+    }
+
+
+
+    // - Preview labels ------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------
+    private class Preview extends JLabel {
+        private MutableLineBorder border;
+        private int type;
+
+        public Preview(int type) {
+            super(WARNING_LEVEL_TEXT[type]);
+            setOpaque(false);
+            setBorder(border = new MutableLineBorder(Color.BLACK, 1));
+            setHorizontalAlignment(CENTER);
+            setForeground(themeData.getColor(ThemeData.STATUS_BAR_FOREGROUND_COLOR));
+            this.type = type;
+        }
+
+        public void refreshBorder() {
+            border.setLineColor(themeData.getColor(ThemeData.STATUS_BAR_BORDER_COLOR));
+            repaint();
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            int width;
+
+            width = ((getWidth() - 2) * WARNING_DRAW_PERCENTAGE[type]) / 100;
+
+            if(type == OK)
+                g.setColor(themeData.getColor(ThemeData.STATUS_BAR_OK_COLOR));
+            else if(type == WARNING)
+                g.setColor(themeData.getColor(ThemeData.STATUS_BAR_WARNING_COLOR));
+            else
+                g.setColor(themeData.getColor(ThemeData.STATUS_BAR_CRITICAL_COLOR));
+            g.fillRect(1, 1, width + 1, getHeight() - 2);
+
+            g.setColor(themeData.getColor(ThemeData.STATUS_BAR_BACKGROUND_COLOR));
+            g.fillRect(width + 1, 1, getWidth() - width - 1, getHeight() - 2);
+
+            super.paint(g);
+        }
+    }
+}

@@ -1,0 +1,30 @@
+repositories.mavenCentral()
+
+dependencies {
+    api project(':apache-bzip2')
+    api project(':barebones-commons-file')
+    api project(':barebones-format-zip')
+
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    implementation 'org.tukaani:xz:1.9'
+
+    testImplementation 'org.testng:testng:7.11.0'
+}
+
+jar {
+    bundle {
+        bnd ('Bundle-Name': 'barebones-commander-archiver',
+                'Bundle-Vendor': 'barebones-commander',
+                'Bundle-Description': 'Library with configuration tools',
+                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
+                'Export-Package': 'dev.barebones.commander.commons.file.archiver',
+                'Specification-Title': 'barebones-commander',
+                'Specification-Vendor': 'barebones-commander contributors',
+                'Specification-Version': project.version,
+                'Implementation-Title': "barebones-commander",
+                'Implementation-Vendor': "barebones-commander contributors",
+                'Implementation-Version': revision,
+                'Build-Date': new Date().format('yyyyMMdd'))
+    }
+}
+

@@ -4,7 +4,7 @@ buildscript {
   }
   dependencies {
     classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:7.1.0'
-    classpath files('libs/mucommander-gradle-macappbundle.jar')
+    classpath files('libs/barebones-gradle-macappbundle.jar')
   }
 }
 
@@ -24,8 +24,8 @@ allprojects {
         options.fork = true
     }
 
-    group = 'org.mucommander'
-    version = '1.7.0'
+    group = 'dev.barebones.commander'
+    version = '0.1.0-SNAPSHOT'
     ext.release = 'snapshot'
     configurations {
         compileOnly.extendsFrom comprise
@@ -73,71 +73,71 @@ dependencies {
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
-    osgiRuntime project('mucommander-core')
-    osgiRuntime project('mucommander-command')
-    osgiRuntime project('mucommander-commons-collections')
-    osgiRuntime project('mucommander-commons-conf')
-    osgiRuntime project('mucommander-commons-file')
-    osgiRuntime project('mucommander-commons-io')
-    osgiRuntime project('mucommander-commons-runtime')
-    osgiRuntime project('mucommander-core-preload')
+    osgiRuntime project('barebones-core')
+    osgiRuntime project('barebones-command')
+    osgiRuntime project('barebones-commons-collections')
+    osgiRuntime project('barebones-commons-conf')
+    osgiRuntime project('barebones-commons-file')
+    osgiRuntime project('barebones-commons-io')
+    osgiRuntime project('barebones-commons-runtime')
+    osgiRuntime project('barebones-core-preload')
     osgiRuntime project('apache-bzip2')
     osgiRuntime project('jetbrains-jediterm')
     osgiRuntime project('sevenzipjbindings')
     osgiRuntime project('gson')
     osgiRuntime project('kotlin-reflect')
-    osgiRuntime project('mucommander-encoding')
-    osgiRuntime project('mucommander-preferences')
-    osgiRuntime project('mucommander-process')
-    osgiRuntime project('mucommander-translator')
+    osgiRuntime project('barebones-encoding')
+    osgiRuntime project('barebones-preferences')
+    osgiRuntime project('barebones-process')
+    osgiRuntime project('barebones-translator')
 
-    osgiRuntime project('mucommander-protocol-adb')
-    osgiRuntime project('mucommander-protocol-ftp')
-    osgiRuntime project('mucommander-protocol-sftp')
-    osgiRuntime project('mucommander-format-rar')
-    osgiRuntime project('mucommander-protocol-http')
-    osgiRuntime project('mucommander-protocol-dropbox')
-    osgiRuntime project('mucommander-protocol-gcs')
-    osgiRuntime project('mucommander-protocol-gdrive')
-    osgiRuntime project('mucommander-protocol-onedrive')
-    osgiRuntime project('mucommander-protocol-nfs')
-    osgiRuntime project('mucommander-protocol-smb')
-    osgiRuntime project('mucommander-protocol-vsphere')
-    osgiRuntime project('mucommander-format-ar')
-    osgiRuntime project('mucommander-format-sevenzip')
-    osgiRuntime project('mucommander-format-rpm')
-    osgiRuntime project('mucommander-format-cpio')
-    osgiRuntime project('mucommander-format-zip')
-    osgiRuntime project('mucommander-format-tar')
-    osgiRuntime project('mucommander-format-bzip2')
-    osgiRuntime project('mucommander-format-gzip')
-    osgiRuntime project('mucommander-format-xz')
-    osgiRuntime project('mucommander-format-iso')
-    osgiRuntime project('mucommander-format-lst')
-    osgiRuntime project('mucommander-archiver')
-//    osgiRuntime project('mucommander-hadoop')
-    osgiRuntime project('mucommander-protocol-s3')
-    osgiRuntime project('mucommander-protocol-registry')
-    osgiRuntime project('mucommander-protocol-ovirt')
-    osgiRuntime project('mucommander-format-libguestfs') // Note that this is a work-in-progress
+    osgiRuntime project('barebones-protocol-adb')
+    osgiRuntime project('barebones-protocol-ftp')
+    osgiRuntime project('barebones-protocol-sftp')
+    osgiRuntime project('barebones-format-rar')
+    osgiRuntime project('barebones-protocol-http')
+    osgiRuntime project('barebones-protocol-dropbox')
+    osgiRuntime project('barebones-protocol-gcs')
+    osgiRuntime project('barebones-protocol-gdrive')
+    osgiRuntime project('barebones-protocol-onedrive')
+    osgiRuntime project('barebones-protocol-nfs')
+    osgiRuntime project('barebones-protocol-smb')
+    osgiRuntime project('barebones-protocol-vsphere')
+    osgiRuntime project('barebones-format-ar')
+    osgiRuntime project('barebones-format-sevenzip')
+    osgiRuntime project('barebones-format-rpm')
+    osgiRuntime project('barebones-format-cpio')
+    osgiRuntime project('barebones-format-zip')
+    osgiRuntime project('barebones-format-tar')
+    osgiRuntime project('barebones-format-bzip2')
+    osgiRuntime project('barebones-format-gzip')
+    osgiRuntime project('barebones-format-xz')
+    osgiRuntime project('barebones-format-iso')
+    osgiRuntime project('barebones-format-lst')
+    osgiRuntime project('barebones-archiver')
+//    osgiRuntime project('barebones-hadoop')
+    osgiRuntime project('barebones-protocol-s3')
+    osgiRuntime project('barebones-protocol-registry')
+    osgiRuntime project('barebones-protocol-ovirt')
+    osgiRuntime project('barebones-format-libguestfs') // Note that this is a work-in-progress
 
-    osgiRuntime project('mucommander-viewer-text')
-    osgiRuntime project('mucommander-viewer-image')
-    osgiRuntime project('mucommander-viewer-pdf')
-    osgiRuntime project('mucommander-viewer-binary')
+    osgiRuntime project('barebones-viewer-text')
+    osgiRuntime project('barebones-viewer-image')
+    osgiRuntime project('barebones-viewer-pdf')
+    osgiRuntime project('barebones-viewer-binary')
 
-    osgiRuntime project('mucommander-bonjour')
+    osgiRuntime project('barebones-bonjour')
 
-    osgiRuntime project('mucommander-os-api')
-    osgiRuntime project('mucommander-os-macos')
-    // osgiRuntime project('mucommander-os-macos-java8')
-    osgiRuntime project('mucommander-os-linux')
-    osgiRuntime project('mucommander-os-win')
-    osgiRuntime project('mucommander-os-openvms')
+    osgiRuntime project('barebones-os-api')
+    osgiRuntime project('barebones-os-macos')
+    // osgiRuntime project('barebones-os-macos-java8')
+    osgiRuntime project('barebones-os-linux')
+    osgiRuntime project('barebones-os-win')
+    osgiRuntime project('barebones-os-openvms')
 }
 
 createBundlesDir.doLast {
-   ant.move file: "${buildDir}/osgi/bundle/${project('mucommander-core').jar.archiveFileName.get()}",
+   ant.move file: "${buildDir}/osgi/bundle/${project('barebones-core').jar.archiveFileName.get()}",
             todir: "${buildDir}/osgi/app"
    copy {
        from "build/libs"
@@ -160,7 +160,7 @@ runOsgi {
 
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
     if (project.hasProperty('debug')) {
-        logger.info('Lauching muCommander in debug mode...')
+        logger.info('Lauching barebones-commander in debug mode...')
         javaArgs += " -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
     }
 
@@ -177,14 +177,14 @@ runOsgi {
             --add-opens java.sql/java.sql=ALL-UNNAMED \
             --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
             --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-            --add-opens mucommander.command/com.mucommander.command=ALL-UNNAMED'
+            --add-opens barebones.command/dev.barebones.commander.command=ALL-UNNAMED'
     configSettings = 'felix'
     osgiMain = project(':')
     config += [
         'org.osgi.framework.storage': 'felix-cache',
         'felix.auto.deploy.dir': 'bundle',
-        'mucommander.app.dir': 'app',
-        'mucommander.conf.dir': 'conf',
+        'barebones.app.dir': 'app',
+        'barebones.conf.dir': 'conf',
     ]
     wrapInstructions {
         manifest("httpclient.*") {
@@ -233,7 +233,7 @@ runOsgi {
 
 task run(dependsOn: 'runOsgi') {
     group = 'Run'
-    description = 'Runs muCommander from sources (basically a shorthand for runOsgi task), optional parameters: -Pdebug=5005 -Psuspend=n'
+    description = 'Runs barebones-commander from sources (basically a shorthand for runOsgi task), optional parameters: -Pdebug=5005 -Psuspend=n'
 }
 
 ext {
@@ -251,12 +251,12 @@ jar {
     from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes("Main-Class": "com.mucommander.main.muCommander",
-                   "Specification-Title": "muCommander",
-                   "Specification-Vendor": "Arik Hadas",
+        attributes("Main-Class": "dev.barebones.commander.main.muCommander",
+                   "Specification-Title": "barebones-commander",
+                   "Specification-Vendor": "barebones-commander contributors",
                    "Specification-Version": project.version,
-                   "Implementation-Title": "muCommander",
-                   "Implementation-Vendor": "Arik Hadas",
+                   "Implementation-Title": "barebones-commander",
+                   "Implementation-Vendor": "barebones-commander contributors",
                    "Implementation-Version": revision,
                    "Build-Date": new Date().format('yyyyMMdd'))
     }
@@ -267,14 +267,14 @@ test.useTestNG()
 import org.apache.tools.ant.filters.ReplaceTokens
 
 launch4j {
-    icon = "$projectDir/package/windows/mucommander.ico"
-    mainClassName = "com.mucommander.main.muCommander"
+    icon = "$projectDir/package/windows/barebones-commander.ico"
+    mainClassName = "dev.barebones.commander.main.muCommander"
     jar = "${project.tasks.jar.archiveFileName.get()}"
-    productName = "muCommander"
-    companyName = "Arik Hadas"
+    productName = "barebones-commander"
+    companyName = "barebones-commander contributors"
     version = project.version
     textVersion = project.version
-    copyright = "Arik Hadas"
+    copyright = "Copyright (C) 2002-2026 muCommander contributors; (C) 2026 barebones-commander contributors. GPL-3.0"
     fileDescription = "a lightweight, cross-platform file manager"
 
     dontWrapJar = true
@@ -288,7 +288,7 @@ launch4j {
         bundledJrePath = '%JAVA_HOME%'
         bundledJreAsFallback = true
     }
-    outfile = "mucommander.exe"
+    outfile = "barebones-commander.exe"
 }
 
 // Portable packaging
@@ -297,7 +297,7 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
     description = 'Creates a portable package (.exe + .sh)'
 
     from ("$buildDir/launch4j") {
-        include 'mucommander.exe'
+        include 'barebones-commander.exe'
     }
     from ("$buildDir/osgi") {
         include '*.jar'
@@ -310,7 +310,7 @@ task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
         include 'felix-cache'
         dirMode 0777
     }
-    from ('package/unix/mucommander.sh') {
+    from ('package/unix/barebones-commander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
     into ""
@@ -350,7 +350,7 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         include 'felix-cache'
         dirMode 0777
     }
-    from ('package/unix/mucommander.sh') {
+    from ('package/unix/barebones-commander.sh') {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
     into ""
@@ -361,9 +361,9 @@ task tgz(dependsOn: createBundlesDir, type: Tar) {
         exclude 'jline*'
         exclude 'junit*'
         exclude 'hamcrest*'
-        exclude 'mucommander-os-win*'
-        exclude 'mucommander-os-macos*'
-        exclude 'mucommander-os-openvms*'
+        exclude 'barebones-os-win*'
+        exclude 'barebones-os-macos*'
+        exclude 'barebones-os-openvms*'
         into 'bundle'
     }
     from ("$buildDir/osgi/app") {
@@ -420,11 +420,11 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     def jpackageCommand = [
                 'jpackage', \
                 '--input', 'build/osgi/', \
-                '--name', 'muCommander', \
+                '--name', 'barebones-commander', \
                 '--app-version', project.version, \
                 '--icon', 'package/osx/icon.icns', \
-                '--main-jar', 'mucommander-'+project.version+'.jar', \
-                '--main-class', 'com.mucommander.main.muCommander', \
+                '--main-jar', 'barebones-'+project.version+'.jar', \
+                '--main-class', 'dev.barebones.commander.main.muCommander', \
                 '--runtime-image', 'jre/macOS/'+project.ext.arch, \
                 '--java-options', '\
                          -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=false -Dsun.java2d.metal=false \
@@ -444,10 +444,10 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
                         --add-opens java.sql/java.sql=ALL-UNNAMED \
                         --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
                         --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED', \
-                '--mac-package-identifier', 'com.mucommander.muCommander', \
+                '--mac-package-identifier', 'dev.barebones.commander.app', \
                 '--type', 'app-image', \
                 '--dest', "${buildDir}", \
-                '--mac-package-signing-prefix', 'com.mucommander.', \
+                '--mac-package-signing-prefix', 'dev.barebones.commander.', \
                 '--mac-signing-key-user-name', project.ext.identity, \
                 '--verbose'
     ]
@@ -463,41 +463,41 @@ task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
        copy {
           from "package"
           include "readme.txt"
-          into "${buildDir}/muCommander.app/Contents/Resources"
+          into "${buildDir}/barebones-commander.app/Contents/Resources"
        }
-       delete("${buildDir}/muCommander.app/Contents/app/run.bat")
-       delete("${buildDir}/muCommander.app/Contents/app/run.sh")
-       delete("${buildDir}/muCommander.app/Contents/app/system-libs")
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'osgiaas*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'jline*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'junit*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'hamcrest*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-linux*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-win*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/bundle/", include: 'mucommander-os-openvms*')
+       delete("${buildDir}/barebones-commander.app/Contents/app/run.bat")
+       delete("${buildDir}/barebones-commander.app/Contents/app/run.sh")
+       delete("${buildDir}/barebones-commander.app/Contents/app/system-libs")
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'osgiaas*')
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'jline*')
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'junit*')
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'hamcrest*')
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'barebones-os-linux*')
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'barebones-os-win*')
+       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'barebones-os-openvms*')
        exec {
-          executable "package/osx/muCommander-post-image.sh"
+          executable "package/osx/barebones-commander-post-image.sh"
        }
        if (project.ext.identity?.trim()) {
          exec {
            workingDir "${rootDir}"
            executable 'java'
-           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/muCommander.app/Contents/app/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/barebones-commander.app/Contents/app/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
          }
          exec {
            workingDir "${rootDir}"
            executable 'java'
-           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/muCommander.app/Contents/app", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/barebones-commander.app/Contents/app", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
          }
          exec {
            workingDir "${rootDir}"
            executable '/usr/bin/codesign'
-           args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app/Contents/MacOS/muCommander"
+           args '--entitlements', 'package/osx/barebones-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/barebones-commander.app/Contents/MacOS/barebones-commander"
          }
          exec {
            workingDir "${rootDir}"
            executable '/usr/bin/codesign'
-           args '--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app"
+           args '--entitlements', 'package/osx/barebones-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/barebones-commander.app"
          }
        }
     }
@@ -509,10 +509,10 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
 
     workingDir "${projectDir}"
     commandLine 'jpackage', \
-                '--app-image', "${buildDir}/muCommander.app", \
+                '--app-image', "${buildDir}/barebones-commander.app", \
                 '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
                 '--license-file', 'package/license.txt', \
-                '--about-url', 'https://www.mucommander.com', \
+                '--about-url', 'https://github.com/e6qu/barebones-commander', \
                 '--dest', "${buildDir}/distributions"
 }
 
@@ -520,10 +520,10 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--input', 'build/osgi/', \
-                '--name', 'muCommander', \
+                '--name', 'barebones-commander', \
                 '--app-version', project.version, \
-                '--main-jar', 'mucommander-'+project.version+'.jar', \
-                '--main-class', 'com.mucommander.main.muCommander', \
+                '--main-jar', 'barebones-'+project.version+'.jar', \
+                '--main-class', 'dev.barebones.commander.main.muCommander', \
                 '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED \
                                    --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED \
                                    --add-opens java.base/java.net=ALL-UNNAMED \
@@ -545,18 +545,18 @@ task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
            from "package"
            include "license.txt"
            include "readme.txt"
-           into "${buildDir}/muCommander/lib/app"
+           into "${buildDir}/barebones-commander/lib/app"
         }
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'osgiaas*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'jline*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'junit*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'hamcrest*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-win*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-macos*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/bundle/", include: 'mucommander-os-openvms*')
-        delete("${buildDir}/muCommander/lib/app/run.bat")
-        delete("${buildDir}/muCommander/lib/app/run.sh")
-        delete("${buildDir}/muCommander/lib/app/system-libs")
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'osgiaas*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'jline*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'junit*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'hamcrest*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'barebones-os-win*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'barebones-os-macos*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'barebones-os-openvms*')
+        delete("${buildDir}/barebones-commander/lib/app/run.bat")
+        delete("${buildDir}/barebones-commander/lib/app/run.sh")
+        delete("${buildDir}/barebones-commander/lib/app/system-libs")
     }
 }
 
@@ -567,12 +567,12 @@ task rpm(dependsOn: 'linuxAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'rpm', \
-                '--app-image', "${buildDir}/muCommander", \
+                '--app-image', "${buildDir}/barebones-commander", \
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
-                '--about-url', 'https://www.mucommander.com', \
+                '--about-url', 'https://github.com/e6qu/barebones-commander', \
                 '--dest', "${buildDir}/distributions", \
-                '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
+                '--icon', 'barebones-core/src/main/resources/images/mucommander/icon128_24.png', \
                 '--linux-app-category', 'Application;FileManager;Utility;'
 }
 
@@ -585,13 +585,13 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
     commandLine 'jpackage', \
                 '--type', 'deb', \
                 '--description', 'a lightweight, cross-platform file manager', \
-                '--app-image', "${buildDir}/muCommander", \
+                '--app-image', "${buildDir}/barebones-commander", \
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
-                '--about-url', 'https://www.mucommander.com', \
+                '--about-url', 'https://github.com/e6qu/barebones-commander', \
                 '--dest', "${buildDir}/distributions", \
-                '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
-                '--linux-deb-maintainer', 'arik.hadas1@gmail.com', \
+                '--icon', 'barebones-core/src/main/resources/images/mucommander/icon128_24.png', \
+                '--linux-deb-maintainer', 'noreply@e6qu.dev', \
                 '--linux-app-category', 'utils', \
                 '--linux-shortcut', \
                 '--linux-menu-group', 'Application;FileManager;Utility;'
@@ -601,10 +601,10 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--input', "${buildDir}/osgi/", \
-                '--name', 'muCommander', \
+                '--name', 'barebones-commander', \
                 '--app-version', project.version, \
-                '--main-jar', 'mucommander-'+project.version+'.jar', \
-                '--main-class', 'com.mucommander.main.muCommander', \
+                '--main-jar', 'barebones-'+project.version+'.jar', \
+                '--main-class', 'dev.barebones.commander.main.muCommander', \
                 '--java-options', \
                 '--add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
                     --add-opens java.base/java.io=ALL-UNNAMED \
@@ -626,18 +626,18 @@ task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
            from "package"
            include "license.txt"
            include "readme.txt"
-           into "${buildDir}/muCommander/"
+           into "${buildDir}/barebones-commander/"
         }
-        delete("${buildDir}/muCommander/app/run.bat")
-        delete("${buildDir}/muCommander/app/run.sh")
-        delete("${buildDir}/muCommander/app/system-libs")
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'osgiaas*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'jline*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'junit*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'hamcrest*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-linux*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-macos*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/bundle/", include: 'mucommander-os-openvms*')
+        delete("${buildDir}/barebones-commander/app/run.bat")
+        delete("${buildDir}/barebones-commander/app/run.sh")
+        delete("${buildDir}/barebones-commander/app/system-libs")
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'osgiaas*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'jline*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'junit*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'hamcrest*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'barebones-os-linux*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'barebones-os-macos*')
+        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'barebones-os-openvms*')
     }
 }
 
@@ -648,28 +648,28 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'msi', \
-                '--app-image', "${buildDir}/muCommander", \
-                '--license-file', "${buildDir}/muCommander/license.txt", \
+                '--app-image', "${buildDir}/barebones-commander", \
+                '--license-file', "${buildDir}/barebones-commander/license.txt", \
                 '--app-version', project.version, \
-                '--about-url', 'https://www.mucommander.com', \
+                '--about-url', 'https://github.com/e6qu/barebones-commander', \
                 '--dest', "${buildDir}/distributions", \
                 '--win-menu', \
                 '--win-shortcut', \
                 '--win-shortcut-prompt', \
                 '--win-dir-chooser', \
-                '--vendor', 'Arik Hadas', \
-                '--win-menu-group', "muCommander"
+                '--vendor', 'barebones-commander', \
+                '--win-menu-group', "barebones-commander"
 }
 
 configurations.default.canBeResolved=true
 
 macAppBundle {
-    appName = "muCommander"
-    dmgName = 'mucommander-'+project.version+'-'+project.ext.release+'-noarch'
-    mainClassName = "com.mucommander.main.muCommander"
+    appName = "barebones-commander"
+    dmgName = 'barebones-commander-'+project.version+'-'+project.ext.release+'-noarch'
+    mainClassName = "dev.barebones.commander.main.muCommander"
     appStyle = "universalJavaApplicationStub"
     bundleJRE = false
-    bundleIdentifier = "com.mucommander.muCommander"
+    bundleIdentifier = "dev.barebones.commander.app"
     jvmVersion = "1.6+"
     icon = "package/osx/icon.icns"
     bundleAllowMixedLocalizations = "true"
@@ -759,21 +759,21 @@ copyToResourcesJava.doLast {
         include 'conf/**'
         exclude 'bundle/osgiaas*'
         exclude 'bundle/jline*'
-        exclude 'bundle/mucommander-os-linux*'
-        exclude 'bundle/mucommander-os-openvms*'
-        exclude 'bundle/mucommander-os-win*'
+        exclude 'bundle/barebones-os-linux*'
+        exclude 'bundle/barebones-os-openvms*'
+        exclude 'bundle/barebones-os-win*'
         into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
     }
     if (project.ext.identity?.trim()) {
       exec {
         workingDir "${rootDir}"
         executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
       }
       exec {
         workingDir "${rootDir}"
         executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
+        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
       }
    }
 }

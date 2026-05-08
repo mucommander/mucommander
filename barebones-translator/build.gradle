@@ -1,0 +1,35 @@
+repositories.mavenCentral()
+
+dependencies {
+    api project(":barebones-preferences")
+
+    testImplementation 'org.testng:testng:7.11.0'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+}
+
+jar {
+    bundle {
+        bnd ('Bundle-Name': 'barebones-commander-translator',
+                'Bundle-Vendor': 'barebones-commander',
+                'Bundle-Activator': 'dev.barebones.commander.text.Activator',
+                'Bundle-Description': 'translations',
+                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
+                'Export-Package': 'dev.barebones.commander.text',
+                'Specification-Title': "barebones-commander",
+                'Specification-Vendor': "barebones-commander contributors",
+                'Specification-Version': project.version,
+                'Implementation-Title': "barebones-commander",
+                'Implementation-Vendor': "barebones-commander contributors",
+                'Implementation-Version': revision,
+                'Build-Date': new Date().format('yyyyMMdd'))
+    }
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

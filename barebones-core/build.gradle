@@ -1,0 +1,107 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies"
+    }
+}
+
+dependencies {
+    compileOnly project(':barebones-commons-file')
+    compileOnly project(':barebones-commons-conf')
+    compileOnly project(':barebones-commons-collections')
+    compileOnly project(':barebones-commons-io')
+    compileOnly project(':barebones-archiver')
+    compileOnly project(':barebones-command')
+    compileOnly project(':barebones-encoding')
+    compileOnly project(':barebones-preferences')
+    compileOnly project(':barebones-process')
+    compileOnly project(':barebones-translator')
+    compileOnly project(':barebones-protocol-api')
+    compileOnly project(':barebones-os-api')
+    compileOnly project(':barebones-viewer-api')
+    compileOnly project(':barebones-core-preload')
+
+
+    compileOnly 'com.formdev:flatlaf:2.2'
+    compileOnly 'org.violetlib:vaqua:10'
+
+    // JediTerm deps: if you change any version below, remember to change it also in jetbrains-jediterm
+    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.57'
+    compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.57'
+    compileOnly 'org.jetbrains.pty4j:pty4j:0.13.11'
+    compileOnly 'org.jetbrains:annotations:26.0.2-1'
+    // JediTerm deps end
+
+    implementation 'ch.qos.logback:logback-core:1.2.13'
+    implementation 'ch.qos.logback:logback-classic:1.2.13'
+    implementation 'org.apache.commons:commons-collections4:4.5.0'
+    implementation 'net.minidev:json-smart:2.4.10'
+
+    comprise 'org.unix4j:unix4j-command:0.6'
+
+    testImplementation 'org.testng:testng:7.11.0'
+    testImplementation(platform('org.junit:junit-bom:5.14.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
+    testImplementation project(':barebones-commons-file')
+    testImplementation project(':barebones-commons-conf')
+    testImplementation project(':barebones-commons-collections')
+    testImplementation project(':barebones-commons-io')
+}
+
+jar {
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        include 'org/unix4j/**'
+        exclude 'codegen/**'
+        exclude 'META-INF/**'
+    } }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    bundle {
+        bnd ('Bundle-Name': 'barebones-commander-core',
+                'Bundle-Vendor': 'barebones-commander',
+                'Bundle-Description': 'The core part of barebones-commander (forked from muCommander)',
+                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
+                'Specification-Title': "barebones-commander",
+                'Specification-Vendor': "barebones-commander contributors",
+                'Specification-Version': project.version,
+                'Implementation-Title': "barebones-commander",
+                'Implementation-Vendor': "barebones-commander contributors",
+                'Implementation-Version': revision,
+                'Build-Date': new Date().format('yyyyMMdd'),
+                'Build-Number': project.ext.release,
+                'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
+                'Export-Package':
+                        'dev.barebones.commander.core.desktop,' +
+                                'dev.barebones.commander.job,' +
+                                'dev.barebones.commander.job.impl,' +
+                                'dev.barebones.commander.process,' +
+                                'dev.barebones.commander.osgi,' +
+                                'dev.barebones.commander.search,' +
+                                'dev.barebones.commander.ui.action,' +
+                                'dev.barebones.commander.ui.action.impl,' +
+                                'dev.barebones.commander.ui.dialog,' +
+                                'dev.barebones.commander.ui.dialog.file,' +
+                                'dev.barebones.commander.ui.dialog.server,' +
+                                'dev.barebones.commander.ui.encoding,' +
+                                'dev.barebones.commander.ui.icon,' +
+                                'dev.barebones.commander.ui.text,' +
+                                'dev.barebones.commander.ui.theme,' +
+                                'dev.barebones.commander.snapshot,' +
+                                'dev.barebones.commander.search,' +
+                                'dev.barebones.commander.text,' +
+                                'dev.barebones.commander.ui.icon,' +
+                                'dev.barebones.commander.ui.main,' +
+                                'dev.barebones.commander.ui.main.table,' +
+                                'dev.barebones.commander.ui.viewer',
+                'Bundle-Activator': 'dev.barebones.commander.Activator')
+    }
+}
+
+test {
+    useTestNG()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

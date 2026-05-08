@@ -1,0 +1,116 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
+package dev.barebones.commander.ui.dialog.file;
+
+import java.util.List;
+import java.util.Vector;
+
+import dev.barebones.commander.commons.file.AbstractFile;
+import dev.barebones.commander.commons.file.archive.AbstractArchiveEntryFile;
+import dev.barebones.commander.commons.file.archive.AbstractArchiveFile;
+import dev.barebones.commander.commons.file.archive.ArchiveEntry;
+import dev.barebones.commander.commons.file.util.DestinationType;
+import dev.barebones.commander.commons.file.util.FileSet;
+import dev.barebones.commander.commons.file.util.PathUtils;
+import dev.barebones.commander.desktop.ActionType;
+import dev.barebones.commander.job.impl.CopyJob;
+import dev.barebones.commander.job.impl.CopyJob.TransferMode;
+import dev.barebones.commander.job.impl.TransferFileJob;
+import dev.barebones.commander.job.impl.UnpackJob;
+import dev.barebones.commander.text.Translator;
+import dev.barebones.commander.ui.action.ActionProperties;
+import dev.barebones.commander.ui.action.impl.CopyAction;
+import dev.barebones.commander.ui.main.MainFrame;
+
+
+/**
+ * Dialog invoked when the user wants to copy currently selected files. The destination field is pre-filled with
+ * the 'other' panel's path and, if there is only one file to copy, with the source file's name.
+ *
+ * @see dev.barebones.commander.ui.action.impl.CopyAction
+ * @author Maxence Bernard
+ */
+public class CopyDialog extends AbstractCopyDialog {
+
+    /**
+     * Creates a new <code>CopyDialog</code>.
+     *
+     * @param mainFrame the main frame that spawned this dialog.
+     * @param files files to be copied
+     */
+    public CopyDialog(MainFrame mainFrame, FileSet files) {
+        super(mainFrame, files,
+              ActionProperties.getActionLabel(ActionType.Copy),
+              Translator.get("copy_dialog.destination"),
+              Translator.get("copy"),
+              Translator.get("copy_dialog.error_title"));
+    }
+
+
+    //////////////////////////////////////////////
+    // TransferDestinationDialog implementation //
+    //////////////////////////////////////////////
+
+    @Override
+    protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
+        AbstractFile baseFolder = files.getBaseFolder();
+        AbstractArchiveFile parentArchiveFile = baseFolder.getParentArchive();
+        TransferFileJob job;
+        String newName = resolvedDest.getDestinationType()==DestinationType.EXISTING_FOLDER?null:resolvedDest.getDestinationFile().getName();
+
+        // If the source files are located inside an archive, use UnpackJob instead of CopyJob to unpack archives in
+        // their natural order (more efficient)
+        if(parentArchiveFile!=null) {
+            // Add all selected archive entries to a vector
+            int nbFiles = files.size();
+            List<ArchiveEntry> selectedEntries = new Vector<ArchiveEntry>();
+            for(int i=0; i<nbFiles; i++) {
+                selectedEntries.add((ArchiveEntry)files.elementAt(i).getAncestor(AbstractArchiveEntryFile.class).getUnderlyingFileObject());
+            }
+
+            job = new UnpackJob(
+                progressDialog,
+                mainFrame,
+                parentArchiveFile,
+                PathUtils.getDepth(baseFolder.getAbsolutePath(), baseFolder.getSeparator()) - PathUtils.getDepth(parentArchiveFile.getAbsolutePath(), parentArchiveFile.getSeparator()),
+                resolvedDest.getDestinationFolder(),
+                newName,
+                defaultFileExistsAction,
+                selectedEntries
+            );
+        }
+        else {
+            job = new CopyJob(
+                progressDialog,
+                mainFrame,
+                files,
+                resolvedDest.getDestinationFolder(),
+                newName,
+                TransferMode.COPY,
+                defaultFileExistsAction);
+        }
+
+        return job;
+    }
+
+    @Override
+    protected String getProgressDialogTitle() {
+        return Translator.get("copy_dialog.copying");
+    }
+}

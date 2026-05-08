@@ -1,0 +1,36 @@
+/*
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package dev.barebones.commander.commons.io;
+
+import java.io.IOException;
+
+/**
+ * This <code>IOException</code> can be used when attempting to read from a {@link BoundedInputStream} or
+ * {@link BoundedReader} beyond the byte or character limit set.
+ *
+ * @see dev.barebones.commander.commons.io.BoundedInputStream
+ * @see dev.barebones.commander.commons.io.BoundedOutputStream
+ * @see dev.barebones.commander.commons.io.BoundedReader
+ * @author Maxence Bernard
+ */
+public class StreamOutOfBoundException extends IOException {
+    
+    public StreamOutOfBoundException(long limit) {
+        super("Attempt to read out of bounds, limit="+limit);
+    }
+}
