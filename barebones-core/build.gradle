@@ -2,9 +2,6 @@ apply plugin: 'java'
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://packages.jetbrains.team/maven/p/ij/intellij-dependencies"
-    }
 }
 
 dependencies {
@@ -25,14 +22,7 @@ dependencies {
 
 
     compileOnly 'com.formdev:flatlaf:2.2'
-    compileOnly 'org.violetlib:vaqua:10'
-
-    // JediTerm deps: if you change any version below, remember to change it also in jetbrains-jediterm
-    compileOnly 'org.jetbrains.jediterm:jediterm-core:3.57'
-    compileOnly 'org.jetbrains.jediterm:jediterm-ui:3.57'
-    compileOnly 'org.jetbrains.pty4j:pty4j:0.13.11'
     compileOnly 'org.jetbrains:annotations:26.0.2-1'
-    // JediTerm deps end
 
     implementation 'ch.qos.logback:logback-core:1.2.13'
     implementation 'ch.qos.logback:logback-classic:1.2.13'

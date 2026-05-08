@@ -68,8 +68,6 @@ public class ToolBarAttributes {
             null,
             ActionId.asToolBarAction(ActionType.ConnectToServer.getId()),
             ActionId.asToolBarAction(ActionType.ShowServerConnections.getId()),
-            ActionId.asToolBarAction(ActionType.ToggleTerminal.getId()),
-            ActionId.asToolBarAction(ActionType.Email.getId()),
             null,
             ActionId.asToolBarAction(ActionType.RevealInDesktop.getId()),
             ActionId.asToolBarAction(ActionType.ShowFileProperties.getId()),

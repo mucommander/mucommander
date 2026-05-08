@@ -53,8 +53,6 @@ public class ActionShortcuts extends dev.barebones.commander.desktop.ActionShort
             return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK);
         case EditCredentials:
             return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.ALT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
-        case Email:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.META_DOWN_MASK);
         case ExploreBookmarks:
             return KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.META_DOWN_MASK);
         case Find:
@@ -187,8 +185,6 @@ public class ActionShortcuts extends dev.barebones.commander.desktop.ActionShort
             return KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
         case EditCredentials:
             return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
-        case Email:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
         case ExploreBookmarks:
             return KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
         case Find:

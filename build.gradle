@@ -12,7 +12,6 @@ plugins {
     id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
     id 'org.ajoberstar.grgit' version '5.0.0'
-    id 'edu.sc.seis.launch4j' version '2.5.4'
 }
 
 // This is the only syntax that appears to work for a local plugin
@@ -69,7 +68,6 @@ dependencies {
     comprise 'org.apache.felix:org.apache.felix.main:7.0.5'
     comprise 'com.beust:jcommander:1.82'
     comprise 'com.formdev:flatlaf:2.6'
-    comprise 'org.violetlib:vaqua:10'
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
@@ -82,58 +80,27 @@ dependencies {
     osgiRuntime project('barebones-commons-runtime')
     osgiRuntime project('barebones-core-preload')
     osgiRuntime project('apache-bzip2')
-    osgiRuntime project('jetbrains-jediterm')
-    osgiRuntime project('sevenzipjbindings')
-    osgiRuntime project('gson')
-    osgiRuntime project('kotlin-reflect')
     osgiRuntime project('barebones-encoding')
     osgiRuntime project('barebones-preferences')
     osgiRuntime project('barebones-process')
     osgiRuntime project('barebones-translator')
 
-    osgiRuntime project('barebones-protocol-adb')
-    osgiRuntime project('barebones-protocol-ftp')
     osgiRuntime project('barebones-protocol-sftp')
-    osgiRuntime project('barebones-format-rar')
-    osgiRuntime project('barebones-protocol-http')
-    osgiRuntime project('barebones-protocol-dropbox')
-    osgiRuntime project('barebones-protocol-gcs')
-    osgiRuntime project('barebones-protocol-gdrive')
-    osgiRuntime project('barebones-protocol-onedrive')
+    osgiRuntime project('barebones-protocol-s3')
     osgiRuntime project('barebones-protocol-nfs')
-    osgiRuntime project('barebones-protocol-smb')
-    osgiRuntime project('barebones-protocol-vsphere')
-    osgiRuntime project('barebones-format-ar')
-    osgiRuntime project('barebones-format-sevenzip')
-    osgiRuntime project('barebones-format-rpm')
-    osgiRuntime project('barebones-format-cpio')
+
     osgiRuntime project('barebones-format-zip')
     osgiRuntime project('barebones-format-tar')
     osgiRuntime project('barebones-format-bzip2')
     osgiRuntime project('barebones-format-gzip')
     osgiRuntime project('barebones-format-xz')
-    osgiRuntime project('barebones-format-iso')
-    osgiRuntime project('barebones-format-lst')
     osgiRuntime project('barebones-archiver')
-//    osgiRuntime project('barebones-hadoop')
-    osgiRuntime project('barebones-protocol-s3')
-    osgiRuntime project('barebones-protocol-registry')
-    osgiRuntime project('barebones-protocol-ovirt')
-    osgiRuntime project('barebones-format-libguestfs') // Note that this is a work-in-progress
 
     osgiRuntime project('barebones-viewer-text')
-    osgiRuntime project('barebones-viewer-image')
-    osgiRuntime project('barebones-viewer-pdf')
-    osgiRuntime project('barebones-viewer-binary')
-
-    osgiRuntime project('barebones-bonjour')
 
     osgiRuntime project('barebones-os-api')
     osgiRuntime project('barebones-os-macos')
-    // osgiRuntime project('barebones-os-macos-java8')
     osgiRuntime project('barebones-os-linux')
-    osgiRuntime project('barebones-os-win')
-    osgiRuntime project('barebones-os-openvms')
 }
 
 createBundlesDir.doLast {
@@ -188,46 +155,9 @@ runOsgi {
     ]
     wrapInstructions {
         manifest("httpclient.*") {
-            // enable httpclient to instantiate factories that reside in jets3t
+            // enable httpclient to instantiate factories that reside in jets3t (S3 module)
             instruction 'DynamicImport-Package', 'org.jets3t.service.utils', '*'
         }
-        manifest("sdk-.*") {
-            instruction 'Bundle-Name', 'ovirt-sdk'
-        }
-        manifest("sevenzipjbinding.*") {
-            instruction 'Bundle-Version', '16.2'
-        }
-        manifest("listenablefuture.*") {
-            instruction 'Bundle-Version', '1.0'
-        }
-        manifest("kotlin-stdlib.*") {
-            instruction 'Bundle-Version', '1.9.10'
-            instruction 'Import-Package', '!android.os', '*'
-        }
-        manifest("jcip-annotations.*") {
-            instruction 'Bundle-Version', '1.0'
-        }
-        manifest("azure-core.*") {
-            instruction 'Import-Package', '!com.fasterxml.jackson.dataformat.xml', '*'
-        }
-        manifest("azure-xml.*") {
-            instruction 'Bundle-Version', '1.0.0'
-        }
-        manifest("msal4j.*") {
-            instruction 'Import-Package', '!com.nimbusds.jose.crypto', '!com.nimbusds.jose.util', '*'
-        }
-        manifest("microsoft-graph-core.*") {
-            instruction 'Import-Package', '!android.os', '*'
-            instruction 'DynamicImport-Package', 'com.microsoft.graph.models'
-        }
-        manifest("okhttp.*") {
-            instruction 'Import-Package', '!sun.security.ssl', '!org.openjsse.javax.net.ssl', '!org.openjsse.net.ssl', '!org.conscrypt', '!org.bouncycastle.jsse.provider', '!org.bouncycastle.jsse', '!dalvik.system', '!android.os', '!android.util', '!android.security', '!android.net.http', '!android.net.ssl', '*'
-        }
-        manifest("smbj.*") {
-            instruction 'Import-Package', '!android.os', '!com.ibm.security.jgss', '*'
-        }
-
-
     }
 }
 
@@ -265,75 +195,6 @@ jar {
 test.useTestNG()
 
 import org.apache.tools.ant.filters.ReplaceTokens
-
-launch4j {
-    icon = "$projectDir/package/windows/barebones-commander.ico"
-    mainClassName = "dev.barebones.commander.main.muCommander"
-    jar = "${project.tasks.jar.archiveFileName.get()}"
-    productName = "barebones-commander"
-    companyName = "barebones-commander contributors"
-    version = project.version
-    textVersion = project.version
-    copyright = "Copyright (C) 2002-2026 muCommander contributors; (C) 2026 barebones-commander contributors. GPL-3.0"
-    fileDescription = "a lightweight, cross-platform file manager"
-
-    dontWrapJar = true
-    classpath = ['.']
-    headerType = "gui"
-    jreMinVersion = "1.8"
-    if (project.ext.bundleJRE) {
-        bundledJre64Bit = true
-        bundledJrePath = "jre"
-    } else {
-        bundledJrePath = '%JAVA_HOME%'
-        bundledJreAsFallback = true
-    }
-    outfile = "barebones-commander.exe"
-}
-
-// Portable packaging
-task portable(dependsOn: [createExe, createBundlesDir], type: Zip) {
-    group = 'Installer'
-    description = 'Creates a portable package (.exe + .sh)'
-
-    from ("$buildDir/launch4j") {
-        include 'barebones-commander.exe'
-    }
-    from ("$buildDir/osgi") {
-        include '*.jar'
-    }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    def tempDir = File.createTempDir()
-    tempDir.deleteOnExit()
-    from ({ new File(temporaryDir, '.portable').createNewFile(); new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
-        include '.portable'
-        include 'felix-cache'
-        dirMode 0777
-    }
-    from ('package/unix/barebones-commander.sh') {
-        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
-    }
-    into ""
-    from ("$buildDir/osgi/bundle") {
-        include '*.jar'
-        exclude 'osgiaas*'
-        exclude 'junit*'
-        exclude 'hamcrest*'
-        exclude 'jline*'
-        into 'bundle'
-    }
-    from ("$buildDir/osgi/app") {
-        include '*.jar'
-        into 'app'
-    }
-    from ("$buildDir/osgi/conf") {
-        include '*'
-        into 'conf'
-    }
-
-    archiveClassifier = 'portable'
-    archiveVersion = project.version+'-'+project.ext.release
-}
 
 // Unix packaging
 task tgz(dependsOn: createBundlesDir, type: Tar) {
@@ -595,70 +456,6 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
                 '--linux-app-category', 'utils', \
                 '--linux-shortcut', \
                 '--linux-menu-group', 'Application;FileManager;Utility;'
-}
-
-task winAppImage(dependsOn: 'createBundlesDir', type: Exec) {
-    workingDir "${projectDir}"
-    commandLine 'jpackage', \
-                '--input', "${buildDir}/osgi/", \
-                '--name', 'barebones-commander', \
-                '--app-version', project.version, \
-                '--main-jar', 'barebones-'+project.version+'.jar', \
-                '--main-class', 'dev.barebones.commander.main.muCommander', \
-                '--java-options', \
-                '--add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-                    --add-opens java.base/java.io=ALL-UNNAMED \
-                    --add-opens java.base/java.net=ALL-UNNAMED \
-                    --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
-                    --add-opens java.management/javax.management=ALL-UNNAMED \
-                    --add-opens java.rmi/java.rmi=ALL-UNNAMED \
-                    --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
-                    --add-opens java.sql/java.sql=ALL-UNNAMED \
-                    --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-                    --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-                    --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED', \
-                '--type', 'app-image', \
-                '--runtime-image', 'jre/win/'+project.ext.arch, \
-                '--dest', "${buildDir}", \
-                '--resource-dir', 'package/windows/'
-    doLast {
-        copy {
-           from "package"
-           include "license.txt"
-           include "readme.txt"
-           into "${buildDir}/barebones-commander/"
-        }
-        delete("${buildDir}/barebones-commander/app/run.bat")
-        delete("${buildDir}/barebones-commander/app/run.sh")
-        delete("${buildDir}/barebones-commander/app/system-libs")
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'osgiaas*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'jline*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'junit*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'hamcrest*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'barebones-os-linux*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'barebones-os-macos*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/app/bundle/", include: 'barebones-os-openvms*')
-    }
-}
-
-task msi(dependsOn: 'winAppImage', type: Exec) {
-    group = 'Installer'
-    description = 'Creates MSI windows package'
-
-    workingDir "${projectDir}"
-    commandLine 'jpackage', \
-                '--type', 'msi', \
-                '--app-image', "${buildDir}/barebones-commander", \
-                '--license-file', "${buildDir}/barebones-commander/license.txt", \
-                '--app-version', project.version, \
-                '--about-url', 'https://github.com/e6qu/barebones-commander', \
-                '--dest', "${buildDir}/distributions", \
-                '--win-menu', \
-                '--win-shortcut', \
-                '--win-shortcut-prompt', \
-                '--win-dir-chooser', \
-                '--vendor', 'barebones-commander', \
-                '--win-menu-group', "barebones-commander"
 }
 
 configurations.default.canBeResolved=true

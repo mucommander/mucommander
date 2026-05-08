@@ -1,7 +1,4 @@
 repositories {
-    maven {
-        url 'https://repository.jboss.org/maven2/'
-    }
     mavenCentral()
 }
 

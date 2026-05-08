@@ -101,7 +101,6 @@ public class ActionManager {
         registerAction(new EditAction.Descriptor(),                         EditAction::new);
         registerAction(new EditBookmarksAction.Descriptor(),                EditBookmarksAction::new);
         registerAction(new EditCredentialsAction.Descriptor(),              EditCredentialsAction::new);
-        registerAction(new EmailAction.Descriptor(),                        EmailAction::new);
         registerAction(new EmptyTrashAction.Descriptor(),                   EmptyTrashAction::new);
         registerAction(new ExploreBookmarksAction.Descriptor(),             ExploreBookmarksAction::new);
         registerAction(new GoBackAction.Descriptor(),                       GoBackAction::new);
@@ -227,7 +226,6 @@ public class ActionManager {
         registerAction(new ToggleShowFoldersFirstAction.Descriptor(),       ToggleShowFoldersFirstAction::new);
         registerAction(new ToggleSizeColumnAction.Descriptor(),             ToggleSizeColumnAction::new);
         registerAction(new ToggleStatusBarAction.Descriptor(),              ToggleStatusBarAction::new);
-        registerAction(new ToggleTerminalAction.Descriptor(),               ToggleTerminalAction::new);
         registerAction(new ToggleToolBarAction.Descriptor(),                ToggleToolBarAction::new);
         registerAction(new ToggleTreeAction.Descriptor(),                   ToggleTreeAction::new);
         registerAction(new UnmarkAllAction.Descriptor(),                    UnmarkAllAction::new);
@@ -242,10 +240,6 @@ public class ActionManager {
                 .forEach(command -> ActionManager.registerAction(
                         new CommandAction.Descriptor(command),
                         (mainFrame, properties) -> new CommandAction(mainFrame, properties, command)));
-
-        TerminalActions.actionDescriptors().forEach(
-                descriptor -> ActionManager.registerAction(descriptor,
-                        (mainFrame, properties) -> new TerminalActions.NullAction(mainFrame, properties, descriptor)));
     }
 
     /**
@@ -267,17 +261,6 @@ public class ActionManager {
      */
     public static void registerAction(CommandAction.Descriptor actionDescriptor, ActionFactory actionFactory) {
         actionFactories.put(ActionId.asCommandAction(actionDescriptor.getId()), actionFactory);
-        ActionProperties.addActionDescriptor(actionDescriptor);
-    }
-
-    /**
-     * Registration method for MuActions.
-     *
-     * @param actionDescriptor - ActionDescriptor instance of the action.
-     * @param actionFactory - ActionFactory instance of the action.
-     */
-    public static void registerAction(TerminalActions.Descriptor actionDescriptor, ActionFactory actionFactory) {
-        actionFactories.put(ActionId.asTerminalAction(actionDescriptor.getId()), actionFactory);
         ActionProperties.addActionDescriptor(actionDescriptor);
     }
 

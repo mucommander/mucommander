@@ -301,8 +301,7 @@ public class muCommander {
                         "sun.awt.image," +
                         "sun.awt.image.codec," +
                         "com.apple.laf," +
-                        "com.formdev.flatlaf," +
-                        "org.violetlib.aqua"
+                        "com.formdev.flatlaf"
         );
 
         configProps.computeIfAbsent(AutoProcessor.AUTO_DEPLOY_DIR_PROPERTY,

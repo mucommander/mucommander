@@ -135,12 +135,6 @@ public class WindowManager implements WindowListener, ConfigurationListener {
         com.formdev.flatlaf.FlatLightLaf.installLafInfo();
         com.formdev.flatlaf.FlatIntelliJLaf.installLafInfo();
 
-        if (OsFamily.MAC_OS.isCurrent() && OsVersion.MAC_OS_10_13.isCurrentLower()) {
-            // don't use import, leave as it is :)
-            org.violetlib.aqua.AquaLookAndFeel aquaLookAndFeel = new org.violetlib.aqua.AquaLookAndFeel();
-            UIManager.installLookAndFeel(new UIManager.LookAndFeelInfo(aquaLookAndFeel.getName(), aquaLookAndFeel.getClass().getName()));
-        }
-
         // Installs all custom look and feels.
         installCustomLookAndFeels();
 

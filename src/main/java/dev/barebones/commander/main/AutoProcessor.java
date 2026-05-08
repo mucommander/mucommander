@@ -87,9 +87,7 @@ public class AutoProcessor
      * in the meantime while other smaller bundles are already being started).
      * Remark: Names are partial match of jar name.
      */
-    private static final String[] bigBundlesToStartLast = new String[] {"dropbox", "jediterm",
-            "protocol-gcs", "viewer-pdf", "gdrive", "microsoft-graph", "sevenzipjbindings", "sdk-",
-            "bcprov" };
+    private static final String[] bigBundlesToStartLast = new String[] { "bcprov" };
 
     /**
      * Used to instigate auto-deploy directory process and auto-install/auto-start

@@ -69,8 +69,6 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_F4, 0);
         case EditCredentials:
             return KeyStroke.getKeyStroke(KeyEvent.VK_K, KeyEvent.ALT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
-        case Email:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
         case ExploreBookmarks:
             return KeyStroke.getKeyStroke(KeyEvent.VK_B, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.CTRL_DOWN_MASK);
         case Find:
@@ -251,8 +249,6 @@ public class ActionShortcuts {
             return KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
         case ToggleHiddenFiles:
             return KeyStroke.getKeyStroke(KeyEvent.VK_H, KeyEvent.SHIFT_DOWN_MASK | KeyEvent.ALT_DOWN_MASK);
-        case ToggleTerminal:
-            return KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0);
         case ToggleTree:
             return KeyStroke.getKeyStroke(KeyEvent.VK_J, KeyEvent.CTRL_DOWN_MASK);
         case UnmarkAll:

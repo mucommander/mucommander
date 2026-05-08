@@ -77,7 +77,6 @@ import dev.barebones.commander.ui.main.table.SortInfo;
 import dev.barebones.commander.ui.main.tabs.ConfFileTableTab;
 import dev.barebones.commander.ui.main.toolbar.ToolBar;
 import dev.barebones.commander.ui.notifier.NotifierProvider;
-import dev.barebones.commander.ui.terminal.TerminalIntegration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,9 +128,6 @@ public class MainFrame implements LocationListener {
 
     /** Is single panel view? */
     private boolean singlePanel;
-
-    /** Terminal integration instance */
-    private TerminalIntegration terminalIntegration;
 
     /** Contains all registered ActivePanelListener instances, stored as weak references */
     private final Map<ActivePanelListener, ?> activePanelListeners = Collections.synchronizedMap(new WeakHashMap<>());
@@ -273,8 +269,6 @@ public class MainFrame implements LocationListener {
         layeredPane.setLayer(verticalSplitPane, JLayeredPane.DEFAULT_LAYER);
         // Split pane will be given any extra space
         insetsPane.add(layeredPane, BorderLayout.CENTER);
-
-        terminalIntegration = new TerminalIntegration(this, verticalSplitPane);
 
         // Add a 2-pixel gap between the file table and status bar
         YBoxPanel southPanel = new YBoxPanel();
@@ -580,13 +574,6 @@ public class MainFrame implements LocationListener {
      */
     public ProportionalSplitPane getFoldersSplitPane() {
         return foldersSplitPane;
-    }
-
-    /**
-     * Toggles the Terminal, i.e., shows (maximized) or hides it (minimized)
-     */
-    public void toggleTerminal() {
-        terminalIntegration.toggleTerminal();
     }
 
     /**
