@@ -1,9 +1,0 @@
-repositories.mavenCentral()
-
-dependencies {
-    compileOnly project(':barebones-core-preload')
-
-    testImplementation 'org.testng:testng:7.11.0'
-}
-
-

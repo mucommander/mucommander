@@ -1,7 +1,5 @@
-apply plugin: 'java'
-
 repositories.mavenCentral()
 
 dependencies {
+    testImplementation(libs.testng)
 }
-

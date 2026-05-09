@@ -1,7 +1,0 @@
-repositories.mavenCentral()
-
-dependencies {
-    api project(':barebones-commons-io')
-
-    testImplementation 'org.testng:testng:7.11.0'
-}

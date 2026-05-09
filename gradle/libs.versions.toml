@@ -1,0 +1,87 @@
+[versions]
+# Logging
+slf4j = "2.0.17"
+logback = "1.5.32"
+
+# UI
+flatlaf = "3.5.4"
+rsyntaxtextarea = "3.6.2"
+
+# JNI / native
+jna = "5.16.0"
+
+# Apache Commons
+commons-collections4 = "4.5.0"
+commons-compress = "1.28.0"
+commons-lang3 = "3.20.0"
+xz = "1.9"
+
+# i18n
+icu4j = "78.3"
+
+# Misc
+jcommander = "1.82"
+json-smart = "2.6.0"
+unix4j-command = "0.6"
+snakeyaml = "2.4"
+dd-plist = "1.23"
+jsr305 = "1.3.9"
+jetbrains-annotations = "26.0.2-1"
+
+# Protocols
+jsch-mwiede = "0.2.26"
+
+# Test
+testng = "7.11.0"
+junit-bom = "5.14.1"
+
+# Constraint pins (transitive hygiene)
+okio = "3.11.0"
+kotlin-stdlib = "2.1.20"
+
+# Plugins
+grgit = "5.0.0"
+
+[libraries]
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+
+logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+
+flatlaf = { group = "com.formdev", name = "flatlaf", version.ref = "flatlaf" }
+rsyntaxtextarea = { group = "com.fifesoft", name = "rsyntaxtextarea", version.ref = "rsyntaxtextarea" }
+
+jna = { group = "net.java.dev.jna", name = "jna", version.ref = "jna" }
+jna-platform = { group = "net.java.dev.jna", name = "jna-platform", version.ref = "jna" }
+
+commons-collections4 = { group = "org.apache.commons", name = "commons-collections4", version.ref = "commons-collections4" }
+commons-compress = { group = "org.apache.commons", name = "commons-compress", version.ref = "commons-compress" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commons-lang3" }
+xz = { group = "org.tukaani", name = "xz", version.ref = "xz" }
+
+icu4j = { group = "com.ibm.icu", name = "icu4j", version.ref = "icu4j" }
+
+jcommander = { group = "com.beust", name = "jcommander", version.ref = "jcommander" }
+json-smart = { group = "net.minidev", name = "json-smart", version.ref = "json-smart" }
+unix4j-command = { group = "org.unix4j", name = "unix4j-command", version.ref = "unix4j-command" }
+snakeyaml = { group = "org.yaml", name = "snakeyaml", version.ref = "snakeyaml" }
+dd-plist = { group = "com.googlecode.plist", name = "dd-plist", version.ref = "dd-plist" }
+jsr305 = { group = "com.google.code.findbugs", name = "jsr305", version.ref = "jsr305" }
+jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations" }
+
+jsch-mwiede = { group = "com.github.mwiede", name = "jsch", version.ref = "jsch-mwiede" }
+
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
+junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit-bom" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+
+# Constraint pins
+okio-jvm = { group = "com.squareup.okio", name = "okio-jvm", version.ref = "okio" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin-stdlib" }
+kotlin-stdlib-jdk7 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk7", version.ref = "kotlin-stdlib" }
+kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin-stdlib" }
+kotlin-stdlib-common = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-common", version.ref = "kotlin-stdlib" }
+
+[plugins]
+grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
