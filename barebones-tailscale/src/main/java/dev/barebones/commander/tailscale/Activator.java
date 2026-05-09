@@ -8,15 +8,21 @@
  */
 package dev.barebones.commander.tailscale;
 
+import dev.barebones.commander.protocol.ui.ProtocolPanelRegistry;
+import dev.barebones.commander.tailscale.ui.TailscalePanelProvider;
+
 import java.nio.file.Path;
 
 /**
  * Phase-2-style static register() entry point. Locates the tailscale
  * binary on $PATH (or the macOS GUI install location); installs a
- * {@link TailscaleClient} on {@link TailscaleService} when found.
+ * {@link TailscaleClient} on {@link TailscaleService} when found, and
+ * registers the {@link TailscalePanelProvider} so the Connect-to-server
+ * dialog grows a "Tailscale" tab.
  *
- * No-op when tailscale is not installed — the UI hides Tailscale
- * menu items in that case.
+ * The tab still registers when tailscale is not installed — opening
+ * it then displays a clear "Tailscale not installed" message rather
+ * than throwing. UI parity with mount-helper's behaviour on Windows.
  */
 public final class Activator {
 
@@ -28,5 +34,6 @@ public final class Activator {
         if (binary != null) {
             TailscaleService.install(new TailscaleClient(binary));
         }
+        ProtocolPanelRegistry.register(new TailscalePanelProvider());
     }
 }

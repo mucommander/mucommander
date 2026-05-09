@@ -24,8 +24,9 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
 | **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
 | **9** | in flight | SAST in CI (SpotBugs + FindSecBugs PR-triggered + OWASP Dependency-Check weekly) | one PR |
-| **10a** | in flight | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). No UI integration yet. | one PR |
-| **10b** | pending | Connectivity UI: Swing dialogs that drive the Phase-10a services (mount dialog, peer-list panel, Taildrop send action, active-mounts management). | one PR |
+| **10a** | done | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). | landed in #13 |
+| **10b** | in flight | Connectivity UI tabs in the existing Connect-to-server dialog: `MountPanel` + `TailscalePeerPanel` registered via `ProtocolPanelRegistry`. | one PR |
+| **10c** | pending | Connectivity polish: SwingWorker wrapper for long-running mount calls, active-mounts management dialog, dedicated `TaildropSendAction`. | one PR |
 | **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
 | **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
 
@@ -432,7 +433,29 @@ user-supplied fields stay contained in their argv slot), `MountSpec`
 validation, `MountRegistry` mutual-exclusion, and `tailscale status
 --json` parsing against a real fixture.
 
-**Phase 10b** wires the backends into the existing UI:
+**Phase 10b** wires the backends into the existing UI as new tabs in
+the Connect-to-server dialog (Cmd-K / Ctrl-K), so the user discovers
+them through the existing remote-connect flow with no new menu
+plumbing:
+
+- `MountPanel` (new in `barebones-mount-helper`) — kind dropdown
+  (NFSv3/NFSv4/SMB/SSHFS), host / remote-path / mountpoint /
+  username / port fields. On Connect, calls
+  `MountService.executor().mount(spec)` synchronously and returns
+  `file:///<mountpoint>` so the active panel navigates into the
+  freshly-mounted directory. Records the mount in `MountRegistry`.
+- `TailscalePeerPanel` (new in `barebones-tailscale`) — lists peers
+  from `TailscaleService.client().peers()` plus a protocol selector
+  (SFTP / NFS / SMB). On Connect, returns
+  `<scheme>://<peer.dnsName>/` so the existing protocol stacks open
+  the chosen peer. Falls back to a clear "Tailscale not installed"
+  status when the binary isn't present.
+
+Both panels register via `ProtocolPanelRegistry.register(...)` from
+their module Activators. No changes to `ActionType`, `ActionManager`,
+or menu wiring needed.
+
+**Phase 10c** (deferred polish):
 
 **OS-level mount helper** — a small Swing dialog that:
 - Asks for a remote share URL / host / share-path / credentials.
@@ -465,10 +488,16 @@ SPIs in 10b):
 SpotBugs clean (no new entries in the Phase-9 baseline), Activator
 registration smoke-tested on Linux and macOS at app startup.
 
-**10b exit criteria** (deferred): app can mount an NFSv4 share on
-both Linux and macOS via the mount dialog and browse it; tailnet
-peer list populates from `tailscale status --json`; Taildrop send
-works in a manual smoke test.
+**10b exit criteria**: Connect-to-server dialog grows two tabs
+("Mount" + "Tailscale") on Linux and macOS startup. SpotBugs clean
+across both new panels (no entries in the Phase-9 baseline). Manual
+smoke test: mount an NFSv4 share and browse the local mountpoint;
+list tailnet peers and pick one to open via SFTP.
+
+**10c exit criteria** (deferred): mount runs off the EDT via
+SwingWorker; "Active mounts" dialog supports unmount per row;
+"Send via Taildrop" file-action ships a selected file to a chosen
+peer.
 
 ## 7. Compatibility with upstream
 

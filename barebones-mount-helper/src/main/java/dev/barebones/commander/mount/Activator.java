@@ -8,11 +8,15 @@
  */
 package dev.barebones.commander.mount;
 
+import dev.barebones.commander.mount.ui.MountPanelProvider;
+import dev.barebones.commander.protocol.ui.ProtocolPanelRegistry;
+
 /**
  * Phase-2-style static register() entry point. Called by Bootstrap on
  * startup. Picks the OS-appropriate {@link MountCommand} and stashes a
- * ready-to-use {@link MountExecutor} on {@link MountService}, so the
- * UI layer doesn't repeat the OS-detection switch.
+ * ready-to-use {@link MountExecutor} on {@link MountService}, then
+ * registers the {@link MountPanelProvider} so the Connect-to-server
+ * dialog grows a "Mount" tab.
  */
 public final class Activator {
 
@@ -28,10 +32,13 @@ public final class Activator {
             command = new LinuxMountCommand();
         } else {
             // Windows / OpenBSD / etc — Phase 10 targets Linux + macOS.
-            // Leave MountService.executor() returning null; the dialog
-            // layer should hide the "Mount remote share" menu item.
+            // Leave MountService.executor() returning null; the
+            // MountPanel still registers but its getServerURL throws
+            // a clear error if the user opens the tab on an
+            // unsupported OS.
             return;
         }
         MountService.install(new MountExecutor(command));
+        ProtocolPanelRegistry.register(new MountPanelProvider());
     }
 }
