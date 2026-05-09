@@ -17,9 +17,10 @@
 
 package dev.barebones.commander.ui.macos;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,40 +148,48 @@ public class AppleScript {
 
 
     /**
-     * This ProcessListener accumulates the output of the 'osascript' command and suppresses the trailing '\n' character
-     * from the script's output.
+     * This ProcessListener accumulates the raw bytes osascript writes to
+     * stdout and decodes the whole accumulated buffer once the process has
+     * exited.
+     *
+     * Why not decode each {@code processOutput(byte[], int, int)} call as
+     * it arrives: the pipe between osascript and us delivers stdout in
+     * timing-dependent chunks. A multi-byte UTF-8 character (a Japanese
+     * kana is 3 bytes) may straddle a chunk boundary; decoding each chunk
+     * independently then produces U+FFFD replacement characters where the
+     * bytes were split. That manifested as
+     * {@code AppleScriptTest.testScriptEncoding} flaking on the macOS-15
+     * GitHub runner — the same Japanese test passed locally because the
+     * short output usually arrives in one chunk.
      */
-    private static class ScriptOutputListener implements ProcessListener {
+    // Package-private so AppleScriptOutputDecodingTest can drive
+    // processOutput / processDied directly to prove the byte-buffering
+    // behaviour on chunk boundaries that fall mid-codepoint.
+    static class ScriptOutputListener implements ProcessListener {
 
-        private StringBuilder outputBuffer;
-        private String outputEncoding;
+        private final StringBuilder outputBuffer;
+        private final Charset outputEncoding;
+        private final ByteArrayOutputStream pending = new ByteArrayOutputStream();
 
         private ScriptOutputListener(StringBuilder outputBuffer, String outputEncoding) {
             this.outputBuffer = outputBuffer;
-            this.outputEncoding = outputEncoding;
+            this.outputEncoding = Charset.forName(outputEncoding);
         }
 
-        ////////////////////////////////////
-        // ProcessListener implementation //
-        ////////////////////////////////////
-
         public void processOutput(byte[] buffer, int offset, int length) {
-            try {
-                outputBuffer.append(new String(buffer, offset, length, outputEncoding));
-            }
-            catch(UnsupportedEncodingException e) {
-                // The encoding is necessarily supported
-            }
+            pending.write(buffer, offset, length);
         }
 
         public void processOutput(String s) {
         }
 
         public void processDied(int returnValue) {
+            outputBuffer.append(pending.toString(outputEncoding));
             // Remove the trailing "\n" character that osascript returns.
             int len = outputBuffer.length();
-            if(len>0 && outputBuffer.charAt(len-1)=='\n')
-                outputBuffer.setLength(len-1);    
+            if (len > 0 && outputBuffer.charAt(len - 1) == '\n') {
+                outputBuffer.setLength(len - 1);
+            }
         }
     }
 

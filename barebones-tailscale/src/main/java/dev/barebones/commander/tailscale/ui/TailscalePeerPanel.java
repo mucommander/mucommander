@@ -15,15 +15,19 @@ import dev.barebones.commander.tailscale.TailscaleClient;
 import dev.barebones.commander.tailscale.TailscalePeer;
 import dev.barebones.commander.tailscale.TailscaleService;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -119,7 +123,55 @@ public class TailscalePeerPanel extends ServerPanel {
         // Status at the bottom uses a panel to span the full width.
         javax.swing.JPanel statusRow = new javax.swing.JPanel(new BorderLayout());
         statusRow.add(statusLabel, BorderLayout.WEST);
-        addRow("Status", statusRow, 15);
+        addRow("Status", statusRow, 5);
+
+        // Taildrop send button — uses the selected peer plus a
+        // JFileChooser to pick the local file. Disabled when no
+        // peer is selected.
+        JButton taildropButton = new JButton("Send file via Taildrop…");
+        taildropButton.setEnabled(false);
+        taildropButton.addActionListener(e -> sendTaildrop());
+        peerList.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                taildropButton.setEnabled(peerList.getSelectedValue() != null
+                    && TailscaleService.client() != null);
+            }
+        });
+        addRow(" ", taildropButton, 0);
+    }
+
+    private void sendTaildrop() {
+        TailscalePeer peer = peerList.getSelectedValue();
+        TailscaleClient client = TailscaleService.client();
+        if (peer == null || client == null) return;
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Send file to " + peer.hostName() + " via Taildrop");
+        if (chooser.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        Path local = chooser.getSelectedFile().toPath();
+        try {
+            int code = client.sendFile(local, peer.dnsName());
+            if (code == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Queued " + local.getFileName() + " → " + peer.hostName() + " via Taildrop.",
+                    "Taildrop", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                    "tailscale file cp exited " + code,
+                    "Taildrop failed", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            JOptionPane.showMessageDialog(this,
+                "Taildrop send interrupted.",
+                "Taildrop failed", JOptionPane.WARNING_MESSAGE);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this,
+                "Taildrop send failed: " + ex.getMessage(),
+                "Taildrop failed", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void selectByLastDns(List<TailscalePeer> peers) {

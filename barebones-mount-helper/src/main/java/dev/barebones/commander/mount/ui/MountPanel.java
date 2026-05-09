@@ -17,16 +17,17 @@ import dev.barebones.commander.mount.MountSpec;
 import dev.barebones.commander.protocol.ui.ServerPanel;
 import dev.barebones.commander.protocol.ui.ServerPanelListener;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Connect-dialog tab for mounting a remote share via the OS mount
@@ -99,6 +100,13 @@ public class MountPanel extends ServerPanel {
 
         portSpinner = createPortSpinner(LAST.port);
         addRow("Port (SSHFS, 0 = default)", portSpinner, 15);
+
+        // Side-door into the active-mounts management dialog. Lives
+        // here so the user finds it where they originally mounted —
+        // no top-level menu / action plumbing needed.
+        JButton manageButton = new JButton("Manage active mounts…");
+        manageButton.addActionListener(e -> ActiveMountsDialog.open(mainFrame));
+        addRow(" ", manageButton, 0);
     }
 
     /** Phase-10 default mountpoint root: ~/.barebones-commander/mounts. */
@@ -138,12 +146,13 @@ public class MountPanel extends ServerPanel {
 
         MountResult result;
         try {
-            result = MountService.executor().mount(spec);
-        } catch (IOException | InterruptedException e) {
-            if (e instanceof InterruptedException) {
-                Thread.currentThread().interrupt();
-            }
-            throw new MalformedURLException("mount failed: " + e.getMessage());
+            result = MountTask.executeBlocking(mainFrame, MountService.executor(), spec);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new MalformedURLException("mount interrupted");
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            throw new MalformedURLException("mount failed: " + cause.getMessage());
         }
         if (!result.ok()) {
             throw new MalformedURLException(

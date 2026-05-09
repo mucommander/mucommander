@@ -26,7 +26,7 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **9** | in flight | SAST in CI (SpotBugs + FindSecBugs PR-triggered + OWASP Dependency-Check weekly) | one PR |
 | **10a** | done | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). | landed in #13 |
 | **10b** | in flight | Connectivity UI tabs in the existing Connect-to-server dialog: `MountPanel` + `TailscalePeerPanel` registered via `ProtocolPanelRegistry`. | one PR |
-| **10c** | pending | Connectivity polish: SwingWorker wrapper for long-running mount calls, active-mounts management dialog, dedicated `TaildropSendAction`. | one PR |
+| **10c** | in flight | Connectivity polish: SwingWorker wrapper for mount calls, active-mounts management dialog, Taildrop send button on the Tailscale tab. | one PR |
 | **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
 | **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
 
@@ -455,6 +455,30 @@ Both panels register via `ProtocolPanelRegistry.register(...)` from
 their module Activators. No changes to `ActionType`, `ActionManager`,
 or menu wiring needed.
 
+**Phase 10c** delivers connectivity polish entirely inside the
+mount-helper / tailscale modules — no `barebones-core` compile-time
+dep, no new `ActionType` entries, no menu wiring:
+
+- `MountTask` (`barebones-mount-helper`): SwingWorker that runs
+  `MountExecutor.mount(spec)` off the EDT and shows a small modal
+  "Mounting…" progress dialog while it works. The EDT keeps pumping
+  events (the indeterminate progress bar animates, the dialog
+  responds to window-close attempts).
+- `ActiveMountsDialog` (`barebones-mount-helper`): modal dialog
+  listing every entry in `MountRegistry.instance().active()` with
+  per-row Unmount; surfaces `umount` exit code + stderr on failure.
+  Opened from a "Manage active mounts…" button on the Mount tab.
+- Taildrop send button on the Tailscale tab: when a peer is
+  selected, opens a `JFileChooser`; on selection, calls
+  `TailscaleClient.sendFile(local, peer.dnsName())`. Failure
+  surfaced via `JOptionPane.showMessageDialog`.
+
+The deliberate non-choice: no top-level menu actions / keybindings.
+Adding actions would force a `compileOnly` dep on `barebones-core`
+(for `MuAction` / `ActionManager`) and an `ActionType` enum entry —
+real plumbing for marginal value when the buttons live exactly where
+the user already is.
+
 **Phase 10c** (deferred polish):
 
 **OS-level mount helper** — a small Swing dialog that:
@@ -494,10 +518,11 @@ across both new panels (no entries in the Phase-9 baseline). Manual
 smoke test: mount an NFSv4 share and browse the local mountpoint;
 list tailnet peers and pick one to open via SFTP.
 
-**10c exit criteria** (deferred): mount runs off the EDT via
-SwingWorker; "Active mounts" dialog supports unmount per row;
-"Send via Taildrop" file-action ships a selected file to a chosen
-peer.
+**10c exit criteria**: mount runs off the EDT via SwingWorker with
+a modal progress dialog; the Mount tab gains a "Manage active
+mounts…" button that opens an unmount-per-row dialog; the
+Tailscale tab gains a "Send file via Taildrop…" button. SpotBugs
+clean across all three additions (no entries in the Phase-9 baseline).
 
 ## 7. Compatibility with upstream
 
