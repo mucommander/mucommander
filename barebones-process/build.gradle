@@ -6,10 +6,6 @@
  * User Manual available at https://docs.gradle.org/5.4.1/userguide/java_library_plugin.html
  */
 
-plugins {
-    id 'biz.aQute.bnd.builder'
-}
-
 repositories.mavenCentral()
 
 dependencies {
@@ -21,23 +17,6 @@ dependencies {
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-process',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'Process related code',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Export-Package': 'dev.barebones.commander.ui.process',
-                'Import-Package': '*',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
-}
 
 test {
     useJUnitPlatform()

@@ -1,54 +1,37 @@
-/**
- * This file is part of muCommander, http://www.mucommander.com
+/*
+ * Copyright (C) 2002-2026 muCommander contributors
+ * Copyright (C) 2026 barebones-commander contributors
  *
- * muCommander is free software; you can redistribute it and/or modify
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * muCommander is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package dev.barebones.commander.desktop.macos;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-
 import dev.barebones.commander.desktop.DesktopAdapter;
 import dev.barebones.commander.osgi.OperatingSystemService;
+import dev.barebones.commander.osgi.OperatingSystemServiceTracker;
 
-public class Activator implements BundleActivator  {
+public final class Activator {
 
-    private ServiceRegistration<OperatingSystemService> osRegistration;
-    private CoreServiceTracker coreServiceTracker;
+    private Activator() {
+    }
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-        coreServiceTracker = new CoreServiceTracker(context);
-        coreServiceTracker.open();
-
-        OperatingSystemService service = new OperatingSystemService() {
+    public static void register() {
+        OperatingSystemServiceTracker.register(new OperatingSystemService() {
             @Override
             public List<DesktopAdapter> getDesktopAdapters() {
                 return Collections.singletonList(new OSXDesktopAdapter());
             }
-        };
-        osRegistration = context.registerService(OperatingSystemService.class, service, null);
-    }
-
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        coreServiceTracker.close();
-        osRegistration.unregister();
+        });
     }
 }

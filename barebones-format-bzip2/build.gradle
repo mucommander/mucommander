@@ -8,21 +8,4 @@ dependencies {
     testImplementation 'org.testng:testng:7.11.0'
 }
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-bzip2',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'Library with configuration tools',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Export-Package': 'dev.barebones.commander.commons.file.archive.bzip2',
-                'Bundle-Activator': 'dev.barebones.commander.commons.file.archive.bzip2.Activator',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
-}
 

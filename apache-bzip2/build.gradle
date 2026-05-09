@@ -1,20 +1,3 @@
 repositories.mavenCentral()
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-apache-bzip2',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'The org.apache.tools.bzip2 part of ant',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Export-Package': 'org.apache.tools.bzip2',
-                'Import-Package': '*',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
-}
 

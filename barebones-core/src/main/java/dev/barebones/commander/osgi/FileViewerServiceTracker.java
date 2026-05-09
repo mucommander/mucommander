@@ -1,18 +1,16 @@
-/**
- * This file is part of muCommander, http://www.mucommander.com
+/*
+ * Copyright (C) 2002-2026 muCommander contributors
+ * Copyright (C) 2026 barebones-commander contributors
  *
- * muCommander is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
- * muCommander is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * GNU General Public License for more details.
  */
 package dev.barebones.commander.osgi;
 
@@ -20,47 +18,34 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.barebones.commander.viewer.FileViewerService;
 
 /**
- * Registration tracker for file viewer service.
- *
- * @author Miroslav Hajda
+ * Static registry for {@link FileViewerService}. Was an OSGi
+ * {@code ServiceTracker} pre-Phase-2; is now a plain registry whose
+ * {@link #register(FileViewerService)} is called directly from each
+ * viewer module's bootstrap entry point.
  */
-public class FileViewerServiceTracker extends ServiceTracker<FileViewerService, FileViewerService> {
+public final class FileViewerServiceTracker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileViewerServiceTracker.class);
-
     private static final List<FileViewerService> SERVICES = new ArrayList<>();
 
-    public FileViewerServiceTracker(BundleContext context) {
-        super(context, FileViewerService.class, null);
+    private FileViewerServiceTracker() {
     }
 
-    @Override
-    public FileViewerService addingService(ServiceReference<FileViewerService> reference) {
-        FileViewerService service = super.addingService(reference);
-        FileViewerServiceTracker.addViewerService(service);
-        LOGGER.info("FileViewerService is registered: " + service);
-        return service;
-    }
-
-    @Override
-    public void removedService(ServiceReference<FileViewerService> reference, FileViewerService service) {
-        super.removedService(reference, service);
-        SERVICES.remove(service);
-        LOGGER.info("FileViewerService is unregistered: " + service);
-    }
-
-    private static void addViewerService(FileViewerService service) {
+    public static void register(FileViewerService service) {
         SERVICES.add(service);
         SERVICES.sort(Comparator.comparing(FileViewerService::getOrderPriority).reversed());
+        LOGGER.info("FileViewerService is registered: " + service);
+    }
+
+    public static void unregister(FileViewerService service) {
+        SERVICES.remove(service);
+        LOGGER.info("FileViewerService is unregistered: " + service);
     }
 
     public static List<FileViewerService> getViewerServices() {

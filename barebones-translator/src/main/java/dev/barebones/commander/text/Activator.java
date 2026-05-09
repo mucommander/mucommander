@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2002-2026 muCommander contributors
+ * Copyright (C) 2026 barebones-commander contributors
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ */
 package dev.barebones.commander.text;
 
 import java.io.IOException;
@@ -19,9 +33,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,72 +40,53 @@ import dev.barebones.commander.commons.util.LocaleUtils;
 import dev.barebones.commander.conf.MuConfigurations;
 import dev.barebones.commander.conf.MuPreference;
 
-public class Activator implements BundleActivator {
+public final class Activator {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Activator.class);
 
-    private static List<String> languageTags = Arrays.asList(
+    private static final List<String> LANGUAGE_TAGS = Arrays.asList(
             "ar","be","ca","cs","da","de","en","en-GB","es","fr", "it", "hu","ja","ko","nb","nl","pl","pt-BR","ro","ru","sk","sl","sv","tr","uk","zh-CN","zh-TW");
 
-    private static Utf8ResourceBundleControl utf8ResourceBundleControl = new Utf8ResourceBundleControl();
-    private ServiceRegistration<TranslationService> serviceRegistration;
+    private static final Utf8ResourceBundleControl UTF8_CONTROL = new Utf8ResourceBundleControl();
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-        List<Locale> availableLanguages = languageTags.stream().map(Locale::forLanguageTag).collect(Collectors.toList());
+    private Activator() {
+    }
+
+    public static void register() {
+        List<Locale> availableLanguages = LANGUAGE_TAGS.stream().map(Locale::forLanguageTag).collect(Collectors.toList());
         Locale locale = match(loadLocale(), availableLanguages);
         String languageTag = locale.toLanguageTag();
-        LOGGER.debug("Current language has been set to "+languageTag);
-        // Set preferred language in configuration file
+        LOGGER.debug("Current language has been set to " + languageTag);
         MuConfigurations.getPreferences().setVariable(MuPreference.LANGUAGE, languageTag);
 
         ResourceBundle dictionaryBundle = getDictionaryBundle(locale);
         ResourceBundle languagesBundle = getLanguageBundle(locale);
 
-        TranslationService translationService = new TranslationService() {
-            @Override
-            public ResourceBundle getLanguagesBundle() {
-                return languagesBundle;
-            }
-            
-            @Override
-            public ResourceBundle getDictionaryBundle() {
-                return dictionaryBundle;
-            }
-            @Override
-            public List<Locale> getAvailableLanguages() {
-                return availableLanguages;
-            }
-        };
-        serviceRegistration = context.registerService(TranslationService.class, translationService, null);
-    }
-
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        serviceRegistration.unregister();
+        TranslationTracker.register(new TranslationService() {
+            @Override public ResourceBundle getLanguagesBundle() { return languagesBundle; }
+            @Override public ResourceBundle getDictionaryBundle() { return dictionaryBundle; }
+            @Override public List<Locale> getAvailableLanguages() { return availableLanguages; }
+        });
     }
 
     static Locale loadLocale() {
         String localeNameFromConf = MuConfigurations.getPreferences().getVariable(MuPreference.LANGUAGE);
         if (localeNameFromConf == null) {
-            // language is not set in preferences, use system's language
-            // Try to match language with the system's language, only if the system's language
-            // has values in dictionary, otherwise use default language (English).
             Locale defaultLocale = Locale.getDefault();
-            LOGGER.info("Language not set in preferences, trying to match system's language ("+defaultLocale+")");
+            LOGGER.info("Language not set in preferences, trying to match system's language (" + defaultLocale + ")");
             return defaultLocale;
         }
-
-        LOGGER.info("Using language set in preferences: "+localeNameFromConf);
+        LOGGER.info("Using language set in preferences: " + localeNameFromConf);
         return LocaleUtils.forLanguageTag(localeNameFromConf);
     }
 
     static ResourceBundle getDictionaryBundle(Locale locale) {
-        ResourceBundle resourceBundle= ResourceBundle.getBundle("dictionary", locale, utf8ResourceBundleControl);
-        return new Activator.ResolveVariableResourceBundle(resourceBundle);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("dictionary", locale, UTF8_CONTROL);
+        return new ResolveVariableResourceBundle(resourceBundle);
     }
 
     static ResourceBundle getLanguageBundle(Locale locale) {
-        return ResourceBundle.getBundle("languages", utf8ResourceBundleControl);
+        return ResourceBundle.getBundle("languages", UTF8_CONTROL);
     }
 
     private static Locale match(Locale loadedLocale, List<Locale> availableLanguages) {
@@ -104,13 +96,11 @@ public class Activator implements BundleActivator {
                 LOGGER.info("Found exact match (language+country) for locale {}", locale);
                 return locale;
             }
-
         for (Locale locale : availableLanguages)
             if (locale.getLanguage().equals(loadedLocale.getLanguage())) {
                 LOGGER.info("Found close match (language) for locale {}", loadedLocale);
                 return locale;
             }
-
         LOGGER.info("Locale {} is not available, falling back to English", loadedLocale);
         return Locale.ENGLISH;
     }
@@ -119,49 +109,25 @@ public class Activator implements BundleActivator {
         @Override
         public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
                 throws IllegalAccessException, InstantiationException, IOException {
-
             String bundleName = toBundleName(baseName, locale);
             String resourceName = toResourceName(bundleName, "properties");
-
             URL resourceURL = loader.getResource(resourceName);
             if (resourceURL != null) {
                 try {
                     return new PropertyResourceBundle(new InputStreamReader(resourceURL.openStream(), StandardCharsets.UTF_8));
                 } catch (Exception e) {
-                    LOGGER.debug("Language "+locale+" failed to load, non english characters might be broken",e);
+                    LOGGER.debug("Language " + locale + " failed to load, non english characters might be broken", e);
                 }
             }
-
             return super.newBundle(baseName, locale, format, loader, reload);
         }
     }
 
-    /**
-     * Decorator allowing to resolve the values composed of variables.
-     */
     private static class ResolveVariableResourceBundle extends ResourceBundle {
-
-        /**
-         * Pattern corresponding to a variable.
-         */
         private static final Pattern VARIABLE = Pattern.compile("\\$\\[([^]]+)\\]");
-
-        /**
-         * The underlying resource bundle.
-         */
         private final ResourceBundle resourceBundle;
-
-        /**
-         * The cache containing the resolved values in case the original value contains at least
-         * one variable.
-         */
         private final Map<String, String> cache;
 
-        /**
-         * Constructs a {@code ResolveVariableResourceBundle} with the specified underlying
-         * {@link ResourceBundle}.
-         * @param resourceBundle The underlying {@link ResourceBundle}.
-         */
         ResolveVariableResourceBundle(final ResourceBundle resourceBundle) {
             this.resourceBundle = resourceBundle;
             this.cache = ResolveVariableResourceBundle.resolve(resourceBundle);
@@ -181,13 +147,8 @@ public class Activator implements BundleActivator {
             return resourceBundle.getKeys();
         }
 
-        /**
-         * Resolves all the values composed of variables.
-         * @param resourceBundle The {@code ResourceBundle} from which we extract the values to resolve.
-         * @return A {@code Map} containing all the values that have been resolved
-         */
         private static Map<String, String> resolve(final ResourceBundle resourceBundle) {
-            final Map<String, String> result = new HashMap<String, String>();
+            final Map<String, String> result = new HashMap<>();
             for (final Enumeration<String> enumeration = resourceBundle.getKeys(); enumeration.hasMoreElements(); ) {
                 final String key = enumeration.nextElement();
                 ResolveVariableResourceBundle.resolve(key, resourceBundle, result);
@@ -195,13 +156,6 @@ public class Activator implements BundleActivator {
             return Collections.unmodifiableMap(result);
         }
 
-        /**
-         * Resolves the value of the specified key if needed and stores the result in the specified map.
-         * @param key The key to resolve.
-         * @param resource The resource bundle from which we extract the value to resolve.
-         * @param map The map in which we store the result.
-         * @return The resolved value of the specified key.
-         */
         private static Object resolve(final String key, final ResourceBundle resource, final Map<String, String> map) {
             Object result = resource.getObject(key);
             if (result instanceof String) {

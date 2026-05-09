@@ -24,7 +24,7 @@ import java.awt.desktop.PreferencesEvent;
 import java.awt.desktop.QuitEvent;
 import java.awt.desktop.QuitResponse;
 
-import dev.barebones.commander.desktop.macos.CoreServiceTracker;
+import dev.barebones.commander.os.api.CoreServiceHolder;
 
 /**
  * This class registers the About, Preferences and Quit handlers.
@@ -42,21 +42,21 @@ class EAWTHandler {
     }
 
     private void showAbout(AboutEvent e) {
-        CoreServiceTracker.getCoreService().showAbout();
+        CoreServiceHolder.get().showAbout();
     }
 
     private void showPreferences(PreferencesEvent e) {
-        CoreServiceTracker.getCoreService().showPreferences();
+        CoreServiceHolder.get().showPreferences();
     }
 
     private void handleQuitRequestWith(final QuitEvent e, final QuitResponse response) {
-        if (CoreServiceTracker.getCoreService().doQuit())
+        if (CoreServiceHolder.get().doQuit())
             response.performQuit();
         else
             response.cancelQuit();
     }
 
     private void openFiles(final OpenFilesEvent e) {
-        CoreServiceTracker.getCoreService().openFile(e.getFiles().get(0).getAbsolutePath());
+        CoreServiceHolder.get().openFile(e.getFiles().get(0).getAbsolutePath());
     }
 }

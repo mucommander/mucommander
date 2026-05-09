@@ -1,24 +1,22 @@
-/**
- * This file is part of muCommander, http://www.mucommander.com
+/*
+ * Copyright (C) 2002-2026 muCommander contributors
+ * Copyright (C) 2026 barebones-commander contributors
  *
- * muCommander is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  *
- * muCommander is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package dev.barebones.commander.commons.file.osgi;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,29 +24,28 @@ import dev.barebones.commander.commons.file.FileFactory;
 import dev.barebones.commander.commons.file.FileURL;
 
 /**
- * @author Arik Hadas
+ * Static registration helper for protocol providers. Was an OSGi
+ * {@code ServiceTracker} pre-Phase-2; is now a thin wrapper around
+ * {@link FileFactory#registerProtocol} and {@link FileURL#registerHandler}
+ * that lets each protocol module register a {@link FileProtocolService}
+ * directly from its bootstrap entry point.
  */
-public class FileProtocolServiceTracker extends ServiceTracker<FileProtocolService, FileProtocolService> {
+public final class FileProtocolServiceTracker {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FileProtocolServiceTracker.class);
 
-    public FileProtocolServiceTracker(BundleContext context) {
-        super(context, FileProtocolService.class, null);
+    private FileProtocolServiceTracker() {
     }
 
-    @Override
-    public FileProtocolService addingService(ServiceReference<FileProtocolService> reference) {
-        FileProtocolService service = super.addingService(reference);
+    public static void register(FileProtocolService service) {
         FileFactory.registerProtocol(service.getSchema(), service.getProtocolProvider());
         FileURL.registerHandler(service.getSchema(), service.getSchemeHandler());
         LOGGER.info("FileProtocolService is registered: " + service);
-        return service;
     }
 
-    @Override
-    public void removedService(ServiceReference<FileProtocolService> reference, FileProtocolService service) {
+    public static void unregister(FileProtocolService service) {
         FileFactory.unregisterProtocol(service.getSchema());
         FileURL.unregisterHandler(service.getSchema());
-        super.removedService(reference, service);
         LOGGER.info("FileProtocolService is unregistered: " + service);
     }
 }

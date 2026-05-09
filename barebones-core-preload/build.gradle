@@ -5,21 +5,3 @@ repositories.mavenCentral()
 dependencies {
 }
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-core-preload',
-                'Bundle-Description': 'Preloader for swing JFrame etc for faster core start-up',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Export-Package': 'dev.barebones.commander.preload',
-                'Bundle-Activator': 'dev.barebones.commander.preload.Activator',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd')
-        )
-    }
-}

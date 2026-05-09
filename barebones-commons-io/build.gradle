@@ -1,35 +1,10 @@
 repositories.mavenCentral()
 
 dependencies {
-    comprise 'com.ibm.icu:icu4j:78.3'
+    implementation 'com.ibm.icu:icu4j:78.3'
 
     testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-        include 'com/ibm/icu/text/**'
-    } }
-
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-commons-io',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'Library with I/O tools',
-                'Import-Package':
-                        '!com.ibm.icu.*,' +
-                                '!dev.barebones.commander.commons.io.bom,' +
-                                ' *',
-                'Export-Package':
-                        'dev.barebones.commander.commons.io,' +
-                                'dev.barebones.commander.commons.io.base64,' +
-                                'dev.barebones.commander.commons.io.bom,' +
-                                'dev.barebones.commander.commons.io.security',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
 }

@@ -1,22 +1,8 @@
-buildscript {
-  repositories {
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:7.1.0'
-    classpath files('libs/barebones-gradle-macappbundle.jar')
-  }
-}
-
 plugins {
-    id 'com.athaydes.osgi-run' version '1.6.0'
     id 'java'
+    id 'application'
     id 'org.ajoberstar.grgit' version '5.0.0'
 }
-
-// This is the only syntax that appears to work for a local plugin
-// TODO: replace this with an official release of gradle-macappbundle
-apply plugin: 'edu.sc.seis.macAppBundle'
 
 allprojects {
     tasks.withType(JavaCompile).configureEach {
@@ -26,9 +12,6 @@ allprojects {
     group = 'dev.barebones.commander'
     version = '0.1.0-SNAPSHOT'
     ext.release = 'snapshot'
-    configurations {
-        compileOnly.extendsFrom comprise
-    }
 }
 
 task printFullVersionName {
@@ -42,14 +25,12 @@ task printVersionName {
 repositories.mavenCentral()
 
 subprojects {
-    apply plugin: 'biz.aQute.bnd.builder'
     apply plugin: 'java-library'
     compileJava.options.compilerArgs += ['--release', '11']
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
     dependencies {
         implementation 'org.slf4j:slf4j-api:1.7.36'
-        implementation 'org.osgi:osgi.core:8.0.0'
         constraints {
             implementation 'com.squareup.okio:okio-jvm:3.11.0'
             implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.1.20'
@@ -64,124 +45,61 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 compileJava.options.compilerArgs += ['--release', '11']
 
+application {
+    mainClass = 'dev.barebones.commander.bootstrap.Main'
+}
+
 dependencies {
-    comprise 'org.apache.felix:org.apache.felix.main:7.0.5'
-    comprise 'com.beust:jcommander:1.82'
-    comprise 'com.formdev:flatlaf:2.6'
+    implementation 'com.beust:jcommander:1.82'
+    implementation 'com.formdev:flatlaf:2.6'
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
-    osgiRuntime project('barebones-core')
-    osgiRuntime project('barebones-command')
-    osgiRuntime project('barebones-commons-collections')
-    osgiRuntime project('barebones-commons-conf')
-    osgiRuntime project('barebones-commons-file')
-    osgiRuntime project('barebones-commons-io')
-    osgiRuntime project('barebones-commons-runtime')
-    osgiRuntime project('barebones-core-preload')
-    osgiRuntime project('apache-bzip2')
-    osgiRuntime project('barebones-encoding')
-    osgiRuntime project('barebones-preferences')
-    osgiRuntime project('barebones-process')
-    osgiRuntime project('barebones-translator')
-
-    osgiRuntime project('barebones-protocol-sftp')
-    osgiRuntime project('barebones-protocol-s3')
-    osgiRuntime project('barebones-protocol-nfs')
-
-    osgiRuntime project('barebones-format-zip')
-    osgiRuntime project('barebones-format-tar')
-    osgiRuntime project('barebones-format-bzip2')
-    osgiRuntime project('barebones-format-gzip')
-    osgiRuntime project('barebones-format-xz')
-    osgiRuntime project('barebones-archiver')
-
-    osgiRuntime project('barebones-viewer-text')
-
-    osgiRuntime project('barebones-os-api')
-    osgiRuntime project('barebones-os-macos')
-    osgiRuntime project('barebones-os-linux')
-}
-
-createBundlesDir.doLast {
-   ant.move file: "${buildDir}/osgi/bundle/${project('barebones-core').jar.archiveFileName.get()}",
-            todir: "${buildDir}/osgi/app"
-   copy {
-       from "build/libs"
-       include project(':').jar.archiveFileName.get()
-       into "${buildDir}/osgi"
-   }
-   copy {
-       from "package"
-       include "logback.xml"
-       into "${buildDir}/osgi/conf"
-   }
-}
-
-runOsgi {
-    javaArgs = '-Djava.library.path=/usr/local/lib' // for Libguestfs
-    
-    // see: https://github.com/mucommander/mucommander/issues/1372
-    javaArgs += ' -Dsun.java2d.metal=false' // (use -Dsun.java2d.metal=true to debug)
-    javaArgs += ' -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1' // faster start
-
-    def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
-    if (project.hasProperty('debug')) {
-        logger.info('Lauching barebones-commander in debug mode...')
-        javaArgs += " -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
-    }
-
-    javaArgs += ' --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
-            --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
-            --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
-            --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-            --add-opens java.base/java.io=ALL-UNNAMED \
-            --add-opens java.base/java.net=ALL-UNNAMED \
-            --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
-            --add-opens java.management/javax.management=ALL-UNNAMED \
-            --add-opens java.rmi/java.rmi=ALL-UNNAMED \
-            --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
-            --add-opens java.sql/java.sql=ALL-UNNAMED \
-            --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-            --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-            --add-opens barebones.command/dev.barebones.commander.command=ALL-UNNAMED'
-    configSettings = 'felix'
-    osgiMain = project(':')
-    config += [
-        'org.osgi.framework.storage': 'felix-cache',
-        'felix.auto.deploy.dir': 'bundle',
-        'barebones.app.dir': 'app',
-        'barebones.conf.dir': 'conf',
-    ]
-    wrapInstructions {
-        manifest("httpclient.*") {
-            // enable httpclient to instantiate factories that reside in jets3t (S3 module)
-            instruction 'DynamicImport-Package', 'org.jets3t.service.utils', '*'
-        }
-    }
-}
-
-task run(dependsOn: 'runOsgi') {
-    group = 'Run'
-    description = 'Runs barebones-commander from sources (basically a shorthand for runOsgi task), optional parameters: -Pdebug=5005 -Psuspend=n'
+    // Compile-time deps for the new Bootstrap launcher in
+    // src/main/java/dev/barebones/commander/bootstrap/. Bootstrap.java
+    // imports LocalBundleContext from barebones-commons-file; it discovers
+    // every other module's Activator class by FQN at runtime via
+    // Class.forName, so non-commons-file subprojects only need to be on
+    // the runtime classpath.
+    implementation project(':barebones-commons-file')
+    runtimeOnly project(':barebones-core')
+    runtimeOnly project(':barebones-command')
+    runtimeOnly project(':barebones-commons-collections')
+    runtimeOnly project(':barebones-commons-conf')
+    runtimeOnly project(':barebones-commons-io')
+    runtimeOnly project(':barebones-commons-runtime')
+    runtimeOnly project(':barebones-core-preload')
+    runtimeOnly project(':apache-bzip2')
+    runtimeOnly project(':barebones-encoding')
+    runtimeOnly project(':barebones-preferences')
+    runtimeOnly project(':barebones-process')
+    runtimeOnly project(':barebones-translator')
+    runtimeOnly project(':barebones-protocol-sftp')
+    runtimeOnly project(':barebones-protocol-s3')
+    runtimeOnly project(':barebones-protocol-nfs')
+    runtimeOnly project(':barebones-format-zip')
+    runtimeOnly project(':barebones-format-tar')
+    runtimeOnly project(':barebones-format-bzip2')
+    runtimeOnly project(':barebones-format-gzip')
+    runtimeOnly project(':barebones-format-xz')
+    runtimeOnly project(':barebones-archiver')
+    runtimeOnly project(':barebones-viewer-text')
+    runtimeOnly project(':barebones-os-api')
+    runtimeOnly project(':barebones-os-macos')
+    runtimeOnly project(':barebones-os-linux')
 }
 
 ext {
-    // Open the Git repository in the project's root directory.
     git = grgit.open(dir: project.rootDir)
-    // Get commit id of HEAD.
     revision = project.hasProperty('revision') ? revision : git.head().id.substring(0, 7)
-    // Whether or not to bundle the JRE in order to create a 'standalone' executable
-    bundleJRE = project.hasProperty('mucommanderBundleJRE') ? mucommanderBundleJRE.toBoolean() : false
-    arch = project.hasProperty('arch') ? arch : System.getProperty('os.arch') // defaults to system architecture
+    arch = project.hasProperty('arch') ? arch : System.getProperty('os.arch')
     identity = project.hasProperty('identity') ? identity : ""
 }
 
 jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes("Main-Class": "dev.barebones.commander.main.muCommander",
+        attributes("Main-Class": "dev.barebones.commander.bootstrap.Main",
                    "Specification-Title": "barebones-commander",
                    "Specification-Vendor": "barebones-commander contributors",
                    "Specification-Version": project.version,
@@ -194,383 +112,28 @@ jar {
 
 test.useTestNG()
 
-import org.apache.tools.ant.filters.ReplaceTokens
-
-// Unix packaging
-task tgz(dependsOn: createBundlesDir, type: Tar) {
-    group = 'Installer'
-    description = 'Creates TGZ unix package'
-
-    from ("$buildDir/osgi") {
-        include '*.jar'
+// Single fat-jar packaging for `java -jar barebones-commander.jar`.
+// Bundles everything on the runtime classpath into the root jar.
+tasks.register('fatJar', Jar) {
+    group = 'build'
+    description = 'Builds a single self-contained jar with all runtime deps.'
+    archiveClassifier = 'all'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes("Main-Class": "dev.barebones.commander.bootstrap.Main",
+                   "Specification-Title": "barebones-commander",
+                   "Specification-Vendor": "barebones-commander contributors",
+                   "Specification-Version": project.version,
+                   "Implementation-Title": "barebones-commander",
+                   "Implementation-Vendor": "barebones-commander contributors",
+                   "Implementation-Version": revision,
+                   "Build-Date": new Date().format('yyyyMMdd'))
     }
-    from ('package') { include 'license.txt', 'readme.txt' }
-    def tempDir = File.createTempDir()
-    tempDir.deleteOnExit()
-    from ({ new File(temporaryDir, 'felix-cache').mkdirs(); temporaryDir }) {
-        include 'felix-cache'
-        dirMode 0777
+    from sourceSets.main.output
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    from ('package/unix/barebones-commander.sh') {
-        filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
-    }
-    into ""
-
-    from ("$buildDir/osgi/bundle") {
-        include '*.jar'
-        exclude 'osgiaas*'
-        exclude 'jline*'
-        exclude 'junit*'
-        exclude 'hamcrest*'
-        exclude 'barebones-os-win*'
-        exclude 'barebones-os-macos*'
-        exclude 'barebones-os-openvms*'
-        into 'bundle'
-    }
-    from ("$buildDir/osgi/app") {
-        include '*.jar'
-        into 'app'
-    }
-    from ("$buildDir/osgi/conf") {
-        include '*'
-        into 'conf'
-    }
-
-    archiveExtension = 'tgz'
-    compression = Compression.GZIP
-    archiveVersion = project.version+'-'+project.ext.release
-}
-
-task(afterEclipseImport).doLast {
-    File f = file('.settings/org.eclipse.core.resources.prefs')
-    f.write('eclipse.preferences.version=1\n')
-    f.append('encoding//src/main/resources/languages.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ar.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_be.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ca.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_cs.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_da.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_de.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_en.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_en_GB.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_es.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_fr.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_hu.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_it.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ja.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ko.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_nb.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_nl.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_pl.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_pt_BR.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ro.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ru.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_sk.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_sl.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_sv.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_tr.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ua.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
-}
-
-task macAppImage(dependsOn: 'createBundlesDir', type: Exec) {
-    workingDir "${projectDir}"
-
-
-    def jpackageCommand = [
-                'jpackage', \
-                '--input', 'build/osgi/', \
-                '--name', 'barebones-commander', \
-                '--app-version', project.version, \
-                '--icon', 'package/osx/icon.icns', \
-                '--main-jar', 'barebones-'+project.version+'.jar', \
-                '--main-class', 'dev.barebones.commander.main.muCommander', \
-                '--runtime-image', 'jre/macOS/'+project.ext.arch, \
-                '--java-options', '\
-                         -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=false -Dsun.java2d.metal=false \
-                         -Dapple.awt.enableTemplateImages=true \
-                         -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
-                        --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
-                        --add-exports java.desktop/com.apple.eio=ALL-UNNAMED \
-                        --add-exports java.desktop/com.apple.eawt=ALL-UNNAMED \
-                        --add-exports jdk.security.jgss/com.sun.security.jgss=ALL-UNNAMED \
-                        --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-                        --add-opens java.base/java.io=ALL-UNNAMED \
-                        --add-opens java.base/java.net=ALL-UNNAMED \
-                        --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
-                        --add-opens java.management/javax.management=ALL-UNNAMED \
-                        --add-opens java.rmi/java.rmi=ALL-UNNAMED \
-                        --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
-                        --add-opens java.sql/java.sql=ALL-UNNAMED \
-                        --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-                        --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED', \
-                '--mac-package-identifier', 'dev.barebones.commander.app', \
-                '--type', 'app-image', \
-                '--dest', "${buildDir}", \
-                '--mac-package-signing-prefix', 'dev.barebones.commander.', \
-                '--mac-signing-key-user-name', project.ext.identity, \
-                '--verbose'
-    ]
-
-    // skip signing if gradle invoked with -PskipDmgSign (for dev purposes only)
-    if (!project.hasProperty('skipDmgSign')) {
-      jpackageCommand += '--mac-sign'
-    }
-
-    commandLine jpackageCommand
-
-    doLast {
-       copy {
-          from "package"
-          include "readme.txt"
-          into "${buildDir}/barebones-commander.app/Contents/Resources"
-       }
-       delete("${buildDir}/barebones-commander.app/Contents/app/run.bat")
-       delete("${buildDir}/barebones-commander.app/Contents/app/run.sh")
-       delete("${buildDir}/barebones-commander.app/Contents/app/system-libs")
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'osgiaas*')
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'jline*')
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'junit*')
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'hamcrest*')
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'barebones-os-linux*')
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'barebones-os-win*')
-       delete fileTree(dir: "${buildDir}/barebones-commander.app/Contents/app/bundle/", include: 'barebones-os-openvms*')
-       exec {
-          executable "package/osx/barebones-commander-post-image.sh"
-       }
-       if (project.ext.identity?.trim()) {
-         exec {
-           workingDir "${rootDir}"
-           executable 'java'
-           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/barebones-commander.app/Contents/app/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
-         }
-         exec {
-           workingDir "${rootDir}"
-           executable 'java'
-           args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/barebones-commander.app/Contents/app", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
-         }
-         exec {
-           workingDir "${rootDir}"
-           executable '/usr/bin/codesign'
-           args '--entitlements', 'package/osx/barebones-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/barebones-commander.app/Contents/MacOS/barebones-commander"
-         }
-         exec {
-           workingDir "${rootDir}"
-           executable '/usr/bin/codesign'
-           args '--entitlements', 'package/osx/barebones-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/barebones-commander.app"
-         }
-       }
-    }
-}
-
-task dmg(dependsOn: 'macAppImage', type: Exec) {
-    group = 'Installer'
-    description = 'Creates DMG macOS package (use -PskipDmgSign to create DMG without signing)'
-
-    workingDir "${projectDir}"
-    commandLine 'jpackage', \
-                '--app-image', "${buildDir}/barebones-commander.app", \
-                '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
-                '--license-file', 'package/license.txt', \
-                '--about-url', 'https://github.com/e6qu/barebones-commander', \
-                '--dest', "${buildDir}/distributions"
-}
-
-task linuxAppImage(dependsOn: 'createBundlesDir', type: Exec) {
-    workingDir "${projectDir}"
-    commandLine 'jpackage', \
-                '--input', 'build/osgi/', \
-                '--name', 'barebones-commander', \
-                '--app-version', project.version, \
-                '--main-jar', 'barebones-'+project.version+'.jar', \
-                '--main-class', 'dev.barebones.commander.main.muCommander', \
-                '--java-options', '--add-opens java.base/java.io=ALL-UNNAMED \
-                                   --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED \
-                                   --add-opens java.base/java.net=ALL-UNNAMED \
-                                   --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
-                                   --add-opens java.transaction.xa/javax.transaction.xa=ALL-UNNAMED \
-                                   --add-opens java.management/javax.management=ALL-UNNAMED \
-                                   --add-opens java.rmi/java.rmi=ALL-UNNAMED \
-                                   --add-opens java.security.jgss/org.ietf.jgss=ALL-UNNAMED \
-                                   --add-opens java.sql/java.sql=ALL-UNNAMED \
-                                   --add-opens java.base/sun.net.www.protocol.http=ALL-UNNAMED \
-                                   --add-opens java.base/sun.net.www.protocol.https=ALL-UNNAMED \
-                                   --add-opens jdk.httpserver/com.sun.net.httpserver=ALL-UNNAMED \
-                                   --add-opens java.compiler/javax.lang.model.element=ALL-UNNAMED', \
-                '--type', 'app-image', \
-                '--runtime-image', 'jre/linux/'+project.ext.arch, \
-                '--dest', "${buildDir}"
-    doLast {
-        copy {
-           from "package"
-           include "license.txt"
-           include "readme.txt"
-           into "${buildDir}/barebones-commander/lib/app"
-        }
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'osgiaas*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'jline*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'junit*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'hamcrest*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'barebones-os-win*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'barebones-os-macos*')
-        delete fileTree(dir: "${buildDir}/barebones-commander/lib/app/bundle/", include: 'barebones-os-openvms*')
-        delete("${buildDir}/barebones-commander/lib/app/run.bat")
-        delete("${buildDir}/barebones-commander/lib/app/run.sh")
-        delete("${buildDir}/barebones-commander/lib/app/system-libs")
-    }
-}
-
-task rpm(dependsOn: 'linuxAppImage', type: Exec) {
-    group = 'Installer'
-    description = 'Creates RPM linux package'
-
-    workingDir "${projectDir}"
-    commandLine 'jpackage', \
-                '--type', 'rpm', \
-                '--app-image', "${buildDir}/barebones-commander", \
-                '--app-version', project.version, \
-                '--license-file', 'package/license.txt', \
-                '--about-url', 'https://github.com/e6qu/barebones-commander', \
-                '--dest', "${buildDir}/distributions", \
-                '--icon', 'barebones-core/src/main/resources/images/mucommander/icon128_24.png', \
-                '--linux-app-category', 'Application;FileManager;Utility;'
-}
-
-
-task deb(dependsOn: 'linuxAppImage', type: Exec) {
-    group = 'Installer'
-    description = 'Creates DEB linux package'
-
-    workingDir "${projectDir}"
-    commandLine 'jpackage', \
-                '--type', 'deb', \
-                '--description', 'a lightweight, cross-platform file manager', \
-                '--app-image', "${buildDir}/barebones-commander", \
-                '--app-version', project.version, \
-                '--license-file', 'package/license.txt', \
-                '--about-url', 'https://github.com/e6qu/barebones-commander', \
-                '--dest', "${buildDir}/distributions", \
-                '--icon', 'barebones-core/src/main/resources/images/mucommander/icon128_24.png', \
-                '--linux-deb-maintainer', 'noreply@e6qu.dev', \
-                '--linux-app-category', 'utils', \
-                '--linux-shortcut', \
-                '--linux-menu-group', 'Application;FileManager;Utility;'
-}
-
-configurations.default.canBeResolved=true
-
-macAppBundle {
-    appName = "barebones-commander"
-    dmgName = 'barebones-commander-'+project.version+'-'+project.ext.release+'-noarch'
-    mainClassName = "dev.barebones.commander.main.muCommander"
-    appStyle = "universalJavaApplicationStub"
-    bundleJRE = false
-    bundleIdentifier = "dev.barebones.commander.app"
-    jvmVersion = "1.6+"
-    icon = "package/osx/icon.icns"
-    bundleAllowMixedLocalizations = "true"
-    bundleExtras.put("NSHighResolutionCapable", "true")
-    bundleExtras.put("NSSupportsAutomaticGraphicsSwitching", "true")
-    backgroundImage = "package/osx/bg.gif"
-    backgroundImageWidth = 450
-    backgroundImageHeight = 475
-    appIconX = 225
-    appIconY = 75
-    appFolderX = 225
-    appFolderY = 350
-    backgroundScript = """
-    tell application "Finder"
-      tell disk "\${VOL_NAME}"
-           open
-           set current view of container window to icon view
-           set toolbar visible of container window to false
-           set statusbar visible of container window to false
-           set the bounds of container window to { 0, 0, \${IMAGE_WIDTH}, \${IMAGE_HEIGHT} }
-           set the position of the container window to {400, 100}
-           set viewOptions to the icon view options of container window
-           set arrangement of viewOptions to not arranged
-           set icon size of viewOptions to 72
-           set background picture of viewOptions to file ".background:\${DMG_BACKGROUND_IMG}"
-           set position of item "\${APP_NAME}.app" of container window to { \${APPICONX}, \${APPICONY} }
-           set position of item "Applications" of container window to { \${APPFOLDERX}, \${APPFOLDERY} }
-           close
-           open
-           update without registering applications
-           delay 2
-      end tell
-    end tell
-    """
-
-    if (!project.hasProperty('skipDmgSign') && project.ext.identity?.trim()) {
-        certIdentity = project.ext.identity
-    }
-    javaProperties.put("com.apple.smallTabs", "true")
-    javaProperties.put("com.apple.hwaccel", "true")
-    javaProperties.put("apple.laf.useScreenMenuBar", "true")
-    javaProperties.put("file.encoding", "UTF-8")
-    javaProperties.put("sun.java2d.d3d", "false")
-    javaProperties.put("sun.java2d.noddraw", "false")
-    javaProperties.put("sun.java2d.metal", "false") // see: https://github.com/mucommander/mucommander/issues/1372
-    javaProperties.put("apple.awt.enableTemplateImages", "true")
-    javaProperties.put("-Xshare:auto", null)
-    javaProperties.put("-XX:-UsePerfData", null)
-    javaProperties.put("-XX:+TieredCompilation", null)
-    javaProperties.put("-XX:TieredStopAtLevel=1", null)
-    javaExtrasList.add("--add-exports")
-    javaExtrasList.add("java.desktop/com.apple.laf=ALL-UNNAMED")
-    javaExtrasList.add("--add-exports")
-    javaExtrasList.add("java.desktop/com.apple.eio=ALL-UNNAMED")
-    javaExtrasList.add("--add-exports")
-    javaExtrasList.add("java.desktop/com.apple.eawt=ALL-UNNAMED")
-    javaExtrasList.add("--add-exports")
-    javaExtrasList.add("jdk.security.jgss/com.sun.security.jgss=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.desktop/javax.swing.plaf.basic=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.base/java.io=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.base/java.net=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.transaction.xa/javax.transaction.xa=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.management/javax.management=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.rmi/java.rmi=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.security.jgss/org.ietf.jgss=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.sql/java.sql=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.base/sun.net.www.protocol.http=ALL-UNNAMED")
-    javaExtrasList.add("--add-opens")
-    javaExtrasList.add("java.base/sun.net.www.protocol.https=ALL-UNNAMED")
-}
-
-copyToResourcesJava.dependsOn createBundlesDir
-copyToResourcesJava.doLast {
-    copy {
-        from "build/osgi"
-        include 'app/**'
-        include 'bundle/**'
-        include 'conf/**'
-        exclude 'bundle/osgiaas*'
-        exclude 'bundle/jline*'
-        exclude 'bundle/barebones-os-linux*'
-        exclude 'bundle/barebones-os-openvms*'
-        exclude 'bundle/barebones-os-win*'
-        into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
-    }
-    if (project.ext.identity?.trim()) {
-      exec {
-        workingDir "${rootDir}"
-        executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
-      }
-      exec {
-        workingDir "${rootDir}"
-        executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/barebones-entitlements'
-      }
-   }
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
 }

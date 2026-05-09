@@ -9,21 +9,4 @@ dependencies {
     testImplementation 'org.testng:testng:7.11.0'
 }
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-xz',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'Library for supporting files in the XZ format',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Export-Package': 'dev.barebones.commander.commons.file.archive.xz',
-                'Bundle-Activator': 'dev.barebones.commander.commons.file.archive.xz.Activator',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "Giorgos Retsinas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
-}
 

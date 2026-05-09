@@ -1,48 +1,40 @@
-/**
- * This file is part of muCommander, http://www.mucommander.com
+/*
+ * Copyright (C) 2002-2026 muCommander contributors
+ * Copyright (C) 2026 barebones-commander contributors
  *
- * muCommander is free software; you can redistribute it and/or modify
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * muCommander is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package dev.barebones.commander.preload;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+public final class Activator {
 
-public class Activator implements BundleActivator {
+    private Activator() {
+    }
 
-    @Override
-    public void start(BundleContext context) throws Exception {
+    public static void register() {
         setWMClass();
         PreloadedJFrame.init();
     }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-    }
-
-     /**
+    /**
      * Sets the WM_CLASS for Linux window managers.
      */
-     private static void setWMClass() {
+    private static void setWMClass() {
         try {
             java.awt.Toolkit toolkit = java.awt.Toolkit.getDefaultToolkit();
             java.lang.reflect.Field awtAppClassNameField = toolkit.getClass().getDeclaredField("awtAppClassName");
             awtAppClassNameField.setAccessible(true);
-            awtAppClassNameField.set(null, "mucommander-muCommander");
+            awtAppClassNameField.set(null, "barebones-commander");
         } catch (NoSuchFieldException e) {
             // Not running on X11/Linux, or field doesn't exist in this JDK version
-            System.out.println("DEBUG: Could not set WM_CLASS - field not found (probably not Linux/X11)");
         } catch (IllegalAccessException e) {
             System.err.println("Warning: Could not set WM_CLASS due to access restrictions: " + e.getMessage());
         } catch (Exception e) {

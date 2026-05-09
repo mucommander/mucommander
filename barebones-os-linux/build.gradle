@@ -7,7 +7,6 @@
  */
 
  plugins {
-     id 'biz.aQute.bnd.builder'
  }
  
  repositories.mavenCentral()
@@ -23,24 +22,6 @@
      testRuntimeOnly('org.junit.platform:junit-platform-launcher')
  }
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-os-linux',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'Linux specifics',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Bundle-Activator': 'dev.barebones.commander.desktop.linux.Activator',
-                'Export-Package': 'dev.barebones.commander.ui.process',
-                'Import-Package': '*',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
-}
 
 test {
     useJUnitPlatform()

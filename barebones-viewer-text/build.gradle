@@ -10,28 +10,11 @@ dependencies {
     api project(":barebones-preferences")
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
-    comprise group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.6.2'
+    implementation group: 'com.fifesoft', name: 'rsyntaxtextarea', version: '3.6.2'
 
     testImplementation 'org.testng:testng:7.11.0'
 }
 
 jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it)}
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-viewer-text',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'Library for textual viewer/editor',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Export-Package': 'dev.barebones.commander.viewer.text',
-                'Import-Package': 'dev.barebones.commander.ui.text,dev.barebones.commander.search,org.fife.ui.rsyntaxtextarea;resolution:=dynamic,*',
-                'Bundle-Activator': 'dev.barebones.commander.viewer.text.Activator',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
 }

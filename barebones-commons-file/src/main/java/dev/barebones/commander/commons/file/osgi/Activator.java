@@ -1,44 +1,32 @@
-/**
- * This file is part of muCommander, http://www.mucommander.com
+/*
+ * Copyright (C) 2002-2026 muCommander contributors
+ * Copyright (C) 2026 barebones-commander contributors
  *
- * muCommander is free software; you can redistribute it and/or modify
+ * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * muCommander is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package dev.barebones.commander.commons.file.osgi;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-
 /**
- * @author Arik Hadas
+ * Pre-Phase-2 this opened the protocol / format service trackers as the
+ * commons-file OSGi bundle started. Now both trackers are static
+ * registries (see {@link FileProtocolServiceTracker} and
+ * {@link FileFormatServiceTracker}), so this class is just a no-op left
+ * in place for symmetry with the other modules.
  */
-public class Activator implements BundleActivator {
+public final class Activator {
 
-    FileProtocolServiceTracker protocolstracker;
-    FileFormatServiceTracker formatsTracker;
-
-    @Override
-    public void start(BundleContext context) throws Exception {
-        protocolstracker = new FileProtocolServiceTracker(context);
-        protocolstracker.open();
-        formatsTracker = new FileFormatServiceTracker(context);
-        formatsTracker.open();
+    private Activator() {
     }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-        protocolstracker.close();
-        formatsTracker.close();
+    public static void register() {
+        // No-op. Static registries replace the dynamic trackers.
     }
-
 }

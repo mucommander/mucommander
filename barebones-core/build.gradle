@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.apache.commons:commons-collections4:4.5.0'
     implementation 'net.minidev:json-smart:2.4.10'
 
-    comprise 'org.unix4j:unix4j-command:0.6'
+    implementation 'org.unix4j:unix4j-command:0.6'
 
     testImplementation 'org.testng:testng:7.11.0'
     testImplementation(platform('org.junit:junit-bom:5.14.1'))
@@ -42,51 +42,7 @@ dependencies {
 }
 
 jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-        include 'org/unix4j/**'
-        exclude 'codegen/**'
-        exclude 'META-INF/**'
-    } }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    bundle {
-        bnd ('Bundle-Name': 'barebones-commander-core',
-                'Bundle-Vendor': 'barebones-commander',
-                'Bundle-Description': 'The core part of barebones-commander (forked from muCommander)',
-                'Bundle-DocURL': 'https://github.com/e6qu/barebones-commander',
-                'Specification-Title': "barebones-commander",
-                'Specification-Vendor': "barebones-commander contributors",
-                'Specification-Version': project.version,
-                'Implementation-Title': "barebones-commander",
-                'Implementation-Vendor': "barebones-commander contributors",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'),
-                'Build-Number': project.ext.release,
-                'Import-Package': 'org.violetlib.aqua;resolution:=dynamic,com.formdev.flatlaf;resolution:=dynamic,com.apple.*;resolution:=dynamic,sun.security.action;resolution:=dynamic,*',
-                'Export-Package':
-                        'dev.barebones.commander.core.desktop,' +
-                                'dev.barebones.commander.job,' +
-                                'dev.barebones.commander.job.impl,' +
-                                'dev.barebones.commander.process,' +
-                                'dev.barebones.commander.osgi,' +
-                                'dev.barebones.commander.search,' +
-                                'dev.barebones.commander.ui.action,' +
-                                'dev.barebones.commander.ui.action.impl,' +
-                                'dev.barebones.commander.ui.dialog,' +
-                                'dev.barebones.commander.ui.dialog.file,' +
-                                'dev.barebones.commander.ui.dialog.server,' +
-                                'dev.barebones.commander.ui.encoding,' +
-                                'dev.barebones.commander.ui.icon,' +
-                                'dev.barebones.commander.ui.text,' +
-                                'dev.barebones.commander.ui.theme,' +
-                                'dev.barebones.commander.snapshot,' +
-                                'dev.barebones.commander.search,' +
-                                'dev.barebones.commander.text,' +
-                                'dev.barebones.commander.ui.icon,' +
-                                'dev.barebones.commander.ui.main,' +
-                                'dev.barebones.commander.ui.main.table,' +
-                                'dev.barebones.commander.ui.viewer',
-                'Bundle-Activator': 'dev.barebones.commander.Activator')
-    }
 }
 
 test {
