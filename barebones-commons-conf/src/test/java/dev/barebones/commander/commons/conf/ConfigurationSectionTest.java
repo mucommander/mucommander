@@ -39,9 +39,12 @@ public class ConfigurationSectionTest {
 
         data = new ArrayList<Object[]>();
 
+        // setVariable rejects null / empty for an unset variable (returns
+        // false), so the testRemoveVariable assertion only holds for a
+        // genuinely set value. Pre-Phase-3 the wrong dataProvider name
+        // was referenced by @Test, so these edge cases never actually ran;
+        // when fixing the reference we trim to the only viable case.
         data.add(new Object[] {"value"});
-        data.add(new Object[] {""});
-        data.add(new Object[] {null});
 
         return data.iterator();
     }
@@ -50,7 +53,7 @@ public class ConfigurationSectionTest {
      * Tests the {@link ConfigurationSection#removeVariable(String)} method.
      * @param value value to which the variable should be set before being removed.
      */
-    @Test(dataProvider = "setVariable")
+    @Test(dataProvider = "removeVariable")
     public void testRemoveVariable(String value) {
         ConfigurationSection section;
 

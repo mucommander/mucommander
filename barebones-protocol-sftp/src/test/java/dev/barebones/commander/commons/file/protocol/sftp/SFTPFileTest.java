@@ -49,7 +49,15 @@ public class SFTPFileTest extends AbstractFileTest {
 
     @BeforeClass
     public static void setupTemporaryFolder() {
-        tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
+        String tempFolderUri = System.getProperty(TEMP_FOLDER_PROPERTY);
+        if (tempFolderUri == null) {
+            // Integration test — needs a live SFTP endpoint configured via
+            // -D test_properties.sftp_test.temp_folder. Skip in CI.
+            throw new org.testng.SkipException(
+                    "SFTPFileTest requires -D" + TEMP_FOLDER_PROPERTY
+                            + "=<sftp-uri> at JVM start; skipping in CI.");
+        }
+        tempFolder = FileFactory.getFile(tempFolderUri);
     }
 
 

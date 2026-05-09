@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -75,6 +76,17 @@ public class ZipArchiveFileTest extends AbstractFileTest {
     ////////////////////////
     // Overridden methods //
     ////////////////////////
+
+    /**
+     * Register the zip archive format with FileFactory so the cast in
+     * {@link #setUp()} resolves to {@link ZipArchiveFile}. At
+     * application runtime this happens in the module's Activator;
+     * unit tests need to do it explicitly.
+     */
+    @BeforeClass
+    public void registerZipFormat() {
+        FileFactory.registerArchiveFormat(new ZipFormatProvider());
+    }
 
     /**
      * Overridden to create the archive file before each test.

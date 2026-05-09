@@ -10,10 +10,23 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+
+      # Install JDK 25 first so the toolchain auto-discoverer sees it
+      # via JAVA_HOME_25_X64; then install JDK 21 LAST so its install
+      # wins JAVA_HOME and Gradle 8.x runs on it (Gradle 8.14 doesn't
+      # support JDK 25 as its own runtime JVM yet).
+      - name: Set up JDK 25 (toolchain target)
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'adopt'
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Set up JDK 21 (Gradle runtime, last so JAVA_HOME wins)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
       - uses: gradle/wrapper-validation-action@v2
       - uses: gradle/actions/setup-gradle@v3
-      - run: ./gradlew test
+      - run: ./gradlew test --stacktrace

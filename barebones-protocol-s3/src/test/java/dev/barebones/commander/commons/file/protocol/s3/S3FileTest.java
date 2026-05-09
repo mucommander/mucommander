@@ -41,7 +41,16 @@ public class S3FileTest extends AbstractFileTest {
 
     @BeforeClass
     public static void setupTemporaryFolder() {
-        tempFolder = FileFactory.getFile(System.getProperty(TEMP_FOLDER_PROPERTY));
+        String tempFolderUri = System.getProperty(TEMP_FOLDER_PROPERTY);
+        if (tempFolderUri == null) {
+            // Integration test — needs a live S3 endpoint and credentials
+            // exposed via the system property. CI doesn't have either, so
+            // skip the whole class instead of NPE-ing in FileFactory.
+            throw new org.testng.SkipException(
+                    "S3FileTest requires -D" + TEMP_FOLDER_PROPERTY
+                            + "=<s3-uri> at JVM start; skipping in CI.");
+        }
+        tempFolder = FileFactory.getFile(tempFolderUri);
     }
 
 
