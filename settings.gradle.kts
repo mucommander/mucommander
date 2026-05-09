@@ -30,6 +30,7 @@ include("barebones-protocol-sftp")
 
 include("barebones-mount-helper")
 include("barebones-tailscale")
+include("barebones-secret-store")
 
 include("barebones-viewer-text")
 

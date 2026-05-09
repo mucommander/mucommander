@@ -46,6 +46,14 @@ public final class Bootstrap {
         invoke("dev.barebones.commander.conf.Activator", "register", Map.class, properties);
         invoke("dev.barebones.commander.preload.Activator", "register");
 
+        // Phase-12 secret store. Picks an OS keychain backend on macOS,
+        // libsecret on Linux, or no-op (the AES-GCM file backend is
+        // opt-in via -Dbarebones.secretStore=aes-gcm-file). Must
+        // register BEFORE the credentials code in barebones-core's
+        // Activator runs — credentials.xml parsing reads the store on
+        // first lookup.
+        invoke("dev.barebones.commander.secret.Activator", "register");
+
         // Protocols. S3 reintroduced in Phase 11 on AWS SDK v2; the
         // jets3t-based module from upstream was deleted in Phase 4.
         invoke("dev.barebones.commander.commons.file.protocol.sftp.Activator", "register");

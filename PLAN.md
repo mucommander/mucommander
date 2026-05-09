@@ -29,7 +29,7 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **10c** | in flight | Connectivity polish: SwingWorker wrapper for mount calls, active-mounts management dialog, Taildrop send button on the Tailscale tab. | one PR |
 | **11a** | done | S3 backend on AWS SDK v2 — headless: `S3Connection`, `S3FileURL`, `S3File`/`Root`/`Bucket`/`Object`, `S3ProtocolProvider`, Activator, URL-parsing + endpoint-build tests. | landed in #16 |
 | **11**  | in flight | Finish S3: `S3Panel` registered via `ProtocolPanelRegistry`; `S3TransferManager` multipart upload (≥ 32 MiB spills to temp file); LocalStack-backed integration tests gated on Docker availability. | one PR |
-| **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
+| **12** | in flight | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback (opt-in via system property). Migrate legacy XOR-encrypted `credentials.xml` on read; XORCipher deleted. Backend-selection UI deferred. | one PR |
 
 **Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
 
@@ -373,20 +373,64 @@ that's otherwise mechanical.
 
 Lifted out of Phase 5 because keychain integration involves JNA
 bindings to platform-specific APIs and a non-trivial passphrase-derived
-AES-GCM fallback path:
+AES-GCM fallback path. New module `barebones-secret-store` houses
+all of this.
 
-- Delete `dev.barebones.commander.bookmark.XORCipher` (the existing
-  hard-coded-XOR "encryption" of stored credentials).
-- Add `dev.barebones.commander.auth.SecretStore` SPI with three
+**Shipped**:
+
+- `dev.barebones.commander.bookmark.XORCipher` **deleted**. Its
+  decode-only logic lives in
+  `dev.barebones.commander.secret.LegacyXorCodec`, used solely by
+  the credentials parser for one-shot migration of pre-Phase-12
+  `credentials.xml` files. Test fixtures (3 known-passwords) prove
+  byte-compatibility with upstream's deleted XORCipher.
+- `dev.barebones.commander.secret.SecretStore` SPI with three
   implementations:
-  * macOS Keychain via JNA → `Security.framework` (`SecKeychainAddGenericPassword` / `SecKeychainFindGenericPassword`).
-  * Linux libsecret via JNA → `secret_password_store_sync` / `secret_password_lookup_sync` (or fall back to D-Bus call to `org.freedesktop.secrets`).
-  * Passphrase-derived AES-GCM blob in `~/.barebones-commander/credentials.bin` for headless / no-keychain environments. Key derivation via PBKDF2-HMAC-SHA-256 from a user-prompted passphrase, stored only in memory while the app runs.
-- One-shot migration on first run: detect the legacy XOR-encrypted
-  `credentials.xml`, decrypt it with the well-known XOR key, re-store
-  via the chosen `SecretStore`, then delete the XML record.
-- Surface `SecretStore` choice in preferences UI (auto-detect by
-  default; user can override).
+  * **macOS Keychain** via JNA → `Security.framework` legacy
+    generic-password API (`SecKeychainAddGenericPassword` /
+    `SecKeychainFindGenericPassword` / `SecKeychainItemDelete`).
+  * **Linux libsecret** via JNA → `secret_password_store_sync` /
+    `secret_password_lookup_sync` / `secret_password_clear_sync`
+    against a custom schema (`dev.barebones.commander.Credentials`).
+  * **AES-GCM file** at `~/.barebones-commander/credentials.bin`
+    for headless / no-keychain environments. Key derivation via
+    PBKDF2-HMAC-SHA-256 (310k iterations — current OWASP guidance);
+    AES-256-GCM with per-save random IV; magic+version bound into
+    the AAD; atomic write via tmp+rename; mode 0600.
+- Activator picks the OS-appropriate backend automatically. Override
+  via `-Dbarebones.secretStore=macos-keychain|linux-libsecret|aes-gcm-file|none`.
+  AES-GCM file backend additionally needs
+  `-Dbarebones.secretStore.passphrase=<value>` (no auto-prompt — that
+  would be a hostile UX for a desktop file manager).
+- `CredentialsWriter` updated: emits `<secret-ref/>` (an empty
+  marker element) instead of `<password>XOR_BASE64</password>`. The
+  actual secret is pushed into the SecretStore before the XML is
+  written, keyed by `(service="barebones-commander", account=URL)`.
+- `CredentialsParser` updated: accepts both formats. Legacy
+  `<password>` entries are decoded via `LegacyXorCodec` and migrated
+  into the SecretStore on the fly. New `<secret-ref/>` entries look
+  the password up via `SecretStoreService.store().lookup(...)`.
+- Bootstrap registers the secret-store Activator early — before the
+  credentials code runs.
+
+**Tests**:
+
+- `AesGcmFileSecretStoreTest` (10): round-trip; persistence across
+  reopen; wrong-passphrase failure; overwrite semantics; delete +
+  delete-of-missing; multiple entries; Unicode secrets; empty
+  passphrase rejected; corrupt file rejected.
+- `LegacyXorCodecTest` (4): three byte-compat fixtures (ASCII,
+  symbol-heavy, UTF-8) + invalid-Base64 rejection.
+
+**Deferred**:
+
+- Preferences-UI panel for backend selection. Auto-detect + system
+  property override is functional today; a Swing radio-button
+  picker plumbed through `MuPreferences` is its own slice.
+- macOS Keychain + libsecret end-to-end tests are not exercised in
+  CI: macOS-15 GitHub runners have no logged-in keychain session;
+  Ubuntu runners have no libsecret installed by default. The JNA
+  bindings are exercised by a manual smoke test on a real desktop.
 
 ### Phase 11 — Re-add S3 backend on AWS SDK v2 (split: 11a + 11b + 11c)
 

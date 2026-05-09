@@ -20,11 +20,11 @@
   <Match><Package name="~com\.sun\.xhandler.*"/></Match>
   <Match><Package name="~sun\.net\.www.*"/></Match>
 
-  <!-- 45 pre-existing (source, pattern) pairs in our own code. -->
+  <!-- Pre-existing (source, pattern) pairs in our own code. -->
   <Match><Class name="~dev\.barebones\.commander\.StressTester([\$.].*)?"/><Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.auth\.CredentialsMapping([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.bookmark\.Bookmark([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
-  <Match><Class name="~dev\.barebones\.commander\.bookmark\.XORCipher([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>  <!-- (×2) -->
+  <!-- XORCipher: deleted in Phase 12; baseline entry retired. -->
   <Match><Class name="~dev\.barebones\.commander\.command\.CommandManager([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>  <!-- (×2) -->
   <Match><Class name="~dev\.barebones\.commander\.command\.CommandReader([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.commons\.file\.Credentials([\$.].*)?"/><Bug pattern="CN_IMPLEMENTS_CLONE_BUT_NOT_CLONEABLE"/></Match>

@@ -15,6 +15,7 @@ dependencies {
     compileOnly(project(":barebones-os-api"))
     compileOnly(project(":barebones-viewer-api"))
     compileOnly(project(":barebones-core-preload"))
+    compileOnly(project(":barebones-secret-store"))
 
     compileOnly(libs.flatlaf)
     compileOnly(libs.jetbrains.annotations)

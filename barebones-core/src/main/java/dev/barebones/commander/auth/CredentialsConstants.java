@@ -36,8 +36,16 @@ interface CredentialsConstants {
     /** Element containing the credentials' login */
     static final String ELEMENT_LOGIN    = "login";
 
-    /** Element containing the credentials' (encrypted) password*/
+    /** Pre-Phase-12 element containing the credentials' XOR-encrypted
+     *  password. New writes never produce this element; the parser
+     *  still reads it for one-shot migration into the SecretStore,
+     *  then it gets dropped on the next save. */
     static final String ELEMENT_PASSWORD = "password";
+
+    /** Phase-12 element. Empty (no body) — its presence tells the
+     *  parser to look the password up in the SecretStore using the
+     *  surrounding {@link #ELEMENT_URL}'s text as the account ref. */
+    static final String ELEMENT_SECRET_REF = "secret-ref";
 
     /** Element that defines a property (name/value pair) */
     static final String ELEMENT_PROPERTY = "property";
@@ -54,7 +62,14 @@ interface CredentialsConstants {
     /** Root element's attribute containing the encryption method used for passwords */
     static final String ATTRIBUTE_ENCRYPTION = "encryption";
 
-    /** Weak password encryption method */
+    /** Pre-Phase-12 encryption method tag (XOR-Base64). */
     static final String WEAK_ENCRYPTION_METHOD = "weak";
+
+    /** Phase-12 encryption method tag — secrets live in the
+     *  OS keychain / libsecret / AES-GCM file rather than the XML. */
+    static final String SECRET_STORE_METHOD = "secret-store";
+
+    /** SecretStore service-name shared by every credentials entry. */
+    static final String SECRET_STORE_SERVICE = "barebones-commander";
 
 }
