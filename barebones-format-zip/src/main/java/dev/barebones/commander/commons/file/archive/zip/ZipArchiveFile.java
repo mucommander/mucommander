@@ -246,16 +246,28 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
                 // This is not the one, look for the entry from the beginning of the archive
             }
 
-            // Iterate through the archive until we've found the entry
+            // Iterate through the archive until we've found the entry.
+            // We can't use try-with-resources directly: on success we
+            // RETURN the stream (caller owns it). Manually close on
+            // any failure path so the underlying FD doesn't leak.
             java.util.zip.ZipInputStream zin = new java.util.zip.ZipInputStream(file.getInputStream());
-            java.util.zip.ZipEntry zipEntry;
-            String entryPath = entry.getPath();
-            // Iterate until we find the entry we're looking for
-            while ((zipEntry=zin.getNextEntry())!=null)
-                if (zipEntry.getName().equals(entryPath)) // That's the one, return it
-                    return zin;
-
-            throw new IOException("Unknown Zip entry: "+entry.getName());
+            try {
+                java.util.zip.ZipEntry zipEntry;
+                String entryPath = entry.getPath();
+                while ((zipEntry = zin.getNextEntry()) != null) {
+                    if (zipEntry.getName().equals(entryPath)) {
+                        return zin; // success — caller owns zin
+                    }
+                }
+                throw new IOException("Unknown Zip entry: " + entry.getName());
+            } catch (IOException | RuntimeException e) {
+                try {
+                    zin.close();
+                } catch (IOException closeEx) {
+                    e.addSuppressed(closeEx);
+                }
+                throw e;
+            }
         }
     }
 

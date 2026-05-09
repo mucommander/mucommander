@@ -680,7 +680,15 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public InputStream getInputStream() throws IOException {
-        return new LocalInputStream(new FileInputStream(file).getChannel());
+        // Hold the FileInputStream in a local so we can close it if
+        // getChannel() throws — otherwise the underlying FD leaks.
+        FileInputStream fis = new FileInputStream(file);
+        try {
+            return new LocalInputStream(fis.getChannel());
+        } catch (RuntimeException | Error e) {
+            try { fis.close(); } catch (IOException closeEx) { e.addSuppressed(closeEx); }
+            throw e;
+        }
     }
 
     /**
@@ -690,7 +698,13 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public OutputStream getOutputStream() throws IOException {
-        return new LocalOutputStream(new FileOutputStream(absPath, false).getChannel());
+        FileOutputStream fos = new FileOutputStream(absPath, false);
+        try {
+            return new LocalOutputStream(fos.getChannel());
+        } catch (RuntimeException | Error e) {
+            try { fos.close(); } catch (IOException closeEx) { e.addSuppressed(closeEx); }
+            throw e;
+        }
     }
 
     /**
@@ -700,7 +714,13 @@ public class LocalFile extends ProtocolFile {
      */
     @Override
     public OutputStream getAppendOutputStream() throws IOException {
-        return new LocalOutputStream(new FileOutputStream(absPath, true).getChannel());
+        FileOutputStream fos = new FileOutputStream(absPath, true);
+        try {
+            return new LocalOutputStream(fos.getChannel());
+        } catch (RuntimeException | Error e) {
+            try { fos.close(); } catch (IOException closeEx) { e.addSuppressed(closeEx); }
+            throw e;
+        }
     }
 
     /**

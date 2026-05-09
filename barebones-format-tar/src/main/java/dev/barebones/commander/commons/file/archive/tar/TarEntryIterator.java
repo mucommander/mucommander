@@ -21,8 +21,11 @@ import dev.barebones.commander.commons.file.PermissionBits;
 import dev.barebones.commander.commons.file.SimpleFilePermissions;
 import dev.barebones.commander.commons.file.archive.ArchiveEntry;
 import dev.barebones.commander.commons.file.archive.ArchiveEntryIterator;
+import dev.barebones.commander.commons.file.archive.SafePath;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -32,6 +35,8 @@ import java.io.IOException;
  * @author Maxence Bernard
  */
 class TarEntryIterator implements ArchiveEntryIterator {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TarEntryIterator.class);
 
     /** InputStream to the archive file */
     private TarArchiveInputStream tin;
@@ -95,12 +100,24 @@ class TarEntryIterator implements ArchiveEntryIterator {
      * @throws IOException if an I/O error occurred
      */
     private ArchiveEntry getNextEntry() throws IOException {
-        TarArchiveEntry entry = tin.getNextTarEntry();
-
-        if(entry==null)
-            return null;
-
-        return createArchiveEntry(entry);
+        // Loop so a single unsafe entry doesn't terminate iteration —
+        // we skip + log it and try the next.
+        while (true) {
+            TarArchiveEntry entry = tin.getNextTarEntry();
+            if (entry == null) {
+                return null;
+            }
+            // Reject entries whose path would escape the extraction
+            // root or otherwise can't safely round-trip through the
+            // filesystem.
+            try {
+                SafePath.validate(entry.getName());
+            } catch (SafePath.UnsafeEntryNameException e) {
+                LOGGER.warn("Skipping unsafe tar entry: {}", e.getMessage());
+                continue;
+            }
+            return createArchiveEntry(entry);
+        }
     }
 
 

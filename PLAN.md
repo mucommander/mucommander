@@ -14,22 +14,31 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 
 | Phase | Status | What | One PR |
 |---|---|---|---|
-| **0** | partly done | Bootstrap: audit docs, rename project, CI cleanup, plan adjustments | ✅ landed in #2; finished by #3 |
-| **6** | done early | Rename to `barebones-commander` | ✅ landed in #2 |
-| **1** | next | Strip every out-of-scope module (protocols, archive formats, viewers, terminal, OS adapters) | one PR |
-| **2** | pending | Drop OSGi runtime — replace Felix + bnd manifests + bundle activators with a plain Java app + fat JAR | one PR |
-| **3** | pending | Java 25 LTS upgrade | one PR |
-| **4** | in flight | Dependency upgrades + Dependabot + dependency-review CI; **drop the abandoned `jets3t`-based S3 module** (its AWS-SDK-v2 reintroduction moves to Phase 11) | one PR |
-| **5** | in flight | Code-level security fixes (XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`). XOR-cipher → keychain split into Phase 12. | one PR |
-| **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
-| **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
-| **9** | in flight | SAST in CI (SpotBugs + FindSecBugs PR-triggered + OWASP Dependency-Check weekly) | one PR |
-| **10a** | done | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). | landed in #13 |
-| **10b** | in flight | Connectivity UI tabs in the existing Connect-to-server dialog: `MountPanel` + `TailscalePeerPanel` registered via `ProtocolPanelRegistry`. | one PR |
-| **10c** | in flight | Connectivity polish: SwingWorker wrapper for mount calls, active-mounts management dialog, Taildrop send button on the Tailscale tab. | one PR |
-| **11a** | done | S3 backend on AWS SDK v2 — headless: `S3Connection`, `S3FileURL`, `S3File`/`Root`/`Bucket`/`Object`, `S3ProtocolProvider`, Activator, URL-parsing + endpoint-build tests. | landed in #16 |
-| **11**  | in flight | Finish S3: `S3Panel` registered via `ProtocolPanelRegistry`; `S3TransferManager` multipart upload (≥ 32 MiB spills to temp file); LocalStack-backed integration tests gated on Docker availability. | one PR |
-| **12** | in flight | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback (opt-in via system property). Migrate legacy XOR-encrypted `credentials.xml` on read; XORCipher deleted. Backend-selection UI deferred. | one PR |
+| **0** | done | Bootstrap: audit docs, rename project, CI cleanup, plan adjustments | landed in #2 + #3 |
+| **6** | done early | Rename to `barebones-commander` | landed in #2 |
+| **1** | done | Strip every out-of-scope module (protocols, archive formats, viewers, terminal, OS adapters) | landed in #5 |
+| **2** | done | Drop OSGi runtime — replace Felix + bnd manifests + bundle activators with a plain Java app + fat JAR | landed in #6 |
+| **3** | done | Java 25 LTS upgrade | landed in #7 |
+| **4** | done | Dependency upgrades + Dependabot + dependency-review CI; **drop the abandoned `jets3t`-based S3 module** (its AWS-SDK-v2 reintroduction moved to Phase 11) | landed in #8 |
+| **5** | done | Code-level security fixes (XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`). XOR-cipher → keychain split into Phase 12. | landed in #9 |
+| **7** | done | Build polish (Kotlin DSL + version catalog) | landed in #10 |
+| **8** | done | Release pipeline (DMG/DEB/RPM via `jpackage`) + SBOM + provenance attestation. AppImage / x86_64 macOS / notarization / commit-signing deferred. | landed in #11 |
+| **9** | done | SAST in CI (SpotBugs + FindSecBugs PR-triggered + OWASP Dependency-Check weekly) | landed in #12 |
+| **10a** | done | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules | landed in #13 |
+| **10b** | done | Connectivity UI tabs in the existing Connect-to-server dialog: `MountPanel` + `TailscalePeerPanel` | landed in #14 |
+| **10c** | done | Connectivity polish: SwingWorker mount, active-mounts dialog, Taildrop send + AppleScript chunk-boundary fix | landed in #15 |
+| **11a** | done | S3 backend on AWS SDK v2 — headless | landed in #16 |
+| **11**  | done | Finish S3: `S3Panel`, `S3TransferManager` multipart upload, LocalStack integration tests, AppleScript race-fix follow-up | landed in #17 |
+| **12** | done | `XORCipher` → OS keychain (macOS Keychain via JNA, Linux libsecret via JNA, AES-GCM file fallback) + one-shot migration of legacy `credentials.xml` | landed in #18 |
+| **13** | next | **Archive safety hardening** — zip-slip / tar-slip path validation, decompression-bomb caps, file-size prompts, archive-tree thread safety, viewer file-size ceiling | one PR |
+| **14** | pending | **Credentials & SecretStore hardening** — SFTP host-key verification, macOS Keychain item-ref leak, libsecret schema unref, AES-GCM key zeroing, equals/hashCode contracts, S3 cache-key hashing, log-leak masking, SecretStore preferences UI | one PR |
+| **15** | pending | **Dead-code sweep** — unused classes/methods/fields, leftover references to deleted modules, stale resource-bundle entries, dead i18n keys, commented-out code, unused dependencies per module. Aim: net negative LOC. | one PR |
+| **16** | pending | **Network reliability + timeouts + EDT off-loading** — NFS / Sun-RPC timeouts, SFTP transfer timeouts, libsecret D-Bus timeouts, mount retry/backoff, SwingWorker shim for S3 uploads, EDT polling-loop conversion, `ProcessRunnerHelper` extraction, listener GC fix, shutdown hook | one PR (may split if reviewer asks) |
+| **17** | pending | **Concurrency + correctness sweep** — mutable static collections (`Vector`/`Hashtable` in `BookmarkManager` / `ActionProperties` / `CredentialsManager`), 31+ empty catches → `IgnoredErrors` helper, NPE / stream-leak patterns, mount username injection | one PR |
+| **18** | pending | **Observability + logging** — S3 module logging from zero, mount stderr on failure, tailscale timeout context, `ThemeManager` file paths, AppleScript REPLACE branch, SFTP warn-level on failures, AppleScript output bound + truncation marker, structured-logging conventions doc | one PR |
+| **19** | pending | **UX polish** — progress dialogs for S3 / folder browse, "operation failed" details, mount-error next-step hints, S3 401/403/404 distinction, tailscale-not-installed banner, prefs Cancel-reverts, default-button focus, huge-file open prompts, keychain-prompt explainer, drop-target writability | one PR (may split into UX-A / UX-B) |
+| **20** | pending | **SpotBugs baseline drawdown to zero** — fix the remaining ~62 own-code suppressions in `config/spotbugs/exclude.xml` (DM_DEFAULT_ENCODING ×41, ST_WRITE_TO_STATIC ×15, HE_EQUALS_USE_HASHCODE ×8, etc) and delete the file. | one PR (may split per bug pattern) |
+| **21+** | open | **Architecture refactors — REVIEW REQUIRED.** Tracked separately; do NOT execute without explicit approval per `BUGS.md` §5/§6. | n/a |
 
 **Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
 
@@ -618,6 +627,305 @@ a modal progress dialog; the Mount tab gains a "Manage active
 mounts…" button that opens an unmount-per-row dialog; the
 Tailscale tab gains a "Send file via Taildrop…" button. SpotBugs
 clean across all three additions (no entries in the Phase-9 baseline).
+
+---
+
+## 6.1 Phases 13–20 — bug & quality drawdown
+
+These phases mostly drain the backlog catalogued in `BUGS.md`.
+Each is a "significant chunk" — typically one PR but a reviewer
+who finds the diff oversized may ask for a split. The first PR of
+each phase always opens with a self-check: re-read `BUGS.md` for
+any new findings since the previous merge.
+
+### Phase 13 — Archive safety hardening (one PR)
+
+The biggest open security gap: opening a malicious archive can
+write outside the extraction directory, OOM the JVM, or freeze
+the UI.
+
+- **Zip-slip / tar-slip**: new `dev.barebones.commander.archive.SafePath`
+  in `barebones-archiver`; called by every format module's iterator
+  before constructing an `ArchiveEntry`. Rejects `..` segments,
+  absolute paths, and Windows `\` separators. (`BUGS.md` 1.1)
+- **Decompression bomb caps**: new `BoundedExtraction` wrapper —
+  per-entry size limit (default 1 GiB, overridable), cumulative
+  limit (default 10× the archive's compressed size), and entry
+  count limit (default 100k). Surface limits via `Tunables` (see
+  Phase 16). (`BUGS.md` 1.13)
+- **Text viewer file-size ceiling**: prompt user before loading
+  files > 100 MiB; offer head/tail-only view. (`BUGS.md` 1.14, 2.10)
+- **`AbstractArchiveFile.createEntriesTree()` thread safety**:
+  add the lock the existing TODO requested. (`BUGS.md` 1.15)
+- **`ZipInputStream` + `LocalFile` channel leaks**: try-with-resources
+  sweep across all archive iterators. (`BUGS.md` 1.10, 1.23)
+- **Tests**: malicious-archive fixtures (zip-slip variants, 4 GB
+  spec entry, million-entry index, mid-stream truncation) in
+  `barebones-archiver`; viewer-file-size behavioural test.
+
+**Exit criteria**: every archive entry path is `SafePath`-validated;
+`BoundedExtraction` integration test trips on a 1.4 GiB-expand
+fixture; viewer test passes the 100 MiB threshold.
+
+### Phase 14 — Credentials & SecretStore hardening (one PR)
+
+Closes the security holes left by Phases 5 + 12 plus the
+Phase-12 follow-up items.
+
+- **SFTP host-key verification**: load OpenSSH `~/.ssh/known_hosts`
+  via JSch; default `StrictHostKeyChecking=yes`; first-connection
+  prompt for unknown hosts; persist the user's accept choice.
+  (`BUGS.md` 1.2)
+- **JNA pointer hygiene**:
+  - `KeychainSecretStore.lookup()` releases its `itemRef` via
+    `CFRelease` on every path. (`BUGS.md` 1.6)
+  - `LibsecretSecretStore` adds `close()` that calls
+    `secret_schema_unref(schema)`. The Activator wires it into
+    the shutdown hook (Phase 16 deliverable; if 16 is later,
+    inline-register a hook here). (`BUGS.md` 1.7)
+- **AES-GCM key zeroing**: `AesGcmFileSecretStore` gains
+  `close()` → `Arrays.fill(keyMaterial, (byte)0)`. (`BUGS.md` 1.8)
+- **Equals/hashCode contracts**: fix `Bookmark`, `CredentialsMapping`,
+  `FileComparator`, `BOM` (4 of the 8 SpotBugs entries — drop those
+  baseline lines). (`BUGS.md` 1.9)
+- **S3 cache-key hashing**: replace the `accessKey`-in-cache-key
+  with `SHA-256(accessKey+secretKey)`. (`BUGS.md` 1.11)
+- **`CredentialsMapping.toString()` masking**: never include the
+  password segment of the URL. (`BUGS.md` 3.4)
+- **SecretStore preferences UI**: the Phase-12 deferred item.
+  Adds a `SecretStorePanel` to the General preferences dialog with
+  radio buttons for the available backends (auto-detect / macOS
+  Keychain / libsecret / AES-GCM file / none); writes the choice
+  to `MuPreferences` and bypasses `Activator`'s default-detect on
+  next start. AES-GCM choice prompts for a passphrase via a
+  one-shot dialog, never persisted to disk.
+
+**Exit criteria**: SFTP integration test rejects a known-bad-host;
+AES-GCM file `close()` zeroes the key (heap-walk test); the four
+fixed equals/hashCode classes work in a `HashSet` round-trip;
+SecretStore panel ships and survives a restart.
+
+### Phase 15 — Dead-code removal sweep (one PR)
+
+Per the user note: "I think there's still significant amount [of
+dead code]." The post-Phase-1 module purge left orphaned references
+behind.
+
+Inputs:
+- IntelliJ IDEA's "Unused declaration" inspection across the whole
+  source tree.
+- Manual scan for references to removed features (terminal,
+  Bonjour, the deleted protocols, JediTerm, OSGi bundle activators
+  that got reduced to no-ops).
+- `grep` for commented-out code blocks (`// public ...`,
+  `/* ... */` blocks).
+- Resource-bundle entries (`*.properties` translations) that no
+  surviving action references — every action key has a label
+  string; removed actions left orphan keys behind.
+- Unused per-module dependencies (each `build.gradle.kts` reviewed
+  with `gradle dependencies --configuration runtimeClasspath` and
+  by-grep verification that classes from each dep are actually
+  imported).
+- Dead `@Deprecated` items that nothing calls anymore.
+- Stale TODOs / FIXMEs that point at problems already solved
+  (e.g. "needs OSGi bundle…" comments).
+
+Discipline:
+- Verify each deletion with a build + a SpotBugs run + (where
+  feasible) a manual smoke of the affected feature in the running
+  app.
+- Keep the diff readable: split into per-module commits within
+  the PR.
+- **Aim**: net negative LOC. Target ≥ 5,000 lines removed.
+
+**Exit criteria**: `./gradlew clean test spotbugsMain` green; per-module
+LOC summary in the PR description; smoke-tested on Linux + macOS;
+no functional regressions reported.
+
+### Phase 16 — Network reliability + timeouts + EDT off-loading (one PR; may split)
+
+Nothing in the app should hang the EDT or the JVM forever.
+
+- **NFS / Sun-RPC timeouts**: patch the vendored `com.sun.rpc`
+  socket call sites in `barebones-protocol-nfs` to set a
+  `Socket.setSoTimeout` (default 30 s, configurable via
+  `Tunables`). (`BUGS.md` 1.4)
+- **SFTP transfer timeout**: configure `socketReadTimeout` on the
+  jsch `ChannelSftp` so a stalled remote no longer wedges the
+  copy job. (`BUGS.md` 1.5)
+- **libsecret D-Bus timeouts**: thread `GCancellable` into every
+  `secret_password_*_sync` call; cancel after 5 s default.
+  (`BUGS.md` 4.1)
+- **Mount retry/backoff**: `MountExecutor.withRetry(spec, n,
+  backoff)` — default 3 attempts with exponential backoff for
+  mount NFS portmap flakes. (`BUGS.md` 4.2)
+- **`SwingWorker` shim for S3 uploads**: same pattern as Phase 10c's
+  `MountTask`, applied to `SpillingPutOutputStream`. Wires in the
+  upload-progress callbacks (foundation for Phase 19's progress
+  dialog). (`BUGS.md` 1.12)
+- **Polling-loop conversion** to `Timer` / `wait/notify`: targets
+  `PropertiesDialog`, `FolderChangeMonitor`, `QuickSearch`,
+  `CompletionType`. (`BUGS.md` 1.17)
+- **`ProcessRunnerHelper` extraction**: shared by `MountExecutor`
+  and `TailscaleClient`; in the process fixes the stderr-fill
+  deadlock (drains stderr concurrently with stdout). (`BUGS.md` 1.25, 6.1)
+- **WeakHashMap listener fix**: replace with `EventListenerList` /
+  `ListenerSupport` in `ThemeManager`, others. (`BUGS.md` 4.5)
+- **Shutdown hook**: register `ShutdownHook` from `Bootstrap`,
+  drain `MountRegistry` (best-effort unmount), close all cached
+  `S3Connection`s, close `SecretStore`. (`BUGS.md` 4.3, 4.6)
+
+**Exit criteria**: integration test of a hung NFS server returns
+a `SocketTimeoutException` within `Tunables.nfsReadTimeoutMs`;
+S3 upload in the app no longer freezes the UI; shutdown hook
+fires cleanly on `kill -TERM`.
+
+### Phase 17 — Concurrency + correctness sweep (one PR)
+
+Latent bugs that haven't bitten yet because of single-threaded
+luck. Substantial because there are many sites.
+
+- **Mutable static collections** → `ConcurrentHashMap` /
+  `CopyOnWriteArrayList` in `BookmarkManager`,
+  `CredentialsManager`, `ActionProperties`. (`BUGS.md` 1.3)
+- **Empty-catch sweep**: 31+ instances. New
+  `dev.barebones.commander.commons.util.IgnoredErrors.ignored(t,
+  why)` (logs at `TRACE`) for the legitimate cases; fix or surface
+  the rest (auth/bookmark parser failures should warn). (`BUGS.md`
+  1.20, 6.5)
+- **NPE / stream-leak fixes** in `EditBookmarksDialog`,
+  `ThemeManager`, `LocalFile.getChannel`. (`BUGS.md` 1.21, 1.22, 1.23)
+- **Mount username injection**: tighten `MountSpec` validation —
+  reject `=`, `,`, `:` in usernames; add a regression test.
+  (`BUGS.md` 1.24)
+- **`AbstractArchiveFile.createEntriesTree()` thread safety**:
+  if Phase 13 didn't ship the lock, add it here.
+- **Equals/hashCode**: any of the 8 SpotBugs entries Phase 14
+  didn't already cover. (`BUGS.md` 1.9)
+
+**Exit criteria**: `IgnoredErrors` adopted; SpotBugs baseline
+shrinks by the equals/hashCode + ST_WRITE entries this phase
+fixes; no remaining `catch (Exception e) {}` in `barebones-core`
+without an `IgnoredErrors` call or a comment explaining why.
+
+### Phase 18 — Observability + logging (one PR)
+
+So that production failures stop being mysteries.
+
+- **S3 module**: zero log lines today; add `LOGGER.debug` at every
+  request entry, `LOGGER.warn` on AWS error responses with the
+  service-name + key + AWS error code (no credentials, no payload).
+  (`BUGS.md` 3.1)
+- **`MountExecutor`**: log stderr at `WARN` when exit ≠ 0.
+  (`BUGS.md` 3.2)
+- **Tailscale**: include sanitised argv in timeout-message context.
+  (`BUGS.md` 3.3)
+- **`ThemeManager`**: file path + reason in every catch site.
+  (`BUGS.md` 3.5)
+- **AppleScript**: DEBUG line on REPLACE-branch decoder events.
+  (`BUGS.md` 3.6)
+- **SFTP**: auth-failure log at `warn`, not `info`. (`BUGS.md` 3.7)
+- **AppleScript output bound**: 1 MiB cap with a
+  "(... output truncated ...)" marker. (`BUGS.md` 1.16)
+- **Lingering `System.out` / `System.err`** → SLF4J. (`BUGS.md` 1.26, 1.27)
+- **ZipArchiveFile UTF-8 hard-coding**: respect EFS bit, fall back
+  to the per-archive default-encoding hint. (`BUGS.md` 1.28)
+- **Documentation**: a short `LOGGING.md` defining the four levels
+  (`error` user-visible / `warn` should be triaged / `info`
+  user-visible state changes / `debug` developer triage), what
+  must NEVER appear (passwords, tokens, full URLs with creds,
+  large request payloads), and the SLF4J idioms we use.
+
+**Exit criteria**: every IO/network operation has at least a debug
+log; no `System.out`/`System.err` in production source; greppable
+"never log" rules in `LOGGING.md`; CI grep gate added (analogous
+to the Phase-5 `no-tls-bypass` gate) that fails on
+`LOGGER.*password\|LOGGER.*secret\|LOGGER.*credentials`.
+
+### Phase 19 — UX polish (one PR; may split into 19a / 19b)
+
+Depends on the primitives delivered by 13–18.
+
+- **Progress dialogs**: S3 multipart uploads (uses the
+  `TransferListener` wired by Phase 16); folder browses ≥ 1 s use
+  a deferred spinner. (`BUGS.md` 2.1, 2.2)
+- **"Operation failed" details**: every `JOptionPane.ERROR` gets
+  an expandable "Show details" pane carrying the underlying
+  exception's message + class. (`BUGS.md` 2.4)
+- **Mount-error next-step hints**: parse common `mount.nfs` /
+  `mount.cifs` / `sshfs` error patterns, show suggestions.
+  (`BUGS.md` 2.5)
+- **S3 401/403/404 distinction**: powered by the Phase-14 / Phase-16
+  `S3ErrorHandler`. (`BUGS.md` 2.6)
+- **Tailscale "not installed" banner**: top-of-window status row
+  on first launch when the binary is missing. (`BUGS.md` 2.7)
+- **Preferences Cancel-reverts**: snapshot at open, restore on
+  Cancel. (`BUGS.md` 2.8)
+- **Default-button focus** on every dialog (`InformationDialog`,
+  `QuestionDialog`, etc.). (`BUGS.md` 2.9)
+- **Keychain prompt explainer**: status-bar one-liner the first
+  time the OS keychain authorisation pops up. (`BUGS.md` 2.11)
+- **Drop-target writability**: reject the drop gesture (cursor
+  changes) on read-only targets. (`BUGS.md` 2.12)
+- **Bookmark deletion**: re-enable with a confirmation prompt.
+  (`BUGS.md` 2.3)
+- **Batch rename preview**: show the rename map before applying.
+  (`BUGS.md` 2.3)
+
+**Exit criteria**: manual UX checklist (in the PR description)
+walks the 11 items above; smoke on Linux + macOS.
+
+### Phase 20 — SpotBugs baseline drawdown to zero (one PR; may split per pattern)
+
+The end-of-PLAN cleanup. Goal: delete `config/spotbugs/exclude.xml`.
+
+After Phases 14, 17, 18 the baseline already shrinks. What's left
+gets fixed here:
+
+- **`DM_DEFAULT_ENCODING` × ~41**: every site goes through
+  `StandardCharsets.UTF_8`. Likely the largest mechanical chunk.
+- **`ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD` × ~15**: refactor to
+  the `LastValues` holder pattern used by Phase 10b/11/12 panels.
+- **`DMI_RANDOM_USED_ONLY_ONCE` × ~5**: shared `SecureRandom` field.
+- **`MS_SHOULD_BE_FINAL` × ~4**: add `final`.
+- **`DE_MIGHT_IGNORE` × ~3**: catch what should be caught.
+- **`NM_SAME_SIMPLE_NAME_AS_SUPERCLASS` × ~3**: rename.
+- **`MS_MUTABLE_ARRAY` × ~2**: defensive copy or `unmodifiable`.
+- **`ES_COMPARING_PARAMETER_STRING_WITH_EQ` × ~2**: `.equals()`.
+- **Various ×~8**: case-by-case.
+- **Vendored ×33**: keep package-level suppressions; comment why
+  ("`com.sun.*`/`sun.net.www.*` is upstream-vendored, not ours
+  to fix") and leave them.
+
+**Exit criteria**: `config/spotbugs/exclude.xml` contains only the
+vendored-package suppressions; no `<Match>` entry under our own
+namespace remains; CI green.
+
+### Phase 21+ — Architecture refactors (parking lot)
+
+`BUGS.md` §5 lists the architecture observations and §6 lists
+candidate refactors. **Both are review-only.** The refactors that
+graduate to a Phase 21+ PR are up to the user. Candidates:
+
+- 21a — `AbstractFile` decomposition into focused interfaces
+  (`FileAttributes`, `FileIO`, `FileURL` handler).
+- 21b — Replace reflection-based `Bootstrap` discovery with
+  `java.util.ServiceLoader`. Concurrent split of leftover OSGi
+  package names (`...commons.file.osgi.*`).
+- 21c — Vendored `apache-bzip2` → direct dep on
+  `org.apache.commons:commons-compress` (already pulled in by
+  `barebones-archiver`).
+- 21d — Connectivity panels (Mount, Tailscale, S3) into a new
+  `barebones-ui-connect` module, leaving `barebones-protocol-api`
+  honestly protocol-only.
+- 21e — Per-format `Activator` pattern → single `ServiceLoader`
+  registry.
+- 21f — Strongly-type Action parameters: replace `Map<String,
+  Object>` with sealed interface / records per action shape.
+- 21g — Centralised `Tunables` for the 30+ scattered timeout / poll
+  constants.
+
+None of the above runs without explicit "do 21x" from the user.
 
 ## 7. Compatibility with upstream
 

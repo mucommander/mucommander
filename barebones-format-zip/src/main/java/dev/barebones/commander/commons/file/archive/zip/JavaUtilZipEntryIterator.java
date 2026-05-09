@@ -25,6 +25,9 @@ import java.util.zip.ZipInputStream;
 
 import dev.barebones.commander.commons.file.archive.ArchiveEntry;
 import dev.barebones.commander.commons.file.archive.ArchiveEntryIterator;
+import dev.barebones.commander.commons.file.archive.SafePath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An <code>ArchiveEntryIterator</code> that iterates through a {@link ZipInputStream}.
@@ -32,6 +35,8 @@ import dev.barebones.commander.commons.file.archive.ArchiveEntryIterator;
  * @author Maxence Bernard
  */
 public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JavaUtilZipEntryIterator.class);
 
     /** InputStream to the archive file */
     private ZipInputStream zin;
@@ -78,24 +83,42 @@ public class JavaUtilZipEntryIterator implements ArchiveEntryIterator  {
      * @throws java.io.IOException if an I/O error occurred
      */
     private ArchiveEntry getNextEntry() throws IOException {
-        try {
-            ZipEntry entry = zin.getNextEntry();
+        // Loop so a single unsafe entry doesn't terminate iteration —
+        // we skip + log it and try the next.
+        while (true) {
+            ZipEntry entry;
+            try {
+                entry = zin.getNextEntry();
+            }
+            catch(Exception e) {
+                // java.util.zip.ZipInputStream can throw an
+                // IllegalArgumentException when the filename / comment
+                // encoding is not UTF-8 (ZipInputStream always expects
+                // UTF-8). Catch the broader Exception just to be safe.
+                throw new IOException("ZipInputStream.getNextEntry failed", e);
+            }
+            catch(Error e) {
+                // ZipInputStream#getNextEntry() throws InternalError
+                // ("invalid compression method") on non-DEFLATED /
+                // STORED methods (e.g. IMPLODED).
+                throw new IOException("ZipInputStream rejected compression method", e);
+            }
 
-            if(entry==null)
+            if (entry == null) {
                 return null;
+            }
+
+            // Reject entries whose path would escape the extraction
+            // root or otherwise can't safely round-trip through the
+            // filesystem.
+            try {
+                SafePath.validate(entry.getName());
+            } catch (SafePath.UnsafeEntryNameException e) {
+                LOGGER.warn("Skipping unsafe zip entry: {}", e.getMessage());
+                continue;
+            }
 
             return createArchiveEntryFunc.apply(new dev.barebones.commander.commons.file.archive.zip.provider.ZipEntry(entry));
-        }
-        catch(Exception e) {
-            // java.util.zip.ZipInputStream can throw an IllegalArgumentException when the filename/comment encoding
-            // is not UTF-8 as expected (ZipInputStream always expects UTF-8). The more general Exception is caught
-            // (just to be safe) and an IOException thrown.
-            throw new IOException();
-        }
-        catch(Error e) {
-            // ZipInputStream#getNextEntry() will throw a java.lang.InternalError ("invalid compression method")
-            // if the compression method is different from DEFLATED or STORED (happens with IMPLODED for example).
-            throw new IOException();
         }
     }
 

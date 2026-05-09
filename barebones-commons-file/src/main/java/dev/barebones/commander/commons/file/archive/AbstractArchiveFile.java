@@ -118,13 +118,20 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
      * underlying file protocol.
      */
-    protected void createEntriesTree() throws IOException, UnsupportedFileOperationException {
-        // TODO: this method is not thread-safe and needs to be synchronized
+    protected synchronized void createEntriesTree() throws IOException, UnsupportedFileOperationException {
+        // synchronized: concurrent ls() / checkEntriesTree calls would
+        // otherwise race on entryTreeRoot + archiveEntryFiles.
         ArchiveEntryTree treeRoot = new ArchiveEntryTree();
         archiveEntryFiles = new WeakHashMap<ArchiveEntry, AbstractArchiveEntryFile>();
 
         long start = System.currentTimeMillis();
-        try (ArchiveEntryIterator entries = getEntryIterator()) {
+        // Cap entry count, per-entry size, and cumulative declared
+        // size — defends against decompression bombs and "million
+        // tiny files" attacks at archive listing time. The
+        // per-entry-extraction path (getInputStream) is independent
+        // and bounded by the AbstractFile copy code.
+        try (ArchiveEntryIterator entries =
+                BoundedExtraction.wrapWithDefaults(getEntryIterator(), getSize())) {
             ArchiveEntry entry;
             while((entry=entries.nextEntry())!=null)
                 treeRoot.addArchiveEntry(entry);
@@ -144,7 +151,7 @@ public abstract class AbstractArchiveFile extends ProxyFile {
      * @throws UnsupportedFileOperationException if {@link FileOperation#READ_FILE} operations are not supported by the
      * underlying file protocol.
      */
-    protected void checkEntriesTree() throws IOException, UnsupportedFileOperationException {
+    protected synchronized void checkEntriesTree() throws IOException, UnsupportedFileOperationException {
         if (this.entryTreeRoot==null || getDate()!=this.entryTreeDate)
             createEntriesTree();
     }

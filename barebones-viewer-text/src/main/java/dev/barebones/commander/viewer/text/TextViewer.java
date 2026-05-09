@@ -123,7 +123,29 @@ public class TextViewer implements FileViewer, EncodingListener, ActionListener 
         textEditorImpl.showLineNumbers(lineNumbers);
     }
 
+    /** Hard ceiling above which the user is asked before the viewer
+     *  loads the whole file into memory. The text widget reads the
+     *  entire stream into a {@code Document}; multi-GiB files freeze
+     *  the JVM. 100 MiB chosen as a balance between "log files are
+     *  often large" and "you really don't want a 1 GiB string". */
+    private static final long LARGE_FILE_THRESHOLD = 100L * 1024 * 1024;
+
     void startEditing(AbstractFile file, DocumentListener documentListener) throws IOException {
+        long size = file.getSize();
+        if (size > LARGE_FILE_THRESHOLD) {
+            int choice = javax.swing.JOptionPane.showConfirmDialog(
+                ui,
+                "This file is " + (size / (1024 * 1024)) + " MiB. " +
+                "Loading it into the viewer will use a similar amount " +
+                "of memory and may freeze the application.\n\nOpen anyway?",
+                "Large file",
+                javax.swing.JOptionPane.OK_CANCEL_OPTION,
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            if (choice != javax.swing.JOptionPane.OK_OPTION) {
+                throw new IOException("user declined to open large file (" + size + " bytes)");
+            }
+        }
+
         // Auto-detect encoding
 
         // Get a RandomAccessInputStream on the file if possible, if not get a simple InputStream
