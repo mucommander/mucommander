@@ -1,0 +1,39 @@
+{
+  "Version": "1.78.1",
+  "BackendState": "Running",
+  "Self": {
+    "ID": "abc123",
+    "HostName": "this-laptop",
+    "DNSName": "this-laptop.tail-1234.ts.net.",
+    "TailscaleIPs": ["100.64.0.1", "fd7a:115c:a1e0::1"],
+    "OS": "macOS",
+    "Online": true
+  },
+  "Peer": {
+    "key-laptop": {
+      "ID": "p-laptop",
+      "HostName": "alice-laptop",
+      "DNSName": "alice-laptop.tail-1234.ts.net.",
+      "TailscaleIPs": ["100.64.0.10", "fd7a:115c:a1e0::a"],
+      "OS": "linux",
+      "Online": true,
+      "LastSeen": "2026-05-09T10:00:00Z"
+    },
+    "key-server": {
+      "ID": "p-server",
+      "HostName": "fileserver",
+      "DNSName": "fileserver.tail-1234.ts.net.",
+      "TailscaleIPs": ["100.64.0.20"],
+      "OS": "linux",
+      "Online": true
+    },
+    "key-offline": {
+      "ID": "p-offline",
+      "HostName": "old-mac",
+      "DNSName": "old-mac.tail-1234.ts.net.",
+      "TailscaleIPs": ["100.64.0.30"],
+      "OS": "macOS",
+      "Online": false
+    }
+  }
+}

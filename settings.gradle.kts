@@ -27,6 +27,9 @@ include("barebones-format-zip")
 include("barebones-protocol-nfs")
 include("barebones-protocol-sftp")
 
+include("barebones-mount-helper")
+include("barebones-tailscale")
+
 include("barebones-viewer-text")
 
 include("apache-bzip2")

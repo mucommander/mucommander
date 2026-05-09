@@ -24,7 +24,8 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
 | **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
 | **9** | in flight | SAST in CI (SpotBugs + FindSecBugs PR-triggered + OWASP Dependency-Check weekly) | one PR |
-| **10** | pending | Connectivity: Tailscale peer discovery + Taildrop, OS-level mount helper for NFSv4/SMB/SSHFS on Linux & macOS | one PR |
+| **10a** | in flight | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). No UI integration yet. | one PR |
+| **10b** | pending | Connectivity UI: Swing dialogs that drive the Phase-10a services (mount dialog, peer-list panel, Taildrop send action, active-mounts management). | one PR |
 | **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
 | **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
 
@@ -405,9 +406,33 @@ implemented:
   remains a SkipException in CI; the AWS SDK has its own LocalStack
   test harness that we may or may not adopt.
 
-### Phase 10 — Connectivity: Tailscale + mount helper (one PR)
+### Phase 10 — Connectivity: Tailscale + mount helper (split: 10a + 10b)
 
-The first feature-add phase after the cleanup wave. Three sub-features in one PR; all use the same shell-out pattern (no native code, no Go/Rust deps).
+The first feature-add phase after the cleanup wave. Originally
+scoped as one PR; split into two because the backend services and
+the Swing UI integration are mechanically independent and reviewing
+them together would be unwieldy.
+
+**Phase 10a** ships the headless backends as new modules with full
+unit-test coverage and Activator registration:
+
+- `barebones-mount-helper` — `MountSpec`, `MountKind`, `MountCommand`
+  SPI with `LinuxMountCommand` + `MacOSMountCommand`, `MountExecutor`
+  (ProcessBuilder shell-out with timeout + stdout/stderr capture),
+  `MountRegistry` (active-mount tracking), Activator that picks the
+  OS-appropriate command on startup. NFSv3/v4, SMB, SSHFS supported.
+- `barebones-tailscale` — `TailscalePeer` record, `TailscaleStatusParser`
+  for `tailscale status --json` output, `TailscaleClient` (locate
+  binary on $PATH or macOS GUI install path; `peers()`; `sendFile()`
+  for Taildrop), Activator that no-ops when tailscale isn't installed.
+
+Tests in 10a verify argv composition for every `(OS, MountKind)` pair
+plus an injection-defence regression case (shell metacharacters in
+user-supplied fields stay contained in their argv slot), `MountSpec`
+validation, `MountRegistry` mutual-exclusion, and `tailscale status
+--json` parsing against a real fixture.
+
+**Phase 10b** wires the backends into the existing UI:
 
 **OS-level mount helper** — a small Swing dialog that:
 - Asks for a remote share URL / host / share-path / credentials.
@@ -429,13 +454,21 @@ The first feature-add phase after the cleanup wave. Three sub-features in one PR
 - (Optional) Taildrop receive: a "Tailscale inbox" panel shows files received via Taildrop (`tailscale file get`).
 - All Tailscale invocations go through the OS-mount-style `ProcessBuilder(List<String>)` path — no shell-injection risk.
 
-**Implementation discipline**:
+**Implementation discipline** (enforced in 10a; UI inherits from these
+SPIs in 10b):
 - All shell-outs use `ProcessBuilder(List<String>)`. No `Runtime.exec(String)`. No string concatenation of user input into command lines. (Same SAST gate from Phase 5.)
-- Failure modes (binary missing, daemon not running, mount denied) bubble up as user-visible dialogs, never silent.
+- Failure modes (binary missing, daemon not running, mount denied) bubble up as user-visible dialogs in 10b, never silent.
 - No bundled Tailscale client. The user installs Tailscale via their OS; we just detect and integrate.
 - No bundled `sshfs` / `mount.nfs4` / `mount.cifs`. Same posture.
 
-**Exit criteria**: app can mount an NFSv4 share on both Linux and macOS via the mount dialog and browse it; tailnet peer list populates from `tailscale status --json`; Taildrop send works in a manual smoke test.
+**10a exit criteria**: `./gradlew test` green for both new modules,
+SpotBugs clean (no new entries in the Phase-9 baseline), Activator
+registration smoke-tested on Linux and macOS at app startup.
+
+**10b exit criteria** (deferred): app can mount an NFSv4 share on
+both Linux and macOS via the mount dialog and browse it; tailnet
+peer list populates from `tailscale status --json`; Taildrop send
+works in a manual smoke test.
 
 ## 7. Compatibility with upstream
 

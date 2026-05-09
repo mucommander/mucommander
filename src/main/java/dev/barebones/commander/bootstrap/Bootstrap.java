@@ -51,6 +51,13 @@ public final class Bootstrap {
         invoke("dev.barebones.commander.commons.file.protocol.sftp.Activator", "register");
         invoke("dev.barebones.commander.commons.file.protocol.nfs.Activator", "register");
 
+        // Phase-10 connectivity helpers. Both register no-op when the
+        // backing OS feature isn't available (mount on Windows, tailscale
+        // when the binary isn't installed) — the UI hides the related
+        // menu items rather than failing.
+        invoke("dev.barebones.commander.mount.Activator", "register");
+        invoke("dev.barebones.commander.tailscale.Activator", "register");
+
         // Archive formats
         invoke("dev.barebones.commander.commons.file.archive.zip.Activator", "register");
         invoke("dev.barebones.commander.commons.file.archive.tar.Activator", "register");
