@@ -21,13 +21,13 @@ dependencies {
     compileOnly project(':barebones-core-preload')
 
 
-    compileOnly 'com.formdev:flatlaf:2.2'
+    compileOnly 'com.formdev:flatlaf:3.5.4'
     compileOnly 'org.jetbrains:annotations:26.0.2-1'
 
-    implementation 'ch.qos.logback:logback-core:1.2.13'
-    implementation 'ch.qos.logback:logback-classic:1.2.13'
+    implementation 'ch.qos.logback:logback-core:1.5.32'
+    implementation 'ch.qos.logback:logback-classic:1.5.32'
     implementation 'org.apache.commons:commons-collections4:4.5.0'
-    implementation 'net.minidev:json-smart:2.4.10'
+    implementation 'net.minidev:json-smart:2.6.0'
 
     implementation 'org.unix4j:unix4j-command:0.6'
 

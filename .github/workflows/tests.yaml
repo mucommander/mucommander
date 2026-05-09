@@ -30,3 +30,18 @@ jobs:
       - uses: gradle/wrapper-validation-action@v2
       - uses: gradle/actions/setup-gradle@v3
       - run: ./gradlew test --stacktrace
+
+  # actions/dependency-review-action@v4 needs GitHub's "Dependency Graph"
+  # feature enabled at the repo level (Settings → Code security and
+  # analysis). It's not enabled on forks by default; once the user toggles
+  # it on, this job can be uncommented.
+  #
+  # dependency-review:
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'pull_request'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Dependency Review
+  #       uses: actions/dependency-review-action@v4
+  #       with:
+  #         fail-on-severity: high

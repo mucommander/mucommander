@@ -177,7 +177,6 @@ public class AboutDialog extends FocusDialog implements ActionListener {
             insertDetailedUrl(doc, "Apache Commons", "Apache License", "http://commons.apache.org");
             insertDetailedUrl(doc, "ICU4J", "ICU License", "http://www.icu-project.org");
             insertDetailedUrl(doc, "JSCH", "BSD", "https://github.com/mwiede/jsch");
-            insertDetailedUrl(doc, "JetS3t", "Apache License", "http://jets3t.s3.amazonaws.com/index.html");
             insertDetailedUrl(doc, "JNA", "LGPL", "http://jna.dev.java.net");
             insertDetailedUrl(doc, "Yanfs", "BSD", "http://yanfs.dev.java.net");
             insertDetailedUrl(doc, "JCommander", "Apache License", "http://jcommander.org");

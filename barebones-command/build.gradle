@@ -12,7 +12,7 @@ dependencies {
     api project(":barebones-commons-file")
     api project(":barebones-preferences")
 
-    implementation 'org.yaml:snakeyaml:2.3'
+    implementation 'org.yaml:snakeyaml:2.4'
 
     testImplementation 'org.testng:testng:7.11.0'
 }

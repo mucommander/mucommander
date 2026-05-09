@@ -35,7 +35,7 @@ subprojects {
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
     dependencies {
-        implementation 'org.slf4j:slf4j-api:1.7.36'
+        implementation 'org.slf4j:slf4j-api:2.0.17'
         constraints {
             implementation 'com.squareup.okio:okio-jvm:3.11.0'
             implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.1.20'
@@ -75,7 +75,7 @@ application {
 
 dependencies {
     implementation 'com.beust:jcommander:1.82'
-    implementation 'com.formdev:flatlaf:2.6'
+    implementation 'com.formdev:flatlaf:3.5.4'
 
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
@@ -99,7 +99,6 @@ dependencies {
     runtimeOnly project(':barebones-process')
     runtimeOnly project(':barebones-translator')
     runtimeOnly project(':barebones-protocol-sftp')
-    runtimeOnly project(':barebones-protocol-s3')
     runtimeOnly project(':barebones-protocol-nfs')
     runtimeOnly project(':barebones-format-zip')
     runtimeOnly project(':barebones-format-tar')

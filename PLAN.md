@@ -19,12 +19,13 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **1** | next | Strip every out-of-scope module (protocols, archive formats, viewers, terminal, OS adapters) | one PR |
 | **2** | pending | Drop OSGi runtime — replace Felix + bnd manifests + bundle activators with a plain Java app + fat JAR | one PR |
 | **3** | pending | Java 25 LTS upgrade | one PR |
-| **4** | pending | Dependency upgrades + Dependabot + dependency-review CI; **modernize S3 backend** (replace abandoned `jets3t` with AWS SDK v2) | one PR |
+| **4** | in flight | Dependency upgrades + Dependabot + dependency-review CI; **drop the abandoned `jets3t`-based S3 module** (its AWS-SDK-v2 reintroduction moves to Phase 11) | one PR |
 | **5** | pending | Code-level security fixes (XOR cipher → keychain, XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`) | one PR |
 | **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
 | **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
 | **9** | pending | SAST in CI (SpotBugs + FindSecBugs + OWASP Dependency-Check) | one PR |
 | **10** | pending | Connectivity: Tailscale peer discovery + Taildrop, OS-level mount helper for NFSv4/SMB/SSHFS on Linux & macOS | one PR |
+| **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
 
 **Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
 
@@ -33,7 +34,7 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 ## 1. Goals
 
 1. Ship a **small** dual-pane file manager built on the well-tested muCommander UI core.
-2. **Remote-data backends**: SSH/SFTP, S3-compatible object storage (AWS S3, MinIO, etc.), in-process NFSv2/v3 (via the existing Yanfs-based module), and — via Phase 10's mount helper — anything the OS can mount (NFSv4, SMB/CIFS, SSHFS). Local FS is always available.
+2. **Remote-data backends**: SSH/SFTP, in-process NFSv2/v3 (via the existing Yanfs-based module), and — via Phase 10's mount helper — anything the OS can mount (NFSv4, SMB/CIFS, SSHFS). Local FS is always available. **S3-compatible object storage** is on the roadmap via Phase 11 but is not present in the current build (the legacy jets3t-based module was deleted in Phase 4).
 3. **Two** OS targets: Linux (x86_64, aarch64) and macOS (Apple Silicon + Intel).
 4. **No** unpatched Critical/High vulnerabilities at v1.0 release.
 5. **Latest LTS Java** (Java 25 LTS) as the runtime target.
@@ -163,7 +164,7 @@ For the pruned dependency set (SFTP-only barebones build):
 | `barebones-command` | Custom-command feature. **Apply XXE hardening.** |
 | `barebones-protocol-api` | SPI. Keep — this is the VFS plug-in contract; future backends (rsync, WebDAV) can hook in here. |
 | `barebones-protocol-sftp` | SFTP backend. Bump `jsch` to fix Terrapin (Phase 4). |
-| `barebones-protocol-s3` | S3-compatible object storage backend. **Replace `jets3t` with AWS SDK v2 in Phase 4** (also drops the bundled `mail.osgi-1.4.jar`). |
+| `barebones-protocol-s3` | **Deleted in Phase 4.** Will be reintroduced in Phase 11 on top of AWS SDK v2 (`software.amazon.awssdk:s3`). |
 | `barebones-protocol-nfs` | In-process NFSv2/v3 backend (Yanfs-based via the vendored `sun-net-www`). NFSv4 is delivered via Phase 10's OS mount helper rather than this module — Yanfs has no v4 support and a Java NFSv4 client is not worth carrying. |
 | `sun-net-www` (vendored) | Keep — required by `barebones-protocol-nfs` (Yanfs / NFS RPC support). |
 | `barebones-os-api` | Keep. |
@@ -260,13 +261,19 @@ OSGi via Apache Felix is upstream's modularity choice; for a one-protocol app it
 
 **Exit criteria**: app builds & passes tests on Java 25.
 
-### Phase 4 — Dependency upgrades + S3 backend modernization (one PR)
+### Phase 4 — Dependency upgrades (one PR)
 
-**Replace abandoned `jets3t` with AWS SDK v2** for the S3 module (the largest single change in this PR):
-- Drop `org.jets3t:jets3t:0.9.7` and the bundled `mail.osgi-1.4.jar`.
-- Add `software.amazon.awssdk:s3` (latest 2.x) as the new backend.
-- Rewrite `S3File`, `S3Panel`, `S3FileURL`, and the OSGi `Activator` against the new SDK. Keep the existing `barebones-protocol-api` SPI shape so the rest of the app sees no behavioural change beyond authentication / endpoint configuration improvements.
-- Verify against AWS S3 + MinIO (S3-compatible) in manual smoke tests before merge.
+**Drop the jets3t-based S3 module wholesale.** The original Phase-4 plan
+called for an in-place rewrite from `jets3t` to AWS SDK v2; that is a
+~1.7k-LOC refactor with a very different API surface, no live test
+endpoint in CI, and so an outsized risk inside a phase that is otherwise
+about safe dep bumps. Phase 4 therefore deletes the
+`barebones-protocol-s3` subproject entirely (along with its bundled
+`mail.osgi-1.4.jar`); reintroducing S3 on AWS SDK v2 is split into a
+dedicated **Phase 11**.
+
+After this commit there is no `org.jets3t` dependency anywhere in the
+build, and no `mail.osgi-1.4.jar` artifact in `libs/`.
 
 **Bumps**:
 - `mwiede:jsch` 0.2.10 → ≥ 0.2.21 (fixes Terrapin CVE-2023-48795).
@@ -322,6 +329,26 @@ Maps 1:1 to `SECURITY_REVIEW.md` §5:
 
 - Add **SpotBugs + FindSecBugs** as a Gradle-driven CI step. Fail the build on any High-severity finding.
 - Add **OWASP Dependency-Check** as a scheduled weekly CI run. Fail on CVSS ≥ 7.0.
+
+### Phase 11 — Re-add S3 backend on AWS SDK v2 (one PR)
+
+Lifted out of the original Phase 4 plan because the refactor is too
+large for a dep-upgrade PR. The Phase-4 PR removed the `jets3t`-based
+module to clear the dep tree; this phase adds it back, properly
+implemented:
+
+- New `barebones-protocol-s3` subproject.
+- `software.amazon.awssdk:bom:2.x` + `software.amazon.awssdk:s3` deps.
+- `S3ProtocolProvider`, `S3Root`, `S3Bucket`, `S3Object`, `S3File`
+  rewritten against the AWS SDK v2 API.
+- `S3Panel` (the connection dialog) preserved from the deleted module's
+  Git history; UI fields adjusted for AWS-SDK-style endpoint /
+  credentials / region inputs.
+- Manual smoke against AWS S3 + at least one S3-compatible
+  endpoint (MinIO) before merge.
+- CI integration test gated on `-Dtest_properties.s3_test.temp_folder`
+  remains a SkipException in CI; the AWS SDK has its own LocalStack
+  test harness that we may or may not adopt.
 
 ### Phase 10 — Connectivity: Tailscale + mount helper (one PR)
 

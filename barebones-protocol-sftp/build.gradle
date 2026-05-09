@@ -5,7 +5,7 @@ dependencies {
     api project(':barebones-protocol-api')
     api project(':barebones-translator')
 
-    implementation 'com.github.mwiede:jsch:0.2.10'
+    implementation 'com.github.mwiede:jsch:0.2.26'
 
     testImplementation 'org.testng:testng:7.11.0'
     testImplementation files(project(':barebones-commons-file').sourceSets.test.output)

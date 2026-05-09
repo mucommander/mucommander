@@ -18,7 +18,7 @@ dependencies {
     api project(":barebones-process")
     api project(":barebones-translator")
 
-    implementation 'net.java.dev.jna:jna-platform:5.12.1'
+    implementation 'net.java.dev.jna:jna-platform:5.16.0'
     implementation 'com.googlecode.plist:dd-plist:1.23'
 
     // the java.desktop module that contains macOS-specific extensions
