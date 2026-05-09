@@ -25,12 +25,11 @@ package dev.barebones.commander.os.notifier;
  * the application is not visible (in the background).
  * </p>
  * <p>
- * The notifier instance returnd by {@link #getNotifier()} is platform-dependent. At this time, two notifier
- * implementations are available:
- * <ul>
- *  <li>{@link GrowlNotifier}: for macOS that is installed with Growl
- *  <li>{@link SystemTrayNotifier}: otherwise, using the java.awt.SystemTray API
- * </ul>
+ * The notifier instance returned by {@code DesktopAdapter#getNotifier()}
+ * is platform-dependent. {@link SystemTrayNotifier} is the default
+ * cross-platform impl (java.awt.SystemTray); macOS currently has no
+ * notifier wired in (Growl was retired; native UNUserNotificationCenter
+ * support is a future addition).
  * </p>
  *
  * @author Maxence Bernard

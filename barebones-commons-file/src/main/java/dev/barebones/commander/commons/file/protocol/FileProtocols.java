@@ -28,39 +28,20 @@ import dev.barebones.commander.commons.file.FileURL;
 public interface FileProtocols {
 
     /** Protocol for local or locally mounted files. */
-    String FILE      = "file";
-
-    /** Protocol for files served by an FTP server. */
-    String FTP       = "ftp";
-
-    /** Protocol for files served by a web server using HTTP. */
-    String HTTP      = "http";
-
-    /** Protocol for files served by an HDFS (Hadoop distributed filesystem) cluster. */
-    String HDFS      = "hdfs";
-
-    /** Protocol for files served by a web server using HTTPS. */
-    String HTTPS     = "https";
+    String FILE = "file";
 
     /** Protocol for files served by an NFS server. */
-    String NFS       = "nfs";
+    String NFS = "nfs";
 
-    /** Protocol for files served by an Amazon S3 (or protocol-compatible) server. */
-    String S3        = "s3";
+    /** Protocol for files served by an Amazon S3 (or S3-compatible) server. */
+    String S3 = "s3";
 
-    /** Protocol for files served by an SFTP server (not to be confused with FTPS or SCP). */
-    String SFTP      = "sftp";
+    /** Protocol for files served by an SFTP server. */
+    String SFTP = "sftp";
 
-    /** Protocol for files served by a SMB/CIFS server. */
-    String SMB       = "smb";
-
-    /** Protocol for files served by a web server using WebDAV/HTTP. */
-    String WEBDAV    = "webdav";
-
-    /** Protocol for files served by a web server using WebDAV/HTTPS. */
-    String WEBDAVS   = "webdavs";
-    
-    /** Protocol for files served by a web server using vSphere. */
-    String VSPHERE   = "vsphere";
+    /** Protocol for files served by a SMB/CIFS server. The backend was
+     *  removed but the constant survives so legacy bookmarks pointing at
+     *  smb:// URLs still parse without throwing. */
+    String SMB = "smb";
 
 }

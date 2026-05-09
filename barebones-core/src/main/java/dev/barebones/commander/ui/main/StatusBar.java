@@ -678,43 +678,6 @@ public class StatusBar extends JPanel {
         }
 
 
-// Total/Free space reversed, doesn't look quite right
-
-//        @Override
-//        public void paint(Graphics g) {
-//            // If free or total space is not available, this label will just be painted as a normal JLabel
-//            if(freeSpace!=-1 && totalSpace!=-1) {
-//                int width = getWidth();
-//                int height = getHeight();
-//
-//                // Paint amount of free volume space if both free and total space are available
-//                float freeSpacePercentage = freeSpace/(float)totalSpace;
-//                float usedSpacePercentage = (totalSpace-freeSpace)/(float)totalSpace;
-//
-//                Color c;
-//                if(freeSpacePercentage<=SPACE_CRITICAL_THRESHOLD) {
-//                    c = criticalColor;
-//                }
-//                else if(freeSpacePercentage<=SPACE_WARNING_THRESHOLD) {
-//                    c = interpolateColor(warningColor, criticalColor, (SPACE_WARNING_THRESHOLD-freeSpacePercentage)/SPACE_WARNING_THRESHOLD);
-//                }
-//                else {
-//                    c = interpolateColor(okColor, warningColor, (1-freeSpacePercentage)/(1-SPACE_WARNING_THRESHOLD));
-//                }
-//
-//                g.setColor(c);
-//
-//                int usedSpaceWidth = Math.max(Math.round(usedSpacePercentage*(float)(width-2)), 1);
-//                g.fillRect(1, 1, usedSpaceWidth + 1, height - 2);
-//
-//                // Fill background
-//                g.setColor(backgroundColor);
-//                g.fillRect(usedSpaceWidth + 1, 1, width - usedSpaceWidth - 1, height - 2);
-//            }
-//
-//            super.paint(g);
-//        }
-
         public void fontChanged(FontChangedEvent event) {}
 
         public void colorChanged(ColorChangedEvent event) {

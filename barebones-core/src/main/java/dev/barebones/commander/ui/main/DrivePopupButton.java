@@ -60,7 +60,6 @@ import dev.barebones.commander.commons.util.ui.helper.MnemonicHelper;
 import dev.barebones.commander.conf.MuConfigurations;
 import dev.barebones.commander.conf.MuPreference;
 import dev.barebones.commander.conf.MuPreferences;
-import dev.barebones.commander.osgi.BrowsableItemsMenuServiceTracker;
 import dev.barebones.commander.protocol.ui.ProtocolPanelProvider;
 import dev.barebones.commander.protocol.ui.ServerPanel;
 import dev.barebones.commander.text.Translator;
@@ -401,12 +400,6 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
             action.setIcon(IconManager.getIcon(IconManager.FILE_ICON_SET, CustomFileIconProvider.NETWORK_ICON_NAME));
             setMnemonic(popupMenu.add(action), mnemonicHelper);
         }
-
-        // Add service menus, like Bonjour service menu
-        BrowsableItemsMenuServiceTracker.getMenuServices().forEach(service -> {
-            JMenu menu = service.getMenu(mainFrame, folderPanel);
-            setMnemonic(popupMenu.add(menu), mnemonicHelper);
-        });
         popupMenu.add(new JSeparator());
 
         // Add 'connect to server' shortcuts

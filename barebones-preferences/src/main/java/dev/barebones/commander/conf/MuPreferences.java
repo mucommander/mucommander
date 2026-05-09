@@ -129,20 +129,6 @@ public class MuPreferences implements MuPreferencesAPI {
     /** Default settings for Use Option as Meta key */
     public static final boolean DEFAULT_USE_OPTION_AS_META_KEY    =  false;
 
-    // - Mail variables ------------------------------------------------------
-    // -----------------------------------------------------------------------
-    /** Section describing mail CONFIGURATION. */
-    public static final String MAIL_SECTION                       = "mail";
-    /** Address of the SMTP server that should be used when sending mails. */
-    public static final String SMTP_SERVER                        = MAIL_SECTION + '.' + "smtp_server";
-    /** Outgoing TCP port to the SMTP server. */
-    public static final String SMTP_PORT                          = MAIL_SECTION + '.' + "smtp_port";
-    /** Default outgoing TCP port to the SMTP server. */
-    public static final int    DEFAULT_SMTP_PORT                   = 25;
-    /** Name under which mails sent by muCommander should appear. */
-    public static final String MAIL_SENDER_NAME                   = MAIL_SECTION + '.' + "sender_name";
-    /** Address which mails sent by muCommander should be replied to. */
-    public static final String MAIL_SENDER_ADDRESS                = MAIL_SECTION + '.' + "sender_address";
 
 
 
@@ -334,15 +320,6 @@ public class MuPreferences implements MuPreferencesAPI {
     public static final String DEFAULT_THEME_NAME                 = "Native";
 
 
-
-    // - Variables used by Bonjour/Zeroconf support --------------------------
-    // -----------------------------------------------------------------------
-    /** Section controlling parameters related to Bonjour/Zeroconf support. */
-    public static final String  BONJOUR_SECTION                   = "bonjour";
-    /** Used do determine whether discovery of Bonjour services should be activated or not. */
-    public static final String  ENABLE_BONJOUR_DISCOVERY          = BONJOUR_SECTION + '.' + "discovery_enabled";
-    /** Default Bonjour discovery activation used on startup. */
-    public static final boolean DEFAULT_ENABLE_BONJOUR_DISCOVERY  = false;
 
     // - Variables used to launch the viewer in case of error opening a file -
     // -----------------------------------------------------------------------

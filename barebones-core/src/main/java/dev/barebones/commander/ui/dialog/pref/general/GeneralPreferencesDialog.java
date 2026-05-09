@@ -61,10 +61,8 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     public static final int APPEARANCE_TAB = 2;
     /** Identifier of the 'shortcuts' tab. */
     public static final int SHORTCUTS_TAB  = 3;
-    /** Identifier of the 'mail' tab. */
-    public static final int MAIL_TAB       = 4;
     /** Identifier of the 'misc' tab. */
-    public static final int MISC_TAB       = 5;
+    public static final int MISC_TAB       = 4;
 
 
 
@@ -76,8 +74,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
     private final static String FOLDERS_ICON    = "folders.png";
     /** Name of the icon used by the 'appearance' tab. */
     private final static String APPEARANCE_ICON = "appearance.png";
-    /** Name of the icon used by the 'mail' tab. */
-    private final static String MAIL_ICON       = "mail.png";
     /** Name of the icon used by the 'misc' tab. */
     private final static String MISC_ICON       = "misc.png";
     /** Name of the icon used by the 'shortucts' tab. */
@@ -106,7 +102,6 @@ public class GeneralPreferencesDialog extends PreferencesDialog {
         addPreferencesPanel(new FoldersPanel(this),    FOLDERS_ICON);
         addPreferencesPanel(new AppearancePanel(this), APPEARANCE_ICON);
         addPreferencesPanel(new ShortcutsPanel(this),  SHORTCUTS_ICON);
-        addPreferencesPanel(new MailPanel(this),       MAIL_ICON);
         addPreferencesPanel(new MiscPanel(this),       MISC_ICON);
 
         // Sets the dialog's size.

@@ -138,15 +138,14 @@ public class BrowseLocationThread extends ChangeFolderThread {
      * Returns <code>true</code> if the given file should have its canonical path followed. In that case, the
      * AbstractFile instance must be resolved again.
      *
-     * <p>HTTP files MUST have their canonical path followed. For all other file protocols, this is an option in
-     * the preferences.</p>
+     * <p>The HTTP protocol used to be a special case (always follow);
+     * HTTP support was removed so the check is the plain preference now.</p>
      *
      * @param file the file to test
      * @return <code>true</code> if the given file should have its canonical path followed
      */
     private boolean followCanonicalPath(AbstractFile file) {
-        return (MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS)
-                || file.getURL().getScheme().equals(FileProtocols.HTTP))
+        return MuConfigurations.getPreferences().getVariable(MuPreference.CD_FOLLOWS_SYMLINKS, MuPreferences.DEFAULT_CD_FOLLOWS_SYMLINKS)
                 && !file.getAbsolutePath(false).equals(file.getCanonicalPath(false));
     }
 

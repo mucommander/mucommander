@@ -45,7 +45,6 @@ import dev.barebones.commander.conf.MuPreference;
 import dev.barebones.commander.conf.MuPreferences;
 import dev.barebones.commander.core.desktop.DesktopManager;
 import dev.barebones.commander.desktop.ActionType;
-import dev.barebones.commander.osgi.BrowsableItemsMenuServiceTracker;
 import dev.barebones.commander.text.Translator;
 import dev.barebones.commander.ui.action.ActionId;
 import dev.barebones.commander.ui.action.ActionManager;
@@ -286,18 +285,6 @@ public class MainMenuBar extends JMenuBar implements ActionListener, MenuListene
         MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowRootFoldersQL, mainFrame), menuItemMnemonicHelper2);
         MenuToolkit.addMenuItem(quickListMenu, ActionManager.getActionInstance(ActionType.ShowTabsQL, mainFrame), menuItemMnemonicHelper2);
         goMenu.add(quickListMenu);
-
-        // Add service menus, like Bonjour
-        goMenu.add(new JSeparator());
-        BrowsableItemsMenuServiceTracker.getMenuServices().forEach(service -> {
-            JMenu menu = service.getMenu(mainFrame, null);
-            char mnemonic = menuItemMnemonicHelper.getMnemonic(menu.getName());
-            if (mnemonic != 0) {
-                menu.setMnemonic(mnemonic);
-            }
-            menu.setIcon(null);
-            goMenu.add(menu);
-        });
 
         // Volumes will be added when the menu is selected
         goMenu.add(new JSeparator());

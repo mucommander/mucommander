@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<barebones-commander>
-  <latest_version>@VERSION@</latest_version>
-  <release_date>@DATE@</release_date>
-  <download_url>@DOWNLOAD_URL@</download_url>
-  <jar_url>@JAR_URL@</jar_url>
-</barebones-commander>
-    

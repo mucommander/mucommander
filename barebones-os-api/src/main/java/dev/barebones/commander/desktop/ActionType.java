@@ -55,7 +55,6 @@ public enum ActionType {
     Find("Find"),
     FocusNext("FocusNext"),
     FocusPrevious("FocusPrevious"),
-    GarbageCollect("GarbageCollect"),
     GoBack("GoBack"),
     GoForward("GoForward"),
     GoToDocumentation("GoToDocumentation"),

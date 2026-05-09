@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Default config bundled in the fat-jar. The user can override
+         with -Dlogback.configurationFile=… on the JVM command line. -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%.15thread] %-5level %logger{36}:%line - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Optional rolling log file. Disabled unless the
+         BAREBONES_LOG_DIR system property points at a writable
+         directory. The original config used a ${BAREBONES_USER_PREFERENCES}
+         env var that nothing set, so the FILE appender opened a
+         path like '/logs/...' and either failed silently or polluted
+         tests; if-then makes this opt-in. -->
+    <if condition='isDefined("BAREBONES_LOG_DIR")'>
+        <then>
+            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <file>${BAREBONES_LOG_DIR}/barebones-commander.log</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                    <fileNamePattern>${BAREBONES_LOG_DIR}/barebones-commander-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <maxFileSize>10MB</maxFileSize>
+                    <maxHistory>7</maxHistory>
+                    <totalSizeCap>200MB</totalSizeCap>
+                </rollingPolicy>
+                <encoder>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%.15thread] %-5level %logger{36}:%line - %msg%n</pattern>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+
+    <!-- Default root level: INFO. Override per-package as needed.
+         The original config used level=all which floods stdout in
+         tests and made ProcessListener-based stdout capture racy. -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <if condition='isDefined("BAREBONES_LOG_DIR")'>
+            <then><appender-ref ref="FILE"/></then>
+        </if>
+    </root>
+</configuration>

@@ -74,7 +74,6 @@ import dev.barebones.commander.ui.icon.FileIcons;
 import dev.barebones.commander.ui.macos.AppleScript;
 import dev.barebones.commander.ui.macos.OSXIntegration;
 import dev.barebones.commander.ui.macos.TabbedPaneUICustomizer;
-import dev.barebones.commander.ui.notifier.GrowlNotifier;
 import com.sun.jna.platform.mac.XAttrUtils;
 
 
@@ -174,7 +173,11 @@ public class OSXDesktopAdapter extends DefaultDesktopAdapter {
 
     @Override
     public AbstractNotifier getNotifier() {
-        return GrowlNotifier.isGrowlRunning() ? new GrowlNotifier() : null;
+        // Growl was a third-party macOS notification system that died
+        // around 2017; the current macOS ships UNUserNotificationCenter
+        // (Notification Center). A native binding belongs in its own
+        // module — for now no notifier means OS-level alerts are off.
+        return null;
     }
 
     @Override

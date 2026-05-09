@@ -70,9 +70,6 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
     /** 'Enable system notifications' checkbox */
     private PrefCheckBox systemNotificationsCheckBox;
 
-    /** 'Enable Bonjour services discovery' checkbox */
-    private PrefCheckBox bonjourDiscoveryCheckBox;
-
     /** 'Open the file with the viewer in case of opening error' checkbox */
     private PrefCheckBox viewOnErrorDiscoveryCheckBox;
 
@@ -182,13 +179,6 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         viewOnErrorDiscoveryCheckBox.addDialogListener(parent);
         northPanel.add(viewOnErrorDiscoveryCheckBox);
 
-        // 'Enable Bonjour services discovery' option
-        bonjourDiscoveryCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.enable_bonjour_discovery"), () -> MuConfigurations.getPreferences().getVariable(
-                MuPreference.ENABLE_BONJOUR_DISCOVERY,
-                MuPreferences.DEFAULT_ENABLE_BONJOUR_DISCOVERY));
-        bonjourDiscoveryCheckBox.addDialogListener(parent);
-        northPanel.add(bonjourDiscoveryCheckBox);
-
         setDropActionToCopyCheckBox = new PrefCheckBox(Translator.get("prefs_dialog.set_drop_action_to_copy"), () -> MuConfigurations.getPreferences().getVariable(
                 MuPreference.SET_DROP_ACTION_TO_COPY,
                 MuPreferences.DEFAULT_SET_DROP_ACTION_TO_COPY));
@@ -244,8 +234,6 @@ class MiscPanel extends PreferencesPanel implements ItemListener {
         }
 
         MuConfigurations.getPreferences().setVariable(MuPreference.VIEW_ON_ERROR, viewOnErrorDiscoveryCheckBox.isSelected());
-
-        MuConfigurations.getPreferences().setVariable(MuPreference.ENABLE_BONJOUR_DISCOVERY, bonjourDiscoveryCheckBox.isSelected());
 
         MuConfigurations.getPreferences().setVariable(MuPreference.SET_DROP_ACTION_TO_COPY, setDropActionToCopyCheckBox.isSelected());
         if (OsFamily.MAC_OS.isCurrent()) {

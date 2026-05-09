@@ -50,7 +50,6 @@
   <Match><Class name="~dev\.barebones\.commander\.job\.impl\.CombineFilesJob([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.process\.DebugProcessListener([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.process\.ProcessOutputMonitor([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
-  <Match><Class name="~dev\.barebones\.commander\.ui\.action\.impl\.GarbageCollectAction([\$.].*)?"/><Bug pattern="DM_GC"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.about\.LicenseDialog([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.file\.FileSelectionDialog([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>  <!-- (×4) -->
   <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.pref\.general\.AppearancePanel([\$.].*)?"/><Bug pattern="EQ_ALWAYS_FALSE"/></Match>
