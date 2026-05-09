@@ -105,7 +105,30 @@ public final class CredentialsMapping {
         return cm.credentials.equals(this.credentials, false) && cm.realm.equals(this.realm, false, true);
     }
 
+    /**
+     * Hash matches the equality contract above: realm + login only,
+     * never the password (so two CredentialsMappings with the same
+     * (login, realm) and different passwords still hash to the
+     * same bucket — which is what equals() reports too).
+     */
+    @Override
+    public int hashCode() {
+        int h = realm == null ? 0 : realm.hashCode();
+        if (credentials != null) {
+            String login = credentials.getLogin();
+            h = 31 * h + (login == null ? 0 : login.hashCode());
+        }
+        return h;
+    }
+
+    /**
+     * Never include the password in {@code toString} — this is called
+     * from log lines where the output may end up on disk or in a
+     * crash report.
+     */
+    @Override
     public String toString() {
-        return credentials.toString()+" "+realm.toString(false);
+        String login = credentials == null ? "(no creds)" : credentials.getLogin();
+        return login + " @ " + realm.toString(false);
     }
 }

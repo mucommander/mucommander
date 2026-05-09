@@ -46,13 +46,19 @@ public final class Bootstrap {
         invoke("dev.barebones.commander.conf.Activator", "register", Map.class, properties);
         invoke("dev.barebones.commander.preload.Activator", "register");
 
-        // Phase-12 secret store. Picks an OS keychain backend on macOS,
+        // Secret store. Picks an OS keychain backend on macOS,
         // libsecret on Linux, or no-op (the AES-GCM file backend is
         // opt-in via -Dbarebones.secretStore=aes-gcm-file). Must
         // register BEFORE the credentials code in barebones-core's
         // Activator runs — credentials.xml parsing reads the store on
         // first lookup.
         invoke("dev.barebones.commander.secret.Activator", "register");
+
+        // Best-effort cleanup at JVM exit: closes the SecretStore
+        // (frees libsecret schema / zeroes AES-GCM key material) and
+        // leaves room to add other native-resource releases later.
+        Runtime.getRuntime().addShutdownHook(new Thread(Bootstrap::shutdown,
+            "barebones-shutdown"));
 
         // Protocols. S3 reintroduced in Phase 11 on AWS SDK v2; the
         // jets3t-based module from upstream was deleted in Phase 4.
@@ -84,6 +90,30 @@ public final class Bootstrap {
 
         // Core — instantiated with the property map; its register() shows the UI.
         instantiateAndRegister("dev.barebones.commander.Activator", properties);
+    }
+
+    /**
+     * JVM shutdown hook: closes anything that holds native resources
+     * we need to release explicitly (libsecret GObjects, AES-GCM key
+     * material). Reflective so the root project doesn't compile-depend
+     * on the secret-store module.
+     */
+    private static void shutdown() {
+        try {
+            Class<?> service = Class.forName("dev.barebones.commander.secret.SecretStoreService");
+            Object store = service.getMethod("store").invoke(null);
+            if (store instanceof AutoCloseable closeable) {
+                try {
+                    closeable.close();
+                } catch (Exception ignored) {
+                    // Shutdown — log channels may already be down.
+                }
+            }
+        } catch (ClassNotFoundException notFound) {
+            // SecretStore module not present; nothing to close.
+        } catch (ReflectiveOperationException e) {
+            // Same — shutdown is best-effort.
+        }
     }
 
     /**

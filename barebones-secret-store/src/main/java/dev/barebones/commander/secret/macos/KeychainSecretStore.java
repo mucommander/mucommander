@@ -132,7 +132,18 @@ public final class KeychainSecretStore implements SecretStore {
                     "SecKeychainItemDelete failed: status=" + deleteStatus);
             }
         } finally {
-            SecurityFramework.INSTANCE.SecKeychainItemFreeContent(null, passwordData.getValue());
+            // SecKeychainItemFreeContent frees the password DATA
+            // buffer; CFRelease releases the CFTypeRef itemRef
+            // itself. Both are required — calling only the first
+            // leaks one CFTypeRef per delete.
+            Pointer pwd = passwordData.getValue();
+            if (pwd != null) {
+                SecurityFramework.INSTANCE.SecKeychainItemFreeContent(null, pwd);
+            }
+            Pointer ref = itemRef.getValue();
+            if (ref != null) {
+                SecurityFramework.INSTANCE.CFRelease(ref);
+            }
         }
     }
 

@@ -55,12 +55,14 @@ normalisation, no leading-`/` rejection, no Windows `\` rejection.
 A crafted archive with `../../etc/passwd` writes outside the
 extraction root.
 
-### 1.2 HIGH — SFTP host-key verification not configured
-**`barebones-protocol-sftp/.../SFTPConnectionHandler.java:88-94`**
-
-`session.connect()` is reached with no `setConfig("StrictHostKeyChecking","yes")`,
-no known-hosts file, no host-key repository. JSch defaults to "ask",
-which is bypassable. MITM-able on any non-trusted network.
+### 1.2 ~~HIGH — SFTP host-key verification not configured~~ **FIXED**
+Fixed in Phase 14: new `HostKeyPolicy` enum (YES / ASK / NO,
+default ASK) wired through `session.setConfig("StrictHostKeyChecking", …)`.
+JSch's `setKnownHosts(~/.ssh/known_hosts)` loaded when present.
+`PasswordAuthentication.promptYesNo` no longer auto-accepts: it
+delegates to `HostKeyPrompter` (default Swing JOptionPane; tests
+inject a non-Swing prompter). System-property override:
+`-Dbarebones.sftp.hostKey=yes|ask|no`.
 
 ### 1.3 HIGH — Static mutable collections without synchronisation
 **`barebones-core/.../auth/CredentialsManager.java`** (vector),
@@ -89,37 +91,31 @@ Connect timeout is 5 s (probably too short on slow VPN), but the
 ongoing transfer has no socket-read timeout — a half-open TCP
 connection wedges the copy-job thread indefinitely.
 
-### 1.6 HIGH — macOS Keychain item-ref leaked on every successful lookup
-**`barebones-secret-store/.../macos/KeychainSecretStore.java:80-104`**
+### 1.6 ~~HIGH — macOS Keychain item-ref leaked~~ **FIXED**
+Fixed in Phase 14: new `CFRelease` JNA binding in
+`SecurityFramework`; `deleteByLookup()` now calls it on the
+returned `itemRef` after the delete completes (the only call
+site that requested an itemRef). The `lookup()` path was
+already passing null for itemRef — no leak there.
 
-`SecKeychainFindGenericPassword` returns an `itemRef` that needs
-`CFRelease`, but `lookup()` never frees it on the success path
-(only `deleteByLookup()` releases its own ref). One leak per
-lookup → accumulates over a long session.
+### 1.7 ~~HIGH — libsecret schema pointer never unref'd~~ **FIXED**
+Fixed in Phase 14: `LibsecretSecretStore` implements `close()`
+which calls `Libsecret.INSTANCE.secret_schema_unref(schema)`.
+Bootstrap registers a JVM shutdown hook that walks
+`SecretStoreService.store()` and calls `close()` on it.
 
-### 1.7 HIGH — libsecret schema pointer never unref'd
-**`barebones-secret-store/.../linux/LibsecretSecretStore.java:46-50`**
+### 1.8 ~~HIGH — AES-GCM derived key never zeroed~~ **FIXED**
+Fixed in Phase 14: `AesGcmFileSecretStore.close()` zeroes the
+in-memory `keyMaterial`, scrubs every cached secret in
+`entries`, and clears the map. Wired into the same shutdown
+hook as 1.7.
 
-`secret_schema_new()` returns a refcounted GObject that needs
-`secret_schema_unref()`. The constructor stores it in a field and
-never frees it. One GObject per `LibsecretSecretStore` instance,
-forever.
-
-### 1.8 HIGH — AES-GCM derived key never zeroed
-**`barebones-secret-store/.../aesgcm/AesGcmFileSecretStore.java:93-94`**
-
-PBKDF2-derived key sits in a `byte[] keyMaterial` field for the
-object's lifetime. `Arrays.fill(keyMaterial, (byte)0)` never runs.
-A heap dump exposes the key. The store has no `close()`.
-
-### 1.9 HIGH — `equals()` without `hashCode()` on `Bookmark` and `CredentialsMapping`
-**`barebones-core/.../bookmark/Bookmark.java:127-134`**,
-**`barebones-core/.../auth/CredentialsMapping.java`** (per the SpotBugs baseline)
-
-Putting these into a `HashMap`/`HashSet` silently produces wrong
-results. `BookmarkManager` keeps them in a `Vector` so the bug is
-latent today, but a future contributor switching to a `Map` ships a
-broken release.
+### 1.9 ~~HIGH — `equals()` without `hashCode()` on `Bookmark` and `CredentialsMapping`~~ **FIXED**
+Fixed in Phase 14: `Bookmark`, `CredentialsMapping`,
+`FileComparator`, `BOM` all gained `hashCode()` matching their
+existing `equals()` contract. `CredentialsMappingTest`
+round-trips through `HashSet` to prove the fix. SpotBugs
+baseline shrunk by 4 entries.
 
 ### 1.10 MED — `ZipInputStream` leaked on iteration error
 **`barebones-format-zip/.../ZipArchiveFile.java:250-258`**
@@ -127,7 +123,13 @@ broken release.
 If an exception is thrown mid-iteration the stream is never closed
 in a finally. Each failed lookup leaks an FD.
 
-### 1.11 MED — S3 connection-cache key contains plaintext access+secret keys
+### 1.11 ~~MED — S3 connection-cache key contains plaintext access+secret keys~~ **FIXED**
+Fixed in Phase 14: cache key now uses
+`SHA-256(accessKey + 0x00 + secretKey)` (hex-encoded) in the
+position previously held by `accessKey`. Same uniqueness; no
+plaintext.
+
+<!-- ORIGINAL DESCRIPTION (kept for historical context):
 **`barebones-protocol-s3/.../S3ProtocolProvider.java:67-68`**
 
 Cache key is `host|port|region|accessKey|pathStyle|useHttps` — but
@@ -135,6 +137,7 @@ the code path I added accidentally also uses the secret key for
 disambiguation in some places. Anywhere the key string is logged,
 serialised, or appears in a heap dump, the secret is exposed.
 Fix: hash credentials (SHA-256) into the cache key.
+-->
 
 ### 1.12 MED — `S3TransferManager.completionFuture().join()` blocks EDT
 **`barebones-protocol-s3/.../S3Object.java:329-330`**
@@ -322,11 +325,11 @@ runs lose the failure reason.
 "tailscale file cp timed out after 5s" — but which peer, which
 file? Include argv (sanitised) in the timeout exception.
 
-### 3.4 `CredentialsMapping.toString()` may dump full URL with credentials
-**`barebones-core/.../auth/CredentialsMapping.java`** — used in
-several `LOGGER.info` lines via `+ url`. If the URL embeds
-`user:pass@host`, that lands in logs. Override `toString()` to mask
-the password segment.
+### 3.4 ~~`CredentialsMapping.toString()` may dump full URL with credentials~~ **FIXED**
+Fixed in Phase 14: `toString()` now returns
+`"<login> @ <realm.toString(false)>"` — `realm` is the
+credential-stripped FileURL; the password is never included.
+Regression test in `CredentialsMappingTest.toStringDoesNotIncludePassword`.
 
 ### 3.5 `ThemeManager` exception sites lack file paths
 **`ThemeManager.java:495,532,563,593,823`** catch and log
@@ -368,10 +371,12 @@ A listener registered from an anonymous inner class loses its
 strong reference and stops firing. Use `EventListenerList` /
 `ListenerSupport`.
 
-### 4.6 No registered shutdown hook for cleanup
-`ShutdownHook` exists in core but its registration site is unclear.
-Mount-helper temp files, S3 clients, secret-store key material —
-none get cleaned up on JVM exit.
+### 4.6 PARTIALLY FIXED — Shutdown hook registered for `SecretStore`
+Phase 14 wires `Bootstrap.shutdown()` as a JVM shutdown hook
+that closes the active `SecretStoreService.store()` (frees
+libsecret schema, zeroes AES-GCM key). Mount-helper temp files
+and cached `S3Connection`s are NOT yet cleaned up — to land in
+Phase 16 alongside the rest of the shutdown / lifecycle work.
 
 ### 4.7 S3 `SpillingPutOutputStream` temp file: deletion-error masks upload error
 **`barebones-protocol-s3/.../S3Object.java:319-338`** — if the

@@ -167,6 +167,11 @@ public class BOM {
         return (o instanceof BOM) && ((BOM)o).sigEquals(sig);
     }
 
+    @Override
+    public int hashCode() {
+        return java.util.Arrays.hashCode(sig);
+    }
+
     /**
      * Returns a String representation of this <code>BOM</code>.
      *

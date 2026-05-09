@@ -298,4 +298,9 @@ public class FileComparator implements Comparator<AbstractFile> {
         FileComparator fc = (FileComparator)o;
         return criterion ==fc.criterion && ascending==fc.ascending;
     }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(criterion, ascending);
+    }
 }

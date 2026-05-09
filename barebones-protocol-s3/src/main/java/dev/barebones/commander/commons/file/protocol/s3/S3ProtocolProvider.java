@@ -64,11 +64,30 @@ public class S3ProtocolProvider implements ProtocolProvider {
         final boolean useHttps  = !"false".equalsIgnoreCase(url.getProperty(PROPERTY_USE_HTTPS));
         final String host = url.getHost();
         final int port = url.getPort();
-        String key = host + "|" + port + "|" + region + "|" + accessKey
+        // Cache key hashes the credentials material rather than embedding
+        // it in plaintext: the key string travels into log output, heap
+        // dumps, and ConcurrentHashMap.toString().
+        String credentialsHash = sha256Hex(accessKey + "\0" + secretKey);
+        String key = host + "|" + port + "|" + region + "|" + credentialsHash
             + "|" + pathStyle + "|" + useHttps;
         return connections.computeIfAbsent(key, k -> S3Connection.open(
             host, port, region,
             accessKey, secretKey,
             pathStyle, useHttps));
+    }
+
+    private static String sha256Hex(String input) {
+        try {
+            byte[] digest = java.security.MessageDigest.getInstance("SHA-256")
+                .digest(input.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder(digest.length * 2);
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            // SHA-256 is mandatory in every JRE; this never fires.
+            throw new IllegalStateException("SHA-256 unavailable", e);
+        }
     }
 }

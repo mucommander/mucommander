@@ -69,4 +69,15 @@ public interface SecurityFramework extends Library {
 
     /** Frees a buffer allocated by SecKeychainFindGenericPassword. */
     int SecKeychainItemFreeContent(Pointer attrList, Pointer data);
+
+    /**
+     * CoreFoundation CFRelease — decrements the refcount of any CFTypeRef.
+     * The itemRef returned by SecKeychainFindGenericPassword is a
+     * CFTypeRef and needs CFRelease to avoid leaking it.
+     *
+     * Lives on the CoreFoundation library, but JNA binds it through
+     * the same Library instance because dlsym walks the global
+     * namespace on macOS.
+     */
+    void CFRelease(Pointer cf);
 }

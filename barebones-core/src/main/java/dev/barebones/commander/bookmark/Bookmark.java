@@ -132,4 +132,9 @@ public class Bookmark implements Cloneable {
         bookmark = (Bookmark)object;
         return bookmark.getName().equals(name);
     }
+
+    @Override
+    public int hashCode() {
+        return name == null ? 0 : name.hashCode();
+    }
 }

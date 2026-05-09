@@ -18,6 +18,7 @@
 
 package dev.barebones.commander.commons.file.protocol.sftp;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -74,6 +75,20 @@ class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
             JSch jsch = new JSch();
 
+            // Load OpenSSH known_hosts so previously-seen keys are
+            // verified silently on reconnect. JSch lazily appends
+            // accepted new keys to this file when StrictHostKeyChecking
+            // is "ask".
+            File knownHosts = new File(System.getProperty("user.home"), ".ssh/known_hosts");
+            if (knownHosts.exists()) {
+                try {
+                    jsch.setKnownHosts(knownHosts.getAbsolutePath());
+                } catch (JSchException e) {
+                    LOGGER.warn("Could not load known_hosts at {}: {}",
+                        knownHosts, e.getMessage());
+                }
+            }
+
             // Override default port (22) if a custom port was specified in the URL
             int port = realm.getPort();
             if(port==-1)
@@ -87,6 +102,13 @@ class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
 
             session = jsch.getSession(credentials.getLogin(), realm.getHost(), port);
             session.setUserInfo(new PasswordAuthentication());
+
+            // Apply host-key policy. Default ASK prompts the user
+            // (via HostKeyPrompter) for unknown hosts; YES rejects
+            // unknown outright; NO accepts any key (legacy / opt-in
+            // via -Dbarebones.sftp.hostKey=no).
+            HostKeyPolicy policy = HostKeyPolicy.fromSystemProperty();
+            session.setConfig("StrictHostKeyChecking", policy.jschValue());
 
             session.connect(5*1000);
             // Init SFTP connections
@@ -143,10 +165,22 @@ class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
     	@Override
 		public void showMessage(String message) {
 		}
-		
+
+		/**
+		 * JSch calls this for the host-key prompt when
+		 * StrictHostKeyChecking=ask and the key is unknown (or
+		 * has changed). We delegate to {@link HostKeyPrompter} —
+		 * the default impl is a Swing JOptionPane; tests inject
+		 * a non-Swing one. Returning false aborts the connect
+		 * with JSchException, which we convert to AuthException.
+		 */
 		@Override
 		public boolean promptYesNo(String message) {
-			return true;
+			boolean accepted = HostKeyPrompter.current().shouldAcceptHostKey(message);
+			if (!accepted) {
+				LOGGER.warn("Rejected SFTP host key: {}", message.replace('\n', ' '));
+			}
+			return accepted;
 		}
 		
 		@Override

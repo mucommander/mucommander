@@ -125,6 +125,18 @@ public final class LibsecretSecretStore implements SecretStore {
         return "linux-libsecret";
     }
 
+    /**
+     * Release the GObject schema allocated by the constructor. JNA
+     * doesn't track lifetimes for us; without this the schema is a
+     * permanent leak per store instance.
+     */
+    @Override
+    public void close() {
+        if (schema != null && Pointer.nativeValue(schema) != 0L) {
+            Libsecret.INSTANCE.secret_schema_unref(schema);
+        }
+    }
+
     private static IOException fromError(String fn, PointerByReference errRef) {
         Pointer p = errRef.getValue();
         String msg;

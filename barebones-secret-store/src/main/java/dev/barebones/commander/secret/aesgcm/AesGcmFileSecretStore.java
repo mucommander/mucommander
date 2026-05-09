@@ -215,6 +215,25 @@ public final class AesGcmFileSecretStore implements SecretStore {
         return "aes-gcm-file";
     }
 
+    /**
+     * Zero the in-memory key material and the cached entries. After
+     * close() the store is unusable; subsequent operations will hit
+     * a corrupt key and fail to decrypt.
+     */
+    @Override
+    public void close() {
+        lock.lock();
+        try {
+            Arrays.fill(keyMaterial, (byte) 0);
+            for (char[] secret : entries.values()) {
+                Arrays.fill(secret, '\0');
+            }
+            entries.clear();
+        } finally {
+            lock.unlock();
+        }
+    }
+
     private static String keyOf(SecretRef ref) {
         return ref.service() + " " + ref.account();
     }

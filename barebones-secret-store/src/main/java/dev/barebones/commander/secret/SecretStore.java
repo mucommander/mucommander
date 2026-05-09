@@ -19,8 +19,12 @@ import java.util.Optional;
  * Secrets are passed as {@code char[]} rather than {@code String}
  * so callers can zero them after use — {@code String} interning
  * would otherwise leave the secret pinned in the heap until GC.
+ *
+ * Implementations that hold native resources (JNA pointers,
+ * derived key material) should release them in {@link #close()}.
+ * The application calls close() during shutdown.
  */
-public interface SecretStore {
+public interface SecretStore extends AutoCloseable {
 
     /**
      * Stores or replaces the secret under {@code ref}. Implementations
@@ -53,4 +57,12 @@ public interface SecretStore {
      * Human-readable backend name for logs / preferences UI.
      */
     String backendName();
+
+    /**
+     * Release any native resources or cached key material. Idempotent.
+     * Default is no-op for backends that own no native state.
+     */
+    @Override
+    default void close() throws IOException {
+    }
 }

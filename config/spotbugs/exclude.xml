@@ -22,8 +22,8 @@
 
   <!-- Pre-existing (source, pattern) pairs in our own code. -->
   <Match><Class name="~dev\.barebones\.commander\.StressTester([\$.].*)?"/><Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/></Match>
-  <Match><Class name="~dev\.barebones\.commander\.auth\.CredentialsMapping([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
-  <Match><Class name="~dev\.barebones\.commander\.bookmark\.Bookmark([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
+  <!-- CredentialsMapping / Bookmark / FileComparator / BOM hashCode
+       contracts fixed; entries retired. -->
   <!-- XORCipher: deleted in Phase 12; baseline entry retired. -->
   <Match><Class name="~dev\.barebones\.commander\.command\.CommandManager([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>  <!-- (×2) -->
   <Match><Class name="~dev\.barebones\.commander\.command\.CommandReader([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
@@ -37,10 +37,8 @@
   <Match><Class name="~dev\.barebones\.commander\.commons\.file\.icon\.impl\.SwingFileIconProviderImpl([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.commons\.file\.protocol\.local\.LocalFile([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.commons\.file\.protocol\.sftp\.SFTPPanel([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
-  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.util\.FileComparator([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.commons\.io\.base64\.Base64Decoder([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.commons\.io\.base64\.Base64Encoder([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
-  <Match><Class name="~dev\.barebones\.commander\.commons\.io\.bom\.BOM([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.commons\.util\.cache\.LRUCache([\$.].*)?"/><Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/></Match>  <!-- (×3) -->
   <Match><Class name="~dev\.barebones\.commander\.core\.LocationChanger([\$.].*)?"/><Bug pattern="DLS_DEAD_LOCAL_STORE"/></Match>
   <Match><Class name="~dev\.barebones\.commander\.desktop\.linux\.gnome\.GnomeTrash([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
