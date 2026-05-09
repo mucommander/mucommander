@@ -8,8 +8,9 @@
  */
 package dev.barebones.commander.tailscale;
 
+import dev.barebones.commander.commons.util.cli.ExternalCommand;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -89,36 +90,20 @@ public final class TailscaleClient {
         if (peerDnsName == null || peerDnsName.isBlank()) {
             throw new IllegalArgumentException("peerDnsName must not be blank");
         }
-        ProcessBuilder pb = new ProcessBuilder(List.of(
+        ExternalCommand.Result r = ExternalCommand.run(List.of(
             binary.toString(),
             "file", "cp",
             localPath.toString(),
             peerDnsName + ":"
-        ));
-        Process p = pb.start();
-        p.getOutputStream().close();
-        if (!p.waitFor(timeoutSeconds, TimeUnit.SECONDS)) {
-            p.destroyForcibly();
-            throw new IOException("tailscale file cp timed out after " + timeoutSeconds + "s");
-        }
-        return p.exitValue();
+        ), timeoutSeconds, TimeUnit.SECONDS);
+        return r.exitCode();
     }
 
     private String run(List<String> argv) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder(argv);
-        pb.redirectErrorStream(false);
-        Process p = pb.start();
-        p.getOutputStream().close();
-        byte[] outBytes = p.getInputStream().readAllBytes();
-        if (!p.waitFor(timeoutSeconds, TimeUnit.SECONDS)) {
-            p.destroyForcibly();
-            throw new IOException("tailscale command timed out after " + timeoutSeconds + "s");
+        ExternalCommand.Result r = ExternalCommand.run(argv, timeoutSeconds, TimeUnit.SECONDS);
+        if (!r.ok()) {
+            throw new IOException("tailscale exited " + r.exitCode() + ": " + r.stderr());
         }
-        if (p.exitValue() != 0) {
-            throw new IOException(
-                "tailscale exited " + p.exitValue() + ": " +
-                new String(p.getErrorStream().readAllBytes(), StandardCharsets.UTF_8));
-        }
-        return new String(outBytes, StandardCharsets.UTF_8);
+        return r.stdout();
     }
 }

@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * different access keys against the same endpoint don't share a
  * client (which would silently authorise as the wrong identity).
  */
-public class S3ProtocolProvider implements ProtocolProvider {
+public class S3ProtocolProvider implements ProtocolProvider, AutoCloseable {
 
     /** Properties accepted on the FileURL — these become S3Configuration options. */
     public static final String PROPERTY_REGION = "region";
@@ -41,6 +41,23 @@ public class S3ProtocolProvider implements ProtocolProvider {
     public static final String PROPERTY_USE_HTTPS = "useHttps";
 
     private final ConcurrentHashMap<String, S3Connection> connections = new ConcurrentHashMap<>();
+
+    /**
+     * Closes every cached connection (releases the AWS SDK HTTP
+     * client thread pools). Idempotent — entries are removed as we
+     * go so a second call is a no-op.
+     */
+    @Override
+    public void close() {
+        for (S3Connection conn : connections.values()) {
+            try {
+                conn.close();
+            } catch (RuntimeException ignored) {
+                // shutdown — log channels may already be down.
+            }
+        }
+        connections.clear();
+    }
 
     @Override
     public AbstractFile getFile(FileURL url, Map<String, Object> instantiationParams) throws IOException {

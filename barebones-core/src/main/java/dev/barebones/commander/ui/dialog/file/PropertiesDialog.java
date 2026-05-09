@@ -32,6 +32,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import dev.barebones.commander.commons.file.AbstractFile;
@@ -61,9 +62,9 @@ import dev.barebones.commander.ui.text.FileLabel;
  *
  * @author Maxence Bernard
  */
-public class PropertiesDialog extends FocusDialog implements Runnable, ActionListener {
+public class PropertiesDialog extends FocusDialog implements ActionListener {
     private PropertiesJob job;
-    private Thread repaintThread;
+    private Timer refreshTimer;
     private SpinningDial dial;
 	
     private JLabel counterLabel;
@@ -170,29 +171,19 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
 
     public void start() {
         job.start();
-		
-        repaintThread = new Thread(this, "dev.barebones.commander.ui.dialog.file.PropertiesDialog's Thread");
-        repaintThread.start();
-    }
-
-	
-    //////////////////////
-    // Runnable methods //
-    //////////////////////
-
-    public void run() {
         dial.setAnimated(true);
-        while(repaintThread!=null && job.getState() != FileJobState.FINISHED) {
+        // Swing Timer fires on the EDT, so updateLabels (which
+        // mutates JLabels) is invoked safely without an extra
+        // invokeLater. Also avoids a dedicated polling thread.
+        refreshTimer = new Timer(REFRESH_RATE, e -> {
             updateLabels();
-			
-            try { Thread.sleep(REFRESH_RATE); }
-            catch(InterruptedException e) {}
-        }
-
-        // Updates button labels and stops spinning dial.
-        updateLabels();
-        okCancelButton.setText(Translator.get("ok"));
-        dial.setAnimated(false);
+            if (job.getState() == FileJobState.FINISHED) {
+                refreshTimer.stop();
+                okCancelButton.setText(Translator.get("ok"));
+                dial.setAnimated(false);
+            }
+        });
+        refreshTimer.start();
     }
 
 
@@ -213,9 +204,11 @@ public class PropertiesDialog extends FocusDialog implements Runnable, ActionLis
     @Override
     public void windowClosed(WindowEvent e) {
         super.windowClosed(e);
-		
-        // Stop threads
+
         job.interrupt();
-        repaintThread = null;
+        if (refreshTimer != null) {
+            refreshTimer.stop();
+            refreshTimer = null;
+        }
     }
 }

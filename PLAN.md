@@ -30,10 +30,11 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **11a** | done | S3 backend on AWS SDK v2 — headless | landed in #16 |
 | **11**  | done | Finish S3: `S3Panel`, `S3TransferManager` multipart upload, LocalStack integration tests, AppleScript race-fix follow-up | landed in #17 |
 | **12** | done | `XORCipher` → OS keychain (macOS Keychain via JNA, Linux libsecret via JNA, AES-GCM file fallback) + one-shot migration of legacy `credentials.xml` | landed in #18 |
-| **13** | next | **Archive safety hardening** — zip-slip / tar-slip path validation, decompression-bomb caps, file-size prompts, archive-tree thread safety, viewer file-size ceiling | one PR |
-| **14** | in flight | **Credentials & SecretStore hardening** — SFTP host-key verification, macOS Keychain item-ref leak, libsecret schema unref, AES-GCM key zeroing, equals/hashCode contracts (4 classes), S3 cache-key SHA-256 hashing, `CredentialsMapping.toString` masking, `SecretStore` AutoCloseable + Bootstrap shutdown hook. (SecretStore prefs UI deferred to Phase 19.) | one PR |
-| **15** | in flight | **Dead-code sweep** — first pass: GrowlNotifier, TerminalPanel, MailPanel + SendMailJob, BrowsableItemsMenuService(Tracker), dead protocol-handler registrations (FTP/HTTP/HDFS/WEBDAV/VSPHERE), Bonjour pref bits. Second pass after agent-driven audit: 16 more orphan classes (CircularByteBuffer, 4 stream utilities, 5 path filters, MimeTypes, ProcessListenerList, GarbageCollectAction, SelfUpdateJob, etc.); top-level dirs (`jre/`, `package/`, `zanata.xml`, `build_template.properties`); logback config moved to classpath + sanitised. Net **~−6,000 LOC**. | one PR |
-| **16** | pending | **Network reliability + timeouts + EDT off-loading** — NFS / Sun-RPC timeouts, SFTP transfer timeouts, libsecret D-Bus timeouts, mount retry/backoff, SwingWorker shim for S3 uploads, EDT polling-loop conversion, `ProcessRunnerHelper` extraction, listener GC fix, shutdown hook | one PR (may split if reviewer asks) |
+| **13** | done | Archive safety hardening — `SafePath` validator + `BoundedExtraction` caps + viewer file-size prompt + archive-tree thread safety + `ZipInputStream` / `LocalFile` stream-leak fixes | landed in #19 |
+| **14** | done | Credentials & SecretStore hardening — SFTP host-key verification, JNA pointer hygiene (Keychain item-ref + libsecret schema unref + AES-GCM key zeroing), 4 `equals`/`hashCode` contracts, S3 cache-key SHA-256, `CredentialsMapping.toString` masking, `SecretStore` AutoCloseable + Bootstrap shutdown hook | landed in #20 |
+| **15** | done | Dead-code sweep — 21 whole files deleted, 4 dead top-level dirs gone, ~1.1k stale i18n keys across 28 dictionaries, logback config moved to classpath + sanitised. **Net −6,012 LOC.** | landed in #21 |
+| **16a** | done | **Network reliability — process & timeout core** — `ExternalCommand` extraction (fixes stderr-pipe deadlock for mount + tailscale), SFTP connect / read / serverAlive timeouts, polling-loop → `Timer` for `PropertiesDialog` + `QuickSearch`, shutdown hook drains `MountRegistry` + closes S3 `S3Connection` cache | this PR |
+| **16b** | pending | **Network reliability — remainders** — NFS / Sun-RPC `setSoTimeout`, libsecret D-Bus `GCancellable` timeouts, mount retry/backoff, `SwingWorker` shim for S3 uploads (paired with Phase 19 progress UI), `WeakHashMap` listener fix, remaining polling loops (`FolderChangeMonitor` daemon tick, `CompletionType`) | one PR |
 | **17** | pending | **Concurrency + correctness sweep** — mutable static collections (`Vector`/`Hashtable` in `BookmarkManager` / `ActionProperties` / `CredentialsManager`), 31+ empty catches → `IgnoredErrors` helper, NPE / stream-leak patterns, mount username injection | one PR |
 | **18** | pending | **Observability + logging** — S3 module logging from zero, mount stderr on failure, tailscale timeout context, `ThemeManager` file paths, AppleScript REPLACE branch, SFTP warn-level on failures, AppleScript output bound + truncation marker, structured-logging conventions doc | one PR |
 | **19** | pending | **UX polish** — progress dialogs for S3 / folder browse, "operation failed" details, mount-error next-step hints, S3 401/403/404 distinction, tailscale-not-installed banner, prefs Cancel-reverts, default-button focus, huge-file open prompts, keychain-prompt explainer, drop-target writability | one PR (may split into UX-A / UX-B) |
@@ -742,43 +743,64 @@ Discipline:
 LOC summary in the PR description; smoke-tested on Linux + macOS;
 no functional regressions reported.
 
-### Phase 16 — Network reliability + timeouts + EDT off-loading (one PR; may split)
+### Phase 16 — Network reliability + timeouts + EDT off-loading (split: 16a + 16b)
 
 Nothing in the app should hang the EDT or the JVM forever.
+
+#### Phase 16a — process & timeout core (PR landed)
+
+- **`ExternalCommand` extraction** (`barebones-commons-util/.../cli/ExternalCommand.java`):
+  shared by `MountExecutor` and `TailscaleClient`. Drains stdout
+  and stderr on dedicated daemon threads concurrently with the
+  wait — fixes the stderr-pipe-buffer deadlock that previously
+  hung any external invocation that emitted >64 KiB on stderr.
+  Closes child stdin so CLI tools that read it don't block.
+  Regression test pushes 256 KiB stderr through the helper.
+  (`BUGS.md` 1.25, 6.1)
+- **SFTP timeouts** (`barebones-protocol-sftp/.../SftpTimeouts.java`):
+  three `-D` knobs — `barebones.sftp.connectTimeoutMs` (default
+  15 000, was hardcoded 5 000), `barebones.sftp.readTimeoutMs`
+  (default 60 000, applied as `Session.setTimeout` → SO_TIMEOUT),
+  `barebones.sftp.serverAliveIntervalSec` (default 30, with
+  `setServerAliveCountMax(3)` so dead sessions tear down after
+  3× the interval). (`BUGS.md` 1.5 partial)
+- **Polling-loop conversion** to `Timer`: `PropertiesDialog` (now
+  a `javax.swing.Timer` that fires on the EDT — also fixes the
+  prior off-EDT `JLabel` mutation), `QuickSearch` (single-shot
+  `Timer` that restarts on each search-string change, replacing
+  the dedicated polling thread). `FolderChangeMonitor` and
+  `CompletionType` deferred to 16b. (`BUGS.md` 1.17 partial)
+- **Shutdown hook extension** in `Bootstrap.shutdown()`:
+  reflectively drains `MountRegistry` (best-effort unmount with
+  exception swallowing) and invokes `S3 Activator.shutdown()`
+  which closes every cached `S3Connection` (releases AWS SDK
+  Netty pools). Augments the Phase-14 `SecretStoreService` close.
+  (`BUGS.md` 4.3, 4.6, 1.19 partial)
+
+#### Phase 16b — remainders (next PR)
 
 - **NFS / Sun-RPC timeouts**: patch the vendored `com.sun.rpc`
   socket call sites in `barebones-protocol-nfs` to set a
   `Socket.setSoTimeout` (default 30 s, configurable via
   `Tunables`). (`BUGS.md` 1.4)
-- **SFTP transfer timeout**: configure `socketReadTimeout` on the
-  jsch `ChannelSftp` so a stalled remote no longer wedges the
-  copy job. (`BUGS.md` 1.5)
 - **libsecret D-Bus timeouts**: thread `GCancellable` into every
   `secret_password_*_sync` call; cancel after 5 s default.
   (`BUGS.md` 4.1)
 - **Mount retry/backoff**: `MountExecutor.withRetry(spec, n,
   backoff)` — default 3 attempts with exponential backoff for
   mount NFS portmap flakes. (`BUGS.md` 4.2)
-- **`SwingWorker` shim for S3 uploads**: same pattern as Phase 10c's
-  `MountTask`, applied to `SpillingPutOutputStream`. Wires in the
-  upload-progress callbacks (foundation for Phase 19's progress
-  dialog). (`BUGS.md` 1.12)
-- **Polling-loop conversion** to `Timer` / `wait/notify`: targets
-  `PropertiesDialog`, `FolderChangeMonitor`, `QuickSearch`,
-  `CompletionType`. (`BUGS.md` 1.17)
-- **`ProcessRunnerHelper` extraction**: shared by `MountExecutor`
-  and `TailscaleClient`; in the process fixes the stderr-fill
-  deadlock (drains stderr concurrently with stdout). (`BUGS.md` 1.25, 6.1)
+- **`SwingWorker` shim for S3 uploads** + `TransferListener`
+  wiring (foundation for Phase 19's progress dialog).
+  (`BUGS.md` 1.12, 2.1)
+- **Polling-loop conversion** for `FolderChangeMonitor` daemon
+  tick and `CompletionType`. (`BUGS.md` 1.17 remainder)
 - **WeakHashMap listener fix**: replace with `EventListenerList` /
   `ListenerSupport` in `ThemeManager`, others. (`BUGS.md` 4.5)
-- **Shutdown hook**: register `ShutdownHook` from `Bootstrap`,
-  drain `MountRegistry` (best-effort unmount), close all cached
-  `S3Connection`s, close `SecretStore`. (`BUGS.md` 4.3, 4.6)
 
-**Exit criteria**: integration test of a hung NFS server returns
-a `SocketTimeoutException` within `Tunables.nfsReadTimeoutMs`;
-S3 upload in the app no longer freezes the UI; shutdown hook
-fires cleanly on `kill -TERM`.
+**Exit criteria** (whole phase): integration test of a hung NFS
+server returns a `SocketTimeoutException` within
+`Tunables.nfsReadTimeoutMs`; S3 upload in the app no longer
+freezes the UI; shutdown hook fires cleanly on `kill -TERM`.
 
 ### Phase 17 — Concurrency + correctness sweep (one PR)
 

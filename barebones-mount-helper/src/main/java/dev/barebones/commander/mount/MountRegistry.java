@@ -8,8 +8,13 @@
  */
 package dev.barebones.commander.mount;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * host one mount at a time, which matches OS behaviour.
  */
 public final class MountRegistry {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MountRegistry.class);
 
     private static final MountRegistry INSTANCE = new MountRegistry();
 
@@ -50,5 +57,39 @@ public final class MountRegistry {
 
     public Collection<MountSpec> active() {
         return Map.copyOf(active).values();
+    }
+
+    /**
+     * Best-effort unmount of every active mount, intended for the
+     * JVM shutdown hook. Each unmount is bounded by the executor's
+     * own timeout; failures are logged at WARN and never propagate
+     * — shutdown must always complete.
+     *
+     * Drained entries are removed from the registry so a second
+     * call is a no-op.
+     */
+    public void drainAtShutdown(MountExecutor executor) {
+        Objects.requireNonNull(executor, "executor");
+        List<MountSpec> snapshot = new ArrayList<>(active.values());
+        for (MountSpec spec : snapshot) {
+            try {
+                MountResult r = executor.unmount(spec);
+                if (!r.ok()) {
+                    LOGGER.warn("shutdown unmount of {} exited {}: {}",
+                        spec.mountpoint(), r.exitCode(), r.stderr().trim());
+                }
+            } catch (InterruptedException ie) {
+                // Shutdown threads should not be interrupted, but
+                // honour it by aborting the drain.
+                Thread.currentThread().interrupt();
+                LOGGER.warn("shutdown unmount interrupted at {}", spec.mountpoint());
+                return;
+            } catch (Exception e) {
+                LOGGER.warn("shutdown unmount of {} failed: {}",
+                    spec.mountpoint(), e.getMessage());
+            } finally {
+                active.remove(spec.mountpoint(), spec);
+            }
+        }
     }
 }

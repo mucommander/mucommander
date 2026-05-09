@@ -30,6 +30,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
+import javax.swing.Timer;
 
 /**
  * This class contains 'quick search' common functionality - selection of rows that match
@@ -39,18 +40,19 @@ import javax.swing.JComponent;
  * 
  * @author Arik Hadas
  */
-public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, ConfigurationListener {
+public abstract class QuickSearch<T> extends KeyAdapter implements ConfigurationListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(QuickSearch.class);
-	
+
 	/** Quick search string */
     private String searchString;
 
 	/** Timestamp of the last search string change, used when quick search is active */
     private long lastSearchStringChange;
 
-    /** Thread that's responsible for canceling the quick search on timeout,
-     * has a null value when quick search is not active */
-    private Thread timeoutThread;
+    /** Single-shot Swing Timer that fires once {@code quickSearchTimeout}
+     *  ms after the last search-string change. Restarted on each
+     *  keystroke; null when search is inactive. */
+    private Timer timeoutTimer;
 
     /** Quick search timeout in milliseconds */
     private int quickSearchTimeout;
@@ -86,10 +88,10 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
         if(!isActive()) {
             // Reset search string
             searchString = "";
-            // Start the thread that's responsible for canceling the quick search on timeout, if timeout is set
             if (quickSearchTimeout > 0) {
-                timeoutThread = new Thread(this, "QuickSearch timeout thread");
-                timeoutThread.start();
+                timeoutTimer = new Timer(quickSearchTimeout, e -> stop());
+                timeoutTimer.setRepeats(false);
+                timeoutTimer.start();
             }
             active = true;
             lastSearchStringChange = System.currentTimeMillis();
@@ -103,7 +105,10 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
      */
     public synchronized void stop() {
         if(isActive()) {
-            timeoutThread = null;
+            if (timeoutTimer != null) {
+                timeoutTimer.stop();
+                timeoutTimer = null;
+            }
             active = false;
             searchStopped();
         }
@@ -168,6 +173,9 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
      */
 	protected void setLastSearchStringChange(long lastSearchStringChange) {
 		this.lastSearchStringChange = lastSearchStringChange;
+		if (timeoutTimer != null) {
+			timeoutTimer.restart();
+		}
 	}
 
 	protected boolean isSearchStringEmpty() {
@@ -353,26 +361,6 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
 	 */
 	protected abstract void matchNotFound(String searchString);
 
-    //////////////////////
-    // Runnable methods //
-    //////////////////////
-
-    public void run() {
-        do {
-            try { Thread.sleep(100); }
-            catch(InterruptedException e) {
-                // No problemo
-            }
-
-            synchronized(this) {
-                if (timeoutThread!=null && System.currentTimeMillis()-lastSearchStringChange >= quickSearchTimeout) {
-                    stop();
-                }
-            }
-        }
-        while(timeoutThread!=null);
-    }
-
     ///////////////////////////////
     // KeyAdapter implementation //
     ///////////////////////////////
@@ -394,6 +382,10 @@ public abstract class QuickSearch<T> extends KeyAdapter implements Runnable, Con
         String var = event.getVariable();
         if (var.equals(MuPreferences.QUICK_SEARCH_TIMEOUT)) {
             quickSearchTimeout = event.getIntegerValue() * 1000;
+            if (timeoutTimer != null) {
+                timeoutTimer.setInitialDelay(quickSearchTimeout);
+                timeoutTimer.restart();
+            }
         }
     }
 }

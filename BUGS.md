@@ -173,14 +173,16 @@ serialises calls, but parallel directory listings hit it.
 A misbehaving / hostile AppleScript that emits forever exhausts
 heap. Add a hard ceiling (e.g. 1 MiB) and truncate with a marker.
 
-### 1.17 MED — Polling loops with `Thread.sleep` on the EDT
-- **`barebones-core/.../ui/dialog/file/PropertiesDialog.java:185-189`** (100 ms loop)
-- **`barebones-core/.../core/FolderChangeMonitor.java:177-218`** (TODO admits this)
-- **`barebones-core/.../ui/quicksearch/QuickSearch.java:362`** (100 ms loop)
-- **`barebones-core/.../ui/text/CompletionType.java:110`**
-
-All freeze the EDT in 100-ms ticks. `wait()/notify()` or a Timer
-fixes each.
+### 1.17 MED — Polling loops with `Thread.sleep` on the EDT (partial)
+- ~~`PropertiesDialog`~~ **FIXED**: now a `javax.swing.Timer` that fires
+  on the EDT — also fixes the prior off-EDT `JLabel.setText` calls
+  from a worker thread.
+- ~~`QuickSearch`~~ **FIXED**: replaced the dedicated polling thread
+  with a single-shot `Timer` that restarts on each search-string change.
+- **`barebones-core/.../core/FolderChangeMonitor.java:179-219`**
+  remains: 300 ms tick is structural to the daemon; conversion to
+  `wait/notify` would touch every call site.
+- **`barebones-core/.../ui/text/CompletionType.java:110`** remains.
 
 ### 1.18 MED — S3 `isDirectory()` / `exists()` swallow IOException → false-negative
 **`barebones-protocol-s3/.../S3Object.java:96-116`**
@@ -188,12 +190,13 @@ fixes each.
 `HeadObject` returning a transient 5xx makes the file look like it
 doesn't exist; the user sees their files vanish until refresh.
 
-### 1.19 MED — S3 connection cache grows unbounded, never closed
-**`barebones-protocol-s3/.../S3ProtocolProvider.java:43`**
-
-`ConcurrentHashMap<String, S3Connection>` never evicts. No
-`close()` on the provider; on shutdown every cached `S3Client` +
-`S3AsyncClient` + `S3TransferManager` is leaked.
+### 1.19 ~~MED — S3 connection cache grows unbounded, never closed~~ **FIXED (shutdown)**
+`S3ProtocolProvider` now implements `AutoCloseable`; the bootstrap
+shutdown hook reflectively invokes `Activator.shutdown()` which
+closes every cached `S3Client` / `S3AsyncClient` /
+`S3TransferManager`. The in-session unbounded growth aspect is not
+addressed yet — for the pathological many-credentials use case a
+size-bounded cache with LRU eviction is still wanted.
 
 ### 1.20 MED — 31+ empty catch blocks in `barebones-core`
 Sample sites: `ThemeManager.java:495,532,685,817`,
@@ -229,13 +232,12 @@ prevents shell injection, but `mount.cifs` interprets the `-o`
 value as comma-separated options. A username `alice,uid=0` would
 inject `uid=0`. `MountSpec` should reject these characters.
 
-### 1.25 MED — Tailscale process stderr read after `waitFor`, can deadlock on big stderr
-**`barebones-tailscale/.../TailscaleClient.java:117-120`**
-
-For commands that fill stderr beyond pipe-buffer size (~64 KB),
-`waitFor` deadlocks waiting for stderr to drain while we wait for
-the process to exit. Read stderr concurrently with the wait or use
-`redirectErrorStream(true)` plus stream-tee.
+### 1.25 ~~MED — Tailscale process stderr read after `waitFor`, can deadlock on big stderr~~ **FIXED**
+Both `TailscaleClient` and `MountExecutor` now route through a
+shared `ExternalCommand` helper in `barebones-commons-util` that
+drains stdout and stderr on dedicated daemon threads concurrently
+with the wait. Regression test pushes 256 KiB to stderr to confirm
+the deadlock is gone.
 
 ### 1.26 LOW — `System.err.println` in `Application.java:142,144`
 CLI code, but inconsistent with logger usage everywhere else.

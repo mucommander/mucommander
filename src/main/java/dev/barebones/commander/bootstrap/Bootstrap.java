@@ -93,12 +93,43 @@ public final class Bootstrap {
     }
 
     /**
-     * JVM shutdown hook: closes anything that holds native resources
-     * we need to release explicitly (libsecret GObjects, AES-GCM key
-     * material). Reflective so the root project doesn't compile-depend
-     * on the secret-store module.
+     * JVM shutdown hook: best-effort cleanup of anything that holds
+     * resources we need to release explicitly. All steps are
+     * reflective so the root project doesn't compile-depend on
+     * leaf modules; each step is independently guarded so one
+     * failure can't skip the others.
      */
     private static void shutdown() {
+        // Best-effort unmount of any mounts we created so the user
+        // doesn't find stale mountpoints after a clean exit.
+        drainMounts();
+        // Close cached S3 connections (releases AWS SDK Netty pools).
+        invokeStatic("dev.barebones.commander.commons.file.protocol.s3.Activator", "shutdown");
+        // Close the secret store (frees libsecret GObjects, zeroes
+        // AES-GCM key material). Last because credentials may be
+        // referenced by the modules above.
+        closeSecretStore();
+    }
+
+    private static void drainMounts() {
+        try {
+            Class<?> serviceCls = Class.forName("dev.barebones.commander.mount.MountService");
+            Object executor = serviceCls.getMethod("executor").invoke(null);
+            if (executor == null) {
+                return; // platform without mount support
+            }
+            Class<?> registryCls = Class.forName("dev.barebones.commander.mount.MountRegistry");
+            Object registry = registryCls.getMethod("instance").invoke(null);
+            Class<?> executorCls = Class.forName("dev.barebones.commander.mount.MountExecutor");
+            registryCls.getMethod("drainAtShutdown", executorCls).invoke(registry, executor);
+        } catch (ClassNotFoundException notFound) {
+            // mount-helper module not present.
+        } catch (ReflectiveOperationException ignored) {
+            // best-effort
+        }
+    }
+
+    private static void closeSecretStore() {
         try {
             Class<?> service = Class.forName("dev.barebones.commander.secret.SecretStoreService");
             Object store = service.getMethod("store").invoke(null);
@@ -111,8 +142,19 @@ public final class Bootstrap {
             }
         } catch (ClassNotFoundException notFound) {
             // SecretStore module not present; nothing to close.
-        } catch (ReflectiveOperationException e) {
-            // Same — shutdown is best-effort.
+        } catch (ReflectiveOperationException ignored) {
+            // best-effort
+        }
+    }
+
+    private static void invokeStatic(String className, String methodName) {
+        try {
+            Class<?> cls = Class.forName(className);
+            cls.getMethod(methodName).invoke(null);
+        } catch (ClassNotFoundException notFound) {
+            // module not present
+        } catch (ReflectiveOperationException ignored) {
+            // best-effort
         }
     }
 

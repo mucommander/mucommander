@@ -8,8 +8,9 @@
  */
 package dev.barebones.commander.mount;
 
+import dev.barebones.commander.commons.util.cli.ExternalCommand;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Objects;
@@ -58,22 +59,7 @@ public final class MountExecutor {
     }
 
     private MountResult run(List<String> argv) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder(argv);
-        pb.redirectErrorStream(false);
-        Process p = pb.start();
-        p.getOutputStream().close();
-
-        byte[] outBytes = p.getInputStream().readAllBytes();
-        byte[] errBytes = p.getErrorStream().readAllBytes();
-
-        if (!p.waitFor(timeoutSeconds, TimeUnit.SECONDS)) {
-            p.destroyForcibly();
-            throw new IOException(
-                "mount command timed out after " + timeoutSeconds + "s: " + argv);
-        }
-        return new MountResult(
-            p.exitValue(),
-            new String(outBytes, StandardCharsets.UTF_8),
-            new String(errBytes, StandardCharsets.UTF_8));
+        ExternalCommand.Result r = ExternalCommand.run(argv, timeoutSeconds, TimeUnit.SECONDS);
+        return new MountResult(r.exitCode(), r.stdout(), r.stderr());
     }
 }

@@ -110,10 +110,22 @@ class SFTPConnectionHandler extends ConnectionHandler implements AutoCloseable {
             HostKeyPolicy policy = HostKeyPolicy.fromSystemProperty();
             session.setConfig("StrictHostKeyChecking", policy.jschValue());
 
-            session.connect(5*1000);
+            int connectMs = SftpTimeouts.connectMs();
+            int readMs = SftpTimeouts.readMs();
+            int aliveSec = SftpTimeouts.serverAliveSec();
+            // setTimeout maps to SO_TIMEOUT on the SSH socket. Keep
+            // wedged reads bounded.
+            session.setTimeout(readMs);
+            if (aliveSec > 0) {
+                session.setServerAliveInterval(aliveSec * 1000);
+                // 3 missed keepalives → JSch tears the session down,
+                // so reads/writes fail fast instead of hanging.
+                session.setServerAliveCountMax(3);
+            }
+            session.connect(connectMs);
             // Init SFTP connections
             channelSftp = (ChannelSftp) session.openChannel("sftp");
-            channelSftp.connect(5*1000);
+            channelSftp.connect(connectMs);
             LOGGER.info("authentication complete");
         }
         catch(IOException e) {

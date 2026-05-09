@@ -26,10 +26,15 @@ import dev.barebones.commander.protocol.ui.ProtocolPanelRegistry;
  */
 public final class Activator {
 
+    /** Set by {@link #register()}; consumed by {@link #shutdown()}. */
+    private static volatile S3ProtocolProvider installedProvider;
+
     private Activator() {
     }
 
     public static void register() {
+        S3ProtocolProvider provider = new S3ProtocolProvider();
+        installedProvider = provider;
         FileProtocolServiceTracker.register(new FileProtocolService() {
             @Override
             public String getSchema() {
@@ -38,7 +43,7 @@ public final class Activator {
 
             @Override
             public ProtocolProvider getProtocolProvider() {
-                return new S3ProtocolProvider();
+                return provider;
             }
 
             @Override
@@ -56,5 +61,17 @@ public final class Activator {
         });
 
         ProtocolPanelRegistry.register(new S3PanelProvider());
+    }
+
+    /**
+     * Closes every cached S3 connection. Invoked from the JVM
+     * shutdown hook (reflectively, from the bootstrap). Safe to
+     * call when {@link #register()} was never invoked.
+     */
+    public static void shutdown() {
+        S3ProtocolProvider provider = installedProvider;
+        if (provider != null) {
+            provider.close();
+        }
     }
 }
