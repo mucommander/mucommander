@@ -31,6 +31,7 @@ jetbrains-annotations = "26.0.2-1"
 # Protocols
 jsch-mwiede = "0.2.26"
 aws-sdk = "2.30.4"
+testcontainers = "1.20.4"
 
 # Test
 testng = "7.11.0"
@@ -80,6 +81,12 @@ jsch-mwiede = { group = "com.github.mwiede", name = "jsch", version.ref = "jsch-
 
 aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "aws-sdk" }
 aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
+aws-sdk-s3-transfer-manager = { group = "software.amazon.awssdk", name = "s3-transfer-manager" }
+aws-sdk-crt-client = { group = "software.amazon.awssdk", name = "aws-crt-client" }
+
+testcontainers-bom = { group = "org.testcontainers", name = "testcontainers-bom", version.ref = "testcontainers" }
+testcontainers = { group = "org.testcontainers", name = "testcontainers" }
+testcontainers-localstack = { group = "org.testcontainers", name = "localstack" }
 
 findsecbugs = { group = "com.h3xstream.findsecbugs", name = "findsecbugs-plugin", version.ref = "findsecbugs" }
 

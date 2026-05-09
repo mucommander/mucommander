@@ -14,8 +14,10 @@ import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.transfer.s3.S3TransferManager;
 
 import java.net.URI;
 import java.util.Objects;
@@ -42,15 +44,24 @@ import java.util.Objects;
 public final class S3Connection implements AutoCloseable {
 
     private final S3Client client;
+    private final S3AsyncClient asyncClient;
+    private final S3TransferManager transferManager;
     private final String defaultRegion;
 
-    private S3Connection(S3Client client, String defaultRegion) {
+    private S3Connection(S3Client client, S3AsyncClient asyncClient,
+                         S3TransferManager transferManager, String defaultRegion) {
         this.client = Objects.requireNonNull(client, "client");
+        this.asyncClient = Objects.requireNonNull(asyncClient, "asyncClient");
+        this.transferManager = Objects.requireNonNull(transferManager, "transferManager");
         this.defaultRegion = Objects.requireNonNull(defaultRegion, "defaultRegion");
     }
 
     public S3Client client() {
         return client;
+    }
+
+    public S3TransferManager transferManager() {
+        return transferManager;
     }
 
     public String defaultRegion() {
@@ -59,6 +70,9 @@ public final class S3Connection implements AutoCloseable {
 
     @Override
     public void close() {
+        // Order: close higher-level managers before the underlying clients.
+        try { transferManager.close(); } catch (RuntimeException ignored) { }
+        try { asyncClient.close(); } catch (RuntimeException ignored) { }
         client.close();
     }
 
@@ -90,15 +104,33 @@ public final class S3Connection implements AutoCloseable {
             creds = DefaultCredentialsProvider.create();
         }
 
+        S3Configuration s3Config = S3Configuration.builder()
+            .pathStyleAccessEnabled(pathStyleAccess)
+            .build();
+
         S3Client client = S3Client.builder()
             .region(Region.of(regionName))
             .credentialsProvider(creds)
             .endpointOverride(endpoint)
-            .serviceConfiguration(S3Configuration.builder()
-                .pathStyleAccessEnabled(pathStyleAccess)
-                .build())
+            .serviceConfiguration(s3Config)
             .build();
-        return new S3Connection(client, regionName);
+
+        // S3AsyncClient (Java/Netty-based) is used by S3TransferManager
+        // to drive multipart uploads of large objects. Using the
+        // CRT-based client would be faster but adds a heavyweight
+        // native dep we don't yet need.
+        S3AsyncClient asyncClient = S3AsyncClient.builder()
+            .region(Region.of(regionName))
+            .credentialsProvider(creds)
+            .endpointOverride(endpoint)
+            .serviceConfiguration(s3Config)
+            .build();
+
+        S3TransferManager transferManager = S3TransferManager.builder()
+            .s3Client(asyncClient)
+            .build();
+
+        return new S3Connection(client, asyncClient, transferManager, regionName);
     }
 
     static URI buildEndpoint(String host, int port, boolean useHttps) {

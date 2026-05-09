@@ -127,4 +127,40 @@ public class AppleScriptOutputDecodingTest {
 
         assertEquals(out.toString(), "");
     }
+
+    /**
+     * Regression test for the SECOND bug uncovered by Phase-11
+     * macOS-15 CI runs of {@code AppleScriptTest.testScriptOutput}.
+     *
+     * The earlier byte-buffer-and-decode-on-processDied attempt left
+     * {@code outputBuffer} empty until {@code processDied} ran. But
+     * {@code AppleScript.execute} reads {@code outputBuffer} after
+     * {@code process.waitFor()} returns, and {@code processDied}
+     * (called from a separate I/O thread) may not have run by that
+     * point — race window where the caller reads "".
+     *
+     * The streaming-decoder rewrite must flush bytes to the buffer
+     * as {@code processOutput} arrives. If this test fails, the
+     * "buffer everything until processDied" anti-pattern is back
+     * and {@code testScriptOutput} will flake on slow runners again.
+     */
+    @Test
+    public void processOutputFlushesImmediatelyDoesNotWaitForProcessDied() throws Exception {
+        StringBuilder out = new StringBuilder();
+        AppleScript.ScriptOutputListener listener = newListener(out);
+
+        byte[] bytes = "6\n".getBytes(StandardCharsets.UTF_8);
+        listener.processOutput(bytes, 0, bytes.length);
+
+        // Caller reads outputBuffer BEFORE processDied. Must already
+        // contain the decoded bytes.
+        assertEquals(out.toString(), "6\n",
+            "processOutput must append to outputBuffer immediately, " +
+            "not wait for processDied. If empty: " +
+            "AppleScriptTest.testScriptOutput will flake.");
+
+        // processDied later strips the trailing newline.
+        listener.processDied(0);
+        assertEquals(out.toString(), "6");
+    }
 }

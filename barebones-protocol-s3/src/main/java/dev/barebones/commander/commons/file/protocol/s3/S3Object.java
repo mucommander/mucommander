@@ -24,11 +24,15 @@ import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.transfer.s3.model.UploadFileRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.CompletionException;
 
 /**
  * One S3 object (or a "directory" prefix). Path shape:
@@ -173,15 +177,16 @@ public class S3Object extends S3File {
 
     @Override
     public OutputStream getOutputStream() throws IOException {
-        // Buffering approach: callers expect an OutputStream they can
-        // close at any time. PutObjectRequest needs the content length
-        // up-front, so we buffer everything written to a
-        // ByteArrayOutputStream and PUT on close().
-        //
-        // Streaming uploads (multipart) belong in S3TransferManager
-        // and are deferred to a follow-up PR — they need an executor
-        // and credentials provider that survive across calls.
-        return new BufferingPutOutputStream();
+        // OutputStream contract: caller writes whatever, then close().
+        // Two strategies bounded by SPILL_THRESHOLD:
+        //   - Small writes (≤ SPILL_THRESHOLD) buffer in memory and
+        //     PUT in a single request on close().
+        //   - Large writes spill to a temp file beyond the threshold
+        //     and on close() the file is uploaded via S3TransferManager
+        //     (multipart). The temp file is deleted regardless.
+        // This keeps memory bounded for arbitrary-size uploads without
+        // forcing every small file through TransferManager.
+        return new SpillingPutOutputStream();
     }
 
     @Override
@@ -218,26 +223,86 @@ public class S3Object extends S3File {
         delete();
     }
 
-    /** OutputStream that buffers writes and PUTs everything on close. */
-    private final class BufferingPutOutputStream extends OutputStream {
-        private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    /**
+     * OutputStream that uploads on close. Stays in-memory for small
+     * payloads; spills to a temp file once a threshold is exceeded
+     * and uploads from that file via {@link
+     * software.amazon.awssdk.transfer.s3.S3TransferManager} (multipart).
+     */
+    private final class SpillingPutOutputStream extends OutputStream {
+
+        /** Spill to disk when the in-memory buffer would exceed this. */
+        private static final int SPILL_THRESHOLD = 32 * 1024 * 1024;
+
+        private ByteArrayOutputStream memory = new ByteArrayOutputStream();
+        private long bytesWritten;
+        private Path spillFile;
+        private OutputStream spillStream;
         private boolean closed;
 
         @Override
-        public void write(int b) {
-            buffer.write(b);
+        public void write(int b) throws IOException {
+            ensureCapacityForOneByte();
+            target().write(b);
+            bytesWritten++;
         }
 
         @Override
-        public void write(byte[] b, int off, int len) {
-            buffer.write(b, off, len);
+        public void write(byte[] b, int off, int len) throws IOException {
+            if (len <= 0) return;
+            ensureCapacityForExtra(len);
+            target().write(b, off, len);
+            bytesWritten += len;
+        }
+
+        private OutputStream target() {
+            return spillStream != null ? spillStream : memory;
+        }
+
+        private void ensureCapacityForOneByte() throws IOException {
+            ensureCapacityForExtra(1);
+        }
+
+        private void ensureCapacityForExtra(int len) throws IOException {
+            if (spillStream != null) return;
+            if (bytesWritten + len <= SPILL_THRESHOLD) return;
+            // Switch to temp-file mode; copy current memory buffer into it.
+            spillFile = Files.createTempFile("barebones-s3-upload-", ".bin");
+            spillStream = Files.newOutputStream(spillFile);
+            memory.writeTo(spillStream);
+            memory = null;
         }
 
         @Override
         public void close() throws IOException {
             if (closed) return;
             closed = true;
-            byte[] payload = buffer.toByteArray();
+            try {
+                if (spillStream == null) {
+                    putFromMemory();
+                } else {
+                    spillStream.close();
+                    uploadSpilledFile();
+                }
+                // Whichever path: refresh local metadata.
+                size = bytesWritten;
+                lastModified = System.currentTimeMillis();
+                directory = false;
+                metadataKnown = true;
+            } finally {
+                if (spillFile != null) {
+                    try {
+                        Files.deleteIfExists(spillFile);
+                    } catch (IOException ignored) {
+                        // Temp dir cleanup is best-effort; the OS
+                        // sweeps it eventually.
+                    }
+                }
+            }
+        }
+
+        private void putFromMemory() throws IOException {
+            byte[] payload = memory.toByteArray();
             try {
                 connection.client().putObject(
                     PutObjectRequest.builder()
@@ -246,13 +311,29 @@ public class S3Object extends S3File {
                         .contentLength((long) payload.length)
                         .build(),
                     RequestBody.fromBytes(payload));
-                // The PUT just defined an object — refresh local metadata.
-                size = payload.length;
-                lastModified = System.currentTimeMillis();
-                directory = false;
-                metadataKnown = true;
             } catch (S3Exception e) {
                 throw toIOException(e, fileURL);
+            }
+        }
+
+        private void uploadSpilledFile() throws IOException {
+            try {
+                connection.transferManager()
+                    .uploadFile(UploadFileRequest.builder()
+                        .source(spillFile)
+                        .putObjectRequest(PutObjectRequest.builder()
+                            .bucket(parsed.bucket())
+                            .key(parsed.key())
+                            .build())
+                        .build())
+                    .completionFuture()
+                    .join();
+            } catch (CompletionException e) {
+                Throwable cause = e.getCause() != null ? e.getCause() : e;
+                if (cause instanceof S3Exception se) {
+                    throw toIOException(se, fileURL);
+                }
+                throw new IOException("S3 multipart upload failed: " + cause.getMessage(), cause);
             }
         }
     }

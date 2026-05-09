@@ -16,11 +16,13 @@ import dev.barebones.commander.commons.file.SchemeHandler;
 import dev.barebones.commander.commons.file.osgi.FileProtocolService;
 import dev.barebones.commander.commons.file.osgi.FileProtocolServiceTracker;
 import dev.barebones.commander.commons.file.protocol.ProtocolProvider;
+import dev.barebones.commander.commons.file.protocol.s3.ui.S3PanelProvider;
+import dev.barebones.commander.protocol.ui.ProtocolPanelRegistry;
 
 /**
- * Phase-2-style register entry point. Registers the S3 protocol with
- * the file factory; UI panel registration lives in a follow-up phase
- * (Phase 11b) so this slice stays headless.
+ * Phase-2-style register entry point. Registers the s3 scheme with
+ * the file factory and the {@link S3PanelProvider} with the
+ * Connect-to-server dialog so the user gets an "S3" tab.
  */
 public final class Activator {
 
@@ -52,5 +54,7 @@ public final class Activator {
                     null);
             }
         });
+
+        ProtocolPanelRegistry.register(new S3PanelProvider());
     }
 }

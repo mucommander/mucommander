@@ -17,10 +17,14 @@
 
 package dev.barebones.commander.ui.macos;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
+import java.nio.charset.CodingErrorAction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -148,44 +152,109 @@ public class AppleScript {
 
 
     /**
-     * This ProcessListener accumulates the raw bytes osascript writes to
-     * stdout and decodes the whole accumulated buffer once the process has
-     * exited.
+     * Streaming UTF-8 (or MacRoman) decoder for osascript's stdout.
      *
-     * Why not decode each {@code processOutput(byte[], int, int)} call as
-     * it arrives: the pipe between osascript and us delivers stdout in
-     * timing-dependent chunks. A multi-byte UTF-8 character (a Japanese
-     * kana is 3 bytes) may straddle a chunk boundary; decoding each chunk
-     * independently then produces U+FFFD replacement characters where the
-     * bytes were split. That manifested as
-     * {@code AppleScriptTest.testScriptEncoding} flaking on the macOS-15
-     * GitHub runner — the same Japanese test passed locally because the
-     * short output usually arrives in one chunk.
+     * Two correctness constraints, both confirmed by tests:
+     *
+     *  1. Bytes must be appended to {@code outputBuffer} as
+     *     {@code processOutput} calls arrive — the caller reads
+     *     {@code outputBuffer} after {@code process.waitFor()} returns,
+     *     and {@code processDied} may not have run yet by that point.
+     *     Buffering everything until {@code processDied} (an earlier
+     *     attempt) caused {@code AppleScriptTest.testScriptOutput} to
+     *     read an empty buffer on the macOS-15 GitHub runner.
+     *
+     *  2. Multi-byte UTF-8 codepoints (Japanese kana = 3 bytes,
+     *     emoji = 4 bytes) may straddle pipe-flush boundaries.
+     *     Decoding each chunk independently as a fresh {@code String}
+     *     turns the split codepoint into {@code U+FFFD}. That
+     *     manifested as {@code testScriptEncoding} flaking on macOS-15.
+     *
+     * Both constraints are satisfied by a stateful {@link CharsetDecoder}.
+     * Partial multi-byte sequences at the end of a chunk are kept in
+     * {@code carryover} and prepended to the next chunk's bytes; the
+     * decoder fills {@code outputBuffer} as it goes. {@code processDied}
+     * just flushes any final state and trims the trailing newline.
      */
     // Package-private so AppleScriptOutputDecodingTest can drive
-    // processOutput / processDied directly to prove the byte-buffering
-    // behaviour on chunk boundaries that fall mid-codepoint.
+    // processOutput / processDied directly.
     static class ScriptOutputListener implements ProcessListener {
 
         private final StringBuilder outputBuffer;
-        private final Charset outputEncoding;
-        private final ByteArrayOutputStream pending = new ByteArrayOutputStream();
+        private final CharsetDecoder decoder;
+        // Buffer for partial multi-byte sequences that span chunk boundaries.
+        // UTF-8 codepoints are at most 4 bytes; 8 leaves headroom.
+        private final ByteBuffer carryover = ByteBuffer.allocate(8);
 
         private ScriptOutputListener(StringBuilder outputBuffer, String outputEncoding) {
             this.outputBuffer = outputBuffer;
-            this.outputEncoding = Charset.forName(outputEncoding);
+            this.decoder = Charset.forName(outputEncoding).newDecoder()
+                .onMalformedInput(CodingErrorAction.REPLACE)
+                .onUnmappableCharacter(CodingErrorAction.REPLACE);
         }
 
-        public void processOutput(byte[] buffer, int offset, int length) {
-            pending.write(buffer, offset, length);
+        public synchronized void processOutput(byte[] buffer, int offset, int length) {
+            ByteBuffer in;
+            if (carryover.position() > 0) {
+                int carrySize = carryover.position();
+                ByteBuffer combined = ByteBuffer.allocate(carrySize + length);
+                carryover.flip();
+                combined.put(carryover);
+                combined.put(buffer, offset, length);
+                combined.flip();
+                in = combined;
+                carryover.clear();
+            } else {
+                in = ByteBuffer.wrap(buffer, offset, length);
+            }
+            CharBuffer out = CharBuffer.allocate(Math.max(256, length));
+            while (true) {
+                CoderResult result = decoder.decode(in, out, false);
+                appendCharBuffer(out);
+                if (result.isUnderflow()) {
+                    if (in.hasRemaining()) {
+                        carryover.put(in);
+                    }
+                    break;
+                }
+                if (result.isOverflow()) {
+                    out = CharBuffer.allocate(out.capacity() * 2);
+                    continue;
+                }
+                // Malformed / unmappable: REPLACE policy already applied
+                // a U+FFFD; skip the offending byte(s) and continue.
+                in.position(in.position() + result.length());
+            }
+        }
+
+        private void appendCharBuffer(CharBuffer out) {
+            out.flip();
+            if (out.hasRemaining()) {
+                outputBuffer.append(out);
+            }
+            out.clear();
         }
 
         public void processOutput(String s) {
         }
 
-        public void processDied(int returnValue) {
-            outputBuffer.append(pending.toString(outputEncoding));
-            // Remove the trailing "\n" character that osascript returns.
+        public synchronized void processDied(int returnValue) {
+            // Flush any state still held by the decoder (e.g. a final
+            // partial multi-byte sequence that turned out to be invalid).
+            CharBuffer out = CharBuffer.allocate(8);
+            ByteBuffer in;
+            if (carryover.position() > 0) {
+                carryover.flip();
+                in = carryover;
+            } else {
+                in = ByteBuffer.allocate(0);
+            }
+            decoder.decode(in, out, true);
+            decoder.flush(out);
+            appendCharBuffer(out);
+            carryover.clear();
+
+            // Strip the trailing "\n" osascript adds.
             int len = outputBuffer.length();
             if (len > 0 && outputBuffer.charAt(len - 1) == '\n') {
                 outputBuffer.setLength(len - 1);

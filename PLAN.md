@@ -27,9 +27,8 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **10a** | done | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). | landed in #13 |
 | **10b** | in flight | Connectivity UI tabs in the existing Connect-to-server dialog: `MountPanel` + `TailscalePeerPanel` registered via `ProtocolPanelRegistry`. | one PR |
 | **10c** | in flight | Connectivity polish: SwingWorker wrapper for mount calls, active-mounts management dialog, Taildrop send button on the Tailscale tab. | one PR |
-| **11a** | in flight | S3 backend on AWS SDK v2 — headless: `S3Connection`, `S3FileURL`, `S3File`/`Root`/`Bucket`/`Object`, `S3ProtocolProvider`, Activator, URL-parsing + endpoint-build tests. No UI panel yet. | one PR |
-| **11b** | pending | S3 connect-dialog `S3Panel` (endpoint / region / access-key / secret-key / path-style / TLS); registered via `ProtocolPanelRegistry`. | one PR |
-| **11c** | pending | LocalStack / MinIO testcontainers integration tests for S3 (list buckets, list objects with prefix, put / get / delete, mkdir-creates-prefix). | one PR |
+| **11a** | done | S3 backend on AWS SDK v2 — headless: `S3Connection`, `S3FileURL`, `S3File`/`Root`/`Bucket`/`Object`, `S3ProtocolProvider`, Activator, URL-parsing + endpoint-build tests. | landed in #16 |
+| **11**  | in flight | Finish S3: `S3Panel` registered via `ProtocolPanelRegistry`; `S3TransferManager` multipart upload (≥ 32 MiB spills to temp file); LocalStack-backed integration tests gated on Docker availability. | one PR |
 | **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
 
 **Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
@@ -436,25 +435,28 @@ unwieldy.
   default-port stripping, MinIO custom-port retention, blank-host
   rejection).
 
-**Phase 11b** — Swing UI panel:
+**Phase 11 finish** — Swing UI + integration tests + multipart streaming
+(all in one PR per the user's "no more sub-phases" directive):
 
-- `S3Panel` (the connection dialog) ported from the deleted module's
-  Git history; UI fields rebuilt for the AWS-SDK-v2 endpoint /
-  region / access-key / secret-key / path-style / TLS inputs.
-- Registered via `ProtocolPanelRegistry` so the existing
-  Connect-to-server dialog grows an "S3" tab.
-- Manual smoke against AWS S3 + MinIO before merge.
-
-**Phase 11c** — testcontainers integration tests:
-
-- LocalStack or MinIO via `testcontainers-java`; gated on Docker
-  being available (Skip on macOS-15 GitHub runner where the action
-  doesn't ship Docker).
-- Coverage: list buckets, list objects with prefix, put/get/delete,
-  mkdir-creates-prefix, paged listing across continuation tokens.
-- Streaming uploads via `S3TransferManager` (multipart) land here
-  too — needs an executor + credentials provider that survives
-  across calls.
+- `S3Panel` (the connection dialog) rebuilt for the AWS-SDK-v2
+  inputs: endpoint host, bucket, access key, secret key, region,
+  port, HTTPS toggle, path-style toggle. Registered via
+  `ProtocolPanelRegistry` so the existing Connect-to-server dialog
+  grows an "S3" tab.
+- `S3TransferManager` plumbed into `S3Connection`; `S3Object`'s
+  OutputStream now uses a `SpillingPutOutputStream` that buffers
+  in memory up to 32 MiB and spills to a temp file beyond that;
+  on close, in-memory payloads PUT in one request and spilled
+  files upload via the TransferManager (multipart). Temp files
+  are best-effort deleted in a `finally`.
+- LocalStack-backed integration tests via `testcontainers-java`,
+  gated on Docker availability (Skip on macOS-15 GitHub runner
+  where the runner doesn't ship Docker; runs on ubuntu-latest).
+  Coverage: full lifecycle (mkdir-bucket → ls-root → put → ls-bucket →
+  get → mkdir-prefix → put-nested → ls-prefix → delete);
+  paged listing of 1500 objects across multiple continuation
+  tokens; rename copy-then-delete; 40 MiB upload exercising the
+  TransferManager spill path; 1 KB upload staying in-memory.
 
 ### Phase 10 — Connectivity: Tailscale + mount helper (split: 10a + 10b)
 
