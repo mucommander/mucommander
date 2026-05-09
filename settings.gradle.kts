@@ -25,6 +25,7 @@ include("barebones-format-xz")
 include("barebones-format-zip")
 
 include("barebones-protocol-nfs")
+include("barebones-protocol-s3")
 include("barebones-protocol-sftp")
 
 include("barebones-mount-helper")

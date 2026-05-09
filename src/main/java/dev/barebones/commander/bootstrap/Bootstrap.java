@@ -46,10 +46,11 @@ public final class Bootstrap {
         invoke("dev.barebones.commander.conf.Activator", "register", Map.class, properties);
         invoke("dev.barebones.commander.preload.Activator", "register");
 
-        // Protocols (S3 module is removed in Phase 4 pending its own dedicated
-        // AWS-SDK-v2 reintroduction phase — see PLAN.md).
+        // Protocols. S3 reintroduced in Phase 11 on AWS SDK v2; the
+        // jets3t-based module from upstream was deleted in Phase 4.
         invoke("dev.barebones.commander.commons.file.protocol.sftp.Activator", "register");
         invoke("dev.barebones.commander.commons.file.protocol.nfs.Activator", "register");
+        invoke("dev.barebones.commander.commons.file.protocol.s3.Activator", "register");
 
         // Phase-10 connectivity helpers. Both register no-op when the
         // backing OS feature isn't available (mount on Windows, tailscale

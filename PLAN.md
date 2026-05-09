@@ -27,7 +27,9 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **10a** | done | Connectivity backends: `barebones-mount-helper` + `barebones-tailscale` modules (services, ProcessBuilder shell-out, parsing, full unit tests). | landed in #13 |
 | **10b** | in flight | Connectivity UI tabs in the existing Connect-to-server dialog: `MountPanel` + `TailscalePeerPanel` registered via `ProtocolPanelRegistry`. | one PR |
 | **10c** | in flight | Connectivity polish: SwingWorker wrapper for mount calls, active-mounts management dialog, Taildrop send button on the Tailscale tab. | one PR |
-| **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
+| **11a** | in flight | S3 backend on AWS SDK v2 — headless: `S3Connection`, `S3FileURL`, `S3File`/`Root`/`Bucket`/`Object`, `S3ProtocolProvider`, Activator, URL-parsing + endpoint-build tests. No UI panel yet. | one PR |
+| **11b** | pending | S3 connect-dialog `S3Panel` (endpoint / region / access-key / secret-key / path-style / TLS); registered via `ProtocolPanelRegistry`. | one PR |
+| **11c** | pending | LocalStack / MinIO testcontainers integration tests for S3 (list buckets, list objects with prefix, put / get / delete, mkdir-creates-prefix). | one PR |
 | **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
 
 **Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
@@ -387,25 +389,72 @@ AES-GCM fallback path:
 - Surface `SecretStore` choice in preferences UI (auto-detect by
   default; user can override).
 
-### Phase 11 — Re-add S3 backend on AWS SDK v2 (one PR)
+### Phase 11 — Re-add S3 backend on AWS SDK v2 (split: 11a + 11b + 11c)
 
 Lifted out of the original Phase 4 plan because the refactor is too
 large for a dep-upgrade PR. The Phase-4 PR removed the `jets3t`-based
 module to clear the dep tree; this phase adds it back, properly
-implemented:
+implemented. Split into three because the headless backend, the
+Swing UI panel, and the testcontainers integration tests are
+mechanically independent and reviewing them together would be
+unwieldy.
+
+**Phase 11a** — headless backend:
 
 - New `barebones-protocol-s3` subproject.
-- `software.amazon.awssdk:bom:2.x` + `software.amazon.awssdk:s3` deps.
-- `S3ProtocolProvider`, `S3Root`, `S3Bucket`, `S3Object`, `S3File`
-  rewritten against the AWS SDK v2 API.
-- `S3Panel` (the connection dialog) preserved from the deleted module's
-  Git history; UI fields adjusted for AWS-SDK-style endpoint /
-  credentials / region inputs.
-- Manual smoke against AWS S3 + at least one S3-compatible
-  endpoint (MinIO) before merge.
-- CI integration test gated on `-Dtest_properties.s3_test.temp_folder`
-  remains a SkipException in CI; the AWS SDK has its own LocalStack
-  test harness that we may or may not adopt.
+- `software.amazon.awssdk:bom` + `software.amazon.awssdk:s3` deps
+  (catalog entries `aws-sdk-bom` + `aws-sdk-s3`).
+- `S3Connection` — wraps an `S3Client` configured for one
+  (endpoint, region, credentials) tuple. Accepts both static
+  credentials (URL-supplied access/secret key) and falls back to
+  the SDK's `DefaultCredentialsProvider` (env, ~/.aws/credentials,
+  IAM instance role) when none are URL-supplied.
+- `S3FileURL` — pure value object that decomposes a `FileURL` into
+  endpoint host/port + bucket + key; no I/O.
+- `S3File` — abstract base extending `ProtocolFile`; surfaces
+  `UnsupportedFileOperationException` for everything S3 has no
+  analogue for (POSIX permissions, owner/group, free/total space,
+  random-access I/O, append, remote copy, change-date).
+- `S3Root` — lists buckets via `listBuckets()`.
+- `S3Bucket` — lists objects via `ListObjectsV2` with
+  delimiter='/'; `headBucket` for `exists()`; create/delete bucket.
+- `S3Object` — get/put/delete object; mkdir creates an empty
+  zero-byte object whose key ends in `/`; rename does
+  copy-then-delete; output stream buffers in memory and PUTs on
+  close (multipart streaming deferred to Phase 11c).
+- `S3Listing` — shared `ListObjectsV2`-with-paging helper.
+- `S3ProtocolProvider` — connection cache keyed by
+  (host, port, region, accessKey, pathStyle, useHttps) — different
+  credentials never share a client.
+- `Activator` — registers the s3 scheme with
+  `FileProtocolServiceTracker`.
+- Bootstrap entry, root build runtimeOnly dep, fat-jar bundles AWS
+  SDK + Netty (jar grows from ~30 MB to ~43 MB).
+- Tests: `S3FileURLTest` (root vs bucket-root vs object vs
+  trailing-slash directory; MinIO host:port shape);
+  `S3ConnectionEndpointTest` (https default-port stripping, http
+  default-port stripping, MinIO custom-port retention, blank-host
+  rejection).
+
+**Phase 11b** — Swing UI panel:
+
+- `S3Panel` (the connection dialog) ported from the deleted module's
+  Git history; UI fields rebuilt for the AWS-SDK-v2 endpoint /
+  region / access-key / secret-key / path-style / TLS inputs.
+- Registered via `ProtocolPanelRegistry` so the existing
+  Connect-to-server dialog grows an "S3" tab.
+- Manual smoke against AWS S3 + MinIO before merge.
+
+**Phase 11c** — testcontainers integration tests:
+
+- LocalStack or MinIO via `testcontainers-java`; gated on Docker
+  being available (Skip on macOS-15 GitHub runner where the action
+  doesn't ship Docker).
+- Coverage: list buckets, list objects with prefix, put/get/delete,
+  mkdir-creates-prefix, paged listing across continuation tokens.
+- Streaming uploads via `S3TransferManager` (multipart) land here
+  too — needs an executor + credentials provider that survives
+  across calls.
 
 ### Phase 10 — Connectivity: Tailscale + mount helper (split: 10a + 10b)
 
