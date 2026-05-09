@@ -20,8 +20,7 @@ package dev.barebones.commander.commons.conf;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
+import dev.barebones.commander.commons.io.security.SecureXml;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -120,8 +119,7 @@ public class XmlConfigurationReader extends DefaultHandler implements Configurat
     public void read(Reader in, ConfigurationBuilder builder) throws IOException, ConfigurationException, ConfigurationFormatException {
         this.builder = builder;
         locator      = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(new InputSource(in), this);}
-        catch(ParserConfigurationException e) {throw new ConfigurationException("Failed to create a SAX parser", e);}
+        try {SecureXml.newSafeSaxParser().parse(new InputSource(in), this);}
         catch(SAXParseException e) {throw new ConfigurationFormatException(e.getMessage(), e.getLineNumber(), e.getColumnNumber());}
         catch(SAXException e) {throw new ConfigurationFormatException(e.getException() == null ? e : e.getException());}
     }

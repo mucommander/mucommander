@@ -27,7 +27,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParserFactory;
+import dev.barebones.commander.commons.io.security.SecureXml;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 
@@ -63,7 +63,7 @@ class BookmarkParser extends DefaultHandler implements BookmarkConstants {
     void parse(InputStream in, BookmarkBuilder builder) throws Exception {
         this.builder = builder;
         characters   = new StringBuilder();
-        SAXParserFactory.newInstance().newSAXParser().parse(in, this);
+        SecureXml.newSafeSaxParser().parse(in, this);
     }
 
     /**

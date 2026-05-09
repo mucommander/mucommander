@@ -21,8 +21,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
+import dev.barebones.commander.commons.io.security.SecureXml;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -80,8 +79,7 @@ public class CommandReader extends DefaultHandler implements CommandsXmlConstant
      */
     public static void read(InputStream in, CommandBuilder b) throws CommandException, IOException {
         b.startBuilding();
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in, new CommandReader(b));}
-        catch(ParserConfigurationException e) {throw new CommandException(e);}
+        try {SecureXml.newSafeSaxParser().parse(in, new CommandReader(b));}
         catch(SAXException e) {throw new CommandException(e);}
         finally {b.endBuilding();}
     }

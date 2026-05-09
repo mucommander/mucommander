@@ -20,6 +20,8 @@ package dev.barebones.commander.desktop.linux.kde;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,28 +46,28 @@ public class KdeConfig {
      * command isn't available in the path.
      */
     public static String getValue(String key) throws IOException {
-        BufferedReader br = null;
-        try {
-            Process process = Runtime.getRuntime().exec(CONFIG_COMMAND+" --key "+key);
-
-            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        // SECURITY: pre-Phase-5 this used Runtime.exec(String) which tokenizes on
+        // whitespace and was reachable with attacker-controlled `key` from XML
+        // bookmark / preferences files (SECURITY_REVIEW.md §5.4). ProcessBuilder
+        // with an explicit argument list passes `key` as a single argv entry, so
+        // shell metacharacters or extra whitespace can never split into a new
+        // command or argument.
+        ProcessBuilder pb = new ProcessBuilder(List.of(CONFIG_COMMAND, "--key", key));
+        pb.redirectErrorStream(false);
+        Process process = pb.start();
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
             String line = br.readLine();
 
-            LOGGER.debug(CONFIG_COMMAND+" returned '"+line+"' for "+key);
+            LOGGER.debug(CONFIG_COMMAND + " returned '" + line + "' for " + key);
 
-            if(line==null || (line=line.trim()).equals(""))
+            if (line == null || (line = line.trim()).isEmpty()) {
                 return null;
-
+            }
             return line;
-        }
-        catch(IOException e) {
-            LOGGER.debug("Error while retrieving value for "+key, e);
-
+        } catch (IOException e) {
+            LOGGER.debug("Error while retrieving value for " + key, e);
             throw e;
-        }
-        finally {
-            if(br!=null)
-                try { br.close(); } catch(IOException e) {}
         }
     }
 }

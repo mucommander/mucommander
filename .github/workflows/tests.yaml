@@ -31,6 +31,27 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
       - run: ./gradlew test --stacktrace
 
+  # SECURITY_REVIEW.md §5.1: prevent the OSGi-era TLS bypass from
+  # ever sneaking back in. The HTTP bundle that called
+  # HttpsURLConnection.setDefaultSSLSocketFactory(<permissive>)
+  # was deleted in Phase 1; this gate stops any new code from
+  # silently downgrading TLS again.
+  no-tls-bypass:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Forbid HttpsURLConnection.setDefault* in source tree
+        run: |
+          set -e
+          if grep -rn "setDefaultSSLSocketFactory\|setDefaultHostnameVerifier" \
+              --include='*.java' --exclude-dir='.git' --exclude-dir='build' .; then
+            echo
+            echo "ERROR: The lines above install a JVM-wide TLS bypass."
+            echo "       See SECURITY_REVIEW.md §5.1 for the original incident."
+            exit 1
+          fi
+          echo "OK — no global TLS-bypass calls in the source tree."
+
   # actions/dependency-review-action@v4 needs GitHub's "Dependency Graph"
   # feature enabled at the repo level (Settings → Code security and
   # analysis). It's not enabled on forks by default; once the user toggles

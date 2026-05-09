@@ -24,7 +24,7 @@ import java.util.Vector;
 
 import javax.swing.KeyStroke;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
+import dev.barebones.commander.commons.io.security.SecureXml;
 
 import dev.barebones.commander.ui.action.ActionId;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ class CommandBarReader extends CommandBarIO {
     	this.file = file;
     	
     	InputStream in = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
+        try {SecureXml.newSafeSaxParser().parse(in = new BackupInputStream(file), this);}
         finally {
             if(in!=null)
                 try { in.close(); }

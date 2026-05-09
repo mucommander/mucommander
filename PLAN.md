@@ -20,12 +20,13 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **2** | pending | Drop OSGi runtime — replace Felix + bnd manifests + bundle activators with a plain Java app + fat JAR | one PR |
 | **3** | pending | Java 25 LTS upgrade | one PR |
 | **4** | in flight | Dependency upgrades + Dependabot + dependency-review CI; **drop the abandoned `jets3t`-based S3 module** (its AWS-SDK-v2 reintroduction moves to Phase 11) | one PR |
-| **5** | pending | Code-level security fixes (XOR cipher → keychain, XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`) | one PR |
+| **5** | in flight | Code-level security fixes (XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`). XOR-cipher → keychain split into Phase 12. | one PR |
 | **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
 | **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
 | **9** | pending | SAST in CI (SpotBugs + FindSecBugs + OWASP Dependency-Check) | one PR |
 | **10** | pending | Connectivity: Tailscale peer discovery + Taildrop, OS-level mount helper for NFSv4/SMB/SSHFS on Linux & macOS | one PR |
 | **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
+| **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
 
 **Hard rule**: only one branch / one PR is in flight at a time. The user — not the LLM — decides when a PR is ready and when the next one starts. The LLM does not autonomously open new PRs to fan out work in parallel.
 
@@ -297,14 +298,19 @@ build, and no `mail.osgi-1.4.jar` artifact in `libs/`.
 
 ### Phase 5 — Code-level security fixes (one PR)
 
-Maps 1:1 to `SECURITY_REVIEW.md` §5:
+Maps 1:1 to `SECURITY_REVIEW.md` §5 — except item 2 (XOR cipher
+replacement) which is split into a dedicated **Phase 12** because
+keychain integration requires JNA bindings to macOS Security.framework
+and Linux libsecret plus a passphrase-derived AES-GCM fallback plus
+on-first-run migration logic — too much for a single security-fix PR
+that's otherwise mechanical.
 
 1. Add a CI **grep gate** that fails the build if `setDefaultSSLSocketFactory` or `setDefaultHostnameVerifier` reappear in the tree (the actual call sites died in Phase 1 with the HTTP bundle).
-2. Replace `XORCipher`-based credential storage with **OS keychain** integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Fall back to a passphrase-derived AES-GCM blob when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field.
+2. *(deferred to Phase 12)* Replace `XORCipher`-based credential storage with OS keychain integration.
 3. **XXE-harden** the 9 SAX entry points (theme, bookmarks, action keymap, toolbar, command bar, association, command, credentials, configuration): set `FEATURE_SECURE_PROCESSING=true` and `disallow-doctype-decl=true`. Add a small test asserting `<!DOCTYPE>` → throws.
 4. Refactor `KdeConfig.exec(String + key)` to `ProcessBuilder(List.of(...))`.
 
-**Exit criteria**: no Critical / High items remain in `SECURITY_REVIEW.md` §5 against the current code.
+**Exit criteria**: items 1, 3, 4 done. Item 2 lives in Phase 12.
 
 ### Phase 6 — Rename to `barebones-commander`
 
@@ -329,6 +335,25 @@ Maps 1:1 to `SECURITY_REVIEW.md` §5:
 
 - Add **SpotBugs + FindSecBugs** as a Gradle-driven CI step. Fail the build on any High-severity finding.
 - Add **OWASP Dependency-Check** as a scheduled weekly CI run. Fail on CVSS ≥ 7.0.
+
+### Phase 12 — Keychain-backed credentials (one PR)
+
+Lifted out of Phase 5 because keychain integration involves JNA
+bindings to platform-specific APIs and a non-trivial passphrase-derived
+AES-GCM fallback path:
+
+- Delete `dev.barebones.commander.bookmark.XORCipher` (the existing
+  hard-coded-XOR "encryption" of stored credentials).
+- Add `dev.barebones.commander.auth.SecretStore` SPI with three
+  implementations:
+  * macOS Keychain via JNA → `Security.framework` (`SecKeychainAddGenericPassword` / `SecKeychainFindGenericPassword`).
+  * Linux libsecret via JNA → `secret_password_store_sync` / `secret_password_lookup_sync` (or fall back to D-Bus call to `org.freedesktop.secrets`).
+  * Passphrase-derived AES-GCM blob in `~/.barebones-commander/credentials.bin` for headless / no-keychain environments. Key derivation via PBKDF2-HMAC-SHA-256 from a user-prompted passphrase, stored only in memory while the app runs.
+- One-shot migration on first run: detect the legacy XOR-encrypted
+  `credentials.xml`, decrypt it with the well-known XOR key, re-store
+  via the chosen `SecretStore`, then delete the XML record.
+- Surface `SecretStore` choice in preferences UI (auto-detect by
+  default; user can override).
 
 ### Phase 11 — Re-add S3 backend on AWS SDK v2 (one PR)
 

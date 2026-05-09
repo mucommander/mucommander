@@ -74,8 +74,11 @@ public class XmlConfigurationWriter implements ConfigurationBuilder {
         SAXTransformerFactory factory;
         TransformerHandler    transformer;
 
-        // Initializes the transformer factory.
-        factory = (SAXTransformerFactory)SAXTransformerFactory.newInstance();
+        // Initializes the transformer factory. SECURITY_REVIEW.md §5.5 —
+        // SecureXml.newSafeSaxTransformerFactory enables FEATURE_SECURE_PROCESSING
+        // and forbids external DTDs / stylesheets. The 'indent-number' attribute
+        // is preserved.
+        factory = dev.barebones.commander.commons.io.security.SecureXml.newSafeSaxTransformerFactory();
         factory.setAttribute("indent-number", 4);
 
         // Creates a new transformer.

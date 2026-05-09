@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Vector;
 
-import javax.xml.parsers.SAXParserFactory;
+import dev.barebones.commander.commons.io.security.SecureXml;
 
 import dev.barebones.commander.ui.action.ActionId;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public class ToolBarReader extends ToolBarIO {
         InputStream in;
 
         in = null;
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(descriptionFile), this);}
+        try {SecureXml.newSafeSaxParser().parse(in = new BackupInputStream(descriptionFile), this);}
         finally {
             if(in != null) {
                 try {in.close();}

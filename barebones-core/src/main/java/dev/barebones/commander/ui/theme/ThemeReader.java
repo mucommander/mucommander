@@ -27,8 +27,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,13 +135,10 @@ class ThemeReader extends DefaultHandler implements ThemeXmlConstants {
      *                thrown if an error occured while reading the template.
      */
     public static void read(InputStream in, ThemeData template) throws Exception {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-        factory.setValidating(false);
-        factory.setNamespaceAware(false);
-        SAXParser parser = factory.newSAXParser();
-        parser.parse(in, new ThemeReader(template));
+        // SECURITY_REVIEW.md §5.5 — themes are local config but can be
+        // shared/imported from third parties; XXE-harden via SecureXml.
+        dev.barebones.commander.commons.io.security.SecureXml.newSafeSaxParser()
+                .parse(in, new ThemeReader(template));
     }
 
     // - XML interaction -----------------------------------------------------

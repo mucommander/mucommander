@@ -28,7 +28,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.SAXParserFactory;
+import dev.barebones.commander.commons.io.security.SecureXml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -74,7 +74,7 @@ class CredentialsParser extends DefaultHandler implements CredentialsConstants {
 
         in = null;
         characters = new StringBuilder();
-        try {SAXParserFactory.newInstance().newSAXParser().parse(in = new BackupInputStream(file), this);}
+        try {SecureXml.newSafeSaxParser().parse(in = new BackupInputStream(file), this);}
         finally {
             if(in != null) {
                 try {in.close();}
