@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OWASP Dependency-Check suppression list.
+
+  Each <suppress> entry silences ONE CPE/CVE-on-dep match. Use only
+  when the dependency-check matcher false-positives or when a CVE is
+  not exploitable in this codebase's usage.  Always include the
+  CVE id and a one-line "why suppressed" comment.
+
+  This file is intentionally empty at Phase 9 wire-in. Add entries
+  as the weekly workflow surfaces false positives.
+-->
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+</suppressions>

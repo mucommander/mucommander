@@ -39,9 +39,14 @@ junit-bom = "5.14.1"
 okio = "3.11.0"
 kotlin-stdlib = "2.1.20"
 
+# SAST
+findsecbugs = "1.13.0"
+
 # Plugins
 grgit = "5.0.0"
 cyclonedx = "1.10.0"
+spotbugs = "6.0.27"
+dependencycheck = "11.1.0"
 
 [libraries]
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
@@ -72,6 +77,8 @@ jetbrains-annotations = { group = "org.jetbrains", name = "annotations", version
 
 jsch-mwiede = { group = "com.github.mwiede", name = "jsch", version.ref = "jsch-mwiede" }
 
+findsecbugs = { group = "com.h3xstream.findsecbugs", name = "findsecbugs-plugin", version.ref = "findsecbugs" }
+
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit-bom" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
@@ -87,3 +94,5 @@ kotlin-stdlib-common = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-c
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
 cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
+spotbugs = { id = "com.github.spotbugs", version.ref = "spotbugs" }
+dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }

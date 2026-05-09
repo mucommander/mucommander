@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Phase-9 SpotBugs baseline.
+  Each Match entry suppresses ONE (source-file, bug-pattern) pair
+  that was already present when SpotBugs was first wired into CI.
+  The build fails on any NEW (source, pattern) pair not listed here.
+  
+  To fix a finding: fix the code, then delete the corresponding line.
+-->
+<FindBugsFilter>
+
+  <!-- Vendored upstream packages (Sun NFS, Sun GSS, sun.net.www) 
+       — not ours to fix; suppress wholesale (33 findings). -->
+  <Match><Package name="~com\.sun\.file.*"/></Match>
+  <Match><Package name="~com\.sun\.gssapi.*"/></Match>
+  <Match><Package name="~com\.sun\.nfs.*"/></Match>
+  <Match><Package name="~com\.sun\.rpc.*"/></Match>
+  <Match><Package name="~com\.sun\.xfile.*"/></Match>
+  <Match><Package name="~com\.sun\.xfilechooser.*"/></Match>
+  <Match><Package name="~com\.sun\.xhandler.*"/></Match>
+  <Match><Package name="~sun\.net\.www.*"/></Match>
+
+  <!-- 45 pre-existing (source, pattern) pairs in our own code. -->
+  <Match><Class name="~dev\.barebones\.commander\.StressTester([\$.].*)?"/><Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.auth\.CredentialsMapping([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.bookmark\.Bookmark([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.bookmark\.XORCipher([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>  <!-- (×2) -->
+  <Match><Class name="~dev\.barebones\.commander\.command\.CommandManager([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>  <!-- (×2) -->
+  <Match><Class name="~dev\.barebones\.commander\.command\.CommandReader([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.Credentials([\$.].*)?"/><Bug pattern="CN_IMPLEMENTS_CLONE_BUT_NOT_CLONEABLE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.FileFactory([\$.].*)?"/><Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.MimeTypes([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.archive\.zip\.provider\.AsiExtraField([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>  <!-- (×3) -->
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.archive\.zip\.provider\.ZipFile([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.archive\.zip\.provider\.ZipOutputStream([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.archiver\.ZipArchiver([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.icon\.impl\.SwingFileIconProviderImpl([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.protocol\.local\.LocalFile([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.protocol\.sftp\.SFTPPanel([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.file\.util\.FileComparator([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.io\.base64\.Base64Decoder([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.io\.base64\.Base64Encoder([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.io\.bom\.BOM([\$.].*)?"/><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.commons\.util\.cache\.LRUCache([\$.].*)?"/><Bug pattern="DMI_RANDOM_USED_ONLY_ONCE"/></Match>  <!-- (×3) -->
+  <Match><Class name="~dev\.barebones\.commander\.core\.LocationChanger([\$.].*)?"/><Bug pattern="DLS_DEAD_LOCAL_STORE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.desktop\.linux\.gnome\.GnomeTrash([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.desktop\.linux\.gnome\.OSCommand([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.desktop\.linux\.xfce\.XfceTrash([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.desktop\.macos\.ActionShortcuts([\$.].*)?"/><Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.desktop\.macos\.OSXDesktopAdapter([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.desktop\.macos\.OSXDesktopAdapter([\$.].*)?"/><Bug pattern="UC_USELESS_CONDITION"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.job\.impl\.CombineFilesJob([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.process\.DebugProcessListener([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.process\.ProcessOutputMonitor([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.action\.impl\.GarbageCollectAction([\$.].*)?"/><Bug pattern="DM_GC"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.about\.LicenseDialog([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.file\.FileSelectionDialog([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>  <!-- (×4) -->
+  <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.pref\.general\.AppearancePanel([\$.].*)?"/><Bug pattern="EQ_ALWAYS_FALSE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.pref\.theme\.FileEditorPanel([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.dialog\.server\.ServerConnectDialog([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.main\.commandbar\.CommandBarButton([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.main\.table\.FileTableModel([\$.].*)?"/><Bug pattern="DE_MIGHT_IGNORE"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.main\.toolbar\.ToolBar([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.main\.tree\.AbstractIOThreadManager([\$.].*)?"/><Bug pattern="SC_START_IN_CTOR"/></Match>
+  <Match><Class name="~dev\.barebones\.commander\.ui\.theme\.SystemDefaultColor([\$.].*)?"/><Bug pattern="MS_SHOULD_BE_FINAL"/></Match>  <!-- (×4) -->
+  <Match><Class name="~dev\.barebones\.commander\.ui\.theme\.ThemeCache([\$.].*)?"/><Bug pattern="MS_MUTABLE_ARRAY"/></Match>  <!-- (×2) -->
+  <Match><Class name="~dev\.barebones\.commander\.ui\.theme\.ThemeCache([\$.].*)?"/><Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/></Match>  <!-- (×5) -->
+  <Match><Class name="~dev\.barebones\.commander\.viewer\.text\.TextEditor([\$.].*)?"/><Bug pattern="DM_DEFAULT_ENCODING"/></Match>
+</FindBugsFilter>

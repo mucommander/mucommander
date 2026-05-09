@@ -1,0 +1,62 @@
+name: Dependency-Check
+
+# OWASP Dependency-Check against the runtime classpath of the
+# application. Fails the build on any CVE with CVSS ≥ 7.0 that
+# isn't suppressed in config/dependency-check/suppression.xml.
+#
+# Runs weekly (Monday 06:00 UTC) so the NVD database stays current,
+# and on workflow_dispatch for ad-hoc audits.  NOT wired to PR builds
+# because the NVD download is slow (5–15 min) and a PR shouldn't
+# fail because an unrelated CVE dropped overnight.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25 (toolchain target)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Set up JDK 21 (Gradle runtime)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - uses: gradle/wrapper-validation-action@v2
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: OWASP Dependency-Check
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: ./gradlew dependencyCheckAggregate --stacktrace
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: build/reports/dependency-check-report.sarif
+          category: dependency-check
+
+      - name: Upload HTML / JSON reports as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-reports
+          path: |
+            build/reports/dependency-check-report.html
+            build/reports/dependency-check-report.json

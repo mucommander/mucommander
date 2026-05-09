@@ -23,7 +23,7 @@ Source: forked from https://github.com/mucommander/mucommander to https://github
 | **5** | in flight | Code-level security fixes (XXE-harden SAX, refactor `KdeConfig.exec`, CI grep gate against `setDefaultSSLSocketFactory`). XOR-cipher → keychain split into Phase 12. | one PR |
 | **7** | pending | Build polish (Kotlin DSL + version catalog) | one PR |
 | **8** | pending | Release pipeline (DMG/DEB/RPM/AppImage via `jpackage`) + commit signing + SBOM | one PR |
-| **9** | pending | SAST in CI (SpotBugs + FindSecBugs + OWASP Dependency-Check) | one PR |
+| **9** | in flight | SAST in CI (SpotBugs + FindSecBugs PR-triggered + OWASP Dependency-Check weekly) | one PR |
 | **10** | pending | Connectivity: Tailscale peer discovery + Taildrop, OS-level mount helper for NFSv4/SMB/SSHFS on Linux & macOS | one PR |
 | **11** | pending | Re-add S3 backend on AWS SDK v2 (`software.amazon.awssdk:s3`); rewrite the S3 module's File / Bucket / Object / Root classes; verify against AWS S3 + MinIO. (Was Phase 4's stretch goal; lifted out because the rewrite is too large for Phase 4's bump-scope.) | one PR |
 | **12** | pending | Replace `XORCipher`-based credential storage with OS keychain integration (macOS Keychain via JNA `Security.framework`; Linux libsecret via JNA). Passphrase-derived AES-GCM fallback when no keychain is available. Migrate any legacy `XORCipher`-protected `credentials.xml` once on first run, then delete the field. (Lifted from Phase 5 because keychain JNA bindings are non-trivial.) | one PR |
@@ -342,8 +342,29 @@ that's otherwise mechanical.
 
 ### Phase 9 — SAST in CI (one PR)
 
-- Add **SpotBugs + FindSecBugs** as a Gradle-driven CI step. Fail the build on any High-severity finding.
-- Add **OWASP Dependency-Check** as a scheduled weekly CI run. Fail on CVSS ≥ 7.0.
+- Add **SpotBugs + FindSecBugs** as a Gradle-driven CI step
+  (`.github/workflows/spotbugs.yaml`, PR + push-to-main triggered).
+  Fails the build on any HIGH-confidence finding not listed in
+  `config/spotbugs/exclude.xml`. SARIF uploaded to GitHub Code
+  Scanning.
+- Add **OWASP Dependency-Check** as a scheduled weekly CI run
+  (`.github/workflows/dependency-check.yaml`, Monday 06:00 UTC +
+  workflow_dispatch). Fails on CVSS ≥ 7.0 not suppressed in
+  `config/dependency-check/suppression.xml`. SARIF uploaded to
+  GitHub Code Scanning.
+- The Phase-9 SpotBugs baseline (`config/spotbugs/exclude.xml`)
+  captures **95 pre-existing HIGH-confidence findings** in the
+  brownfield muCommander code. Categorisation:
+  * `com.sun.*` / `sun.net.www.*` — vendored upstream (33 findings)
+    suppressed wholesale via `<Package>` matches.
+  * Per-(class, bug-pattern) suppressions for our own code (62
+    findings), each line a real issue to fix in a follow-up.
+  * Top patterns: `DM_DEFAULT_ENCODING` (charset reliance),
+    `ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD` (static caches),
+    `HE_EQUALS_USE_HASHCODE` (broken `equals/hashCode` contract).
+- Post-Phase-9 cleanup phases will progressively remove suppressions
+  from `config/spotbugs/exclude.xml` until empty (then the file can
+  be deleted and SpotBugs runs purely on regression).
 
 ### Phase 12 — Keychain-backed credentials (one PR)
 

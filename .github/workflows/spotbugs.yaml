@@ -1,0 +1,85 @@
+name: SpotBugs
+
+# SpotBugs + FindSecBugs static analysis. Runs on every PR and push
+# to main. Fails the build on any HIGH-confidence finding not listed
+# in config/spotbugs/exclude.xml (the Phase-9 baseline). SARIF output
+# is uploaded to GitHub Code Scanning so findings are visible in the
+# Security tab.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  spotbugs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25 (toolchain target)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Set up JDK 21 (Gradle runtime)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - uses: gradle/wrapper-validation-action@v2
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: SpotBugs + FindSecBugs
+        run: ./gradlew spotbugsMain --stacktrace
+
+      - name: Merge per-module SARIF into a single run
+        if: always()
+        run: |
+          set -euo pipefail
+          # codeql/upload-sarif rejects multiple runs sharing one
+          # category; merge every per-module run's results into a
+          # single run so the upload is a single SARIF document.
+          python3 - <<'PY'
+          import json, glob, os
+          out = {
+              "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+              "version": "2.1.0",
+              "runs": [{
+                  "tool": {"driver": {"name": "SpotBugs", "rules": []}},
+                  "results": [],
+              }],
+          }
+          rules_seen = {}
+          for f in sorted(glob.glob("**/build/reports/spotbugs/main.sarif", recursive=True)):
+              if os.path.getsize(f) == 0:
+                  continue
+              with open(f) as fh:
+                  d = json.load(fh)
+              for run in d.get("runs", []):
+                  for rule in run.get("tool", {}).get("driver", {}).get("rules", []):
+                      rid = rule.get("id")
+                      if rid and rid not in rules_seen:
+                          rules_seen[rid] = rule
+                  out["runs"][0]["results"].extend(run.get("results", []))
+          out["runs"][0]["tool"]["driver"]["rules"] = list(rules_seen.values())
+          os.makedirs(os.environ["RUNNER_TEMP"], exist_ok=True)
+          dest = os.path.join(os.environ["RUNNER_TEMP"], "spotbugs-merged.sarif")
+          with open(dest, "w") as fh:
+              json.dump(out, fh)
+          print(f"merged: {len(out['runs'][0]['results'])} results, {len(rules_seen)} rules → {dest}")
+          PY
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ runner.temp }}/spotbugs-merged.sarif
+          category: spotbugs

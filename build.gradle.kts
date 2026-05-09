@@ -6,6 +6,8 @@ plugins {
     application
     alias(libs.plugins.grgit)
     alias(libs.plugins.cyclonedx)
+    alias(libs.plugins.spotbugs)
+    alias(libs.plugins.dependencycheck)
 }
 
 allprojects {
@@ -30,6 +32,7 @@ repositories.mavenCentral()
 
 subprojects {
     apply(plugin = "java-library")
+    apply(plugin = "com.github.spotbugs")
     extensions.configure<JavaPluginExtension> {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(25))
@@ -166,6 +169,50 @@ tasks.named<org.cyclonedx.gradle.CycloneDxTask>("cyclonedxBom") {
     setOutputFormat("all")
     setOutputName("bom")
     setIncludeBomSerialNumber(true)
+}
+
+// SpotBugs + FindSecBugs across every Java subproject. Reports
+// HIGH-confidence findings to SARIF (uploaded to GitHub Code
+// Scanning by the CI workflow) and HTML, and **fails the build on
+// any finding** that isn't suppressed by config/spotbugs/exclude.xml.
+//
+// The exclude file holds the Phase-9 baseline — 95 (source, pattern)
+// pairs that pre-existed in the brownfield muCommander code. Each
+// suppression is a real bug to fix in a follow-up; deleting a line
+// from the exclude file surfaces the underlying finding.
+allprojects {
+    plugins.withId("com.github.spotbugs") {
+        dependencies {
+            add("spotbugsPlugins", rootProject.libs.findsecbugs)
+        }
+        extensions.configure<com.github.spotbugs.snom.SpotBugsExtension> {
+            toolVersion.set("4.9.6")
+            effort.set(com.github.spotbugs.snom.Effort.MAX)
+            reportLevel.set(com.github.spotbugs.snom.Confidence.HIGH)
+            ignoreFailures.set(false)
+            excludeFilter.set(rootProject.file("config/spotbugs/exclude.xml"))
+        }
+        tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
+            reports.create("sarif") { required.set(true) }
+            reports.create("html")  { required.set(true) }
+        }
+    }
+}
+
+// OWASP Dependency-Check for the application's runtime classpath.
+// Run weekly via .github/workflows/dependency-check.yaml; not wired
+// to PR builds because the NVD download is slow and a PR shouldn't
+// fail because of an unrelated CVE drop.
+//
+// `nvd.apiKey` is read from the NVD_API_KEY env var by the
+// dependency-check plugin itself when the property isn't set; we
+// don't shim a fallback here. CI sets the env var from a repo
+// secret; a missing key just means slower NVD downloads.
+dependencyCheck {
+    failBuildOnCVSS = 7.0f
+    formats = listOf("HTML", "JSON", "SARIF")
+    scanConfigurations = listOf("runtimeClasspath")
+    suppressionFile = rootProject.file("config/dependency-check/suppression.xml").absolutePath
 }
 
 // Single fat-jar packaging for `java -jar barebones-commander.jar`.
