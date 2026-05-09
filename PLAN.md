@@ -323,13 +323,22 @@ that's otherwise mechanical.
 
 ### Phase 8 — Release pipeline + supply chain (one PR)
 
-- Replace upstream nightly / stable workflows (already deleted) with a fresh `release.yml` triggered on tag push:
-  - Linux x86_64 / aarch64 AppImage + DEB + RPM via `jpackage`.
-  - macOS aarch64 / x86_64 DMG via `jpackage` + `notarytool` (when an Apple Developer ID is configured; until then, ad-hoc-signed DMG).
-- Enable **commit signing** + branch-protection rule on `main` requiring signed commits.
-- Add **SBOM** generation (`org.cyclonedx.bom` Gradle plugin); publish `bom.cdx.json` per release.
-- Add **SLSA-style provenance** via `actions/attest-build-provenance`.
-- Replace upstream icon set with new artwork.
+**Automated in this phase**:
+- New `release.yml` triggered on `v*` tag push (and `workflow_dispatch` for testing):
+  - Builds fat-jar + SBOM on `ubuntu-latest`.
+  - Native installers via `jpackage`: **DEB + RPM on Linux** (matrix), **DMG on macOS aarch64** (`macos-15` runner).
+  - SLSA-style provenance via `actions/attest-build-provenance@v1` covering every artifact.
+  - Draft GitHub Release auto-created with all artifacts attached.
+- **CycloneDX SBOM** via `org.cyclonedx.bom` Gradle plugin → `bom.json` + `bom.xml` published per release.
+
+**Deferred to follow-up phases** (each needs out-of-band setup the LLM cannot do alone):
+- **AppImage** for Linux: `jpackage` does not produce AppImage natively. Needs `appimagetool` integration + a Linux app-image directory build step.
+- **macOS x86_64 DMG**: requires a `macos-13` runner in the matrix; left out for the initial cut to keep CI minutes low. Single-line addition when Intel Mac coverage becomes priority.
+- **macOS notarization**: requires an Apple Developer ID + `APPLE_ID` / `APPLE_TEAM_ID` / `APPLE_APP_PASSWORD` repo secrets. Until configured, the DMG is unsigned (Gatekeeper will warn on first launch).
+- **Commit signing + branch protection**: must be configured in the GitHub repo settings UI by the repo owner. The PR cannot toggle these from CI. Recommended:
+  * Settings → Rules → New ruleset → require signed commits + linear history on `main`.
+  * Local: `git config commit.gpgsign true` (or sigstore via `gitsign`).
+- **Icon artwork**: needs a new icon set (PNG/ICNS/ICO) before passing to `--icon` in `jpackage`. Until then, jpackage uses the default Java cup icon.
 
 ### Phase 9 — SAST in CI (one PR)
 

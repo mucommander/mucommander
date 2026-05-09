@@ -1,0 +1,191 @@
+name: Release
+
+# Triggered on tag push (e.g. `v0.1.0`) — builds the fat-jar + SBOM,
+# then native installers via jpackage on Linux (DEB, RPM) and macOS
+# (DMG), attests SLSA-style build provenance, and attaches everything
+# to a GitHub Release.
+#
+# Manual trigger (`workflow_dispatch`) is enabled for testing without
+# cutting a real tag — when run that way, the job uses
+# `0.0.0-SNAPSHOT` as the version and skips the actual Release
+# creation step.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build-jar-and-sbom:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=0.0.0-SNAPSHOT" >> "$GITHUB_OUTPUT"
+          fi
+
+      # JDK 25 first so the toolchain auto-discoverer sees it via
+      # JAVA_HOME_25_X64; JDK 21 last so its install wins JAVA_HOME
+      # (Gradle 8.14 doesn't run on JDK 25).
+      - name: Set up JDK 25 (toolchain target)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - name: Set up JDK 21 (Gradle runtime, last so JAVA_HOME wins)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - uses: gradle/wrapper-validation-action@v2
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: Build fat-jar + SBOM
+        run: ./gradlew fatJar cyclonedxBom --stacktrace
+
+      - name: Stage artifacts
+        run: |
+          mkdir -p staging
+          cp build/libs/*-all.jar staging/
+          cp build/reports/bom.json staging/barebones-commander-bom.json
+          cp build/reports/bom.xml  staging/barebones-commander-bom.xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jar-and-sbom
+          path: staging/
+          if-no-files-found: error
+
+  build-installer-linux:
+    needs: build-jar-and-sbom
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        type: [deb, rpm]
+    steps:
+      - uses: actions/checkout@v4
+
+      # jpackage uses the current JDK to build the runtime image bundled
+      # in the installer. JDK 25 == app's runtime target.
+      - name: Set up JDK 25 (jpackage runtime image source)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: jar-and-sbom
+          path: staging/
+
+      - name: Install rpmbuild (RPM only)
+        if: matrix.type == 'rpm'
+        run: sudo apt-get update && sudo apt-get install -y rpm
+
+      - name: Run jpackage
+        run: |
+          set -e
+          mkdir -p input dist
+          cp staging/*-all.jar input/
+          MAIN_JAR=$(basename input/*-all.jar)
+          jpackage \
+            --input input \
+            --main-jar "$MAIN_JAR" \
+            --main-class dev.barebones.commander.bootstrap.Main \
+            --type ${{ matrix.type }} \
+            --name barebones-commander \
+            --app-version "${{ needs.build-jar-and-sbom.outputs.version }}" \
+            --vendor "barebones-commander contributors" \
+            --copyright "GNU GPL v3 or later" \
+            --description "Barebones-commander dual-pane file manager" \
+            --linux-shortcut \
+            --dest dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer-linux-${{ matrix.type }}
+          path: dist/*
+          if-no-files-found: error
+
+  build-installer-macos:
+    needs: build-jar-and-sbom
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 25 (jpackage runtime image source)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: jar-and-sbom
+          path: staging/
+
+      - name: Run jpackage
+        run: |
+          set -e
+          mkdir -p input dist
+          cp staging/*-all.jar input/
+          MAIN_JAR=$(basename input/*-all.jar)
+          jpackage \
+            --input input \
+            --main-jar "$MAIN_JAR" \
+            --main-class dev.barebones.commander.bootstrap.Main \
+            --type dmg \
+            --name barebones-commander \
+            --app-version "${{ needs.build-jar-and-sbom.outputs.version }}" \
+            --vendor "barebones-commander contributors" \
+            --copyright "GNU GPL v3 or later" \
+            --description "Barebones-commander dual-pane file manager" \
+            --mac-package-name barebones-commander \
+            --dest dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installer-macos-aarch64
+          path: dist/*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-jar-and-sbom, build-installer-linux, build-installer-macos]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+          merge-multiple: true
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: 'artifacts/*'
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true
+          draft: true

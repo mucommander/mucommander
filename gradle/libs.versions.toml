@@ -41,6 +41,7 @@ kotlin-stdlib = "2.1.20"
 
 # Plugins
 grgit = "5.0.0"
+cyclonedx = "1.10.0"
 
 [libraries]
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
@@ -85,3 +86,4 @@ kotlin-stdlib-common = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-c
 
 [plugins]
 grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }

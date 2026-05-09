@@ -5,6 +5,7 @@ plugins {
     java
     application
     alias(libs.plugins.grgit)
+    alias(libs.plugins.cyclonedx)
 }
 
 allprojects {
@@ -153,6 +154,18 @@ tasks.named<Jar>("jar") {
 
 tasks.named<Test>("test") {
     useTestNG()
+}
+
+// CycloneDX SBOM published per release. The plugin writes
+// build/reports/bom.json + bom.xml against the runtime classpath of
+// the root project, which is the fat-jar's actual contents.
+tasks.named<org.cyclonedx.gradle.CycloneDxTask>("cyclonedxBom") {
+    setProjectType("application")
+    setIncludeConfigs(listOf("runtimeClasspath"))
+    setSchemaVersion("1.5")
+    setOutputFormat("all")
+    setOutputName("bom")
+    setIncludeBomSerialNumber(true)
 }
 
 // Single fat-jar packaging for `java -jar barebones-commander.jar`.
