@@ -31,20 +31,20 @@ If you are having problems launching muCommander from these packages, make sure 
 environment variable points to the directory where your Java runtime is installed.
 
 
-What's new since v1.6.1 ?
+What's new since v1.6.2 ?
 -----------------------
 
 New features:
 -
 
 Improvements:
-- Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
+-
 
 Localization:
 -
 
 Bug fixes:
-- Fixed a possible NPE during initialization that prevents the application from starting.
+-
 
 Known issues:
 - Some translations may not be up-to-date.
