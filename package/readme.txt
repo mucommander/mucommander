@@ -34,14 +34,8 @@ environment variable points to the directory where your Java runtime is installe
 What's new since v1.6.1 ?
 -----------------------
 
-New features:
--
-
 Improvements:
 - Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
-
-Localization:
--
 
 Bug fixes:
 - Fixed a possible NPE during initialization that prevents the application from starting.
