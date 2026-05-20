@@ -27,6 +27,11 @@ import com.mucommander.text.Translator;
 import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionKeymap;
 import com.mucommander.ui.main.MainFrame;
+import com.mucommander.ui.theme.ColorChangedEvent;
+import com.mucommander.ui.theme.FontChangedEvent;
+import com.mucommander.ui.theme.ThemeData;
+import com.mucommander.ui.theme.ThemeListener;
+import com.mucommander.ui.theme.ThemeManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +59,7 @@ import java.util.TimerTask;
 /**
  * This class integrates Terminal (via TerminalWidget) into bottom pane of provided vertical split pane.
  */
-public class TerminalIntegration {
+public class TerminalIntegration implements ThemeListener {
 
     protected final Logger LOGGER = LoggerFactory.getLogger(TerminalIntegration.class);
 
@@ -86,6 +91,7 @@ public class TerminalIntegration {
     public TerminalIntegration(MainFrame mainFrame, JSplitPane verticalSplitPane) {
         this.mainFrame = mainFrame;
         this.verticalSplitPane = verticalSplitPane;
+        ThemeManager.addCurrentThemeListener(this);
         prepareVerticalSplitPaneForTerminal();
         shellConfigurationListener = new ConfigurationListener() {
             @Override
@@ -110,6 +116,42 @@ public class TerminalIntegration {
             }
         };
         MuConfigurations.addPreferencesListener(shellConfigurationListener);
+    }
+
+    @Override
+    public void fontChanged(FontChangedEvent event) {
+        if (event.getFontId() == ThemeData.TERMINAL_FONT) {
+            refreshTerminalAppearance();
+        }
+    }
+
+    @Override
+    public void colorChanged(ColorChangedEvent event) {
+        if (isTerminalColor(event.getColorId())) {
+            refreshTerminalAppearance();
+        }
+    }
+
+    private static boolean isTerminalColor(int colorId) {
+        return colorId == ThemeData.TERMINAL_FOREGROUND_COLOR
+                || colorId == ThemeData.TERMINAL_BACKGROUND_COLOR
+                || colorId == ThemeData.TERMINAL_SELECTED_FOREGROUND_COLOR
+                || colorId == ThemeData.TERMINAL_SELECTED_BACKGROUND_COLOR;
+    }
+
+    private void refreshTerminalAppearance() {
+        JediTermWidget activeTerminal = terminal;
+        if (activeTerminal == null) {
+            return;
+        }
+        SwingUtilities.invokeLater(() -> {
+            if (terminal != activeTerminal) {
+                return;
+            }
+            TerminalPanelHelper.reinitFontAndResize(activeTerminal.getTerminalPanel());
+            activeTerminal.revalidate();
+            activeTerminal.repaint();
+        });
     }
 
     /**
