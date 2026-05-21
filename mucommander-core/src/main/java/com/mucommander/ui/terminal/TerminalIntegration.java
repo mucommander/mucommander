@@ -56,6 +56,8 @@ import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.jediterm.terminal.ui.TerminalPanelHelper.reinitFontAndResize;
+
 /**
  * This class integrates Terminal (via TerminalWidget) into bottom pane of provided vertical split pane.
  */
@@ -148,7 +150,7 @@ public class TerminalIntegration implements ThemeListener {
             if (terminal != activeTerminal) {
                 return;
             }
-            TerminalPanelHelper.reinitFontAndResize(activeTerminal.getTerminalPanel());
+            reinitFontAndResize(activeTerminal);
             activeTerminal.revalidate();
             activeTerminal.repaint();
         });

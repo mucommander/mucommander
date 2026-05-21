@@ -38,7 +38,7 @@ New features:
 -
 
 Improvements:
--
+- Terminal: Font and color updates now apply instantly.
 
 Localization:
 -
