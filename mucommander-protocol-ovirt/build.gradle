@@ -23,7 +23,7 @@ dependencies {
     api project(':mucommander-protocol-api')
     api project(':mucommander-translator')
 
-    implementation 'org.ovirt.engine.api:sdk:4.4.5'
+    implementation 'org.ovirt.engine.api:sdk:4.6.0'
 
     testImplementation 'org.testng:testng:7.11.0'
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)

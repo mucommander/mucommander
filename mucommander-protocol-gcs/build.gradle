@@ -26,7 +26,7 @@ dependencies {
 
     implementation project(':gson')  // Use non-modular wrapper for classpath compilation
 
-    api ('com.google.cloud:google-cloud-storage:2.23.0') {
+    api ('com.google.cloud:google-cloud-storage:2.70.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
         exclude group: 'com.fasterxml.jackson.core', module: 'jackson-core'
     }

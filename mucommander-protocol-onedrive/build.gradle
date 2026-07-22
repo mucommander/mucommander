@@ -24,11 +24,11 @@ dependencies {
     api project(':mucommander-translator')
 
     // These are non-module-path dependencies (will be automatic modules)
-    api ('com.microsoft.graph:microsoft-graph:5.67.0') {
+    api ('com.microsoft.graph:microsoft-graph:5.75.0') {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
     api 'com.azure:azure-xml:1.0.0-beta.2'
-    api 'com.azure:azure-identity:1.9.2'
+    api 'com.azure:azure-identity:1.11.4'
 
     testImplementation(platform('org.junit:junit-bom:5.14.1'))
     testImplementation('org.junit.jupiter:junit-jupiter')

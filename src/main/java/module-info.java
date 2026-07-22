@@ -50,8 +50,8 @@ module org.mucommander {
 
     // Logging dependencies
     requires org.slf4j;
-    requires logback.classic;
-    requires logback.core;
+    requires ch.qos.logback.classic;
+    requires ch.qos.logback.core;
 
     // Open main package to jcommander for deep reflection access to Configuration
     opens com.mucommander.main to jcommander;

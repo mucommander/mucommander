@@ -233,10 +233,9 @@ java {
     modularity.inferModulePath = true
 }
 
-// Force SLF4J 1.7.36 for compatibility with logback-classic 1.2.13
 configurations.all {
     resolutionStrategy {
-        force 'org.slf4j:slf4j-api:1.7.36'
+        force 'org.slf4j:slf4j-api:2.0.17'
     }
 }
 
@@ -270,9 +269,9 @@ dependencies {
     compileOnly 'com.google.code.findbugs:jsr305:1.3.9'
 
     // Logging dependencies for logback reconfiguration
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'ch.qos.logback:logback-core:1.2.13'
-    implementation 'ch.qos.logback:logback-classic:1.2.13'
+    implementation 'org.slf4j:slf4j-api:2.0.17'
+    implementation 'ch.qos.logback:logback-core:1.5.37'
+    implementation 'ch.qos.logback:logback-classic:1.5.37'
 
     // Add direct dependencies on JPMS modules for compilation
     implementation project(':mucommander-core')

@@ -30,6 +30,8 @@ open module org.mucommander.core {
 
     // Third-party modules (from unnamed module)
     requires org.slf4j;
+    requires ch.qos.logback.classic;
+    requires ch.qos.logback.core;
     requires org.apache.commons.collections4;
 
     // Optional L&F modules (from unnamed module)
