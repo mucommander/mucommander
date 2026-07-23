@@ -20,6 +20,7 @@ module org.mucommander.protocol.gcs {
     requires org.mucommander.commons.file;
     requires org.mucommander.commons.io;
     requires org.mucommander.commons.runtime;
+    requires org.mucommander.commons.util;
     requires org.mucommander.protocol.api;
     requires org.mucommander.translator;
     requires org.mucommander.preferences;

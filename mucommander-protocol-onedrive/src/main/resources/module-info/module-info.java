@@ -23,6 +23,7 @@ module org.mucommander.protocol.onedrive {
     requires org.mucommander.translator;
     requires org.mucommander.preferences;
     requires java.desktop;
+    requires com.microsoft.aad.msal4j;
 
     exports com.mucommander.commons.file.protocol.onedrive;
 

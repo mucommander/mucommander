@@ -28,7 +28,7 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
     api 'com.azure:azure-xml:1.0.0-beta.2'
-    api 'com.azure:azure-identity:1.11.4'
+    api 'com.azure:azure-identity:1.18.4'
 
     testImplementation(platform('org.junit:junit-bom:5.14.1'))
     testImplementation('org.junit.jupiter:junit-jupiter')
