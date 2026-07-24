@@ -23,6 +23,8 @@ module org.mucommander.viewer.binary {
     requires org.mucommander.encoding;
     requires org.mucommander.preferences;
     requires org.mucommander.commons.util;
+    requires org.mucommander.commons.runtime;
+    requires org.mucommander.commons.io;
     requires org.mucommander.os.api;
     requires org.mucommander.core;
     requires java.desktop;

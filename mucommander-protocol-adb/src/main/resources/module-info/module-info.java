@@ -27,8 +27,11 @@ module org.mucommander.protocol.adb {
     requires org.slf4j;
     requires org.mucommander.commons.file;
     requires org.mucommander.commons.runtime;
+    requires org.mucommander.commons.io;
+    requires org.mucommander.commons.util;
     requires org.mucommander.protocol.api;
     requires org.mucommander.translator;
+    requires org.mucommander.process;
     requires org.mucommander.core;
     requires java.desktop;
 

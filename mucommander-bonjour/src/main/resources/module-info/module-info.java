@@ -25,6 +25,8 @@ module org.mucommander.bonjour {
     requires org.mucommander.preferences;
     requires java.desktop;
     requires jmdns;
+    requires org.slf4j;
+    requires org.mucommander.commons.util;
 
     provides BrowsableItemsMenuService
         with com.mucommander.bonjour.BonjourMenuService;

@@ -33,6 +33,7 @@ open module org.mucommander.core {
     requires ch.qos.logback.classic;
     requires ch.qos.logback.core;
     requires org.apache.commons.collections4;
+    requires json.smart;
 
     // Optional L&F modules (from unnamed module)
     requires static com.formdev.flatlaf;

@@ -18,8 +18,10 @@
 open module org.mucommander.protocol.gdrive {
     requires org.slf4j;
     requires org.mucommander.commons.file;
+    requires org.mucommander.commons.io;
     requires org.mucommander.protocol.api;
     requires org.mucommander.translator;
+    requires org.mucommander.preferences;
     requires org.mucommander.core;
     requires java.desktop;
 

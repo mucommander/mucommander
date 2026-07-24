@@ -18,6 +18,7 @@
 module org.mucommander.protocol.smb {
     requires org.slf4j;
     requires org.mucommander.commons.file;
+    requires org.mucommander.commons.io;
     requires org.mucommander.protocol.api;
     requires org.mucommander.translator;
     requires java.desktop;
