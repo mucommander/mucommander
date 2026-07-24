@@ -464,58 +464,93 @@ task runJpms(type: JavaExec) {
                      externalDeps +
                      localLibs
 
-    classpath = classpathLibs  // Cloud protocol dependencies as unnamed modules
     mainClass = 'com.mucommander.main.muCommander' // Required by Gradle even when using --module
 
-    jvmArgs '--class-path', classpathLibs.asPath  // Explicitly set classpath for unnamed modules
-    jvmArgs '--module-path', modulePath.asPath
-    jvmArgs '--add-modules', 'ALL-MODULE-PATH,jdk.httpserver'  // Add jdk.httpserver for Google OAuth
+    // Windows imposes a hard limit (~32K chars) on a process's command line. The module path,
+    // class path and all the --add-exports/--add-opens/--add-reads flags below easily exceed that,
+    // so we write them all to a JDK "@argfile" instead - only the short "@file" token then needs
+    // to reach CreateProcess. See: https://docs.oracle.com/javase/9/tools/java.htm (Command-Line Argument Files)
+    def argFileArgs = []
+    argFileArgs << '--class-path' << classpathLibs.asPath  // Explicitly set classpath for unnamed modules
+    argFileArgs << '--module-path' << modulePath.asPath
+    argFileArgs << '--add-modules' << 'ALL-MODULE-PATH,jdk.httpserver'  // Add jdk.httpserver for Google OAuth
 
     // Required JVM access grants for JPMS (must come before --module)
-    jvmArgs '--add-exports', 'java.desktop/com.apple.laf=ALL-UNNAMED'
-    jvmArgs '--add-exports', 'java.desktop/com.apple.eio=ALL-UNNAMED'
-    jvmArgs '--add-exports', 'java.desktop/com.apple.eawt=ALL-UNNAMED'
-    jvmArgs '--add-exports', 'java.desktop/com.apple.laf=org.mucommander.os.macos'
-    jvmArgs '--add-exports', 'java.desktop/com.apple.eio=org.mucommander.os.macos'
-    jvmArgs '--add-exports', 'java.desktop/com.apple.eawt=org.mucommander.os.macos'
-    jvmArgs '--add-opens', 'java.desktop/javax.swing.plaf.basic=org.mucommander.core'
-    jvmArgs '--add-opens', 'java.base/java.io=org.mucommander.commons.file'
-    jvmArgs '--add-opens', 'java.base/java.net=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.transaction.xa/javax.transaction.xa=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.management/javax.management=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.rmi/java.rmi=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.security.jgss/org.ietf.jgss=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.sql/java.sql=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.base/sun.net.www.protocol.http=ALL-UNNAMED'
-    jvmArgs '--add-opens', 'java.base/sun.net.www.protocol.https=ALL-UNNAMED'
+    argFileArgs << '--add-exports' << 'java.desktop/com.apple.laf=ALL-UNNAMED'
+    argFileArgs << '--add-exports' << 'java.desktop/com.apple.eio=ALL-UNNAMED'
+    argFileArgs << '--add-exports' << 'java.desktop/com.apple.eawt=ALL-UNNAMED'
+    argFileArgs << '--add-exports' << 'java.desktop/com.apple.laf=org.mucommander.os.macos'
+    argFileArgs << '--add-exports' << 'java.desktop/com.apple.eio=org.mucommander.os.macos'
+    argFileArgs << '--add-exports' << 'java.desktop/com.apple.eawt=org.mucommander.os.macos'
+    argFileArgs << '--add-opens' << 'java.desktop/javax.swing.plaf.basic=org.mucommander.core'
+    argFileArgs << '--add-opens' << 'java.base/java.io=org.mucommander.commons.file'
+    argFileArgs << '--add-opens' << 'java.base/java.net=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.transaction.xa/javax.transaction.xa=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.management/javax.management=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.rmi/java.rmi=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.security.jgss/org.ietf.jgss=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.sql/java.sql=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.base/sun.net.www.protocol.http=ALL-UNNAMED'
+    argFileArgs << '--add-opens' << 'java.base/sun.net.www.protocol.https=ALL-UNNAMED'
 
     // Allow cloud protocols to read from unnamed module (classpath) for their non-modular dependencies
-    jvmArgs '--add-reads', 'org.mucommander.protocol.gcs=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.protocol.gdrive=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.protocol.dropbox=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.protocol.onedrive=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.protocol.s3=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.protocol.registry=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.os.macos=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.os.linux=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.os.win=ALL-UNNAMED'
-    jvmArgs '--add-reads', 'org.mucommander.os.openvms=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.gcs=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.gdrive=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.dropbox=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.onedrive=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.s3=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.registry=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.os.macos=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.os.linux=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.os.win=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.os.openvms=ALL-UNNAMED'
 
-    jvmArgs '--module', 'org.mucommander/com.mucommander.main.muCommander'
+    // sevenzipjbindings/apache-bzip2 have no real module descriptor or Automatic-Module-Name,
+    // so they compile as unnamed-module (classpath) dependencies via --add-reads=ALL-UNNAMED,
+    // but at runtime they land on the module path (via ALL-MODULE-PATH) as automatic modules
+    // named after their jar file (e.g. "sevenzipjbindings-1.6.3.jar" -> "sevenzipjbindings").
+    // Grant explicit reads to those automatic module names here.
+    argFileArgs << '--add-reads' << 'org.mucommander.format.sevenzip=sevenzipjbindings'
+    argFileArgs << '--add-reads' << 'org.mucommander.format.rpm=sevenzipjbindings'
+    argFileArgs << '--add-reads' << 'org.mucommander.format.bzip2=apache.bzip2'
+
+    // The external net.sf.sevenzipjbinding jars are non-modular and deliberately kept on the
+    // runtime classpath (see classpathLibs above), so these modules also need ALL-UNNAMED reads
+    // (already granted at compile time via compileJava's --add-reads, but that doesn't carry
+    // over to this separate runtime JVM launch).
+    argFileArgs << '--add-reads' << 'org.mucommander.format.sevenzip=ALL-UNNAMED'
+    argFileArgs << '--add-reads' << 'org.mucommander.format.rpm=ALL-UNNAMED'
+
+    // viewer-binary's bined/binary_data jars and vsphere's vim25.jar are likewise non-modular
+    // (no Automatic-Module-Name), not comprise-embedded, and not in classpathLibs, so they land
+    // on the module path as automatic modules named after their jar files at runtime.
+    argFileArgs << '--add-reads' << 'org.mucommander.viewer.binary=bined.core,bined.swing,bined.operation,bined.operation.swing,bined.highlight.swing,binary.data,binary.data.array'
+    argFileArgs << '--add-reads' << 'org.mucommander.protocol.vsphere=vim25'
+
+    argFileArgs << '--module' << 'org.mucommander/com.mucommander.main.muCommander'
 
     // Java library path for Libguestfs
-    jvmArgs '-Djava.library.path=/usr/local/lib'
+    argFileArgs << '-Djava.library.path=/usr/local/lib'
 
     // Performance optimizations
-    jvmArgs '-Dsun.java2d.metal=false' // see: https://github.com/mucommander/mucommander/issues/1372
-    jvmArgs '-Xshare:auto', '-XX:-UsePerfData', '-XX:+TieredCompilation', '-XX:TieredStopAtLevel=1' // faster start
+    argFileArgs << '-Dsun.java2d.metal=false' // see: https://github.com/mucommander/mucommander/issues/1372
+    argFileArgs << '-Xshare:auto' << '-XX:-UsePerfData' << '-XX:+TieredCompilation' << '-XX:TieredStopAtLevel=1' // faster start
 
     // Debug configuration
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
     if (project.hasProperty('debug')) {
         logger.info('Launching muCommander in debug mode...')
-        jvmArgs "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
+        argFileArgs << '-Xdebug' << "-Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
     }
+
+    def argFile = layout.buildDirectory.file('runJpms/args.txt').get().asFile
+    argFile.parentFile.mkdirs()
+    // Per the @argfile format: quote any token containing whitespace, escaping backslashes/quotes within it.
+    argFile.text = argFileArgs.collect { arg ->
+        arg.contains(' ') ? '"' + arg.replace('\\', '\\\\').replace('"', '\\"') + '"' : arg
+    }.join('\n')
+
+    jvmArgs "@${argFile}"
 }
 
 task run(dependsOn: 'runJpms') {
