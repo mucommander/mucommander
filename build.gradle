@@ -387,7 +387,7 @@ task runJpms(type: JavaExec) {
     // For modules that embed dependencies (comprise), use JAR files instead of class directories
     // Note: Cloud protocols are excluded - they compile with --add-reads=ALL-UNNAMED and should
     // use classes directory while their dependencies remain on classpath as unnamed modules
-    def modulesWithEmbeddedDeps = ['mucommander-core', 'jetbrains-jediterm', 'mucommander-os-macos', 'mucommander-viewer-text', 'mucommander-viewer-binary', 'mucommander-viewer-image', 'mucommander-viewer-pdf']
+    def modulesWithEmbeddedDeps = ['mucommander-core', 'jetbrains-jediterm', 'mucommander-os-macos', 'mucommander-viewer-text', 'mucommander-viewer-binary', 'mucommander-viewer-image', 'mucommander-viewer-pdf', 'sevenzipjbindings']
     def ourProjectClasses = files()
     project.subprojects.findAll { it.plugins.hasPlugin('java') && it.name != 'sun-net-www' }.each {
         if (modulesWithEmbeddedDeps.contains(it.name)) {

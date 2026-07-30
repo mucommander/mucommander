@@ -18,6 +18,8 @@
 module org.mucommander.format.sevenzip {
     requires org.mucommander.commons.file;
     requires org.slf4j;
+    // sevenzipjbindings (wrapper) is an automatic module on module path, accessed via --add-reads
+    // sevenzipjbinding (external library) is on classpath, accessed via --add-reads=ALL-UNNAMED
 
     exports com.mucommander.commons.file.archive.sevenzip;
 
