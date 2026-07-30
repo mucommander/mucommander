@@ -545,14 +545,15 @@ task runJpms(type: JavaExec) {
     // subsequent token is treated as a program argument rather than a JVM flag.
     argFileArgs << '--module' << 'org.mucommander/com.mucommander.main.muCommander'
 
-    def argFile = layout.buildDirectory.file('runJpms/args.txt').get().asFile
-    argFile.parentFile.mkdirs()
-    // Per the @argfile format: quote any token containing whitespace, escaping backslashes/quotes within it.
-    argFile.text = argFileArgs.collect { arg ->
-        arg.contains(' ') ? '"' + arg.replace('\\', '\\\\').replace('"', '\\"') + '"' : arg
-    }.join('\n')
-
-    jvmArgs "@${argFile}"
+    doFirst {
+        def argFile = layout.buildDirectory.file('runJpms/args.txt').get().asFile
+        argFile.parentFile.mkdirs()
+        // Per the @argfile format: quote any token containing whitespace, escaping backslashes/quotes within it.
+        argFile.text = argFileArgs.collect { arg ->
+            arg.contains(' ') ? '"' + arg.replace('\\', '\\\\').replace('"', '\\"') + '"' : arg
+        }.join('\n')
+        jvmArgs "@${argFile}"
+    }
 }
 
 task run(dependsOn: 'runJpms') {
