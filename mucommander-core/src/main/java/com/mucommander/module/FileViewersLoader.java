@@ -38,7 +38,9 @@ public class FileViewersLoader {
     private static final List<FileViewerService> SERVICES = new ArrayList<>();
 
     public static void load() {
-        for (FileViewerService service : ServiceLoader.load(FileViewerService.class)) {
+        // Use ModuleLayer.boot() to ensure ServiceLoader sees all modules on the module path
+        ServiceLoader<FileViewerService> loader = ServiceLoader.load(ModuleLayer.boot(), FileViewerService.class);
+        for (FileViewerService service : loader) {
             addViewerService(service);
             LOGGER.info("FileViewerService is registered: " + service);
         }

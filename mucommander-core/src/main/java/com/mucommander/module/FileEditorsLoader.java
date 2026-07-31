@@ -38,7 +38,9 @@ public class FileEditorsLoader {
     private static final List<FileEditorService> SERVICES = new ArrayList<>();
 
     public static void load() {
-        for (FileEditorService service : ServiceLoader.load(FileEditorService.class)) {
+        // Use ModuleLayer.boot() to ensure ServiceLoader sees all modules on the module path
+        ServiceLoader<FileEditorService> loader = ServiceLoader.load(ModuleLayer.boot(), FileEditorService.class);
+        for (FileEditorService service : loader) {
             addEditorService(service);
             LOGGER.info("FileEditorService is registered: " + service);
         }
