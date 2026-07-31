@@ -18,7 +18,7 @@
 package com.mucommander.ui.chooser;
 
 import com.mucommander.commons.util.ui.layout.YBoxPanel;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 import javax.swing.Box;
 import javax.swing.JCheckBox;

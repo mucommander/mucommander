@@ -22,7 +22,7 @@ import javax.swing.KeyStroke;
 
 import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.icon.IconManager;
 
 /**

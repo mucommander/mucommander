@@ -21,7 +21,7 @@ import com.mucommander.commons.io.StreamUtils;
 import com.mucommander.commons.util.ui.dialog.DialogToolkit;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.commons.util.ui.helper.MnemonicHelper;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.viewer.FileViewer;
 import com.mucommander.viewer.ViewerPresenter;
 import com.mucommander.viewer.image.ui.ImageStatusPanel;

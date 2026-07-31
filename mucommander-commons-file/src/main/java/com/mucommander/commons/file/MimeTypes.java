@@ -44,7 +44,7 @@ public class MimeTypes extends Hashtable<String, String> {
 
         br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(ResourceLoader.getPackageResourceAsStream(MimeTypes.class.getPackage(), MIME_TYPES_RESOURCE_NAME)));
+            br = new BufferedReader(new InputStreamReader(MimeTypes.class.getResourceAsStream(MIME_TYPES_RESOURCE_NAME)));
 
             String line;
             StringTokenizer st;

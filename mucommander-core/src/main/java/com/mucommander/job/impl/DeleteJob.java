@@ -31,7 +31,7 @@ import com.mucommander.core.desktop.DesktopManager;
 import com.mucommander.desktop.AbstractTrash;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.file.ProgressDialog;

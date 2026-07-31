@@ -45,6 +45,7 @@ public class ExtraFieldUtils {
         register(AsiExtraField.class);
         register(JarMarker.class);
         register(ExtendedTimestampExtraField.class);
+        register(Zip64ExtendedInformationExtraField.class);
     }
 
     /**
@@ -88,12 +89,25 @@ public class ExtraFieldUtils {
 
     /**
      * Split the array into ExtraFields and populate them with the
-     * give data.
+     * give data as if they were read from the local file data.
      * @param data an array of bytes
      * @return an array of ExtraFields
      * @throws ZipException on error
      */
     public static ZipExtraField[] parse(byte[] data) throws ZipException {
+        return parse(data, true);
+    }
+
+    /**
+     * Split the array into ExtraFields and populate them with the
+     * given data.
+     * @param data an array of bytes
+     * @param local whether the data originates from the local file data (as opposed to the
+     * central directory data)
+     * @return an array of ExtraFields
+     * @throws ZipException on error
+     */
+    public static ZipExtraField[] parse(byte[] data, boolean local) throws ZipException {
         Vector<ZipExtraField> v = new Vector<>();
         int start = 0;
         while (start <= data.length - 4) {
@@ -105,7 +119,12 @@ public class ExtraFieldUtils {
             }
             try {
                 ZipExtraField ze = createExtraField(headerId);
-                ze.parseFromLocalFileData(data, start + 4, length);
+                if (!local && ze instanceof CentralDirectoryParsingZipExtraField) {
+                    ((CentralDirectoryParsingZipExtraField) ze)
+                        .parseFromCentralDirectoryData(data, start + 4, length);
+                } else {
+                    ze.parseFromLocalFileData(data, start + 4, length);
+                }
                 v.addElement(ze);
             } catch (InstantiationException ie) {
                 throw new ZipException(ie.getMessage());

@@ -1,3 +1,20 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 repositories.mavenCentral()
 
 dependencies {
@@ -21,22 +38,42 @@ dependencies {
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
-jar {
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-smb',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Library with configuration tools',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.commons.protocol.smb',
-                'Bundle-Activator': 'com.mucommander.commons.file.protocol.smb.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
+// JPMS module - compile module-info separately like mucommander-core
+// Note: SMB protocol uses non-modular jcifs-ng and smbj libraries
+
+// Compile module-info separately
+task compileModuleInfo(type: JavaCompile) {
+    dependsOn compileJava
+    source = fileTree('src/main/resources/module-info') {
+        include 'module-info.java'
     }
+    destinationDirectory = compileJava.destinationDirectory
+    classpath = files()  // Empty classpath since we're using module path
+
+    doFirst {
+        // Filter out dependencies with split packages or non-modular libs
+        def filteredClasspath = compileJava.classpath.filter {
+            !it.name.contains('jcifs-') &&
+            !it.name.contains('smbj-') &&
+            !it.name.contains('bcprov-') &&
+            !it.name.contains('mbassador-') &&
+            !it.name.contains('el-api-')
+        }
+
+        // Put dependencies on module path for module-info compilation
+        options.compilerArgs += [
+            '--module-path', filteredClasspath.asPath,
+            '--patch-module', 'org.mucommander.protocol.smb=' + compileJava.destinationDirectory.get().asFile.path
+        ]
+    }
+}
+
+classes {
+    dependsOn compileModuleInfo
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 test {

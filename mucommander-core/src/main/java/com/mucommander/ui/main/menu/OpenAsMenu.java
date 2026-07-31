@@ -27,7 +27,7 @@ import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.archive.ArchiveFormatProvider;
 import com.mucommander.commons.util.ui.helper.MenuToolkit;
 import com.mucommander.desktop.ActionType;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionId;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.action.ActionParameters;

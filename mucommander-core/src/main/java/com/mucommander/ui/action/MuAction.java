@@ -36,14 +36,13 @@ import com.mucommander.commons.util.StringUtils;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.main.table.FileTable;
 import com.mucommander.ui.notifier.NotifierProvider;
 import com.mucommander.ui.text.KeyStrokeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mucommander.commons.file.util.ResourceLoader;
 import com.mucommander.ui.icon.IconManager;
 import com.mucommander.ui.main.MainFrame;
 

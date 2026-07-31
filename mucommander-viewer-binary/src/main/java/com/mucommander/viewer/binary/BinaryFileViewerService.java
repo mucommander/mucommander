@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.viewer.CanOpen;
 import com.mucommander.viewer.FileEditor;
 import com.mucommander.viewer.FileEditorService;

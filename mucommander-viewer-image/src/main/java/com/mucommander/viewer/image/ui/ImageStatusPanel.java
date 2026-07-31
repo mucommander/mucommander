@@ -18,7 +18,7 @@ package com.mucommander.viewer.image.ui;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * Image viewer status panel.

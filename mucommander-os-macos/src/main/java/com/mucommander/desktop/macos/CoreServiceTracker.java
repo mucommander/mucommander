@@ -17,39 +17,43 @@
 
 package com.mucommander.desktop.macos;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
+import java.util.ServiceLoader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mucommander.os.api.CoreService;
 
-public class CoreServiceTracker extends ServiceTracker<CoreService, CoreService> {
+/**
+ * Service locator for CoreService using JPMS ServiceLoader.
+ * <p>
+ * Replaces OSGi ServiceTracker with ServiceLoader for JPMS migration.
+ *
+ * @author Arik Hadas
+ */
+public class CoreServiceTracker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CoreServiceTracker.class);
 
     private static CoreService service;
 
-    public CoreServiceTracker(BundleContext context) {
-        super(context, CoreService.class, null);
-    }
-
-    @Override
-    public CoreService addingService(ServiceReference<CoreService> reference) {
-        CoreService service = super.addingService(reference);
-        CoreServiceTracker.service = service;
-        LOGGER.info("CoreService is registered: " + service);
-        return service;
-    }
-
-    @Override
-    public void removedService(ServiceReference<CoreService> reference, CoreService service) {
-        super.removedService(reference, service);
-        LOGGER.info("CoreService is unregistered: " + service);
+    /**
+     * Initialize the CoreService using ServiceLoader.
+     */
+    public static void initialize() {
+        ServiceLoader<CoreService> loader = ServiceLoader.load(CoreService.class);
+        service = loader.findFirst().orElse(null);
+        if (service != null) {
+            LOGGER.info("CoreService is registered: " + service);
+        } else {
+            LOGGER.warn("No CoreService implementation found");
+        }
     }
 
     public static CoreService getCoreService() {
+        if (service == null) {
+            initialize();
+        }
         return service;
     }
 }

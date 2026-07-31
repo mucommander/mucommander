@@ -31,7 +31,7 @@ import javax.swing.ListSelectionModel;
 
 import com.mucommander.commons.collections.AlteredVector;
 import com.mucommander.commons.collections.VectorChangeListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * DynamicList extends JList to work with an {@link AlteredVector} of items which values can be dynamically modified

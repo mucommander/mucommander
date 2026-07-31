@@ -60,10 +60,10 @@ import com.mucommander.commons.util.ui.helper.MnemonicHelper;
 import com.mucommander.conf.MuConfigurations;
 import com.mucommander.conf.MuPreference;
 import com.mucommander.conf.MuPreferences;
-import com.mucommander.osgi.BrowsableItemsMenuServiceTracker;
+import com.mucommander.module.BrowsableMenuItemsLoader;
 import com.mucommander.protocol.ui.ProtocolPanelProvider;
 import com.mucommander.protocol.ui.ServerPanel;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.MuAction;
 import com.mucommander.ui.action.impl.OpenLocationAction;
 import com.mucommander.ui.button.PopupButton;
@@ -403,7 +403,7 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
         }
 
         // Add service menus, like Bonjour service menu
-        BrowsableItemsMenuServiceTracker.getMenuServices().forEach(service -> {
+        BrowsableMenuItemsLoader.getMenuServices().forEach(service -> {
             JMenu menu = service.getMenu(mainFrame, folderPanel);
             setMnemonic(popupMenu.add(menu), mnemonicHelper);
         });
@@ -429,17 +429,6 @@ public class DrivePopupButton extends PopupButton implements BookmarkListener, C
      */
     public static void register(ProtocolPanelProvider protocolPanelProvider) {
         schemaToPanelProvider.put(protocolPanelProvider.getSchema(), protocolPanelProvider);
-    }
-
-    /**
-     * Unregisters an instance of {@link ProtocolPanelProvider}.
-     * 
-     * @see {@link #register(ProtocolPanelProvider)}}
-     * @param protocolPanelProvider
-     *            an instance of {@link ProtocolPanelProvider} to unregister.
-     */
-    public static void unregister(ProtocolPanelProvider protocolPanelProvider) {
-        schemaToPanelProvider.remove(protocolPanelProvider.getSchema());
     }
 
     /**

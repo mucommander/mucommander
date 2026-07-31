@@ -6,7 +6,7 @@
 
 
 ------------------
-muCommander v1.7.0
+muCommander v1.6.3
 ------------------
 
 muCommander is a lightweight, cross-platform file manager with a dual-pane interface.
@@ -31,7 +31,7 @@ If you are having problems launching muCommander from these packages, make sure 
 environment variable points to the directory where your Java runtime is installed.
 
 
-What's new since v1.6.1 ?
+What's new since v1.6.2 ?
 -----------------------
 
 New features:
@@ -40,12 +40,15 @@ New features:
 Improvements:
 - Respect dark mode settings for windows decorations under macOS
 - Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
+- Terminal: Font and color updates now apply instantly.
+- Support zip64 files (zip files larger than 4gb).
 
 Localization:
 -
 
 Bug fixes:
--
+- Hide the breadcrumbs component when navigating away from application window while holding down the ctrl/cmd key.
+- Dynamically update the path displayed in the breadcrumbs component in case the current path changes while its displayed.
 
 Known issues:
 - Some translations may not be up-to-date.

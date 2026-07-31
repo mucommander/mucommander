@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.mucommander.text.CustomDateFormat;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ import com.mucommander.conf.MuPreferences;
 import com.mucommander.conf.SystemIconsPolicy;
 import com.mucommander.extension.ExtensionManager;
 import com.mucommander.snapshot.MuSnapshot;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.InformationDialog;
 import com.mucommander.ui.dialog.startup.CheckVersionDialog;
@@ -53,7 +54,6 @@ import com.mucommander.ui.icon.FileIcons;
 import com.mucommander.ui.main.SplashScreen;
 import com.mucommander.ui.main.WindowManager;
 import com.mucommander.ui.main.commandbar.CommandBarIO;
-import com.mucommander.ui.main.frame.CommandLineMainFrameBuilder;
 import com.mucommander.ui.main.frame.DefaultMainFramesBuilder;
 import com.mucommander.ui.main.toolbar.ToolBarIO;
 import com.mucommander.utils.MuLogging;
@@ -74,7 +74,7 @@ public class Application {
     private static boolean isLaunching = true;
     /** Launch lock. */
     private static final Object LAUNCH_LOCK = new Object();
-    /** OSGi BundleActivator */
+    /** OSGi BundleActivator 0 TODO: refactor */
     private static Activator activator;
 
     // - Initialization ---------------------------------------------------------
@@ -439,7 +439,7 @@ public class Application {
             executor.execute(() -> {
                 // Inits CustomDateFormat to make sure that its ConfigurationListener is added
                 // before FileTable, so CustomDateFormat gets notified of date format changes first
-                com.mucommander.text.CustomDateFormat.init();
+                CustomDateFormat.init();
 
                 // Initialize file icons
                 printStartupMessage(splashScreenProvider, "Loading icons...");
@@ -491,7 +491,8 @@ public class Application {
                 List<String> folders = activator.getInitialFolders();
                 LOGGER.debug("muC new main frame to start");
                 if (CollectionUtils.isNotEmpty(folders)) {
-                    WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+//                    WindowManager.createNewMainFrame(new CommandLineMainFrameBuilder(folders));
+                    WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
                 } else {
                     WindowManager.createNewMainFrame(new DefaultMainFramesBuilder());
                 }
@@ -607,7 +608,7 @@ public class Application {
     public static void initiateShutdown() {
         LOGGER.info("shutting down");
         try {
-            activator.stopAll();
+            System.exit(0);
         } catch (Exception e) {
             // should never happen
             LOGGER.error("failed to shut down", e);

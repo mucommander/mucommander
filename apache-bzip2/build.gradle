@@ -1,20 +1,43 @@
-repositories.mavenCentral()
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+ repositories.mavenCentral()
 
 jar {
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-apache-bzip2',
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    // Include module-info.java in META-INF for future JPMS support
+    from('src/main/resources/module-info') {
+        include 'module-info.java'
+        into 'META-INF'
+    }
+
+    manifest {
+        attributes(
+                'Bundle-Name': 'muCommander-apache-bzip2',
                 'Bundle-Vendor': 'muCommander',
                 'Bundle-Description': 'The org.apache.tools.bzip2 part of ant',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'org.apache.tools.bzip2',
-                'Import-Package': '*',
                 'Specification-Title': "muCommander",
                 'Specification-Vendor': "Arik Hadas",
                 'Specification-Version': project.version,
                 'Implementation-Title': "muCommander",
                 'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
+                'Implementation-Version': rootProject.ext.revision,
+                'Build-Date': new Date().format('yyyyMMdd')
+        )
     }
 }
-

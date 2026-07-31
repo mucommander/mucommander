@@ -54,6 +54,23 @@ public interface ZipConstants {
     public static final long MAX_ZIP32_SIZE = 4294967295l;
 
     /**
+     * Maximum number of entries (or central directory size/offset) representable in a Zip32 file, i.e. (2^16)-1.
+     */
+    public static final int MAX_ZIP32_ENTRIES = 0xFFFF;
+
+    /**
+     * Value stored in 4-byte size/offset fields to indicate that the real value is stored in a
+     * Zip64 extended information extra field.
+     */
+    public static final long ZIP64_MAGIC = 0xFFFFFFFFL;
+
+    /**
+     * Value stored in 2-byte count fields to indicate that the real value is stored in the
+     * Zip64 end of central directory record.
+     */
+    public static final int ZIP64_MAGIC_SHORT = 0xFFFF;
+
+    /**
      * Size of write buffers
      */
     final static int WRITE_BUFFER_SIZE = 65536;
@@ -82,4 +99,14 @@ public interface ZipConstants {
      * End of central dir signature
      */
     static final byte[] EOCD_SIG = ZipLong.getBytes(0X06054B50L);
+
+    /**
+     * Zip64 end of central directory record signature
+     */
+    static final byte[] ZIP64_EOCD_SIG = ZipLong.getBytes(0X06064B50L);
+
+    /**
+     * Zip64 end of central directory locator signature
+     */
+    static final byte[] ZIP64_EOCD_LOC_SIG = ZipLong.getBytes(0X07064B50L);
 }

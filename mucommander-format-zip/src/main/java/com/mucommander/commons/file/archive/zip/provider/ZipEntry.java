@@ -292,6 +292,25 @@ public class ZipEntry implements Cloneable {
     }
 
     /**
+     * Returns the extra field corresponding to the given type, or <code>null</code> if there is none.
+     *
+     * @param type the type of extra field to look up
+     * @return the extra field corresponding to the given type, or <code>null</code> if there is none
+     */
+    public ZipExtraField getExtraField(ZipShort type) {
+        if (extraFields == null)
+            return null;
+
+        for (int i=0, nbFields=extraFields.size(); i<nbFields; i++) {
+            ZipExtraField field = extraFields.elementAt(i);
+            if (field.getHeaderId().equals(type))
+                return field;
+        }
+
+        return null;
+    }
+
+    /**
      * Removes the first extra field corresponding to the given type.
      *
      * @param type the type of extra field to remove
@@ -391,10 +410,10 @@ public class ZipEntry implements Cloneable {
      * Sets the uncompressed size of the entry data.
      *
      * @param size the uncompressed size in bytes
-     * @throws IllegalArgumentException if the specified size is less than 0 or greater than 0xFFFFFFFF bytes
+     * @throws IllegalArgumentException if the specified size is negative
      */
     public void setSize(long size) {
-        if(!isValidUnsignedInt(size))
+        if(size < 0)
 	        throw new IllegalArgumentException("Invalid entry size");
 
 	    this.size = size;
@@ -414,9 +433,10 @@ public class ZipEntry implements Cloneable {
      * Sets the size of the compressed entry data.
      *
      * @param csize the compressed size to set to
+     * @throws IllegalArgumentException if the specified size is negative
      */
     public void setCompressedSize(long csize) {
-        if(!isValidUnsignedInt(csize))
+        if(csize < 0)
 	        throw new IllegalArgumentException("Invalid entry size");
 
         this.compressedSize = csize;
@@ -552,6 +572,27 @@ public class ZipEntry implements Cloneable {
         else {
             try {
                 setExtraFields(ExtraFieldUtils.parse(extra));
+            }
+            catch (Exception e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Parses the given bytes as central directory extra fields and replaces all current extra fields with the
+     * parsed ones.
+     *
+     * @param extra an array of bytes to be parsed into extra fields, as found in the central directory
+     * @throws IllegalArgumentException if the byte array cannot be parsed into extra fields
+     */
+    public void setCentralDirectoryExtra(byte[] extra) throws IllegalArgumentException {
+        if(extra==null || extra.length==0) {
+            extraFields = null;
+        }
+        else {
+            try {
+                setExtraFields(ExtraFieldUtils.parse(extra, false));
             }
             catch (Exception e) {
                 throw new IllegalArgumentException(e.getMessage());

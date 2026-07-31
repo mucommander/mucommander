@@ -61,7 +61,8 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
     public Collection<MainFrame> build() {
         int nbFrames = snapshot.getIntegerVariable(MuSnapshot.getWindowsCount());
         // if last configuration is requested and exists in the snapshot file, restore it
-        if (nbFrames > 0 && MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS).equals(MuPreferences.STARTUP_FOLDERS_LAST)) {
+        String startupFolders = MuConfigurations.getPreferences().getVariable(MuPreference.STARTUP_FOLDERS);
+        if (nbFrames > 0 && MuPreferences.STARTUP_FOLDERS_LAST.equals(startupFolders)) {
             return IntStream.range(0, nbFrames)
                     .mapToObj(this::createMainFrame)
                     .collect(Collectors.toList());

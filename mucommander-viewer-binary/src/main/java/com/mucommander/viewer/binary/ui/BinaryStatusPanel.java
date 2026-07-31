@@ -32,7 +32,7 @@ import org.exbin.bined.EditOperation;
 import org.exbin.bined.PositionCodeType;
 import org.exbin.bined.SelectionRange;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.viewer.binary.BinaryStatusApi;
 import com.mucommander.viewer.binary.StatusCursorPositionFormat;
 import com.mucommander.viewer.binary.StatusDocumentSizeFormat;

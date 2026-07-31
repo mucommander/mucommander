@@ -28,7 +28,7 @@ import com.mucommander.commons.file.util.PathUtils;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.job.FileJobAction;
 import com.mucommander.job.FileJobState;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.dialog.DialogAction;
 import com.mucommander.ui.dialog.file.ArchivePasswordDialog;
@@ -41,9 +41,6 @@ import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.util.List;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-
 
 /**
  * This job unpacks a set of archive files to a base destination folder. Archive entries are extracted in their natural

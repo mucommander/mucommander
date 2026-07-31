@@ -20,7 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.exbin.bined.CodeAreaUtils;
 
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.viewer.binary.GoToBinaryPositionMode;
 
 /**

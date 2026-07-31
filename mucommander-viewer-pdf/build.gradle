@@ -1,9 +1,37 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+repositories.mavenCentral()
+
+// Exclude module-info.java from resources to prevent it from being compiled with main sources
+sourceSets {
+    main {
+        resources {
+            exclude 'module-info/**'
+        }
+    }
+}
+
 dependencies {
     api project(':mucommander-core')
     api project(':mucommander-viewer-api')
     api project(':mucommander-translator')
 
-    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.3.1'
+    comprise 'com.github.pcorless.icepdf:icepdf-viewer:7.4.1'
     comprise 'com.twelvemonkeys.imageio:imageio-psd:3.12.0'
     comprise 'org.apache.avalon.framework:avalon-framework-api:4.3.1'
     implementation 'org.jmdns:jmdns:3.5.5'
@@ -14,35 +42,56 @@ dependencies {
     testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
-repositories.mavenCentral()
+// JPMS module - configuration in module-info.java
+// Note: PDF viewer uses non-modular icepdf-viewer library
+// We compile on classpath (not module path) to access unnamed module
+
+compileJava {
+    options.compilerArgs += ['--add-reads', 'org.mucommander.viewer.pdf=ALL-UNNAMED']
+}
+
+// Compile module-info separately
+task compileModuleInfo(type: JavaCompile) {
+    dependsOn compileJava
+    source = fileTree('src/main/resources/module-info') {
+        include 'module-info.java'
+    }
+    destinationDirectory = compileJava.destinationDirectory
+    classpath = files()  // Empty classpath since we're using module path
+
+    doFirst {
+        def filteredClasspath = compileJava.classpath.filter {
+            !it.name.contains('icepdf') &&
+            !it.name.contains('imageio') &&
+            !it.name.contains('avalon') &&
+            !it.name.contains('jmdns')
+        }
+
+        // Put dependencies on module path for module-info compilation
+        options.compilerArgs += [
+            '--module-path', filteredClasspath.asPath,
+            '--patch-module', 'org.mucommander.viewer.pdf=' + compileJava.destinationDirectory.get().asFile.path
+        ]
+    }
+}
+
+classes {
+    dependsOn compileModuleInfo
+}
 
 jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it) }
+    dependsOn compileModuleInfo
+    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'org/bouncycastle/**'  // Exclude bouncycastle to avoid split package with external module
+        exclude 'com/twelvemonkeys/**'  // Exclude twelvemonkeys to avoid split package with viewer-image
+        exclude 'org/apache/commons/logging/**'  // Exclude commons-logging to avoid split package
+        exclude 'profiles/**'  // Exclude profiles to avoid split package with viewer-image
+    } }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-viewer-pdf',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Library for viewing PDF files',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.viewer.pdf',
-                'Import-Package':
-                        '!com.sun.*,' +
-                                '!javax.media.*,' +
-                                '!com.ibm.uvm.tools,' +
-                                '!magick,' +
-                                '!com.inet.jortho,' +
-                                '!org.apache.log.*,' +
-                                '*',
-                'Bundle-Activator': 'com.mucommander.viewer.pdf.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Impxlementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-        bnd('-fixupmessages': '^Classes found in the wrong directory: .*')
-    }
 }
 
 test {

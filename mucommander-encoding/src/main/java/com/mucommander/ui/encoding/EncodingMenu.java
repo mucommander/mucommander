@@ -31,7 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 
 import com.mucommander.commons.util.ui.dialog.DialogOwner;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * This menu lets the user choose a character encoding among a list of {@link EncodingPreferences#getPreferredEncodings()

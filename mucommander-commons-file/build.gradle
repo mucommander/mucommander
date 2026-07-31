@@ -1,3 +1,20 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 repositories.mavenCentral()
 
 test.useTestNG()
@@ -7,8 +24,9 @@ dependencies {
     api project(':mucommander-commons-runtime')
     api project(':mucommander-commons-util')
 
-    comprise 'net.java.dev.jna:jna:5.5.0'
-    comprise 'net.java.dev.jna:jna-platform:5.5.0'
+    implementation 'net.java.dev.jna:jna:5.13.0'
+    implementation 'net.java.dev.jna:jna-platform:5.13.0'
+
     implementation 'org.apache.commons:commons-collections4:4.5.0'
     implementation 'org.apache.commons:commons-lang3:3.20.0'
 
@@ -21,51 +39,9 @@ dependencies {
     testImplementation project(':mucommander-format-zip')
 }
 
-jar {
-    from configurations.comprise.collect { it.isDirectory() ? it : zipTree(it).matching {
-        exclude 'com/sun/jna/freebsd-x86/**'
-        exclude 'com/sun/jna/freebsd-x86-64/**'
-        exclude 'com/sun/jna/linux-arm/**'
-        exclude 'com/sun/jna/linux-x86/**'
-        exclude 'com/sun/jna/linux-x86-64/**'
-        exclude 'com/sun/jna/openbsd-x86/**'
-        exclude 'com/sun/jna/openbsd-x86-64/**'
-        exclude 'com/sun/jna/sunos-sparc/**'
-        exclude 'com/sun/jna/sunos-sparcv9/**'
-        exclude 'com/sun/jna/sunos-x86/**'
-        exclude 'com/sun/jna/sunos-x86-64/**'
-        exclude 'com/sun/jna/w32ce-arm/**'
-        exclude 'com/sun/jna/darwin/**'
-        exclude 'META-INF/**'
-    } }
 
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-commons-file',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Component with file-level utilities',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Bundle-Activator': 'com.mucommander.commons.file.osgi.Activator',
-                'Export-Package':
-                        'com.mucommander.commons.file,' +
-                                'com.mucommander.commons.file.archive,' +
-                                'com.mucommander.commons.file.connection,' +
-                                'com.mucommander.commons.file.filter,' +
-                                'com.mucommander.commons.file.icon,' +
-                                'com.mucommander.commons.file.icon.impl,' +
-                                'com.mucommander.commons.file.osgi,' +
-                                'com.mucommander.commons.file.protocol,' +
-                                'com.mucommander.commons.file.protocol.local,' +
-                                'com.mucommander.commons.file.protocol.search,' +
-                                'com.mucommander.commons.file.util,' +
-                                'com.sun.jna.platform.win32',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 test {

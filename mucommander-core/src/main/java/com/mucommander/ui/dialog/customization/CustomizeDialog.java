@@ -19,7 +19,7 @@ package com.mucommander.ui.dialog.customization;
 
 import com.mucommander.commons.util.ui.dialog.FocusDialog;
 import com.mucommander.commons.util.ui.layout.XBoxPanel;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;

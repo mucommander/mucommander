@@ -97,11 +97,20 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     /** 20 as ZipShort */
     private static final byte[] SHORT_20 = ZipShort.getBytes(20);
 
+    /** 45 as ZipShort, the version needed to extract a Zip64 entry */
+    private static final byte[] SHORT_45 = ZipShort.getBytes(45);
+
     /** 2048 as ZipShort */
     private static final byte[] SHORT_2048 = ZipShort.getBytes(2048);
 
     /** 2056 as ZipShort */
     private static final byte[] SHORT_2056 = ZipShort.getBytes(2056);
+
+    /** {@link ZipConstants#ZIP64_MAGIC_SHORT} as ZipShort */
+    private static final byte[] SHORT_MAX = ZipShort.getBytes(ZIP64_MAGIC_SHORT);
+
+    /** {@link ZipConstants#ZIP64_MAGIC} as ZipLong */
+    private static final byte[] LONG_MAX = ZipLong.getBytes(ZIP64_MAGIC);
 
 
     /**
@@ -203,7 +212,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         if (entry == null)
             return;
 
-        finalizeEntryData(entry, zeos, out, !hasRandomAccess, zipBuffer);
+        finalizeEntryData(entry, zeos, out, !hasRandomAccess, encoding, zipBuffer);
         written += entry.getCompressedSize();
 
         if(!hasRandomAccess)
@@ -228,10 +237,11 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param out the
      * @param useDataDescriptor if true, a data descriptor will be written to out. If false, size and CRC information
      * will be written in the local file header (requires out to be a RandomAccessOutputStream).
+     * @param encoding the encoding used for writing the entry's filename in the local file header
      * @param zipBuffer a ZipBuffer instance used to convert integer values to Zip variants
      * @throws IOException if an I/O error occurred
      */
-    protected static void finalizeEntryData(ZipEntry entry, ZipEntryOutputStream zeos, OutputStream out, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
+    protected static void finalizeEntryData(ZipEntry entry, ZipEntryOutputStream zeos, OutputStream out, boolean useDataDescriptor, String encoding, ZipBuffer zipBuffer) throws IOException {
         long crc = zeos.getCrc();
 
         if (entry.getMethod() == DEFLATED) {
@@ -257,12 +267,52 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
 
             long save = raos.getOffset();
 
+            boolean isZip64 = entry.getCompressedSize() >= MAX_ZIP32_SIZE || entry.getSize() >= MAX_ZIP32_SIZE;
+
             raos.seek(entry.getEntryInfo().headerOffset + 14);
             raos.write(ZipLong.getBytes(entry.getCrc(), zipBuffer.longBuffer));
-            raos.write(ZipLong.getBytes(entry.getCompressedSize(), zipBuffer.longBuffer));
-            raos.write(ZipLong.getBytes(entry.getSize(), zipBuffer.longBuffer));
+            if (isZip64) {
+                raos.write(LONG_MAX);
+                raos.write(LONG_MAX);
+            }
+            else {
+                raos.write(ZipLong.getBytes(entry.getCompressedSize(), zipBuffer.longBuffer));
+                raos.write(ZipLong.getBytes(entry.getSize(), zipBuffer.longBuffer));
+            }
+
+            // writeLocalFileHeader always reserves a Zip64 extended information extra field for entries
+            // written with random access, so that the actual sizes can be patched in here, even if they
+            // turn out to exceed 4GB.
+            long zip64ExtraOffset = getZip64LocalExtraDataOffset(entry);
+            if (zip64ExtraOffset >= 0) {
+                byte[] name = getBytes(entry.getName(), encoding);
+                raos.seek(entry.getEntryInfo().headerOffset + 30 + name.length + zip64ExtraOffset);
+                raos.write(ZipEightByteInteger.getBytes(entry.getSize()));
+                raos.write(ZipEightByteInteger.getBytes(entry.getCompressedSize()));
+            }
+
             raos.seek(save);
         }
+    }
+
+    /**
+     * Returns the offset, within this entry's local file data extra fields, of the data of its
+     * {@link Zip64ExtendedInformationExtraField}, or <code>-1</code> if the entry has no such extra field.
+     *
+     * @param entry the entry to look up
+     * @return the offset of the Zip64 extended information extra field's data within the entry's local file
+     * data extra fields, or <code>-1</code> if the entry has no such extra field
+     */
+    private static long getZip64LocalExtraDataOffset(ZipEntry entry) {
+        long offset = 0;
+        for (ZipExtraField field : entry.getExtraFields()) {
+            if (field.getHeaderId().equals(Zip64ExtendedInformationExtraField.HEADER_ID))
+                return offset + 4;
+
+            offset += 4 + field.getLocalFileDataLength().getValue();
+        }
+
+        return -1;
     }
 
     /**
@@ -363,9 +413,23 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
 
         int zipMethod = ze.getMethod();
 
+        // For entries written with random access, reserve a Zip64 extended information extra field upfront so
+        // that the actual sizes can be patched in by #finalizeEntryData once known, even if they turn out to
+        // exceed 4GB. This isn't possible for entries written with a data descriptor, as the local file header
+        // has already been flushed by the time the sizes are known.
+        boolean reserveZip64 = !useDataDescriptor;
+        if (reserveZip64) {
+            long size = ze.getSize() >= 0 ? ze.getSize() : 0;
+            long compressedSize = ze.getCompressedSize() >= 0 ? ze.getCompressedSize() : 0;
+            ze.addExtraField(new Zip64ExtendedInformationExtraField(new ZipEightByteInteger(size), new ZipEightByteInteger(compressedSize)));
+        }
+        else {
+            ze.removeExtraField(Zip64ExtendedInformationExtraField.HEADER_ID);
+        }
+
         // version needed to extract
         // general purpose bit flag
-        writeVersionAndGPBF(out, encoding, useDataDescriptor);
+        writeVersionAndGPBF(out, encoding, useDataDescriptor, reserveZip64);
         // nbWritten += 4;
 
         // compression method
@@ -421,6 +485,11 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @throws IOException if an I/O error occurred
      */
     protected static long writeDataDescriptor(ZipEntry ze, OutputStream out, ZipBuffer zipBuffer) throws IOException {
+        if (ze.getCompressedSize() >= MAX_ZIP32_SIZE || ze.getSize() >= MAX_ZIP32_SIZE) {
+            throw new ZipException("Entry " + ze.getName() + " is too large (" + ze.getSize()
+                + " bytes) to be written without random access (Zip64 data descriptors are not supported)");
+        }
+
         out.write(DD_SIG);
         out.write(ZipLong.getBytes(ze.getCrc(), zipBuffer.longBuffer));
         out.write(ZipLong.getBytes(ze.getCompressedSize(), zipBuffer.longBuffer));
@@ -458,6 +527,21 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @return the number of bytes that were written, i.e. the size of the central file header 
      */
     protected static long writeCentralFileHeader(ZipEntry ze, OutputStream out, String encoding, long localFileHeaderOffset, boolean useDataDescriptor, ZipBuffer zipBuffer) throws IOException {
+        boolean hasZip64CompressedSize = ze.getCompressedSize() >= MAX_ZIP32_SIZE;
+        boolean hasZip64Size = ze.getSize() >= MAX_ZIP32_SIZE;
+        boolean hasZip64Offset = localFileHeaderOffset >= MAX_ZIP32_SIZE;
+        boolean needsZip64 = hasZip64CompressedSize || hasZip64Size || hasZip64Offset;
+
+        if (needsZip64) {
+            ZipEightByteInteger size = hasZip64Size ? new ZipEightByteInteger(ze.getSize()) : null;
+            ZipEightByteInteger compressedSize = hasZip64CompressedSize ? new ZipEightByteInteger(ze.getCompressedSize()) : null;
+            ZipEightByteInteger relativeHeaderOffset = hasZip64Offset ? new ZipEightByteInteger(localFileHeaderOffset) : null;
+            ze.addExtraField(new Zip64ExtendedInformationExtraField(size, compressedSize, relativeHeaderOffset, null));
+        }
+        else {
+            ze.removeExtraField(Zip64ExtendedInformationExtraField.HEADER_ID);
+        }
+
         out.write(CFH_SIG);
         // nbWritten += 4;
 
@@ -467,7 +551,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
 
         // version needed to extract
         // general purpose bit flag
-        writeVersionAndGPBF(out, encoding, useDataDescriptor);
+        writeVersionAndGPBF(out, encoding, useDataDescriptor, needsZip64);
         // nbWritten += 4;
 
         // compression method
@@ -482,8 +566,8 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         // compressed length
         // uncompressed length
         out.write(ZipLong.getBytes(ze.getCrc(), zipBuffer.longBuffer));
-        out.write(ZipLong.getBytes(ze.getCompressedSize(), zipBuffer.longBuffer));
-        out.write(ZipLong.getBytes(ze.getSize(), zipBuffer.longBuffer));
+        out.write(hasZip64CompressedSize ? LONG_MAX : ZipLong.getBytes(ze.getCompressedSize(), zipBuffer.longBuffer));
+        out.write(hasZip64Size ? LONG_MAX : ZipLong.getBytes(ze.getSize(), zipBuffer.longBuffer));
         // nbWritten += 12;
 
         // file name length
@@ -518,7 +602,7 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
         // nbWritten += 4;
 
         // relative offset of LFH
-        out.write(ZipLong.getBytes(localFileHeaderOffset, zipBuffer.longBuffer));
+        out.write(hasZip64Offset ? LONG_MAX : ZipLong.getBytes(localFileHeaderOffset, zipBuffer.longBuffer));
         // nbWritten += 4;
 
         long nbWritten = 46;
@@ -545,31 +629,38 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
      * @param out the OutputStream to write the fields to
      * @param encoding the encoding used for writing the filename and optional comment
      * @param useDataDescriptor true if a data descriptor is used for the entry
+     * @param zip64 true if the entry requires Zip64 features (and thus version 4.5)
      * @return the number of bytes that were written, i.e. 4
      * @throws IOException if an I/O error occurred
      */
-    protected static long writeVersionAndGPBF(OutputStream out, String encoding, boolean useDataDescriptor) throws IOException {
+    protected static long writeVersionAndGPBF(OutputStream out, String encoding, boolean useDataDescriptor, boolean zip64) throws IOException {
         boolean isUTF8 = isUTF8(encoding);
 
         // General purpose bit flag :
         // Bit 11 signals UTF-8 is used
         // Bit 3 signals a data descriptor is used
 
-        if (useDataDescriptor) {
+        if (zip64) {
+            // requires version 4.5 to support the Zip64 extended information extra field
+            out.write(SHORT_45);
+        }
+        else if (useDataDescriptor) {
             // requires version 2 as we are going to store length info in the data descriptor
             out.write(SHORT_20);
+        }
+        else {
+            // Version
+            out.write(SHORT_10);
+        }
 
-            // General purpose bit flag
+        // General purpose bit flag
+        if (useDataDescriptor) {
             out.write(isUTF8?
                 SHORT_2056                  // Bit 3 | Bit 11 = 2056
                 :SHORT_8                    // Bit 3          = 8
             );
         }
         else {
-            // Version
-            out.write(SHORT_10);
-
-            // General purpose bit flag
             out.write(isUTF8?
                 SHORT_2048                  // Bit 11 = 2048
                 :SHORT_0                    // No bit set
@@ -595,19 +686,56 @@ public class ZipOutputStream extends OutputStream implements ZipConstants {
     protected static void writeCentralDirectoryEnd(OutputStream out, int nbEntries, long cdLength, long cdOffset, String comment, String encoding, ZipBuffer zipBuffer)
             throws IOException {
 
+        boolean needsZip64 = nbEntries >= MAX_ZIP32_ENTRIES || cdLength >= MAX_ZIP32_SIZE || cdOffset >= MAX_ZIP32_SIZE;
+
+        if (needsZip64) {
+            // Zip64 end of central directory record
+            out.write(ZIP64_EOCD_SIG);
+
+            // size of the record, excluding the signature and this 8-byte field
+            out.write(ZipEightByteInteger.getBytes(44));
+
+            // version made by / version needed to extract
+            out.write(SHORT_45);
+            out.write(SHORT_45);
+
+            // number of this disk / disk with the start of the central directory
+            out.write(LONG_0);
+            out.write(LONG_0);
+
+            // number of entries on this disk / total number of entries
+            out.write(ZipEightByteInteger.getBytes(nbEntries));
+            out.write(ZipEightByteInteger.getBytes(nbEntries));
+
+            // size and offset of the central directory
+            out.write(ZipEightByteInteger.getBytes(cdLength));
+            out.write(ZipEightByteInteger.getBytes(cdOffset));
+
+            // Zip64 end of central directory locator
+            out.write(ZIP64_EOCD_LOC_SIG);
+
+            // number of the disk with the start of the Zip64 EOCD record
+            out.write(LONG_0);
+
+            // relative offset of the Zip64 EOCD record
+            out.write(ZipEightByteInteger.getBytes(cdOffset + cdLength));
+
+            // total number of disks
+            out.write(ZipLong.getBytes(1, zipBuffer.longBuffer));
+        }
+
         out.write(EOCD_SIG);
 
         // disk numbers
         out.write(LONG_0);      // 2x SHORT_0
 
         // number of entries
-        ZipShort.getBytes(nbEntries, zipBuffer.shortBuffer);
-        out.write(zipBuffer.shortBuffer);
-        out.write(zipBuffer.shortBuffer);
+        out.write(needsZip64 ? SHORT_MAX : ZipShort.getBytes(nbEntries, zipBuffer.shortBuffer));
+        out.write(needsZip64 ? SHORT_MAX : zipBuffer.shortBuffer);
 
         // length and location of CD
-        out.write(ZipLong.getBytes(cdLength, zipBuffer.longBuffer));
-        out.write(ZipLong.getBytes(cdOffset, zipBuffer.longBuffer));
+        out.write(cdLength >= MAX_ZIP32_SIZE ? LONG_MAX : ZipLong.getBytes(cdLength, zipBuffer.longBuffer));
+        out.write(cdOffset >= MAX_ZIP32_SIZE ? LONG_MAX : ZipLong.getBytes(cdOffset, zipBuffer.longBuffer));
 
         // ZIP file comment
         byte[] data = getBytes(comment, encoding);

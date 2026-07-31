@@ -17,7 +17,7 @@
 package com.mucommander.ui.viewer;
 
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.osgi.FileEditorServiceTracker;
+import com.mucommander.module.FileEditorsLoader;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.viewer.FileEditorService;
 import com.mucommander.viewer.FileOpenService;
@@ -45,7 +45,7 @@ public class EditorRegistrar extends BaseOpenFileRegistrar {
 
     @Override
     List<? extends FileOpenService> getOpenFileServices() {
-        return FileEditorServiceTracker.getEditorServices();
+        return FileEditorsLoader.getEditorServices();
     }
 
     @Override

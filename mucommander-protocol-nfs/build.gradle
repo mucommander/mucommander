@@ -1,3 +1,20 @@
+/**
+ * This file is part of muCommander, http://www.mucommander.com
+ *
+ * muCommander is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * muCommander is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
 dependencies {
     api project(':mucommander-commons-file')
     api project(':mucommander-protocol-api')
@@ -13,26 +30,14 @@ dependencies {
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
 }
 
-repositories {
-    mavenCentral()
-}
+repositories.mavenCentral()
+
+// JPMS module - configuration in module-info.java
+// Note: NFS protocol uses sun.net.www classes from the unnamed module
+// We compile on classpath (not module path) with --add-reads=ALL-UNNAMED
 
 jar {
-    bundle {
-        bnd ('Bundle-Name': 'muCommander-nfs',
-                'Bundle-Vendor': 'muCommander',
-                'Bundle-Description': 'Library with configuration tools',
-                'Bundle-DocURL': 'https://www.mucommander.com',
-                'Export-Package': 'com.mucommander.commons.protocol.nfs',
-                'Bundle-Activator': 'com.mucommander.commons.file.protocol.nfs.Activator',
-                'Specification-Title': "muCommander",
-                'Specification-Vendor': "Arik Hadas",
-                'Specification-Version': project.version,
-                'Implementation-Title': "muCommander",
-                'Implementation-Vendor': "Arik Hadas",
-                'Implementation-Version': revision,
-                'Build-Date': new Date().format('yyyyMMdd'))
-    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 test {
@@ -40,4 +45,31 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+}
+
+
+// JPMS module - compile module-info separately
+task compileModuleInfo(type: JavaCompile) {
+    dependsOn compileJava
+    source = fileTree('src/main/resources/module-info') {
+        include 'module-info.java'
+    }
+    destinationDirectory = compileJava.destinationDirectory
+    classpath = files()
+
+    doFirst {
+        def filteredClasspath = compileJava.classpath.filter {
+            !it.name.contains('nfs4j-') &&
+            !it.name.contains('oncrpc-') &&
+            !it.name.contains('sun-net-www')
+        }
+        options.compilerArgs += [
+            '--module-path', filteredClasspath.asPath,
+            '--patch-module', 'org.mucommander.protocol.nfs=' + compileJava.destinationDirectory.get().asFile.path
+        ]
+    }
+}
+
+classes {
+    dependsOn compileModuleInfo
 }

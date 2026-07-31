@@ -17,8 +17,6 @@
 
 package com.mucommander.ui.main.tabs;
 
-import java.util.Arrays;
-
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.ui.event.LocationEvent;
@@ -29,6 +27,8 @@ import com.mucommander.ui.tabs.HideableTabbedPane;
 import com.mucommander.ui.tabs.TabFactory;
 import com.mucommander.ui.tabs.TabsViewerFactory;
 
+import java.util.Arrays;
+
 /**
 * HideableTabbedPane of {@link com.mucommander.ui.main.tabs.FileTableTab} instances.
 * 
@@ -37,7 +37,7 @@ import com.mucommander.ui.tabs.TabsViewerFactory;
 public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements LocationListener {
 
 	/** FolderPanel containing those tabs */
-	private FolderPanel folderPanel;
+	private final FolderPanel folderPanel;
 
 	/** Factory of instances of FileTableTab */
 	private DefaultFileTableTabFactory defaultTabsFactory;
@@ -62,10 +62,14 @@ public class FileTableTabs extends HideableTabbedPane<FileTableTab> implements L
 
 	@Override
 	protected void setTabsViewer(TabsViewerFactory<FileTableTab> tabsViewerFactory) {
-		// During the transition to the other viewer, the focus might switch to the
-		// previously focused component, which may be in the other panel. Hence we switch
-		// the focus to the location text field so that it remains at the current panel.
-		folderPanel.getLocationTextField().requestFocus();
+		var locationTextField = folderPanel.getLocationTextField();
+		// locationTextField might be null during initialization (created in background thread)
+		if (locationTextField != null) {
+			// During the transition to the other viewer, the focus might switch to the
+			// previously focused component, which may be in the other panel. Hence we switch
+			// the focus to the location text field so that it remains at the current panel.
+			locationTextField.requestFocus();
+		}
 		super.setTabsViewer(tabsViewerFactory);
 	}
 

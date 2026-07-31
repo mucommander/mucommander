@@ -473,7 +473,7 @@ public class ZipFile implements ZipConstants {
                 @Override
                 public void close() throws IOException {
                     // Write data info in the local file header
-                    ZipOutputStream.finalizeEntryData(entry, this, raos, false, zipBuffer);
+                    ZipOutputStream.finalizeEntryData(entry, this, raos, false, entryInfo.encoding, zipBuffer);
 
                     // Write the central directory that was squashed by the new entry (at least partially)
                     ZipEntry tempZe;
@@ -835,7 +835,7 @@ public class ZipFile implements ZipConstants {
             int commentLen = ZipShort.getValue(cfh, 28);
             // off += 2;
 
-            // skip disk number
+            int diskStart = ZipShort.getValue(cfh, 30);
             // off += 2;
 
             ze.setInternalAttributes(ZipShort.getValue(cfh, 32));
@@ -866,7 +866,11 @@ public class ZipFile implements ZipConstants {
             // Read and set extra bytes
             byte extra[] = new byte[extraLen];
             rais.readFully(extra);
-            ze.setExtra(extra);
+            ze.setCentralDirectoryExtra(extra);
+
+            // Resolve the real values of any fields that contain a Zip64 magic placeholder value,
+            // using the Zip64 extended information extra field (if any).
+            resolveZip64Values(ze, entryInfo, diskStart);
 
             // Read comment bytes
             byte[] comment = new byte[commentLen];
@@ -922,6 +926,44 @@ public class ZipFile implements ZipConstants {
                 entryInfo.comment = null;
             }
         }
+    }
+
+    /**
+     * Resolves the real values of any of the given entry's central directory fields that contain a Zip64 magic
+     * placeholder value (size, compressed size, local header offset and disk start number), using the values
+     * stored in the entry's Zip64 extended information extra field, if any.
+     *
+     * @param ze the entry being parsed
+     * @param entryInfo the entry's {@link ZipEntryInfo}, whose {@link ZipEntryInfo#headerOffset} is updated if it
+     * contains a Zip64 magic placeholder value
+     * @param diskStart the disk number start field, as read from the central file header
+     * @throws ZipException if the Zip64 extended information extra field is present but doesn't hold the
+     * expected fields
+     */
+    private void resolveZip64Values(ZipEntry ze, ZipEntryInfo entryInfo, int diskStart) throws ZipException {
+        boolean hasZip64Size = ze.getCompressedSize() == ZIP64_MAGIC;
+        boolean hasZip64UncompressedSize = ze.getSize() == ZIP64_MAGIC;
+        boolean hasZip64Offset = entryInfo.headerOffset == ZIP64_MAGIC;
+        boolean hasZip64DiskStart = diskStart == ZIP64_MAGIC_SHORT;
+
+        if (!hasZip64Size && !hasZip64UncompressedSize && !hasZip64Offset && !hasZip64DiskStart)
+            return;
+
+        Zip64ExtendedInformationExtraField z64 = (Zip64ExtendedInformationExtraField)
+            ze.getExtraField(Zip64ExtendedInformationExtraField.HEADER_ID);
+        if (z64 == null)
+            return;
+
+        z64.reparseCentralDirectoryData(hasZip64UncompressedSize, hasZip64Size, hasZip64Offset, hasZip64DiskStart);
+
+        if (hasZip64UncompressedSize)
+            ze.setSize(z64.getSize().getLongValue());
+
+        if (hasZip64Size)
+            ze.setCompressedSize(z64.getCompressedSize().getLongValue());
+
+        if (hasZip64Offset)
+            entryInfo.headerOffset = z64.getRelativeHeaderOffset().getLongValue();
     }
 
     /**
@@ -1003,6 +1045,46 @@ public class ZipFile implements ZipConstants {
         /* size of the central directory   */ + 4;
 
     /**
+     * Length of the "Zip64 end of central directory locator" - which should be located right
+     * in front of the "End of central directory record" if one is present at all.
+     */
+    private static final int ZIP64_EOCDL_LENGTH =
+        /* zip64 end of central dir locator sig */ 4
+        /* number of the disk with the start    */
+        /* of the zip64 end of central dir      */ + 4
+        /* relative offset of the zip64 end of  */
+        /* central directory record             */ + 8
+        /* total number of disks                */ + 4;
+
+    /**
+     * Offset of the field that holds the location of the "Zip64 end of central directory record"
+     * inside the "Zip64 end of central directory locator", relative to the start of the locator.
+     */
+    private static final int ZIP64_EOCDL_LOCATOR_OFFSET =
+        /* zip64 end of central dir locator sig */ 4
+        /* number of the disk with the start    */
+        /* of the zip64 end of central dir      */ + 4;
+
+    /**
+     * Offset of the field that holds the location of the first central directory entry inside
+     * the "Zip64 end of central directory record", relative to the start of that record.
+     */
+    private static final int ZIP64_EOCD_CFD_LOCATOR_OFFSET =
+        /* zip64 end of central dir signature */ 4
+        /* size of zip64 end of central       */
+        /* directory record                   */ + 8
+        /* version made by                    */ + 2
+        /* version needed to extract          */ + 2
+        /* number of this disk                */ + 4
+        /* number of the disk with the        */
+        /* start of the central directory     */ + 4
+        /* total number of entries in the     */
+        /* central directory on this disk     */ + 8
+        /* total number of entries in the     */
+        /* central directory                  */ + 8
+        /* size of the central directory      */ + 8;
+
+    /**
      * Searches for the end of central dir record, parses
      * it and positions the stream at the first central directory
      * record.
@@ -1049,32 +1131,80 @@ public class ZipFile implements ZipConstants {
                 throw new ZipException("Invalid Zip stream (EOCD signature not found)");
             }
 
+            // Absolute offset of the EOCD record within the file
+            long eocdOffset = (length - bufLen) + off;
+
             // Parse the offset to the central directory start
-            off += CFD_LOCATOR_OFFSET;
+            int cdLocatorOff = off + CFD_LOCATOR_OFFSET;
             byte[] cdStart = new byte[4];
-            System.arraycopy(buf, off, cdStart, 0, 4);
-            off += 4;
+            System.arraycopy(buf, cdLocatorOff, cdStart, 0, 4);
 
             // Fetch the global zip file comment
+            int commentLenOff = cdLocatorOff + 4 + 2;
             byte[] commentLen = new byte[2];
-            System.arraycopy(buf, off, commentLen, 0, 2);
-            off += 2;
+            System.arraycopy(buf, commentLenOff - 2, commentLen, 0, 2);
 
             // Fetch the global zip file comment
             byte commentBytes[] = new byte[ZipShort.getValue(commentLen)];
-            System.arraycopy(buf, off, commentBytes, 0, commentBytes.length);
+            System.arraycopy(buf, commentLenOff, commentBytes, 0, commentBytes.length);
 
             // If no default encoding has been specified, try to guess the comment's encoding.
             // Note that the Zip format doesn't provide any way of knowing the encoding, not even a bit to indicate UTF-8
             // like bit 11 in GPBF.
             comment = getString(commentBytes, defaultEncoding!=null?defaultEncoding:EncodingDetector.detectEncoding(commentBytes));
 
-            // Seek to the start of the central directory
+            // Check whether a Zip64 end of central directory locator immediately precedes the
+            // end of central directory record.
+            if (eocdOffset >= ZIP64_EOCDL_LENGTH) {
+                rais.seek(eocdOffset - ZIP64_EOCDL_LENGTH);
+                byte[] zip64Locator = new byte[ZIP64_EOCDL_LENGTH];
+                rais.readFully(zip64Locator);
+
+                if (matchesSignature(zip64Locator, 0, ZIP64_EOCD_LOC_SIG)) {
+                    // Offset of the Zip64 end of central directory record
+                    long zip64EocdOffset = ZipEightByteInteger.getLongValue(zip64Locator, ZIP64_EOCDL_LOCATOR_OFFSET);
+
+                    rais.seek(zip64EocdOffset);
+                    byte[] zip64EocdSig = new byte[4];
+                    rais.readFully(zip64EocdSig);
+                    if (!matchesSignature(zip64EocdSig, 0, ZIP64_EOCD_SIG)) {
+                        throw new ZipException("Archive's Zip64 end of central directory locator is corrupt");
+                    }
+
+                    rais.seek(zip64EocdOffset + ZIP64_EOCD_CFD_LOCATOR_OFFSET);
+                    byte[] cdOffset64 = new byte[8];
+                    rais.readFully(cdOffset64);
+
+                    // Seek to the start of the central directory
+                    rais.seek(ZipEightByteInteger.getLongValue(cdOffset64));
+                    return;
+                }
+            }
+
+            // Not a Zip64 archive: seek to the start of the central directory using the regular
+            // (32-bit) end of central directory record
             rais.seek(ZipLong.getValue(cdStart));
         }
         finally {
             BufferPool.releaseByteArray(buf);
         }
+    }
+
+    /**
+     * Returns <code>true</code> if the given byte array contains the specified signature at the given offset.
+     *
+     * @param data the byte array to look into
+     * @param offset the offset at which the signature is expected
+     * @param signature the signature to compare against
+     * @return <code>true</code> if the given byte array contains the specified signature at the given offset
+     */
+    private static boolean matchesSignature(byte[] data, int offset, byte[] signature) {
+        for (int i=0; i<signature.length; i++) {
+            if (data[offset+i] != signature[i])
+                return false;
+        }
+
+        return true;
     }
 
     /**

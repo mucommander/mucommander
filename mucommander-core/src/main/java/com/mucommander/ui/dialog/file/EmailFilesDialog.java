@@ -43,9 +43,8 @@ import com.mucommander.conf.MuPreference;
 import com.mucommander.desktop.ActionType;
 import com.mucommander.job.impl.SendMailJob;
 import com.mucommander.text.SizeFormat;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 import com.mucommander.ui.action.ActionProperties;
-import com.mucommander.ui.action.impl.EmailAction;
 import com.mucommander.ui.dialog.pref.general.GeneralPreferencesDialog;
 import com.mucommander.ui.main.MainFrame;
 

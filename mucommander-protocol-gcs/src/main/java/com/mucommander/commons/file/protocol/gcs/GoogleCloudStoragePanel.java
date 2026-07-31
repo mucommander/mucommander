@@ -16,8 +16,6 @@
  */
 package com.mucommander.commons.file.protocol.gcs;
 
-import static com.mucommander.commons.file.protocol.gcs.Activator.GCS_SCHEMA;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -49,7 +47,7 @@ import com.mucommander.commons.runtime.OsFamily;
 import com.mucommander.commons.util.StringUtils;
 import com.mucommander.protocol.ui.ServerPanel;
 import com.mucommander.protocol.ui.ServerPanelListener;
-import com.mucommander.text.Translator;
+import com.mucommander.translator.Translator;
 
 /**
  * This ServerPanel helps initiate Google Cloud Storage connections.
@@ -314,7 +312,7 @@ public class GoogleCloudStoragePanel extends ServerPanel {
             throw new MalformedURLException("Project id cannot be empty");
         }
 
-        return FileURL.getFileURL(String.format("%s://%s", GCS_SCHEMA, lastProjectId));
+        return FileURL.getFileURL(String.format("%s://%s", "gcs", lastProjectId));
     }
 
     @Override
