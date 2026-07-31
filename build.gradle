@@ -379,7 +379,12 @@ task runJpms(type: JavaExec) {
     dependsOn 'prepareJpmsModules', 'copyConfigForJpms',
               ':mucommander-core:jar',
               ':jetbrains-jediterm:jar',
-              ':mucommander-os-macos:jar'
+              ':mucommander-os-macos:jar',
+              ':mucommander-viewer-text:jar',
+              ':mucommander-viewer-image:jar',
+              ':mucommander-viewer-pdf:jar',
+              ':mucommander-viewer-binary:jar',
+              ':sevenzipjbindings:jar'
 
     // Build module path using classes directories (which now include resources)
     // For external dependencies, use JARs
