@@ -193,6 +193,8 @@ class ImageViewer implements FileViewer, ActionListener {
                         view.y += deltaY;
 
                         imageViewerPanel.scrollRectToVisible(view);
+                        origin = e.getPoint();
+                        e.consume();
                     }
                 }
             }
