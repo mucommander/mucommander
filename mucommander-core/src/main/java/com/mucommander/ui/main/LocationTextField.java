@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.UNCFile;
@@ -280,6 +281,17 @@ public class LocationTextField extends ProgressTextField implements LocationList
 
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
+
+        // If the entered/pasted location points to an existing regular file rather than a directory,
+        // navigate to its parent folder and select it there - mirroring how dropping a file onto the
+        // location bar is handled (see FileDropTransferHandler) - instead of falling through to
+        // BrowseLocationThread's generic file handling, which offers to "download" it.
+        AbstractFile file = FileFactory.getFile(location);
+        if (file != null && file.exists() && !file.isDirectory()) {
+            AbstractFile parent = file.getParent();
+            if (parent != null)
+                return folderPanel.tryChangeCurrentFolder(parent, file, false) == null;
+        }
 
         // Change folder
         return folderPanel.tryChangeCurrentFolder(location) == null;
