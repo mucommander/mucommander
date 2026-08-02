@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 import com.mucommander.bookmark.Bookmark;
 import com.mucommander.bookmark.BookmarkManager;
 import com.mucommander.commons.file.AbstractFile;
-import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
 import com.mucommander.commons.file.protocol.local.LocalFile;
 import com.mucommander.commons.file.protocol.local.UNCFile;
@@ -282,20 +281,9 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
 
-        // If the entered/pasted location points to an existing non-browsable file (i.e. not a directory
-        // and not an archive that can be browsed into), navigate to its parent folder and select it
-        // there - mirroring how dropping a file onto the location bar is handled (see
-        // FileDropTransferHandler) - instead of falling through to BrowseLocationThread's generic file
-        // handling, which offers to "download" it. Browsable files (archives) keep going through that
-        // generic path so the existing "download or browse" prompt still applies to them.
-        AbstractFile file = FileFactory.getFile(location);
-        if (file != null && file.exists() && !file.isBrowsable()) {
-            AbstractFile parent = file.getParent();
-            if (parent != null)
-                return folderPanel.tryChangeCurrentFolder(parent, file, false) == null;
-        }
-
-        // Change folder
+        // Change folder. If the entered/pasted location turns out to point to a non-browsable file
+        // rather than a directory, BrowseLocationThread navigates to its parent folder and selects it
+        // there instead of showing the "download" prompt - see the resolution logic in its run() method.
         return folderPanel.tryChangeCurrentFolder(location) == null;
     }
 

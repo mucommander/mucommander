@@ -281,11 +281,26 @@ public class BrowseLocationThread extends ChangeFolderThread {
                             }
                             // else just continue and browse file's contents
                         }
-                        // File is a regular file: show download dialog which allows to download (copy) the file
-                        // to a directory specified by the user
+                        // File is a regular, non-browsable file (e.g. the user typed/pasted a file path
+                        // into the location bar): navigate to its parent folder and select it there,
+                        // mirroring how dropping such a file onto the location bar is handled (see
+                        // FileDropTransferHandler.importData()), instead of prompting to download it.
+                        //
+                        // Note: this must be done by continuing the current loop iteration (below) rather
+                        // than by calling folderPanel.tryChangeCurrentFolder(parent, file, false) here -
+                        // LocationChanger refuses to start a new folder-change thread while one is already
+                        // in progress, and this very thread is still registered as in-progress at this
+                        // point, so such a call would silently be a no-op.
                         else {
-                            showDownloadDialog(file);
-                            break;
+                            AbstractFile parent = file.getParent();
+                            if (parent == null) {
+                                // No parent to navigate to (shouldn't normally happen) - fall back to the
+                                // download prompt
+                                showDownloadDialog(file);
+                                break;
+                            }
+                            fileToSelect = file;
+                            file = parent;
                         }
 
                         this.folder = file;
