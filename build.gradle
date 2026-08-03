@@ -717,7 +717,8 @@ task createJpmsPackaging {
                 return
             }
 
-            // Cloud protocol dependencies go on classpath (have split packages)
+            // Cloud protocol dependencies with split packages go on classpath
+            // Note: Microsoft/Azure and AWS libraries work fine as automatic modules
             if (file.name.contains('google-http-client') ||
                 file.name.contains('google-api-client') ||
                 file.name.contains('google-auth') ||
@@ -727,12 +728,7 @@ task createJpmsPackaging {
                 file.name.contains('proto-google-common') ||
                 file.name.contains('proto-google-iam') ||
                 file.name.contains('grpc-') ||
-                file.name.contains('dropbox-core-sdk') ||
-                file.name.contains('microsoft-graph') ||
-                file.name.contains('azure-') ||
-                file.name.contains('msal4j') ||
-                file.name.contains('aws-java-sdk') ||
-                file.name.contains('aws-sdk-')) {
+                file.name.contains('dropbox-core-sdk')) {
                 classpathDeps.add(file)
                 return
             }
@@ -740,9 +736,9 @@ task createJpmsPackaging {
             // Extract base name for deduplication
             def baseName = file.name.replaceAll(/-\d+[\d.\-\w]*\.jar$/, '')
 
-            // Special case: keep slf4j-api 1.7.36 (not 2.0.9) to match logback-classic 1.2.13
+            // Special case: keep slf4j-api 2.0.17 to match logback-classic 1.5.37
             if (baseName == 'slf4j-api') {
-                if (file.name.contains('1.7.')) {
+                if (file.name.contains('2.0.')) {
                     modulePathDeps[baseName] = file
                 }
                 return
@@ -985,7 +981,7 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--app-image', "${buildDir}/muCommander.app", \
-                '--app-version', project.version+'-'+project.ext.release+'-'+project.ext.arch, \
+                '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions"
