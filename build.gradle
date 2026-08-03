@@ -987,6 +987,16 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
                 '--dest', "${buildDir}/distributions"
 }
 
+// Disable macAppBundle plugin tasks by default to avoid conflict with the dmg task above
+// To create noarch DMG, explicitly run: ./gradlew createDmg
+def macAppBundleTaskNames = ['createDmg', 'copyBackgroundImage', 'copyIcon', 'copyStub', 'bundleJRE',
+                              'copyToResourcesJava', 'generatePlist', 'generatePkgInfo', 'createApp',
+                              'createAppZip', 'codeSign', 'runSetFile']
+tasks.matching { it.name in macAppBundleTaskNames }.configureEach {
+    enabled = gradle.startParameter.taskNames.contains('createDmg') ||
+              gradle.startParameter.taskNames.contains(':createDmg')
+}
+
 task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     workingDir "${projectDir}"
 
