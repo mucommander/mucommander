@@ -985,6 +985,20 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
                 '--dest', "${buildDir}/distributions"
+
+    doLast {
+        def defaultDmg = file("${buildDir}/distributions/muCommander-${project.version}.dmg")
+        if (!defaultDmg.exists()) {
+            throw new GradleException("Source DMG not found: ${defaultDmg.absolutePath}")
+        }
+
+        def targetDmg = file("${buildDir}/distributions/mucommander-${project.version}-${project.ext.release}-${project.ext.arch}.dmg")
+        if (!defaultDmg.renameTo(targetDmg)) {
+            throw new GradleException("Failed to rename DMG from ${defaultDmg.name} to ${targetDmg.name}")
+        }
+
+        println "Created: ${targetDmg.name}"
+    }
 }
 
 // Disable macAppBundle plugin tasks by default to avoid conflict with the dmg task above
