@@ -1011,6 +1011,25 @@ tasks.matching { it.name in macAppBundleTaskNames }.configureEach {
               gradle.startParameter.taskNames.contains(':createDmg')
 }
 
+// Add JAR signing for noarch DMG after JARs are copied
+tasks.matching { it.name == 'copyToResourcesJava' }.configureEach {
+    // Declare signing inputs to invalidate task when identity/tools change
+    inputs.property('signingIdentity', project.ext.identity ?: '')
+    inputs.property('skipDmgSign', project.hasProperty('skipDmgSign'))
+    inputs.file('package/osx/SignPackage-1.0-jar-with-dependencies.jar')
+    inputs.file('package/osx/mucommander-entitlements')
+
+    doLast {
+        if (!project.hasProperty('skipDmgSign') && project.ext.identity?.trim()) {
+            services.get(ExecOperations).exec {
+                workingDir(rootDir)
+                executable('java')
+                args = ['-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/${macAppBundle.appOutputDir}/${macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements']
+            }
+        }
+    }
+}
+
 task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     workingDir "${projectDir}"
 
@@ -1260,32 +1279,3 @@ macAppBundle {
     javaExtrasList.add("--add-opens")
     javaExtrasList.add("java.base/sun.net.www.protocol.https=ALL-UNNAMED")
 }
-
-// TODO: Update for JPMS
-/*copyToResourcesJava.dependsOn build
-copyToResourcesJava.doLast {
-    copy {
-        from "build/osgi"
-        include 'app/**'
-        include 'bundle/**'
-        include 'conf/**'
-        exclude 'bundle/osgiaas*'
-        exclude 'bundle/jline*'
-        exclude 'bundle/mucommander-os-linux*'
-        exclude 'bundle/mucommander-os-openvms*'
-        exclude 'bundle/mucommander-os-win*'
-        into project.file("${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/${->project.macAppBundle.jarSubdir}")
-    }
-    if (project.ext.identity?.trim()) {
-      exec {
-        workingDir "${rootDir}"
-        executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppBundle.appName}.app/Contents/Java/bundle", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
-      }
-      exec {
-        workingDir "${rootDir}"
-        executable 'java'
-        args '-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${->project.buildDir}/${->project.macAppBundle.appOutputDir}/${->project.macAppander.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements'
-      }
-   }
-}*/
