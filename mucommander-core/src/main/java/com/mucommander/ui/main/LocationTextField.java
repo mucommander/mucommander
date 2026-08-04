@@ -281,9 +281,7 @@ public class LocationTextField extends ProgressTextField implements LocationList
         // Remember that the folder change was initiated by the location field
         folderChangeInitiatedByLocationField = true;
 
-        // Change folder. If the entered/pasted location turns out to point to a non-browsable file
-        // rather than a directory, BrowseLocationThread navigates to its parent folder and selects it
-        // there instead of showing the "download" prompt - see the resolution logic in its run() method.
+        // Change folder
         return folderPanel.tryChangeCurrentFolder(location) == null;
     }
 
