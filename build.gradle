@@ -610,13 +610,13 @@ task jpmsJar(type: Jar) {
 task copyConfigForJpms(type: Copy) {
     from "package"
     include "logback.xml"
-    into "${buildDir}/libs/conf"
+    into layout.buildDirectory.file('libs/conf').get().asFile
 }
 
 task copyConfigForJpmsSource(type: Copy) {
     from "package"
     include "logback.xml"
-    into "${buildDir}/classes/java/conf"
+    into layout.buildDirectory.file('classes/java/conf').get().asFile
 }
 
 jar.finalizedBy copyConfigForJpms
@@ -639,7 +639,7 @@ task createJpmsPackaging {
 
     doLast {
         // Create jpms directory structure
-        def jpmsDir = file("${buildDir}/jpms")
+        def jpmsDir = layout.buildDirectory.dir("jpms").get().asFile
         jpmsDir.mkdirs()
 
         // Copy JPMS-specific main launcher JAR (without embedded comprise dependencies)
@@ -798,10 +798,10 @@ task portable(dependsOn: [createExe, createJpmsPackaging], type: Zip) {
     group = 'Installer'
     description = 'Creates a portable package (.exe + .sh)'
 
-    from ("$buildDir/launch4j") {
+    from (layout.buildDirectory.file("launch4j").get().asFile) {
         include 'mucommander.exe'
     }
-    from ("$buildDir/jpms") {
+    from (layout.buildDirectory.file("jpms").get().asFile) {
         include 'mucommander*.jar'
     }
     from ('package') { include 'license.txt', 'readme.txt' }
@@ -809,7 +809,7 @@ task portable(dependsOn: [createExe, createJpmsPackaging], type: Zip) {
         filter(ReplaceTokens, tokens: [MU_VERSION: project.version])
     }
     into ""
-    from ("$buildDir/jpms/conf") {
+    from (layout.buildDirectory.file("jpms/conf").get().asFile) {
         include '*'
         into 'conf'
     }
@@ -823,7 +823,7 @@ task tgz(dependsOn: createJpmsPackaging, type: Tar) {
     group = 'Installer'
     description = 'Creates TGZ unix package'
 
-    from ("$buildDir/jpms") {
+    from (layout.buildDirectory.file("jpms").get().asFile) {
         include '*.jar'
         exclude 'mucommander-os-win*'
         exclude 'mucommander-os-macos*'
@@ -835,7 +835,7 @@ task tgz(dependsOn: createJpmsPackaging, type: Tar) {
     }
     into ""
 
-    from ("$buildDir/jpms/conf") {
+    from (layout.buildDirectory.file("jpms/conf").get().asFile) {
         include '*'
         into 'conf'
     }
@@ -883,7 +883,7 @@ task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
 
     // Clean existing app before creating new one
     doFirst {
-        delete("${buildDir}/muCommander.app")
+        delete(layout.buildDirectory.file("muCommander.app").get().asFile)
     }
 
     def jpackageCommand = [
@@ -928,7 +928,7 @@ task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
                         --add-reads org.mucommander.os.openvms=ALL-UNNAMED', \
                 '--mac-package-identifier', 'com.mucommander.muCommander', \
                 '--type', 'app-image', \
-                '--dest', "${buildDir}", \
+                '--dest', layout.buildDirectory.file(".").get().asFile, \
                 '--mac-package-signing-prefix', 'com.mucommander.', \
                 '--mac-signing-key-user-name', project.ext.identity, \
                 '--verbose'
@@ -945,12 +945,12 @@ task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
        copy {
           from "package"
           include "readme.txt"
-          into "${buildDir}/muCommander.app/Contents/Resources"
+          into layout.buildDirectory.file("muCommander.app/Contents/Resources").get().asFile
        }
        // Delete unwanted OS-specific modules from the app
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/", include: 'mucommander-os-linux*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/", include: 'mucommander-os-win*')
-       delete fileTree(dir: "${buildDir}/muCommander.app/Contents/app/", include: 'mucommander-os-openvms*')
+       delete fileTree(dir: layout.buildDirectory.file("muCommander.app/Contents/app").get().asFile, include: 'mucommander-os-linux*')
+       delete fileTree(dir: layout.buildDirectory.file("muCommander.app/Contents/app").get().asFile, include: 'mucommander-os-win*')
+       delete fileTree(dir: layout.buildDirectory.file("muCommander.app/Contents/app").get().asFile, include: 'mucommander-os-openvms*')
        services.get(ExecOperations).exec {
            executable("package/osx/muCommander-post-image.sh")
        }
@@ -958,17 +958,17 @@ task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
          services.get(ExecOperations).exec {
            workingDir("${rootDir}")
            executable('java')
-           args = ['-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/muCommander.app/Contents/app", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements']
+           args = ['-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', layout.buildDirectory.file("muCommander.app/Contents/app").get().asFile, '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements']
          }
          services.get(ExecOperations).exec {
            workingDir("${rootDir}")
            executable('/usr/bin/codesign')
-           args = ['--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app/Contents/MacOS/muCommander"]
+           args = ['--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', layout.buildDirectory.file("muCommander.app/Contents/MacOS/muCommander").get().asFile]
          }
          services.get(ExecOperations).exec {
            workingDir("${rootDir}")
            executable('/usr/bin/codesign')
-           args = ['--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', "${buildDir}/muCommander.app"]
+           args = ['--entitlements', 'package/osx/mucommander-entitlements', '--options', 'runtime', '--deep', '--timestamp', '-s', project.ext.identity, '-f', layout.buildDirectory.file("muCommander.app").get().asFile]
          }
        }
     }
@@ -980,19 +980,19 @@ task dmg(dependsOn: 'macAppImage', type: Exec) {
 
     workingDir "${projectDir}"
     commandLine 'jpackage', \
-                '--app-image', "${buildDir}/muCommander.app", \
+                '--app-image', layout.buildDirectory.file('muCommander.app').get().asFile, \
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distributions"
+                '--dest', layout.buildDirectory.file("distributions").get().asFile
 
     doLast {
-        def defaultDmg = file("${buildDir}/distributions/muCommander-${project.version}.dmg")
+        def defaultDmg = file(layout.buildDirectory.file("distributions/muCommander-${project.version}.dmg").get().asFile)
         if (!defaultDmg.exists()) {
             throw new GradleException("Source DMG not found: ${defaultDmg.absolutePath}")
         }
 
-        def targetDmg = file("${buildDir}/distributions/mucommander-${project.version}-${project.ext.release}-${project.ext.arch}.dmg")
+        def targetDmg = file(layout.buildDirectory.file("distributions/mucommander-${project.version}-${project.ext.release}-${project.ext.arch}.dmg").get().asFile)
         if (!defaultDmg.renameTo(targetDmg)) {
             throw new GradleException("Failed to rename DMG from ${defaultDmg.name} to ${targetDmg.name}")
         }
@@ -1024,7 +1024,7 @@ tasks.matching { it.name == 'copyToResourcesJava' }.configureEach {
             services.get(ExecOperations).exec {
                 workingDir(rootDir)
                 executable('java')
-                args = ['-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', "${buildDir}/${macAppBundle.appOutputDir}/${macAppBundle.appName}.app/Contents/Java", '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements']
+                args = ['-jar', 'package/osx/SignPackage-1.0-jar-with-dependencies.jar', '-d', layout.buildDirectory.file("${macAppBundle.appOutputDir}/${macAppBundle.appName}.app/Contents/Java").get().asFile, '-t', '-r', '-k', project.ext.identity, '-e', 'package/osx/mucommander-entitlements']
             }
         }
     }
@@ -1035,7 +1035,7 @@ task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
 
     // Clean existing app before creating new one
     doFirst {
-        delete("${buildDir}/muCommander")
+        delete(layout.buildDirectory.file('muCommander').get().asFile)
     }
 
     commandLine 'jpackage', \
@@ -1067,18 +1067,18 @@ task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
                                    --add-reads org.mucommander.os.linux=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/linux/'+project.ext.arch, \
-                '--dest', "${buildDir}"
+                '--dest', layout.buildDirectory.file(".").get().asFile
     doLast {
         copy {
            from "package"
            include "license.txt"
            include "readme.txt"
-           into "${buildDir}/muCommander/lib/app"
+           into layout.buildDirectory.file("muCommander/lib/app").get().asFile
         }
         // Delete unwanted OS-specific modules
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/", include: 'mucommander-os-win*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/", include: 'mucommander-os-macos*')
-        delete fileTree(dir: "${buildDir}/muCommander/lib/app/", include: 'mucommander-os-openvms*')
+        delete fileTree(dir: layout.buildDirectory.file("muCommander/lib/app").get().asFile, include: 'mucommander-os-win*')
+        delete fileTree(dir: layout.buildDirectory.file("muCommander/lib/app").get().asFile, include: 'mucommander-os-macos*')
+        delete fileTree(dir: layout.buildDirectory.file("muCommander/lib/app").get().asFile, include: 'mucommander-os-openvms*')
     }
 }
 
@@ -1089,11 +1089,11 @@ task rpm(dependsOn: 'linuxAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'rpm', \
-                '--app-image', "${buildDir}/muCommander", \
+                '--app-image', layout.buildDirectory.file("muCommander").get().asFile, \
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distributions", \
+                '--dest', layout.buildDirectory.file("distributions").get().asFile, \
                 '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
                 '--linux-app-category', 'Application;FileManager;Utility;'
 }
@@ -1107,11 +1107,11 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
     commandLine 'jpackage', \
                 '--type', 'deb', \
                 '--description', 'a lightweight, cross-platform file manager', \
-                '--app-image', "${buildDir}/muCommander", \
+                '--app-image', layout.buildDirectory.file("muCommander").get().asFile, \
                 '--app-version', project.version, \
                 '--license-file', 'package/license.txt', \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distributions", \
+                '--dest', layout.buildDirectory.file("distributions").get().asFile, \
                 '--icon', 'mucommander-core/src/main/resources/images/mucommander/icon128_24.png', \
                 '--linux-deb-maintainer', 'arik.hadas1@gmail.com', \
                 '--linux-app-category', 'utils', \
@@ -1124,11 +1124,11 @@ task winAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
 
     // Clean existing app before creating new one
     doFirst {
-        delete("${buildDir}/muCommander")
+        delete(layout.buildDirectory.file("muCommander").get().asFile)
     }
 
     commandLine 'jpackage', \
-                '--module-path', "${buildDir}/jpms/", \
+                '--module-path', layout.buildDirectory.file("jpms").get().asFile, \
                 '--module', 'org.mucommander/com.mucommander.main.muCommander', \
                 '--name', 'muCommander', \
                 '--app-version', project.version, \
@@ -1155,19 +1155,19 @@ task winAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
                     --add-reads org.mucommander.os.win=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/win/'+project.ext.arch, \
-                '--dest', "${buildDir}", \
+                '--dest', layout.buildDirectory.file(".").get().asFile, \
                 '--resource-dir', 'package/windows/'
     doLast {
         copy {
            from "package"
            include "license.txt"
            include "readme.txt"
-           into "${buildDir}/muCommander/"
+           into layout.buildDirectory.file("muCommander").get().asFile
         }
         // Delete unwanted OS-specific modules
-        delete fileTree(dir: "${buildDir}/muCommander/app/", include: 'mucommander-os-linux*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/", include: 'mucommander-os-macos*')
-        delete fileTree(dir: "${buildDir}/muCommander/app/", include: 'mucommander-os-openvms*')
+        delete fileTree(dir: layout.buildDirectory.file("muCommander/app").get().asFile, include: 'mucommander-os-linux*')
+        delete fileTree(dir: layout.buildDirectory.file("muCommander/app").get().asFile, include: 'mucommander-os-macos*')
+        delete fileTree(dir: layout.buildDirectory.file("muCommander/app").get().asFile, include: 'mucommander-os-openvms*')
     }
 }
 
@@ -1178,11 +1178,11 @@ task msi(dependsOn: 'winAppImage', type: Exec) {
     workingDir "${projectDir}"
     commandLine 'jpackage', \
                 '--type', 'msi', \
-                '--app-image', "${buildDir}/muCommander", \
-                '--license-file', "${buildDir}/muCommander/license.txt", \
+                '--app-image', layout.buildDirectory.file("muCommander").get().asFile, \
+                '--license-file', layout.buildDirectory.file("muCommander/license.txt").get().asFile, \
                 '--app-version', project.version, \
                 '--about-url', 'https://www.mucommander.com', \
-                '--dest', "${buildDir}/distributions", \
+                '--dest', layout.buildDirectory.file("distributions").get().asFile, \
                 '--win-menu', \
                 '--win-shortcut', \
                 '--win-shortcut-prompt', \
