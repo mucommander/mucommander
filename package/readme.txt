@@ -40,6 +40,7 @@ New features:
 Improvements:
 - Terminal: Font and color updates now apply instantly.
 - Support zip64 files (zip files larger than 4gb).
+- Pasting or typing a path to a non-browsable file into the location bar now navigates to its parent folder and selects the file.
 
 Localization:
 -

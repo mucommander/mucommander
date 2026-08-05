@@ -17,9 +17,11 @@
 
 package com.mucommander.ui.dnd;
 
+import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.event.InputEvent;
 
+import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 import org.slf4j.Logger;
@@ -75,19 +77,43 @@ public class FileDropTransferHandler extends TransferHandler {
     private final boolean changeFolderOnlyMode;
 
     /**
+     * The component's previous TransferHandler (if any), e.g. the LAF-installed one that implements
+     * ordinary text cut/copy/paste for a text field. {@code setTransferHandler} replaces the handler
+     * wholesale, and TransferHandler is also what keyboard-triggered clipboard operations (Ctrl+C/X/V)
+     * delegate to - so without forwarding non-drop transfers here, installing this handler on a text
+     * field would silently break its normal clipboard shortcuts.
+     */
+    private final TransferHandler fallbackHandler;
+
+    /**
      * @param folderPanel          the panel to navigate / copy-move into
      * @param changeFolderOnlyMode if {@code true} only folder navigation is performed on drop;
      *                             if {@code false} copy/move is also possible
      */
     public FileDropTransferHandler(FolderPanel folderPanel, boolean changeFolderOnlyMode) {
+        this(folderPanel, changeFolderOnlyMode, null);
+    }
+
+    /**
+     * @param folderPanel          the panel to navigate / copy-move into
+     * @param changeFolderOnlyMode if {@code true} only folder navigation is performed on drop;
+     *                             if {@code false} copy/move is also possible
+     * @param fallbackHandler      the component's previous TransferHandler, to which non-drop transfers
+     *                             (keyboard cut/copy/paste) are forwarded; {@code null} if the component
+     *                             has no clipboard behavior worth preserving (e.g. a plain button)
+     */
+    public FileDropTransferHandler(FolderPanel folderPanel, boolean changeFolderOnlyMode, TransferHandler fallbackHandler) {
         this.folderPanel = folderPanel;
         this.changeFolderOnlyMode = changeFolderOnlyMode;
+        this.fallbackHandler = fallbackHandler;
     }
 
     @Override
     public boolean canImport(TransferSupport support) {
         if (!support.isDrop()) {
-            return false;
+            // Not a drag-and-drop transfer, so this is a keyboard/menu-triggered clipboard paste -
+            // defer to whatever the component normally does with pasted text.
+            return fallbackHandler != null && fallbackHandler.canImport(support);
         }
 
         // Accept any of the three flavors we know how to handle
@@ -111,6 +137,10 @@ public class FileDropTransferHandler extends TransferHandler {
 
     @Override
     public boolean importData(TransferSupport support) {
+        if (!support.isDrop()) {
+            return fallbackHandler != null && fallbackHandler.importData(support);
+        }
+
         if (!canImport(support)) {
             return false;
         }
@@ -147,6 +177,22 @@ public class FileDropTransferHandler extends TransferHandler {
             }
         }
         return true;
+    }
+
+    @Override
+    public int getSourceActions(JComponent c) {
+        // Keyboard-triggered cut/copy (Ctrl+C/X) check this before calling exportToClipboard - forward
+        // it so text selection can still be copied out of a component using this handler.
+        return fallbackHandler != null ? fallbackHandler.getSourceActions(c) : super.getSourceActions(c);
+    }
+
+    @Override
+    public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
+        if (fallbackHandler != null) {
+            fallbackHandler.exportToClipboard(comp, clip, action);
+        } else {
+            super.exportToClipboard(comp, clip, action);
+        }
     }
 
     /**

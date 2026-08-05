@@ -166,9 +166,13 @@ public class FolderPanel implements FocusListener, QuickListContainer, ActiveTab
             registerCycleThruFolderPanelAction(locationTextField);
 
             // Allow the location field to change the current directory when a file/folder is dropped on it.
-            FileDropTransferHandler dropHandler = new FileDropTransferHandler(this, true);
-            locationTextField.setTransferHandler(dropHandler);
-            driveButton.setTransferHandler(dropHandler);
+            // Preserve the field's original (LAF-installed) TransferHandler as a fallback so that
+            // keyboard-triggered clipboard cut/copy/paste - which also goes through TransferHandler -
+            // keeps working; otherwise replacing it outright would silently break text paste into the
+            // location bar.
+            locationTextField.setTransferHandler(
+                    new FileDropTransferHandler(this, true, locationTextField.getTransferHandler()));
+            driveButton.setTransferHandler(new FileDropTransferHandler(this, true));
             locationTextField.addFocusListener(this);
         }).start();
 
