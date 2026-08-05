@@ -38,6 +38,8 @@ New features:
 -
 
 Improvements:
+- Respect dark mode settings for windows decorations under macOS
+- Suppressed the "Unexpected error setting WM_CLASS" warning when using portable or .tgz packages.
 - Terminal: Font and color updates now apply instantly.
 - Support zip64 files (zip files larger than 4gb).
 

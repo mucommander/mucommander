@@ -151,6 +151,33 @@ public class ProportionalSplitPane extends JSplitPane implements ComponentListen
     // Overridden methods //
     ////////////////////////
 
+    /** Guards against infinite recursion in {@link #updateUI()} when we call {@link #setUI}. */
+    private boolean updatingUI = false;
+
+    @Override
+    public void updateUI() {
+        if (updatingUI) {
+            return;
+        }
+        updatingUI = true;
+        try {
+            super.updateUI();
+            // On macOS with the Aqua LaF (com.apple.laf.AquaLookAndFeel) and
+            // apple.awt.application.appearance=system the native split pane painter renders the
+            // divider black in dark mode. Replacing it with BasicSplitPaneUI makes the divider
+            // use pure Java painting instead.
+            if (getUI().getClass().getName().startsWith("com.apple.laf")) {
+                setUI(new BasicSplitPaneUI());
+                // Re-register listeners on the new divider created by BasicSplitPaneUI.
+                BasicSplitPaneDivider newDivider = getDividerComponent();
+                newDivider.addComponentListener(this);
+                newDivider.addMouseListener(this);
+            }
+        } finally {
+            updatingUI = false;
+        }
+    }
+
     @Override
     public void setOrientation(int orientation) {
         super.setOrientation(orientation);

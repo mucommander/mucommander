@@ -538,6 +538,9 @@ task runJpms(type: JavaExec) {
     // Performance optimizations
     argFileArgs << '-Dsun.java2d.metal=false' // see: https://github.com/mucommander/mucommander/issues/1372
     argFileArgs << '-Xshare:auto' << '-XX:-UsePerfData' << '-XX:+TieredCompilation' << '-XX:TieredStopAtLevel=1' // faster start
+    
+    // Respect system preference regarding Dark mode (only for rebase & conflict resolution, to be changed)
+    argFileArgs << '-Dapple.awt.application.appearance=system'
 
     // Debug configuration
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
@@ -897,7 +900,9 @@ task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
                 '--java-options', '\
                          -Dsun.java2d.d3d=false -Dsun.java2d.noddraw=false -Dsun.java2d.metal=false \
                          -Dapple.awt.enableTemplateImages=true \
+                         -Dapple.awt.application.appearance=system \
                          -Xshare:auto -XX:-UsePerfData -XX:+TieredCompilation -XX:TieredStopAtLevel=1 \
+                         -Dapple.awt.application.appearance=system \
                         -cp $APPDIR/mods/lib/* \
                         --add-modules ALL-MODULE-PATH,jdk.httpserver \
                         --add-exports java.desktop/com.apple.laf=ALL-UNNAMED \
@@ -1250,6 +1255,7 @@ macAppBundle {
     javaProperties.put("-XX:-UsePerfData", null)
     javaProperties.put("-XX:+TieredCompilation", null)
     javaProperties.put("-XX:TieredStopAtLevel=1", null)
+    javaProperties.put("apple.awt.application.appearance", "system")
     javaExtrasList.add("--add-exports")
     javaExtrasList.add("java.desktop/com.apple.laf=ALL-UNNAMED")
     javaExtrasList.add("--add-exports")
