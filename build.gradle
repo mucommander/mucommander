@@ -189,9 +189,10 @@ subprojects {
         def isCore = project.name == 'mucommander-core'
 
         // Check if this project depends on mucommander-core
-        def dependsOnCore = project.configurations.findByName('compileClasspath')?.allDependencies?.any { dep ->
-            (dep instanceof ProjectDependency) && dep.dependencyProject == coreProject
-        } ?: false
+        def dependsOnCore = project.configurations.names.contains('compileClasspath') ?
+            project.configurations.named('compileClasspath').get().allDependencies.any { dep ->
+                (dep instanceof ProjectDependency) && dep.dependencyProject == coreProject
+            } : false
 
         def isNonModulePathModule = rootProject.ext.nonModulePathJpmsModules.contains(project.name)
 
@@ -202,10 +203,9 @@ subprojects {
             evaluationDependsOn(':mucommander-core')
 
             // Check if compileModuleInfo task exists before depending on it
-            def compileModuleInfoTask = coreProject.tasks.findByName('compileModuleInfo')
-            if (compileModuleInfoTask != null) {
+            if (coreProject.tasks.names.contains('compileModuleInfo')) {
                 tasks.named('compileJava').configure {
-                    dependsOn(compileModuleInfoTask)
+                    dependsOn(coreProject.tasks.named('compileModuleInfo'))
                 }
             }
         }
