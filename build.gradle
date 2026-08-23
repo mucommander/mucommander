@@ -233,7 +233,7 @@ java {
     modularity.inferModulePath = true
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         force 'org.slf4j:slf4j-api:2.0.17'
     }
