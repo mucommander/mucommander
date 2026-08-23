@@ -137,12 +137,12 @@ public class FileDropTransferHandler extends TransferHandler {
 
     @Override
     public boolean importData(TransferSupport support) {
-        if (!support.isDrop()) {
-            return fallbackHandler != null && fallbackHandler.importData(support);
-        }
-
         if (!canImport(support)) {
             return false;
+        }
+
+        if (!support.isDrop()) {
+            return fallbackHandler != null && fallbackHandler.importData(support);
         }
 
         FileSet droppedFiles = TransferableFileSet.getTransferFiles(support.getTransferable());
