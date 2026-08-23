@@ -393,16 +393,16 @@ tasks.register('runJpms', JavaExec) {
     // Note: Cloud protocols are excluded - they compile with --add-reads=ALL-UNNAMED and should
     // use classes directory while their dependencies remain on classpath as unnamed modules
     def modulesWithEmbeddedDeps = ['mucommander-core', 'jetbrains-jediterm', 'mucommander-os-macos', 'mucommander-viewer-text', 'mucommander-viewer-binary', 'mucommander-viewer-image', 'mucommander-viewer-pdf', 'sevenzipjbindings']
-    def ourProjectClasses = files()
-    project.subprojects.findAll { it.plugins.hasPlugin('java') && it.name != 'sun-net-www' }.each {
+    def projectClassesList = project.subprojects.findAll { it.plugins.hasPlugin('java') && it.name != 'sun-net-www' }.collect {
         if (modulesWithEmbeddedDeps.contains(it.name)) {
             // Use JAR file for modules with embedded dependencies
-            ourProjectClasses += files(it.tasks.jar.archiveFile)
+            files(it.tasks.jar.archiveFile)
         } else {
             // Use compiled classes directory for regular modules
-            ourProjectClasses += files(it.sourceSets.main.java.destinationDirectory)
+            files(it.sourceSets.main.java.destinationDirectory)
         }
     }
+    def ourProjectClasses = files(projectClassesList)
 
     // External dependencies only (not our subprojects' compiled classes)
     // Include local JARs from libs directories (libguestfs.jar, jadb.jar, vim25.jar, etc.)
@@ -543,7 +543,7 @@ tasks.register('runJpms', JavaExec) {
     def debugSuspend = (project.findProperty('suspend') as String) ?: 'y'
     if (project.hasProperty('debug')) {
         logger.info('Launching muCommander in debug mode...')
-        argFileArgs << '-Xdebug' << "-Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}"
+        argFileArgs << '-Xdebug' << "-Xrunjdwp:transport=dt_socket,server=y,suspend=${debugSuspend},address=${project.debug}".toString()
     }
 
     // --module must be the last JVM option: once the java launcher sees it, every
