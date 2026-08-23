@@ -55,11 +55,11 @@ allprojects {
     }
 }
 
-task printFullVersionName {
+tasks.register('printFullVersionName') {
   doLast { println project.version + '-' + project.ext.release }
 }
 
-task printVersionName {
+tasks.register('printVersionName') {
   doLast { println project.version }
 }
 
@@ -340,7 +340,7 @@ dependencies {
 }
 
 // Task to prepare proper JPMS module directories (classes + resources combined)
-task prepareJpmsModules {
+tasks.register('prepareJpmsModules') {
     dependsOn classes
 
     project.subprojects.each { subproject ->
@@ -372,7 +372,7 @@ task prepareJpmsModules {
     }
 }
 
-task runJpms(type: JavaExec) {
+tasks.register('runJpms', JavaExec) {
     group = 'Run'
     description = 'Runs muCommander with JPMS (Java Platform Module System), optional parameters: -Pdebug=5005 -Psuspend=n'
 
@@ -561,7 +561,8 @@ task runJpms(type: JavaExec) {
     }
 }
 
-task run(dependsOn: 'runJpms') {
+tasks.register('run') {
+    dependsOn 'runJpms'
     group = 'Run'
     description = 'Runs muCommander from sources (runs with JPMS by default), optional parameters: -Pdebug=5005 -Psuspend=n'
 }
@@ -586,7 +587,7 @@ jar {
 }
 
 // JPMS packaging JAR - does NOT embed comprise dependencies (they must be separate modules)
-task jpmsJar(type: Jar) {
+tasks.register('jpmsJar', Jar) {
     archiveClassifier = 'jpms'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
@@ -607,13 +608,13 @@ task jpmsJar(type: Jar) {
     }
 }
 
-task copyConfigForJpms(type: Copy) {
+tasks.register('copyConfigForJpms', Copy) {
     from "package"
     include "logback.xml"
     into layout.buildDirectory.file('libs/conf').get().asFile
 }
 
-task copyConfigForJpmsSource(type: Copy) {
+tasks.register('copyConfigForJpmsSource', Copy) {
     from "package"
     include "logback.xml"
     into layout.buildDirectory.file('classes/java/conf').get().asFile
@@ -627,7 +628,7 @@ test.useTestNG()
 import org.apache.tools.ant.filters.ReplaceTokens
 
 // Task to prepare JPMS packaging structure for jpackage
-task createJpmsPackaging {
+tasks.register('createJpmsPackaging') {
     dependsOn build, jpmsJar
 
     // Ensure all subproject JARs are built
@@ -794,7 +795,8 @@ launch4j {
 }
 
 // Portable packaging
-task portable(dependsOn: [createExe, createJpmsPackaging], type: Zip) {
+tasks.register('portable', Zip) {
+    dependsOn createExe, createJpmsPackaging
     group = 'Installer'
     description = 'Creates a portable package (.exe + .sh)'
 
@@ -819,7 +821,8 @@ task portable(dependsOn: [createExe, createJpmsPackaging], type: Zip) {
 }
 
 // Unix packaging
-task tgz(dependsOn: createJpmsPackaging, type: Tar) {
+tasks.register('tgz', Tar) {
+    dependsOn createJpmsPackaging
     group = 'Installer'
     description = 'Creates TGZ unix package'
 
@@ -845,40 +848,43 @@ task tgz(dependsOn: createJpmsPackaging, type: Tar) {
     archiveVersion = project.version+'-'+project.ext.release
 }
 
-task(afterEclipseImport).doLast {
-    File f = file('.settings/org.eclipse.core.resources.prefs')
-    f.write('eclipse.preferences.version=1\n')
-    f.append('encoding//src/main/resources/languages.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ar.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_be.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ca.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_cs.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_da.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_de.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_en.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_en_GB.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_es.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_fr.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_hu.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_it.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ja.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ko.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_nb.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_nl.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_pl.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_pt_BR.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ro.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ru.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_sk.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_sl.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_sv.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_tr.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_ua.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
-    f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
+tasks.register('afterEclipseImport') {
+    doLast {
+        File f = file('.settings/org.eclipse.core.resources.prefs')
+        f.write('eclipse.preferences.version=1\n')
+        f.append('encoding//src/main/resources/languages.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ar.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_be.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ca.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_cs.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_da.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_de.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_en.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_en_GB.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_es.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_fr.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_hu.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_it.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ja.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ko.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_nb.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_nl.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_pl.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_pt_BR.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ro.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ru.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_sk.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_sl.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_sv.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_tr.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_ua.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_zh_CN.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_zh_TW.properties=UTF-8\n')
+    }
 }
 
-task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
+tasks.register('macAppImage', Exec) {
+    dependsOn 'createJpmsPackaging'
     workingDir "${projectDir}"
 
     // Clean existing app before creating new one
@@ -974,7 +980,8 @@ task macAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     }
 }
 
-task dmg(dependsOn: 'macAppImage', type: Exec) {
+tasks.register('dmg', Exec) {
+    dependsOn 'macAppImage'
     group = 'Installer'
     description = 'Creates DMG macOS package (use -PskipDmgSign to create DMG without signing)'
 
@@ -1030,7 +1037,8 @@ tasks.matching { it.name == 'copyToResourcesJava' }.configureEach {
     }
 }
 
-task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
+tasks.register('linuxAppImage', Exec) {
+    dependsOn 'createJpmsPackaging'
     workingDir "${projectDir}"
 
     // Clean existing app before creating new one
@@ -1082,7 +1090,8 @@ task linuxAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     }
 }
 
-task rpm(dependsOn: 'linuxAppImage', type: Exec) {
+tasks.register('rpm', Exec) {
+    dependsOn 'linuxAppImage'
     group = 'Installer'
     description = 'Creates RPM linux package'
 
@@ -1099,7 +1108,8 @@ task rpm(dependsOn: 'linuxAppImage', type: Exec) {
 }
 
 
-task deb(dependsOn: 'linuxAppImage', type: Exec) {
+tasks.register('deb', Exec) {
+    dependsOn 'linuxAppImage'
     group = 'Installer'
     description = 'Creates DEB linux package'
 
@@ -1119,7 +1129,8 @@ task deb(dependsOn: 'linuxAppImage', type: Exec) {
                 '--linux-menu-group', 'Application;FileManager;Utility;'
 }
 
-task winAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
+tasks.register('winAppImage', Exec) {
+    dependsOn 'createJpmsPackaging'
     workingDir "${projectDir}"
 
     // Clean existing app before creating new one
@@ -1171,7 +1182,8 @@ task winAppImage(dependsOn: 'createJpmsPackaging', type: Exec) {
     }
 }
 
-task msi(dependsOn: 'winAppImage', type: Exec) {
+tasks.register('msi', Exec) {
+    dependsOn 'winAppImage'
     group = 'Installer'
     description = 'Creates MSI windows package'
 
