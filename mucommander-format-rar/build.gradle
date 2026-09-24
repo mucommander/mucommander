@@ -26,7 +26,7 @@ dependencies {
     api project(':mucommander-commons-io')
     api project(':mucommander-commons-util')
     api project(':sevenzipjbindings')
-    api 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
+    api 'net.sf.sevenzipjbinding:sevenzipjbinding:23.01-2.2'
 
     implementation 'org.apache.commons:commons-vfs2:2.3'
     implementation 'com.github.junrar:junrar:7.5.5'

@@ -41,9 +41,6 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven {
-            url = uri("https://www.mucommander.com/maven/")
-        }
     }
 
     group = 'org.mucommander'
@@ -65,9 +62,6 @@ tasks.register('printVersionName') {
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://www.mucommander.com/maven/")
-    }
 }
 
 ext.nonModulePathJpmsModules = [
