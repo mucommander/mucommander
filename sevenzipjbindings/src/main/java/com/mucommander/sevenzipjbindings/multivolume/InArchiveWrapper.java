@@ -32,6 +32,7 @@ import net.sf.sevenzipjbinding.IOutUpdateArchive7z;
 import net.sf.sevenzipjbinding.IOutUpdateArchiveBZip2;
 import net.sf.sevenzipjbinding.IOutUpdateArchiveGZip;
 import net.sf.sevenzipjbinding.IOutUpdateArchiveTar;
+import net.sf.sevenzipjbinding.IOutUpdateArchiveXz;
 import net.sf.sevenzipjbinding.IOutUpdateArchiveZip;
 import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.PropID;
@@ -150,6 +151,11 @@ public class InArchiveWrapper implements IInArchive {
     @Override
     public IOutUpdateArchiveBZip2 getConnectedOutArchiveBZip2() throws SevenZipException {
         return getMainArchive().getConnectedOutArchiveBZip2();
+    }
+
+    @Override
+    public IOutUpdateArchiveXz getConnectedOutArchiveXz() throws SevenZipException {
+        return getMainArchive().getConnectedOutArchiveXz();
     }
 
     @Override

@@ -17,9 +17,6 @@
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://www.mucommander.com/maven/")
-    }
 }
 
 dependencies {
@@ -27,11 +24,10 @@ dependencies {
     api project(':mucommander-commons-io')
     api project(':mucommander-commons-util')
 
-    api 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
+    api 'net.sf.sevenzipjbinding:sevenzipjbinding:23.01-2.2'
 
-    // Use a patched version of sevenzipjbinding-all-platforms with support for Apple silicon
-    // See https://github.com/mucommander/mucommander/pull/1237
-    api 'com.mucommander:sevenzipjbinding-all-platforms:16.02-2.01'
+    // Includes native libraries for all supported platforms, including Apple silicon
+    api 'net.sf.sevenzipjbinding:sevenzipjbinding-all-platforms:23.01-2.2'
 
     testImplementation 'org.testng:testng:7.11.0'
 }
