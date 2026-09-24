@@ -20,7 +20,7 @@ repositories.mavenCentral()
 dependencies {
     api project(':mucommander-commons-file')
     api project(':sevenzipjbindings')
-    api 'net.sf.sevenzipjbinding:sevenzipjbinding:16.02-2.01'
+    api 'net.sf.sevenzipjbinding:sevenzipjbinding:23.01-2.2'
 
     testImplementation 'org.testng:testng:7.11.0'
 }
