@@ -853,6 +853,7 @@ tasks.register('afterEclipseImport') {
         File f = file('.settings/org.eclipse.core.resources.prefs')
         f.write('eclipse.preferences.version=1\n')
         f.append('encoding//src/main/resources/languages.properties=UTF-8\n')
+        f.append('encoding//src/main/resources/dictionary_af.properties=UTF-8\n')
         f.append('encoding//src/main/resources/dictionary_ar.properties=UTF-8\n')
         f.append('encoding//src/main/resources/dictionary_be.properties=UTF-8\n')
         f.append('encoding//src/main/resources/dictionary_ca.properties=UTF-8\n')
