@@ -51,6 +51,7 @@ jar {
         include 'jtermios/**'
         include 'purejavacomm/**'
         include 'org/jetbrains/**'
+        exclude 'org/jetbrains/annotations/**'
         include 'resources/com/pty4j/**'
         exclude 'kotlin/**'  // Excluded - on module path
         exclude 'com/sun/jna/**'  // Excluded - on module path
