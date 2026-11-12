@@ -95,8 +95,9 @@ public abstract class S3File extends ProtocolFile {
             StorageObject objects[] = chunk.getObjects();
             String[] commonPrefixes = chunk.getCommonPrefixes();
 
-            if(objects.length==0 && !prefix.equals("")) {
-                // This happens only when the directory does not exist
+            if(objects.length==0 && commonPrefixes.length==0 && !prefix.equals("")) {
+                // This happens only when the directory does not exist. A directory that has no object of its own
+                // (no "dir/" placeholder), as created by most other S3 tools, still has common prefixes or objects.
                 throw new IOException();
             }
 
