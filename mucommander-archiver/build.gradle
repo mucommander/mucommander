@@ -36,4 +36,8 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-
+// zip4j has neither a module descriptor nor an Automatic-Module-Name, so it is put on the classpath at compile
+// time: allow reading it from the unnamed module
+compileJava {
+    options.compilerArgs += ['--add-reads', 'org.mucommander.archiver=ALL-UNNAMED']
+}
