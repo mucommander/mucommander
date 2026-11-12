@@ -93,11 +93,11 @@ public class S3ProtocolProvider implements ProtocolProvider {
 
     private ProviderCredentials getProviderCredentials(FileURL url) {
         Credentials credentials = url.getCredentials();
-        switch(url.getProperty(S3File.STORAGE_TYPE)) {
-        case "GS":
+
+        if ("GS".equals(url.getProperty(S3File.STORAGE_TYPE))) {
             return new GSCredentials(credentials.getLogin(), credentials.getPassword());
-        default:
-            return new AWSCredentials(credentials.getLogin(), credentials.getPassword());
         }
+
+        return new AWSCredentials(credentials.getLogin(), credentials.getPassword());
     }
 }
