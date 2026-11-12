@@ -211,6 +211,39 @@ public class EncryptedZipArchiverTest {
         }
     }
 
+    /**
+     * The underlying stream must be closed even if the archive cannot be finalized.
+     */
+    public void testUnderlyingStreamClosedWhenFinalizingFails() throws IOException {
+        Path textFile = Files.write(tempDir.resolve("text.txt"), TEXT_CONTENT);
+        AbstractFile file = FileFactory.getFile(textFile.toString());
+
+        // Stream that fails once writes are disabled, and remembers whether it has been closed
+        boolean[] failWrites = { false };
+        boolean[] closed = { false };
+        OutputStream out = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                if (failWrites[0])
+                    throw new IOException("disk full");
+            }
+
+            @Override
+            public void close() {
+                closed[0] = true;
+            }
+        };
+
+        Archiver archiver = Archiver.getArchiver(out, Archiver.ZIP_FORMAT, PASSWORD);
+        try (InputStream in = archiver.getContentStream(file)) {
+            StreamUtils.copyStream(in, archiver.createEntry("text.txt", file));
+        }
+
+        failWrites[0] = true;
+        expectThrows(IOException.class, archiver::close);
+        assertTrue(closed[0]);
+    }
+
     public void testEmptyPasswordCreatesUnencryptedArchive() throws IOException {
         assertTrue(Archiver.getArchiver(new ByteArrayOutputStream(), Archiver.ZIP_FORMAT, "") instanceof ZipArchiver);
         assertTrue(Archiver.getArchiver(new ByteArrayOutputStream(), Archiver.ZIP_FORMAT, null) instanceof ZipArchiver);
