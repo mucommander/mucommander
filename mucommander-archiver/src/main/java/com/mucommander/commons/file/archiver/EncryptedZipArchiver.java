@@ -125,7 +125,7 @@ class EncryptedZipArchiver extends Archiver {
                 zos.setComment(comment);
         }
         finally {
-            zos.close();
+            closeZipOutputStream();
         }
     }
 
@@ -140,6 +140,27 @@ class EncryptedZipArchiver extends Archiver {
     /////////////////////
     // Private methods //
     /////////////////////
+
+    /**
+     * Closes the Zip4j stream, which writes the central directory and closes the underlying stream. If writing the
+     * central directory fails, Zip4j doesn't close the underlying stream, so it is closed here.
+     *
+     * @throws IOException if the archive could not be finalized
+     */
+    private void closeZipOutputStream() throws IOException {
+        try {
+            zos.close();
+        }
+        catch (IOException | RuntimeException e) {
+            try {
+                out.close();
+            }
+            catch (IOException suppressed) {
+                e.addSuppressed(suppressed);
+            }
+            throw e;
+        }
+    }
 
     /**
      * Returns the entry size to give Zip4j for a file of the given size. Zip4j decides whether to write the entry's
