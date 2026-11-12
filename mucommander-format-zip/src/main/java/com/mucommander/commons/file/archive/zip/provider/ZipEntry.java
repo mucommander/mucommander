@@ -398,6 +398,16 @@ public class ZipEntry implements Cloneable {
     }
 
     /**
+     * Returns <code>true</code> if this entry's data is encrypted, as declared in the Zip file. A password is then
+     * required to read the entry's contents.
+     *
+     * @return <code>true</code> if this entry's data is encrypted
+     */
+    public boolean isEncrypted() {
+        return entryInfo != null && entryInfo.encryption != ZipEntryInfo.Encryption.NONE;
+    }
+
+    /**
      * Returns the uncompressed size of the entry data, or <code>-1</code> if not known.
      *
      * @return the uncompressed size of the entry data, or <code>-1</code> if not known

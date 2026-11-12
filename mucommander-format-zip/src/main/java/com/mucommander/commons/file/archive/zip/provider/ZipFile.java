@@ -33,6 +33,8 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipException;
 
+import net.lingala.zip4j.model.enums.AesKeyStrength;
+
 /**
  * This class is a replacement for <code>java.util.ZipFile</code> with some extra functionalities:
  * <ul>
@@ -86,6 +88,10 @@ public class ZipFile implements ZipConstants {
 
     /** Maps entry paths to corresponding ZipEntry instances */
     private Hashtable<String, ZipEntry> nameMap = new Hashtable<String, ZipEntry>();
+
+    /** <code>true</code> if at least one entry is encrypted, as read from the central directory. Entries added to
+     * this Zip file are never encrypted, so this flag doesn't need to be updated afterwards. */
+    private boolean hasEncryptedEntries;
 
     /** Global zip file comment */
     private String comment;
@@ -261,6 +267,24 @@ public class ZipFile implements ZipConstants {
      * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public InputStream getInputStream(ZipEntry ze) throws IOException, ZipException, UnsupportedFileOperationException {
+        return getInputStream(ze, null);
+    }
+
+    /**
+     * Returns an InputStream for reading the contents of the given entry, decrypting it with the given password if
+     * the entry is {@link ZipEntry#isEncrypted() encrypted}.
+     *
+     * @param ze the entry to get the stream for.
+     * @param password the password used to decrypt the entry, ignored if the entry is not encrypted. May be
+     * <code>null</code>.
+     * @return a stream to read the entry from.
+     * @throws IOException if unable to create an input stream from the zipentry, or if the entry is encrypted and the
+     * password is missing or wrong (in which case a {@link net.lingala.zip4j.exception.ZipException} of type
+     * {@link net.lingala.zip4j.exception.ZipException.Type#WRONG_PASSWORD WRONG_PASSWORD} is thrown)
+     * @throws ZipException if the zipentry has an unsupported compression or encryption method
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
+     */
+    public InputStream getInputStream(ZipEntry ze, String password) throws IOException, ZipException, UnsupportedFileOperationException {
 
         ZipEntryInfo entryInfo = ze.getEntryInfo();
         if (entryInfo == null)
@@ -277,16 +301,71 @@ public class ZipFile implements ZipConstants {
         
         long start = entryInfo.dataOffset;
         BoundedInputStream bis = new BoundedInputStream(entryIn, start, ze.getCompressedSize());
-        switch (ze.getMethod()) {
-            case ZipConstants.STORED:
-                return bis;
-            case ZipConstants.DEFLATED:
-                bis.addDummy();
-                return new InflaterInputStream(bis, new Inflater(true));
-            default:
-                throw new ZipException("Found unsupported compression method "
-                                       + ze.getMethod());
+
+        int method = ze.getMethod();
+        if (method != ZipConstants.STORED && method != ZipConstants.DEFLATED) {
+            bis.close();
+            throw new ZipException("Found unsupported compression method " + method);
         }
+
+        // Encrypted entries: decrypt the data before uncompressing it. The password is verified at this point, the
+        // underlying stream must be closed if it is wrong as the caller won't get a stream to close.
+        InputStream dataIn = bis;
+        if (ze.isEncrypted()) {
+            try {
+                dataIn = ZipEntryDecryption.createDecryptingStream(ze, bis, password);
+            }
+            catch (IOException e) {
+                bis.close();
+                throw e;
+            }
+        }
+
+        if (method == ZipConstants.STORED)
+            return dataIn;
+
+        // Inflater needs an extra dummy byte for nowrap - see Inflater's javadocs. It is appended to the (decrypted)
+        // data, as it must not go through decryption.
+        return new InflaterInputStream(new SequenceInputStream(dataIn, new ByteArrayInputStream(new byte[1])), new Inflater(true));
+    }
+
+    /**
+     * Returns <code>true</code> if at least one entry of this Zip file is {@link ZipEntry#isEncrypted() encrypted}.
+     *
+     * @return <code>true</code> if at least one entry of this Zip file is encrypted
+     */
+    public boolean hasEncryptedEntries() {
+        return hasEncryptedEntries;
+    }
+
+    /**
+     * Verifies the given password against the first entry of this Zip file that is encrypted with a supported method.
+     * Only the encryption header of that entry is read, its data is not decrypted.
+     *
+     * @param password the password to verify
+     * @return <code>false</code> if the password is wrong, <code>true</code> if it is correct or if this Zip file has
+     * no entry encrypted with a supported method that it could be verified against
+     * @throws IOException if an I/O error occurred while reading the encryption header
+     * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
+     */
+    public boolean isPasswordValid(String password) throws IOException, UnsupportedFileOperationException {
+        for (ZipEntry entry : entries) {
+            ZipEntryInfo entryInfo = entry.getEntryInfo();
+            if (entryInfo == null
+                    || (entryInfo.encryption != ZipEntryInfo.Encryption.AES && entryInfo.encryption != ZipEntryInfo.Encryption.ZIP_CRYPTO))
+                continue;
+
+            // The password is verified when the stream is created, nothing has to be read from it
+            try (InputStream ignored = getInputStream(entry, password)) {
+                return true;
+            }
+            catch (net.lingala.zip4j.exception.ZipException e) {
+                if (e.getType() == net.lingala.zip4j.exception.ZipException.Type.WRONG_PASSWORD)
+                    return false;
+                throw e;
+            }
+        }
+        return true;
     }
 
 
@@ -808,10 +887,13 @@ public class ZipFile implements ZipConstants {
             // Note: ZipEntry#setMethod(int) will throw a java.lang.InternalError ("invalid compression method") if the
             // method is different from DEFLATED or STORED (happens with IMPLODED for example).
             // Thus we check the method ourselves to fail gracefully.
-            if(method!=DEFLATED && method!=STORED)
+            // AES-encrypted entries use a placeholder method: their actual compression method is stored in the AES
+            // extra field, it is resolved once the extra field has been read.
+            if(method!=DEFLATED && method!=STORED && method!=AES_ENCRYPTED)
                 throw new ZipException("Unsupported compression method");
 
-            ze.setMethod(method);
+            if(method!=AES_ENCRYPTED)
+                ze.setMethod(method);
             // off += 2;
 
             ze.setDosTime(ZipLong.getValue(cfh, 8));
@@ -872,6 +954,10 @@ public class ZipFile implements ZipConstants {
             // using the Zip64 extended information extra field (if any).
             resolveZip64Values(ze, entryInfo, diskStart);
 
+            // Resolve the entry's encryption method and, for AES-encrypted entries, the actual compression method
+            resolveEncryption(ze, entryInfo, gp, method);
+            hasEncryptedEntries |= entryInfo.encryption != ZipEntryInfo.Encryption.NONE;
+
             // Read comment bytes
             byte[] comment = new byte[commentLen];
             rais.readFully(comment);
@@ -925,6 +1011,44 @@ public class ZipFile implements ZipConstants {
                 entry.setComment(getString(entryInfo.comment, guessedEncoding));
                 entryInfo.comment = null;
             }
+        }
+    }
+
+    /**
+     * Resolves the encryption method of the given entry from its general purpose bit flag and compression method.
+     * For AES-encrypted entries, the key strength and the actual compression method are read from the WinZip AES extra
+     * field (header ID 0x9901), whose data is laid out as follows: vendor version (2 bytes), vendor ID "AE" (2 bytes),
+     * AES key strength (1 byte), actual compression method (2 bytes).
+     *
+     * @param ze the entry being parsed, whose compression method is set if it is AES-encrypted
+     * @param entryInfo the entry's {@link ZipEntryInfo}, in which the encryption method is stored
+     * @param gp the general purpose bit flag, as read from the central file header
+     * @param method the compression method, as read from the central file header
+     * @throws ZipException if the entry is AES-encrypted but its AES extra field is missing or invalid, or if its
+     * actual compression method is not supported
+     */
+    private static void resolveEncryption(ZipEntry ze, ZipEntryInfo entryInfo, int gp, int method) throws ZipException {
+        if (method == AES_ENCRYPTED) {
+            ZipExtraField aesExtraField = ze.getExtraField(AES_EXTRA_FIELD_ID);
+            byte[] data = aesExtraField == null ? null : aesExtraField.getCentralDirectoryData();
+            if (data == null || data.length < 7)
+                throw new ZipException("Missing or invalid AES extra field for entry " + ze.getName());
+
+            AesKeyStrength keyStrength = AesKeyStrength.getAesKeyStrengthFromRawCode(data[4] & 0xFF);
+            if (keyStrength == null)
+                throw new ZipException("Invalid AES key strength for entry " + ze.getName());
+
+            int actualMethod = ZipShort.getValue(data, 5);
+            if (actualMethod != DEFLATED && actualMethod != STORED)
+                throw new ZipException("Unsupported compression method");
+
+            ze.setMethod(actualMethod);
+            entryInfo.encryption = ZipEntryInfo.Encryption.AES;
+            entryInfo.aesKeyStrength = keyStrength;
+        }
+        // Bit 0 signals an encrypted entry, bit 6 the PKWARE strong encryption which is not supported
+        else if ((gp & 1) != 0) {
+            entryInfo.encryption = (gp & 0x40) != 0 ? ZipEntryInfo.Encryption.UNSUPPORTED : ZipEntryInfo.Encryption.ZIP_CRYPTO;
         }
     }
 
@@ -1247,7 +1371,6 @@ public class ZipFile implements ZipConstants {
 
         private long remaining;
         private long loc;
-        private boolean addDummyByte = false;
 
         BoundedInputStream(RandomAccessInputStream rais, long start, long remaining) {
             this.rais = rais;
@@ -1257,13 +1380,8 @@ public class ZipFile implements ZipConstants {
 
         @Override
         public int read() throws IOException {
-            if (remaining-- <= 0) {
-                if (addDummyByte) {
-                    addDummyByte = false;
-                    return 0;
-                }
+            if (remaining-- <= 0)
                 return -1;
-            }
             synchronized (rais) {
                 rais.seek(loc++);
                 return rais.read();
@@ -1272,14 +1390,8 @@ public class ZipFile implements ZipConstants {
 
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
-            if (remaining <= 0) {
-                if (addDummyByte) {
-                    addDummyByte = false;
-                    b[off] = 0;
-                    return 1;
-                }
+            if (remaining <= 0)
                 return -1;
-            }
 
             if (len <= 0) {
                 return 0;
@@ -1303,13 +1415,6 @@ public class ZipFile implements ZipConstants {
         @Override
         public void close() throws IOException {
             rais.close();
-        }
-
-        /**
-         * Inflater needs an extra dummy byte for nowrap - see Inflater's javadocs.
-         */
-        void addDummy() {
-            addDummyByte = true;
         }
     }
 

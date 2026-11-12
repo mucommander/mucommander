@@ -83,7 +83,10 @@ public class ZipArchiveFileTest extends AbstractFileTest {
     @BeforeMethod
     public void setUp() throws IOException {
         entryNum = 0;
-        tempZipFile = (ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
+        // The Zip format must be registered for the temporary file to be a ZipArchiveFile. AbstractFileTest#setUp()
+        // registers it as well, but only after this point.
+        FileFactory.registerArchiveFormat(new ZipFormatProvider());
+        tempZipFile =(ZipArchiveFile)FileFactory.getTemporaryFile(ZipArchiveFileTest.class.getName()+".zip", false);
 
         // Assert that the file is not an actual archive yet
         assert !tempZipFile.isArchive();

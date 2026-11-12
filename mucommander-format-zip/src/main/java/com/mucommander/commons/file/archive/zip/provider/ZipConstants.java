@@ -38,6 +38,18 @@ public interface ZipConstants {
     public static final int STORED = java.util.zip.ZipEntry.STORED;
 
     /**
+     * Compression method placeholder used by entries encrypted with the WinZip AES format (AE-1 / AE-2). The actual
+     * compression method of such entries is stored in the {@link #AES_EXTRA_FIELD_ID AES extra field}.
+     */
+    public static final int AES_ENCRYPTED = 99;
+
+    /**
+     * Header ID of the WinZip AES extra field, which holds the AES key strength and the actual compression method
+     * of AES-encrypted entries.
+     */
+    public static final ZipShort AES_EXTRA_FIELD_ID = new ZipShort(0x9901);
+
+    /**
      * Default compression level for DEFLATED compression
      */
     public static final int DEFAULT_DEFLATER_COMPRESSION = Deflater.DEFAULT_COMPRESSION;

@@ -35,7 +35,8 @@ What's new since v1.6.2 ?
 -----------------------
 
 New features:
--
+- Support extracting password-protected (AES and ZipCrypto encrypted) zip files.
+- Support creating password-protected zip files, encrypted with AES-256.
 
 Improvements:
 - Terminal: Font and color updates now apply instantly.

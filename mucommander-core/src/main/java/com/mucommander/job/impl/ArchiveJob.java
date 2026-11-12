@@ -61,17 +61,32 @@ public class ArchiveJob extends TransferFileJob {
 	
     /** Optional archive comment */
     private String archiveComment;
+
+    /** Optional password used to encrypt the archive's entries */
+    private String archivePassword;
 	
     /** Lock to avoid Archiver.close() to be called while data is being written */
     private final Object ioLock = new Object();
 
 
     public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment) {
+        this(progressDialog, mainFrame, files, destFile, archiveFormat, archiveComment, null);
+    }
+
+    /**
+     * Creates a new job that packs the given files into an archive, optionally encrypting its entries.
+     *
+     * @param archivePassword password used to encrypt the archive's entries, <code>null</code> or empty for no
+     * encryption. Must be <code>null</code> for formats that don't support encryption, see
+     * {@link Archiver#formatSupportsPassword(int)}.
+     */
+    public ArchiveJob(ProgressDialog progressDialog, MainFrame mainFrame, FileSet files, AbstractFile destFile, int archiveFormat, String archiveComment, String archivePassword) {
         super(progressDialog, mainFrame, files);
 		
         this.destFile = destFile;
         this.archiveFormat = archiveFormat;
         this.archiveComment = archiveComment;
+        this.archivePassword = archivePassword;
 
         this.baseFolderPath = getBaseSourceFolder().getAbsolutePath(false);
     }
@@ -185,7 +200,7 @@ public class ArchiveJob extends TransferFileJob {
         do {
             try {
                 // Tries to get an Archiver instance.
-                this.archiver = Archiver.getArchiver(destFile, archiveFormat);
+                this.archiver = Archiver.getArchiver(destFile, archiveFormat, archivePassword);
                 this.archiver.setComment(archiveComment);
 
                 break;
