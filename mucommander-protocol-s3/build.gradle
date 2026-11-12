@@ -48,6 +48,15 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
+test {
+    useTestNG()
+    // S3FileTest runs against a live S3 server (see S3FileTest.TEMP_FOLDER_PROPERTY)
+    exclude '**/S3FileTest.class'
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
 // Note: S3 protocol uses jets3t library which is a non-modular library
 // We compile on classpath (not module path) with --add-reads=ALL-UNNAMED
 compileJava {
