@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.ServiceException;
+import org.jets3t.service.StorageObjectsChunk;
 import org.jets3t.service.model.StorageObject;
 import org.jets3t.service.model.StorageOwner;
 import org.slf4j.Logger;
@@ -637,6 +638,18 @@ public class S3Object extends S3File {
                 setExists(true);
             }
             catch(ServiceException e) {
+                if(e.getResponseCode()==404 && isImplicitDirectory()) {
+                    // No object with this key, but other objects have it as a prefix: a directory without a
+                    // placeholder object, like a common prefix in a listing
+                    setExists(true);
+                    setDirectory(true);
+                    setSize(0);
+                    setDate(System.currentTimeMillis());
+                    setPermissions(DEFAULT_PERMISSIONS);
+                    setOwner(null);
+                    return;
+                }
+
                 // Object does not exist on the server, or could not be retrieved
                 setExists(false);
 
@@ -647,6 +660,20 @@ public class S3Object extends S3File {
                 setOwner(null);
 
                 handleAuthException(e, fileURL);
+            }
+        }
+
+
+        /**
+         * Returns <code>true</code> if at least one object has this object's key, followed by a separator, as a prefix.
+         */
+        private boolean isImplicitDirectory() {
+            try {
+                StorageObjectsChunk chunk = service.listObjectsChunked(bucketName, getObjectKey(true), "/", 1, null, false);
+                return chunk.getObjects().length>0 || chunk.getCommonPrefixes().length>0;
+            }
+            catch(ServiceException e) {
+                return false;
             }
         }
 
