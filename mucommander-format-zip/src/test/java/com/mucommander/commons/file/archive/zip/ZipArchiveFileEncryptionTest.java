@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -42,6 +45,9 @@ import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
+import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
+import com.mucommander.commons.file.archive.zip.provider.ZipLong;
+import com.mucommander.commons.file.archive.zip.provider.ZipShort;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.FileHeader;
@@ -56,6 +62,9 @@ import net.lingala.zip4j.model.enums.EncryptionMethod;
  */
 @Test
 public class ZipArchiveFileEncryptionTest {
+
+    /** Signature of a central directory file header, "PK\1\2" */
+    private static final long CENTRAL_FILE_HEADER_SIGNATURE = 0x02014B50L;
 
     private static final String PASSWORD = "s3cr3t-heslo-žluťoučký";
 
@@ -140,6 +149,31 @@ public class ZipArchiveFileEncryptionTest {
     }
 
     /**
+     * The authentication code of a DEFLATED AES entry must be verified even if the inflater doesn't need all the
+     * encrypted data, which happens when the compressed size recorded in the central directory is too large.
+     */
+    public void testAesEntryWithEnlargedCompressedSize() throws IOException {
+        createArchive(EncryptionMethod.AES, AesKeyStrength.KEY_STRENGTH_256);
+        enlargeCompressedSize("dir/text.txt", 20_000);
+
+        ZipArchiveFile archive = openArchive(PASSWORD);
+        ArchiveEntry entry = listEntries(archive).get("dir/text.txt");
+        expectThrows(IOException.class, () -> readEntry(archive, entry));
+    }
+
+    /**
+     * The Zip provider itself must refuse to modify a Zip file that contains encrypted entries.
+     */
+    public void testZipFileRefusesModifications() throws IOException {
+        createArchive(EncryptionMethod.AES, AesKeyStrength.KEY_STRENGTH_256);
+        com.mucommander.commons.file.archive.zip.provider.ZipFile zipFile = new com.mucommander.commons.file.archive.zip.provider.ZipFile(tempFile);
+
+        expectThrows(IOException.class, () -> zipFile.addEntry(new ZipEntry("new.txt")));
+        expectThrows(IOException.class, () -> zipFile.deleteEntry(zipFile.getEntry("binary.bin")));
+        expectThrows(IOException.class, zipFile::defragment);
+    }
+
+    /**
      * Archives that contain encrypted entries must be read-only.
      */
     public void testEncryptedArchiveIsReadOnly() throws IOException {
@@ -220,6 +254,29 @@ public class ZipArchiveFileEncryptionTest {
         try (InputStream in = archive.getEntryInputStream(entry, null)) {
             return in.readAllBytes();
         }
+    }
+
+    /**
+     * Adds the given number of bytes to the compressed size of the given entry, as recorded in its central directory
+     * file header.
+     */
+    private void enlargeCompressedSize(String entryName, int delta) throws IOException {
+        Path path = Path.of(tempFile.getAbsolutePath());
+        byte[] zip = Files.readAllBytes(path);
+        byte[] name = entryName.getBytes(StandardCharsets.UTF_8);
+
+        // Central directory file header: signature at offset 0, compressed size at offset 20, filename length at
+        // offset 28, filename at offset 46
+        for (int i = 0; i + 46 + name.length <= zip.length; i++) {
+            if (ZipLong.getValue(zip, i) != CENTRAL_FILE_HEADER_SIGNATURE || ZipShort.getValue(zip, i + 28) != name.length
+                    || !Arrays.equals(zip, i + 46, i + 46 + name.length, name, 0, name.length))
+                continue;
+
+            System.arraycopy(ZipLong.getBytes(ZipLong.getValue(zip, i + 20) + delta), 0, zip, i + 20, 4);
+            Files.write(path, zip);
+            return;
+        }
+        throw new AssertionError("central directory header not found: " + entryName);
     }
 
     /**

@@ -23,6 +23,7 @@ import java.io.OutputStream;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.UnsupportedFileOperationException;
+import com.mucommander.commons.file.archive.zip.provider.ZipConstants;
 import com.mucommander.commons.file.archive.zip.provider.ZipEntry;
 import com.mucommander.commons.file.archive.zip.provider.ZipLong;
 
@@ -35,7 +36,8 @@ import net.lingala.zip4j.model.enums.EncryptionMethod;
 
 /**
  * Archiver implementation using the Zip archive format, with password-protected entries encrypted using AES-256
- * (WinZip AE-2 format, supported by most Zip tools such as 7-Zip, WinZip or Info-ZIP's unzip 6.0+).
+ * (WinZip AE-2 format, supported by most Zip tools such as 7-Zip, WinZip or libarchive's bsdtar - but not by Info-ZIP's
+ * unzip 6.0).
  *
  * <p>Since muCommander's own Zip implementation does not support encryption, archives are written by the
  * <a href="https://github.com/srikanth-lingala/zip4j">Zip4j</a> library. Directory entries are not encrypted as
@@ -87,7 +89,7 @@ class EncryptedZipArchiver extends Archiver {
         // Start by closing current entry
         closeCurrentEntry();
 
-        boolean isDirectory = file.isDirectory();
+        boolean isDirectory = ZipArchiver.isDirectoryEntry(file);
         String normalizedPath = normalizePath(entryPath, isDirectory);
 
         ZipParameters parameters = new ZipParameters();
@@ -99,11 +101,10 @@ class EncryptedZipArchiver extends Archiver {
         parameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256);
         parameters.setLastModifiedFileTime(file.getDate());
 
-        // The size is used by Zip4j to decide whether the entry needs Zip64 extensions. It is not set for directories,
-        // files whose size is unknown and symlinks, whose contents (the link's target) differs from the file's size.
-        long size = file.getSize();
-        if (!isDirectory && size >= 0 && !ZipArchiver.isLocalSymlink(file))
-            parameters.setEntrySize(size);
+        // The size is used by Zip4j to decide whether the entry needs Zip64 extensions. It is not set for directories
+        // and symlinks, whose contents (the link's target) is small and differs from the file's size.
+        if (!isDirectory && !ZipArchiver.isLocalSymlink(file))
+            parameters.setEntrySize(getEntrySizeHint(file.getSize()));
 
         zos.putNextEntry(parameters);
 
@@ -116,12 +117,16 @@ class EncryptedZipArchiver extends Archiver {
 
     @Override
     public void close() throws IOException {
-        closeCurrentEntry();
+        // The underlying stream must be closed even if the archive could not be finalized
+        try {
+            closeCurrentEntry();
 
-        if (comment != null && !comment.isEmpty())
-            zos.setComment(comment);
-
-        zos.close();
+            if (comment != null && !comment.isEmpty())
+                zos.setComment(comment);
+        }
+        finally {
+            zos.close();
+        }
     }
 
     @Override
@@ -135,6 +140,26 @@ class EncryptedZipArchiver extends Archiver {
     /////////////////////
     // Private methods //
     /////////////////////
+
+    /**
+     * Returns the entry size to give Zip4j for a file of the given size. Zip4j decides whether to write the entry's
+     * sizes in Zip64 format (in the local header and data descriptor) from that size alone, before the data is
+     * compressed and encrypted. Incompressible data grows slightly when deflated and encrypted, so a file slightly
+     * smaller than the Zip32 limit can end up larger than it: in that case, as well as when the file size is unknown,
+     * a size that forces Zip64 is returned. The actual sizes are written in the data descriptor and central directory.
+     *
+     * @param size the size of the file, <code>-1</code> if unknown
+     * @return the entry size to give Zip4j
+     */
+    private static long getEntrySizeHint(long size) {
+        if (size < 0)
+            return ZipConstants.MAX_ZIP32_SIZE;
+
+        // Worst-case size of deflated data (as computed by zlib's deflateBound()), plus the AES salt (16 bytes for
+        // AES-256), password verifier (2 bytes) and authentication code (10 bytes)
+        long maxCompressedSize = size + (size >>> 12) + (size >>> 14) + (size >>> 25) + 13 + 16 + 2 + 10;
+        return maxCompressedSize >= ZipConstants.MAX_ZIP32_SIZE ? Math.max(size, ZipConstants.MAX_ZIP32_SIZE) : size;
+    }
 
     /**
      * Closes the entry currently being written, if any, and stores the entry's Unix mode in its central directory

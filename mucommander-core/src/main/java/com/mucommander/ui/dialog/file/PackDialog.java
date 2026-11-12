@@ -63,6 +63,10 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     /** Repeated password, to protect against typing errors */
     private JPasswordField confirmPasswordField;
 
+    /** The password captured when the input was validated, so that later edits of the fields while the destination
+     * is being resolved are ignored. <code>null</code> if the archive must not be encrypted. */
+    private String validatedPassword;
+
     /** Used to keep track of the last selected archive format. */
     private int lastFormatIndex;
 
@@ -191,7 +195,7 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         // Remember last format used, for next time this dialog is invoked
         lastFormat = getSelectedFormat();
 
-        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null, getArchivePassword());
+        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null, Archiver.formatSupportsPassword(lastFormat)?validatedPassword:null);
     }
 
     @Override
@@ -206,10 +210,11 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
     /**
      * Overridden to check that the password and its confirmation match, if the selected archive format supports
-     * encryption.
+     * encryption, and to capture the validated password.
      */
     @Override
     protected boolean validateInput() {
+        validatedPassword = null;
         if (!Archiver.formatSupportsPassword(getSelectedFormat()))
             return true;
 
@@ -217,8 +222,11 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         if (!match) {
             showErrorDialog(Translator.get("pack_dialog.passwords_do_not_match"), errorDialogTitle);
             confirmPasswordField.requestFocus();
+            return false;
         }
-        return match;
+
+        validatedPassword = getArchivePassword();
+        return true;
     }
 
     @Override

@@ -85,6 +85,36 @@ final class ZipEntryDecryption {
     }
 
     /**
+     * Returns a stream that reads the given uncompressed data stream and, once its end has been reached, reads the
+     * remaining data from the given decrypting stream. An InflaterInputStream stops reading once the end of the deflated
+     * data is reached, which may come before the end of the encrypted data (if the recorded compressed size is larger):
+     * reading the remaining data ensures that the AES authentication code is always verified.
+     *
+     * @param uncompressedIn the stream that returns the uncompressed data, read from <code>decryptedIn</code>
+     * @param decryptedIn the stream that decrypts the entry's data
+     * @return a stream that returns the uncompressed data
+     */
+    static InputStream readAllOnEndOfStream(InputStream uncompressedIn, InputStream decryptedIn) {
+        return new FilterInputStream(uncompressedIn) {
+            @Override
+            public int read() throws IOException {
+                int b = super.read();
+                if (b == -1)
+                    StreamUtils.readUntilEOF(decryptedIn);
+                return b;
+            }
+
+            @Override
+            public int read(byte[] b, int off, int len) throws IOException {
+                int nbRead = super.read(b, off, len);
+                if (nbRead == -1)
+                    StreamUtils.readUntilEOF(decryptedIn);
+                return nbRead;
+            }
+        };
+    }
+
+    /**
      * Returns a stream that decrypts the data of an AES-encrypted entry. The entry's data is laid out as follows:
      * salt (8, 12 or 16 bytes depending on the key strength), password verification value (2 bytes), encrypted data,
      * authentication code (10 bytes).

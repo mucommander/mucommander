@@ -44,9 +44,11 @@ import org.testng.annotations.Test;
 
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.FileFactory;
+import com.mucommander.commons.file.ProxyFile;
 import com.mucommander.commons.file.archive.ArchiveEntry;
 import com.mucommander.commons.file.archive.ArchiveEntryIterator;
 import com.mucommander.commons.file.archive.zip.ZipArchiveFile;
+import com.mucommander.commons.file.archive.zip.provider.ZipShort;
 import com.mucommander.commons.io.StreamUtils;
 
 import net.lingala.zip4j.ZipFile;
@@ -151,10 +153,61 @@ public class EncryptedZipArchiverTest {
         assertTrue(entries.get("sub/").isDirectory());
 
         if (POSIX) {
+            // Symlinks to directories are stored as symlink entries, not as directories
+            assertTrue(entries.get("dirlink").isSymlink());
+            assertFalse(entries.get("dirlink").isDirectory());
+            assertEquals(entries.get("dirlink").getLinkTarget(), "sub");
+
             // Only the owner's permissions are reported by local files, other permissions get default values
             assertEquals(entries.get("text.txt").getPermissions().getIntValue() & 0700, 0400);
             assertTrue(entries.get("link.txt").isSymlink());
             assertEquals(entries.get("link.txt").getLinkTarget(), "text.txt");
+        }
+    }
+
+    /**
+     * Zip64 must be forced for files whose compressed size may exceed the Zip32 limit (simulated here by reporting a
+     * size close to the limit) or whose size is unknown. The resulting archives must be readable.
+     */
+    public void testZip64ForcedForLargeOrUnknownSizes() throws IOException {
+        Path textFile = Files.write(tempDir.resolve("text.txt"), TEXT_CONTENT);
+        AbstractFile file = FileFactory.getFile(textFile.toString());
+
+        for (long reportedSize : new long[] { 0xFFFFFFF0L, -1 }) {
+            AbstractFile fileWithReportedSize = new ProxyFile(file) {
+                @Override
+                public long getSize() {
+                    return reportedSize;
+                }
+            };
+
+            Path archivePath = tempDir.resolve("zip64-" + reportedSize + ".data");
+            try (OutputStream out = Files.newOutputStream(archivePath)) {
+                Archiver archiver = Archiver.getArchiver(out, Archiver.ZIP_FORMAT, PASSWORD);
+                try (InputStream in = archiver.getContentStream(fileWithReportedSize)) {
+                    StreamUtils.copyStream(in, archiver.createEntry("text.txt", fileWithReportedSize));
+                }
+                archiver.close();
+            }
+
+            // Zip4j (as of 2.11.6, HeaderWriter#writeLocalFileHeader) adds a Zip64 extended information extra field to
+            // the local file header, and writes 8-byte sizes in the data descriptor, only if the entry size is large
+            // enough: check that the size hint did force Zip64
+            assertTrue(hasZip64LocalExtraField(Files.readAllBytes(archivePath)));
+
+            try (ZipFile zipFile = new ZipFile(archivePath.toFile(), PASSWORD.toCharArray());
+                 InputStream in = zipFile.getInputStream(zipFile.getFileHeader("text.txt"))) {
+                assertEquals(in.readAllBytes(), TEXT_CONTENT);
+            }
+
+            ZipArchiveFile archive = new ZipArchiveFile(FileFactory.getFile(archivePath.toString()));
+            archive.setPassword(PASSWORD);
+            ArchiveEntryIterator iterator = archive.getEntryIterator();
+            ArchiveEntry entry = iterator.nextEntry();
+            try (InputStream in = archive.getEntryInputStream(entry, null)) {
+                assertEquals(in.readAllBytes(), TEXT_CONTENT);
+            }
+            iterator.close();
         }
     }
 
@@ -175,6 +228,22 @@ public class EncryptedZipArchiverTest {
     ////////////////////
 
     /**
+     * Returns <code>true</code> if the local file header of the first entry of the given archive has a Zip64 extended
+     * information extra field (header ID 0x0001).
+     */
+    private static boolean hasZip64LocalExtraField(byte[] zip) {
+        // Local file header: filename length at offset 26, extra field length at offset 28, filename at offset 30,
+        // followed by the extra fields, each made of a header ID and a data size (2 bytes each) followed by the data
+        int extraStart = 30 + ZipShort.getValue(zip, 26);
+        int extraEnd = extraStart + ZipShort.getValue(zip, 28);
+        for (int i = extraStart; i + 4 <= extraEnd; i += 4 + ZipShort.getValue(zip, i + 2)) {
+            if (ZipShort.getValue(zip, i) == 0x0001)
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * Creates the files to pack and packs them into an encrypted Zip archive, the same way ArchiveJob does.
      *
      * @return the path to the created archive
@@ -193,6 +262,7 @@ public class EncryptedZipArchiverTest {
         if (POSIX) {
             Files.setPosixFilePermissions(textFile, PosixFilePermissions.fromString("r--------"));
             entryPaths.put("link.txt", Files.createSymbolicLink(sourceDir.resolve("link.txt"), Path.of("text.txt")));
+            entryPaths.put("dirlink", Files.createSymbolicLink(sourceDir.resolve("dirlink"), Path.of("sub")));
         }
 
         Path archivePath = tempDir.resolve("archive.data");
@@ -203,7 +273,7 @@ public class EncryptedZipArchiverTest {
 
             for (Map.Entry<String, Path> entryPath : entryPaths.entrySet()) {
                 AbstractFile file = FileFactory.getFile(entryPath.getValue().toString());
-                if (file.isDirectory() && !file.isSymlink()) {
+                if (ZipArchiver.isDirectoryEntry(file)) {
                     archiver.createEntry(entryPath.getKey(), file);
                     continue;
                 }
