@@ -175,6 +175,42 @@ public class TerminalIntegration implements ThemeListener {
         return terminalMaximized;
     }
 
+    public boolean isTerminalVisible() {
+        return terminal != null
+                && verticalSplitPane.getDividerLocation()
+                < verticalSplitPane.getMaximumDividerLocation();
+    }
+
+    public int getTerminalDividerPercentage() {
+        int maximum = verticalSplitPane.getMaximumDividerLocation();
+        if (maximum <= 0) {
+            return 0;
+        }
+
+        int percentage = Math.round(
+                100f * verticalSplitPane.getDividerLocation() / maximum);
+        return Math.max(0, Math.min(100, percentage));
+    }
+
+    public void restoreTerminalLayout(int dividerPercentage) {
+        showTerminal();
+
+        if (terminal == null) {
+            return;
+        }
+
+        SwingUtilities.invokeLater(() -> {
+            int maximum = verticalSplitPane.getMaximumDividerLocation();
+            if (maximum > 0) {
+                int percentage = Math.max(0, Math.min(100, dividerPercentage));
+                verticalSplitPane.setDividerLocation(
+                        Math.round(maximum * percentage / 100f));
+            }
+        });
+    }
+
+
+
     private KeyAdapter termCloseKeyHandler() {
         return new KeyAdapter() {
             public void keyPressed(KeyEvent keyEvent) {
