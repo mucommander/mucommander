@@ -24,7 +24,3 @@ dependencies {
     testImplementation 'org.testng:testng:7.11.0'
 }
 
-// Allow reading apache-bzip2 from unnamed module (classpath)
-compileJava {
-    options.compilerArgs += ['--add-reads', 'org.mucommander.format.bzip2=ALL-UNNAMED']
-}

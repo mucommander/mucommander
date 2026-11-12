@@ -20,12 +20,6 @@
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // Include module-info.java in META-INF for future JPMS support
-    from('src/main/resources/module-info') {
-        include 'module-info.java'
-        into 'META-INF'
-    }
-
     manifest {
         attributes(
                 'Bundle-Name': 'muCommander-apache-bzip2',

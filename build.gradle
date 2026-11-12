@@ -504,14 +504,18 @@ tasks.register('runJpms', JavaExec) {
     argFileArgs << '--add-reads' << 'org.mucommander.os.win=ALL-UNNAMED'
     argFileArgs << '--add-reads' << 'org.mucommander.os.openvms=ALL-UNNAMED'
 
-    // sevenzipjbindings/apache-bzip2 have no real module descriptor or Automatic-Module-Name,
-    // so they compile as unnamed-module (classpath) dependencies via --add-reads=ALL-UNNAMED,
-    // but at runtime they land on the module path (via ALL-MODULE-PATH) as automatic modules
-    // named after their jar file (e.g. "sevenzipjbindings-1.6.3.jar" -> "sevenzipjbindings").
-    // Grant explicit reads to those automatic module names here.
+    // sevenzipjbindings has no real module descriptor or Automatic-Module-Name,
+    // so it compiles as an unnamed-module (classpath) dependency via --add-reads=ALL-UNNAMED,
+    // but at runtime it lands on the module path (via ALL-MODULE-PATH) as an automatic module
+    // named after its jar file (e.g. "sevenzipjbindings-1.6.3.jar" -> "sevenzipjbindings").
+    // Grant explicit reads to that automatic module name here.
     argFileArgs << '--add-reads' << 'org.mucommander.format.sevenzip=sevenzipjbindings'
     argFileArgs << '--add-reads' << 'org.mucommander.format.rpm=sevenzipjbindings'
-    argFileArgs << '--add-reads' << 'org.mucommander.format.bzip2=apache.bzip2'
+
+    // zip4j has no module descriptor nor Automatic-Module-Name: at runtime it lands on the module path as an
+    // automatic module named after its jar file ("zip4j-x.y.z.jar" -> "zip4j").
+    argFileArgs << '--add-reads' << 'org.mucommander.format.zip=zip4j'
+    argFileArgs << '--add-reads' << 'org.mucommander.archiver=zip4j'
 
     // The external net.sf.sevenzipjbinding jars are non-modular and deliberately kept on the
     // runtime classpath (see classpathLibs above), so these modules also need ALL-UNNAMED reads
@@ -922,6 +926,8 @@ tasks.register('macAppImage', Exec) {
                         --add-reads org.mucommander.protocol.onedrive=ALL-UNNAMED \
                         --add-reads org.mucommander.protocol.s3=ALL-UNNAMED \
                         --add-reads org.mucommander.protocol.registry=ALL-UNNAMED \
+                        --add-reads org.mucommander.format.zip=zip4j \
+                        --add-reads org.mucommander.archiver=zip4j \
                         --add-reads org.mucommander.os.macos=ALL-UNNAMED \
                         --add-reads org.mucommander.os.linux=ALL-UNNAMED \
                         --add-reads org.mucommander.os.win=ALL-UNNAMED \
@@ -1068,6 +1074,8 @@ tasks.register('linuxAppImage', Exec) {
                                    --add-reads org.mucommander.protocol.onedrive=ALL-UNNAMED \
                                    --add-reads org.mucommander.protocol.s3=ALL-UNNAMED \
                                    --add-reads org.mucommander.protocol.registry=ALL-UNNAMED \
+                                   --add-reads org.mucommander.format.zip=zip4j \
+                                   --add-reads org.mucommander.archiver=zip4j \
                                    --add-reads org.mucommander.os.linux=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/linux/'+project.ext.arch, \
@@ -1159,6 +1167,8 @@ tasks.register('winAppImage', Exec) {
                     --add-reads org.mucommander.protocol.onedrive=ALL-UNNAMED \
                     --add-reads org.mucommander.protocol.s3=ALL-UNNAMED \
                     --add-reads org.mucommander.protocol.registry=ALL-UNNAMED \
+                    --add-reads org.mucommander.format.zip=zip4j \
+                    --add-reads org.mucommander.archiver=zip4j \
                     --add-reads org.mucommander.os.win=ALL-UNNAMED', \
                 '--type', 'app-image', \
                 '--runtime-image', 'jre/win/'+project.ext.arch, \

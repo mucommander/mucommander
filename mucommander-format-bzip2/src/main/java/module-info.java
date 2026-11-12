@@ -19,6 +19,7 @@ module org.mucommander.format.bzip2 {
     requires org.mucommander.commons.file;
     requires org.mucommander.commons.io;
     requires org.slf4j;
+    requires org.apache.bzip2;
 
     exports com.mucommander.commons.file.archive.bzip2;
 

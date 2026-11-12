@@ -17,6 +17,8 @@
 
 repositories.mavenCentral()
 
+test.useTestNG()
+
 dependencies {
     api project(':apache-bzip2')
     api project(':mucommander-commons-file')
@@ -24,6 +26,8 @@ dependencies {
 
     implementation 'org.apache.commons:commons-compress:1.28.0'
     implementation 'org.tukaani:xz:1.9'
+    // Writes password-protected (AES-256 encrypted) Zip archives
+    implementation 'net.lingala.zip4j:zip4j:2.11.6'
 
     testImplementation 'org.testng:testng:7.11.0'
 }
@@ -32,4 +36,8 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-
+// zip4j has neither a module descriptor nor an Automatic-Module-Name, so it is put on the classpath at compile
+// time: allow reading it from the unnamed module
+compileJava {
+    options.compilerArgs += ['--add-reads', 'org.mucommander.archiver=ALL-UNNAMED']
+}

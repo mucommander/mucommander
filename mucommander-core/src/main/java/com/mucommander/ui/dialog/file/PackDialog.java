@@ -21,10 +21,12 @@ package com.mucommander.ui.dialog.file;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 
 import com.mucommander.commons.file.AbstractFile;
@@ -45,7 +47,7 @@ import com.mucommander.ui.text.FilePathField;
 
 /**
  * This dialog allows the user to pack marked files to an archive file of a selected format (Zip, TAR, ...)
- * and add an optional comment to the archive (for the formats that support it).
+ * and add an optional comment and password to the archive (for the formats that support it).
  *
  * @author Maxence Bernard
  */
@@ -55,6 +57,17 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     private int formats[];
 	
     private JTextArea commentArea;
+
+    /** Password used to encrypt the archive, enabled only if the selected archive format supports encryption */
+    private JPasswordField passwordField;
+    /** Repeated password, to protect against typing errors */
+    private JPasswordField confirmPasswordField;
+
+    /** The archive format and password captured when the input was validated, so that later changes of the fields
+     * while the destination is being resolved are ignored. The password is <code>null</code> if the archive must not
+     * be encrypted. */
+    private int validatedFormat;
+    private String validatedPassword;
 
     /** Used to keep track of the last selected archive format. */
     private int lastFormatIndex;
@@ -106,6 +119,38 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
         commentArea = new JTextArea();
         commentArea.setRows(4);
         mainPanel.add(commentArea);
+        mainPanel.addSpace(10);
+
+        // Password fields, enabled only if selected archive format has encryption support.
+        // The archive is not encrypted if the password is left empty.
+        mainPanel.add(new JLabel(Translator.get("pack_dialog.password")));
+        passwordField = new JPasswordField();
+        mainPanel.add(passwordField);
+        mainPanel.add(new JLabel(Translator.get("pack_dialog.confirm_password")));
+        confirmPasswordField = new JPasswordField();
+        mainPanel.add(confirmPasswordField);
+
+        updateFormatDependentFields();
+    }
+
+    /**
+     * Enables or disables the comment and password fields depending on whether the selected archive format supports
+     * them.
+     */
+    private void updateFormatDependentFields() {
+        int format = getSelectedFormat();
+        commentArea.setEnabled(Archiver.formatSupportsComment(format));
+
+        boolean passwordSupported = Archiver.formatSupportsPassword(format);
+        passwordField.setEnabled(passwordSupported);
+        confirmPasswordField.setEnabled(passwordSupported);
+    }
+
+    /**
+     * Returns the archive format currently selected in the formats combo box.
+     */
+    private int getSelectedFormat() {
+        return formats[formatsComboBox.getSelectedIndex()];
     }
 	
 
@@ -138,9 +183,9 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
         // Remember last format used, for next time this dialog is invoked
-        lastFormat = formats[formatsComboBox.getSelectedIndex()];
+        lastFormat = validatedFormat;
 
-        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null);
+        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null, validatedPassword);
     }
 
     @Override
@@ -152,6 +197,29 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     ////////////////////////
     // Overridden methods //
     ////////////////////////
+
+    /**
+     * Overridden to check that the password and its confirmation match, if the selected archive format supports
+     * encryption, and to capture the validated format and password.
+     */
+    @Override
+    protected boolean validateInput() {
+        validatedFormat = getSelectedFormat();
+        validatedPassword = null;
+        if (!Archiver.formatSupportsPassword(validatedFormat))
+            return true;
+
+        char[] password = passwordField.getPassword();
+        if (!Arrays.equals(password, confirmPasswordField.getPassword())) {
+            showErrorDialog(Translator.get("pack_dialog.passwords_do_not_match"), errorDialogTitle);
+            confirmPasswordField.requestFocus();
+            return false;
+        }
+
+        // The archive is not encrypted if no password was entered
+        validatedPassword = password.length == 0 ? null : new String(password);
+        return true;
+    }
 
     @Override
     protected boolean isValidDestination(PathUtils.ResolvedDestination resolvedDest, String destPath) {
@@ -199,7 +267,7 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
                 pathField.setSelectionEnd(selectionEnd);
             }
 
-            commentArea.setEnabled(Archiver.formatSupportsComment(formats[formatsComboBox.getSelectedIndex()]));
+            updateFormatDependentFields();
             lastFormatIndex = newFormatIndex;
         }
 

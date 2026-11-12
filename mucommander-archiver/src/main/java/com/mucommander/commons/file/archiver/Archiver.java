@@ -248,6 +248,27 @@ public abstract class Archiver {
      * @throws UnsupportedFileOperationException if the underlying filesystem does not support write operations
      */
     public static Archiver getArchiver(AbstractFile file, int format) throws IOException, UnsupportedFileOperationException {
+        return getArchiver(file, format, null);
+    }
+
+    /**
+     * Returns an Archiver for the specified format and that uses the given {@link AbstractFile} to write entries to,
+     * encrypting them with the given password. See {@link #getArchiver(AbstractFile, int)} for more details.
+     *
+     * @param file the AbstractFile which the returned Archiver will write entries to
+     * @param format an archive format
+     * @param password the password used to encrypt the entries, <code>null</code> or empty for no encryption. Only
+     * formats for which {@link #formatSupportsPassword(int)} returns <code>true</code> accept a password.
+     * @return an Archiver for the specified format and that uses the given {@link AbstractFile} to write entries to ;
+     * null if the specified format is not valid.
+     * @throws IOException if the file cannot be opened for write, or if an error occurred while intializing the archiver
+     * @throws UnsupportedFileOperationException if the underlying filesystem does not support write operations
+     * @throws IllegalArgumentException if a password is specified for a format that doesn't support encryption
+     */
+    public static Archiver getArchiver(AbstractFile file, int format, String password) throws IOException, UnsupportedFileOperationException {
+        // Fail before the file gets overwritten
+        checkPasswordSupported(format, password);
+
         OutputStream out = null;
 
         if(file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)) {
@@ -267,7 +288,7 @@ public abstract class Archiver {
         if(out==null)
             out = new BufferedOutputStream(file.getOutputStream());
 
-        return getArchiver(out, format);
+        return getArchiver(out, format, password);
     }
 
 
@@ -283,11 +304,31 @@ public abstract class Archiver {
      * @throws IOException if an error occurred while intializing the archiver
      */
     public static Archiver getArchiver(OutputStream out, int format) throws IOException {
+        return getArchiver(out, format, null);
+    }
+
+    /**
+     * Returns an Archiver for the specified format and that uses the given <code>OutputStream</code> to write entries
+     * to, encrypting them with the given password. See {@link #getArchiver(OutputStream, int)} for more details.
+     *
+     * @param out the OutputStream which the returned Archiver will write entries to
+     * @param format an archive format
+     * @param password the password used to encrypt the entries, <code>null</code> or empty for no encryption. Only
+     * formats for which {@link #formatSupportsPassword(int)} returns <code>true</code> accept a password.
+     * @return an Archiver for the specified format and that uses the given {@link AbstractFile} to write entries to ;
+     * null if the specified format is not valid.
+     * @throws IOException if an error occurred while intializing the archiver
+     * @throws IllegalArgumentException if a password is specified for a format that doesn't support encryption
+     */
+    public static Archiver getArchiver(OutputStream out, int format, String password) throws IOException {
+        boolean encrypt = checkPasswordSupported(format, password);
+
         Archiver archiver;
 
         switch(format) {
             case ZIP_FORMAT:
-                archiver = new ZipArchiver(out);
+                // muCommander's own Zip implementation doesn't support encryption, encrypted archives use Zip4j
+                archiver = encrypt ? new EncryptedZipArchiver(out, password) : new ZipArchiver(out);
                 break;
             case GZ_FORMAT:
                 archiver = new SingleFileArchiver(new GZIPOutputStream(out));
@@ -318,6 +359,21 @@ public abstract class Archiver {
         archiver.setFormat(format);
 
         return archiver;
+    }
+
+    /**
+     * Throws an exception if a password is specified for a format that doesn't support encryption.
+     *
+     * @param format an archive format
+     * @param password the password used to encrypt the entries, <code>null</code> or empty for no encryption
+     * @return <code>true</code> if a password is specified, i.e. if the entries must be encrypted
+     * @throws IllegalArgumentException if a password is specified for a format that doesn't support encryption
+     */
+    private static boolean checkPasswordSupported(int format, String password) {
+        boolean encrypt = password != null && !password.isEmpty();
+        if (encrypt && !formatSupportsPassword(format))
+            throw new IllegalArgumentException("Archive format " + format + " does not support encryption");
+        return encrypt;
     }
 
     /**
@@ -388,6 +444,16 @@ public abstract class Archiver {
      * @param format an archive format	 
      */
     public static boolean formatSupportsComment(int format) {
+        return format==ZIP_FORMAT;
+    }
+
+
+    /**
+     * Returns true if the specified archive format can encrypt its entries with a password (AES-256 for Zip).
+     *
+     * @param format an archive format
+     */
+    public static boolean formatSupportsPassword(int format) {
         return format==ZIP_FORMAT;
     }
 	

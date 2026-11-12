@@ -45,6 +45,7 @@ open module org.mucommander.core {
     requires org.mucommander.commons.io;
     requires org.mucommander.commons.runtime;
     requires org.mucommander.commons.util;
+    requires org.mucommander.archiver;
     requires org.mucommander.command;
     requires org.mucommander.encoding;
     requires org.mucommander.preferences;

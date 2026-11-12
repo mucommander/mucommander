@@ -236,6 +236,19 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
     }
 
     /**
+     * Validates the dialog's fields other than the destination path, when the OK button has been pressed and before
+     * the destination path is resolved. This method is called from the event thread and must not perform I/O
+     * operations. Implementations that return <code>false</code> are expected to notify the user of the problem.
+     *
+     * <p>This implementation always returns <code>true</code>.</p>
+     *
+     * @return <code>true</code> if the fields are valid and the destination can be resolved
+     */
+    protected boolean validateInput() {
+        return true;
+    }
+
+    /**
      * This method checks that the given resolved destination is valid. This implementation returns <code>true</code>
      * if the resolved destination is not <code>null</code> and, in case there is more than one file to process, if the
      * destination is a folder that exists. This method can safely be overridden by subclasses to change the behavior.
@@ -334,6 +347,10 @@ public abstract class TransferDestinationDialog extends JobDialog implements Act
         Object source = e.getSource();
 
         if(source == okButton) {
+            // Let subclasses validate their own fields before the destination path is resolved
+            if(!validateInput())
+                return;
+
             // Disable the OK button and path field while the current path is being resolved
             okButton.setEnabled(false);
             pathField.setEnabled(false);
