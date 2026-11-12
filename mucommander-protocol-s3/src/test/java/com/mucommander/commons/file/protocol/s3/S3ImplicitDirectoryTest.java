@@ -34,6 +34,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.mucommander.commons.file.AbstractFile;
+import com.mucommander.commons.file.AuthException;
 import com.mucommander.commons.file.Credentials;
 import com.mucommander.commons.file.FileFactory;
 import com.mucommander.commons.file.FileURL;
@@ -42,6 +43,7 @@ import com.mucommander.commons.file.protocol.FileProtocols;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 /**
  * Tests directories that exist only as a common prefix of other objects, i.e. without a "dir/" placeholder object.
@@ -56,6 +58,14 @@ public class S3ImplicitDirectoryTest {
         InMemoryS3Service(String... keys) {
             super(null);
             this.keys.addAll(Arrays.asList(keys));
+        }
+
+        final List<String> deleted = new ArrayList<>();
+
+        @Override
+        public void deleteObject(String bucketName, String objectKey) {
+            deleted.add(objectKey);
+            keys.remove(objectKey);
         }
 
         private static StorageObject newObject(String key) {
@@ -77,7 +87,7 @@ public class S3ImplicitDirectoryTest {
 
         @Override
         public StorageObjectsChunk listObjectsChunked(String bucketName, String prefix, String delimiter,
-                long maxListingLength, String priorLastKey, boolean completeListing) {
+                long maxListingLength, String priorLastKey, boolean completeListing) throws ServiceException {
             List<StorageObject> objects = new ArrayList<>();
             SortedSet<String> commonPrefixes = new TreeSet<>();
             for (String key : keys) {
@@ -92,6 +102,17 @@ public class S3ImplicitDirectoryTest {
             }
             return new StorageObjectsChunk(prefix, delimiter, objects.toArray(new StorageObject[0]),
                     commonPrefixes.toArray(new String[0]), null);
+        }
+    }
+
+    /** A service whose listings are refused, as with a key that may not list the bucket. */
+    private static class ListForbiddenS3Service extends InMemoryS3Service {
+        @Override
+        public StorageObjectsChunk listObjectsChunked(String bucketName, String prefix, String delimiter,
+                long maxListingLength, String priorLastKey, boolean completeListing) throws ServiceException {
+            ServiceException e = new ServiceException("Forbidden");
+            e.setResponseCode(403);
+            throw e;
         }
     }
 
@@ -130,6 +151,39 @@ public class S3ImplicitDirectoryTest {
         assertTrue(photos.isDirectory());
         assertEquals(names(photos.ls()), Collections.singletonList("2024/"));
         assertEquals(names(getFile(service, "/bucket/photos/2024/").ls()), Collections.singletonList("beach.jpg"));
+    }
+
+    @Test
+    public void testDeleteDirectoryWithoutPlaceholderThatHasAFile() throws IOException {
+        InMemoryS3Service service = new InMemoryS3Service("photos/readme.txt");
+        AbstractFile photos = getFile(service, "/bucket/photos/");
+        try {
+            photos.delete();
+            fail("deleting a non-empty directory must fail");
+        }
+        catch(IOException expected) {
+            assertEquals(expected.getMessage(), "Directory not empty");
+        }
+        assertTrue(service.deleted.isEmpty());
+        assertTrue(getFile(service, "/bucket/photos/").exists());
+    }
+
+    @Test
+    public void testDeleteEmptyDirectoryWithPlaceholder() throws IOException {
+        InMemoryS3Service service = new InMemoryS3Service("photos/");
+        getFile(service, "/bucket/photos/").delete();
+        assertEquals(service.deleted, Collections.singletonList("photos/"));
+    }
+
+    @Test
+    public void testForbiddenListingIsAnAuthError() {
+        try {
+            getFile(new ListForbiddenS3Service(), "/bucket/photos/");
+            fail("a 403 from the listing must not be reported as a missing directory");
+        }
+        catch(IOException e) {
+            assertTrue(e instanceof AuthException, e.getClass().getName());
+        }
     }
 
     @Test
