@@ -63,8 +63,10 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     /** Repeated password, to protect against typing errors */
     private JPasswordField confirmPasswordField;
 
-    /** The password captured when the input was validated, so that later edits of the fields while the destination
-     * is being resolved are ignored. <code>null</code> if the archive must not be encrypted. */
+    /** The archive format and password captured when the input was validated, so that later changes of the fields
+     * while the destination is being resolved are ignored. The password is <code>null</code> if the archive must not
+     * be encrypted. */
+    private int validatedFormat;
     private String validatedPassword;
 
     /** Used to keep track of the last selected archive format. */
@@ -145,18 +147,6 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     }
 
     /**
-     * Returns the password to encrypt the archive with, or <code>null</code> if the archive must not be encrypted,
-     * i.e. if no password was entered or if the selected archive format doesn't support encryption.
-     */
-    private String getArchivePassword() {
-        if (!Archiver.formatSupportsPassword(getSelectedFormat()))
-            return null;
-
-        char[] password = passwordField.getPassword();
-        return password.length == 0 ? null : new String(password);
-    }
-
-    /**
      * Returns the archive format currently selected in the formats combo box.
      */
     private int getSelectedFormat() {
@@ -193,9 +183,9 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
     @Override
     protected TransferFileJob createTransferFileJob(ProgressDialog progressDialog, PathUtils.ResolvedDestination resolvedDest, FileCollisionDialog.FileCollisionAction defaultFileExistsAction) {
         // Remember last format used, for next time this dialog is invoked
-        lastFormat = getSelectedFormat();
+        lastFormat = validatedFormat;
 
-        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null, Archiver.formatSupportsPassword(lastFormat)?validatedPassword:null);
+        return new ArchiveJob(progressDialog, mainFrame, files, resolvedDest.getDestinationFile(), lastFormat, Archiver.formatSupportsComment(lastFormat)?commentArea.getText():null, validatedPassword);
     }
 
     @Override
@@ -210,22 +200,24 @@ public class PackDialog extends TransferDestinationDialog implements ItemListene
 
     /**
      * Overridden to check that the password and its confirmation match, if the selected archive format supports
-     * encryption, and to capture the validated password.
+     * encryption, and to capture the validated format and password.
      */
     @Override
     protected boolean validateInput() {
+        validatedFormat = getSelectedFormat();
         validatedPassword = null;
-        if (!Archiver.formatSupportsPassword(getSelectedFormat()))
+        if (!Archiver.formatSupportsPassword(validatedFormat))
             return true;
 
-        boolean match = Arrays.equals(passwordField.getPassword(), confirmPasswordField.getPassword());
-        if (!match) {
+        char[] password = passwordField.getPassword();
+        if (!Arrays.equals(password, confirmPasswordField.getPassword())) {
             showErrorDialog(Translator.get("pack_dialog.passwords_do_not_match"), errorDialogTitle);
             confirmPasswordField.requestFocus();
             return false;
         }
 
-        validatedPassword = getArchivePassword();
+        // The archive is not encrypted if no password was entered
+        validatedPassword = password.length == 0 ? null : new String(password);
         return true;
     }
 
