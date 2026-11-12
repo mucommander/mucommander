@@ -181,8 +181,16 @@ public class S3Object extends S3File {
             // Make sure that the directory is empty, abort if not.
             // Note that we must not count the parent directory (this file).
             boolean isDirectory = isDirectory();
-            if(isDirectory && service.listObjectsChunked(bucketName, getObjectKey(true), "/", 2, null, false).getObjects().length>1)
-                throw new IOException("Directory not empty");
+            if(isDirectory) {
+                // The directory may have no placeholder object of its own, so count anything other than it
+                String dirKey = getObjectKey(true);
+                StorageObjectsChunk chunk = service.listObjectsChunked(bucketName, dirKey, "/", 2, null, false);
+                boolean hasChildren = chunk.getCommonPrefixes().length>0;
+                for(StorageObject object : chunk.getObjects())
+                    hasChildren |= !object.getKey().equals(dirKey);
+                if(hasChildren)
+                    throw new IOException("Directory not empty");
+            }
 
             service.deleteObject(bucketName, getObjectKey(isDirectory));
 
@@ -667,12 +675,14 @@ public class S3Object extends S3File {
         /**
          * Returns <code>true</code> if at least one object has this object's key, followed by a separator, as a prefix.
          */
-        private boolean isImplicitDirectory() {
+        private boolean isImplicitDirectory() throws AuthException {
             try {
                 StorageObjectsChunk chunk = service.listObjectsChunked(bucketName, getObjectKey(true), "/", 1, null, false);
                 return chunk.getObjects().length>0 || chunk.getCommonPrefixes().length>0;
             }
             catch(ServiceException e) {
+                // An authentication error must not be reported as a missing file
+                handleAuthException(e, fileURL);
                 return false;
             }
         }
