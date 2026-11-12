@@ -115,6 +115,10 @@ public class MuSnapshot {
     /** Single panel view toggle state */
     public static final String  SINGLE_PANEL_VIEW_TOGGLE_STATE     = "single_panel_view";
 
+    private static final String TERMINAL_VISIBLE = "terminal_visible";
+    private static final String TERMINAL_DIVIDER_PERCENTAGE = "terminal_divider_percentage";
+
+
     // - Panels variables ----------------------------------------------------
     // -----------------------------------------------------------------------
     /** Section describing the dynamic information contained in the folder panels */
@@ -268,7 +272,16 @@ public class MuSnapshot {
         return getWindowPropertiesSection(window) + "." + SINGLE_PANEL_VIEW_TOGGLE_STATE;
     }
 
-	/**
+    public static String getTerminalVisible(int window) {
+        return getWindowPropertiesSection(window) + "." + TERMINAL_VISIBLE;
+    }
+
+    public static String getTerminalDividerPercentage(int window) {
+        return getWindowPropertiesSection(window) + "." + TERMINAL_DIVIDER_PERCENTAGE;
+    }
+
+
+    /**
      * Returns the CONFIGURATION section corresponding to the specified {@link com.mucommander.ui.main.FolderPanel},
      * left or right one in the {@link com.mucommander.ui.main.MainFrame} at the given index.
      *
@@ -722,6 +735,12 @@ public class MuSnapshot {
 
         // Save single panel view toggle state
         configuration.setVariable(getSinglePanelViewToggleState(index), currentMainFrame.isSinglePanel());
+
+        configuration.setVariable(getTerminalVisible(index),
+                currentMainFrame.isTerminalVisible());
+        configuration.setVariable(getTerminalDividerPercentage(index),
+                currentMainFrame.getTerminalDividerPercentage());
+
     }
     
     public static void registerHandler(MuSnapshotable snapshotable) {
