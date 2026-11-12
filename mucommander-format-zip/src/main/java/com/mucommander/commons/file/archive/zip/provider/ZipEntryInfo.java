@@ -18,6 +18,8 @@
 
 package com.mucommander.commons.file.archive.zip.provider;
 
+import net.lingala.zip4j.model.enums.AesKeyStrength;
+
 /**
  * ZipEntryInfo is a C struct-like class that holds the information about an entry that is used for parsing and writing
  * the Zip file.
@@ -49,4 +51,24 @@ final class ZipEntryInfo {
 
     /** The comment's bytes */
     byte comment[];
+
+    /** The method used to encrypt the entry's data */
+    Encryption encryption = Encryption.NONE;
+
+    /** AES key strength, only set for {@link Encryption#AES} */
+    AesKeyStrength aesKeyStrength;
+
+    /**
+     * Encryption methods an entry can be encrypted with.
+     */
+    enum Encryption {
+        /** The entry is not encrypted */
+        NONE,
+        /** Traditional PKWARE encryption, also known as ZipCrypto */
+        ZIP_CRYPTO,
+        /** WinZip AES encryption (AE-1 / AE-2) */
+        AES,
+        /** An encryption method that is not supported, e.g. PKWARE strong encryption */
+        UNSUPPORTED
+    }
 }

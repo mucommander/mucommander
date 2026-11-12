@@ -82,11 +82,7 @@ class ZipArchiver extends Archiver {
             entry.setSize(size);
 
         entry.setTime(file.getDate());
-        int unixMode = SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectory ?
-                FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
-                : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue();
-        unixMode |= file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink() ? UnixStat.LINK_FLAG : 0;
-        entry.setUnixMode(unixMode);
+        entry.setUnixMode(getUnixMode(file));
 
         // Add the entry
         zos.putNextEntry(entry);
@@ -106,12 +102,51 @@ class ZipArchiver extends Archiver {
 
     @Override
     public InputStream getContentStream(AbstractFile file) throws UnsupportedFileOperationException, IOException {
-        if (file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink()) {
-            // we return the target of the link here so it will be
-            // written to the "file" within the archive
-            Path path = Path.of(file.getAbsolutePath());
-            return new ByteArrayInputStream(Files.readSymbolicLink(path).toString().getBytes());
-        }
+        if (isLocalSymlink(file))
+            return getSymlinkTargetStream(file);
         return super.getContentStream(file);
+    }
+
+
+    ///////////////////////////////////////////////////////////
+    // Helper methods shared with the encrypted Zip archiver //
+    ///////////////////////////////////////////////////////////
+
+    /**
+     * Returns <code>true</code> if the given file is a symbolic link on the local filesystem. Such files are stored
+     * as Unix symlink entries, whose contents is the link's target.
+     *
+     * @param file the file to test
+     * @return <code>true</code> if the given file is a local symbolic link
+     */
+    static boolean isLocalSymlink(AbstractFile file) {
+        return file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink();
+    }
+
+    /**
+     * Returns the Unix mode (file type and permissions) to store in the Zip entry of the given file.
+     *
+     * @param file the file whose entry is being created
+     * @return the Unix mode of the given file, as understood by {@link ZipEntry#setUnixMode(int)}
+     */
+    static int getUnixMode(AbstractFile file) {
+        int unixMode = SimpleFilePermissions.padPermissions(file.getPermissions(), file.isDirectory() ?
+                FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
+                : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue();
+        unixMode |= isLocalSymlink(file) ? UnixStat.LINK_FLAG : 0;
+        return unixMode;
+    }
+
+    /**
+     * Returns a stream containing the target of the given local symbolic link, which is written as the contents of
+     * the symlink's entry within the archive.
+     *
+     * @param file a local symbolic link
+     * @return a stream containing the link's target path
+     * @throws IOException if the link's target could not be read
+     */
+    static InputStream getSymlinkTargetStream(AbstractFile file) throws IOException {
+        Path path = Path.of(file.getAbsolutePath());
+        return new ByteArrayInputStream(Files.readSymbolicLink(path).toString().getBytes());
     }
 }

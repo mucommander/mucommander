@@ -61,6 +61,9 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     /** The date at which the current ZipFile object was created */
     private long lastZipFileDate;
 
+    /** The password that was last verified against the current ZipFile, to avoid verifying it again */
+    private String verifiedPassword;
+
     /** Contents of an empty Zip file, 22 bytes long */
     private final static byte EMPTY_ZIP_BYTES[] = {
             0x50, 0x4B, 0x05, 0x06, 0x00, 0x00, 0x00, 0x00,
@@ -90,6 +93,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
         if(zipFile==null || currentDate!=lastZipFileDate) {
             zipFile = new ZipFile(file);
+            verifiedPassword = null;
             declareZipFileUpToDate();
         }
     }
@@ -100,6 +104,42 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      */
     private void declareZipFileUpToDate() {
         lastZipFileDate = file.getDate();
+    }
+
+    /**
+     * Checks that a valid password has been set if the Zip file contains encrypted entries. This is performed when the
+     * entries are listed so that the password is asked for when the archive is opened, rather than when one of its
+     * entries is read.
+     *
+     * @throws IOException if the Zip file contains encrypted entries and the password is missing or wrong
+     */
+    private void checkPassword() throws IOException, UnsupportedFileOperationException {
+        if (!zipFile.hasEncryptedEntries())
+            return;
+
+        if (password == null)
+            throw new IOException("Zip archive is password-protected: " + file.getName());
+
+        if (password.equals(verifiedPassword))
+            return;
+
+        if (!zipFile.isPasswordValid(password))
+            throw new IOException("Wrong password for Zip archive: " + file.getName());
+
+        verifiedPassword = password;
+    }
+
+    /**
+     * Same as {@link #checkZipFile()}, and also throws an exception if the Zip file contains encrypted entries:
+     * modifying such archives is not supported, as added entries would not be encrypted and rewritten headers would
+     * lose their encryption attributes.
+     *
+     * @throws IOException if an error occurred while reloading, or if the Zip file contains encrypted entries
+     */
+    private void checkZipFileWritable() throws IOException, UnsupportedFileOperationException {
+        checkZipFile();
+        if (zipFile.hasEncryptedEntries())
+            throw new IOException("Modifying an encrypted Zip archive is not supported: " + file.getName());
     }
 
     /**
@@ -148,7 +188,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
     public String getUnixSymlink(final ZipEntry entry) {
         if (entry != null && entry.isUnixSymlink()) {
-            try (InputStream in = zipFile.getInputStream(entry)) {
+            try (InputStream in = zipFile.getInputStream(entry, password)) {
                 final ByteArrayOutputStream output = new ByteArrayOutputStream();
                 StreamUtils.copyStream(in, output);
                 return new String(output.toByteArray(), Charset.forName("utf-8"));
@@ -187,6 +227,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         // If the underlying AbstractFile has random read access, use our own ZipFile implementation to read entries
         if (file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)) {
             checkZipFile();
+            checkPassword();
 
             final Iterator<ZipEntry> iterator = zipFile.getEntries();
 
@@ -221,7 +262,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
             if(zipEntry==null)  // Should not normally happen
                 throw new IOException();
 
-            return zipFile.getInputStream(zipEntry);
+            return zipFile.getInputStream(zipEntry, password);
         }
         // If the underlying AbstractFile doesn't have random read access, use java.util.InputStream to
         // read the entry. This is much slower than the former method as the file cannot be seeked and needs
@@ -265,7 +306,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
     @Override
     public synchronized OutputStream addEntry(final ArchiveEntry entry) throws IOException, UnsupportedFileOperationException {
-        checkZipFile();
+        checkZipFileWritable();
 
         final ZipEntry zipEntry = createZipEntry(entry);
 
@@ -307,7 +348,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if(zipEntry!=null) {
             // Entry exists physically in the zip file
 
-            checkZipFile();
+            checkZipFileWritable();
 
             // Delete the entry from the zip file (physically)
             zipFile.deleteEntry(zipEntry);
@@ -335,7 +376,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
         if(zipEntry!=null) {
             // Entry exists physically in the zip file
 
-            checkZipFile();
+            checkZipFileWritable();
 
             zipEntry.setTime(entry.getDate());
             zipEntry.setUnixMode(entry.getPermissions().getIntValue());
@@ -351,7 +392,7 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
 
     @Override
     public synchronized void optimizeArchive() throws IOException, UnsupportedFileOperationException {
-        checkZipFile();
+        checkZipFileWritable();
 
         // Defragment the zip file
         zipFile.defragment();
@@ -370,13 +411,15 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
      * Returns <code>true</code> only if the proxied archive file has random read and write access, as reported
      * by {@link AbstractFile#isFileOperationSupported(FileOperation)}. If that is not the case, this archive has 
      * read-only access and behaves just like a {@link com.mucommander.commons.file.archive.AbstractROArchiveFile}.
+     * Archives that are known to contain encrypted entries are read-only as well.
      *
      * @return true only if the proxied archive file has random read and write access
      */
     @Override
     public boolean isWritable() {
         return file.isFileOperationSupported(FileOperation.RANDOM_READ_FILE)
-                && file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE);
+                && file.isFileOperationSupported(FileOperation.RANDOM_WRITE_FILE)
+                && (zipFile == null || !zipFile.hasEncryptedEntries());
     }
 
     /**

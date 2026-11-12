@@ -19,6 +19,8 @@ module org.mucommander.format.zip {
     requires org.slf4j;
     requires org.mucommander.commons.file;
     requires org.mucommander.commons.io;
+    // zip4j (external library) has no module descriptor: it is accessed via --add-reads, from the unnamed module at
+    // compile time and from the 'zip4j' automatic module at runtime
 
     exports com.mucommander.commons.file.archive.zip;
     exports com.mucommander.commons.file.archive.zip.provider;

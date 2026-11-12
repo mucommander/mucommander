@@ -17,12 +17,23 @@
 
 repositories.mavenCentral()
 
+test.useTestNG()
+
 dependencies {
     api project(':mucommander-commons-file')
+
+    // Provides the cryptography used to read encrypted (AES and ZipCrypto) entries
+    implementation 'net.lingala.zip4j:zip4j:2.11.6'
 
     testImplementation 'org.testng:testng:7.11.0'
     testImplementation project(':mucommander-commons-file')
     testImplementation files(project(':mucommander-commons-file').sourceSets.test.output)
+}
+
+// zip4j has neither a module descriptor nor an Automatic-Module-Name, so it is put on the classpath at compile
+// time: allow reading it from the unnamed module
+compileJava {
+    options.compilerArgs += ['--add-reads', 'org.mucommander.format.zip=ALL-UNNAMED']
 }
 
 
