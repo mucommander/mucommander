@@ -132,7 +132,8 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     /**
      * Same as {@link #checkZipFile()}, and also throws an exception if the Zip file contains encrypted entries:
      * modifying such archives is not supported, as added entries would not be encrypted and rewritten headers would
-     * lose their encryption attributes.
+     * lose their encryption attributes. The provider's ZipFile refuses such modifications as well, but checking here
+     * first leaves the entries tree untouched and reports the archive's name.
      *
      * @throws IOException if an error occurred while reloading, or if the Zip file contains encrypted entries
      */
@@ -342,13 +343,14 @@ public class ZipArchiveFile extends AbstractRWArchiveFile {
     public synchronized void deleteEntry(ArchiveEntry entry) throws IOException, UnsupportedFileOperationException {
         ZipEntry zipEntry = (com.mucommander.commons.file.archive.zip.provider.ZipEntry)entry.getEntryObject();
 
+        // Checked before anything is done, as entries that don't exist physically are removed from the entries tree too
+        checkZipFileWritable();
+
         // Most of the time, the ZipEntry will not be null. However, it can be null in some rare cases, when directory
         // entries have been created in the entries tree but don't exist in the Zip file.
         // That is the case when a file entry exists in the Zip file but has no directory entry for the parent.
         if(zipEntry!=null) {
             // Entry exists physically in the zip file
-
-            checkZipFileWritable();
 
             // Delete the entry from the zip file (physically)
             zipFile.deleteEntry(zipEntry);

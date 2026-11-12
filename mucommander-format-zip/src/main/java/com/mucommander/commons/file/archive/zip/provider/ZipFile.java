@@ -326,7 +326,8 @@ public class ZipFile implements ZipConstants {
 
         // Inflater needs an extra dummy byte for nowrap - see Inflater's javadocs. It is appended to the (decrypted)
         // data, as it must not go through decryption.
-        return new InflaterInputStream(new SequenceInputStream(dataIn, new ByteArrayInputStream(new byte[1])), new Inflater(true));
+        InputStream inflaterIn = new InflaterInputStream(new SequenceInputStream(dataIn, new ByteArrayInputStream(new byte[1])), new Inflater(true));
+        return ze.isEncrypted() ? ZipEntryDecryption.readAllOnEndOfStream(inflaterIn, dataIn) : inflaterIn;
     }
 
     /**
@@ -336,6 +337,19 @@ public class ZipFile implements ZipConstants {
      */
     public boolean hasEncryptedEntries() {
         return hasEncryptedEntries;
+    }
+
+    /**
+     * Throws an exception if this Zip file contains encrypted entries: modifying such files is not supported, as the
+     * central directory headers would be rewritten without the encryption attributes (encryption flag, AES method).
+     * This protects the provider's public API; ZipArchiveFile performs the same check beforehand so that its entries
+     * tree is left untouched and a more descriptive error is reported.
+     *
+     * @throws ZipException if this Zip file contains encrypted entries
+     */
+    private void checkNotEncrypted() throws ZipException {
+        if (hasEncryptedEntries)
+            throw new ZipException("Modifying a Zip file with encrypted entries is not supported");
     }
 
     /**
@@ -391,6 +405,7 @@ public class ZipFile implements ZipConstants {
      * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public void deleteEntry(ZipEntry ze) throws IOException, ZipException, UnsupportedFileOperationException {
+        checkNotEncrypted();
         openRead();
         openWrite();
 
@@ -522,6 +537,7 @@ public class ZipFile implements ZipConstants {
      * or is not implemented.
      */
     public OutputStream addEntry(final ZipEntry entry) throws IOException, UnsupportedFileOperationException {
+        checkNotEncrypted();
         try {
             // Open the zip file for random read and write access
             openRead();
@@ -620,6 +636,7 @@ public class ZipFile implements ZipConstants {
      * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public void updateEntry(ZipEntry entry) throws IOException, UnsupportedFileOperationException {
+        checkNotEncrypted();
         try {
             // Open the zip file for write
             openWrite();
@@ -669,6 +686,7 @@ public class ZipFile implements ZipConstants {
      * @throws UnsupportedFileOperationException if a required operation is not supported by the underlying filesystem.
      */
     public void defragment() throws IOException, UnsupportedFileOperationException {
+        checkNotEncrypted();
         int nbEntries = entries.size();
         if(nbEntries==0)
             return;

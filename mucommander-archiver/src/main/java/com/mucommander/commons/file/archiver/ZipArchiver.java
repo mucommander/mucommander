@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -72,7 +73,7 @@ class ZipArchiver extends Archiver {
         if(!firstEntry)
             zos.closeEntry();
 
-        boolean isDirectory = file.isDirectory();
+        boolean isDirectory = isDirectoryEntry(file);
 		
         // Create the entry and use the provided file's date
         ZipEntry entry = new ZipEntry(normalizePath(entryPath, isDirectory));
@@ -120,7 +121,18 @@ class ZipArchiver extends Archiver {
      * @return <code>true</code> if the given file is a local symbolic link
      */
     static boolean isLocalSymlink(AbstractFile file) {
-        return file.getURL().getScheme() == LocalFile.SCHEMA && file.isSymlink();
+        return LocalFile.SCHEMA.equals(file.getURL().getScheme()) && file.isSymlink();
+    }
+
+    /**
+     * Returns <code>true</code> if the given file must be stored as a directory entry. Symbolic links to directories
+     * are stored as file entries, consistently with ArchiveJob which doesn't recurse into them.
+     *
+     * @param file the file to test
+     * @return <code>true</code> if the given file is a directory that is not a symbolic link
+     */
+    static boolean isDirectoryEntry(AbstractFile file) {
+        return file.isDirectory() && !file.isSymlink();
     }
 
     /**
@@ -130,7 +142,7 @@ class ZipArchiver extends Archiver {
      * @return the Unix mode of the given file, as understood by {@link ZipEntry#setUnixMode(int)}
      */
     static int getUnixMode(AbstractFile file) {
-        int unixMode = SimpleFilePermissions.padPermissions(file.getPermissions(), file.isDirectory() ?
+        int unixMode = SimpleFilePermissions.padPermissions(file.getPermissions(), isDirectoryEntry(file) ?
                 FilePermissions.DEFAULT_DIRECTORY_PERMISSIONS
                 : FilePermissions.DEFAULT_FILE_PERMISSIONS).getIntValue();
         unixMode |= isLocalSymlink(file) ? UnixStat.LINK_FLAG : 0;
@@ -147,6 +159,6 @@ class ZipArchiver extends Archiver {
      */
     static InputStream getSymlinkTargetStream(AbstractFile file) throws IOException {
         Path path = Path.of(file.getAbsolutePath());
-        return new ByteArrayInputStream(Files.readSymbolicLink(path).toString().getBytes());
+        return new ByteArrayInputStream(Files.readSymbolicLink(path).toString().getBytes(StandardCharsets.UTF_8));
     }
 }
