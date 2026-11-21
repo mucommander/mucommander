@@ -589,6 +589,19 @@ public class MainFrame implements LocationListener {
         terminalIntegration.toggleTerminal();
     }
 
+    public boolean isTerminalVisible() {
+        return terminalIntegration.isTerminalVisible();
+    }
+
+    public int getTerminalDividerPercentage() {
+        return terminalIntegration.getTerminalDividerPercentage();
+    }
+
+    public void restoreTerminalLayout(int dividerPercentage) {
+        terminalIntegration.restoreTerminalLayout(dividerPercentage);
+    }
+
+
     /**
      * Specifies how folder panels are split: if true is passed, the folder panels will be split vertically
      * (default), horizontally otherwise.
