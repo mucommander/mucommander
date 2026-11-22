@@ -42,6 +42,7 @@ Improvements:
 - Terminal: Font and color updates now apply instantly.
 - Support zip64 files (zip files larger than 4gb).
 - Entering a non-browsable file path into the location bar now selects the file in its parent folder instead of triggering a download.
+- S3 directories that are created by other tools and have no placeholder object can be opened.
 
 Localization:
 -
@@ -49,6 +50,7 @@ Localization:
 Bug fixes:
 - Hide the breadcrumbs component when navigating away from application window while holding down the ctrl/cmd key.
 - Dynamically update the path displayed in the breadcrumbs component in case the current path changes while its displayed.
+- S3 bookmarks can now be opened even when their AWS credentials have not been previously stored.
 
 Known issues:
 - Some translations may not be up-to-date.
