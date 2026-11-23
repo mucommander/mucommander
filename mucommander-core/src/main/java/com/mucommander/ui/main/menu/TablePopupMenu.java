@@ -18,6 +18,9 @@
 
 package com.mucommander.ui.main.menu;
 
+import com.mucommander.commons.file.protocol.local.LocalFile;
+import com.mucommander.ui.dialog.FolderSizeAnalyzerDialog;
+import javax.swing.JSeparator;
 import com.mucommander.commons.file.AbstractFile;
 import com.mucommander.commons.file.protocol.search.SearchFile;
 import com.mucommander.commons.file.util.FileSet;
@@ -27,7 +30,7 @@ import com.mucommander.ui.dnd.ClipboardNotifier;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.popup.MuActionsPopupMenu;
 
-import javax.swing.JSeparator;
+import javax.swing.JMenuItem;
 
 /**
  * Contextual popup menu invoked by FileTable when right-clicking on a file or a group of files.
@@ -78,6 +81,13 @@ public class TablePopupMenu extends MuActionsPopupMenu {
             }
 
             addAction(ActionType.OpenInNewTab);
+            if (clickedFile != null && clickedFile.isDirectory()
+                    && LocalFile.SCHEMA.equals(clickedFile.getURL().getScheme())) {
+                JMenuItem analyze = new JMenuItem("Analyze Folder Size...");
+                analyze.addActionListener(event ->
+                        FolderSizeAnalyzerDialog.showFor(mainFrame.getJFrame(), clickedFile));
+                add(analyze);
+            }
             if (SearchFile.SCHEMA.equals(currentFolder.getURL().getScheme()))
                 addAction(ActionType.ShowInEnclosingFolder);
             add(new JSeparator());
