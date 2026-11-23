@@ -46,7 +46,7 @@ public class TranslationServiceProvider implements TranslationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TranslationServiceProvider.class);
 
     private static final List<String> LANGUAGE_TAGS = Arrays.asList(
-            "ar","be","ca","cs","da","de","en","en-GB","es","fr", "it", "hu","ja","ko","nb","nl","pl","pt-BR","ro","ru","sk","sl","sv","tr","uk","zh-CN","zh-TW");
+            "af","ar","be","ca","cs","da","de","en","en-GB","es","fr", "it", "hu","ja","ko","nb","nl","pl","pt-BR","ro","ru","sk","sl","sv","tr","uk","zh-CN","zh-TW");
 
     private final ResourceBundle languagesBundle;
     private final ResourceBundle dictionaryBundle;
