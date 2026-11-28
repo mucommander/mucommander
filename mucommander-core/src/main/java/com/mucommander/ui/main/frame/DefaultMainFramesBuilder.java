@@ -40,7 +40,9 @@ import com.mucommander.ui.action.ActionManager;
 import com.mucommander.ui.main.FolderPanel.FolderPanelType;
 import com.mucommander.ui.main.MainFrame;
 import com.mucommander.ui.main.tabs.ConfFileTableTab;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.SwingUtilities;
 /**
  * 
  * @author Arik Hadas
@@ -49,6 +51,24 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultMainFramesBuilder.class);
 
     private Configuration snapshot = MuSnapshot.getSnapshot();
+
+    private void restoreSavedTerminalLayout(MainFrame mainFrame, int index) {
+        if (!snapshot.getBooleanVariable(MuSnapshot.getTerminalVisible(index))) {
+            return;
+        }
+
+        int percentage = snapshot.getIntegerVariable(
+                MuSnapshot.getTerminalDividerPercentage(index));
+
+        mainFrame.getJFrame().addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent event) {
+                mainFrame.getJFrame().removeWindowListener(this);
+                SwingUtilities.invokeLater(
+                        () -> mainFrame.restoreTerminalLayout(percentage));
+            }
+        });
+    }
 
     public DefaultMainFramesBuilder() { }
 
@@ -89,6 +109,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
                 mainFrame.getJFrame().setBounds(new Rectangle(x, y, width, height));
             }
 
+            restoreSavedTerminalLayout(mainFrame, index);
             return Collections.singleton(mainFrame);
         }
     }
@@ -154,6 +175,7 @@ public class DefaultMainFramesBuilder extends MainFrameBuilder {
         if (MuSnapshot.getSnapshot().getBooleanVariable(MuSnapshot.getSinglePanelViewToggleState(index))) {
             ActionManager.performAction(ActionType.ToggleUseSinglePanel, mainFrame);
         }
+        restoreSavedTerminalLayout(mainFrame, index);
         return mainFrame;
     }
 
